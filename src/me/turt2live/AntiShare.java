@@ -97,6 +97,7 @@ public class AntiShare extends JavaPlugin {
 		pm.registerEvent(Event.Type.BLOCK_PLACE, bl, Event.Priority.Lowest, this);
 		pm.registerEvent(Event.Type.ENTITY_DEATH, el, Event.Priority.Lowest, this);
 		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, pl, Event.Priority.Lowest, this);
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Lowest, this); //Fix for onInteract not working, whoops
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}
 
