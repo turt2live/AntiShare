@@ -1,0 +1,73 @@
+name: AntiShare
+main: me.turt2live.AntiShare
+version: 1.0.1_1
+description: Create social awkwardness for creative-mode players
+author: Turt2Live
+authors: [Turt2Live, Sayshal]
+website: http://mc.turt2live.com/plugins/AntiShare
+commands:
+  antishare:
+    description: reloads config
+    permission: AntiShare.reload
+  as:
+    description: reloads config
+    permission: AntiShare.reload
+  antis:
+    description: reloads config
+    permission: AntiShare.reload
+  ashare:
+    description: reloads config
+    permission: AntiShare.reload
+
+permissions:
+    AntiShare.reload:
+        description: reload plugin
+        default: op
+    AntiShare.*:
+        description: deny all AntiShare events
+        default: true
+        children:
+            AntiShare.place: true
+            AntiShare.break: true
+            AntiShare.death: true
+            AntiShare.drop: true
+            AntiShare.interact: true
+    AntiShare.place:
+        description: deny place of defined blocks
+        default: true
+    AntiShare.break:
+        description: deny break of defined blocks
+        default: true
+    AntiShare.death:
+        description: deny defined items dropped on death
+        default: true
+    AntiShare.drop:
+        description: deny defined items from being dropped
+        default: true
+    AntiShare.interact:
+        description: deny interaction of defined blocks
+        default: true
+    AntiShare.allow.*:
+        description: allow all AntiShare.allow events
+        default: op
+        children:
+            AntiShare.allow.place: true
+            AntiShare.allow.break: true
+            AntiShare.allow.death: true
+            AntiShare.allow.drop: true
+            AntiShare.allow.interact: true
+    AntiShare.allow.place:
+        description: allow place of defined blocks
+        default: op
+    AntiShare.allow.break:
+        description: allow break of defined blocks
+        default: op
+    AntiShare.allow.death:
+        description: allow defined items dropped on death
+        default: op
+    AntiShare.allow.drop:
+        description: allow defined items from being dropped
+        default: op
+    AntiShare.allow.interact:
+        description: allow interaction of defined blocks
+        default: op
