@@ -1,6 +1,6 @@
 name: AntiShare
 main: me.turt2live.AntiShare
-version: 1.0.2
+version: 1.0.3
 description: Create social awkwardness for creative-mode players
 author: Turt2Live
 authors: [Turt2Live, Sayshal]
@@ -32,6 +32,7 @@ permissions:
             AntiShare.death: true
             AntiShare.drop: true
             AntiShare.interact: true
+            AntiShare.eggs: true
     AntiShare.place:
         description: deny place of defined blocks
         default: true
@@ -47,6 +48,9 @@ permissions:
     AntiShare.interact:
         description: deny interaction of defined blocks
         default: true
+    AntiShare.eggs:
+        description: deny use of mob spawning eggs
+        default: true
     AntiShare.allow.*:
         description: allow all AntiShare.allow events
         default: op
@@ -56,6 +60,7 @@ permissions:
             AntiShare.allow.death: true
             AntiShare.allow.drop: true
             AntiShare.allow.interact: true
+            AntiShare.allow.eggs: true
     AntiShare.allow.place:
         description: allow place of defined blocks
         default: op
@@ -70,4 +75,7 @@ permissions:
         default: op
     AntiShare.allow.interact:
         description: allow interaction of defined blocks
+        default: op
+    AntiShare.allow.eggs:
+        description: allow use of mob spawning eggs
         default: op

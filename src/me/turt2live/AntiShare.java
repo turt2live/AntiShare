@@ -4,28 +4,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AntiShare extends JavaPlugin {
 
-	private ServerPlayerListener	pl;
-	private ServerBlockListener		bl;
-	private ServerEntityListener	el;
-
+	private AntiShareListener	listener;
 	public Logger					log	= Logger.getLogger("Minecraft");
 
 	@Override
 	public void onDisable() {
-		pl = null;
-		bl = null;
-		el = null;
+		listener = null;
 		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
 	}
 
@@ -51,6 +43,8 @@ public class AntiShare extends JavaPlugin {
 			getConfig().set("messages.drop_item", "You can't do that!");
 			getConfig().set("messages.interact", "You can't do that!");
 			getConfig().set("other.only_if_creative", true);
+			getConfig().set("other.allow_eggs", false);
+			//getConfig().set("other.noBedrock", true); //TODO: Stop bedrock breaking
 			getConfig().options().header("AntiShare Configuration:\n" +
 					"Events:\n" +
 					"	'block_place' - Blocks/items to deny for block placing\n" +
@@ -67,6 +61,7 @@ public class AntiShare extends JavaPlugin {
 					"Other:\n" +
 					"	'only_if_creative' - Auto-decline if they are in creative, permissions still apply.\n" +
 					"		(eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)\n" +
+					"	'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)\n" +
 					"Permissions:\n" +
 					"	'AntiShare.*' - Deny all events\n" +
 					"	'AntiShare.place' - Deny block placing\n" +
@@ -74,6 +69,7 @@ public class AntiShare extends JavaPlugin {
 					"	'AntiShare.death' - Deny item drops on death\n" +
 					"	'AntiShare.drop' - Deny item dropping\n" +
 					"	'AntiShare.interact' - Deny interactions\n" +
+					"	'AntiShare.eggs' - Deny eggs that spawn mobs\n" +
 					"	-- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)\n" +
 					"	'AntiShare.reload' - Permission to use /antishare\n" +
 					"Commands:\n" +
@@ -88,43 +84,35 @@ public class AntiShare extends JavaPlugin {
 			saveConfig();
 		}
 		reloadConfig();
-		pl = new ServerPlayerListener(this);
-		bl = new ServerBlockListener(this);
-		el = new ServerEntityListener(this);
-		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvent(Event.Type.BLOCK_BREAK, bl, Event.Priority.Lowest, this);
-		pm.registerEvent(Event.Type.BLOCK_DAMAGE, bl, Event.Priority.Lowest, this);
-		pm.registerEvent(Event.Type.BLOCK_PLACE, bl, Event.Priority.Lowest, this);
-		pm.registerEvent(Event.Type.ENTITY_DEATH, el, Event.Priority.Lowest, this);
-		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, pl, Event.Priority.Lowest, this);
-		pm.registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Lowest, this); //Fix for onInteract not working, whoops
+		listener = new AntiShareListener(this);
+		listener.init();
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}
 
 	public static String addColor(String message) {
 		String colorSeperator = "&";
-		message = message.replaceAll(colorSeperator + "0", ChatColor.getByCode(0x0).toString());
-		message = message.replaceAll(colorSeperator + "1", ChatColor.getByCode(0x1).toString());
-		message = message.replaceAll(colorSeperator + "2", ChatColor.getByCode(0x2).toString());
-		message = message.replaceAll(colorSeperator + "3", ChatColor.getByCode(0x3).toString());
-		message = message.replaceAll(colorSeperator + "4", ChatColor.getByCode(0x4).toString());
-		message = message.replaceAll(colorSeperator + "5", ChatColor.getByCode(0x5).toString());
-		message = message.replaceAll(colorSeperator + "6", ChatColor.getByCode(0x6).toString());
-		message = message.replaceAll(colorSeperator + "7", ChatColor.getByCode(0x7).toString());
-		message = message.replaceAll(colorSeperator + "8", ChatColor.getByCode(0x8).toString());
-		message = message.replaceAll(colorSeperator + "9", ChatColor.getByCode(0x9).toString());
-		message = message.replaceAll(colorSeperator + "a", ChatColor.getByCode(0xA).toString());
-		message = message.replaceAll(colorSeperator + "b", ChatColor.getByCode(0xB).toString());
-		message = message.replaceAll(colorSeperator + "c", ChatColor.getByCode(0xC).toString());
-		message = message.replaceAll(colorSeperator + "d", ChatColor.getByCode(0xD).toString());
-		message = message.replaceAll(colorSeperator + "e", ChatColor.getByCode(0xE).toString());
-		message = message.replaceAll(colorSeperator + "f", ChatColor.getByCode(0xF).toString());
-		message = message.replaceAll(colorSeperator + "A", ChatColor.getByCode(0xA).toString());
-		message = message.replaceAll(colorSeperator + "B", ChatColor.getByCode(0xB).toString());
-		message = message.replaceAll(colorSeperator + "C", ChatColor.getByCode(0xC).toString());
-		message = message.replaceAll(colorSeperator + "D", ChatColor.getByCode(0xD).toString());
-		message = message.replaceAll(colorSeperator + "E", ChatColor.getByCode(0xE).toString());
-		message = message.replaceAll(colorSeperator + "F", ChatColor.getByCode(0xF).toString());
+		message = message.replaceAll(colorSeperator + "0", ChatColor.getByChar('0').toString());
+		message = message.replaceAll(colorSeperator + "1", ChatColor.getByChar('1').toString());
+		message = message.replaceAll(colorSeperator + "2", ChatColor.getByChar('2').toString());
+		message = message.replaceAll(colorSeperator + "3", ChatColor.getByChar('3').toString());
+		message = message.replaceAll(colorSeperator + "4", ChatColor.getByChar('4').toString());
+		message = message.replaceAll(colorSeperator + "5", ChatColor.getByChar('5').toString());
+		message = message.replaceAll(colorSeperator + "6", ChatColor.getByChar('6').toString());
+		message = message.replaceAll(colorSeperator + "7", ChatColor.getByChar('7').toString());
+		message = message.replaceAll(colorSeperator + "8", ChatColor.getByChar('8').toString());
+		message = message.replaceAll(colorSeperator + "9", ChatColor.getByChar('9').toString());
+		message = message.replaceAll(colorSeperator + "a", ChatColor.getByChar('A').toString());
+		message = message.replaceAll(colorSeperator + "b", ChatColor.getByChar('B').toString());
+		message = message.replaceAll(colorSeperator + "c", ChatColor.getByChar('C').toString());
+		message = message.replaceAll(colorSeperator + "d", ChatColor.getByChar('D').toString());
+		message = message.replaceAll(colorSeperator + "e", ChatColor.getByChar('E').toString());
+		message = message.replaceAll(colorSeperator + "f", ChatColor.getByChar('F').toString());
+		message = message.replaceAll(colorSeperator + "A", ChatColor.getByChar('A').toString());
+		message = message.replaceAll(colorSeperator + "B", ChatColor.getByChar('B').toString());
+		message = message.replaceAll(colorSeperator + "C", ChatColor.getByChar('C').toString());
+		message = message.replaceAll(colorSeperator + "D", ChatColor.getByChar('D').toString());
+		message = message.replaceAll(colorSeperator + "E", ChatColor.getByChar('E').toString());
+		message = message.replaceAll(colorSeperator + "F", ChatColor.getByChar('F').toString());
 		return message;
 	}
 
