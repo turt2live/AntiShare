@@ -65,6 +65,19 @@ public class AntiShareListener implements Listener {
 				event.setCancelled(true);
 				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.interact")));
 			}
+			//Egg check
+			if (plugin.getConfig().getBoolean("other.allow_eggs") == false) {
+				boolean filter = false;
+				if (plugin.getConfig().getBoolean("other.only_if_creative") && player.getGameMode() == GameMode.CREATIVE) filter = true;
+				else if (!plugin.getConfig().getBoolean("other.only_if_creative")) filter = true;
+				if (filter) {
+					ItemStack possibleEgg = event.getItem();
+					if (possibleEgg.getTypeId() == 383) {
+						event.setCancelled(true);
+						player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.eggs")));
+					}
+				}
+			}
 		}
 	}
 

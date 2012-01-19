@@ -42,6 +42,7 @@ public class AntiShare extends JavaPlugin {
 			getConfig().set("messages.death", "You can't do that!");
 			getConfig().set("messages.drop_item", "You can't do that!");
 			getConfig().set("messages.interact", "You can't do that!");
+			getConfig().set("messages.eggs", "You can't use the spawn eggs!");
 			getConfig().set("other.only_if_creative", true);
 			getConfig().set("other.allow_eggs", false);
 			//getConfig().set("other.noBedrock", true); //TODO: Stop bedrock breaking
