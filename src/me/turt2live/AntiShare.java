@@ -102,18 +102,18 @@ public class AntiShare extends JavaPlugin {
 		message = message.replaceAll(colorSeperator + "7", ChatColor.getByChar('7').toString());
 		message = message.replaceAll(colorSeperator + "8", ChatColor.getByChar('8').toString());
 		message = message.replaceAll(colorSeperator + "9", ChatColor.getByChar('9').toString());
-		message = message.replaceAll(colorSeperator + "a", ChatColor.getByChar('A').toString());
-		message = message.replaceAll(colorSeperator + "b", ChatColor.getByChar('B').toString());
-		message = message.replaceAll(colorSeperator + "c", ChatColor.getByChar('C').toString());
-		message = message.replaceAll(colorSeperator + "d", ChatColor.getByChar('D').toString());
-		message = message.replaceAll(colorSeperator + "e", ChatColor.getByChar('E').toString());
-		message = message.replaceAll(colorSeperator + "f", ChatColor.getByChar('F').toString());
-		message = message.replaceAll(colorSeperator + "A", ChatColor.getByChar('A').toString());
-		message = message.replaceAll(colorSeperator + "B", ChatColor.getByChar('B').toString());
-		message = message.replaceAll(colorSeperator + "C", ChatColor.getByChar('C').toString());
-		message = message.replaceAll(colorSeperator + "D", ChatColor.getByChar('D').toString());
-		message = message.replaceAll(colorSeperator + "E", ChatColor.getByChar('E').toString());
-		message = message.replaceAll(colorSeperator + "F", ChatColor.getByChar('F').toString());
+		message = message.replaceAll(colorSeperator + "a", ChatColor.getByChar('a').toString());
+		message = message.replaceAll(colorSeperator + "b", ChatColor.getByChar('b').toString());
+		message = message.replaceAll(colorSeperator + "c", ChatColor.getByChar('c').toString());
+		message = message.replaceAll(colorSeperator + "d", ChatColor.getByChar('d').toString());
+		message = message.replaceAll(colorSeperator + "e", ChatColor.getByChar('e').toString());
+		message = message.replaceAll(colorSeperator + "f", ChatColor.getByChar('f').toString());
+		message = message.replaceAll(colorSeperator + "A", ChatColor.getByChar('a').toString());
+		message = message.replaceAll(colorSeperator + "B", ChatColor.getByChar('b').toString());
+		message = message.replaceAll(colorSeperator + "C", ChatColor.getByChar('c').toString());
+		message = message.replaceAll(colorSeperator + "D", ChatColor.getByChar('d').toString());
+		message = message.replaceAll(colorSeperator + "E", ChatColor.getByChar('e').toString());
+		message = message.replaceAll(colorSeperator + "F", ChatColor.getByChar('f').toString());
 		return message;
 	}
 
