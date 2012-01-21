@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class AntiShare extends JavaPlugin {
 
 	private AntiShareListener	listener;
-	public Logger					log	= Logger.getLogger("Minecraft");
+	public Logger				log	= Logger.getLogger("Minecraft");
 
 	@Override
 	public void onDisable() {

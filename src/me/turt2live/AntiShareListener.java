@@ -48,7 +48,6 @@ public class AntiShareListener implements Listener {
 	}
 
 	@EventHandler(event = PlayerInteractEvent.class, priority = EventPriority.LOWEST)
-	//TODO: Check for eggs
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		// System.out.println("onInteract | " + event.getPlayer() + " | " + event.getClickedBlock().getTypeId());
 		Player player = event.getPlayer();
@@ -70,9 +69,10 @@ public class AntiShareListener implements Listener {
 				boolean filter = false;
 				if (plugin.getConfig().getBoolean("other.only_if_creative") && player.getGameMode() == GameMode.CREATIVE) filter = true;
 				else if (!plugin.getConfig().getBoolean("other.only_if_creative")) filter = true;
-				if (filter) {
+				if (player.hasPermission("AntiShare.allow.eggs")) filter = false;
+				if (filter && (player.hasPermission("AntiShare.eggs"))) {
 					ItemStack possibleEgg = event.getItem();
-					if (possibleEgg.getTypeId() == 383) {
+					if (possibleEgg != null) if (possibleEgg.getTypeId() == 383) {
 						event.setCancelled(true);
 						player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.eggs")));
 					}
