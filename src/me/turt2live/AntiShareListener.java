@@ -2,6 +2,7 @@ package me.turt2live;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -126,6 +127,14 @@ public class AntiShareListener implements Listener {
 				&& plugin.getConfig().getBoolean("other.track_blocks")
 				&& player.getGameMode() == GameMode.CREATIVE
 				&& !player.hasPermission("AntiShare.freePlace")) ASBlockRegistry.saveCreativeBlock(event.getBlock());
+		//Bedrock check
+		if (!event.isCancelled()
+				&& !plugin.getConfig().getBoolean("other.allow_bedrock")
+				&& !player.hasPermission("AntiShare.bedrock")
+				&& event.getBlock().getType() == Material.BEDROCK) {
+			player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.bedrock")));
+			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler(event = BlockBreakEvent.class, priority = EventPriority.LOWEST)
@@ -149,12 +158,20 @@ public class AntiShareListener implements Listener {
 			if (!event.isCancelled()
 					&& plugin.getConfig().getBoolean("other.track_blocks")
 					&& !player.hasPermission("AntiShare.blockBypass")) if(player.getGameMode() == GameMode.SURVIVAL){
-				boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
-				if (isBlocked) {
-					player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.creativeModeBlock")));
-					event.setCancelled(true);
-				}
-			} else ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
+						boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
+						if (isBlocked) {
+							player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.creativeModeBlock")));
+							event.setCancelled(true);
+						}
+					} else ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
+			//Bedrock check
+			if (!event.isCancelled()
+					&& !plugin.getConfig().getBoolean("other.allow_bedrock")
+					&& !player.hasPermission("AntiShare.bedrock")
+					&& event.getBlock().getType() == Material.BEDROCK) {
+				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.bedrock")));
+				event.setCancelled(true);
+			}
 		}
 	}
 

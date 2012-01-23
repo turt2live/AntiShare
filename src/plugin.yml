@@ -32,6 +32,9 @@ permissions:
     AntiShare.freePlace:
         description: can place a creative-mode block without it being registered as such
         default: op
+    AntiShare.bedrock:
+        description: can break and place bedrock
+        default: op
     AntiShare.admin:
         description: All AntiShare permissions
         default: op
@@ -42,6 +45,7 @@ permissions:
             AntiShare.noswap: true
             AntiShare.blockBypass: true
             AntiShare.freePlace: true
+            AntiShare.bedrock: true
     AntiShare.*:
         description: deny all AntiShare events
         default: true

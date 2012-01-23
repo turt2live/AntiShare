@@ -1,7 +1,6 @@
 package me.turt2live;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -15,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class AntiShare extends JavaPlugin {
 
 	private AntiShareListener	listener;
+	private ASConfig			config;
 	public Logger				log	= Logger.getLogger("Minecraft");
 
 	@Override
@@ -25,79 +25,9 @@ public class AntiShare extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		File d = getDataFolder();
-		d.mkdirs();
-		File f2 = new File(getDataFolder(), "config.yml");
-		if (!f2.exists()) {
-			try {
-				f2.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			getConfig().set("events.block_break", "none");
-			getConfig().set("events.block_place", "57 41 42");
-			getConfig().set("events.death", "*");
-			getConfig().set("events.drop_item", "*");
-			getConfig().set("events.interact", "23 61 62 54 342");
-			getConfig().set("messages.block_break", "You can't do that!");
-			getConfig().set("messages.block_place", "You can't do that!");
-			getConfig().set("messages.death", "You can't do that!");
-			getConfig().set("messages.drop_item", "You can't do that!");
-			getConfig().set("messages.interact", "You can't do that!");
-			getConfig().set("messages.eggs", "You can't use the spawn eggs!");
-			getConfig().set("messages.inventory_swap", "Your inventory has been changed.");
-			getConfig().set("messages.creativeModeBlock", "You cannot break that block! It was placed by a creative mode player.");
-			getConfig().set("other.only_if_creative", true);
-			getConfig().set("other.allow_eggs", false);
-			getConfig().set("other.inventory_swap", true);
-			getConfig().set("other.track_blocks", true);
-			//getConfig().set("other.noBedrock", true); //TODO: Stop bedrock breaking
-			getConfig().options().header("AntiShare Configuration:\n" +
-					"Events:\n" +
-					"	'block_place' - Blocks/items to deny for block placing\n" +
-					"	'block_break' - Blocks/items to deny for block breaking\n" +
-					"	'death' - Blocks/items to not allow to drop on death\n" +
-					"	'drop_item' - Block/items to not allow to drop when a player presses (default) Q\n" +
-					"	'interact' - Blocks/items to deny interactions to. (Left/Right click)\n" +
-					"	-- Want all blocks/items to be denied? Put a *\n" +
-					"	-- Want no blocks/items to be denied? Put: none\n" +
-					"	-- Make sure item lists are space-seperated, not commas, periods, or fancy other things!" +
-					"Messages:\n" +
-					"	All messages are when they are declined an action.\n" +
-					"	Chat colors are supported using the & sign (eg: &f = white)\n" +
-					"Other:\n" +
-					"	'only_if_creative' - Auto-decline if they are in creative, permissions still apply.\n" +
-					"		(eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)\n" +
-					"	'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)\n" +
-					"	'inventory_swap' - If true then creative and survival inventories will be swapped\n" +
-					"	'track_blocks' - If true then creative mode blocks will be tracked where only creative mode players can break them\n" +
-					" 						(unless they have the permission \"AntiShare.blockBypass\")" +
-					"Permissions:\n" +
-					"	'AntiShare.*' - Deny all events\n" +
-					"	'AntiShare.place' - Deny block placing\n" +
-					"	'AntiShare.break' - Deny block breaking\n" +
-					"	'AntiShare.death' - Deny item drops on death\n" +
-					"	'AntiShare.drop' - Deny item dropping\n" +
-					"	'AntiShare.interact' - Deny interactions\n" +
-					"	'AntiShare.eggs' - Deny eggs that spawn mobs\n" +
-					"	-- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)\n" +
-					"	'AntiShare.reload' - Permission to use /antishare\n" +
-					"	'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched\n" +
-					"	'AntiShare.blockBypass' - If true, then the player can bypass the \"Creative mode players can only break this block\" message\n" +
-					"	'AntiShare.freePlace' - If true, then the player can place a \"creative-mode\" block without it being registered as a \"creative-mode\" block\n" +
-					"	'AntiShare.admin' - Includes \"AntiShare.allow.*\", \"AntiShare.reload\", \"AntiShare.blockBypass\", \"AntiShare.freePlace\".\n" +
-					"Commands:\n" +
-					"	'/antishare' - Reloads configuration\n" +
-					"		Aliases: '/as', '/antis', '/ashare'\n" +
-					"Notes:\n" +
-					"	- Permissions default to all deny as true while all allow as OP or higher.\n" +
-					"	- 'only_if_creative' will override the permissions meaning if a player is in survival-mode while 'only_if_creative' is true then \n" +
-					"	  the deny permissions will be ignored (eg: That survival player places a block: it is placed)\n" +
-					"	- The default settings decline interactions with furnaces, chests, dispensers, and chest-minecarts\n" +
-					"	- The event 'block_break' is set to 'none' because in creative-mode, no blocks are dropped when broken");
-			saveConfig();
-		}
-		reloadConfig();
+		config = new ASConfig(this);
+		config.create();
+		config.reload();
 		listener = new AntiShareListener(this);
 		listener.init();
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
