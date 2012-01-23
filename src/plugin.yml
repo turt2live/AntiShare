@@ -23,6 +23,17 @@ permissions:
     AntiShare.reload:
         description: reload plugin
         default: op
+    AntiShare.noswap:
+        description: immunity (if true) to inventory swapping on GameMode changes
+        default: op
+    AntiShare.admin:
+        description: All AntiShare permissions
+        default: op
+        children:
+            AntiShare.allow.*: true
+            AntiShare.*: false
+            AntiShare.reload: true
+            AntiShare.noswap: true
     AntiShare.*:
         description: deny all AntiShare events
         default: true

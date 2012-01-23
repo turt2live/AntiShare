@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -158,6 +159,18 @@ public class AntiShareListener implements Listener {
 			} else if (player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break") && itemIsBlocked) {
 				event.setCancelled(true);
 				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.block_break")));
+			}
+		}
+	}
+
+	@EventHandler(event = PlayerGameModeChangeEvent.class, priority = EventPriority.LOWEST)
+	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
+		if (plugin.getConfig().getBoolean("other.inventory_swap")) {
+			Player player = event.getPlayer();
+			if (player != null) if (!player.hasPermission("AntiShare.noswap")) {
+				ASInventory.save(player, player.getGameMode());
+				ASInventory.load(player, event.getNewGameMode());
+				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.inventory_swap")));
 			}
 		}
 	}

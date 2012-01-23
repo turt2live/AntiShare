@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AntiShare extends JavaPlugin {
@@ -43,8 +45,10 @@ public class AntiShare extends JavaPlugin {
 			getConfig().set("messages.drop_item", "You can't do that!");
 			getConfig().set("messages.interact", "You can't do that!");
 			getConfig().set("messages.eggs", "You can't use the spawn eggs!");
+			getConfig().set("messages.inventory_swap", "Your inventory has been changed.");
 			getConfig().set("other.only_if_creative", true);
 			getConfig().set("other.allow_eggs", false);
+			getConfig().set("other.inventory_swap", true);
 			//getConfig().set("other.noBedrock", true); //TODO: Stop bedrock breaking
 			getConfig().options().header("AntiShare Configuration:\n" +
 					"Events:\n" +
@@ -63,6 +67,7 @@ public class AntiShare extends JavaPlugin {
 					"	'only_if_creative' - Auto-decline if they are in creative, permissions still apply.\n" +
 					"		(eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)\n" +
 					"	'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)\n" +
+					"	'inventory_swap' - If true then creative and survival inventories will be swapped\n" +
 					"Permissions:\n" +
 					"	'AntiShare.*' - Deny all events\n" +
 					"	'AntiShare.place' - Deny block placing\n" +
@@ -73,6 +78,7 @@ public class AntiShare extends JavaPlugin {
 					"	'AntiShare.eggs' - Deny eggs that spawn mobs\n" +
 					"	-- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)\n" +
 					"	'AntiShare.reload' - Permission to use /antishare\n" +
+					"	'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched\n" +
 					"Commands:\n" +
 					"	'/antishare' - Reloads configuration\n" +
 					"		Aliases: '/as', '/antis', '/ashare'\n" +
@@ -153,5 +159,10 @@ public class AntiShare extends JavaPlugin {
 				break;
 			}
 		return ret;
+	}
+
+	public static File getSaveFolder() {
+		Plugin plugin = Bukkit.getPluginManager().getPlugin("AntiShare");
+		return plugin.getDataFolder();
 	}
 }
