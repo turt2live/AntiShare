@@ -122,11 +122,6 @@ public class AntiShareListener implements Listener {
 				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.block_place")));
 			}
 		}
-		//Creative Mode Placing
-		if (!event.isCancelled()
-				&& plugin.getConfig().getBoolean("other.track_blocks")
-				&& player.getGameMode() == GameMode.CREATIVE
-				&& !player.hasPermission("AntiShare.freePlace")) ASBlockRegistry.saveCreativeBlock(event.getBlock());
 		//Bedrock check
 		if (!event.isCancelled()
 				&& !plugin.getConfig().getBoolean("other.allow_bedrock")
@@ -135,6 +130,11 @@ public class AntiShareListener implements Listener {
 			player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.bedrock")));
 			event.setCancelled(true);
 		}
+		//Creative Mode Placing
+		if (!event.isCancelled()
+				&& plugin.getConfig().getBoolean("other.track_blocks")
+				&& player.getGameMode() == GameMode.CREATIVE
+				&& !player.hasPermission("AntiShare.freePlace")) ASBlockRegistry.saveCreativeBlock(event.getBlock());
 	}
 
 	@EventHandler(event = BlockBreakEvent.class, priority = EventPriority.LOWEST)
@@ -154,6 +154,14 @@ public class AntiShareListener implements Listener {
 				event.setCancelled(true);
 				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.block_break")));
 			}
+			//Bedrock check
+			if (!event.isCancelled()
+					&& !plugin.getConfig().getBoolean("other.allow_bedrock")
+					&& !player.hasPermission("AntiShare.bedrock")
+					&& event.getBlock().getType() == Material.BEDROCK) {
+				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.bedrock")));
+				event.setCancelled(true);
+			}
 			//Creative Mode Blocking
 			if (!event.isCancelled()
 					&& plugin.getConfig().getBoolean("other.track_blocks")
@@ -164,14 +172,6 @@ public class AntiShareListener implements Listener {
 							event.setCancelled(true);
 						}
 					} else ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
-			//Bedrock check
-			if (!event.isCancelled()
-					&& !plugin.getConfig().getBoolean("other.allow_bedrock")
-					&& !player.hasPermission("AntiShare.bedrock")
-					&& event.getBlock().getType() == Material.BEDROCK) {
-				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.bedrock")));
-				event.setCancelled(true);
-			}
 		}
 	}
 
