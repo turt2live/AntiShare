@@ -46,9 +46,11 @@ public class AntiShare extends JavaPlugin {
 			getConfig().set("messages.interact", "You can't do that!");
 			getConfig().set("messages.eggs", "You can't use the spawn eggs!");
 			getConfig().set("messages.inventory_swap", "Your inventory has been changed.");
+			getConfig().set("messages.creativeModeBlock", "You cannot break that block! It was placed by a creative mode player.");
 			getConfig().set("other.only_if_creative", true);
 			getConfig().set("other.allow_eggs", false);
 			getConfig().set("other.inventory_swap", true);
+			getConfig().set("other.track_blocks", true);
 			//getConfig().set("other.noBedrock", true); //TODO: Stop bedrock breaking
 			getConfig().options().header("AntiShare Configuration:\n" +
 					"Events:\n" +
@@ -68,6 +70,8 @@ public class AntiShare extends JavaPlugin {
 					"		(eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)\n" +
 					"	'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)\n" +
 					"	'inventory_swap' - If true then creative and survival inventories will be swapped\n" +
+					"	'track_blocks' - If true then creative mode blocks will be tracked where only creative mode players can break them\n" +
+					" 						(unless they have the permission \"AntiShare.blockBypass\")" +
 					"Permissions:\n" +
 					"	'AntiShare.*' - Deny all events\n" +
 					"	'AntiShare.place' - Deny block placing\n" +
@@ -79,6 +83,9 @@ public class AntiShare extends JavaPlugin {
 					"	-- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)\n" +
 					"	'AntiShare.reload' - Permission to use /antishare\n" +
 					"	'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched\n" +
+					"	'AntiShare.blockBypass' - If true, then the player can bypass the \"Creative mode players can only break this block\" message\n" +
+					"	'AntiShare.freePlace' - If true, then the player can place a \"creative-mode\" block without it being registered as a \"creative-mode\" block\n" +
+					"	'AntiShare.admin' - Includes \"AntiShare.allow.*\", \"AntiShare.reload\", \"AntiShare.blockBypass\", \"AntiShare.freePlace\".\n" +
 					"Commands:\n" +
 					"	'/antishare' - Reloads configuration\n" +
 					"		Aliases: '/as', '/antis', '/ashare'\n" +

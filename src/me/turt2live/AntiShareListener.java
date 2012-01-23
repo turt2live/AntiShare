@@ -121,6 +121,11 @@ public class AntiShareListener implements Listener {
 				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.block_place")));
 			}
 		}
+		//Creative Mode Placing
+		if (!event.isCancelled()
+				&& plugin.getConfig().getBoolean("other.track_blocks")
+				&& player.getGameMode() == GameMode.CREATIVE
+				&& !player.hasPermission("AntiShare.freePlace")) ASBlockRegistry.saveCreativeBlock(event.getBlock());
 	}
 
 	@EventHandler(event = BlockBreakEvent.class, priority = EventPriority.LOWEST)
@@ -140,6 +145,16 @@ public class AntiShareListener implements Listener {
 				event.setCancelled(true);
 				player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.block_break")));
 			}
+			//Creative Mode Blocking
+			if (!event.isCancelled()
+					&& plugin.getConfig().getBoolean("other.track_blocks")
+					&& !player.hasPermission("AntiShare.blockBypass")) if(player.getGameMode() == GameMode.SURVIVAL){
+				boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
+				if (isBlocked) {
+					player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.creativeModeBlock")));
+					event.setCancelled(true);
+				}
+			} else ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
 		}
 	}
 
