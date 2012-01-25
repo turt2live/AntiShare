@@ -10,19 +10,20 @@ import org.bukkit.inventory.ItemStack;
 
 public class ASInventory {
 
-	public static void save(Player player, GameMode gamemode) {
-		try {
+	public static void save(Player player, GameMode gamemode){
+		try{
 			Integer size = player.getInventory().getSize();
 			Integer i = 0;
 			File sdir = new File(AntiShare.getSaveFolder(), "inventories");
 			sdir.mkdirs();
 			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
-			if (!saveFile.exists()) saveFile.createNewFile();
+			if(!saveFile.exists())
+				saveFile.createNewFile();
 			FileConfiguration config = new YamlConfiguration();
 			config.load(saveFile);
-			for (i = 0; i < size; i++) {
+			for(i = 0; i < size; i++){
 				ItemStack item = player.getInventory().getItem(i);
-				if (item.getAmount() != 0) {
+				if(item.getAmount() != 0){
 					config.set(i.toString() + ".amount", item.getAmount());
 					Short durab = item.getDurability();
 					config.set(i.toString() + ".durability", durab.intValue());
@@ -30,26 +31,28 @@ public class ASInventory {
 					config.save(saveFile);
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	public static void load(Player player, GameMode gamemode) {
-		try {
+	@SuppressWarnings ("deprecation")
+	public static void load(Player player, GameMode gamemode){
+		try{
 			File sdir = new File(AntiShare.getSaveFolder(), "inventories");
 			sdir.mkdirs();
 			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
-			if (!saveFile.exists()) saveFile.createNewFile();
+			if(!saveFile.exists())
+				saveFile.createNewFile();
 			FileConfiguration config = new YamlConfiguration();
 			config.load(saveFile);
 			Integer i = 0;
 			Integer size = player.getInventory().getSize();
 			player.getInventory().clear();
-			for (i = 0; i < size; i++) {
+			for(i = 0; i < size; i++){
 				ItemStack item = new ItemStack(0, 0);
-				if (config.getInt(i.toString() + ".amount", 0) != 0) {
+				if(config.getInt(i.toString() + ".amount", 0) != 0){
 					Integer amount = config.getInt(i.toString() + ".amount", 0);
 					Integer durability = config.getInt(i.toString() + ".durability", 0);
 					Integer type = config.getInt(i.toString() + ".type", 0);
@@ -60,7 +63,8 @@ public class ASInventory {
 					player.updateInventory();
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch(Exception e){
 			e.printStackTrace();
 		}
 	}

@@ -9,22 +9,23 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public class AntiShare extends JavaPlugin {
+import com.feildmaster.lib.configuration.PluginWrapper;
 
-	private AntiShareListener	listener;
-	private ASConfig			config;
-	public Logger				log	= Logger.getLogger("Minecraft");
+public class AntiShare extends PluginWrapper {
+
+	private AntiShareListener listener;
+	private ASConfig config;
+	public Logger log = Logger.getLogger("Minecraft");
 
 	@Override
-	public void onDisable() {
+	public void onDisable(){
 		listener = null;
 		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
 	}
 
 	@Override
-	public void onEnable() {
+	public void onEnable(){
 		config = new ASConfig(this);
 		config.create();
 		config.reload();
@@ -33,7 +34,7 @@ public class AntiShare extends JavaPlugin {
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}
 
-	public static String addColor(String message) {
+	public static String addColor(String message){
 		String colorSeperator = "&";
 		message = message.replaceAll(colorSeperator + "0", ChatColor.getByChar('0').toString());
 		message = message.replaceAll(colorSeperator + "1", ChatColor.getByChar('1').toString());
@@ -61,21 +62,22 @@ public class AntiShare extends JavaPlugin {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
-		if (sender instanceof Player) {
-			if (((Player) sender).hasPermission("AntiShare.reload")) if (cmd.equalsIgnoreCase("antishare") ||
-					cmd.equalsIgnoreCase("as") ||
-					cmd.equalsIgnoreCase("antis") ||
-					cmd.equalsIgnoreCase("ashare")) {
-				reloadConfig();
-				((Player) sender).sendMessage(ChatColor.GREEN + "AntiShare Reloaded.");
-			}
+	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args){
+		if(sender instanceof Player){
+			if(((Player) sender).hasPermission("AntiShare.reload"))
+				if(cmd.equalsIgnoreCase("antishare") ||
+						cmd.equalsIgnoreCase("as") ||
+						cmd.equalsIgnoreCase("antis") ||
+						cmd.equalsIgnoreCase("ashare")){
+					reloadConfig();
+					((Player) sender).sendMessage(ChatColor.GREEN + "AntiShare Reloaded.");
+				}
 			return false;
-		} else {
-			if (cmd.equalsIgnoreCase("antishare") ||
+		}else{
+			if(cmd.equalsIgnoreCase("antishare") ||
 					cmd.equalsIgnoreCase("as") ||
 					cmd.equalsIgnoreCase("antis") ||
-					cmd.equalsIgnoreCase("ashare")) {
+					cmd.equalsIgnoreCase("ashare")){
 				reloadConfig();
 				log.info("AntiShare Reloaded.");
 			}
@@ -83,22 +85,24 @@ public class AntiShare extends JavaPlugin {
 		}
 	}
 
-	public static boolean isBlocked(String message, int id) {
+	public static boolean isBlocked(String message, int id){
 		boolean ret = false;
-		if (message.equalsIgnoreCase("none")) return false;
-		else if (message.equalsIgnoreCase("*")) return true;
+		if(message.equalsIgnoreCase("none"))
+			return false;
+		else if(message.equalsIgnoreCase("*"))
+			return true;
 		String parts[] = message.split(" ");
 		String item = id + "";
-		for (String s : parts)
+		for(String s : parts)
 			//System.out.println("ITEM: " + s);
-			if (s.equalsIgnoreCase(item)) {
+			if(s.equalsIgnoreCase(item)){
 				ret = true;
 				break;
 			}
 		return ret;
 	}
 
-	public static File getSaveFolder() {
+	public static File getSaveFolder(){
 		Plugin plugin = Bukkit.getPluginManager().getPlugin("AntiShare");
 		return plugin.getDataFolder();
 	}
