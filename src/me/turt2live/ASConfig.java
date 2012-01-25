@@ -13,9 +13,22 @@ public class ASConfig {
 	public void create(){
 		File d = plugin.getDataFolder();
 		d.mkdirs();
+		plugin.getConfig().loadDefaults(plugin.getResource("resources/config.yml"));
 		if(!plugin.getConfig().fileExists() || !plugin.getConfig().checkDefaults()){
-			plugin.saveDefaultConfig();
+			plugin.getConfig().saveDefaults();
 		}
+		load();
+	}
+
+	public Object get(String path){
+		return plugin.getConfig().get(path);
+	}
+
+	public void load(){
+		plugin.reloadConfig();
+	}
+
+	public void reload(){
 		load();
 	}
 
@@ -25,17 +38,5 @@ public class ASConfig {
 
 	public void set(String path, Object value){
 		plugin.getConfig().set(path, value);
-	}
-
-	public Object get(String path){
-		return plugin.getConfig().get(path);
-	}
-
-	public void reload(){
-		load();
-	}
-
-	public void load(){
-		plugin.reloadConfig();
 	}
 }
