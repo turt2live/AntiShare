@@ -17,8 +17,9 @@ public class ASInventory {
 			File sdir = new File(AntiShare.getSaveFolder(), "inventories");
 			sdir.mkdirs();
 			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
-			if(!saveFile.exists())
+			if(!saveFile.exists()){
 				saveFile.createNewFile();
+			}
 			FileConfiguration config = new YamlConfiguration();
 			config.load(saveFile);
 			for(i = 0; i < size; i++){
@@ -43,8 +44,9 @@ public class ASInventory {
 			File sdir = new File(AntiShare.getSaveFolder(), "inventories");
 			sdir.mkdirs();
 			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
-			if(!saveFile.exists())
+			if(!saveFile.exists()){
 				saveFile.createNewFile();
+			}
 			FileConfiguration config = new YamlConfiguration();
 			config.load(saveFile);
 			Integer i = 0;

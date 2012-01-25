@@ -64,7 +64,7 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args){
 		if(sender instanceof Player){
-			if(((Player) sender).hasPermission("AntiShare.reload"))
+			if(((Player) sender).hasPermission("AntiShare.reload")){
 				if(cmd.equalsIgnoreCase("antishare") ||
 						cmd.equalsIgnoreCase("as") ||
 						cmd.equalsIgnoreCase("antis") ||
@@ -72,6 +72,7 @@ public class AntiShare extends PluginWrapper {
 					reloadConfig();
 					((Player) sender).sendMessage(ChatColor.GREEN + "AntiShare Reloaded.");
 				}
+			}
 			return false;
 		}else{
 			if(cmd.equalsIgnoreCase("antishare") ||
@@ -87,18 +88,20 @@ public class AntiShare extends PluginWrapper {
 
 	public static boolean isBlocked(String message, int id){
 		boolean ret = false;
-		if(message.equalsIgnoreCase("none"))
+		if(message.equalsIgnoreCase("none")){
 			return false;
-		else if(message.equalsIgnoreCase("*"))
+		}else if(message.equalsIgnoreCase("*")){
 			return true;
+		}
 		String parts[] = message.split(" ");
 		String item = id + "";
-		for(String s : parts)
+		for(String s : parts){
 			//System.out.println("ITEM: " + s);
 			if(s.equalsIgnoreCase(item)){
 				ret = true;
 				break;
 			}
+		}
 		return ret;
 	}
 

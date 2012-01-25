@@ -13,8 +13,9 @@ public class ASConfig {
 	public void create(){
 		File d = plugin.getDataFolder();
 		d.mkdirs();
-		if(!plugin.getConfig().fileExists() || !plugin.getConfig().checkDefaults())
+		if(!plugin.getConfig().fileExists() || !plugin.getConfig().checkDefaults()){
 			plugin.saveDefaultConfig();
+		}
 		load();
 	}
 
