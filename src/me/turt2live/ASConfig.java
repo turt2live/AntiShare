@@ -1,7 +1,5 @@
 package me.turt2live;
 
-import java.io.File;
-
 public class ASConfig {
 
 	private AntiShare plugin;
@@ -11,8 +9,6 @@ public class ASConfig {
 	}
 
 	public void create(){
-		File d = plugin.getDataFolder();
-		d.mkdirs();
 		plugin.getConfig().loadDefaults(plugin.getResource("resources/config.yml"));
 		if(!plugin.getConfig().fileExists() || !plugin.getConfig().checkDefaults()){
 			plugin.getConfig().saveDefaults();
@@ -22,6 +18,14 @@ public class ASConfig {
 
 	public Object get(String path){
 		return plugin.getConfig().get(path);
+	}
+
+	public boolean getBoolean(String path){
+		return plugin.getConfig().getBoolean(path);
+	}
+
+	public String getString(String path){
+		return plugin.getConfig().getString(path);
 	}
 
 	public void load(){

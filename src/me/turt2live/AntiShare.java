@@ -14,26 +14,6 @@ import com.feildmaster.lib.configuration.PluginWrapper;
 
 public class AntiShare extends PluginWrapper {
 
-	private AntiShareListener listener;
-	private ASConfig config;
-	public Logger log = Logger.getLogger("Minecraft");
-
-	@Override
-	public void onDisable(){
-		listener = null;
-		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
-	}
-
-	@Override
-	public void onEnable(){
-		config = new ASConfig(this);
-		config.create();
-		config.reload();
-		listener = new AntiShareListener(this);
-		listener.init();
-		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
-	}
-
 	public static String addColor(String message){
 		String colorSeperator = "&";
 		message = message.replaceAll(colorSeperator + "0", ChatColor.getByChar('0').toString());
@@ -61,29 +41,9 @@ public class AntiShare extends PluginWrapper {
 		return message;
 	}
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args){
-		if(sender instanceof Player){
-			if(((Player) sender).hasPermission("AntiShare.reload")){
-				if(cmd.equalsIgnoreCase("antishare") ||
-						cmd.equalsIgnoreCase("as") ||
-						cmd.equalsIgnoreCase("antis") ||
-						cmd.equalsIgnoreCase("ashare")){
-					reloadConfig();
-					((Player) sender).sendMessage(ChatColor.GREEN + "AntiShare Reloaded.");
-				}
-			}
-			return false;
-		}else{
-			if(cmd.equalsIgnoreCase("antishare") ||
-					cmd.equalsIgnoreCase("as") ||
-					cmd.equalsIgnoreCase("antis") ||
-					cmd.equalsIgnoreCase("ashare")){
-				reloadConfig();
-				log.info("AntiShare Reloaded.");
-			}
-			return false;
-		}
+	public static File getSaveFolder(){
+		Plugin plugin = Bukkit.getPluginManager().getPlugin("AntiShare");
+		return plugin.getDataFolder();
 	}
 
 	public static boolean isBlocked(String message, int id){
@@ -105,8 +65,54 @@ public class AntiShare extends PluginWrapper {
 		return ret;
 	}
 
-	public static File getSaveFolder(){
-		Plugin plugin = Bukkit.getPluginManager().getPlugin("AntiShare");
-		return plugin.getDataFolder();
+	private AntiShareListener listener;
+
+	private ASConfig config;
+
+	public Logger log = Logger.getLogger("Minecraft");
+
+	public ASConfig config(){
+		return config;
+	}
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args){
+		if(sender instanceof Player){
+			if(((Player) sender).hasPermission("AntiShare.reload")){
+				if(cmd.equalsIgnoreCase("antishare") ||
+						cmd.equalsIgnoreCase("as") ||
+						cmd.equalsIgnoreCase("antis") ||
+						cmd.equalsIgnoreCase("ashare")){
+					config.reload();
+					((Player) sender).sendMessage(ChatColor.GREEN + "AntiShare Reloaded.");
+				}
+			}
+			return false;
+		}else{
+			if(cmd.equalsIgnoreCase("antishare") ||
+					cmd.equalsIgnoreCase("as") ||
+					cmd.equalsIgnoreCase("antis") ||
+					cmd.equalsIgnoreCase("ashare")){
+				reloadConfig();
+				log.info("AntiShare Reloaded.");
+			}
+			return false;
+		}
+	}
+
+	@Override
+	public void onDisable(){
+		listener = null;
+		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
+	}
+
+	@Override
+	public void onEnable(){
+		config = new ASConfig(this);
+		config.create();
+		config.reload();
+		listener = new AntiShareListener(this);
+		listener.init();
+		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}
 }
