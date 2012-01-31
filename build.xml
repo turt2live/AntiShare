@@ -29,7 +29,7 @@
             <fileset dir="${src}" excludes="**/*.java,**/*.form" includes="**"/>
         </copy>
         <copy todir="${build}">
-            <fileset dir="${resources}" excludes="**/*.java,**/*.form" includes="**"/>
+            <fileset dir="${resources}/resources" excludes="**/*.java,**/*.form" includes="**"/>
         </copy>
 
         <jar compress="true" destfile="${dist}/${ant.project.name}.jar" basedir="${build}"/>
