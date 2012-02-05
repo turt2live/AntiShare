@@ -1,8 +1,7 @@
 name: AntiShare
 main: me.turt2live.AntiShare
-version: 1.0.5
-description: Create social awkwardness for creative-mode players
-author: Turt2Live
+version: 1.0.6
+description: Create social awkwardness for creative-mode players]
 authors: [Turt2Live, Sayshal]
 website: http://mc.turt2live.com/plugins/AntiShare
 commands:
@@ -35,6 +34,12 @@ permissions:
     AntiShare.bedrock:
         description: can break and place bedrock
         default: op
+    AntiShare.pvp:
+        description: can use pvp
+        default: op
+    AntiShare.mobpvp:
+        description: can use pvp against mobs
+        default: op
     AntiShare.admin:
         description: All AntiShare permissions
         default: op
@@ -46,6 +51,8 @@ permissions:
             AntiShare.blockBypass: true
             AntiShare.freePlace: true
             AntiShare.bedrock: true
+            AntiShare.pvp: true
+            AntiShare.mobpvp: true
     AntiShare.*:
         description: deny all AntiShare events
         default: true

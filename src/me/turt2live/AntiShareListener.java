@@ -3,6 +3,8 @@ package me.turt2live;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,7 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -132,6 +137,38 @@ public class AntiShareListener implements Listener {
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST)
+	public void onDamage(EntityDamageEvent event){
+		if(!(event instanceof EntityDamageByEntityEvent)
+				|| event.isCancelled()){
+			return;
+		}
+		Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+		if(damager instanceof Player){
+			Player dealer = (Player) damager;
+			if(dealer.getGameMode() != GameMode.CREATIVE){
+				return;
+			}
+			if(event.getEntity() instanceof Player){
+				if(!plugin.getConfig().getBoolean("other.pvp")){
+					return;
+				}
+				if(!dealer.hasPermission("AntiShare.pvp")){
+					dealer.sendMessage(AntiShare.addColor(plugin.config().getString("messages.pvp")));
+					event.setCancelled(true);
+				}
+			}else{
+				if(!plugin.getConfig().getBoolean("other.pvp-mob")){
+					return;
+				}
+				if(!dealer.hasPermission("AntiShare.mobpvp")){
+					dealer.sendMessage(AntiShare.addColor(plugin.config().getString("messages.mobpvp")));
+					event.setCancelled(true);
+				}
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onEntityDeath(EntityDeathEvent event){
 		// System.out.println("onDeath | " + event.getEntity());
 		if(event.getEntity() instanceof Player){
@@ -152,6 +189,22 @@ public class AntiShareListener implements Listener {
 						item.setAmount(0);
 					}
 				}
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onEntityTarget(EntityTargetEvent event){
+		if(event.isCancelled())
+			return;
+
+		Entity targetEntity = event.getTarget();
+		if(event.getEntity() instanceof Monster
+				&& targetEntity != null
+				&& targetEntity instanceof Player){
+			final Player player = (Player) targetEntity;
+			if(!player.hasPermission("AntiShare.mobpvp")){
+				event.setCancelled(true);
 			}
 		}
 	}

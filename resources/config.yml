@@ -16,7 +16,10 @@
 # 	'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)
 # 	'inventory_swap' - If true then creative and survival inventories will be swapped
 # 	'track_blocks' - If true then creative mode blocks will be tracked where only creative mode players can break them
-#  						(unless they have the permission "AntiShare.blockBypass")	'allow_bedrock' - If false then bedrock will never be broken or placed
+#  						(unless they have the permission "AntiShare.blockBypass")	
+#   'allow_bedrock' - If false then bedrock will never be broken or placed
+#   'pvp' - True if you want to allow creative players to hit other players ("AntiShare.pvp" to allow to specific players)
+#   'pvp-mobs' - True if you want to allow creative players to be able to hit mobs ("AntiShare.mobpvp" to allow to specific players)
 # Permissions:
 # 	'AntiShare.*' - Deny all events
 # 	'AntiShare.place' - Deny block placing
@@ -57,9 +60,13 @@ messages:
   inventory_swap: Your inventory has been changed.
   creativeModeBlock: You cannot break that block! It was placed by a creative mode player.
   bedrock: You cannot play with bedrock!
+  pvp: You cannot hit other players!
+  mobpvp: You cannot hit mobs!
 other:
   only_if_creative: true
   allow_eggs: false
   inventory_swap: true
   track_blocks: true
   allow_bedrock: false
+  pvp: false
+  pvp-mobs: false

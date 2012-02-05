@@ -9,16 +9,13 @@ public abstract class PluginWrapper extends org.bukkit.plugin.java.JavaPlugin {
 
     public EnhancedConfiguration getConfig() {
         if(config == null) {
-            reloadConfig();
+            config = new EnhancedConfiguration(this);
         }
         return config;
     }
 
     public void reloadConfig() {
-        if(config == null) {
-            config = new EnhancedConfiguration(this);
-        }
-        config.load();
+        getConfig().load();
     }
 
     public void saveConfig() {
