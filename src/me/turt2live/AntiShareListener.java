@@ -4,8 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -149,7 +151,7 @@ public class AntiShareListener implements Listener {
 				return;
 			}
 			if(event.getEntity() instanceof Player){
-				if(!plugin.getConfig().getBoolean("other.pvp")){
+				if(plugin.getConfig().getBoolean("other.pvp")){
 					return;
 				}
 				if(!dealer.hasPermission("AntiShare.pvp")){
@@ -157,11 +159,20 @@ public class AntiShareListener implements Listener {
 					event.setCancelled(true);
 				}
 			}else{
-				if(!plugin.getConfig().getBoolean("other.pvp-mob")){
+				if(plugin.getConfig().getBoolean("other.pvp-mob")){
 					return;
 				}
 				if(!dealer.hasPermission("AntiShare.mobpvp")){
 					dealer.sendMessage(AntiShare.addColor(plugin.config().getString("messages.mobpvp")));
+					event.setCancelled(true);
+				}
+			}
+		}else if(damager instanceof Projectile){
+			LivingEntity shooter = ((Projectile) damager).getShooter();
+			if(shooter instanceof Player){
+				Player dealer = ((Player) shooter);
+				if(!dealer.hasPermission("AntiShare.pvp")){
+					dealer.sendMessage(AntiShare.addColor(plugin.config().getString("messages.pvp")));
 					event.setCancelled(true);
 				}
 			}
@@ -202,8 +213,9 @@ public class AntiShareListener implements Listener {
 		if(event.getEntity() instanceof Monster
 				&& targetEntity != null
 				&& targetEntity instanceof Player){
-			final Player player = (Player) targetEntity;
-			if(!player.hasPermission("AntiShare.mobpvp")){
+			Player player = (Player) targetEntity;
+			if(!player.hasPermission("AntiShare.mobpvp")
+					&& !plugin.getConfig().getBoolean("other.mobpvp")){
 				event.setCancelled(true);
 			}
 		}
