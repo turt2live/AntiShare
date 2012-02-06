@@ -1,8 +1,11 @@
 package me.turt2live;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
@@ -26,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 public class AntiShareListener implements Listener {
 
 	private AntiShare plugin;
+	private HashMap<Player, Long> blockDropTextWarnings = new HashMap<Player, Long>();
 
 	public AntiShareListener(AntiShare p){
 		plugin = p;
@@ -59,8 +63,15 @@ public class AntiShareListener implements Listener {
 					&& !plugin.config().getBoolean("other.allow_bedrock")
 					&& !player.hasPermission("AntiShare.bedrock")
 					&& event.getBlock().getType() == Material.BEDROCK){
-				player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.bedrock")));
-				event.setCancelled(true);
+				if(plugin.getConfig().getBoolean("other.only_if_creative")){
+					if(player.getGameMode() == GameMode.CREATIVE){
+						player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.bedrock")));
+						event.setCancelled(true);
+					}
+				}else{
+					player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.bedrock")));
+					event.setCancelled(true);
+				}
 			}
 			//Creative Mode Blocking
 			if(!event.isCancelled()
@@ -69,8 +80,16 @@ public class AntiShareListener implements Listener {
 				if(player.getGameMode() == GameMode.SURVIVAL){
 					boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
 					if(isBlocked){
-						player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.creativeModeBlock")));
-						event.setCancelled(true);
+						if(!plugin.getConfig().getBoolean("other.blockDrops")){
+							player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.creativeModeBlock")));
+							event.setCancelled(true);
+						}else{
+							player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.creativeModeBlock")));
+							ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
+							Block block = event.getBlock();
+							event.setCancelled(true);
+							block.setTypeId(0); // Fakes a break
+						}
 					}
 				}else{
 					ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
@@ -97,6 +116,23 @@ public class AntiShareListener implements Listener {
 			}else if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break") && itemIsBlocked){
 				event.setCancelled(true);
 				player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.block_break")));
+			}
+		}
+		// Warning message for block drops
+		if(!event.isCancelled()){
+			if(plugin.getConfig().getBoolean("other.blockDrops")
+					&& !player.hasPermission("AntiShare.blockBypass")){
+				long systemTime = System.currentTimeMillis();
+				if(blockDropTextWarnings.containsKey(player)){
+					if((systemTime - blockDropTextWarnings.get(player)) > 1000){
+						player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.noBlockDrop")));
+						blockDropTextWarnings.remove(player);
+						blockDropTextWarnings.put(player, systemTime);
+					}
+				}else{
+					player.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.noBlockDrop")));
+					blockDropTextWarnings.put(player, systemTime);
+				}
 			}
 		}
 	}
@@ -126,8 +162,15 @@ public class AntiShareListener implements Listener {
 				&& !plugin.config().getBoolean("other.allow_bedrock")
 				&& !player.hasPermission("AntiShare.bedrock")
 				&& event.getBlock().getType() == Material.BEDROCK){
-			player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.bedrock")));
-			event.setCancelled(true);
+			if(plugin.getConfig().getBoolean("other.only_if_creative")){
+				if(player.getGameMode() == GameMode.CREATIVE){
+					player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.bedrock")));
+					event.setCancelled(true);
+				}
+			}else{
+				player.sendMessage(AntiShare.addColor(plugin.config().getString("messages.bedrock")));
+				event.setCancelled(true);
+			}
 		}
 		//Creative Mode Placing
 		if(!event.isCancelled()
@@ -139,7 +182,7 @@ public class AntiShareListener implements Listener {
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST)
-	public void onDamage(EntityDamageEvent event){
+	public void onEntityDamage(EntityDamageEvent event){
 		if(!(event instanceof EntityDamageByEntityEvent)
 				|| event.isCancelled()){
 			return;
@@ -147,7 +190,7 @@ public class AntiShareListener implements Listener {
 		Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 		if(damager instanceof Player){
 			Player dealer = (Player) damager;
-			if(dealer.getGameMode() != GameMode.CREATIVE){
+			if(dealer.getGameMode() != GameMode.CREATIVE && !plugin.getConfig().getBoolean("other.only_if_creative")){
 				return;
 			}
 			if(event.getEntity() instanceof Player){
@@ -214,9 +257,18 @@ public class AntiShareListener implements Listener {
 				&& targetEntity != null
 				&& targetEntity instanceof Player){
 			Player player = (Player) targetEntity;
-			if(!player.hasPermission("AntiShare.mobpvp")
-					&& !plugin.getConfig().getBoolean("other.mobpvp")){
-				event.setCancelled(true);
+			if(plugin.getConfig().getBoolean("other.only_if_creative")){
+				if(player.getGameMode() == GameMode.CREATIVE){
+					if(!player.hasPermission("AntiShare.mobpvp")
+							&& !plugin.getConfig().getBoolean("other.mobpvp")){
+						event.setCancelled(true);
+					}
+				}
+			}else{
+				if(!player.hasPermission("AntiShare.mobpvp")
+						&& !plugin.getConfig().getBoolean("other.mobpvp")){
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
