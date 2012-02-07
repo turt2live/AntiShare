@@ -192,7 +192,10 @@ public class AntiShareListener implements Listener {
 			Player dealer = (Player) damager;
 			if(dealer.getGameMode() != GameMode.CREATIVE && !plugin.getConfig().getBoolean("other.only_if_creative")){
 				return;
+			}else if(dealer.getGameMode() != GameMode.CREATIVE){
+				return;
 			}
+			System.out.println("GM: " + dealer.getGameMode().toString());
 			if(event.getEntity() instanceof Player){
 				if(plugin.getConfig().getBoolean("other.pvp")){
 					return;
@@ -214,6 +217,11 @@ public class AntiShareListener implements Listener {
 			LivingEntity shooter = ((Projectile) damager).getShooter();
 			if(shooter instanceof Player){
 				Player dealer = ((Player) shooter);
+				if(dealer.getGameMode() != GameMode.CREATIVE && !plugin.getConfig().getBoolean("other.only_if_creative")){
+					return;
+				}else if(dealer.getGameMode() != GameMode.CREATIVE){
+					return;
+				}
 				if(!dealer.hasPermission("AntiShare.pvp")){
 					dealer.sendMessage(AntiShare.addColor(plugin.config().getString("messages.pvp")));
 					event.setCancelled(true);

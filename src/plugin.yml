@@ -1,11 +1,7 @@
 name: AntiShare
 main: me.turt2live.AntiShare
-<<<<<<< HEAD
-version: 1.0.7
-=======
-version: 1.0.6
->>>>>>> 900661404ae7592470be6fbc511d608a7245e2ec
-description: Create social awkwardness for creative-mode players]
+version: 1.0.8
+description: Create social awkwardness for creative-mode players
 authors: [Turt2Live, Sayshal]
 website: http://mc.turt2live.com/plugins/AntiShare
 commands:
