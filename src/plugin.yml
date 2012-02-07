@@ -1,0 +1,111 @@
+name: AntiShare
+main: me.turt2live.AntiShare
+version: 1.0.6
+description: Create social awkwardness for creative-mode players]
+authors: [Turt2Live, Sayshal]
+website: http://mc.turt2live.com/plugins/AntiShare
+commands:
+  antishare:
+    description: reloads config
+    permission: AntiShare.reload
+  as:
+    description: reloads config
+    permission: AntiShare.reload
+  antis:
+    description: reloads config
+    permission: AntiShare.reload
+  ashare:
+    description: reloads config
+    permission: AntiShare.reload
+
+permissions:
+    AntiShare.reload:
+        description: reload plugin
+        default: op
+    AntiShare.noswap:
+        description: immunity (if true) to inventory swapping on GameMode changes
+        default: op
+    AntiShare.blockBypass:
+        description: immunity to creative-mode only blocks
+        default: op
+    AntiShare.freePlace:
+        description: can place a creative-mode block without it being registered as such
+        default: op
+    AntiShare.bedrock:
+        description: can break and place bedrock
+        default: op
+    AntiShare.pvp:
+        description: can use pvp
+        default: op
+    AntiShare.mobpvp:
+        description: can use pvp against mobs
+        default: op
+    AntiShare.admin:
+        description: All AntiShare permissions
+        default: op
+        children:
+            AntiShare.allow.*: true
+            AntiShare.*: false
+            AntiShare.reload: true
+            AntiShare.noswap: true
+            AntiShare.blockBypass: true
+            AntiShare.freePlace: true
+            AntiShare.bedrock: true
+            AntiShare.pvp: true
+            AntiShare.mobpvp: true
+    AntiShare.*:
+        description: deny all AntiShare events
+        default: true
+        children:
+            AntiShare.place: true
+            AntiShare.break: true
+            AntiShare.death: true
+            AntiShare.drop: true
+            AntiShare.interact: true
+            AntiShare.eggs: true
+    AntiShare.place:
+        description: deny place of defined blocks
+        default: true
+    AntiShare.break:
+        description: deny break of defined blocks
+        default: true
+    AntiShare.death:
+        description: deny defined items dropped on death
+        default: true
+    AntiShare.drop:
+        description: deny defined items from being dropped
+        default: true
+    AntiShare.interact:
+        description: deny interaction of defined blocks
+        default: true
+    AntiShare.eggs:
+        description: deny use of mob spawning eggs
+        default: true
+    AntiShare.allow.*:
+        description: allow all AntiShare.allow events
+        default: op
+        children:
+            AntiShare.allow.place: true
+            AntiShare.allow.break: true
+            AntiShare.allow.death: true
+            AntiShare.allow.drop: true
+            AntiShare.allow.interact: true
+            AntiShare.allow.eggs: true
+    AntiShare.allow.place:
+        description: allow place of defined blocks
+        default: op
+    AntiShare.allow.break:
+        description: allow break of defined blocks
+        default: op
+    AntiShare.allow.death:
+        description: allow defined items dropped on death
+        default: op
+    AntiShare.allow.drop:
+        description: allow defined items from being dropped
+        default: op
+    AntiShare.allow.interact:
+        description: allow interaction of defined blocks
+        default: op
+    AntiShare.allow.eggs:
+        description: allow use of mob spawning eggs
+        default: op
