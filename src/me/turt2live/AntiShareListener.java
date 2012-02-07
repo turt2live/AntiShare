@@ -195,7 +195,7 @@ public class AntiShareListener implements Listener {
 			}else if(dealer.getGameMode() != GameMode.CREATIVE){
 				return;
 			}
-			System.out.println("GM: " + dealer.getGameMode().toString());
+			//System.out.println("GM: " + dealer.getGameMode().toString());
 			if(event.getEntity() instanceof Player){
 				if(plugin.getConfig().getBoolean("other.pvp")){
 					return;
