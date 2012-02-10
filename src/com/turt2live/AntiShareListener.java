@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -277,6 +278,31 @@ public class AntiShareListener implements Listener {
 						&& !plugin.getConfig().getBoolean("other.mobpvp")){
 					event.setCancelled(true);
 				}
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onPlayerCommand(PlayerCommandPreprocessEvent event){
+		if(event.isCancelled()){
+			return;
+		}
+		Player sender = event.getPlayer();
+		if(sender.hasPermission("AntiShare.allow.commands")){
+			return;
+		}
+		if(plugin.getConfig().getBoolean("other.only_if_creative")){
+			if(sender.getGameMode() != GameMode.CREATIVE){
+				return;
+			}
+		}
+		String commandsToBlock[] = plugin.getConfig().getString("events.commands").split(" ");
+		String commandSent = event.getMessage();
+		for(String check : commandsToBlock){
+			if(check.equalsIgnoreCase("/" + commandSent)){
+				sender.sendMessage(AntiShare.addColor(plugin.getConfig().getString("messages.illegalCommand")));
+				event.setCancelled(true);
+				return;
 			}
 		}
 	}
