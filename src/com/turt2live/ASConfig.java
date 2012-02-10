@@ -1,4 +1,4 @@
-package me.turt2live;
+package com.turt2live;
 
 public class ASConfig {
 
