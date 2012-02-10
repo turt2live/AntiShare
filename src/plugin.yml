@@ -1,5 +1,5 @@
 name: AntiShare
-main: me.turt2live.AntiShare
+main: com.turt2live.AntiShare
 version: 1.0.8
 description: Create social awkwardness for creative-mode players
 authors: [Turt2Live, Sayshal]
