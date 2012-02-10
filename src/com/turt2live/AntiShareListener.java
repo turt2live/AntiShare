@@ -121,7 +121,8 @@ public class AntiShareListener implements Listener {
 		// Warning message for block drops
 		if(!event.isCancelled()){
 			if(plugin.getConfig().getBoolean("other.blockDrops")
-					&& !player.hasPermission("AntiShare.blockBypass")){
+					&& !player.hasPermission("AntiShare.blockBypass")
+					&& ASBlockRegistry.isBlockCreative(event.getBlock())){
 				long systemTime = System.currentTimeMillis();
 				if(blockDropTextWarnings.containsKey(player)){
 					if((systemTime - blockDropTextWarnings.get(player)) > 1000){
