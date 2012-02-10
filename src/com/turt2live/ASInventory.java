@@ -10,34 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class ASInventory {
 
-	public static void save(Player player, GameMode gamemode){
-		try{
-			Integer size = player.getInventory().getSize();
-			Integer i = 0;
-			File sdir = new File(AntiShare.getSaveFolder(), "inventories");
-			sdir.mkdirs();
-			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
-			if(!saveFile.exists()){
-				saveFile.createNewFile();
-			}
-			FileConfiguration config = new YamlConfiguration();
-			config.load(saveFile);
-			for(i = 0; i < size; i++){
-				ItemStack item = player.getInventory().getItem(i);
-				if(item.getAmount() != 0){
-					config.set(i.toString() + ".amount", item.getAmount());
-					Short durab = item.getDurability();
-					config.set(i.toString() + ".durability", durab.intValue());
-					config.set(i.toString() + ".type", item.getTypeId());
-					config.save(saveFile);
-				}
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-
 	@SuppressWarnings ("deprecation")
 	public static void load(Player player, GameMode gamemode){
 		try{
@@ -65,9 +37,50 @@ public class ASInventory {
 					player.updateInventory();
 				}
 			}
-		}
-		catch(Exception e){
+		}catch(Exception e){
 			e.printStackTrace();
+		}
+	}
+
+	public static void save(Player player, GameMode gamemode){
+		wipe(player);
+		try{
+			Integer size = player.getInventory().getSize();
+			Integer i = 0;
+			File sdir = new File(AntiShare.getSaveFolder(), "inventories");
+			sdir.mkdirs();
+			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
+			if(!saveFile.exists()){
+				saveFile.createNewFile();
+			}
+			FileConfiguration config = new YamlConfiguration();
+			config.load(saveFile);
+			for(i = 0; i < size; i++){
+				ItemStack item = player.getInventory().getItem(i);
+				if(item.getAmount() != 0){
+					config.set(i.toString() + ".amount", item.getAmount());
+					Short durab = item.getDurability();
+					config.set(i.toString() + ".durability", durab.intValue());
+					config.set(i.toString() + ".type", item.getTypeId());
+					config.save(saveFile);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	private static void wipe(Player player){
+		File sdir = new File(AntiShare.getSaveFolder(), "inventories");
+		sdir.mkdirs();
+		File saveFile = new File(sdir, player.getName() + "_" + player.getGameMode().toString() + ".yml");
+		if(saveFile.exists()){
+			saveFile.delete();
+			try{
+				saveFile.createNewFile();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 
