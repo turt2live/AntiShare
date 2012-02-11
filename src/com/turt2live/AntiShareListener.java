@@ -390,7 +390,7 @@ public class AntiShareListener implements Listener {
 		}
 		Player player = event.getPlayer();
 		if(!event.getFrom().getWorld().equals(event.getTo().getWorld())){
-			boolean cancel = ASMultiWorld.worldSwap(plugin, player, event.getFrom(), event.getTo());
+			boolean cancel = !ASMultiWorld.worldSwap(plugin, player, event.getFrom(), event.getTo());
 			if(cancel){
 				event.setCancelled(true);
 			}

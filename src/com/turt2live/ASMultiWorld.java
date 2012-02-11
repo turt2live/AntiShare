@@ -3,6 +3,7 @@ package com.turt2live;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -39,8 +40,25 @@ public class ASMultiWorld implements Listener {
 		}
 	}
 
+	// Returns allowance of worldSwap
 	public static boolean worldSwap(AntiShare plugin, Player player, Location from, Location to){
-		return false; //Cancel or not
+		if(player.hasPermission("AntiShare.worlds")){
+			return true;
+		}
+		World worldTo = to.getWorld();
+		boolean transfers = plugin.config().getBoolean("other.worldTransfer", worldTo);
+		if(plugin.config().getBoolean("other.only_if_creative", worldTo)){
+			if(player.getGameMode() == GameMode.CREATIVE && transfers){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			if(!transfers){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private AntiShare plugin;

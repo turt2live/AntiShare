@@ -25,8 +25,10 @@
 #   'blockDrops' - Only works if 'track_blocks' is in effect. If true, you allow allow the creative-mode block to be broken, but no drops will be produced
 #                  If false, you don't allow the block to be broken (1.0.6 and prior default). While breaking (if this is true) AntiShare sends the message
 #                  'noBlockDrop' to the player once per second, or for every different block. As well, when the block is 100% broken it will show 'creativeModeBlock'.
-# 
-#   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', and all the 'events'
+#   'worldTransfer' - True if you would like to allow players to transfer worlds. Suggested value of 'true' is 'only_if_creative' is false
+#                     True means you can transfer TO the world, false means you cannot.
+#
+#   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
 # Permissions:
 # 	'AntiShare.*' - Deny all events
@@ -91,3 +93,4 @@ other:
   pvp: false
   pvp-mobs: false
   blockDrops: false
+  worldTransfer: false
