@@ -1,5 +1,7 @@
 package com.turt2live;
 
+import org.bukkit.World;
+
 public class ASConfig {
 
 	private AntiShare plugin;
@@ -20,11 +22,11 @@ public class ASConfig {
 		return plugin.getConfig().get(path);
 	}
 
-	public boolean getBoolean(String path){
+	public boolean getBoolean(String path, World world){
 		return plugin.getConfig().getBoolean(path);
 	}
 
-	public String getString(String path){
+	public String getString(String path, World world){
 		return plugin.getConfig().getString(path);
 	}
 
