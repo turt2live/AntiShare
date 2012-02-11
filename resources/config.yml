@@ -8,7 +8,8 @@
 #   'commands' - Commands to block, define a new command with a SPACE (defaults block '/spawn' and '/home')
 # 	-- Want all blocks/items to be denied? Put a *
 # 	-- Want no blocks/items to be denied? Put: none
-# 	-- Make sure item lists are space-seperated, not commas, periods, or fancy other things!Messages:
+# 	-- Make sure item lists are space-seperated, not commas, periods, or fancy other things!
+# Messages:
 # 	All messages are when they are declined an action.
 # 	Chat colors are supported using the & sign (eg: &f = white)
 # Other:
