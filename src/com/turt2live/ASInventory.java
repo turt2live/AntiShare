@@ -13,14 +13,26 @@ public class ASInventory {
 	@SuppressWarnings ("deprecation")
 	public static void load(Player player, GameMode gamemode){
 		try{
-			File sdir = new File(AntiShare.getSaveFolder(), "inventories");
+			File sdir = new File(ASUtils.getSaveFolder(), "inventories");
 			sdir.mkdirs();
-			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
+			final File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
+			final File newSave = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + player.getWorld() + ".yml");
+			boolean transfer = true;
+			boolean loadOld = true;
+			// For pre 2.0.0
 			if(!saveFile.exists()){
-				saveFile.createNewFile();
+				if(!newSave.exists()){
+					newSave.createNewFile();
+					transfer = false;
+				}
+				loadOld = false;
 			}
 			FileConfiguration config = new YamlConfiguration();
-			config.load(saveFile);
+			if(loadOld){
+				config.load(saveFile);
+			}else{
+				config.load(newSave);
+			}
 			Integer i = 0;
 			Integer size = player.getInventory().getSize();
 			player.getInventory().clear();
@@ -37,6 +49,15 @@ public class ASInventory {
 					player.updateInventory();
 				}
 			}
+			if(transfer){
+				new Thread(new Runnable(){
+					@Override
+					public void run(){
+						ASUtils.transfer(saveFile, newSave);
+						saveFile.delete();
+					}
+				}).start();
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -47,11 +68,16 @@ public class ASInventory {
 		try{
 			Integer size = player.getInventory().getSize();
 			Integer i = 0;
-			File sdir = new File(AntiShare.getSaveFolder(), "inventories");
+			File sdir = new File(ASUtils.getSaveFolder(), "inventories");
 			sdir.mkdirs();
-			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
+			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + player.getWorld().getName() + ".yml");
 			if(!saveFile.exists()){
 				saveFile.createNewFile();
+				// Cleanup pre 2.0.0 stuff
+				File f = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
+				if(f.exists()){
+					f.delete();
+				}
 			}
 			FileConfiguration config = new YamlConfiguration();
 			config.load(saveFile);
@@ -71,9 +97,9 @@ public class ASInventory {
 	}
 
 	private static void wipe(Player player){
-		File sdir = new File(AntiShare.getSaveFolder(), "inventories");
+		File sdir = new File(ASUtils.getSaveFolder(), "inventories");
 		sdir.mkdirs();
-		File saveFile = new File(sdir, player.getName() + "_" + player.getGameMode().toString() + ".yml");
+		File saveFile = new File(sdir, player.getName() + "_" + player.getGameMode().toString() + "_" + player.getWorld().getName() + ".yml");
 		if(saveFile.exists()){
 			saveFile.delete();
 			try{
@@ -81,7 +107,11 @@ public class ASInventory {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
+			// Cleanup pre 2.0.0 stuff
+			File f = new File(sdir, player.getName() + "_" + player.getGameMode().toString() + ".yml");
+			if(f.exists()){
+				f.delete();
+			}
 		}
 	}
-
 }

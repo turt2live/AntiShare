@@ -46,8 +46,10 @@
 # 	'AntiShare.bedrock' - If true, then the player can break and place bedrock
 #   'AntiShare.pvp' - Allows PVP to a creative mode player
 #   'AntiShare.mobpvp' - Allows Mob PVP to a creative mode player
+#   'AntiShare.worlds' - Allows world teleporting without being blocked
 # 	'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.blockBypass", 
-#                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", and "AntiShare.mobpvp".
+#                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds",
+#                         and "AntiShare.mobpvp".
 # Commands:
 # 	'/antishare' - Reloads configuration
 # 		Aliases: '/as', '/antis', '/ashare'
@@ -79,6 +81,7 @@ messages:
   mobpvp: You cannot hit mobs!
   noBlockDrop: You will not get anything from breaking that!
   illegalCommand: You cannot use that command!
+  worldSwap: You cannot transfer to that world!
 other:
   only_if_creative: true
   allow_eggs: false

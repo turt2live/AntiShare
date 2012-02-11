@@ -40,6 +40,9 @@ permissions:
     AntiShare.mobpvp:
         description: can use pvp against mobs
         default: op
+    AntiShare.worlds:
+        description: can teleport to worlds without being blocked
+        default: op
     AntiShare.admin:
         description: All AntiShare permissions
         default: op
@@ -53,6 +56,7 @@ permissions:
             AntiShare.bedrock: true
             AntiShare.pvp: true
             AntiShare.mobpvp: true
+            AntiShare.worlds: true
     AntiShare.*:
         description: deny all AntiShare events
         default: true
