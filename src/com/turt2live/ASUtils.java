@@ -53,7 +53,6 @@ public class ASUtils {
 		String parts[] = message.split(" ");
 		String item = id + "";
 		for(String s : parts){
-			//System.out.println("ITEM: " + s);
 			if(s.equalsIgnoreCase(item)){
 				ret = true;
 				break;
