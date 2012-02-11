@@ -1,6 +1,10 @@
 package com.turt2live;
 
+import java.io.File;
+
 import org.bukkit.World;
+
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
 public class ASConfig {
 
@@ -18,16 +22,40 @@ public class ASConfig {
 		load();
 	}
 
-	public Object get(String path){
-		return plugin.getConfig().get(path);
+	public Object get(String path, World world){
+		File worldConfig = new File(plugin.getDataFolder(), world.getName() + "_config.yml");
+		EnhancedConfiguration config = new EnhancedConfiguration(worldConfig, plugin);
+		Object value = null;
+		if(config.getString(path).equalsIgnoreCase("global")){
+			value = config.get(path);
+		}else{
+			value = plugin.getConfig().get(path);
+		}
+		return value;
 	}
 
 	public boolean getBoolean(String path, World world){
-		return plugin.getConfig().getBoolean(path);
+		File worldConfig = new File(plugin.getDataFolder(), world.getName() + "_config.yml");
+		EnhancedConfiguration config = new EnhancedConfiguration(worldConfig, plugin);
+		boolean value = false;
+		if(config.getString(path).equalsIgnoreCase("global")){
+			value = config.getBoolean(path);
+		}else{
+			value = plugin.getConfig().getBoolean(path);
+		}
+		return value;
 	}
 
 	public String getString(String path, World world){
-		return plugin.getConfig().getString(path);
+		File worldConfig = new File(plugin.getDataFolder(), world.getName() + "_config.yml");
+		EnhancedConfiguration config = new EnhancedConfiguration(worldConfig, plugin);
+		String value = null;
+		if(config.getString(path).equalsIgnoreCase("global")){
+			value = config.getString(path);
+		}else{
+			value = plugin.getConfig().getString(path);
+		}
+		return value;
 	}
 
 	public void load(){
@@ -40,9 +68,5 @@ public class ASConfig {
 
 	public void save(){
 		plugin.saveConfig();
-	}
-
-	public void set(String path, Object value){
-		plugin.getConfig().set(path, value);
 	}
 }

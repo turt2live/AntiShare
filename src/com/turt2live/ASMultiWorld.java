@@ -2,6 +2,7 @@ package com.turt2live;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -26,7 +27,16 @@ public class ASMultiWorld implements Listener {
 	}
 
 	public static void detectWorlds(AntiShare plugin){
-		// TODO
+		for(World w : Bukkit.getWorlds()){
+			String worldName = w.getName();
+			File worldConfig = new File(plugin.getDataFolder(), worldName + "_config.yml");
+			EnhancedConfiguration worldSettings = new EnhancedConfiguration(worldConfig, plugin);
+			worldSettings.loadDefaults(plugin.getResource("resources/world.yml"));
+			if(!worldSettings.fileExists() || !worldSettings.checkDefaults()){
+				worldSettings.saveDefaults();
+			}
+			worldSettings.load();
+		}
 	}
 
 	public static boolean worldSwap(AntiShare plugin, Player player, Location from, Location to){
