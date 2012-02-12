@@ -2,7 +2,6 @@ package com.turt2live;
 
 import java.io.File;
 
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,7 +15,7 @@ public class ASBlockRegistry {
 			return false;
 		}
 		blockListing.mkdirs();
-		File blockList = new File(blockListing, block.getChunk().getX() + "_" + block.getChunk().getZ() + ".yml");
+		File blockList = new File(blockListing, block.getWorld().getName() + "_" + block.getChunk().getX() + "_" + block.getChunk().getZ() + ".yml");
 		try{
 			if(!blockList.exists()){
 				blockList.createNewFile();
@@ -35,19 +34,12 @@ public class ASBlockRegistry {
 		return false;
 	}
 
-	public static boolean isBlockCreative(Location location){
-		if(location == null){
-			return false;
-		}
-		return isBlockCreative(location.getBlock());
-	}
-
 	public static void saveCreativeBlock(Block block){
 		if(block == null){
 			return;
 		}
 		blockListing.mkdirs();
-		File blockList = new File(blockListing, block.getChunk().getX() + "_" + block.getChunk().getZ() + ".yml");
+		File blockList = new File(blockListing, block.getWorld().getName() + "_" + block.getChunk().getX() + "_" + block.getChunk().getZ() + ".yml");
 		try{
 			if(!blockList.exists()){
 				blockList.createNewFile();
@@ -62,21 +54,12 @@ public class ASBlockRegistry {
 		}
 	}
 
-	//For when I screw up...
-
-	public static void saveCreativeBlock(Location location){
-		if(location == null){
-			return;
-		}
-		saveCreativeBlock(location.getBlock());
-	}
-
 	public static void unregisterCreativeBlock(Block block){
 		if(block == null){
 			return;
 		}
 		blockListing.mkdirs();
-		File blockList = new File(blockListing, block.getChunk().getX() + "_" + block.getChunk().getZ() + ".yml");
+		File blockList = new File(blockListing, block.getWorld().getName() + "_" + block.getChunk().getX() + "_" + block.getChunk().getZ() + ".yml");
 		try{
 			if(!blockList.exists()){
 				blockList.createNewFile();
@@ -89,12 +72,5 @@ public class ASBlockRegistry {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	}
-
-	public static void unregisterCreativeBlock(Location location){
-		if(location == null){
-			return;
-		}
-		unregisterCreativeBlock(location.getBlock());
 	}
 }

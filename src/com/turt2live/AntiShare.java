@@ -53,6 +53,7 @@ public class AntiShare extends PluginWrapper {
 		config = new ASConfig(this);
 		config.create();
 		config.reload();
+		ASInventory.cleanup();
 		getServer().getPluginManager().registerEvents(new AntiShareListener(this), this);
 		getServer().getPluginManager().registerEvents(new ASMultiWorld(this), this);
 		ASMultiWorld.detectWorlds(this);

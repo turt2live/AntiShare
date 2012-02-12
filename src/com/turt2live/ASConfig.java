@@ -26,7 +26,7 @@ public class ASConfig {
 		File worldConfig = new File(plugin.getDataFolder(), world.getName() + "_config.yml");
 		EnhancedConfiguration config = new EnhancedConfiguration(worldConfig, plugin);
 		Object value = null;
-		if(config.getString(path).equalsIgnoreCase("global")){
+		if(!config.getString(path).equalsIgnoreCase("global")){
 			value = config.get(path);
 		}else{
 			value = plugin.getConfig().get(path);
@@ -38,7 +38,7 @@ public class ASConfig {
 		File worldConfig = new File(plugin.getDataFolder(), world.getName() + "_config.yml");
 		EnhancedConfiguration config = new EnhancedConfiguration(worldConfig, plugin);
 		boolean value = false;
-		if(config.getString(path).equalsIgnoreCase("global")){
+		if(!config.getString(path).equalsIgnoreCase("global")){
 			value = config.getBoolean(path);
 		}else{
 			value = plugin.getConfig().getBoolean(path);
@@ -50,7 +50,7 @@ public class ASConfig {
 		File worldConfig = new File(plugin.getDataFolder(), world.getName() + "_config.yml");
 		EnhancedConfiguration config = new EnhancedConfiguration(worldConfig, plugin);
 		String value = null;
-		if(config.getString(path).equalsIgnoreCase("global")){
+		if(!config.getString(path).equalsIgnoreCase("global")){
 			value = config.getString(path);
 		}else{
 			value = plugin.getConfig().getString(path);

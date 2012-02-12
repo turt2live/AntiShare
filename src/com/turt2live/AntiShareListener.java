@@ -296,7 +296,7 @@ public class AntiShareListener implements Listener {
 		String commandsToBlock[] = plugin.getConfig().getString("events.commands").split(" ");
 		String commandSent = event.getMessage();
 		for(String check : commandsToBlock){
-			if(check.equalsIgnoreCase("/" + commandSent)){
+			if(check.equalsIgnoreCase(commandSent)){
 				sender.sendMessage(ASUtils.addColor(plugin.getConfig().getString("messages.illegalCommand")));
 				event.setCancelled(true);
 				return;

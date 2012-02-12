@@ -2,6 +2,7 @@ package com.turt2live;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,29 +11,31 @@ import org.bukkit.inventory.ItemStack;
 
 public class ASInventory {
 
+	public static void cleanup(){
+		File sdir = new File(ASUtils.getSaveFolder(), "inventories");
+		String world = Bukkit.getWorlds().get(0).getName();
+		if(sdir.exists()){
+			for(File f : sdir.listFiles()){
+				if(f.getName().endsWith("CREATIVE.yml")
+						|| f.getName().endsWith("SURVIVAL.yml")){
+					File newName = new File(f.getParent(), f.getName().replace("SURVIVAL", "SURVIVAL_" + world).replace("CREATIVE", "CREATIVE_" + world));
+					f.renameTo(newName);
+				}
+			}
+		}
+	}
+
 	@SuppressWarnings ("deprecation")
 	public static void load(Player player, GameMode gamemode){
 		try{
 			File sdir = new File(ASUtils.getSaveFolder(), "inventories");
 			sdir.mkdirs();
-			final File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
-			final File newSave = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + player.getWorld() + ".yml");
-			boolean transfer = true;
-			boolean loadOld = true;
-			// For pre 2.0.0
+			final File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + player.getWorld().getName() + ".yml");
 			if(!saveFile.exists()){
-				if(!newSave.exists()){
-					newSave.createNewFile();
-					transfer = false;
-				}
-				loadOld = false;
+				saveFile.createNewFile();
 			}
 			FileConfiguration config = new YamlConfiguration();
-			if(loadOld){
-				config.load(saveFile);
-			}else{
-				config.load(newSave);
-			}
+			config.load(saveFile);
 			Integer i = 0;
 			Integer size = player.getInventory().getSize();
 			player.getInventory().clear();
@@ -49,15 +52,6 @@ public class ASInventory {
 					player.updateInventory();
 				}
 			}
-			if(transfer){
-				new Thread(new Runnable(){
-					@Override
-					public void run(){
-						ASUtils.transfer(saveFile, newSave);
-						saveFile.delete();
-					}
-				}).start();
-			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -73,11 +67,6 @@ public class ASInventory {
 			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + player.getWorld().getName() + ".yml");
 			if(!saveFile.exists()){
 				saveFile.createNewFile();
-				// Cleanup pre 2.0.0 stuff
-				File f = new File(sdir, player.getName() + "_" + gamemode.toString() + ".yml");
-				if(f.exists()){
-					f.delete();
-				}
 			}
 			FileConfiguration config = new YamlConfiguration();
 			config.load(saveFile);
@@ -106,11 +95,6 @@ public class ASInventory {
 				saveFile.createNewFile();
 			}catch(Exception e){
 				e.printStackTrace();
-			}
-			// Cleanup pre 2.0.0 stuff
-			File f = new File(sdir, player.getName() + "_" + player.getGameMode().toString() + ".yml");
-			if(f.exists()){
-				f.delete();
 			}
 		}
 	}
