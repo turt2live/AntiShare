@@ -38,7 +38,6 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event){
-		// System.out.println("onBreak | " + event.getPlayer() + " | " + event.getBlock().getTypeId());
 		Player player = event.getPlayer();
 		if(player != null && !event.isCancelled()){
 			boolean itemIsBlocked = false;
@@ -97,7 +96,6 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockDamage(BlockDamageEvent event){
-		// System.out.println("onBreak | " + event.getPlayer() + " | " + event.getBlock().getTypeId());
 		Player player = event.getPlayer();
 		if(player != null && !event.isCancelled()){
 			boolean itemIsBlocked = false;
@@ -137,7 +135,6 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event){
-		// System.out.println("onPlace | " + event.getPlayer() + " | " + event.getBlockPlaced().getTypeId());
 		Player player = event.getPlayer();
 		if(player != null && !event.isCancelled()){
 			boolean itemIsBlocked = false;
