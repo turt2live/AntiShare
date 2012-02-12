@@ -2,13 +2,14 @@ package com.turt2live;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ASBlockRegistry {
 
-	static File blockListing = new File(ASUtils.getSaveFolder(), "blocks");
+	static File blockListing = new File(Bukkit.getServer().getPluginManager().getPlugin("AntiShare").getDataFolder(), "blocks");
 
 	public static boolean isBlockCreative(Block block){
 		if(block == null){

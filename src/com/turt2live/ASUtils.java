@@ -6,9 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.Plugin;
 
 public class ASUtils {
 	public static String addColor(String message){
@@ -36,11 +34,6 @@ public class ASUtils {
 		message = message.replaceAll(colorSeperator + "E", ChatColor.getByChar('e').toString());
 		message = message.replaceAll(colorSeperator + "F", ChatColor.getByChar('f').toString());
 		return message;
-	}
-
-	public static File getSaveFolder(){
-		Plugin plugin = Bukkit.getPluginManager().getPlugin("AntiShare");
-		return plugin.getDataFolder();
 	}
 
 	public static boolean isBlocked(String message, int id){
