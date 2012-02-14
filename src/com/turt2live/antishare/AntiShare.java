@@ -5,12 +5,11 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.antishare.SQL.SQLManager;
 
-// TODO: Ensuse use of ASUtils.sendToPlayer();
+// TODO: Ensure use of ASUtils.sendToPlayer();
 // TODO: Add admin channel, for reporting events
 // TODO: ChannelChat implementation for above
 public class AntiShare extends PluginWrapper {
@@ -29,27 +28,16 @@ public class AntiShare extends PluginWrapper {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args){
-		if(sender instanceof Player){
-			if(((Player) sender).hasPermission("AntiShare.reload")){
-				if(cmd.equalsIgnoreCase("antishare") ||
-						cmd.equalsIgnoreCase("as") ||
-						cmd.equalsIgnoreCase("antis") ||
-						cmd.equalsIgnoreCase("ashare")){
-					config.reload();
-					((Player) sender).sendMessage(ChatColor.GREEN + "AntiShare Reloaded.");
-				}
-			}
-			return false;
-		}else{
-			if(cmd.equalsIgnoreCase("antishare") ||
-					cmd.equalsIgnoreCase("as") ||
-					cmd.equalsIgnoreCase("antis") ||
-					cmd.equalsIgnoreCase("ashare")){
-				reloadConfig();
-				log.info("AntiShare Reloaded.");
-			}
-			return false;
+		if(cmd.equalsIgnoreCase("antishare") ||
+				cmd.equalsIgnoreCase("as") ||
+				cmd.equalsIgnoreCase("antis") ||
+				cmd.equalsIgnoreCase("ashare")){
+			reloadConfig();
+			log.info("AntiShare Reloaded.");
+			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
+			return true;
 		}
+		return false;
 	}
 
 	@Override

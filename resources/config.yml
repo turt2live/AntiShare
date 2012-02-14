@@ -12,6 +12,7 @@
 # Messages:
 # 	All messages are when they are declined an action.
 # 	Chat colors are supported using the & sign (eg: &f = white)
+#   If you wouldn't like a message to show, set the value as 'noshow'
 # Other:
 # 	'only_if_creative' - Auto-decline if they are in creative, permissions still apply.
 # 		(eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)

@@ -55,11 +55,15 @@ public class ASUtils {
 		return ret;
 	}
 
-	/* TODO: Create this, sends a message to the player if needed (ie: msg != none/nomsg)
-	 * TODO: Implement this
-	 */
 	public static void sendToPlayer(CommandSender target, String message){
-
+		if(!message.equalsIgnoreCase("nomsg")
+				&& !message.equalsIgnoreCase("no message")
+				&& !message.equalsIgnoreCase("none")
+				&& !message.equalsIgnoreCase("noshow")
+				&& !message.equalsIgnoreCase("no show")){
+			message = addColor(message);
+			target.sendMessage(message);
+		}
 	}
 
 	public static void transfer(File original, File destination){
