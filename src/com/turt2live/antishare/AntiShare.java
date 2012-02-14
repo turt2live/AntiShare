@@ -42,7 +42,9 @@ public class AntiShare extends PluginWrapper {
 
 	@Override
 	public void onDisable(){
-		sql.disconnect();
+		if(sql != null){
+			sql.disconnect();
+		}
 		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
 	}
 
@@ -55,9 +57,11 @@ public class AntiShare extends PluginWrapper {
 		getServer().getPluginManager().registerEvents(new AntiShareListener(this), this);
 		getServer().getPluginManager().registerEvents(new ASMultiWorld(this), this);
 		ASMultiWorld.detectWorlds(this);
-		sql = new SQLManager(this);
-		if(sql.attemptConnectFromConfig()){
-			sql.checkValues();
+		if(getConfig().getBoolean("SQL.use")){
+			sql = new SQLManager(this);
+			if(sql.attemptConnectFromConfig()){
+				sql.checkValues();
+			}
 		}
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}

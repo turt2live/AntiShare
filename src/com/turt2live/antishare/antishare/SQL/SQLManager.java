@@ -1,6 +1,5 @@
 package com.turt2live.antishare.antishare.SQL;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.turt2live.antishare.AntiShare;
-
-// TODO: Finish SQL class
 
 /*
  * Thanks go to Example Depot for teaching me everything in this class.
@@ -33,26 +30,12 @@ public class SQLManager {
 		return connect(host, username, password, port, database);
 	}
 
-	public void backup(){
-		// TODO: Backup
-		try{
-			// Create the statement
-			Statement stmt = connection.createStatement();
-
-			// Export the data
-			String filename = "c:\\\\temp\\\\outfile.txt";
-			String tablename = "mysql_2_table";
-			stmt.executeUpdate("SELECT * INTO OUTFILE \"" + filename + "\" FROM " + tablename);
-		}catch(SQLException e){}
-	}
-
 	public void checkConnection(){
 		if(connection == null){
 			attemptConnectFromConfig();
 		}
 	}
 
-	// TODO this
 	public void checkValues(){
 		if(!isConnected()){
 			return;
@@ -98,11 +81,7 @@ public class SQLManager {
 	}
 
 	public void createQuery(String query){
-		// CREATE 
-	}
-
-	public void createTable(String name, String[] values, String key){
-		// Build statement and call createQuery();
+		updateQuery(query);
 	}
 
 	public void disconnect(){
@@ -144,27 +123,6 @@ public class SQLManager {
 
 	public boolean isConnected(){
 		return connection == null;
-	}
-
-	public void restore(File SQLFile){
-		// TODO: Restore
-		try{
-			// Create the statement
-			Statement stmt = connection.createStatement();
-
-			// Load the data
-			String filename = "c:\\\\temp\\\\infile.txt";
-			String tablename = "mysql_2_table";
-			stmt.executeUpdate("LOAD DATA INFILE \"" + filename + "\" INTO TABLE " + tablename);
-
-			// If the file is comma-separated, use this statement
-			stmt.executeUpdate("LOAD DATA INFILE \"" + filename + "\" INTO TABLE "
-					+ tablename + " FIELDS TERMINATED BY ','");
-
-			// If the file is terminated by \r\n, use this statement
-			stmt.executeUpdate("LOAD DATA INFILE \"" + filename + "\" INTO TABLE "
-					+ tablename + " LINES TERMINATED BY '\\r\\n'");
-		}catch(SQLException e){}
 	}
 
 	public boolean tableExists(String tablename){
