@@ -42,35 +42,41 @@ public class ASInventory {
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
 				player.getInventory().clear();
-				ResultSet inventory = sql.getQuery("SELECT * FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + gamemode.toString() + "'");
-				try{
-					while (inventory.next()){
-						int slot = inventory.getInt("slot");
-						int id = inventory.getInt("itemID");
-						//String name = inventory.getString("itemName");
-						String durability = inventory.getString("itemDurability");
-						int amount = inventory.getInt("itemAmount");
-						byte data = Byte.parseByte(inventory.getString("itemData"));
-						String enchants[] = inventory.getString("itemEnchant").split(" ");
-						ItemStack item = new ItemStack(id);
-						item.setAmount(amount);
-						MaterialData itemData = item.getData();
-						itemData.setData(data);
-						item.setData(itemData);
-						item.setDurability(Short.parseShort(durability));
-						for(String enchant : enchants){
-							String parts[] = enchant.split("[]");
-							String enchantID = parts[0];
-							int level = Integer.parseInt(parts[1]);
-							Enchantment e = Enchantment.getById(Integer.parseInt(enchantID));
-							item.addEnchantment(e, level);
+				ResultSet inventory = sql.getQuery("SELECT * FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + gamemode.toString() + "' AND world='" + player.getWorld().getName() + "'");
+				if(inventory != null){
+					try{
+						while (inventory.next()){
+							int slot = inventory.getInt("slot");
+							int id = inventory.getInt("itemID");
+							//String name = inventory.getString("itemName");
+							String durability = inventory.getString("itemDurability");
+							int amount = inventory.getInt("itemAmount");
+							byte data = Byte.parseByte(inventory.getString("itemData"));
+							String enchants[] = inventory.getString("itemEnchant").split(" ");
+							ItemStack item = new ItemStack(id);
+							item.setAmount(amount);
+							MaterialData itemData = item.getData();
+							itemData.setData(data);
+							item.setData(itemData);
+							item.setDurability(Short.parseShort(durability));
+							if(enchants.length > 0){
+								for(String enchant : enchants){
+									String parts[] = enchant.split("[]");
+									String enchantID = parts[0];
+									int level = Integer.parseInt(parts[1]);
+									Enchantment e = Enchantment.getById(Integer.parseInt(enchantID));
+									item.addEnchantment(e, level);
+								}
+							}
+							player.getInventory().setItem(slot, item);
+							player.updateInventory();
 						}
-						player.getInventory().setItem(slot, item);
-						player.updateInventory();
+						skip = true;
+					}catch(SQLException e){
+						plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle inventory: " + e.getMessage());
 					}
+				}else{
 					skip = true;
-				}catch(SQLException e){
-					plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle inventory: " + e.getMessage());
 				}
 			}
 		}
@@ -124,9 +130,11 @@ public class ASInventory {
 					for(Enchantment e : enchantsSet){
 						enchant = enchant + e.getId() + "[]" + enchantsMap.get(e) + " ";
 					}
-					enchant = enchant.substring(0, enchant.length() - 1);
-					sql.insertQuery("INSERT INTO AntiShare_Inventories (username, gamemode, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant) " +
-							"VALUES ('" + player.getName() + "', '" + gamemode.toString() + "', '" + i + "', '" + id + "', '" + name + "', '" + durability + "', '" + amount + "', '" + data + "', '" + enchant + "')");
+					if(enchant.length() > 0){
+						enchant = enchant.substring(0, enchant.length() - 1);
+					}
+					sql.insertQuery("INSERT INTO AntiShare_Inventories (username, gamemode, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant, world) " +
+							"VALUES ('" + player.getName() + "', '" + gamemode.toString() + "', '" + i + "', '" + id + "', '" + name + "', '" + durability + "', '" + amount + "', '" + data + "', '" + enchant + "', '" + player.getWorld().getName() + "')");
 				}
 				skip = true;
 			}
@@ -161,7 +169,7 @@ public class ASInventory {
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
-				sql.updateQuery("DELETE FROM AntiShare_Inventories WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "'");
+				sql.updateQuery("DELETE FROM AntiShare_Inventories WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "' AND world='" + player.getWorld().getName() + "'");
 			}
 		}
 		if(skip){

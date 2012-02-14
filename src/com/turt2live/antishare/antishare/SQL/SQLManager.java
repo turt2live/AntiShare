@@ -48,8 +48,9 @@ public class SQLManager {
 				"  `blockZ` int(11) NOT NULL," +
 				"  `blockID` int(11) NOT NULL," +
 				"  `blockName` varchar(25) NOT NULL," +
+				"  `world` varchar(100) NOT NULL," +
 				"  PRIMARY KEY (`id`)" +
-				") ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
+				")");
 		createQuery("CREATE TABLE IF NOT EXISTS `AntiShare_Inventories` (" +
 				"  `id` int(11) NOT NULL AUTO_INCREMENT," +
 				"  `username` varchar(20) NOT NULL," +
@@ -61,8 +62,9 @@ public class SQLManager {
 				"  `itemAmount` int(11) NOT NULL," +
 				"  `itemData` int(11) NOT NULL," +
 				"  `itemEnchant` varchar(100) NOT NULL," +
+				"  `world` varchar(100) NOT NULL," +
 				"  PRIMARY KEY (`id`)" +
-				") ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
+				")");
 	}
 
 	public boolean connect(String host, String username, String password, int port, String database){
@@ -122,11 +124,7 @@ public class SQLManager {
 	}
 
 	public boolean isConnected(){
-		return connection == null;
-	}
-
-	public boolean tableExists(String tablename){
-		return false;
+		return connection != null;
 	}
 
 	/**
