@@ -31,6 +31,13 @@
 #
 #   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
+# SQL:
+#   'use' - If this is false, flat-file storage will be used instead
+#   'host' - The SQL host, usually localhost
+#   'username' - The SQL username to use, this user must be able to create/edit/view tables in the database
+#   'password' - The SQL password for the above username
+#   'port' - The SQL port, this is unused thus far (will be used in later support)
+#   'database' - The SQL database to use, this must already be made
 # Permissions:
 # 	'AntiShare.*' - Deny all events
 # 	'AntiShare.place' - Deny block placing
@@ -95,3 +102,10 @@ other:
   pvp-mobs: false
   blockDrops: false
   worldTransfer: false
+SQL:
+  use: false
+  host: localhost
+  username: AntiShare
+  password: AntiSharePW
+  port: 3306
+  database: AntiShare

@@ -42,6 +42,7 @@ public class AntiShare extends PluginWrapper {
 
 	@Override
 	public void onDisable(){
+		sql.disconnect();
 		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
 	}
 
