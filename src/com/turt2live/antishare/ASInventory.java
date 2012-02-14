@@ -16,7 +16,6 @@ import org.bukkit.material.MaterialData;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.antishare.SQL.SQLManager;
 
-// TODO: Implement SQL/FlatFile implementation
 public class ASInventory {
 
 	public static void cleanup(){
@@ -59,9 +58,9 @@ public class ASInventory {
 							itemData.setData(data);
 							item.setData(itemData);
 							item.setDurability(Short.parseShort(durability));
-							if(enchants.length > 0){
+							if(inventory.getString("itemEnchant").length() > 0){
 								for(String enchant : enchants){
-									String parts[] = enchant.split("[]");
+									String parts[] = enchant.split("\\|");
 									String enchantID = parts[0];
 									int level = Integer.parseInt(parts[1]);
 									Enchantment e = Enchantment.getById(Integer.parseInt(enchantID));
@@ -128,12 +127,12 @@ public class ASInventory {
 					Set<Enchantment> enchantsSet = item.getEnchantments().keySet();
 					Map<Enchantment, Integer> enchantsMap = item.getEnchantments();
 					for(Enchantment e : enchantsSet){
-						enchant = enchant + e.getId() + "[]" + enchantsMap.get(e) + " ";
+						enchant = enchant + e.getId() + "|" + enchantsMap.get(e) + " ";
 					}
 					if(enchant.length() > 0){
 						enchant = enchant.substring(0, enchant.length() - 1);
 					}
-					sql.insertQuery("INSERT INTO AntiShare_Inventories (username, gamemode, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant, world) " +
+					sql.insertQuery("INSERT INTO AntiShare_Inventory (username, gamemode, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant, world) " +
 							"VALUES ('" + player.getName() + "', '" + gamemode.toString() + "', '" + i + "', '" + id + "', '" + name + "', '" + durability + "', '" + amount + "', '" + data + "', '" + enchant + "', '" + player.getWorld().getName() + "')");
 				}
 				skip = true;
@@ -169,7 +168,7 @@ public class ASInventory {
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
-				sql.updateQuery("DELETE FROM AntiShare_Inventories WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "' AND world='" + player.getWorld().getName() + "'");
+				sql.updateQuery("DELETE FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "' AND world='" + player.getWorld().getName() + "'");
 			}
 		}
 		if(skip){

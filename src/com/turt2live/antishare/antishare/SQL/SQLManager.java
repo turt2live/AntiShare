@@ -51,7 +51,7 @@ public class SQLManager {
 				"  `world` varchar(100) NOT NULL," +
 				"  PRIMARY KEY (`id`)" +
 				")");
-		createQuery("CREATE TABLE IF NOT EXISTS `AntiShare_Inventories` (" +
+		createQuery("CREATE TABLE IF NOT EXISTS `AntiShare_Inventory` (" +
 				"  `id` int(11) NOT NULL AUTO_INCREMENT," +
 				"  `username` varchar(20) NOT NULL," +
 				"  `gamemode` varchar(25) NOT NULL," +
@@ -107,6 +107,7 @@ public class SQLManager {
 			Statement stmt = connection.createStatement();
 			return stmt.executeQuery(query);
 		}catch(SQLException e){
+			e.printStackTrace();
 			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
 			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
 		}
