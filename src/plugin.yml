@@ -48,7 +48,7 @@ permissions:
         default: op
     AntiShare.silent:
         description: stops the sending of notifications from the player
-        default: false
+        default: op
     AntiShare.admin:
         description: All AntiShare permissions
         default: op
@@ -64,7 +64,7 @@ permissions:
             AntiShare.mobpvp: true
             AntiShare.worlds: true
             AntiShare.notify: true
-            AntiShare.silent: false
+            AntiShare.silent: true
     AntiShare.*:
         description: deny all AntiShare events
         default: true
