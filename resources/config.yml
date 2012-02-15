@@ -46,6 +46,7 @@
 # 
 # Notifications: 
 #   - Used to alert specific people of actions taking place
+#   'send' - True to send notifications, false otherwise
 #   'illegal' - All the illegal (blocked) actions, the name of the action relates to the action (eg: block_place means an illegal block was placed)
 #   'legal' - All the legal (allowed) actions, the name of the action relates to the action (eg: block_place means an legal block was placed)
 #   'general' - Everything else that doesn't fit into a category (illegal/legal)
@@ -126,6 +127,7 @@ SQL:
   port: 3306
   database: AntiShare
 notifications:
+  send: true
   illegal:
     block_place: true
     block_break: true
@@ -138,6 +140,7 @@ notifications:
     pvp: true
     mob-pvp: true
     bedrock_attempt: true
+    world_transfer: true
   legal:
     block_place: false
     block_break: false
@@ -149,6 +152,6 @@ notifications:
     creative_block_break: false
     pvp: false
     mob-pvp: false
-  general:
-    gamemode_change: true
     world_transfer: true
+  general:
+    gamemode_change: false
