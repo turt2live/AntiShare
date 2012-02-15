@@ -90,6 +90,19 @@ Building
             basedir="${build}"
             compress="true"
             destfile="${dist}/${ant.project.name}.jar" />
+
+        <copy todir="${build}" >
+
+            <fileset
+                dir="${src}"
+                excludes="**/*.form"
+                includes="**" />
+        </copy>
+
+        <jar
+            basedir="${build}"
+            compress="true"
+            destfile="${dist}/${ant.project.name}-source.jar" />
     </target>
 
 </project>
