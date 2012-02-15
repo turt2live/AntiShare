@@ -6,7 +6,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
 public class ASUtils {
@@ -53,6 +56,13 @@ public class ASUtils {
 			}
 		}
 		return ret;
+	}
+
+	public static boolean isBlocked(String interactionBlockName, World world){
+		Material item = Material.getMaterial(interactionBlockName);
+		int id = item.getId();
+		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		return isBlocked(plugin.config().getString("events.interact", world), id);
 	}
 
 	public static void sendToPlayer(CommandSender target, String message){

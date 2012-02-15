@@ -31,5 +31,5 @@ public enum NotificationType{
 	LEGAL_BEDROCK,
 
 	// GENERAL actions
-	GAMEMODE_INVENTORY_CHANGE
+	GAMEMODE_CHANGE
 }

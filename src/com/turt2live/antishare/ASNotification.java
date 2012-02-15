@@ -17,16 +17,34 @@ public class ASNotification {
 		switch (type){
 		// ILLEGAL actions
 		case ILLEGAL_BLOCK_PLACE:
+			if(variable.equalsIgnoreCase("BEDROCK")){
+				break;
+			}
+			if(ASUtils.isBlocked(variable, player.getWorld())){
+				break;
+			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.block_place")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to place " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 			}
 			break;
 		case ILLEGAL_BLOCK_BREAK:
+			if(variable.equalsIgnoreCase("BEDROCK")){
+				break;
+			}
+			if(ASUtils.isBlocked(variable, player.getWorld())){
+				break;
+			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.block_break")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 			}
 			break;
 		case ILLEGAL_CREATIVE_BLOCK_BREAK:
+			if(variable.equalsIgnoreCase("BEDROCK")){
+				break;
+			}
+			if(ASUtils.isBlocked(variable, player.getWorld())){
+				break;
+			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.creative_block_break")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break the creative block " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 			}
@@ -68,7 +86,7 @@ public class ASNotification {
 			break;
 		case ILLEGAL_EGG:
 			if(plugin.getConfig().getBoolean("notifications.illegal.egg")){
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use the egg " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 			}
 			break;
 		case ILLEGAL_BEDROCK:
@@ -79,16 +97,34 @@ public class ASNotification {
 
 		// LEGAL actions
 		case LEGAL_BLOCK_PLACE:
+			if(variable.equalsIgnoreCase("BEDROCK")){
+				break;
+			}
+			if(ASUtils.isBlocked(variable, player.getWorld())){
+				break;
+			}
 			if(plugin.getConfig().getBoolean("notifications.legal.block_place")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " placed " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 			}
 			break;
 		case LEGAL_BLOCK_BREAK:
+			if(variable.equalsIgnoreCase("BEDROCK")){
+				break;
+			}
+			if(ASUtils.isBlocked(variable, player.getWorld())){
+				break;
+			}
 			if(plugin.getConfig().getBoolean("notifications.legal.block_break")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " broke " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 			}
 			break;
 		case LEGAL_CREATIVE_BLOCK_BREAK:
+			if(variable.equalsIgnoreCase("BEDROCK")){
+				break;
+			}
+			if(ASUtils.isBlocked(variable, player.getWorld())){
+				break;
+			}
 			if(plugin.getConfig().getBoolean("notifications.legal.creative_block_break")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " broke the creative block " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 			}
@@ -130,7 +166,7 @@ public class ASNotification {
 			break;
 		case LEGAL_EGG:
 			if(plugin.getConfig().getBoolean("notifications.legal.egg")){
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used the egg " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 			}
 			break;
 		case LEGAL_BEDROCK:
@@ -140,7 +176,7 @@ public class ASNotification {
 			break;
 
 		// GENERAL actions
-		case GAMEMODE_INVENTORY_CHANGE:
+		case GAMEMODE_CHANGE:
 			if(plugin.getConfig().getBoolean("notifications.general.gamemode_change")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " changed to gamemode " + ChatColor.BLUE + variable + ChatColor.AQUA + "!";
 			}

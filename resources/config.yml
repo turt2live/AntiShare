@@ -71,9 +71,10 @@
 #   'AntiShare.mobpvp' - Allows Mob PVP to a creative mode player
 #   'AntiShare.worlds' - Allows world teleporting without being blocked
 #   'AntiShare.notify' - Sends notifications to the player
+#   'AntiShare.silent' - Stops the sending of notifications from this player
 # 	'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.blockBypass", 
 #                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds",
-#                         "AntiShare.notify", and "AntiShare.mobpvp".
+#                         "AntiShare.notify", "AntiShare.silent", and "AntiShare.mobpvp".
 # 
 # Commands:
 # 	'/antishare' - Reloads configuration
@@ -152,6 +153,7 @@ notifications:
     creative_block_break: false
     pvp: false
     mob-pvp: false
-    world_transfer: true
+    bedrock_attempt: false
+    world_transfer: false
   general:
     gamemode_change: false
