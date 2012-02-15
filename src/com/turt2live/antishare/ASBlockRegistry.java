@@ -1,11 +1,15 @@
 package com.turt2live.antishare;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.turt2live.antishare.SQL.SQLManager;
 
 // TODO: Implement SQL/FlatFile implementation
 public class ASBlockRegistry {
@@ -14,6 +18,33 @@ public class ASBlockRegistry {
 
 	public static boolean isBlockCreative(Block block){
 		if(block == null){
+			return false;
+		}
+		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		boolean skip = false;
+		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				SQLManager sql = plugin.getSQLManager();
+				ResultSet blocks = sql.getQuery("SELECT * FROM AntiShare_Blocks WHERE blockX='" + block.getX() + "' AND blockY='" + block.getY() + "' AND blockZ='" + block.getZ() + "' AND world='" + block.getWorld().getName() + "'");
+				if(blocks != null){
+					try{
+						while (blocks.next()){
+							if(blocks.getString("blockName").equalsIgnoreCase("AIR")){
+								return false;
+							}else{
+								return true;
+							}
+						}
+						skip = true;
+					}catch(SQLException e){
+						plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle blocks: " + e.getMessage());
+					}
+				}else{
+					skip = true;
+				}
+			}
+		}
+		if(skip){
 			return false;
 		}
 		blockListing.mkdirs();
@@ -36,8 +67,21 @@ public class ASBlockRegistry {
 		return false;
 	}
 
-	public static void saveCreativeBlock(Block block){
+	public static void saveCreativeBlock(Block block, String usernameWhoPlaced){
 		if(block == null){
+			return;
+		}
+		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		boolean skip = false;
+		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				SQLManager sql = plugin.getSQLManager();
+				sql.insertQuery("INSERT INTO AntiShare_Blocks (username, blockX, blockY, blockZ, blockID, blockName, world) " +
+						"VALUES ('" + usernameWhoPlaced + "', '" + block.getX() + "', '" + block.getY() + "', '" + block.getZ() + "', '" + block.getTypeId() + "', '" + block.getType().name() + "', '" + block.getWorld() + "')");
+				skip = true;
+			}
+		}
+		if(skip){
 			return;
 		}
 		blockListing.mkdirs();
@@ -58,6 +102,30 @@ public class ASBlockRegistry {
 
 	public static void unregisterCreativeBlock(Block block){
 		if(block == null){
+			return;
+		}
+		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		boolean skip = false;
+		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				SQLManager sql = plugin.getSQLManager();
+				ResultSet blocks = sql.getQuery("SELECT * FROM AntiShare_Blocks WHERE blockX='" + block.getX() + "' AND blockY='" + block.getY() + "' AND blockZ='" + block.getZ() + "' AND world='" + block.getWorld().getName() + "'");
+				if(blocks != null){
+					try{
+						while (blocks.next()){
+							int id = blocks.getInt("id");
+							sql.deleteQuery("DELETE FROM AntiShare_Blocks WHERE id='" + id + "' LIMIT 1");
+						}
+						skip = true;
+					}catch(SQLException e){
+						plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle blocks: " + e.getMessage());
+					}
+				}else{
+					skip = true;
+				}
+			}
+		}
+		if(skip){
 			return;
 		}
 		blockListing.mkdirs();

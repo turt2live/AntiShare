@@ -7,7 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
-import com.turt2live.antishare.antishare.SQL.SQLManager;
+import com.turt2live.antishare.SQL.SQLManager;
 
 // TODO: Ensure use of ASUtils.sendToPlayer();
 // TODO: Add admin channel, for reporting events

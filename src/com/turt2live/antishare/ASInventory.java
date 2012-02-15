@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.antishare.SQL.SQLManager;
+import com.turt2live.antishare.SQL.SQLManager;
 
 public class ASInventory {
 
@@ -168,7 +168,7 @@ public class ASInventory {
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
-				sql.updateQuery("DELETE FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "' AND world='" + player.getWorld().getName() + "'");
+				sql.deleteQuery("DELETE FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "' AND world='" + player.getWorld().getName() + "'");
 			}
 		}
 		if(skip){

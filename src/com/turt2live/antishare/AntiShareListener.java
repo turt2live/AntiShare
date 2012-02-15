@@ -172,7 +172,7 @@ public class AntiShareListener implements Listener {
 				&& plugin.config().getBoolean("other.track_blocks", player.getWorld())
 				&& player.getGameMode() == GameMode.CREATIVE
 				&& !player.hasPermission("AntiShare.freePlace")){
-			ASBlockRegistry.saveCreativeBlock(event.getBlock());
+			ASBlockRegistry.saveCreativeBlock(event.getBlock(), player.getName());
 		}
 	}
 
