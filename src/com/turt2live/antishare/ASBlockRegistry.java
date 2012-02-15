@@ -103,6 +103,11 @@ public class ASBlockRegistry {
 	}
 
 	public static boolean trackBlock(Block block, AntiShare plugin){
+		if(plugin.getConfig().getString("other.tracked-blocks").equalsIgnoreCase("*")){
+			return true;
+		}else if(plugin.getConfig().getString("other.tracked-blocks").equalsIgnoreCase("none")){
+			return false;
+		}
 		String trackedBlocks[] = plugin.getConfig().getString("other.tracked-blocks").split(" ");
 		for(String tblock : trackedBlocks){
 			if(tblock.equalsIgnoreCase(block.getTypeId() + "")){

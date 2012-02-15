@@ -31,6 +31,8 @@
 #   'worldTransfer' - True if you would like to allow players to transfer worlds. Suggested value of 'true' is 'only_if_creative' is false
 #                     True means you can transfer TO the world, false means you cannot.
 #   'tracked-blocks' - The blocks the plugin should track and mark as "creative" blocks (if the player placing is in creative). This list is SPACE defined (see default)
+#                    You can set this to 'none' or '*' as well if you prefer, 'none' meaning don't track (set 'track_blocks' to false to reduce some possible lag), '*' meaning
+#                    track everything placed.
 # 
 #   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
@@ -115,7 +117,7 @@ other:
   pvp-mobs: false
   blockDrops: false
   worldTransfer: false
-  tracked-blocks: 57 41 42
+  tracked-blocks: '*'
 SQL:
   use: false
   host: localhost
