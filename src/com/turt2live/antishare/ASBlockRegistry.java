@@ -11,7 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.turt2live.antishare.SQL.SQLManager;
 
-// TODO: Implement SQL/FlatFile implementation
 public class ASBlockRegistry {
 
 	static File blockListing = new File(Bukkit.getServer().getPluginManager().getPlugin("AntiShare").getDataFolder(), "blocks");
@@ -76,8 +75,8 @@ public class ASBlockRegistry {
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
-				sql.insertQuery("INSERT INTO AntiShare_Blocks (username, blockX, blockY, blockZ, blockID, blockName, world) " +
-						"VALUES ('" + usernameWhoPlaced + "', '" + block.getX() + "', '" + block.getY() + "', '" + block.getZ() + "', '" + block.getTypeId() + "', '" + block.getType().name() + "', '" + block.getWorld() + "')");
+				sql.insertQuery("INSERT INTO AntiShare_Blocks (username_placer, blockX, blockY, blockZ, blockID, blockName, world) " +
+						"VALUES ('" + usernameWhoPlaced + "', '" + block.getX() + "', '" + block.getY() + "', '" + block.getZ() + "', '" + block.getTypeId() + "', '" + block.getType().name() + "', '" + block.getWorld().getName() + "')");
 				skip = true;
 			}
 		}
