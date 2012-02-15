@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -34,14 +35,14 @@ public class ASInventory {
 	}
 
 	@SuppressWarnings ("deprecation")
-	public static void load(Player player, GameMode gamemode){
+	public static void load(Player player, GameMode gamemode, World world){
 		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 		boolean skip = false;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
 				player.getInventory().clear();
-				ResultSet inventory = sql.getQuery("SELECT * FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + gamemode.toString() + "' AND world='" + player.getWorld().getName() + "'");
+				ResultSet inventory = sql.getQuery("SELECT * FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + gamemode.toString() + "' AND world='" + world.getName() + "'");
 				if(inventory != null){
 					try{
 						while (inventory.next()){
@@ -85,7 +86,7 @@ public class ASInventory {
 		try{
 			File sdir = new File(plugin.getDataFolder(), "inventories");
 			sdir.mkdirs();
-			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + player.getWorld().getName() + ".yml");
+			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + world.getName() + ".yml");
 			if(!saveFile.exists()){
 				saveFile.createNewFile();
 			}
@@ -107,9 +108,9 @@ public class ASInventory {
 		}
 	}
 
-	public static void save(Player player, GameMode gamemode){
+	public static void save(Player player, GameMode gamemode, World world){
 		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
-		wipe(player);
+		wipe(player, world);
 		boolean skip = false;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
@@ -133,7 +134,7 @@ public class ASInventory {
 						enchant = enchant.substring(0, enchant.length() - 1);
 					}
 					sql.insertQuery("INSERT INTO AntiShare_Inventory (username, gamemode, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant, world) " +
-							"VALUES ('" + player.getName() + "', '" + gamemode.toString() + "', '" + i + "', '" + id + "', '" + name + "', '" + durability + "', '" + amount + "', '" + data + "', '" + enchant + "', '" + player.getWorld().getName() + "')");
+							"VALUES ('" + player.getName() + "', '" + gamemode.toString() + "', '" + i + "', '" + id + "', '" + name + "', '" + durability + "', '" + amount + "', '" + data + "', '" + enchant + "', '" + world.getName() + "')");
 				}
 				skip = true;
 			}
@@ -144,7 +145,7 @@ public class ASInventory {
 		try{
 			File sdir = new File(plugin.getDataFolder(), "inventories");
 			sdir.mkdirs();
-			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + player.getWorld().getName() + ".yml");
+			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + world.getName() + ".yml");
 			if(!saveFile.exists()){
 				saveFile.createNewFile();
 			}
@@ -162,13 +163,13 @@ public class ASInventory {
 		}
 	}
 
-	private static void wipe(Player player){
+	private static void wipe(Player player, World world){
 		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 		boolean skip = false;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
-				sql.deleteQuery("DELETE FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "' AND world='" + player.getWorld().getName() + "'");
+				sql.deleteQuery("DELETE FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "' AND world='" + world.getName() + "'");
 			}
 		}
 		if(skip){
@@ -176,7 +177,7 @@ public class ASInventory {
 		}
 		File sdir = new File(plugin.getDataFolder(), "inventories");
 		sdir.mkdirs();
-		File saveFile = new File(sdir, player.getName() + "_" + player.getGameMode().toString() + "_" + player.getWorld().getName() + ".yml");
+		File saveFile = new File(sdir, player.getName() + "_" + player.getGameMode().toString() + "_" + world.getName() + ".yml");
 		if(saveFile.exists()){
 			saveFile.delete();
 			try{

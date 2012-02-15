@@ -329,8 +329,8 @@ public class AntiShareListener implements Listener {
 			Player player = event.getPlayer();
 			if(player != null){
 				if(!player.hasPermission("AntiShare.noswap")){
-					ASInventory.save(player, player.getGameMode());
-					ASInventory.load(player, event.getNewGameMode());
+					ASInventory.save(player, player.getGameMode(), player.getWorld());
+					ASInventory.load(player, event.getNewGameMode(), player.getWorld());
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.inventory_swap", player.getWorld()));
 				}
 			}
@@ -390,6 +390,8 @@ public class AntiShareListener implements Listener {
 			boolean cancel = !ASMultiWorld.worldSwap(plugin, player, event.getFrom(), event.getTo());
 			if(cancel){
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.worldSwap", event.getTo().getWorld()));
+				ASInventory.save(player, player.getGameMode(), event.getFrom().getWorld());
+				ASInventory.load(player, player.getGameMode(), event.getTo().getWorld());
 				event.setCancelled(true);
 			}
 		}
