@@ -9,10 +9,12 @@
 # 	-- Want all blocks/items to be denied? Put a *
 # 	-- Want no blocks/items to be denied? Put: none
 # 	-- Make sure item lists are space-seperated, not commas, periods, or fancy other things!
+# 
 # Messages:
 # 	All messages are when they are declined an action.
 # 	Chat colors are supported using the & sign (eg: &f = white)
 #   If you wouldn't like a message to show, set the value as 'noshow'
+# 
 # Other:
 # 	'only_if_creative' - Auto-decline if they are in creative, permissions still apply.
 # 		(eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)
@@ -28,7 +30,8 @@
 #                  'noBlockDrop' to the player once per second, or for every different block. As well, when the block is 100% broken it will show 'creativeModeBlock'.
 #   'worldTransfer' - True if you would like to allow players to transfer worlds. Suggested value of 'true' is 'only_if_creative' is false
 #                     True means you can transfer TO the world, false means you cannot.
-#
+#   'tracked-blocks' - The blocks the plugin should track and mark as "creative" blocks (if the player placing is in creative). This list is SPACE defined (see default)
+# 
 #   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
 # SQL:
@@ -38,6 +41,13 @@
 #   'password' - The SQL password for the above username
 #   'port' - The SQL port, this is unused thus far (will be used in later support)
 #   'database' - The SQL database to use, this must already be made
+# 
+# Notifications: 
+#   - Used to alert specific people of actions taking place
+#   'illegal' - All the illegal (blocked) actions, the name of the action relates to the action (eg: block_place means an illegal block was placed)
+#   'legal' - All the legal (allowed) actions, the name of the action relates to the action (eg: block_place means an legal block was placed)
+#   'general' - Everything else that doesn't fit into a category (illegal/legal)
+#  
 # Permissions:
 # 	'AntiShare.*' - Deny all events
 # 	'AntiShare.place' - Deny block placing
@@ -57,12 +67,15 @@
 #   'AntiShare.pvp' - Allows PVP to a creative mode player
 #   'AntiShare.mobpvp' - Allows Mob PVP to a creative mode player
 #   'AntiShare.worlds' - Allows world teleporting without being blocked
+#   'AntiShare.notify' - Sends notifications to the player
 # 	'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.blockBypass", 
 #                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds",
-#                         and "AntiShare.mobpvp".
+#                         "AntiShare.notify", and "AntiShare.mobpvp".
+# 
 # Commands:
 # 	'/antishare' - Reloads configuration
 # 		Aliases: '/as', '/antis', '/ashare'
+# 
 # Notes:
 # 	- Permissions default to all deny as true while all allow as OP or higher.
 # 	- 'only_if_creative' will override the permissions meaning if a player is in survival-mode while 'only_if_creative' is true then 
@@ -102,6 +115,7 @@ other:
   pvp-mobs: false
   blockDrops: false
   worldTransfer: false
+  tracked-blocks: 57 41 42
 SQL:
   use: false
   host: localhost
@@ -109,3 +123,30 @@ SQL:
   password: AntiSharePW
   port: 3306
   database: AntiShare
+notifications:
+  illegal:
+    block_place: true
+    block_break: true
+    death: true
+    drop_item: true
+    interact: true
+    command: true
+    egg: true
+    creative_block_break: true
+    pvp: true
+    mob-pvp: true
+    bedrock_attempt: true
+  legal:
+    block_place: false
+    block_break: false
+    death: false
+    drop_item: false
+    interact: false
+    command: false
+    egg: false
+    creative_block_break: false
+    pvp: false
+    mob-pvp: false
+  general:
+    gamemode_change: true
+    world_transfer: true

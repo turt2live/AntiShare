@@ -71,6 +71,9 @@ public class ASBlockRegistry {
 			return;
 		}
 		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		if(!trackBlock(block, plugin)){
+			return;
+		}
 		boolean skip = false;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
@@ -97,6 +100,16 @@ public class ASBlockRegistry {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean trackBlock(Block block, AntiShare plugin){
+		String trackedBlocks[] = plugin.getConfig().getString("other.tracked-blocks").split(" ");
+		for(String tblock : trackedBlocks){
+			if(tblock.equalsIgnoreCase(block.getTypeId() + "")){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static void unregisterCreativeBlock(Block block){
