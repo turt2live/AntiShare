@@ -1,4 +1,4 @@
-package com.turt2live.antishare.antishare.SQL;
+package com.turt2live.antishare.SQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -84,6 +84,10 @@ public class SQLManager {
 
 	public void createQuery(String query){
 		updateQuery(query);
+	}
+
+	public int deleteQuery(String query){
+		return updateQuery(query);
 	}
 
 	public void disconnect(){
