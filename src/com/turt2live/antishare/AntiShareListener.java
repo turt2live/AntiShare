@@ -475,8 +475,10 @@ public class AntiShareListener implements Listener {
 			public void run(){
 				while (player.getLocation().getWorld() != event.getTo().getWorld())
 					;
-				ASInventory.save(player, player.getGameMode(), event.getFrom().getWorld());
-				ASInventory.load(player, player.getGameMode(), event.getTo().getWorld());
+				if(!player.hasPermission("AntiShare.worlds")){
+					ASInventory.save(player, player.getGameMode(), event.getFrom().getWorld());
+					ASInventory.load(player, player.getGameMode(), event.getTo().getWorld());
+				}
 				ASNotification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName());
 			}
 		}).start();

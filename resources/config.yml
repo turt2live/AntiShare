@@ -69,7 +69,7 @@
 # 	'AntiShare.bedrock' - If true, then the player can break and place bedrock
 #   'AntiShare.pvp' - Allows PVP to a creative mode player
 #   'AntiShare.mobpvp' - Allows Mob PVP to a creative mode player
-#   'AntiShare.worlds' - Allows world teleporting without being blocked
+#   'AntiShare.worlds' - Allows world teleporting without being blocked, also stops multi-world inventories for the target
 #   'AntiShare.notify' - Sends notifications to the player
 #   'AntiShare.silent' - Stops the sending of notifications from this player
 # 	'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.blockBypass", 
