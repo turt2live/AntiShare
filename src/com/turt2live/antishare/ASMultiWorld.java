@@ -47,18 +47,20 @@ public class ASMultiWorld implements Listener {
 		}
 		World worldTo = to.getWorld();
 		boolean transfers = plugin.config().getBoolean("other.worldTransfer", worldTo);
-		if(plugin.config().getBoolean("other.only_if_creative", worldTo)){
-			if(player.getGameMode() == GameMode.CREATIVE && transfers){
-				return true;
+		boolean creative = plugin.config().getBoolean("other.only_if_creative", worldTo);
+		if(transfers){
+			return true;
+		}else{
+			if(creative){
+				if(player.getGameMode() == GameMode.CREATIVE){
+					return false;
+				}else{
+					return true;
+				}
 			}else{
 				return false;
 			}
-		}else{
-			if(!transfers){
-				return false;
-			}
 		}
-		return true;
 	}
 
 	private AntiShare plugin;
