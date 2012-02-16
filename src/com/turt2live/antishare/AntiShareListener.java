@@ -448,22 +448,7 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPlayerPortal(PlayerPortalEvent event){
-		if(event.isCancelled()){
-			return;
-		}
-		Player player = event.getPlayer();
-		if(!event.getFrom().getWorld().equals(event.getTo().getWorld())){
-			boolean cancel = !ASMultiWorld.worldSwap(plugin, player, event.getFrom(), event.getTo());
-			if(cancel){
-				ASUtils.sendToPlayer(player, plugin.config().getString("messages.worldSwap", event.getTo().getWorld()));
-				ASInventory.save(player, player.getGameMode(), event.getFrom().getWorld());
-				ASInventory.load(player, player.getGameMode(), event.getTo().getWorld());
-				ASNotification.sendNotification(NotificationType.ILLEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName());
-				event.setCancelled(true);
-			}else{
-				ASNotification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName());
-			}
-		}
+		onPlayerTeleport(event);
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST)
@@ -476,13 +461,24 @@ public class AntiShareListener implements Listener {
 			boolean cancel = !ASMultiWorld.worldSwap(plugin, player, event.getFrom(), event.getTo());
 			if(cancel){
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.worldSwap", event.getTo().getWorld()));
-				ASInventory.save(player, player.getGameMode(), event.getFrom().getWorld());
-				ASInventory.load(player, player.getGameMode(), event.getTo().getWorld());
 				ASNotification.sendNotification(NotificationType.ILLEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName());
 				event.setCancelled(true);
 			}else{
-				ASNotification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName());
+				scheduleInventoryChange(player, event);
 			}
 		}
+	}
+
+	public void scheduleInventoryChange(final Player player, final PlayerTeleportEvent event){
+		new Thread(new Runnable(){
+			@Override
+			public void run(){
+				while (player.getLocation().getWorld() != event.getTo().getWorld())
+					;
+				ASInventory.save(player, player.getGameMode(), event.getFrom().getWorld());
+				ASInventory.load(player, player.getGameMode(), event.getTo().getWorld());
+				ASNotification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName());
+			}
+		}).start();
 	}
 }
