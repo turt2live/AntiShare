@@ -5,7 +5,7 @@
 # 	'death' - Blocks/items to not allow to drop on death
 # 	'drop_item' - Block/items to not allow to drop when a player presses (default) Q
 # 	'interact' - Blocks/items to deny interactions to. (Left/Right click)
-#   'commands' - Commands to block, define a new command with a SPACE (defaults block '/spawn' and '/home')
+#   'commands' - Commands to block, define a new command with a SPACE (defaults block '/somecommand' and '/anothercommand')
 # 	-- Want all blocks/items to be denied? Put a *
 # 	-- Want no blocks/items to be denied? Put: none
 # 	-- Make sure item lists are space-seperated, not commas, periods, or fancy other things!
@@ -28,7 +28,7 @@
 #   'blockDrops' - Only works if 'track_blocks' is in effect. If true, you allow allow the creative-mode block to be broken, but no drops will be produced
 #                  If false, you don't allow the block to be broken (1.0.6 and prior default). While breaking (if this is true) AntiShare sends the message
 #                  'noBlockDrop' to the player once per second, or for every different block. As well, when the block is 100% broken it will show 'creativeModeBlock'.
-#   'worldTransfer' - True if you would like to allow players to transfer worlds. Suggested value of 'true' is 'only_if_creative' is false
+#   'worldTransfer' - True if you would like to allow players to transfer worlds. See the section towards the end of this documentation labeled "world transfer information" for help.
 #                     True means you can transfer TO the world, false means you cannot.
 #   'tracked-blocks' - The blocks the plugin should track and mark as "creative" blocks (if the player placing is in creative). This list is SPACE defined (see default)
 #                    You can set this to 'none' or '*' as well if you prefer, 'none' meaning don't track (set 'track_blocks' to false to reduce some possible lag), '*' meaning
@@ -87,13 +87,27 @@
 # 	- The default settings decline interactions with furnaces, chests, dispensers, and chest-minecarts
 # 	- The event 'block_break' is set to 'none' because in creative-mode, no blocks are dropped when broken
 #   - Messages support colors, use '&' to define a color. Eg: "&aWelcome!" will display "Welcome!" in green.
+# 
+# World Transfer Help:
+#   Here is a table of values to show you what would happen depending on settings:
+#   ------------------------------------------------------------------------------
+#   | worldTransfers | only_if_creative |                  Result                |
+#   ------------------------------------------------------------------------------
+#   |      true      |       true       | All players can transfer worlds        |
+#   ------------------------------------------------------------------------------
+#   |      true      |       false      | All players can transfer worlds        |
+#   ------------------------------------------------------------------------------
+#   |      false     |       true       | Only creative mode players are blocked |
+#   ------------------------------------------------------------------------------
+#   |      false     |       false      | All players are blocked from transfers |
+#   ------------------------------------------------------------------------------
 events:
   block_break: none
   block_place: 57 41 42
   death: '*'
   drop_item: '*'
   interact: 23 61 62 54 342
-  commands: '/spawn /home'
+  commands: '/somecommand /anothercommand'
 messages:
   block_break: You can't do that!
   block_place: You can't do that!
