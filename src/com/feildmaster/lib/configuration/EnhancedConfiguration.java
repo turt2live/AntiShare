@@ -135,10 +135,9 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	}
 
 	@Override
-	@SuppressWarnings ({"rawtypes", "unchecked"})
 	public List<Object> getList(String path, List<?> def){
 		List<Object> list = super.getList(path, def);
-		return list == null ? new ArrayList() : list;
+		return list == null ? new ArrayList<Object>() : list;
 	}
 
 	/**

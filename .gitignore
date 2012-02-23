@@ -1,6 +1,9 @@
 /.classpath
 /.project
 /.settings
+.classpath
+.project
+.settings
 /nbproject
 /target
 .*.sw[a-p]
