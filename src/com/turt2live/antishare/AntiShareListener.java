@@ -39,71 +39,73 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event){
+		if(event.isCancelled()){
+			return;
+		}
 		Player player = event.getPlayer();
-		if(player != null && !event.isCancelled()){
-			boolean itemIsBlocked = false;
-			int item = event.getBlock().getTypeId();
-			itemIsBlocked = ASUtils.isBlocked(plugin.config().getString("events.block_break", player.getWorld()), item);
-			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld()) && itemIsBlocked){
+		if(player == null){
+			return;
+		}
+		if(!plugin.config().getBoolean("other.allow_bedrock", player.getWorld())
+				&& event.getBlock().getType().equals(Material.BEDROCK)
+				&& !player.hasPermission("AntiShare.bedrock")){
+			if(plugin.getConfig().getBoolean("other.only_if_creative")){
 				if(player.getGameMode() == GameMode.CREATIVE){
-					if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break")){
-						event.setCancelled(true);
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
-						ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
-					}else{
-						ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
-					}
-				}
-			}else if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break") && itemIsBlocked){
-				event.setCancelled(true);
-				ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
-				ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
-			}
-			//Bedrock check
-			if(!event.isCancelled()
-					&& !plugin.config().getBoolean("other.allow_bedrock", player.getWorld())
-					&& !player.hasPermission("AntiShare.bedrock")
-					&& event.getBlock().getType() == Material.BEDROCK){
-				if(plugin.getConfig().getBoolean("other.only_if_creative")){
-					if(player.getGameMode() == GameMode.CREATIVE){
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-						ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, event.getBlock().getType().name());
-						event.setCancelled(true);
-					}
-				}else{
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
 					ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, event.getBlock().getType().name());
 					event.setCancelled(true);
 				}
-			}else if(event.getBlock().getType() == Material.BEDROCK
-					&& player.hasPermission("AntiShare.bedrock")
-					&& !plugin.config().getBoolean("other.allow_bedrock", player.getWorld())
-					&& !event.isCancelled()){
-				ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, event.getBlock().getType().name());
+			}else{
+				ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
+				ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, event.getBlock().getType().name());
+				event.setCancelled(true);
 			}
-			//Creative Mode Blocking
-			if(!event.isCancelled()
-					&& plugin.config().getBoolean("other.track_blocks", player.getWorld())
-					&& !player.hasPermission("AntiShare.blockBypass")){
-				if(player.getGameMode() == GameMode.SURVIVAL){
-					boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
-					if(isBlocked){
-						if(!plugin.getConfig().getBoolean("other.blockDrops")){
-							ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
-							event.setCancelled(true);
-						}else{
-							ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
-							ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
-							Block block = event.getBlock();
-							event.setCancelled(true);
-							block.setTypeId(0); // Fakes a break
-						}
-						ASNotification.sendNotification(NotificationType.ILLEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
-					}
+		}else{
+			ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, event.getBlock().getType().name());
+		}
+		if(event.isCancelled()){
+			return;
+		}
+		boolean itemIsBlocked = false;
+		int item = event.getBlock().getTypeId();
+		itemIsBlocked = ASUtils.isBlocked(plugin.config().getString("events.block_break", player.getWorld()), item);
+		if(plugin.config().getBoolean("other.only_if_creative", player.getWorld()) && itemIsBlocked){
+			if(player.getGameMode() == GameMode.CREATIVE){
+				if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break")){
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
+					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
 				}else{
-					//ASNotification.sendNotification(NotificationType.LEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
-					ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
+					ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
 				}
+			}
+		}else if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break") && itemIsBlocked){
+			event.setCancelled(true);
+			ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
+			ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+		}
+		if(event.isCancelled()){
+			return;
+		}
+		if(plugin.config().getBoolean("other.track_blocks", player.getWorld())
+				&& !player.hasPermission("AntiShare.blockBypass")){
+			if(player.getGameMode() == GameMode.SURVIVAL){
+				boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
+				if(isBlocked){
+					if(!plugin.getConfig().getBoolean("other.blockDrops")){
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
+						event.setCancelled(true);
+					}else{
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
+						ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
+						Block block = event.getBlock();
+						event.setCancelled(true);
+						block.setTypeId(0); // Fakes a break
+					}
+					ASNotification.sendNotification(NotificationType.ILLEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+				}
+			}else{
+				ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
 			}
 		}
 		if(!event.isCancelled()){
