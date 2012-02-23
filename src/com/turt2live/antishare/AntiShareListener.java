@@ -115,24 +115,10 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockDamage(BlockDamageEvent event){
-		Player player = event.getPlayer();
-		if(player != null && !event.isCancelled()){
-			boolean itemIsBlocked = false;
-			int item = event.getBlock().getTypeId();
-			itemIsBlocked = ASUtils.isBlocked(plugin.config().getString("events.block_break", player.getWorld()), item);
-			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld()) && itemIsBlocked){
-				if(player.getGameMode() == GameMode.CREATIVE){
-					if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break")){
-						event.setCancelled(true);
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
-					}
-				}
-			}else if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break") && itemIsBlocked){
-				event.setCancelled(true);
-				ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
-			}
+		if(event.isCancelled() || event.getPlayer() == null){
+			return;
 		}
-		// Warning message for block drops
+		Player player = event.getPlayer();
 		if(!event.isCancelled()){
 			if(plugin.getConfig().getBoolean("other.blockDrops")
 					&& !player.hasPermission("AntiShare.blockBypass")
