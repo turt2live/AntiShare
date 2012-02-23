@@ -1,12 +1,15 @@
 package com.turt2live.antishare;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class ASNotification {
 
+	// DEBUG
 	public static void sendNotification(NotificationType type, AntiShare plugin, Player player, String variable){
+		return;
+	}
+
+	/*public static void sendNotification(NotificationType type, AntiShare plugin, Player player, String variable){
 		if(!plugin.getConfig().getBoolean("notifications.send")){
 			return;
 		}
@@ -191,5 +194,5 @@ public class ASNotification {
 			ASUtils.sendToPlayer(Bukkit.getConsoleSender(), message);
 		}
 	}
-
+	*/
 }
