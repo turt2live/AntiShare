@@ -11,6 +11,14 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.plugin.Plugin;
 
+// Path Comments
+// - The next thing to code
+// Case Insensitivity
+// - The "proper" way for this would increase configuration memory. Look into further.
+// Lowercase Keys
+// - This is terrible to implement as well...
+// https://github.com/dumptruckman/PluginTemplate/blob/master/src/main/java/com/dumptruckman/plugintemplate/config/CommentedConfig.java
+
 /**
  * Enhancing configuration to do the following: <li>Stores a file for configuration to use.</li> <li>Self contained "load," "reload," and "save" functions.</li> <li>Self contained "loadDefaults" functions that set defaults.</li> <li>Adds "getLastException" to return the last exception from self contained functions.</li> <li>Adds "options().header(String, String)" to build multiline headers easier(?)</li>
  * 
@@ -20,6 +28,8 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	private final File file;
 	private final Plugin plugin;
 	private Exception exception;
+	private boolean modified = false;
+	private long last_modified = -1L;
 
 	// Cache System
 	private Map<String, Object> cache = new HashMap<String, Object>();
@@ -54,11 +64,6 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	 */
 	public EnhancedConfiguration(String file, Plugin plugin){
 		this(new File(plugin.getDataFolder(), file), plugin);
-	}
-
-	@Override
-	protected String buildHeader(){
-		return super.buildHeader();
 	}
 
 	/**
@@ -130,7 +135,7 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	}
 
 	@Override
-	@SuppressWarnings ({"unchecked", "rawtypes"})
+	@SuppressWarnings ({"rawtypes", "unchecked"})
 	public List<Object> getList(String path, List<?> def){
 		List<Object> list = super.getList(path, def);
 		return list == null ? new ArrayList() : list;
@@ -144,7 +149,28 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	}
 
 	/**
+	 * Checks if file has been modified since last load().
+	 * 
+	 * @return True if file has been modified
+	 */
+	public boolean isFileModified(){
+		return last_modified != file.lastModified();
+	}
+
+	/**
+	 * Checks if loaded configuration (not the file) has been modified.
+	 * 
+	 * @return True if local configuration has been modified
+	 */
+	public boolean isModified(){
+		return modified;
+	}
+
+	/**
 	 * Loads set file
+	 * <p>
+	 * Does not load if file has not been changed since last load
+	 * </p>
 	 * <p>
 	 * Stores exception if possible.
 	 * </p>
@@ -152,9 +178,14 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	 * @return True on successful load
 	 */
 	public final boolean load(){
+		if(last_modified != -1L && !isFileModified()){ // File hasn't been modified since last load
+			return true;
+		}
+
 		try{
 			load(file);
 			clearCache();
+			last_modified = file.lastModified();
 			return true;
 		}catch(Exception ex){
 			exception = ex;
@@ -236,12 +267,6 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 		return (EnhancedConfigurationOptions) options;
 	}
 
-	// _TODO: Header Overrides. To fix line breaks
-	@Override
-	protected String parseHeader(String input){
-		return super.parseHeader(input);
-	}
-
 	/**
 	 * Saves to the set file
 	 * <p>
@@ -253,6 +278,7 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	public final boolean save(){
 		try{
 			save(file);
+			modified = false;
 			return true;
 		}catch(Exception ex){
 			exception = ex;
@@ -271,19 +297,42 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 		return save();
 	}
 
-	// _TODO: Custom Yaml Loader
+	//    protected String parseHeader(String input) {
+	//        return super.parseHeader(input);
+	//    }
+	//    protected String buildHeader() {
+	//        return super.buildHeader();
+	//    }
+	//
+	// TODO: Custom Yaml Loader
 	@Override
 	public String saveToString(){
-		return super.saveToString();
+		return super.saveToString().replaceAll("\n", System.getProperty("line.separator"));
 	}
 
 	@Override
 	public void set(String path, Object value){
+		if(!modified && !value.equals(get(path))){ // New value does not equal old value...!
+			modified = true;
+		}
+
 		if(value == null && cache.containsKey(path)){
 			cache.remove(path);
 		}else if(value != null){
 			cache.put(path, value);
 		}
 		super.set(path, value);
+	}
+
+	/**
+	 * Removes the specified path from the configuration.
+	 * <p>
+	 * Currently equivilent to set(path, null).
+	 * </p>
+	 * 
+	 * @param path The path to remove
+	 */
+	public void unset(String path){
+		set(path, null);
 	}
 }
