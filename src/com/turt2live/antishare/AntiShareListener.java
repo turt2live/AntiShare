@@ -140,6 +140,9 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event){
+		if(event.isCancelled() || event.getPlayer() == null){
+			return;
+		}
 		Player player = event.getPlayer();
 		if(player != null && !event.isCancelled()){
 			boolean itemIsBlocked = false;
@@ -160,9 +163,11 @@ public class AntiShareListener implements Listener {
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_place", player.getWorld()));
 			}
 		}
+		if(event.isCancelled()){
+			return;
+		}
 		//Bedrock check
-		if(!event.isCancelled()
-				&& !plugin.config().getBoolean("other.allow_bedrock", player.getWorld())
+		if(!plugin.config().getBoolean("other.allow_bedrock", player.getWorld())
 				&& !player.hasPermission("AntiShare.bedrock")
 				&& event.getBlock().getType() == Material.BEDROCK){
 			if(plugin.getConfig().getBoolean("other.only_if_creative")){
@@ -180,6 +185,9 @@ public class AntiShareListener implements Listener {
 				&& !plugin.config().getBoolean("other.allow_bedrock", player.getWorld())
 				&& !event.isCancelled()){
 			ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, event.getBlock().getType().name());
+		}
+		if(event.isCancelled()){
+			return;
 		}
 		//Creative Mode Placing
 		if(!event.isCancelled()
