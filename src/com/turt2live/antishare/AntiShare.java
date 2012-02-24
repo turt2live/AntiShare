@@ -16,6 +16,7 @@ public class AntiShare extends PluginWrapper {
 	private ASConfig config;
 	public static Logger log = Logger.getLogger("Minecraft");
 	private SQLManager sql;
+	public VirtualStorage storage;
 
 	public ASConfig config(){
 		return config;
@@ -64,6 +65,7 @@ public class AntiShare extends PluginWrapper {
 		getServer().getPluginManager().registerEvents(new AntiShareListener(this), this);
 		//		getServer().getPluginManager().registerEvents(new ASMultiWorld(this), this);
 		ASMultiWorld.detectWorlds(this);
+		storage = new VirtualStorage(this);
 		if(getConfig().getBoolean("SQL.use")){
 			sql = new SQLManager(this);
 			if(sql.attemptConnectFromConfig()){
