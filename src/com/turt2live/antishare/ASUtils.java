@@ -41,21 +41,18 @@ public class ASUtils {
 	}
 
 	public static boolean isBlocked(String message, int id){
-		boolean ret = false;
 		if(message.equalsIgnoreCase("none")){
 			return false;
 		}else if(message.equalsIgnoreCase("*")){
 			return true;
 		}
-		String parts[] = message.split(" ");
-		String item = id + "";
-		for(String s : parts){
-			if(s.equalsIgnoreCase(item)){
-				ret = true;
-				break;
-			}
+		if(!message.endsWith(" ")){
+			message = message + " ";
 		}
-		return ret;
+		if(message.indexOf(" " + String.valueOf(id) + " ") > -1){
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isBlocked(String interactionBlockName, World world){

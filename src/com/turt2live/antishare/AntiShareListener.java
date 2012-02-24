@@ -39,6 +39,7 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event){
+		long start = System.currentTimeMillis();
 		if(event.isCancelled()){
 			return;
 		}
@@ -64,32 +65,33 @@ public class AntiShareListener implements Listener {
 			ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, event.getBlock().getType().name());
 		}
 		if(event.isCancelled()){
+			plugin.getServer().getPluginManager().callEvent(new ASEvent("BlockBreak:ASEvent", player.getName(), start, System.currentTimeMillis(), "BedrockBreak"));
 			return;
 		}
-		boolean itemIsBlocked = false;
 		int item = event.getBlock().getTypeId();
-		itemIsBlocked = ASUtils.isBlocked(plugin.config().getString("events.block_break", player.getWorld()), item);
-		if(plugin.config().getBoolean("other.only_if_creative", player.getWorld()) && itemIsBlocked){
-			if(player.getGameMode() == GameMode.CREATIVE){
-				if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break")){
+		boolean itemIsBlocked = ASUtils.isBlocked(plugin.config().getString("events.block_break", player.getWorld()), item);
+		if(itemIsBlocked){
+			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
+				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
 					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
-				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+				}
+			}else{
+				if(!player.hasPermission("AntiShare.allow.break")){
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
+					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
 				}
 			}
-		}else if(player.hasPermission("AntiShare.break") && !player.hasPermission("AntiShare.allow.break") && itemIsBlocked){
-			event.setCancelled(true);
-			ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
-			ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
-		}
+		}// We don't do a 'legal' block break just yet
 		if(event.isCancelled()){
+			plugin.getServer().getPluginManager().callEvent(new ASEvent("BlockBreak:ASEvent", player.getName(), start, System.currentTimeMillis(), "BlockBreak"));
 			return;
 		}
 		if(plugin.config().getBoolean("other.track_blocks", player.getWorld())
 				&& !player.hasPermission("AntiShare.blockBypass")){
-			if(player.getGameMode() == GameMode.SURVIVAL){
+			if(player.getGameMode().equals(GameMode.SURVIVAL)){
 				boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
 				if(isBlocked){
 					if(!plugin.getConfig().getBoolean("other.blockDrops")){
@@ -108,6 +110,7 @@ public class AntiShareListener implements Listener {
 				ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
 			}
 		}
+		plugin.getServer().getPluginManager().callEvent(new ASEvent("BlockBreak:ASEvent", player.getName(), start, System.currentTimeMillis(), "TrackedBlockBreak"));
 		if(!event.isCancelled()){
 			ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
 		}
@@ -115,6 +118,7 @@ public class AntiShareListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockDamage(BlockDamageEvent event){
+		long start = System.currentTimeMillis();
 		if(event.isCancelled() || event.getPlayer() == null){
 			return;
 		}
@@ -136,6 +140,7 @@ public class AntiShareListener implements Listener {
 				}
 			}
 		}
+		plugin.getServer().getPluginManager().callEvent(new ASEvent("BlockDamage:ASEvent", player.getName(), start, System.currentTimeMillis(), "BlockDamage"));
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST)
@@ -190,8 +195,7 @@ public class AntiShareListener implements Listener {
 			return;
 		}
 		//Creative Mode Placing
-		if(!event.isCancelled()
-				&& plugin.config().getBoolean("other.track_blocks", player.getWorld())
+		if(plugin.config().getBoolean("other.track_blocks", player.getWorld())
 				&& player.getGameMode() == GameMode.CREATIVE
 				&& !player.hasPermission("AntiShare.freePlace")){
 			ASBlockRegistry.saveCreativeBlock(event.getBlock(), player.getName());
