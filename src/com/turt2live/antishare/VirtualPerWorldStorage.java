@@ -21,6 +21,7 @@ public class VirtualPerWorldStorage {
 
 	public VirtualPerWorldStorage(World world, AntiShare plugin){
 		this.plugin = plugin;
+		this.world = world;
 		build();
 	}
 
@@ -57,7 +58,7 @@ public class VirtualPerWorldStorage {
 				// TODO: Load in all vars
 			}
 		}
-		blocked_bedrock = plugin.config().getBoolean("other.bedrock", world);
+		blocked_bedrock = !plugin.config().getBoolean("other.allow_bedrock", world);
 		if(flatfile){
 
 		}

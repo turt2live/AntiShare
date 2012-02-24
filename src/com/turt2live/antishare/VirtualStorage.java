@@ -18,7 +18,7 @@ public class VirtualStorage {
 		build();
 	}
 
-	public boolean bedrock(World world){
+	public boolean bedrockBlocked(World world){
 		return worlds.get(world).isBlocked(null, BlockedType.BEDROCK);
 	}
 
@@ -28,7 +28,7 @@ public class VirtualStorage {
 		}
 	}
 
-	public boolean command(String command, World world){
+	public boolean commandBlocked(String command, World world){
 		return worlds.get(world).command(command, BlockedType.COMMAND);
 	}
 
