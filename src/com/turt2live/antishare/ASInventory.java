@@ -73,7 +73,7 @@ public class ASInventory {
 						}
 						skip = true;
 					}catch(SQLException e){
-						plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle inventory: " + e.getMessage());
+						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle inventory: " + e.getMessage());
 					}
 				}else{
 					skip = true;

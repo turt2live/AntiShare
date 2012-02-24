@@ -75,9 +75,9 @@ public class SQLManager {
 			connection = DriverManager.getConnection(url, username, password);
 			return true;
 		}catch(ClassNotFoundException e){
-			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] You do not have a MySQL driver, please install one. AntiShare will use Flat-File for now");
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] You do not have a MySQL driver, please install one. AntiShare will use Flat-File for now");
 		}catch(SQLException e){
-			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 		}
 		return false;
 	}
@@ -97,7 +97,7 @@ public class SQLManager {
 					connection.close();
 				}
 			}catch(SQLException e){
-				plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot close SQL connection: " + e.getMessage());
+				AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot close SQL connection: " + e.getMessage());
 			}
 		}
 	}
@@ -112,8 +112,8 @@ public class SQLManager {
 			return stmt.executeQuery(query);
 		}catch(SQLException e){
 			e.printStackTrace();
-			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
-			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
 		}
 		return null;
 	}
@@ -123,8 +123,8 @@ public class SQLManager {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(query);
 		}catch(SQLException e){
-			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
-			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
 		}
 	}
 
@@ -143,8 +143,8 @@ public class SQLManager {
 			Statement stmt = connection.createStatement();
 			return stmt.executeUpdate(query);
 		}catch(SQLException e){
-			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
-			plugin.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
 		}
 		return 0;
 	}

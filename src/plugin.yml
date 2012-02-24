@@ -17,8 +17,6 @@ commands:
   ashare:
     description: reloads config
     permission: AntiShare.reload
-  astest:
-    description: will never work for release builds
 
 permissions:
     AntiShare.reload:

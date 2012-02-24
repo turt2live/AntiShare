@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,7 +14,7 @@ import com.turt2live.antishare.SQL.SQLManager;
 public class AntiShare extends PluginWrapper {
 
 	private ASConfig config;
-	public Logger log = Logger.getLogger("Minecraft");
+	public static Logger log = Logger.getLogger("Minecraft");
 	private SQLManager sql;
 
 	public ASConfig config(){
@@ -34,24 +33,16 @@ public class AntiShare extends PluginWrapper {
 				cmd.equalsIgnoreCase("ashare")){
 			reloadConfig();
 			log.info("AntiShare Reloaded.");
-			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
-			return true;
-		}else if(cmd.equalsIgnoreCase("astest")){
+			if(sender instanceof Player){
+				ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
+			}
 			new Thread(new Runnable(){
 				@Override
 				public void run(){
-					while (true){
-						for(Player p : Bukkit.getOnlinePlayers()){
-							if(p.getGameMode() == GameMode.SURVIVAL){
-								p.setGameMode(GameMode.CREATIVE);
-							}else{
-								p.setGameMode(GameMode.SURVIVAL);
-							}
-						}
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lag");
-					}
+					ASMultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
 				}
-			}).start();
+			});
+			return true;
 		}
 		return false;
 	}
@@ -71,7 +62,7 @@ public class AntiShare extends PluginWrapper {
 		config.reload();
 		ASInventory.cleanup();
 		getServer().getPluginManager().registerEvents(new AntiShareListener(this), this);
-		getServer().getPluginManager().registerEvents(new ASMultiWorld(this), this);
+		//		getServer().getPluginManager().registerEvents(new ASMultiWorld(this), this);
 		ASMultiWorld.detectWorlds(this);
 		if(getConfig().getBoolean("SQL.use")){
 			sql = new SQLManager(this);

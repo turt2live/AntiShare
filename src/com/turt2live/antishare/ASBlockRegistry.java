@@ -36,7 +36,7 @@ public class ASBlockRegistry {
 						}
 						skip = true;
 					}catch(SQLException e){
-						plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle blocks: " + e.getMessage());
+						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle blocks: " + e.getMessage());
 					}
 				}else{
 					skip = true;
@@ -135,7 +135,7 @@ public class ASBlockRegistry {
 						}
 						skip = true;
 					}catch(SQLException e){
-						plugin.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle blocks: " + e.getMessage());
+						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle blocks: " + e.getMessage());
 					}
 				}else{
 					skip = true;
