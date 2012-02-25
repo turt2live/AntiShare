@@ -3,7 +3,6 @@ package com.turt2live.antishare.storage;
 import java.io.File;
 import java.util.Vector;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,13 +12,14 @@ import com.turt2live.antishare.SQL.SQLManager;
 
 public class CreativeBlockSaver {
 
-	private static File blockListing = new File(Bukkit.getServer().getPluginManager().getPlugin("AntiShare").getDataFolder(), "blocks");
+	private File blockListing = null;
 	private Vector<Block> blocks;
 	private AntiShare plugin;
 
 	public CreativeBlockSaver(Vector<Block> blocks, AntiShare plugin){
 		this.blocks = blocks;
 		this.plugin = plugin;
+		blockListing = new File(plugin.getDataFolder(), "blocks");
 	}
 
 	public void save(){

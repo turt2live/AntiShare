@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +16,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.BlockedType;
 
@@ -28,7 +31,7 @@ public class VirtualStorage implements Listener {
 	}
 
 	public boolean bedrockBlocked(World world){
-		return worlds.get(world).isBlocked(null, BlockedType.BEDROCK);
+		return worlds.get(world).isBlocked(Material.BEDROCK, BlockedType.BEDROCK);
 	}
 
 	public boolean blockDrops(World world){
@@ -90,6 +93,18 @@ public class VirtualStorage implements Listener {
 		for(World world : worldListing){
 			worlds.get(world).reload();
 		}
+	}
+
+	public void reload(final CommandSender sender){
+		ASUtils.sendToPlayer(sender, ChatColor.GRAY + "[AntiShare] " + ChatColor.DARK_RED + "Reloading virtual storage. This could take a while...");
+		ASUtils.sendToPlayer(sender, ChatColor.GRAY + "[AntiShare] " + ChatColor.RED + "The configuration will not work correctly until the virtual storage is reloaded.");
+		new Thread(new Runnable(){
+			@Override
+			public void run(){
+				reload();
+				ASUtils.sendToPlayer(sender, ChatColor.GRAY + "[AntiShare] " + ChatColor.DARK_GREEN + "Virtual Storage Reloaded!");
+			}
+		}).start();
 	}
 
 	public void reload(World world){
