@@ -113,6 +113,7 @@ public class SQLManager {
 			e.printStackTrace();
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] MESSAGE: " + e.getMessage());
 		}
 		return null;
 	}
@@ -124,6 +125,7 @@ public class SQLManager {
 		}catch(SQLException e){
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] MESSAGE: " + e.getMessage());
 		}
 	}
 
@@ -144,6 +146,7 @@ public class SQLManager {
 		}catch(SQLException e){
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] MESSAGE: " + e.getMessage());
 		}
 		return 0;
 	}
