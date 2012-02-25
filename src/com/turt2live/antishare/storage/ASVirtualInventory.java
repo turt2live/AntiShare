@@ -30,6 +30,7 @@ public class ASVirtualInventory {
 		this.player = player;
 		this.world = world;
 		this.plugin = plugin;
+		load();
 	}
 
 	public HashMap<Integer, ItemStack> getCreativeInventory(){

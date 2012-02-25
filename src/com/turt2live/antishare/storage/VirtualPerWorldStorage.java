@@ -1,8 +1,12 @@
 package com.turt2live.antishare.storage;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Vector;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -10,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.BlockedType;
+import com.turt2live.antishare.SQL.SQLManager;
 
 public class VirtualPerWorldStorage {
 
@@ -24,7 +29,6 @@ public class VirtualPerWorldStorage {
 	private Vector<Block> creative_blocks = new Vector<Block>();
 	private Vector<Material> tracked_creative_blocks = new Vector<Material>();
 	private boolean blocked_bedrock = false;
-	private HashMap<String, Boolean> all_blocked = new HashMap<String, Boolean>();
 	private HashMap<Player, ASVirtualInventory> inventories = new HashMap<Player, ASVirtualInventory>();
 	public boolean blockDrops;
 
@@ -43,7 +47,6 @@ public class VirtualPerWorldStorage {
 		blocked_commands.clear();
 		creative_blocks.clear();
 		blocked_bedrock = false;
-		all_blocked.clear();
 		inventories.clear();
 		reload();
 	}
@@ -52,11 +55,16 @@ public class VirtualPerWorldStorage {
 		return blocked_commands.contains(command);
 	}
 
+	public void freePlayer(Player player){
+		if(inventories.containsKey(player)){
+			inventories.get(player).saveInventoryToDisk();
+		}
+		inventories.remove(player);
+	}
+
 	public ASVirtualInventory getInventoryManager(Player player){
 		if(!inventories.containsKey(player)){
-			ASVirtualInventory inventory = new ASVirtualInventory(player, world, plugin);
-			inventory.load();
-			inventories.put(player, inventory);
+			inventories.put(player, new ASVirtualInventory(player, world, plugin));
 		}
 		return inventories.get(player);
 	}
@@ -94,8 +102,36 @@ public class VirtualPerWorldStorage {
 		if(plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
 				flatfile = false;
-				//SQLManager sql = plugin.getSQLManager();
-				// TODO: Load in all vars
+				SQLManager sql = plugin.getSQLManager();
+				ResultSet results = sql.getQuery("SELECT * FROM AntiShare_Blocks");
+				if(results != null){
+					try{
+						while (results.next()){
+							Location location = new Location(Bukkit.getWorld(results.getString("world")), results.getInt("blockX"), results.getInt("blockY"), results.getInt("blockZ"));
+							Block block = Bukkit.getWorld(results.getString("world")).getBlockAt(location);
+							creative_blocks.add(block);
+						}
+					}catch(SQLException e){
+						e.printStackTrace();
+					}
+				}
+				results = null; // Reset
+				results = sql.getQuery("SELECT DISTINCT username FROM AntiShare_Inventory");
+				if(results != null){
+					try{
+						while (results.next()){
+							String username = results.getString("username");
+							if(Bukkit.getPlayer(username) != null){
+								Player player = Bukkit.getPlayer(username);
+								if(player.isOnline()){
+									inventories.put(player, new ASVirtualInventory(player, world, plugin));
+								}
+							}
+						}
+					}catch(SQLException e){
+						e.printStackTrace();
+					}
+				}
 				String trackedBlocks[] = plugin.getConfig().getString("other.tracked-blocks").split(" ");
 				boolean notNoneOrAll = false;
 				if(trackedBlocks.length == 1){
@@ -114,9 +150,112 @@ public class VirtualPerWorldStorage {
 						tracked_creative_blocks.add(Material.getMaterial(id));
 					}
 				}
+				//				private Vector<Integer> blocked_break = new Vector<Integer>();
+				//				private Vector<Integer> blocked_place = new Vector<Integer>();
+				//				private Vector<Integer> blocked_drop = new Vector<Integer>();
+				//				private Vector<Integer> blocked_death = new Vector<Integer>();
+				//				private Vector<Integer> blocked_interact = new Vector<Integer>();
+				//				private Vector<String> blocked_commands = new Vector<String>();
+				String blockedBreak[] = plugin.config().getString("events.block_break", world).split(" ");
+				String blockedPlace[] = plugin.config().getString("events.block_place", world).split(" ");
+				String blockedDrop[] = plugin.config().getString("events.drop_item", world).split(" ");
+				String blockedDeath[] = plugin.config().getString("events.death", world).split(" ");
+				String blockedInteract[] = plugin.config().getString("events.interact", world).split(" ");
+				String blockedCommands[] = plugin.config().getString("events.commands", world).split(" ");
+				boolean skip = false;
+				/*## Block Break ##*/
+				if(blockedBreak.length == 1){
+					if(blockedBreak[0].equalsIgnoreCase("*")){
+						for(Material m : Material.values()){
+							blocked_break.add(m.getId());
+						}
+						skip = true;
+					}else if(blockedBreak[0].equalsIgnoreCase("none")){
+						skip = true;
+					}
+				}
+				if(!skip){
+					for(String blocked : blockedBreak){
+						blocked_break.add(Integer.valueOf(blocked));
+					}
+				}
+				skip = false;
+				/*## Block Place ##*/
+				if(blockedPlace.length == 1){
+					if(blockedPlace[0].equalsIgnoreCase("*")){
+						for(Material m : Material.values()){
+							blocked_place.add(m.getId());
+						}
+						skip = true;
+					}else if(blockedPlace[0].equalsIgnoreCase("none")){
+						skip = true;
+					}
+				}
+				if(!skip){
+					for(String blocked : blockedPlace){
+						blocked_place.add(Integer.valueOf(blocked));
+					}
+				}
+				skip = false;
+				/*## Block Drop ##*/
+				if(blockedDrop.length == 1){
+					if(blockedDrop[0].equalsIgnoreCase("*")){
+						for(Material m : Material.values()){
+							blocked_drop.add(m.getId());
+						}
+						skip = true;
+					}else if(blockedDrop[0].equalsIgnoreCase("none")){
+						skip = true;
+					}
+				}
+				if(!skip){
+					for(String blocked : blockedDrop){
+						blocked_drop.add(Integer.valueOf(blocked));
+					}
+				}
+				skip = false;
+				/*## Death ##*/
+				if(blockedDeath.length == 1){
+					if(blockedDeath[0].equalsIgnoreCase("*")){
+						for(Material m : Material.values()){
+							blocked_death.add(m.getId());
+						}
+						skip = true;
+					}else if(blockedDeath[0].equalsIgnoreCase("none")){
+						skip = true;
+					}
+				}
+				if(!skip){
+					for(String blocked : blockedDeath){
+						blocked_death.add(Integer.valueOf(blocked));
+					}
+				}
+				skip = false;
+				/*## Interact ##*/
+				if(blockedInteract.length == 1){
+					if(blockedInteract[0].equalsIgnoreCase("*")){
+						for(Material m : Material.values()){
+							blocked_interact.add(m.getId());
+						}
+						skip = true;
+					}else if(blockedInteract[0].equalsIgnoreCase("none")){
+						skip = true;
+					}
+				}
+				if(!skip){
+					for(String blocked : blockedInteract){
+						blocked_interact.add(Integer.valueOf(blocked));
+					}
+				}
+				skip = false;
+				/*## Commands ##*/
+				for(String blocked : blockedCommands){
+					blocked_commands.add(blocked);
+				}
 			}
 		}
 		blocked_bedrock = !plugin.config().getBoolean("other.allow_bedrock", world);
+		blockDrops = plugin.config().getBoolean("other.blockDrops", world);
 		if(flatfile){
 
 		}
@@ -138,6 +277,14 @@ public class VirtualPerWorldStorage {
 		}
 		if(!creative_blocks.contains(block)){
 			creative_blocks.add(block);
+		}
+	}
+
+	public void saveToDisk(){
+		CreativeBlockSaver creativeBlocks = new CreativeBlockSaver(creative_blocks, plugin);
+		creativeBlocks.save();
+		for(Player player : inventories.keySet()){
+			inventories.get(player).saveInventoryToDisk();
 		}
 	}
 

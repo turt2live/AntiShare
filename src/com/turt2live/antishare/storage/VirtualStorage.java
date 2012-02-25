@@ -8,12 +8,16 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.BlockedType;
 
-public class VirtualStorage {
+public class VirtualStorage implements Listener {
 
 	private AntiShare plugin;
 	private HashMap<World, VirtualPerWorldStorage> worlds = new HashMap<World, VirtualPerWorldStorage>();
@@ -41,6 +45,12 @@ public class VirtualStorage {
 		return worlds.get(world).command(command, BlockedType.COMMAND);
 	}
 
+	private void freePlayer(Player player){
+		for(World world : worlds.keySet()){
+			worlds.get(world).freePlayer(player);
+		}
+	}
+
 	public ASVirtualInventory getInventoryManager(Player player, World world){
 		return worlds.get(world).getInventoryManager(player);
 	}
@@ -59,6 +69,19 @@ public class VirtualStorage {
 
 	public boolean isCreativeBlock(Block block, BlockedType type, World world){
 		return worlds.get(world).isCreativeBlock(block, type);
+	}
+
+	@EventHandler
+	public void playerKickedEvent(PlayerKickEvent event){
+		if(event.isCancelled()){
+			return;
+		}
+		freePlayer(event.getPlayer());
+	}
+
+	@EventHandler
+	public void playerQuitEvent(PlayerQuitEvent event){
+		freePlayer(event.getPlayer());
 	}
 
 	public void reload(){
@@ -85,6 +108,13 @@ public class VirtualStorage {
 		case CREATIVE_BLOCK_BREAK:
 			worlds.get(world).removeCreativeBlock(block);
 			break;
+		}
+	}
+
+	public void saveToDisk(){
+		Set<World> worldListing = worlds.keySet();
+		for(World world : worldListing){
+			worlds.get(world).saveToDisk();
 		}
 	}
 }

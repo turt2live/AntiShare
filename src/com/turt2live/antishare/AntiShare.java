@@ -51,6 +51,7 @@ public class AntiShare extends PluginWrapper {
 
 	@Override
 	public void onDisable(){
+		log.info("[" + getDescription().getFullName() + "] Saving virtual storage to disk/SQL");
 		if(sql != null){
 			sql.disconnect();
 		}
@@ -64,7 +65,6 @@ public class AntiShare extends PluginWrapper {
 		config.reload();
 		ASInventory.cleanup();
 		getServer().getPluginManager().registerEvents(new AntiShareListener(this), this);
-		//		getServer().getPluginManager().registerEvents(new ASMultiWorld(this), this);
 		ASMultiWorld.detectWorlds(this);
 		storage = new VirtualStorage(this);
 		if(getConfig().getBoolean("SQL.use")){
