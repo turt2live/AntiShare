@@ -2,6 +2,7 @@ package com.turt2live.antishare;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class ASNotification {
@@ -20,7 +21,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(ASUtils.isBlocked(variable, player.getWorld())){
+			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.block_place")){
@@ -31,7 +32,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(ASUtils.isBlocked(variable, player.getWorld())){
+			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.block_break")){
@@ -42,7 +43,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(ASUtils.isBlocked(variable, player.getWorld())){
+			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.creative_block_break")){
@@ -100,7 +101,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(ASUtils.isBlocked(variable, player.getWorld())){
+			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.legal.block_place")){
@@ -111,7 +112,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(ASUtils.isBlocked(variable, player.getWorld())){
+			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.legal.block_break")){
@@ -122,7 +123,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(ASUtils.isBlocked(variable, player.getWorld())){
+			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.legal.creative_block_break")){

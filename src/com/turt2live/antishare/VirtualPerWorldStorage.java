@@ -1,5 +1,6 @@
 package com.turt2live.antishare;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.bukkit.Material;
@@ -18,6 +19,8 @@ public class VirtualPerWorldStorage {
 	private Vector<String> blocked_commands = new Vector<String>();
 	private Vector<Block> creative_blocks = new Vector<Block>();
 	private boolean blocked_bedrock = false;
+	private HashMap<String, Boolean> all_blocked = new HashMap<String, Boolean>();
+	public boolean blockDrops;
 
 	public VirtualPerWorldStorage(World world, AntiShare plugin){
 		this.plugin = plugin;
@@ -34,6 +37,7 @@ public class VirtualPerWorldStorage {
 		blocked_commands.clear();
 		creative_blocks.clear();
 		blocked_bedrock = false;
+		all_blocked.clear();
 		reload();
 	}
 
@@ -46,6 +50,11 @@ public class VirtualPerWorldStorage {
 		case BEDROCK:
 			return blocked_bedrock;
 		}
+		return false;
+	}
+
+	public boolean isCreativeBlock(Material material, BlockedType type){
+		// TODO Auto-generated method stub
 		return false;
 	}
 

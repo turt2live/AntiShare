@@ -6,10 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
 public class ASUtils {
@@ -40,7 +37,7 @@ public class ASUtils {
 		return message;
 	}
 
-	public static boolean isBlocked(String message, int id){
+	/*public static boolean isBlocked(String message, int id){
 		if(message.equalsIgnoreCase("none")){
 			return false;
 		}else if(message.equalsIgnoreCase("*")){
@@ -60,7 +57,7 @@ public class ASUtils {
 		int id = item.getId();
 		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 		return isBlocked(plugin.config().getString("events.interact", world), id);
-	}
+	}*/
 
 	public static void sendToPlayer(CommandSender target, String message){
 		if(!message.equalsIgnoreCase("nomsg")

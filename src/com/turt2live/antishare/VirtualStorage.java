@@ -22,6 +22,10 @@ public class VirtualStorage {
 		return worlds.get(world).isBlocked(null, BlockedType.BEDROCK);
 	}
 
+	public boolean blockDrops(World world){
+		return worlds.get(world).blockDrops;
+	}
+
 	public void build(){
 		for(World world : Bukkit.getServer().getWorlds()){
 			worlds.put(world, new VirtualPerWorldStorage(world, plugin));
@@ -42,6 +46,18 @@ public class VirtualStorage {
 
 	public boolean isBlocked(Material material, BlockedType type, World world){
 		return worlds.get(world).isBlocked(material, type);
+	}
+
+	public boolean isCreativeBlock(int itemID, BlockedType type, World world){
+		return worlds.get(world).isCreativeBlock(Material.getMaterial(itemID), type);
+	}
+
+	public boolean isCreativeBlock(ItemStack item, BlockedType type, World world){
+		return worlds.get(world).isCreativeBlock(item.getType(), type);
+	}
+
+	public boolean isCreativeBlock(Material material, BlockedType type, World world){
+		return worlds.get(world).isCreativeBlock(material, type);
 	}
 
 	public void reload(){
