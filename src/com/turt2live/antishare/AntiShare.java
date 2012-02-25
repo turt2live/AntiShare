@@ -44,6 +44,7 @@ public class AntiShare extends PluginWrapper {
 					ASMultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
 				}
 			});
+			storage.reload(sender);
 			return true;
 		}
 		return false;
