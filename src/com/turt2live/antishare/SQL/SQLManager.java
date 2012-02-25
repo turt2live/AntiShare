@@ -42,7 +42,6 @@ public class SQLManager {
 		}
 		createQuery("CREATE TABLE IF NOT EXISTS `AntiShare_Blocks` (" +
 				"  `id` int(11) NOT NULL AUTO_INCREMENT," +
-				"  `username_placer` varchar(20) NOT NULL," +
 				"  `blockX` int(11) NOT NULL," +
 				"  `blockY` int(11) NOT NULL," +
 				"  `blockZ` int(11) NOT NULL," +

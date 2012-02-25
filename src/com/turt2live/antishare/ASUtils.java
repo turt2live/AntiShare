@@ -37,28 +37,6 @@ public class ASUtils {
 		return message;
 	}
 
-	/*public static boolean isBlocked(String message, int id){
-		if(message.equalsIgnoreCase("none")){
-			return false;
-		}else if(message.equalsIgnoreCase("*")){
-			return true;
-		}
-		if(!message.endsWith(" ")){
-			message = message + " ";
-		}
-		if(message.indexOf(" " + String.valueOf(id) + " ") > -1){
-			return true;
-		}
-		return false;
-	}
-
-	public static boolean isBlocked(String interactionBlockName, World world){
-		Material item = Material.getMaterial(interactionBlockName);
-		int id = item.getId();
-		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
-		return isBlocked(plugin.config().getString("events.interact", world), id);
-	}*/
-
 	public static void sendToPlayer(CommandSender target, String message){
 		if(!message.equalsIgnoreCase("nomsg")
 				&& !message.equalsIgnoreCase("no message")
