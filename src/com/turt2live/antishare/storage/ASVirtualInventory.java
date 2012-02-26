@@ -183,11 +183,8 @@ public class ASVirtualInventory {
 			}
 			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 			config.load();
-			Integer i = 0;
-			Integer size = player.getInventory().getSize();
-			for(i = 0; i < size; i++){
-				ItemStack item = player.getInventory().getItem(i);
-				config.set(i.toString(), item);
+			for(Integer slot : inventoryMap.keySet()){
+				config.set(String.valueOf(slot), inventoryMap.get(slot));
 			}
 			config.save();
 		}catch(Exception e){

@@ -69,6 +69,7 @@ public class AntiShareListener implements Listener {
 			return;
 		}
 		if(plugin.storage.isBlocked(event.getBlock().getType(), BlockedType.BLOCK_BREAK, player.getWorld())){
+			System.out.println("BLOCK BREAK: ILLEGAL");
 			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
 				if(player.getGameMode().equals(GameMode.CREATIVE)
 						&& !player.hasPermission("AntiShare.allow.break")){
@@ -417,7 +418,11 @@ public class AntiShareListener implements Listener {
 		//Egg check
 		if(plugin.config().getBoolean("other.allow_eggs", player.getWorld()) == false){
 			ItemStack possibleEgg = event.getItem();
-			if(possibleEgg.getTypeId() != 383){
+			if(possibleEgg != null){
+				if(possibleEgg.getTypeId() != 383){
+					return;
+				}
+			}else{
 				return;
 			}
 			if(player.hasPermission("AntiShare.allow.eggs")){

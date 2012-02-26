@@ -79,7 +79,7 @@ public class VirtualPerWorldStorage {
 		case BLOCK_PLACE:
 			return blocked_place.contains(material.getId());
 		case BLOCK_BREAK:
-			return blocked_place.contains(material.getId());
+			return blocked_break.contains(material.getId());
 		case INTERACT:
 			return blocked_interact.contains(material.getId());
 		case DEATH:
