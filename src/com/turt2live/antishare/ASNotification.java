@@ -193,4 +193,8 @@ public class ASNotification {
 		}
 	}
 
+	public static void sendNotification(NotificationType type, Player player, String variable){
+		sendNotification(type, (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"), player, variable);
+	}
+
 }
