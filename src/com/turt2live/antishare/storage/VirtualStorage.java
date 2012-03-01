@@ -48,16 +48,6 @@ public class VirtualStorage implements Listener {
 		return worlds.get(world).command(command, BlockedType.COMMAND);
 	}
 
-	private void freePlayer(Player player){
-		for(World world : worlds.keySet()){
-			worlds.get(world).freePlayer(player);
-		}
-	}
-
-	public ASVirtualInventory getInventoryManager(Player player, World world){
-		return worlds.get(world).getInventoryManager(player);
-	}
-
 	public boolean isBlocked(int itemID, BlockedType type, World world){
 		return worlds.get(world).isBlocked(Material.getMaterial(itemID), type);
 	}
@@ -72,6 +62,16 @@ public class VirtualStorage implements Listener {
 
 	public boolean isCreativeBlock(Block block, BlockedType type, World world){
 		return worlds.get(world).isCreativeBlock(block, type);
+	}
+
+	private void freePlayer(Player player){
+		for(World world : worlds.keySet()){
+			worlds.get(world).freePlayer(player);
+		}
+	}
+
+	public ASVirtualInventory getInventoryManager(Player player, World world){
+		return worlds.get(world).getInventoryManager(player);
 	}
 
 	@EventHandler

@@ -12,16 +12,6 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
 public class ASMultiWorld {
 
-	//	public static void detectWorld(AntiShare plugin, World world){
-	//		File worldConfig = new File(plugin.getDataFolder(), world.getName() + "_config.yml");
-	//		if(!worldConfig.exists()){
-	//			EnhancedConfiguration worldSettings = new EnhancedConfiguration(worldConfig, plugin);
-	//			worldSettings.loadDefaults(plugin.getResource("resources/world.yml"));
-	//			worldSettings.saveDefaults();
-	//			worldSettings.load();
-	//		}
-	//	}
-
 	public static void detectWorlds(AntiShare plugin){
 		for(World w : Bukkit.getWorlds()){
 			String worldName = w.getName();

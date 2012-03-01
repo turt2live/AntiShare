@@ -30,10 +30,41 @@ public class SQLManager {
 		return connect(host, username, password, port, database);
 	}
 
+	public boolean connect(String host, String username, String password, int port, String database){
+		try{
+			String driverName = "org.gjt.mm.mysql.Driver";
+			Class.forName(driverName);
+			String url = "jdbc:mysql://" + host + "/" + database;
+			connection = DriverManager.getConnection(url, username, password);
+			return true;
+		}catch(ClassNotFoundException e){
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] You do not have a MySQL driver, please install one. AntiShare will use Flat-File for now");
+		}catch(SQLException e){
+			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
+		}
+		return false;
+	}
+
+	public void disconnect(){
+		if(connection != null){
+			try{
+				if(!connection.isClosed()){
+					connection.close();
+				}
+			}catch(SQLException e){
+				AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot close SQL connection: " + e.getMessage());
+			}
+		}
+	}
+
 	public void checkConnection(){
 		if(connection == null){
 			attemptConnectFromConfig();
 		}
+	}
+
+	public boolean isConnected(){
+		return connection != null;
 	}
 
 	public void checkValues(){
@@ -66,19 +97,8 @@ public class SQLManager {
 				")");
 	}
 
-	public boolean connect(String host, String username, String password, int port, String database){
-		try{
-			String driverName = "org.gjt.mm.mysql.Driver";
-			Class.forName(driverName);
-			String url = "jdbc:mysql://" + host + "/" + database;
-			connection = DriverManager.getConnection(url, username, password);
-			return true;
-		}catch(ClassNotFoundException e){
-			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] You do not have a MySQL driver, please install one. AntiShare will use Flat-File for now");
-		}catch(SQLException e){
-			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
-		}
-		return false;
+	public String getDatabase(){
+		return plugin.getConfig().getString("SQL.database");
 	}
 
 	public void createQuery(String query){
@@ -87,22 +107,6 @@ public class SQLManager {
 
 	public int deleteQuery(String query){
 		return updateQuery(query);
-	}
-
-	public void disconnect(){
-		if(connection != null){
-			try{
-				if(!connection.isClosed()){
-					connection.close();
-				}
-			}catch(SQLException e){
-				AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot close SQL connection: " + e.getMessage());
-			}
-		}
-	}
-
-	public String getDatabase(){
-		return plugin.getConfig().getString("SQL.database");
 	}
 
 	public ResultSet getQuery(String query){
@@ -129,16 +133,6 @@ public class SQLManager {
 		}
 	}
 
-	public boolean isConnected(){
-		return connection != null;
-	}
-
-	/**
-	 * Returns number of rows updated
-	 * 
-	 * @param query query string
-	 * @return rows updated
-	 */
 	public int updateQuery(String query){
 		try{
 			Statement stmt = connection.createStatement();

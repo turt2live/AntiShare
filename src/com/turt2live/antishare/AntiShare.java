@@ -19,12 +19,31 @@ public class AntiShare extends PluginWrapper {
 	private SQLManager sql;
 	public VirtualStorage storage;
 
-	public ASConfig config(){
-		return config;
+	@Override
+	public void onEnable(){
+		config = new ASConfig(this);
+		config.create();
+		config.reload();
+		ASInventory.cleanup();
+		getServer().getPluginManager().registerEvents(new AntiShareListener(this), this);
+		ASMultiWorld.detectWorlds(this);
+		storage = new VirtualStorage(this);
+		if(getConfig().getBoolean("SQL.use")){
+			sql = new SQLManager(this);
+			if(sql.attemptConnectFromConfig()){
+				sql.checkValues();
+			}
+		}
+		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}
 
-	public SQLManager getSQLManager(){
-		return sql;
+	@Override
+	public void onDisable(){
+		log.info("[" + getDescription().getFullName() + "] Saving virtual storage to disk/SQL");
+		if(sql != null){
+			sql.disconnect();
+		}
+		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
 	}
 
 	@Override
@@ -50,30 +69,12 @@ public class AntiShare extends PluginWrapper {
 		return false;
 	}
 
-	@Override
-	public void onDisable(){
-		log.info("[" + getDescription().getFullName() + "] Saving virtual storage to disk/SQL");
-		if(sql != null){
-			sql.disconnect();
-		}
-		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
+	public ASConfig config(){
+		return config;
 	}
 
-	@Override
-	public void onEnable(){
-		config = new ASConfig(this);
-		config.create();
-		config.reload();
-		ASInventory.cleanup();
-		getServer().getPluginManager().registerEvents(new AntiShareListener(this), this);
-		ASMultiWorld.detectWorlds(this);
-		storage = new VirtualStorage(this);
-		if(getConfig().getBoolean("SQL.use")){
-			sql = new SQLManager(this);
-			if(sql.attemptConnectFromConfig()){
-				sql.checkValues();
-			}
-		}
-		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
+	public SQLManager getSQLManager(){
+		return sql;
 	}
+
 }

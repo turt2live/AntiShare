@@ -58,15 +58,15 @@ public class ASConfig {
 		return value;
 	}
 
-	public void load(){
-		plugin.reloadConfig();
-	}
-
 	public void reload(){
 		load();
 	}
 
 	public void save(){
 		plugin.saveConfig();
+	}
+
+	public void load(){
+		plugin.reloadConfig();
 	}
 }
