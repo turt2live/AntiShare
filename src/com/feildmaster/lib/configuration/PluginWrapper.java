@@ -1,24 +1,30 @@
 package com.feildmaster.lib.configuration;
 
-public class PluginWrapper extends org.bukkit.plugin.java.JavaPlugin {
-    private EnhancedConfiguration config;
+import org.bukkit.plugin.java.JavaPlugin;
 
-    public EnhancedConfiguration getConfig() {
-        if(config == null) {
-            config = new EnhancedConfiguration(this);
-        }
-        return config;
-    }
+public class PluginWrapper extends JavaPlugin {
+	private EnhancedConfiguration config;
 
-    public void reloadConfig() {
-        getConfig().load();
-    }
+	@Override
+	public EnhancedConfiguration getConfig(){
+		if(config == null){
+			config = new EnhancedConfiguration(this);
+		}
+		return config;
+	}
 
-    public void saveConfig() {
-        getConfig().save();
-    }
+	@Override
+	public void reloadConfig(){
+		getConfig().load();
+	}
 
-    public void saveDefaultConfig() {
-        getConfig().saveDefaults();
-    }
+	@Override
+	public void saveConfig(){
+		getConfig().save();
+	}
+
+	@Override
+	public void saveDefaultConfig(){
+		getConfig().saveDefaults();
+	}
 }

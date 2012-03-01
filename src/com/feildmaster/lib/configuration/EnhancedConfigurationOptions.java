@@ -9,20 +9,23 @@ import org.bukkit.configuration.file.YamlConfigurationOptions;
  */
 public class EnhancedConfigurationOptions extends YamlConfigurationOptions {
 //    private boolean lowercaseKeys = false; // TODO: Finish this for next release
-//
+
     public EnhancedConfigurationOptions(EnhancedConfiguration configuration) {
         super(configuration);
     }
 
+    @Override
     public EnhancedConfiguration configuration() {
         return (EnhancedConfiguration) super.configuration();
     }
 
+    @Override
     public EnhancedConfigurationOptions copyDefaults(boolean value) {
         super.copyDefaults(value);
         return this;
     }
 
+    @Override
     public EnhancedConfigurationOptions header(String value) {
         super.header(value);
         return this;
@@ -42,7 +45,7 @@ public class EnhancedConfigurationOptions extends YamlConfigurationOptions {
 //    public boolean lowercaseKeys() {
 //        return lowercaseKeys;
 //    }
-//
+
     /**
      *
      *
@@ -66,16 +69,19 @@ public class EnhancedConfigurationOptions extends YamlConfigurationOptions {
         return this;
     }
 
+    @Override
     public EnhancedConfigurationOptions copyHeader(boolean value) {
         super.copyHeader(value);
         return this;
     }
 
+    @Override
     public EnhancedConfigurationOptions pathSeparator(char value) {
         super.pathSeparator(value);
         return this;
     }
 
+    @Override
     public EnhancedConfigurationOptions indent(int value) {
         super.indent(value);
         return this;
