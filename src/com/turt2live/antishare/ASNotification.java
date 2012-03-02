@@ -185,12 +185,7 @@ public class ASNotification {
 			break;
 		}
 		if(message.length() > 0){
-			for(Player p : Bukkit.getServer().getOnlinePlayers()){
-				if(p.hasPermission("AntiShare.notify")){
-					ASUtils.sendToPlayer(p, message);
-				}
-			}
-			ASUtils.sendToPlayer(Bukkit.getConsoleSender(), message);
+			Bukkit.broadcast(message, "AntiShare.notify");
 		}
 	}
 
