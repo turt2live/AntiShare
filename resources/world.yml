@@ -1,0 +1,37 @@
+# World Configuration
+# The defaults here are the same as the config.yml
+# If you would like to use a "global" value, set the value here as 'global' (like in defaults)
+# Otherwise, use a custom value.
+# For an explanation of each value, see config.yml
+events:
+  block_break: global
+  block_place: global
+  death: global
+  drop_item: global
+  interact: global
+  commands: global
+messages:
+  block_break: global
+  block_place: global
+  death: global
+  drop_item: global
+  interact: global
+  eggs: global
+  inventory_swap: global
+  creativeModeBlock: global
+  bedrock: global
+  pvp: global
+  mobpvp: global
+  noBlockDrop: global
+  illegalCommand: global
+  worldSwap: global
+other:
+  only_if_creative: global
+  allow_eggs: global
+  inventory_swap: global
+  track_blocks: global
+  allow_bedrock: global
+  pvp: global
+  pvp-mobs: global
+  blockDrops: global
+  worldTransfer: global
