@@ -229,7 +229,7 @@ public class ASListener implements Listener {
 					event.setCancelled(true);
 				}
 			}else{
-				if(plugin.config().getBoolean("other.pvp-mob", dealer.getWorld())){
+				if(plugin.config().getBoolean("other.pvp-mobs", dealer.getWorld())){
 					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""), null);
 					return;
 				}
@@ -310,13 +310,13 @@ public class ASListener implements Listener {
 			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					if(!player.hasPermission("AntiShare.mobpvp")
-							&& !plugin.config().getBoolean("other.mobpvp", player.getWorld())){
+							&& !plugin.config().getBoolean("other.pvp-mobs", player.getWorld())){
 						event.setCancelled(true);
 					}
 				}
 			}else{
 				if(!player.hasPermission("AntiShare.mobpvp")
-						&& !plugin.config().getBoolean("other.mobpvp", player.getWorld())){
+						&& !plugin.config().getBoolean("other.pvp-mobs", player.getWorld())){
 					event.setCancelled(true);
 				}
 			}
