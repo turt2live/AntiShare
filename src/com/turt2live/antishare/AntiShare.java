@@ -25,7 +25,7 @@ public class AntiShare extends PluginWrapper {
 		config.create();
 		config.reload();
 		ASInventory.cleanup();
-		getServer().getPluginManager().registerEvents(new AntiShareListener(this), this);
+		getServer().getPluginManager().registerEvents(new ASListener(this), this);
 		ASMultiWorld.detectWorlds(this);
 		storage = new VirtualStorage(this);
 		if(getConfig().getBoolean("SQL.use")){

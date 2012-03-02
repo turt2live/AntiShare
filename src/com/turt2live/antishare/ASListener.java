@@ -13,6 +13,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -28,12 +29,12 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class AntiShareListener implements Listener {
+public class ASListener implements Listener {
 
 	private AntiShare plugin;
 	private HashMap<Player, Long> blockDropTextWarnings = new HashMap<Player, Long>();
 
-	public AntiShareListener(AntiShare p){
+	public ASListener(AntiShare p){
 		plugin = p;
 	}
 
@@ -52,44 +53,44 @@ public class AntiShareListener implements Listener {
 			if(plugin.getConfig().getBoolean("other.only_if_creative")){
 				if(player.getGameMode() == GameMode.CREATIVE){
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK");
+					ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 					event.setCancelled(true);
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK");
+					ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 				}
 			}else{
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-				ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK");
+				ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 				event.setCancelled(true);
 			}
 		}else{
-			ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK");
+			ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 		}
 		if(event.isCancelled()){
 			return;
 		}
 		if(plugin.storage.isBlocked(event.getBlock().getType(), BlockedType.BLOCK_BREAK, player.getWorld())){
-			System.out.println("BLOCK BREAK: ILLEGAL");
+			//System.out.println("BLOCK BREAK: ILLEGAL");
 			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
 				if(player.getGameMode().equals(GameMode.CREATIVE)
 						&& !player.hasPermission("AntiShare.allow.break")){
 					event.setCancelled(true);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+					ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				}
 			}else{
 				if(!player.hasPermission("AntiShare.allow.break")){
 					event.setCancelled(true);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_break", player.getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+					ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				}
 			}
 		}else{
-			ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+			ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 		}
 		if(event.isCancelled()){
 			return;
@@ -109,13 +110,13 @@ public class AntiShareListener implements Listener {
 						event.setCancelled(true);
 						block.setTypeId(0); // Fakes a break
 					}
-					ASNotification.sendNotification(NotificationType.ILLEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+					ASNotification.sendNotification(NotificationType.ILLEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				}
 			}else{
 				ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
 			}
 		}else{
-			ASNotification.sendNotification(NotificationType.LEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name());
+			ASNotification.sendNotification(NotificationType.LEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 		}
 	}
 
@@ -155,18 +156,18 @@ public class AntiShareListener implements Listener {
 			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
-					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name());
+					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_place", player.getWorld()));
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name());
+					ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				}
 			}else{
 				event.setCancelled(true);
-				ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name());
+				ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_place", player.getWorld()));
 			}
 		}else{
-			ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name());
+			ASNotification.sendNotification(NotificationType.LEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 		}
 		if(event.isCancelled()){
 			return;
@@ -179,17 +180,17 @@ public class AntiShareListener implements Listener {
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK");
+					ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK");
+					ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 				}
 			}else{
 				event.setCancelled(true);
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-				ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK");
+				ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 			}
 		}else{
-			ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK");
+			ASNotification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 		}
 		if(event.isCancelled()){
 			return;
@@ -219,25 +220,25 @@ public class AntiShareListener implements Listener {
 			//System.out.println("GM: " + dealer.getGameMode().toString());
 			if(event.getEntity() instanceof Player){
 				if(plugin.getConfig().getBoolean("other.pvp")){
-					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName());
+					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
 					return;
 				}
 				if(!dealer.hasPermission("AntiShare.pvp")){
 					ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.pvp", event.getEntity().getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName());
+					ASNotification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
 					event.setCancelled(true);
 				}
 			}else{
 				if(plugin.getConfig().getBoolean("other.pvp-mob")){
-					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""));
+					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""), null);
 					return;
 				}
 				if(!dealer.hasPermission("AntiShare.mobpvp")){
-					ASNotification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""));
+					ASNotification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""), null);
 					ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.mobpvp", event.getEntity().getWorld()));
 					event.setCancelled(true);
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""));
+					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""), null);
 				}
 			}
 		}else if(damager instanceof Projectile){
@@ -245,15 +246,15 @@ public class AntiShareListener implements Listener {
 			if(shooter instanceof Player){
 				Player dealer = ((Player) shooter);
 				if(!dealer.getGameMode().equals(GameMode.CREATIVE) && !plugin.getConfig().getBoolean("other.only_if_creative")){
-					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName());
+					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
 					return;
 				}else if(!dealer.getGameMode().equals(GameMode.CREATIVE)){
-					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName());
+					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
 					return;
 				}
 				if(!dealer.hasPermission("AntiShare.pvp")){
 					ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.pvp", dealer.getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName());
+					ASNotification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
 					event.setCancelled(true);
 				}
 			}
@@ -289,9 +290,9 @@ public class AntiShareListener implements Listener {
 			}
 			if(illegal){
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.death", player.getWorld()));
-				ASNotification.sendNotification(NotificationType.ILLEGAL_DEATH, plugin, player, player.getGameMode().toString());
+				ASNotification.sendNotification(NotificationType.ILLEGAL_DEATH, plugin, player, player.getGameMode().toString(), null);
 			}else{
-				ASNotification.sendNotification(NotificationType.LEGAL_DEATH, plugin, player, player.getGameMode().toString());
+				ASNotification.sendNotification(NotificationType.LEGAL_DEATH, plugin, player, player.getGameMode().toString(), null);
 			}
 		}
 	}
@@ -330,18 +331,18 @@ public class AntiShareListener implements Listener {
 		}
 		Player sender = event.getPlayer();
 		if(sender.hasPermission("AntiShare.allow.commands")){
-			ASNotification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent);
+			ASNotification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent, null);
 			return;
 		}
 		if(plugin.getConfig().getBoolean("other.only_if_creative")){
 			if(sender.getGameMode().equals(GameMode.SURVIVAL)){
-				ASNotification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent);
+				ASNotification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent, null);
 				return;
 			}
 		}
 		if(plugin.storage.commandBlocked(commandSent, sender.getWorld())){
 			ASUtils.sendToPlayer(sender, plugin.getConfig().getString("messages.illegalCommand"));
-			ASNotification.sendNotification(NotificationType.ILLEGAL_COMMAND, plugin, sender, commandSent);
+			ASNotification.sendNotification(NotificationType.ILLEGAL_COMMAND, plugin, sender, commandSent, null);
 			event.setCancelled(true);
 		}
 	}
@@ -353,21 +354,21 @@ public class AntiShareListener implements Listener {
 		}
 		Player player = event.getPlayer();
 		if(player.hasPermission("AntiShare.allow.drop")){
-			ASNotification.sendNotification(NotificationType.LEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name());
+			ASNotification.sendNotification(NotificationType.LEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
 			return;
 		}
 		if(plugin.storage.isBlocked(event.getItemDrop().getItemStack(), BlockedType.DROP_ITEM, player.getWorld())){
 			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
-					ASNotification.sendNotification(NotificationType.ILLEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name());
+					ASNotification.sendNotification(NotificationType.ILLEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.drop_item", player.getWorld()));
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name());
+					ASNotification.sendNotification(NotificationType.LEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
 				}
 			}else{
 				event.setCancelled(true);
-				ASNotification.sendNotification(NotificationType.ILLEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name());
+				ASNotification.sendNotification(NotificationType.ILLEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.drop_item", player.getWorld()));
 			}
 		}
@@ -385,7 +386,7 @@ public class AntiShareListener implements Listener {
 				}
 			}
 		}
-		ASNotification.sendNotification(NotificationType.GAMEMODE_CHANGE, plugin, player, event.getNewGameMode().toString());
+		ASNotification.sendNotification(NotificationType.GAMEMODE_CHANGE, plugin, player, event.getNewGameMode().toString(), null);
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST)
@@ -398,19 +399,35 @@ public class AntiShareListener implements Listener {
 				&& plugin.storage.isBlocked(event.getClickedBlock().getType(), BlockedType.INTERACT, player.getWorld())){
 			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
-					event.setCancelled(true);
-					ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name());
+					if(event.getClickedBlock().getType().equals(Material.CHEST)){
+						if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+							event.setCancelled(true);
+							ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
+							ASNotification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
+						}
+					}else{
+						event.setCancelled(true);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
+						ASNotification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
+					}
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name());
+					ASNotification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
 				}
 			}else{
-				event.setCancelled(true);
-				ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
-				ASNotification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name());
+				if(event.getClickedBlock().getType().equals(Material.CHEST)){
+					if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+						event.setCancelled(true);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
+						ASNotification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
+					}
+				}else{
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
+					ASNotification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
+				}
 			}
 		}else{
-			ASNotification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name());
+			ASNotification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
 		}
 		if(event.isCancelled()){
 			return;
@@ -426,21 +443,21 @@ public class AntiShareListener implements Listener {
 				return;
 			}
 			if(player.hasPermission("AntiShare.allow.eggs")){
-				ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG");
+				ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
 				return;
 			}
 			// At this point the player is not allowed to use eggs, and we are dealing with an egg
 			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
-					ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG");
+					ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG");
+					ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
 				}
 			}else{
 				event.setCancelled(true);
-				ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG");
+				ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
 			}
 		}
@@ -461,7 +478,7 @@ public class AntiShareListener implements Listener {
 			boolean cancel = !ASMultiWorld.worldSwap(plugin, player, event.getFrom(), event.getTo());
 			if(cancel){
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.worldSwap", event.getTo().getWorld()));
-				ASNotification.sendNotification(NotificationType.ILLEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName());
+				ASNotification.sendNotification(NotificationType.ILLEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName(), null);
 				event.setCancelled(true);
 			}else{
 				scheduleInventoryChange(player, event);
@@ -485,7 +502,7 @@ public class AntiShareListener implements Listener {
 					ASInventory.save(player, player.getGameMode(), event.getFrom().getWorld());
 					ASInventory.load(player, player.getGameMode(), event.getTo().getWorld());
 				}
-				ASNotification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName());
+				ASNotification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName(), null);
 			}
 		}).start();
 	}
