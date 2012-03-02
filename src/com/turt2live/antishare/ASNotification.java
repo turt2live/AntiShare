@@ -7,13 +7,14 @@ import org.bukkit.entity.Player;
 
 public class ASNotification {
 
-	public static void sendNotification(NotificationType type, AntiShare plugin, Player player, String variable){
+	public static void sendNotification(NotificationType type, AntiShare plugin, Player player, String variable, Material material){
 		if(!plugin.getConfig().getBoolean("notifications.send")){
 			return;
 		}
 		if(player.hasPermission("AntiShare.silent")){
 			return;
 		}
+		variable = variable.replaceAll("_", " ");
 		String message = "";
 		switch (type){
 		// ILLEGAL actions
@@ -21,7 +22,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
+			if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.block_place")){
@@ -32,7 +33,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
+			if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.block_break")){
@@ -43,7 +44,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
+			if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.illegal.creative_block_break")){
@@ -101,7 +102,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
+			if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.legal.block_place")){
@@ -112,7 +113,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
+			if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.legal.block_break")){
@@ -123,7 +124,7 @@ public class ASNotification {
 			if(variable.equalsIgnoreCase("BEDROCK")){
 				break;
 			}
-			if(plugin.storage.isBlocked(Material.getMaterial(variable), BlockedType.INTERACT, player.getWorld())){
+			if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 				break;
 			}
 			if(plugin.getConfig().getBoolean("notifications.legal.creative_block_break")){
@@ -186,15 +187,19 @@ public class ASNotification {
 		if(message.length() > 0){
 			for(Player p : Bukkit.getServer().getOnlinePlayers()){
 				if(p.hasPermission("AntiShare.notify")){
-					ASUtils.sendToPlayer(player, message);
+					ASUtils.sendToPlayer(p, message);
 				}
 			}
 			ASUtils.sendToPlayer(Bukkit.getConsoleSender(), message);
 		}
 	}
 
+	public static void sendNotification(NotificationType type, Player player, String variable, Material material){
+		sendNotification(type, (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"), player, variable, material);
+	}
+
 	public static void sendNotification(NotificationType type, Player player, String variable){
-		sendNotification(type, (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"), player, variable);
+		sendNotification(type, (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"), player, variable, null);
 	}
 
 }
