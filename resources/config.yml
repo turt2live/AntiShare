@@ -18,6 +18,7 @@
 # Other:
 # 	'only_if_creative' - Auto-decline if they are in creative, permissions still apply.
 # 		(eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)
+#       For per-player support, set the permission "AntiShare.onlyIfCreative". See the permissions section for more information
 # 	'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)
 # 	'inventory_swap' - If true then creative and survival inventories will be swapped
 # 	'track_blocks' - If true then creative mode blocks will be tracked where only creative mode players can break them
@@ -61,6 +62,8 @@
 # 	'AntiShare.eggs' - Deny eggs that spawn mobs
 #   'AntiShare.commands' - Deny command usage (for specified commands)
 # 	-- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)
+#   'AntiShare.onlyIfCreative' - Only deny actions if the player is in creative mode, false to deny regardless of Game Mode (this is default FALSE)
+#   'AntiShare.onlyIfCreative.global' - Uses the configuration value and overrides the 'AntiShare.onlyIfCreative' permission (this is default TRUE)
 # 	'AntiShare.reload' - Permission to use /antishare
 # 	'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched
 # 	'AntiShare.blockBypass' - If true, then the player can bypass the "Creative mode players can only break this block" message
@@ -87,6 +90,8 @@
 # 	- The default settings decline interactions with furnaces, chests, dispensers, and chest-minecarts
 # 	- The event 'block_break' is set to 'none' because in creative-mode, no blocks are dropped when broken
 #   - Messages support colors, use '&' to define a color. Eg: "&aWelcome!" will display "Welcome!" in green.
+#   - **** The new permissions for 'only if creative' do not need to be set ****
+#         - The default values mirror the pre-permissions setup to stop servers from breaking.
 # 
 # World Transfer Help:
 #   Here is a table of values to show you what would happen depending on settings:

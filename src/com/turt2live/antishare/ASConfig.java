@@ -3,6 +3,7 @@ package com.turt2live.antishare;
 import java.io.File;
 
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
@@ -20,6 +21,15 @@ public class ASConfig {
 			plugin.getConfig().saveDefaults();
 		}
 		load();
+	}
+
+	public boolean onlyIfCreative(Player player){
+		if(player.hasPermission("AntiShare.onlyIfCreative.global")){
+			return getBoolean("other.only_if_creative", player.getWorld());
+		}else if(player.hasPermission("AntiShare.onlyIfCreative")){
+			return true;
+		}
+		return false;
 	}
 
 	public Object get(String path, World world){

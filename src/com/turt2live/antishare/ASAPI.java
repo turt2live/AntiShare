@@ -600,6 +600,16 @@ public class ASAPI {
 	}
 
 	/**
+	 * Determines if a player is subject to "only if creative" mode
+	 * 
+	 * @param player the player to test
+	 * @return true if the player has to be in creative to be blocked an action, false for denial regardless of game mode
+	 */
+	public boolean isOnlyIfCreativeOn(Player player){
+		return plugin.config().onlyIfCreative(player);
+	}
+
+	/**
 	 * Checks to see if the SQL Manager is connected
 	 * 
 	 * @return true if a connection is active

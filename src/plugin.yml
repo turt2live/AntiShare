@@ -19,6 +19,12 @@ commands:
     permission: AntiShare.reload
 
 permissions:
+    AntiShare.onlyIfCreative:
+        description: only block actions if in creative
+        default: false
+    AntiShare.onlyIfCreative.global:
+        description: only block actions if in creative based on configuration instead of permissions
+        default: true
     AntiShare.reload:
         description: reload plugin
         default: op

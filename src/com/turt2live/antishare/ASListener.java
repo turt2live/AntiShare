@@ -50,7 +50,7 @@ public class ASListener implements Listener {
 		if(plugin.storage.bedrockBlocked(player.getWorld())
 				&& !player.hasPermission("AntiShare.bedrock")
 				&& event.getBlock().getType().equals(Material.BEDROCK)){
-			if(plugin.getConfig().getBoolean("other.only_if_creative")){
+			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode() == GameMode.CREATIVE){
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
 					ASNotification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
@@ -71,7 +71,7 @@ public class ASListener implements Listener {
 		}
 		if(plugin.storage.isBlocked(event.getBlock().getType(), BlockedType.BLOCK_BREAK, player.getWorld())){
 			//System.out.println("BLOCK BREAK: ILLEGAL");
-			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
+			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)
 						&& !player.hasPermission("AntiShare.allow.break")){
 					event.setCancelled(true);
@@ -100,7 +100,7 @@ public class ASListener implements Listener {
 			if(player.getGameMode().equals(GameMode.SURVIVAL)){
 				boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
 				if(isBlocked){
-					if(!plugin.getConfig().getBoolean("other.blockDrops")){
+					if(!plugin.config().getBoolean("other.blockDrops", player.getWorld())){
 						ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
 						event.setCancelled(true);
 					}else{
@@ -127,7 +127,7 @@ public class ASListener implements Listener {
 		}
 		Player player = event.getPlayer();
 		if(!event.isCancelled()){
-			if(plugin.getConfig().getBoolean("other.blockDrops")
+			if(plugin.config().getBoolean("other.blockDrops", player.getWorld())
 					&& !player.hasPermission("AntiShare.blockBypass")
 					&& ASBlockRegistry.isBlockCreative(event.getBlock())){
 				long systemTime = System.currentTimeMillis();
@@ -153,7 +153,7 @@ public class ASListener implements Listener {
 		Player player = event.getPlayer();
 		if(plugin.storage.isBlocked(event.getBlock().getType(), BlockedType.BLOCK_PLACE, player.getWorld())
 				&& !player.hasPermission("AntiShare.allow.place")){
-			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
+			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
 					ASNotification.sendNotification(NotificationType.ILLEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
@@ -176,7 +176,7 @@ public class ASListener implements Listener {
 		if(plugin.storage.bedrockBlocked(player.getWorld())
 				&& !player.hasPermission("AntiShare.bedrock")
 				&& event.getBlock().getType().equals(Material.BEDROCK)){
-			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
+			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
@@ -212,14 +212,14 @@ public class ASListener implements Listener {
 		Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 		if(damager instanceof Player){
 			Player dealer = (Player) damager;
-			if(!dealer.getGameMode().equals(GameMode.CREATIVE) && !plugin.getConfig().getBoolean("other.only_if_creative")){
+			if(!dealer.getGameMode().equals(GameMode.CREATIVE) && !plugin.config().onlyIfCreative(dealer)){
 				return;
 			}else if(!dealer.getGameMode().equals(GameMode.CREATIVE)){
 				return;
 			}
 			//System.out.println("GM: " + dealer.getGameMode().toString());
 			if(event.getEntity() instanceof Player){
-				if(plugin.getConfig().getBoolean("other.pvp")){
+				if(plugin.config().getBoolean("other.pvp", dealer.getWorld())){
 					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
 					return;
 				}
@@ -229,7 +229,7 @@ public class ASListener implements Listener {
 					event.setCancelled(true);
 				}
 			}else{
-				if(plugin.getConfig().getBoolean("other.pvp-mob")){
+				if(plugin.config().getBoolean("other.pvp-mob", dealer.getWorld())){
 					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""), null);
 					return;
 				}
@@ -245,7 +245,7 @@ public class ASListener implements Listener {
 			LivingEntity shooter = ((Projectile) damager).getShooter();
 			if(shooter instanceof Player){
 				Player dealer = ((Player) shooter);
-				if(!dealer.getGameMode().equals(GameMode.CREATIVE) && !plugin.getConfig().getBoolean("other.only_if_creative")){
+				if(!dealer.getGameMode().equals(GameMode.CREATIVE) && !plugin.config().onlyIfCreative(dealer)){
 					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
 					return;
 				}else if(!dealer.getGameMode().equals(GameMode.CREATIVE)){
@@ -272,7 +272,7 @@ public class ASListener implements Listener {
 			boolean illegal = false;
 			if(!player.hasPermission("AntiShare.allow.death")){
 				boolean doCheck = false;
-				if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
+				if(plugin.config().onlyIfCreative(player)){
 					if(player.getGameMode().equals(GameMode.CREATIVE)){
 						doCheck = true;
 					}
@@ -307,16 +307,16 @@ public class ASListener implements Listener {
 				&& targetEntity != null
 				&& targetEntity instanceof Player){
 			Player player = (Player) targetEntity;
-			if(plugin.getConfig().getBoolean("other.only_if_creative")){
+			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					if(!player.hasPermission("AntiShare.mobpvp")
-							&& !plugin.getConfig().getBoolean("other.mobpvp")){
+							&& !plugin.config().getBoolean("other.mobpvp", player.getWorld())){
 						event.setCancelled(true);
 					}
 				}
 			}else{
 				if(!player.hasPermission("AntiShare.mobpvp")
-						&& !plugin.getConfig().getBoolean("other.mobpvp")){
+						&& !plugin.config().getBoolean("other.mobpvp", player.getWorld())){
 					event.setCancelled(true);
 				}
 			}
@@ -334,7 +334,7 @@ public class ASListener implements Listener {
 			ASNotification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent, null);
 			return;
 		}
-		if(plugin.getConfig().getBoolean("other.only_if_creative")){
+		if(plugin.config().onlyIfCreative(sender)){
 			if(sender.getGameMode().equals(GameMode.SURVIVAL)){
 				ASNotification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent, null);
 				return;
@@ -358,7 +358,7 @@ public class ASListener implements Listener {
 			return;
 		}
 		if(plugin.storage.isBlocked(event.getItemDrop().getItemStack(), BlockedType.DROP_ITEM, player.getWorld())){
-			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
+			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
 					ASNotification.sendNotification(NotificationType.ILLEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
@@ -397,7 +397,7 @@ public class ASListener implements Listener {
 		}
 		if(!player.hasPermission("AntiShare.allow.interact")
 				&& plugin.storage.isBlocked(event.getClickedBlock().getType(), BlockedType.INTERACT, player.getWorld())){
-			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
+			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 						event.setCancelled(true);
@@ -435,7 +435,7 @@ public class ASListener implements Listener {
 				return;
 			}
 			// At this point the player is not allowed to use eggs, and we are dealing with an egg
-			if(plugin.config().getBoolean("other.only_if_creative", player.getWorld())){
+			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					event.setCancelled(true);
 					ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
