@@ -44,6 +44,9 @@ public class ASUtils {
 				&& !message.equalsIgnoreCase("noshow")
 				&& !message.equalsIgnoreCase("no show")){
 			message = addColor(message);
+			if(!ChatColor.stripColor(message).startsWith("[AntiShare]")){
+				message = ChatColor.GRAY + "[AntiShare] " + message;
+			}
 			target.sendMessage(message);
 		}
 	}

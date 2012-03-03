@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.storage.VirtualStorage;
+import com.turt2live.antishare.worldedit.ASRegionHandler;
 
 public class AntiShare extends PluginWrapper {
 
@@ -19,6 +20,7 @@ public class AntiShare extends PluginWrapper {
 	public static Logger log = Logger.getLogger("Minecraft");
 	private SQLManager sql;
 	public VirtualStorage storage;
+	private ASRegionHandler regions;
 
 	@Override
 	public void onEnable(){
@@ -39,6 +41,7 @@ public class AntiShare extends PluginWrapper {
 				sql.checkValues();
 			}
 		}
+		regions = new ASRegionHandler(this);
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}
 
@@ -58,21 +61,43 @@ public class AntiShare extends PluginWrapper {
 				cmd.equalsIgnoreCase("as") ||
 				cmd.equalsIgnoreCase("antis") ||
 				cmd.equalsIgnoreCase("ashare")){
-			reloadConfig();
-			log.info("AntiShare Reloaded.");
-			if(sender instanceof Player){
-				ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
-			}
-			new Thread(new Runnable(){
-				@Override
-				public void run(){
-					ASMultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
+			if(args.length > 0){
+				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
+					if(sender.hasPermission("AntiShare.reload")){
+						reloadConfig();
+						log.info("AntiShare Reloaded.");
+						if(sender instanceof Player){
+							ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
+						}
+						new Thread(new Runnable(){
+							@Override
+							public void run(){
+								ASMultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
+							}
+						});
+						storage.reload(sender);
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+					}
+				}else if(args[0].equalsIgnoreCase("region")){
+					if(sender.hasPermission("AntiShare.regions")){
+						if(args.length < 2){
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax error, try: /as region <gamemode>");
+						}else{
+							regions.newRegion(sender, args[1]);
+						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+					}
+				}else{
+					return false; //Shows usage in plugin.yml
 				}
-			});
-			storage.reload(sender);
+			}else{
+				return false; //Shows usage in plugin.yml
+			}
 			return true;
 		}
-		return false;
+		return false; //Shows usage in plugin.yml
 	}
 
 	public ASConfig config(){
@@ -83,4 +108,7 @@ public class AntiShare extends PluginWrapper {
 		return sql;
 	}
 
+	public ASRegionHandler getRegionHandler(){
+		return regions;
+	}
 }
