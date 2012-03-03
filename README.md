@@ -14,7 +14,7 @@ API
 To use the API simply add this to your code:
 
 ```java
-ASAPI api = new ASPI();
+ASAPI api = new ASAPI();
 ```
 
 Other Information
