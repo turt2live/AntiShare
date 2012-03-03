@@ -8,9 +8,16 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.turt2live.antishare.AntiShare;
 
+/*
+ * This is used mostly while developing. There may be reminaing code here
+ * but that code will be disabled if AntiShare.DEBUG_MODE is false
+ */
 public class Debugger implements Listener {
 
 	public static void displayBug(Bug bug){
+		if(!AntiShare.DEBUG_MODE){
+			return;
+		}
 		Logger log = Logger.getLogger("Minecraft");
 		log.severe("[AntiShare Debugger] *** BUG REPORT ***");
 		log.severe("[AntiShare Debugger] Class: " + bug.getInvolvedClass().getName());

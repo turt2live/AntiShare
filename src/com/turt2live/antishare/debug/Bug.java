@@ -5,6 +5,10 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+/*
+ * This is used mostly while developing. When this is used, it
+ * will only be useful if AntiShare.DEBUG_MODE is true.
+ */
 public class Bug {
 
 	private Exception e;

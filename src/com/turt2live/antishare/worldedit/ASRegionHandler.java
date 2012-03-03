@@ -32,7 +32,7 @@ public class ASRegionHandler {
 		GameMode gamemode;
 		if(gamemodeName.equalsIgnoreCase("creative") || gamemodeName.equalsIgnoreCase("c") || gamemodeName.equalsIgnoreCase("1")){
 			gamemode = GameMode.CREATIVE;
-		}else if(gamemodeName.equalsIgnoreCase("survival") || gamemodeName.equalsIgnoreCase("c=s") || gamemodeName.equalsIgnoreCase("0")){
+		}else if(gamemodeName.equalsIgnoreCase("survival") || gamemodeName.equalsIgnoreCase("s") || gamemodeName.equalsIgnoreCase("0")){
 			gamemode = GameMode.SURVIVAL;
 		}else{
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "I don't know what Game Mode '" + gamemodeName + "' is!");
