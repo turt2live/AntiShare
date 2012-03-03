@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -131,5 +132,19 @@ public class VirtualStorage implements Listener {
 		for(World world : worldListing){
 			worlds.get(world).saveToDisk();
 		}
+	}
+
+	public int convertCreativeBlocks(){
+		int total = 0;
+		Set<World> worldListing = worlds.keySet();
+		for(World world : worldListing){
+			total += worlds.get(world).convertCreativeBlocks();
+		}
+		return total;
+	}
+
+	public void switchInventories(Player player, World worldFrom, GameMode gmFrom, World worldTo, GameMode gmTo){
+		getInventoryManager(player, worldFrom).saveInventory(gmFrom);
+		getInventoryManager(player, worldTo).loadInventory(gmTo);
 	}
 }

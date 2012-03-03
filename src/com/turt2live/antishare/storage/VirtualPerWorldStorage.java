@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
@@ -29,7 +30,6 @@ public class VirtualPerWorldStorage {
 	private Vector<Integer> blocked_death = new Vector<Integer>();
 	private Vector<Integer> blocked_interact = new Vector<Integer>();
 	private Vector<String> blocked_commands = new Vector<String>();
-	private Vector<Block> creative_blocks = new Vector<Block>();
 	private Vector<Material> tracked_creative_blocks = new Vector<Material>();
 	private boolean blocked_bedrock = false;
 	private HashMap<Player, ASVirtualInventory> inventories = new HashMap<Player, ASVirtualInventory>();
@@ -48,7 +48,6 @@ public class VirtualPerWorldStorage {
 		blocked_death.clear();
 		blocked_interact.clear();
 		blocked_commands.clear();
-		creative_blocks.clear();
 		blocked_bedrock = false;
 		inventories.clear();
 		load();
@@ -95,7 +94,9 @@ public class VirtualPerWorldStorage {
 		case CREATIVE_BLOCK_PLACE:
 			return false;
 		case CREATIVE_BLOCK_BREAK:
-			return creative_blocks.contains(material);
+			if(material.hasMetadata("ASCreative")){
+				return material.getMetadata("ASCreative").get(0).asBoolean();
+			}
 		}
 		return false;
 	}
@@ -106,20 +107,7 @@ public class VirtualPerWorldStorage {
 			if(plugin.getSQLManager().isConnected()){
 				flatfile = false;
 				SQLManager sql = plugin.getSQLManager();
-				ResultSet results = sql.getQuery("SELECT * FROM AntiShare_Blocks");
-				if(results != null){
-					try{
-						while (results.next()){
-							Location location = new Location(Bukkit.getWorld(results.getString("world")), results.getInt("blockX"), results.getInt("blockY"), results.getInt("blockZ"));
-							Block block = Bukkit.getWorld(results.getString("world")).getBlockAt(location);
-							creative_blocks.add(block);
-						}
-					}catch(SQLException e){
-						e.printStackTrace();
-					}
-				}
-				results = null; // Reset
-				results = sql.getQuery("SELECT DISTINCT username FROM AntiShare_Inventory");
+				ResultSet results = sql.getQuery("SELECT DISTINCT username FROM AntiShare_Inventory");
 				if(results != null){
 					try{
 						while (results.next()){
@@ -140,29 +128,9 @@ public class VirtualPerWorldStorage {
 		blocked_bedrock = !plugin.config().getBoolean("other.allow_bedrock", world);
 		blockDrops = plugin.config().getBoolean("other.blockDrops", world);
 		if(flatfile){
-			File listing[] = new File(plugin.getDataFolder(), "blocks").listFiles();
+			File listing[] = new File(plugin.getDataFolder(), "inventories").listFiles();
 			if(listing != null){
 				for(File file : listing){
-					if(file.getName().startsWith(world.getName())){
-						EnhancedConfiguration blockRegistryData = new EnhancedConfiguration(file, plugin);
-						blockRegistryData.load();
-						Set<String> keys = blockRegistryData.getConfigurationSection("").getKeys(false);
-						for(String x : keys){
-							Set<String> keys2 = blockRegistryData.getConfigurationSection(x).getKeys(false);
-							for(String y : keys2){
-								Set<String> keys3 = blockRegistryData.getConfigurationSection(y).getKeys(false);
-								for(String z : keys3){
-									Block block = world.getBlockAt(new Location(world, Integer.valueOf(x), Integer.valueOf(y), Integer.valueOf(z)));
-									creative_blocks.add(block);
-								}
-							}
-						}
-					}
-				}
-			}
-			File listing2[] = new File(plugin.getDataFolder(), "inventories").listFiles();
-			if(listing2 != null){
-				for(File file : listing2){
 					String username = file.getName().split("_")[0];
 					if(Bukkit.getPlayer(username) != null){
 						Player player = Bukkit.getPlayer(username);
@@ -299,23 +267,17 @@ public class VirtualPerWorldStorage {
 	}
 
 	public void removeCreativeBlock(Block block){
-		if(creative_blocks.contains(block)){
-			creative_blocks.remove(block);
-		}
+		block.setMetadata("ASCreative", new FixedMetadataValue(plugin, false));
 	}
 
 	public void saveCreativeBlock(Block block){
 		if(!trackBlock(block)){
 			return;
 		}
-		if(!creative_blocks.contains(block)){
-			creative_blocks.add(block);
-		}
+		block.setMetadata("ASCreative", new FixedMetadataValue(plugin, true));
 	}
 
 	public void saveToDisk(){
-		CreativeBlockSaver creativeBlocks = new CreativeBlockSaver(creative_blocks, plugin);
-		creativeBlocks.save();
 		for(Player player : inventories.keySet()){
 			inventories.get(player).saveInventoryToDisk();
 		}
@@ -323,5 +285,61 @@ public class VirtualPerWorldStorage {
 
 	public boolean trackBlock(Block block){
 		return tracked_creative_blocks.contains(block.getType());
+	}
+
+	public int convertCreativeBlocks(){
+		int total = 0;
+		boolean flatfile = true;
+		if(plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				flatfile = false;
+				SQLManager sql = plugin.getSQLManager();
+				ResultSet results = sql.getQuery("SELECT * FROM AntiShare_Blocks");
+				if(results != null){
+					try{
+						while (results.next()){
+							Location location = new Location(Bukkit.getWorld(results.getString("world")), results.getInt("blockX"), results.getInt("blockY"), results.getInt("blockZ"));
+							Block block = Bukkit.getWorld(results.getString("world")).getBlockAt(location);
+							if(!block.hasMetadata("ASCreative")){
+								saveCreativeBlock(block);
+								total++;
+							}
+						}
+						sql.deleteQuery("DELECT * FROM AntiShare_Blocks"); // Free up space
+					}catch(SQLException e){
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		blocked_bedrock = !plugin.config().getBoolean("other.allow_bedrock", world);
+		blockDrops = plugin.config().getBoolean("other.blockDrops", world);
+		if(flatfile){
+			File listing[] = new File(plugin.getDataFolder(), "blocks").listFiles();
+			if(listing != null){
+				for(File file : listing){
+					if(file.getName().startsWith(world.getName())){
+						EnhancedConfiguration blockRegistryData = new EnhancedConfiguration(file, plugin);
+						blockRegistryData.load();
+						Set<String> keys = blockRegistryData.getConfigurationSection("").getKeys(false);
+						for(String x : keys){
+							Set<String> keys2 = blockRegistryData.getConfigurationSection(x).getKeys(false);
+							for(String y : keys2){
+								Set<String> keys3 = blockRegistryData.getConfigurationSection(y).getKeys(false);
+								for(String z : keys3){
+									Block block = world.getBlockAt(new Location(world, Integer.valueOf(x), Integer.valueOf(y), Integer.valueOf(z)));
+									if(!block.hasMetadata("ASCreative")){
+										saveCreativeBlock(block);
+										total++;
+									}
+								}
+							}
+						}
+					}
+					file.delete(); // Free up space
+				}
+			}
+		}
+		return total;
 	}
 }

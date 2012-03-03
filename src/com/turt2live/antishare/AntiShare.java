@@ -1,5 +1,6 @@
 package com.turt2live.antishare;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -24,10 +25,14 @@ public class AntiShare extends PluginWrapper {
 		config = new ASConfig(this);
 		config.create();
 		config.reload();
+		new File(getDataFolder(), "inventories").mkdirs(); // Setup folders
 		ASInventory.cleanup();
 		getServer().getPluginManager().registerEvents(new ASListener(this), this);
 		ASMultiWorld.detectWorlds(this);
 		storage = new VirtualStorage(this);
+		log.info("[" + getDescription().getFullName() + "] Converting pre-3.0.0 creative blocks...");
+		int converted = storage.convertCreativeBlocks();
+		log.info("[" + getDescription().getFullName() + "] Converted " + converted + " blocks!");
 		if(getConfig().getBoolean("SQL.use")){
 			sql = new SQLManager(this);
 			if(sql.attemptConnectFromConfig()){

@@ -98,14 +98,14 @@ public class ASListener implements Listener {
 		if(plugin.config().getBoolean("other.track_blocks", player.getWorld())
 				&& !player.hasPermission("AntiShare.blockBypass")){
 			if(player.getGameMode().equals(GameMode.SURVIVAL)){
-				boolean isBlocked = ASBlockRegistry.isBlockCreative(event.getBlock());
+				boolean isBlocked = plugin.storage.isCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld());
 				if(isBlocked){
 					if(!plugin.config().getBoolean("other.blockDrops", player.getWorld())){
 						ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
 						event.setCancelled(true);
 					}else{
 						ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
-						ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
+						plugin.storage.saveCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld());
 						Block block = event.getBlock();
 						event.setCancelled(true);
 						block.setTypeId(0); // Fakes a break
@@ -113,7 +113,7 @@ public class ASListener implements Listener {
 					ASNotification.sendNotification(NotificationType.ILLEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				}
 			}else{
-				ASBlockRegistry.unregisterCreativeBlock(event.getBlock());
+				plugin.storage.saveCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld());
 			}
 		}else{
 			ASNotification.sendNotification(NotificationType.LEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
@@ -129,7 +129,7 @@ public class ASListener implements Listener {
 		if(!event.isCancelled()){
 			if(plugin.config().getBoolean("other.blockDrops", player.getWorld())
 					&& !player.hasPermission("AntiShare.blockBypass")
-					&& ASBlockRegistry.isBlockCreative(event.getBlock())){
+					&& plugin.storage.isCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld())){
 				long systemTime = System.currentTimeMillis();
 				if(blockDropTextWarnings.containsKey(player)){
 					if((systemTime - blockDropTextWarnings.get(player)) > 1000){
@@ -199,7 +199,7 @@ public class ASListener implements Listener {
 		if(plugin.config().getBoolean("other.track_blocks", player.getWorld())
 				&& player.getGameMode() == GameMode.CREATIVE
 				&& !player.hasPermission("AntiShare.freePlace")){
-			ASBlockRegistry.saveCreativeBlock(event.getBlock());
+			plugin.storage.saveCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_PLACE, event.getBlock().getWorld());
 		}
 	}
 
@@ -380,8 +380,7 @@ public class ASListener implements Listener {
 		if(plugin.config().getBoolean("other.inventory_swap", event.getPlayer().getWorld())){
 			if(player != null){
 				if(!player.hasPermission("AntiShare.noswap")){
-					ASInventory.save(player, player.getGameMode(), player.getWorld());
-					ASInventory.load(player, event.getNewGameMode(), player.getWorld());
+					plugin.storage.getInventoryManager(player, player.getWorld()).switchInventories(player.getGameMode(), event.getNewGameMode());
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.inventory_swap", player.getWorld()));
 				}
 			}
@@ -487,8 +486,7 @@ public class ASListener implements Listener {
 					}
 				}
 				if(!player.hasPermission("AntiShare.worlds")){
-					ASInventory.save(player, player.getGameMode(), event.getFrom().getWorld());
-					ASInventory.load(player, player.getGameMode(), event.getTo().getWorld());
+					plugin.storage.switchInventories(player, event.getFrom().getWorld(), player.getGameMode(), event.getTo().getWorld(), player.getGameMode());
 				}
 				ASNotification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName(), null);
 			}

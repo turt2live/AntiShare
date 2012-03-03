@@ -71,16 +71,6 @@ public class SQLManager {
 		if(!isConnected()){
 			return;
 		}
-		createQuery("CREATE TABLE IF NOT EXISTS `AntiShare_Blocks` (" +
-				"  `id` int(11) NOT NULL AUTO_INCREMENT," +
-				"  `blockX` int(11) NOT NULL," +
-				"  `blockY` int(11) NOT NULL," +
-				"  `blockZ` int(11) NOT NULL," +
-				"  `blockID` int(11) NOT NULL," +
-				"  `blockName` varchar(25) NOT NULL," +
-				"  `world` varchar(100) NOT NULL," +
-				"  PRIMARY KEY (`id`)" +
-				")");
 		createQuery("CREATE TABLE IF NOT EXISTS `AntiShare_Inventory` (" +
 				"  `id` int(11) NOT NULL AUTO_INCREMENT," +
 				"  `username` varchar(20) NOT NULL," +

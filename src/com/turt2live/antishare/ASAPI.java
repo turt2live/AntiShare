@@ -37,7 +37,7 @@ public class ASAPI {
 	 * @param block the block to add
 	 */
 	public void addBlockToCreativeRegistry(Block block){
-		ASBlockRegistry.saveCreativeBlock(block);
+		plugin.storage.saveCreativeBlock(block, BlockedType.CREATIVE_BLOCK_PLACE, block.getWorld());
 	}
 
 	/**
@@ -690,7 +690,7 @@ public class ASAPI {
 	 * @param block the block, with world, to remove
 	 */
 	public void removeBlockFromCreativeRegistry(Block block){
-		ASBlockRegistry.unregisterCreativeBlock(block);
+		plugin.storage.saveCreativeBlock(block, BlockedType.CREATIVE_BLOCK_BREAK, block.getWorld());
 	}
 
 	/**
