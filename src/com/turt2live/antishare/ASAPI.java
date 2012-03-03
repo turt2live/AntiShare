@@ -703,4 +703,6 @@ public class ASAPI {
 	public void sendNotification(NotificationType type, Player player, String variable){
 		ASNotification.sendNotification(type, player, variable);
 	}
+
+	// TODO: Add region API
 }

@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.BlockedType;
+import com.turt2live.antishare.worldedit.ASRegion;
 
 public class VirtualStorage implements Listener {
 
@@ -132,6 +133,15 @@ public class VirtualStorage implements Listener {
 		for(World world : worldListing){
 			worlds.get(world).saveToDisk();
 		}
+	}
+
+	public void saveRegion(ASRegion region){
+		worlds.get(region.getWorld()).saveRegion(region);
+	}
+
+	// CAN BE NULL
+	public ASRegion getRegion(Player player){
+		return worlds.get(player.getWorld()).getRegion(player);
 	}
 
 	public int convertCreativeBlocks(){

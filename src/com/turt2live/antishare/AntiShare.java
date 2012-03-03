@@ -11,10 +11,14 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.storage.VirtualStorage;
 import com.turt2live.antishare.worldedit.ASRegionHandler;
 
 public class AntiShare extends PluginWrapper {
+
+	// TODO: SET TO FALSE BEFORE RELEASE
+	public static boolean DEBUG_MODE = true;
 
 	private ASConfig config;
 	public static Logger log = Logger.getLogger("Minecraft");
@@ -42,6 +46,9 @@ public class AntiShare extends PluginWrapper {
 			}
 		}
 		regions = new ASRegionHandler(this);
+		if(DEBUG_MODE){
+			getServer().getPluginManager().registerEvents(new Debugger(this), this);
+		}
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}
 
@@ -92,10 +99,9 @@ public class AntiShare extends PluginWrapper {
 				}else{
 					return false; //Shows usage in plugin.yml
 				}
-			}else{
-				return false; //Shows usage in plugin.yml
 			}
-			return true;
+			// Unhandled command (such as /as help, or /as asjkdhgasjdg)
+			return false; //Shows usage in plugin.yml
 		}
 		return false; //Shows usage in plugin.yml
 	}
