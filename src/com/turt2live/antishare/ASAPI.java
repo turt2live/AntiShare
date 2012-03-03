@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.getspout.commons.GameMode;
 
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.storage.VirtualStorage;
