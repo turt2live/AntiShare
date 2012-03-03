@@ -6,17 +6,13 @@ authors: [Turt2Live, Sayshal]
 website: http://dev.bukkit.org/server-mods/antishare
 commands:
   antishare:
-    description: reloads config
-    permission: AntiShare.reload
-  as:
-    description: reloads config
-    permission: AntiShare.reload
-  antis:
-    description: reloads config
-    permission: AntiShare.reload
-  ashare:
-    description: reloads config
-    permission: AntiShare.reload
+    description: AntiShare command
+    aliases: [as, antis, ashare]
+    usage: |
+      -------- AntiShare Help Menu --------
+      /<command> rl = Reloads configuration and saves to disk/SQL
+      /<command> region <gamemode> = Create a GameMode Region
+      /<command> help = This menu
 
 permissions:
     AntiShare.onlyIfCreative:

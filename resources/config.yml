@@ -64,7 +64,9 @@
 # 	-- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)
 #   'AntiShare.onlyIfCreative' - Only deny actions if the player is in creative mode, false to deny regardless of Game Mode (this is default FALSE)
 #   'AntiShare.onlyIfCreative.global' - Uses the configuration value and overrides the 'AntiShare.onlyIfCreative' permission (this is default TRUE)
-# 	'AntiShare.reload' - Permission to use /antishare
+# 	'AntiShare.reload' - Permission to use /antishare reload
+#   'AntiShare.regions' - Permission to set GameMode Regions
+#   'AntiShare.roam' - If set as true, the target can roam through regions without being affected
 # 	'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched
 # 	'AntiShare.blockBypass' - If true, then the player can bypass the "Creative mode players can only break this block" message
 #                           - As well they can break a block and get drops if 'blockDrops' (under 'other') is true
@@ -75,13 +77,16 @@
 #   'AntiShare.worlds' - Allows world teleporting without being blocked, also stops multi-world inventories for the target
 #   'AntiShare.notify' - Sends notifications to the player
 #   'AntiShare.silent' - Stops the sending of notifications from this player
-# 	'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.blockBypass", 
-#                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds",
-#                         "AntiShare.notify", "AntiShare.silent", and "AntiShare.mobpvp".
+# 	'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam", "AntiShare.blockBypass", 
+#                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", 
+#                         and "AntiShare.mobpvp".
 # 
 # Commands:
-# 	'/antishare' - Reloads configuration
+# 	'/antishare'
 # 		Aliases: '/as', '/antis', '/ashare'
+#   '/as help' - Displays command usage
+#   '/as reload' - Reloads configuration
+#   '/as region <gamemode>' - Sets your currently selected WorldEdit region as a GameMode Region
 # 
 # Notes:
 # 	- Permissions default to all deny as true while all allow as OP or higher.
@@ -106,6 +111,11 @@
 #   ------------------------------------------------------------------------------
 #   |      false     |       false      | All players are blocked from transfers |
 #   ------------------------------------------------------------------------------
+#
+# WHAT IS A GAMEMODE REGION?
+#   A GameMode region is a WorldEdit region where a player automatically changes GameModes. Upon leaving their GameMode is restored.
+#   All the same functions apply, such as inventory changes, blocks, etc. Future support may be added to have a configuration per region.
+#   Currently you cannot name a region. See the permissions for information on what is required and how to not be affected by these regions.
 events:
   block_break: none
   block_place: 57 41 42
