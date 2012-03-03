@@ -9,13 +9,12 @@ import java.util.Set;
 
 import org.bukkit.GameMode;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 
@@ -118,8 +117,10 @@ public class ASVirtualInventory {
 				if(!saveFile.exists()){
 					saveFile.createNewFile();
 				}
-				FileConfiguration config = new YamlConfiguration();
-				config.load(saveFile);
+				EnhancedConfiguration config = new EnhancedConfiguration("inventories/" + saveFile.getName(), plugin);
+				if(!config.load()){
+					AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+				}
 				Integer i = 0;
 				Integer size = player.getInventory().getSize();
 				for(i = 0; i < size; i++){
@@ -140,10 +141,6 @@ public class ASVirtualInventory {
 		load();
 	}
 
-	private void saveInventory(){
-		saveInventory(player.getGameMode());
-	}
-
 	public void saveInventory(GameMode gamemode){
 		HashMap<Integer, ItemStack> newInventory = new HashMap<Integer, ItemStack>();
 		for(int slot = 0; slot < player.getInventory().getSize(); slot++){
@@ -158,13 +155,13 @@ public class ASVirtualInventory {
 	}
 
 	public void saveInventoryToDisk(){
-		saveInventory();
+		saveInventory(player.getGameMode());
 		saveToDisk(GameMode.CREATIVE, getCreativeInventory());
 		saveToDisk(GameMode.SURVIVAL, getSurvivalInventory());
 	}
 
 	private void saveToDisk(GameMode gamemode, HashMap<Integer, ItemStack> inventoryMap){
-		wipe();
+		wipe(gamemode);
 		boolean skip = false;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
@@ -198,23 +195,27 @@ public class ASVirtualInventory {
 			File sdir = new File(plugin.getDataFolder(), "inventories");
 			sdir.mkdirs();
 			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + world.getName() + ".yml");
-			FileConfiguration config = new YamlConfiguration();
-			config.load(saveFile);
+			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
+			if(!config.load()){
+				AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+			}
 			for(Integer slot : inventoryMap.keySet()){
 				config.set(String.valueOf(slot), inventoryMap.get(slot));
-				config.save(saveFile);
+				if(!config.save()){
+					AntiShare.log.severe("[AntiShare] CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
+				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
-	private void wipe(){
+	private void wipe(GameMode gamemode){
 		boolean skip = false;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
-				sql.deleteQuery("DELETE FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + player.getGameMode().toString() + "' AND world='" + world.getName() + "'");
+				sql.deleteQuery("DELETE FROM AntiShare_Inventory WHERE username='" + player.getName() + "' AND gamemode='" + gamemode.toString() + "' AND world='" + world.getName() + "'");
 				skip = true;
 			}
 		}
@@ -223,7 +224,7 @@ public class ASVirtualInventory {
 		}
 		File sdir = new File(plugin.getDataFolder(), "inventories");
 		sdir.mkdirs();
-		File saveFile = new File(sdir, player.getName() + "_" + player.getGameMode().toString() + "_" + world.getName() + ".yml");
+		File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + world.getName() + ".yml");
 		if(saveFile.exists()){
 			saveFile.delete();
 			try{

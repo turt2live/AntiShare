@@ -305,15 +305,13 @@ public class VirtualPerWorldStorage {
 								total++;
 							}
 						}
-						sql.deleteQuery("DELECT * FROM AntiShare_Blocks"); // Free up space
+						sql.deleteQuery("DELETE FROM AntiShare_Blocks"); // Free up space
 					}catch(SQLException e){
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		blocked_bedrock = !plugin.config().getBoolean("other.allow_bedrock", world);
-		blockDrops = plugin.config().getBoolean("other.blockDrops", world);
 		if(flatfile){
 			File listing[] = new File(plugin.getDataFolder(), "blocks").listFiles();
 			if(listing != null){
