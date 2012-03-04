@@ -22,6 +22,9 @@ public class ASRegion {
 	private GameMode gamemode;
 	private Selection region;
 	private String id;
+	private String name;
+	private boolean showEnterMessage = true;
+	private boolean showExitMessage = true;
 
 	public ASRegion(Selection region, String setBy, GameMode gamemode){
 		this.region = region;
@@ -30,6 +33,7 @@ public class ASRegion {
 		this.world = region.getWorld();
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		name = id;
 	}
 
 	public void setUniqueID(String ID){
@@ -38,6 +42,15 @@ public class ASRegion {
 
 	public void setGameMode(GameMode gamemode){
 		this.gamemode = gamemode;
+	}
+
+	public void setName(String name){
+		this.name = name;
+	}
+
+	public void setMessageOptions(boolean showEnter, boolean showExit){
+		showEnterMessage = showEnter;
+		showExitMessage = showExit;
 	}
 
 	public void saveToDisk(){
@@ -62,11 +75,26 @@ public class ASRegion {
 		regionYAML.set("ma-z", region.getMaximumPoint().getZ());
 		regionYAML.set("set-by", setBy);
 		regionYAML.set("gamemode", gamemode.name());
+		regionYAML.set("name", name);
+		regionYAML.set("showEnter", showEnterMessage);
+		regionYAML.set("showExit", showExitMessage);
 		regionYAML.save();
 	}
 
 	public boolean has(Location location){
 		return region.contains(location);
+	}
+
+	public String getName(){
+		return name;
+	}
+
+	public boolean isEnterMessageActive(){
+		return showEnterMessage;
+	}
+
+	public boolean isExitMessageActive(){
+		return showExitMessage;
 	}
 
 	public World getWorld(){
@@ -97,10 +125,14 @@ public class ASRegion {
 	// TODO: Implement away-from-region editing (/as rmregion <name>)
 	// TODO: Allow the API to create regions WITHOUT players (and etc)
 	public void alertEntry(Player player){
-		ASUtils.sendToPlayer(player, ChatColor.GOLD + "You entered '" + id + "'");
+		if(showEnterMessage){
+			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You entered '" + name + "'");
+		}
 	}
 
 	public void alertExit(Player player){
-		ASUtils.sendToPlayer(player, ChatColor.GOLD + "You left '" + id + "'");
+		if(showExitMessage){
+			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You left '" + name + "'");
+		}
 	}
 }

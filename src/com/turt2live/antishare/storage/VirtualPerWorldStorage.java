@@ -285,8 +285,13 @@ public class VirtualPerWorldStorage {
 						regionYAML.getDouble("ma-z"));
 				String setBy = regionYAML.getString("set-by");
 				GameMode gamemode = GameMode.valueOf(regionYAML.getString("gamemode"));
+				String name = regionYAML.getString("name");
+				boolean enterMessage = regionYAML.getBoolean("showEnter");
+				boolean exitMessage = regionYAML.getBoolean("showExit");
 				ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
 				region.setUniqueID(regionFile.getName().replace(".yml", ""));
+				region.setName(name);
+				region.setMessageOptions(enterMessage, exitMessage);
 				gamemode_regions.add(region);
 			}
 		}
@@ -333,6 +338,15 @@ public class VirtualPerWorldStorage {
 	public ASRegion getRegionByID(String id){
 		for(ASRegion region : gamemode_regions){
 			if(region.getUniqueID().equals(id)){
+				return region;
+			}
+		}
+		return null;
+	}
+
+	public ASRegion getRegionByName(String name){
+		for(ASRegion region : gamemode_regions){
+			if(region.getName().equalsIgnoreCase(name)){
 				return region;
 			}
 		}

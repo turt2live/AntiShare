@@ -110,10 +110,10 @@ public class AntiShare extends PluginWrapper {
 					return true;
 				}else if(args[0].equalsIgnoreCase("region")){
 					if(sender.hasPermission("AntiShare.regions")){
-						if(args.length < 2){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax error, try: /as region <gamemode>");
+						if(args.length < 3){
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax error, try: /as region <gamemode> <name>");
 						}else{
-							regions.newRegion(sender, args[1]);
+							regions.newRegion(sender, args[1], args[2]);
 						}
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
@@ -121,10 +121,14 @@ public class AntiShare extends PluginWrapper {
 					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion")){
 					if(sender.hasPermission("AntiShare.regions")){
-						if(!(sender instanceof Player)){
-							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You cannot do that from the console!");
+						if(args.length > 1){
+
 						}else{
-							regions.removeRegion(((Player) sender).getLocation(), (Player) sender);
+							if(!(sender instanceof Player)){
+								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You have not supplied a name, try /as rmregion <name>");
+							}else{
+								regions.removeRegion(((Player) sender).getLocation(), (Player) sender);
+							}
 						}
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");

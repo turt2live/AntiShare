@@ -794,9 +794,10 @@ public class ASAPI {
 	 * 
 	 * @param placedBy the subject with the WorldEdit selection
 	 * @param gamemode the GameMode of the region
+	 * @param regionName the region name
 	 */
-	public void addRegion(Player placedBy, GameMode gamemode){
-		plugin.getRegionHandler().newRegion(placedBy, gamemode.name());
+	public void addRegion(Player placedBy, GameMode gamemode, String regionName){
+		plugin.getRegionHandler().newRegion(placedBy, gamemode.name(), regionName);
 	}
 
 	/**

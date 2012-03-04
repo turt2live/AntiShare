@@ -11,8 +11,10 @@ commands:
     usage: |
       -------- AntiShare Help Menu --------
       /<command> rl = Reloads configuration and saves to disk/SQL
-      /<command> region <gamemode> = Create a GameMode Region
+      /<command> region <gamemode> <name> = Create a GameMode region
       /<command> rmregion = Remove GameMode region at your location
+      /<command> rmregion <name> = Remove a GameMode region by name
+      /<command> editregion <name> <key> <value> = Edit a GameMode region
       /<command> help = This menu
 
 permissions:

@@ -23,18 +23,27 @@ public class ASWorldEdit {
 		wePlugin = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 	}
 
-	public void newRegion(Player player, GameMode gamemode){
+	public void newRegion(Player player, GameMode gamemode, String name){
 		Selection userSelection = wePlugin.getSelection(player);
 		if(userSelection == null){
 			ASUtils.sendToPlayer(player, ChatColor.RED + "You have no WorldEdit selection!");
 			return;
 		}
 		ASRegion region = new ASRegion(userSelection, player.getName(), gamemode);
+		region.setName(name);
 		plugin.storage.saveRegion(region);
 	}
 
 	public void removeRegionAtLocation(Location location){
 		plugin.storage.removeRegion(plugin.storage.getRegion(location));
+	}
+
+	public void removeRegionByName(String name){
+		plugin.storage.removeRegion(plugin.storage.getRegionByName(name));
+	}
+
+	public boolean regionNameExists(String name){
+		return plugin.getRegionHandler().regionNameExists(name);
 	}
 
 	public boolean regionExistsInSelection(Player player){

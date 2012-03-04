@@ -33,7 +33,7 @@ public class ASRegionHandler {
 		load();
 	}
 
-	public void newRegion(CommandSender sender, String gamemodeName){
+	public void newRegion(CommandSender sender, String gamemodeName, String name){
 		if(!hasWorldEdit){
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "WorldEdit is not installed. No region set.");
 			return;
@@ -55,8 +55,12 @@ public class ASRegionHandler {
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "There is a region where you have selected!");
 			return;
 		}
-		worldedit.newRegion((Player) sender, gamemode);
-		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region added.");
+		if(worldedit.regionNameExists(name)){
+			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "That region name already exists!");
+			return;
+		}
+		worldedit.newRegion((Player) sender, gamemode, name);
+		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region '" + name + "' added.");
 	}
 
 	public void removeRegion(Location location, Player sender){
@@ -78,6 +82,14 @@ public class ASRegionHandler {
 
 	public boolean isRegion(Location location){
 		return plugin.storage.getRegion(location) != null;
+	}
+
+	public boolean regionNameExists(String name){
+		return plugin.storage.getRegionByName(name) != null;
+	}
+
+	public ASRegion getRegionByName(String name){
+		return plugin.storage.getRegionByName(name);
 	}
 
 	public ASRegion getRegionByID(String id){
