@@ -27,6 +27,7 @@ public class AntiShare extends PluginWrapper {
 	private ASRegionHandler regions;
 	private Conflicts conflicts;
 	private Debugger debugger;
+	private int saveTimerThreadID = -1;
 
 	@Override
 	public void onEnable(){
@@ -56,12 +57,15 @@ public class AntiShare extends PluginWrapper {
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 		if(getConfig().getInt("save-interval") > 0){
 			int saveTime = (getConfig().getInt("save-interval") * 60 * 1000) / 20;
-			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+			saveTimerThreadID = getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 				@Override
 				public void run(){
 					getServer().dispatchCommand(Bukkit.getConsoleSender(), "as rl");
 				}
 			}, saveTime, saveTime);
+			if(saveTimerThreadID == -1){
+				log.severe("[AntiShare] Save thread cannot be created.");
+			}
 		}
 	}
 
@@ -71,6 +75,9 @@ public class AntiShare extends PluginWrapper {
 		storage.saveToDisk();
 		if(sql != null){
 			sql.disconnect();
+		}
+		if(saveTimerThreadID != -1){
+			Bukkit.getServer().getScheduler().cancelTask(saveTimerThreadID);
 		}
 		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
 	}

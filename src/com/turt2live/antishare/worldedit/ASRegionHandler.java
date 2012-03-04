@@ -1,19 +1,25 @@
 package com.turt2live.antishare.worldedit;
 
+import java.io.File;
+import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.debug.AlertType;
 
 public class ASRegionHandler {
 
 	private AntiShare plugin;
 	private boolean hasWorldEdit = false;
 	private ASWorldEdit worldedit;
+	private HashMap<Player, ASRegionPlayer> player_information = new HashMap<Player, ASRegionPlayer>();
 
 	public ASRegionHandler(AntiShare plugin){
 		this.plugin = plugin;
@@ -70,6 +76,57 @@ public class ASRegionHandler {
 
 	public boolean isRegion(Location location){
 		return plugin.storage.getRegion(location) != null;
+	}
+
+	public void checkRegion(Player player, Location newLocation){
+		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
+		if(AntiShare.DEBUG_MODE){
+			if(region != null){
+				plugin.getDebugger().alert(ChatColor.GOLD + "Welcome to region '" + region.getUniqueID() + "'", player, AlertType.REGION_ENTER);
+			}else{
+				plugin.getDebugger().alert(ChatColor.GOLD + "You left a region!", player, AlertType.REGION_LEAVE);
+			}
+		}
+		if(player.hasPermission("AntiShare.roam")){
+			return;
+		}
+		ASRegionPlayer asPlayer = player_information.get(player);
+		if(asPlayer == null){
+			asPlayer = new ASRegionPlayer(player);
+		}
+		if(region != null){
+			if(!player.getGameMode().equals(region.getGameModeSwitch())){
+				asPlayer.setLastGameMode(player.getGameMode());
+				player.setGameMode(region.getGameModeSwitch());
+			}
+			asPlayer.setLastRegion(region);
+		}else{ // Left region/is out of region
+			if(asPlayer.getLastRegion() != null){
+				if(!asPlayer.getLastGameMode().equals(player.getGameMode())){
+					player.setGameMode(asPlayer.getLastGameMode());
+					asPlayer.setLastRegion(null);
+				}
+			}
+		}
+		if(player_information.containsKey(player)){
+			player_information.remove(player);
+		}
+		player_information.put(player, asPlayer);
+	}
+
+	public void saveStatusToDisk(){
+		File saveFile = new File(plugin.getDataFolder(), "region_saves.yml");
+		if(saveFile.exists()){
+			saveFile.delete();
+			try{
+				saveFile.createNewFile();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
+		listing.load();
+
 	}
 
 	public AntiShare getPlugin(){

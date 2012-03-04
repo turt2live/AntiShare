@@ -287,7 +287,6 @@ public class VirtualPerWorldStorage {
 				GameMode gamemode = GameMode.valueOf(regionYAML.getString("gamemode"));
 				ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
 				region.setUniqueID(regionFile.getName().replace(".yml", ""));
-				System.out.println("************************ " + region.getUniqueID());
 				gamemode_regions.add(region);
 			}
 		}
