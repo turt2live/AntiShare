@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.enums.AlertType;
 import com.turt2live.antishare.enums.RegionKeyType;
 
 public class ASRegionHandler {
@@ -150,22 +149,13 @@ public class ASRegionHandler {
 
 	public void checkRegion(Player player, Location newLocation){
 		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
-		if(AntiShare.DEBUG_MODE){
-			if(region != null){
-				plugin.getDebugger().alert(ChatColor.GOLD + "Welcome to region '" + region.getUniqueID() + "'", player, AlertType.REGION_ENTER);
-			}else{
-				plugin.getDebugger().alert(ChatColor.GOLD + "You left a region!", player, AlertType.REGION_LEAVE);
-			}
-		}
-		if(player.hasPermission("AntiShare.roam")){
-			return;
-		}
 		ASRegionPlayer asPlayer = player_information.get(player.getName());
 		if(asPlayer == null){
 			asPlayer = new ASRegionPlayer(player.getName());
 		}
 		if(region != null){
-			if(!player.getGameMode().equals(region.getGameModeSwitch())){
+			if(!player.getGameMode().equals(region.getGameModeSwitch())
+					&& !player.hasPermission("AntiShare.roam")){
 				asPlayer.setLastGameMode(player.getGameMode());
 				player.setGameMode(region.getGameModeSwitch());
 			}
@@ -181,9 +171,9 @@ public class ASRegionHandler {
 			if(asPlayer.getLastRegion() != null){
 				if(!asPlayer.getLastGameMode().equals(player.getGameMode())){
 					player.setGameMode(asPlayer.getLastGameMode());
-					asPlayer.getLastRegion().alertExit(player);
-					asPlayer.setLastRegion(null);
 				}
+				asPlayer.getLastRegion().alertExit(player);
+				asPlayer.setLastRegion(null);
 			}
 		}
 		if(player_information.containsKey(player.getName())){
