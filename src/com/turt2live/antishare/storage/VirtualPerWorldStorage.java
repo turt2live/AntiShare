@@ -266,26 +266,30 @@ public class VirtualPerWorldStorage {
 			inventories.get(player).reload();
 		}
 		// Gamemode regions
-		for(File regionFile : new File(plugin.getDataFolder(), "regions").listFiles()){
-			EnhancedConfiguration regionYAML = new EnhancedConfiguration(regionFile, plugin);
-			regionYAML.load();
-			World world = plugin.getServer().getWorld(regionYAML.getString("worldName"));
-			if(!this.world.equals(world)){
-				continue;
+		File[] listing = new File(plugin.getDataFolder(), "regions").listFiles();
+		if(listing != null){
+			for(File regionFile : listing){
+				EnhancedConfiguration regionYAML = new EnhancedConfiguration(regionFile, plugin);
+				regionYAML.load();
+				World world = plugin.getServer().getWorld(regionYAML.getString("worldName"));
+				if(!this.world.equals(world)){
+					continue;
+				}
+				Location minimum = new Location(world,
+						regionYAML.getDouble("mi-x"),
+						regionYAML.getDouble("mi-y"),
+						regionYAML.getDouble("mi-z"));
+				Location maximum = new Location(world,
+						regionYAML.getDouble("ma-x"),
+						regionYAML.getDouble("ma-y"),
+						regionYAML.getDouble("ma-z"));
+				String setBy = regionYAML.getString("set-by");
+				GameMode gamemode = GameMode.valueOf(regionYAML.getString("gamemode"));
+				ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
+				region.setUniqueID(regionFile.getName().replace(".yml", ""));
+				System.out.println("************************ " + region.getUniqueID());
+				gamemode_regions.add(region);
 			}
-			Location minimum = new Location(world,
-					regionYAML.getDouble("mi-x"),
-					regionYAML.getDouble("mi-y"),
-					regionYAML.getDouble("mi-z"));
-			Location maximum = new Location(world,
-					regionYAML.getDouble("ma-x"),
-					regionYAML.getDouble("ma-y"),
-					regionYAML.getDouble("ma-z"));
-			String setBy = regionYAML.getString("set-by");
-			GameMode gamemode = GameMode.valueOf(regionYAML.getString("gamemode"));
-			ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
-			region.setUniqueID(regionFile.getName().replace(".yml", ""));
-			gamemode_regions.add(region);
 		}
 	}
 

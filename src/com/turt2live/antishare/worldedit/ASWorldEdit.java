@@ -74,8 +74,11 @@ public class ASWorldEdit {
 	}
 
 	public static void clean(AntiShare plugin){
-		for(File file : new File(plugin.getDataFolder(), "regions").listFiles()){
-			file.delete();
+		File[] listing = new File(plugin.getDataFolder(), "regions").listFiles();
+		if(listing != null){
+			for(File regionFile : listing){
+				regionFile.delete();
+			}
 		}
 	}
 }

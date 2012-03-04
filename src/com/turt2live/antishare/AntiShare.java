@@ -26,6 +26,7 @@ public class AntiShare extends PluginWrapper {
 	public VirtualStorage storage;
 	private ASRegionHandler regions;
 	private Conflicts conflicts;
+	private Debugger debugger;
 
 	@Override
 	public void onEnable(){
@@ -47,11 +48,21 @@ public class AntiShare extends PluginWrapper {
 			}
 		}
 		regions = new ASRegionHandler(this);
+		debugger = new Debugger(this);
 		if(DEBUG_MODE){
-			getServer().getPluginManager().registerEvents(new Debugger(this), this);
+			getServer().getPluginManager().registerEvents(debugger, this);
 		}
 		conflicts = new Conflicts(this);
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
+		if(getConfig().getInt("save-interval") > 0){
+			int saveTime = (getConfig().getInt("save-interval") * 60 * 1000) / 20;
+			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+				@Override
+				public void run(){
+					getServer().dispatchCommand(Bukkit.getConsoleSender(), "as rl");
+				}
+			}, saveTime, saveTime);
+		}
 	}
 
 	@Override
@@ -88,6 +99,7 @@ public class AntiShare extends PluginWrapper {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
+					return true;
 				}else if(args[0].equalsIgnoreCase("region")){
 					if(sender.hasPermission("AntiShare.regions")){
 						if(args.length < 2){
@@ -98,6 +110,7 @@ public class AntiShare extends PluginWrapper {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
+					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion")){
 					if(sender.hasPermission("AntiShare.regions")){
 						if(!(sender instanceof Player)){
@@ -108,6 +121,7 @@ public class AntiShare extends PluginWrapper {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
+					return true;
 				}else{
 					return false; //Shows usage in plugin.yml
 				}
@@ -132,5 +146,9 @@ public class AntiShare extends PluginWrapper {
 
 	public Conflicts getConflicts(){
 		return conflicts;
+	}
+
+	public Debugger getDebugger(){
+		return debugger;
 	}
 }

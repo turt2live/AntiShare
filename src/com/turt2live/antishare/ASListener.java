@@ -2,6 +2,7 @@ package com.turt2live.antishare;
 
 import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,9 +26,13 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+
+import com.turt2live.antishare.debug.AlertType;
+import com.turt2live.antishare.worldedit.ASRegion;
 
 public class ASListener implements Listener {
 
@@ -477,6 +482,27 @@ public class ASListener implements Listener {
 			}else{
 				scheduleInventoryChange(player, event);
 			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event){
+		if(event.isCancelled()){
+			return;
+		}
+		ASRegion region = plugin.getRegionHandler().getRegion(event.getTo());
+		if(AntiShare.DEBUG_MODE){
+			if(region != null){
+				plugin.getDebugger().alert(ChatColor.GOLD + "Welcome to region '" + region.getUniqueID() + "'", event.getPlayer(), AlertType.REGION_ENTER);
+			}else{
+				plugin.getDebugger().alert(ChatColor.GOLD + "You left a region!", event.getPlayer(), AlertType.REGION_LEAVE);
+			}
+		}
+		if(event.getPlayer().hasPermission("AntiShare.roam")){
+			return;
+		}
+		if(region != null){
+			event.getPlayer().setGameMode(region.getGameModeSwitch());
 		}
 	}
 

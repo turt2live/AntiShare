@@ -2,6 +2,7 @@ package com.turt2live.antishare.worldedit;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -25,6 +26,7 @@ public class ASRegion {
 		this.gamemode = gamemode;
 		this.world = region.getWorld();
 		id = String.valueOf(System.currentTimeMillis());
+		plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 	}
 
 	public void setUniqueID(String ID){
@@ -78,6 +80,10 @@ public class ASRegion {
 
 	public Selection getSelection(){
 		return region;
+	}
+
+	public String getUniqueID(){
+		return id;
 	}
 
 	public AntiShare getPlugin(){

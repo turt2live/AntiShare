@@ -37,6 +37,7 @@
 # 
 #   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
+# 'save-interval' - This is the interval, in minutes, you want AntiShare to save it's data to disk (default is 30 minutes)
 # SQL:
 #   'use' - If this is false, flat-file storage will be used instead
 #   'host' - The SQL host, usually localhost
@@ -157,6 +158,7 @@ SQL:
   password: AntiSharePW
   port: 3306
   database: AntiShare
+save-interval: 30
 notifications:
   send: true
   illegal:
