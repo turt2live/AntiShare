@@ -12,6 +12,7 @@ commands:
       -------- AntiShare Help Menu --------
       /<command> rl = Reloads configuration and saves to disk/SQL
       /<command> region <gamemode> = Create a GameMode Region
+      /<command> rmregion = Remove GameMode region at your location
       /<command> help = This menu
 
 permissions:
@@ -51,6 +52,9 @@ permissions:
     AntiShare.silent:
         description: stops the sending of notifications from the player
         default: op
+    AntiShare.regions:
+        description: allows creating/removing of GameMode regions
+        default: op
     AntiShare.admin:
         description: All AntiShare permissions
         default: op
@@ -67,6 +71,7 @@ permissions:
             AntiShare.worlds: true
             AntiShare.notify: true
             AntiShare.silent: true
+            AntiShare.regions: true
     AntiShare.*:
         description: deny all AntiShare events
         default: true

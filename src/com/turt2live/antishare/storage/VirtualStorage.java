@@ -6,6 +6,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -140,8 +141,12 @@ public class VirtualStorage implements Listener {
 	}
 
 	// CAN BE NULL
-	public ASRegion getRegion(Player player){
-		return worlds.get(player.getWorld()).getRegion(player);
+	public ASRegion getRegion(Location location){
+		return worlds.get(location.getWorld()).getRegion(location);
+	}
+
+	public void removeRegion(ASRegion region){
+		worlds.get(region.getWorld()).removeRegion(region);
 	}
 
 	public int convertCreativeBlocks(){

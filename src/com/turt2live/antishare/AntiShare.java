@@ -98,6 +98,16 @@ public class AntiShare extends PluginWrapper {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
+				}else if(args[0].equalsIgnoreCase("rmregion")){
+					if(sender.hasPermission("AntiShare.regions")){
+						if(!(sender instanceof Player)){
+							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You cannot do that from the console!");
+						}else{
+							regions.removeRegion(((Player) sender).getLocation(), (Player) sender);
+						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+					}
 				}else{
 					return false; //Shows usage in plugin.yml
 				}

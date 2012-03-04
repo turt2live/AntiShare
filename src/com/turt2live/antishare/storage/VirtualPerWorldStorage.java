@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.BlockedType;
 import com.turt2live.antishare.SQL.SQLManager;
@@ -263,7 +265,28 @@ public class VirtualPerWorldStorage {
 		for(Player player : inventories.keySet()){
 			inventories.get(player).reload();
 		}
-		// TODO: Load regions
+		// Gamemode regions
+		for(File regionFile : new File(plugin.getDataFolder(), "regions").listFiles()){
+			EnhancedConfiguration regionYAML = new EnhancedConfiguration(regionFile, plugin);
+			regionYAML.load();
+			World world = plugin.getServer().getWorld(regionYAML.getString("worldName"));
+			if(!this.world.equals(world)){
+				continue;
+			}
+			Location minimum = new Location(world,
+					regionYAML.getDouble("mi-x"),
+					regionYAML.getDouble("mi-y"),
+					regionYAML.getDouble("mi-z"));
+			Location maximum = new Location(world,
+					regionYAML.getDouble("ma-x"),
+					regionYAML.getDouble("ma-y"),
+					regionYAML.getDouble("ma-z"));
+			String setBy = regionYAML.getString("set-by");
+			GameMode gamemode = GameMode.valueOf(regionYAML.getString("gamemode"));
+			ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
+			region.setUniqueID(regionFile.getName().replace(".yml", ""));
+			gamemode_regions.add(region);
+		}
 	}
 
 	public void reload(){
@@ -295,9 +318,12 @@ public class VirtualPerWorldStorage {
 		saveRegion(newRegion);
 	}
 
-	// Return null if none
-	public ASRegion getRegion(Player player){
-		// TODO Auto-generated method stub
+	public ASRegion getRegion(Location location){
+		for(ASRegion region : gamemode_regions){
+			if(region.has(location)){
+				return region;
+			}
+		}
 		return null;
 	}
 

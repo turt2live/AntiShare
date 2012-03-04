@@ -1,17 +1,15 @@
 package com.turt2live.antishare.worldedit;
 
+import java.io.File;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.bukkit.WorldEditAPI;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
-import com.sk89q.worldedit.regions.Region;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 
@@ -19,7 +17,6 @@ public class ASWorldEdit {
 
 	private AntiShare plugin;
 	private WorldEditPlugin wePlugin;
-	private WorldEditAPI weAPI;
 
 	public ASWorldEdit(AntiShare plugin){
 		this.plugin = plugin;
@@ -27,30 +24,21 @@ public class ASWorldEdit {
 	}
 
 	public void newRegion(Player player, GameMode gamemode){
-		weAPI = new WorldEditAPI(wePlugin);
-		LocalSession session = weAPI.getSession(player);
-		if(session.hasExpired()){
-			ASUtils.sendToPlayer(player, "Your WorldEdit session expired.");
+		Selection userSelection = wePlugin.getSelection(player);
+		if(userSelection == null){
+			ASUtils.sendToPlayer(player, ChatColor.RED + "You have no WorldEdit selection!");
 			return;
 		}
-		if(session.getSelectionWorld() == null){
-			ASUtils.sendToPlayer(player, "You have no WorldEdit selection!");
-			return;
-		}
-		@SuppressWarnings ("unused")
-		Region userSelection;
-		try{
-			if(session.getSelection(session.getSelectionWorld()) == null){
-				ASUtils.sendToPlayer(player, "You have no WorldEdit selection!");
-				return;
-			}
-			userSelection = session.getSelection(session.getSelectionWorld());
-		}catch(IncompleteRegionException e){
-			e.printStackTrace();
-			ASUtils.sendToPlayer(player, "Something went wrong in the WorldEdit selection check.");
-			return;
-		}
+		ASRegion region = new ASRegion(userSelection, player.getName(), gamemode);
+		plugin.storage.saveRegion(region);
+	}
 
+	public void removeRegionAtLocation(Location location){
+		plugin.storage.removeRegion(plugin.storage.getRegion(location));
+	}
+
+	public boolean regionExistsInSelection(Player player){
+		return plugin.getRegionHandler().isRegion(wePlugin.getSelection(player).getMaximumPoint());
 	}
 
 	public AntiShare getPlugin(){
@@ -86,6 +74,8 @@ public class ASWorldEdit {
 	}
 
 	public static void clean(AntiShare plugin){
-		// TODO
+		for(File file : new File(plugin.getDataFolder(), "regions").listFiles()){
+			file.delete();
+		}
 	}
 }

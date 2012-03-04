@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.storage.VirtualStorage;
+import com.turt2live.antishare.worldedit.ASRegion;
 
 /**
  * AntiShare API
@@ -767,5 +769,52 @@ public class ASAPI {
 		return plugin.getConflicts().CREATIVE_MANAGER_CONFLICT;
 	}
 
-	// TODO: Add region API
+	/**
+	 * Determines if there is a GameMode region at the location
+	 * 
+	 * @param location the location to test
+	 * @return true if the location is contained in a GameMode region
+	 */
+	public boolean isRegion(Location location){
+		return plugin.getRegionHandler().getRegion(location) != null;
+	}
+
+	/**
+	 * Fetches the region found at that location
+	 * 
+	 * @param location the location to test
+	 * @return null if no region found, ASRegion otherwise
+	 */
+	public ASRegion getRegion(Location location){
+		return plugin.getRegionHandler().getRegion(location);
+	}
+
+	/**
+	 * Adds a new GameMode region
+	 * 
+	 * @param placedBy the subject with the WorldEdit selection
+	 * @param gamemode the GameMode of the region
+	 */
+	public void addRegion(Player placedBy, GameMode gamemode){
+		plugin.getRegionHandler().newRegion(placedBy, gamemode.name());
+	}
+
+	/**
+	 * Removes a region based on location
+	 * 
+	 * @param location the location of the region
+	 * @param sender the Player to notify
+	 */
+	public void removeRegion(Location location, Player sender){
+		plugin.getRegionHandler().removeRegion(location, sender);
+	}
+
+	/**
+	 * Remove a region without alerting anyone
+	 * 
+	 * @param location the location to remove the region at
+	 */
+	public void removeRegion(Location location){
+		plugin.getRegionHandler().removeRegion(location, null);
+	}
 }

@@ -65,7 +65,7 @@
 #   'AntiShare.onlyIfCreative' - Only deny actions if the player is in creative mode, false to deny regardless of Game Mode (this is default FALSE)
 #   'AntiShare.onlyIfCreative.global' - Uses the configuration value and overrides the 'AntiShare.onlyIfCreative' permission (this is default TRUE)
 # 	'AntiShare.reload' - Permission to use /antishare reload
-#   'AntiShare.regions' - Permission to set GameMode Regions
+#   'AntiShare.regions' - Permission to set/remove GameMode Regions
 #   'AntiShare.roam' - If set as true, the target can roam through regions without being affected
 # 	'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched
 # 	'AntiShare.blockBypass' - If true, then the player can bypass the "Creative mode players can only break this block" message
@@ -87,6 +87,7 @@
 #   '/as help' - Displays command usage
 #   '/as reload' - Reloads configuration
 #   '/as region <gamemode>' - Sets your currently selected WorldEdit region as a GameMode Region
+#   '/as rmregion' - Removes the GameMode region you are in
 # 
 # Notes:
 # 	- Permissions default to all deny as true while all allow as OP or higher.

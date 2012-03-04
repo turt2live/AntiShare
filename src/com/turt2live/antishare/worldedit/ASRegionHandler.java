@@ -2,6 +2,7 @@ package com.turt2live.antishare.worldedit;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -42,7 +43,33 @@ public class ASRegionHandler {
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, sorry!");
 			return;
 		}
+		if(worldedit.regionExistsInSelection((Player) sender)){
+			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "There is a region where you have selected!");
+			return;
+		}
 		worldedit.newRegion((Player) sender, gamemode);
+		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region added.");
+	}
+
+	public void removeRegion(Location location, Player sender){
+		if(isRegion(location)){
+			worldedit.removeRegionAtLocation(location);
+			if(sender != null){
+				ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed.");
+			}
+		}else{
+			if(sender != null){
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "You are not in a GameMode region.");
+			}
+		}
+	}
+
+	public ASRegion getRegion(Location location){
+		return plugin.storage.getRegion(location);
+	}
+
+	public boolean isRegion(Location location){
+		return plugin.storage.getRegion(location) != null;
 	}
 
 	public AntiShare getPlugin(){
