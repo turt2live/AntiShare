@@ -41,23 +41,23 @@ public class Conflicts {
 	private void findInventoryManagerConflicts(Plugin[] plugins){
 		for(Plugin plugin : plugins){
 			String name = plugin.getName();
-			if(name.contains("ClearInv")){
+			if(name.equalsIgnoreCase("ClearInv")){
 				INVENTORY_CONFLICT_PRESENT = true;
 				INVENTORY_CONFLICT = name;
 				break;
-			}else if(name.contains("ChangeDat")){
+			}else if(name.equalsIgnoreCase("ChangeDat")){
 				INVENTORY_CONFLICT_PRESENT = true;
 				INVENTORY_CONFLICT = name;
 				break;
-			}else if(name.contains("MultiInv") || name.contains("Multiverse-Inventories")){
+			}else if(name.equalsIgnoreCase("MultiInv") || name.equalsIgnoreCase("Multiverse-Inventories")){
 				INVENTORY_CONFLICT_PRESENT = true;
 				INVENTORY_CONFLICT = name;
 				break;
-			}else if(name.contains("Multiworld")){
+			}else if(name.equalsIgnoreCase("Multiworld")){
 				INVENTORY_CONFLICT_PRESENT = true;
 				INVENTORY_CONFLICT = name;
 				break;
-			}else if(name.contains("AutoGamemode")){
+			}else if(name.equalsIgnoreCase("AutoGamemode")){
 				INVENTORY_CONFLICT_PRESENT = true;
 				INVENTORY_CONFLICT = name;
 				break;
@@ -69,7 +69,7 @@ public class Conflicts {
 	private void findGamemodeManagerConflicts(Plugin[] plugins){
 		//		for(Plugin plugin : plugins){
 		//			String name = plugin.getName();
-		//			if(name.contains("")){
+		//			if(name.equalsIgnoreCase("")){
 		//				GAMEMODE_CONFLICT_PRESENT = true;
 		//				GAMEMODE_CONFLICT = name;
 		//				break;
@@ -80,23 +80,23 @@ public class Conflicts {
 	private void findCreativeModeManagerConflicts(Plugin[] plugins){
 		for(Plugin plugin : plugins){
 			String name = plugin.getName();
-			if(name.contains("CreativeControl")){
+			if(name.equalsIgnoreCase("CreativeControl")){
 				CREATIVE_MANAGER_CONFLICT_PRESENT = true;
 				CREATIVE_MANAGER_CONFLICT = name;
 				break;
-			}else if(name.contains("BurningCreativeSuite") || name.contains("BurningCreative") || name.contains("BCS")){
+			}else if(name.equalsIgnoreCase("BurningCreativeSuite") || name.equalsIgnoreCase("BurningCreative") || name.equalsIgnoreCase("BCS")){
 				CREATIVE_MANAGER_CONFLICT_PRESENT = true;
 				CREATIVE_MANAGER_CONFLICT = name;
 				break;
-			}else if(name.contains("LimitedCreative")){
+			}else if(name.equalsIgnoreCase("LimitedCreative")){
 				CREATIVE_MANAGER_CONFLICT_PRESENT = true;
 				CREATIVE_MANAGER_CONFLICT = name;
 				break;
-			}else if(name.contains("Anti-Place-Destroy-Ignite") || name.contains("APDI")){
+			}else if(name.equalsIgnoreCase("Anti-Place-Destroy-Ignite") || name.equalsIgnoreCase("APDI")){
 				CREATIVE_MANAGER_CONFLICT_PRESENT = true;
 				CREATIVE_MANAGER_CONFLICT = name;
 				break;
-			}else if(name.contains("iCreative")){
+			}else if(name.equalsIgnoreCase("iCreative")){
 				CREATIVE_MANAGER_CONFLICT_PRESENT = true;
 				CREATIVE_MANAGER_CONFLICT = name;
 				break;
@@ -107,11 +107,11 @@ public class Conflicts {
 	private void findOtherConflicts(Plugin[] plugins){
 		for(Plugin plugin : plugins){
 			String name = plugin.getName();
-			if(name.contains("AntiGrief")){
+			if(name.equalsIgnoreCase("AntiGrief")){
 				OTHER_CONFLICT_PRESENT = true;
 				OTHER_CONFLICT = name;
 				break;
-			}else if(name.contains("MobEggs")){
+			}else if(name.equalsIgnoreCase("MobEggs")){
 				OTHER_CONFLICT_PRESENT = true;
 				OTHER_CONFLICT = name;
 				break;
