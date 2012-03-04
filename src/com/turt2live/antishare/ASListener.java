@@ -376,8 +376,12 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event){
+		if(plugin.getConflicts().GAMEMODE_CONFLICT_PRESENT){
+			return;
+		}
 		Player player = event.getPlayer();
-		if(plugin.config().getBoolean("other.inventory_swap", event.getPlayer().getWorld())){
+		if(plugin.config().getBoolean("other.inventory_swap", event.getPlayer().getWorld())
+				&& !plugin.getConflicts().INVENTORY_CONFLICT_PRESENT){
 			if(player != null){
 				if(!player.hasPermission("AntiShare.noswap")){
 					plugin.storage.getInventoryManager(player, player.getWorld()).switchInventories(player.getGameMode(), event.getNewGameMode());
@@ -457,6 +461,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
+		if(plugin.getConflicts().INVENTORY_CONFLICT_PRESENT){
+			return;
+		}
 		if(event.isCancelled()){
 			return;
 		}

@@ -704,5 +704,68 @@ public class ASAPI {
 		ASNotification.sendNotification(type, player, variable);
 	}
 
+	/**
+	 * Gets the conflicts handler
+	 * 
+	 * @return AntiShare's conflict handler
+	 */
+	public Conflicts getConflicts(){
+		return plugin.getConflicts();
+	}
+
+	/**
+	 * Determines if there is an inventory change conflict on the server
+	 * 
+	 * @return true if a conflict exists
+	 */
+	public boolean isInventoryConflictPresent(){
+		return plugin.getConflicts().INVENTORY_CONFLICT_PRESENT;
+	}
+
+	/**
+	 * Determines if there is an gamemode change conflict on the server
+	 * 
+	 * @return true if a conflict exists
+	 */
+	public boolean isGameModeConflictPresent(){
+		return plugin.getConflicts().GAMEMODE_CONFLICT_PRESENT;
+	}
+
+	/**
+	 * Determines if a creative manager conflict is on the server
+	 * 
+	 * @return true if a conflict is present
+	 */
+	public boolean isCreativeConflictPresent(){
+		return plugin.getConflicts().CREATIVE_MANAGER_CONFLICT_PRESENT;
+	}
+
+	/**
+	 * Gets the name of the currently conflicting inventory plugin (first found)
+	 * 
+	 * @return 'None' if no plugin is found to be conflicting, anything else is a plugin name
+	 */
+	public String getInventoryConflictName(){
+		return plugin.getConflicts().INVENTORY_CONFLICT;
+	}
+
+	/**
+	 * Gets the name of the currently conflicting gamemode plugin (first found)
+	 * 
+	 * @return 'None' if no plugin is found to be conflicting, anything else is a plugin name
+	 */
+	public String getGameModeConflictName(){
+		return plugin.getConflicts().GAMEMODE_CONFLICT;
+	}
+
+	/**
+	 * Gets the name of the currently conflicting creative manager plugin (first found)
+	 * 
+	 * @return 'None' if no plugin is found to be conflicting, anything else is a plugin name
+	 */
+	public String getCreativeConflictName(){
+		return plugin.getConflicts().CREATIVE_MANAGER_CONFLICT;
+	}
+
 	// TODO: Add region API
 }

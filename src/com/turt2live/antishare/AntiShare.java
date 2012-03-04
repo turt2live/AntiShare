@@ -25,6 +25,7 @@ public class AntiShare extends PluginWrapper {
 	private SQLManager sql;
 	public VirtualStorage storage;
 	private ASRegionHandler regions;
+	private Conflicts conflicts;
 
 	@Override
 	public void onEnable(){
@@ -49,6 +50,7 @@ public class AntiShare extends PluginWrapper {
 		if(DEBUG_MODE){
 			getServer().getPluginManager().registerEvents(new Debugger(this), this);
 		}
+		conflicts = new Conflicts(this);
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 	}
 
@@ -116,5 +118,9 @@ public class AntiShare extends PluginWrapper {
 
 	public ASRegionHandler getRegionHandler(){
 		return regions;
+	}
+
+	public Conflicts getConflicts(){
+		return conflicts;
 	}
 }
