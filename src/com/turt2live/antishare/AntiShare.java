@@ -55,8 +55,8 @@ public class AntiShare extends PluginWrapper {
 		}
 		conflicts = new Conflicts(this);
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
-		if(getConfig().getInt("save-interval") > 0){
-			int saveTime = (getConfig().getInt("save-interval") * 60 * 1000) / 20;
+		if(getConfig().getInt("settings.save-interval") > 0){
+			int saveTime = (getConfig().getInt("settings.save-interval") * 60 * 1000) / 20;
 			saveTimerThreadID = getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 				@Override
 				public void run(){
