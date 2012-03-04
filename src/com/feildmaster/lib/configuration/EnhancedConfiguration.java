@@ -309,7 +309,7 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 
 	// Replaces \n with System line.separator
 	@Override
-	public String saveToString(){ // TODO: Custom YAML loader/saver?
+	public String saveToString(){
 		String separator = System.getProperty("line.separator");
 		if(separator.equals("\n")){ // Do nothing
 			return super.saveToString();

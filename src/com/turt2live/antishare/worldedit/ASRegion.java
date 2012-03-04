@@ -14,7 +14,7 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 
-public class ASRegion implements Cloneable {
+public class ASRegion {
 
 	private AntiShare plugin;
 	private World world;
@@ -128,8 +128,6 @@ public class ASRegion implements Cloneable {
 		return plugin;
 	}
 
-	// TODO: Implement region names
-	// TODO: Implement away-from-region editing (/as rmregion <name>)
 	// TODO: Allow the API to create regions WITHOUT players (and etc)
 	public void alertEntry(Player player){
 		if(showEnterMessage){
@@ -141,16 +139,5 @@ public class ASRegion implements Cloneable {
 		if(showExitMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You left '" + name + "'");
 		}
-	}
-
-	@Override
-	public ASRegion clone(){
-		try{
-			ASRegion r = (ASRegion) super.clone();
-			return r;
-		}catch(CloneNotSupportedException e){
-			e.printStackTrace();
-		}
-		return null;
 	}
 }
