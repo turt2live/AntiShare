@@ -3,12 +3,15 @@ package com.turt2live.antishare.worldedit;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 
 public class ASRegion {
@@ -90,4 +93,14 @@ public class ASRegion {
 		return plugin;
 	}
 
+	// TODO: Implement region names
+	// TODO: Implement away-from-region editing (/as rmregion <name>)
+	// TODO: Allow the API to create regions WITHOUT players (and etc)
+	public void alertEntry(Player player){
+		ASUtils.sendToPlayer(player, ChatColor.GOLD + "You entered '" + id + "'");
+	}
+
+	public void alertExit(Player player){
+		ASUtils.sendToPlayer(player, ChatColor.GOLD + "You left '" + id + "'");
+	}
 }

@@ -105,11 +105,19 @@ public class ASRegionHandler {
 				asPlayer.setLastGameMode(player.getGameMode());
 				player.setGameMode(region.getGameModeSwitch());
 			}
+			if(asPlayer.getLastRegion() != null){
+				if(!asPlayer.getLastRegion().equals(region)){
+					region.alertEntry(player);
+				}
+			}else{
+				region.alertEntry(player);
+			}
 			asPlayer.setLastRegion(region);
 		}else{ // Left region/is out of region
 			if(asPlayer.getLastRegion() != null){
 				if(!asPlayer.getLastGameMode().equals(player.getGameMode())){
 					player.setGameMode(asPlayer.getLastGameMode());
+					asPlayer.getLastRegion().alertExit(player);
 					asPlayer.setLastRegion(null);
 				}
 			}
