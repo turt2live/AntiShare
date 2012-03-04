@@ -13,7 +13,8 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.debug.AlertType;
+import com.turt2live.antishare.enums.AlertType;
+import com.turt2live.antishare.enums.RegionKeyType;
 
 public class ASRegionHandler {
 
@@ -76,6 +77,15 @@ public class ASRegionHandler {
 		}
 	}
 
+	public void removeRegion(String name, CommandSender sender){
+		if(!regionNameExists(name)){
+			ASUtils.sendToPlayer(sender, ChatColor.RED + "Region '" + name + "' does not exist.");
+			return;
+		}
+		worldedit.removeRegionByName(name);
+		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed.");
+	}
+
 	public ASRegion getRegion(Location location){
 		return plugin.storage.getRegion(location);
 	}
@@ -94,6 +104,48 @@ public class ASRegionHandler {
 
 	public ASRegion getRegionByID(String id){
 		return plugin.storage.getRegionByID(id);
+	}
+
+	public void editRegion(ASRegion region, RegionKeyType key, String value, CommandSender sender){
+		boolean changed = false;
+		switch (key){
+		case NAME:
+			if(regionNameExists(value)){
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name '" + value + "' already exists!");
+			}else{
+				region.setName(value);
+				changed = true;
+			}
+			break;
+		case ENTER_MESSAGE_SHOW:
+			if(ASUtils.getValueOf(value) != null){
+				region.setMessageOptions(ASUtils.getValueOf(value), region.isExitMessageActive());
+				changed = true;
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?");
+			}
+			break;
+		case EXIT_MESSAGE_SHOW:
+			if(ASUtils.getValueOf(value) != null){
+				region.setMessageOptions(region.isEnterMessageActive(), ASUtils.getValueOf(value));
+				changed = true;
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?");
+			}
+			break;
+		case INVENTORY:
+			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Unsupported"); // TODO
+			break;
+		case SELECTION_AREA:
+			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Unsupported"); // TODO
+			break;
+		case GAMEMODE:
+			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Unsupported"); // TODO
+			break;
+		}
+		if(changed){
+			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region saved.");
+		}
 	}
 
 	public void checkRegion(Player player, Location newLocation){

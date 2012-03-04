@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.enums.AlertType;
 
 /*
  * This is used mostly while developing. There may be reminaing code here

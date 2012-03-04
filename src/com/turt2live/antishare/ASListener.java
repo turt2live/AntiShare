@@ -30,6 +30,9 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.turt2live.antishare.enums.BlockedType;
+import com.turt2live.antishare.enums.NotificationType;
+
 public class ASListener implements Listener {
 
 	private AntiShare plugin;

@@ -14,6 +14,7 @@ import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.storage.VirtualStorage;
 import com.turt2live.antishare.worldedit.ASRegionHandler;
+import com.turt2live.antishare.worldedit.RegionKey;
 
 public class AntiShare extends PluginWrapper {
 
@@ -27,7 +28,7 @@ public class AntiShare extends PluginWrapper {
 	private ASRegionHandler regions;
 	private Conflicts conflicts;
 	private Debugger debugger;
-	private int saveTimerThreadID = -1;
+	private TimedSave timedSave;
 
 	@Override
 	public void onEnable(){
@@ -57,28 +58,20 @@ public class AntiShare extends PluginWrapper {
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 		if(getConfig().getInt("settings.save-interval") > 0){
 			int saveTime = (getConfig().getInt("settings.save-interval") * 60 * 1000) / 20;
-			saveTimerThreadID = getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-				@Override
-				public void run(){
-					getServer().dispatchCommand(Bukkit.getConsoleSender(), "as rl");
-				}
-			}, saveTime, saveTime);
-			if(saveTimerThreadID == -1){
-				log.severe("[AntiShare] Save thread cannot be created.");
-			}
+			timedSave = new TimedSave(this, saveTime);
 		}
 	}
 
 	@Override
 	public void onDisable(){
+		if(timedSave != null){
+			timedSave.cancel();
+		}
 		log.info("[" + getDescription().getFullName() + "] Saving virtual storage to disk/SQL");
 		storage.saveToDisk();
 		regions.saveStatusToDisk();
 		if(sql != null){
 			sql.disconnect();
-		}
-		if(saveTimerThreadID != -1){
-			Bukkit.getServer().getScheduler().cancelTask(saveTimerThreadID);
 		}
 		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
 	}
@@ -93,17 +86,12 @@ public class AntiShare extends PluginWrapper {
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(sender.hasPermission("AntiShare.reload")){
 						reloadConfig();
+						ASMultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
+						storage.reload(sender);
 						log.info("AntiShare Reloaded.");
 						if(sender instanceof Player){
 							ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
 						}
-						new Thread(new Runnable(){
-							@Override
-							public void run(){
-								ASMultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
-							}
-						});
-						storage.reload(sender);
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
@@ -122,7 +110,7 @@ public class AntiShare extends PluginWrapper {
 				}else if(args[0].equalsIgnoreCase("rmregion")){
 					if(sender.hasPermission("AntiShare.regions")){
 						if(args.length > 1){
-
+							regions.removeRegion(args[1], sender);
 						}else{
 							if(!(sender instanceof Player)){
 								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You have not supplied a name, try /as rmregion <name>");
@@ -130,6 +118,51 @@ public class AntiShare extends PluginWrapper {
 								regions.removeRegion(((Player) sender).getLocation(), (Player) sender);
 							}
 						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("editregion")){
+					if(sender.hasPermission("AntiShare.regions")){
+						if(args.length < 4){
+							if(args.length >= 2){
+								if(args[1].equalsIgnoreCase("help")){
+									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "/as editregion <name> <key> <value>");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "name " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<any name>");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<player name>/none");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "survival/creative");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "area " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<player name>");
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'ShowEnterMessage'" + ChatColor.WHITE + " - True to show a message when entering a region");
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'ShowExitMessage'" + ChatColor.WHITE + " - True to show a message when leaving a region");
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'inventory'" + ChatColor.WHITE + " - Sets the default inventory");
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'area'" + ChatColor.WHITE + " - Sets the area based on <player name>'s WorldEdit selection");
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>");
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help");
+								}
+							}else{
+								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>");
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help");
+							}
+						}else{
+							String name = args[1];
+							String key = args[2];
+							String value = args[3];
+							if(regions.getRegionByName(name) == null){
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "That region does not exist!");
+							}else{
+								if(RegionKey.isKey(key)){
+									regions.editRegion(regions.getRegionByName(name), RegionKey.getKey(key), value, sender);
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "That is not a valid region key");
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help");
+								}
+							}
+						}
+					}else if(args[0].equalsIgnoreCase("listregions")){
+						// TODO
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}

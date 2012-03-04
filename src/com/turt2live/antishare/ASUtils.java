@@ -71,4 +71,15 @@ public class ASUtils {
 			e.printStackTrace();
 		}
 	}
+
+	public static Boolean getValueOf(String value){
+		if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("on")
+				|| value.equalsIgnoreCase("active") || value.equalsIgnoreCase("1")){
+			return true;
+		}else if(value.equalsIgnoreCase("false") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("off")
+				|| value.equalsIgnoreCase("inactive") || value.equalsIgnoreCase("0")){
+			return false;
+		}
+		return null;
+	}
 }

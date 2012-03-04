@@ -19,10 +19,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.BlockedType;
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.worldedit.ASRegion;
-import com.turt2live.antishare.worldedit.ASWorldEdit;
 
 public class VirtualPerWorldStorage {
 
@@ -321,11 +320,6 @@ public class VirtualPerWorldStorage {
 		gamemode_regions.remove(region);
 	}
 
-	public void updateRegion(ASRegion oldRegion, ASRegion newRegion){
-		removeRegion(oldRegion);
-		saveRegion(newRegion);
-	}
-
 	public ASRegion getRegion(Location location){
 		for(ASRegion region : gamemode_regions){
 			if(region.has(location)){
@@ -353,11 +347,14 @@ public class VirtualPerWorldStorage {
 		return null;
 	}
 
+	public boolean regionExists(ASRegion region){
+		return gamemode_regions.contains(region);
+	}
+
 	public void saveToDisk(){
 		for(Player player : inventories.keySet()){
 			inventories.get(player).saveInventoryToDisk();
 		}
-		ASWorldEdit.clean(plugin);
 		for(ASRegion region : gamemode_regions){
 			region.saveToDisk();
 		}

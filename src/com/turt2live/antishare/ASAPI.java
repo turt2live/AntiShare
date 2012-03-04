@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.enums.BlockedType;
+import com.turt2live.antishare.enums.NotificationType;
 import com.turt2live.antishare.storage.VirtualStorage;
 import com.turt2live.antishare.worldedit.ASRegion;
 

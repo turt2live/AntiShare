@@ -1,5 +1,6 @@
 package com.turt2live.antishare.storage;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -20,8 +21,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.BlockedType;
+import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.worldedit.ASRegion;
+import com.turt2live.antishare.worldedit.ASWorldEdit;
 
 public class VirtualStorage implements Listener {
 
@@ -91,11 +93,11 @@ public class VirtualStorage implements Listener {
 	}
 
 	public void reload(){
-		build();
 		Set<World> worldListing = worlds.keySet();
 		for(World world : worldListing){
 			worlds.get(world).reload();
 		}
+		build();
 	}
 
 	public void reload(final CommandSender sender){
@@ -130,6 +132,7 @@ public class VirtualStorage implements Listener {
 	}
 
 	public void saveToDisk(){
+		ASWorldEdit.clean(plugin);
 		Set<World> worldListing = worlds.keySet();
 		for(World world : worldListing){
 			worlds.get(world).saveToDisk();
@@ -160,12 +163,15 @@ public class VirtualStorage implements Listener {
 		return null;
 	}
 
-	// CAN BE NULL
 	public ASRegion getRegion(Location location){
 		return worlds.get(location.getWorld()).getRegion(location);
 	}
 
 	public void removeRegion(ASRegion region){
+		File regionFile = new File(plugin.getDataFolder() + "/regions", region.getUniqueID() + ".yml");
+		if(regionFile.exists()){
+			regionFile.delete();
+		}
 		worlds.get(region.getWorld()).removeRegion(region);
 	}
 
@@ -176,6 +182,10 @@ public class VirtualStorage implements Listener {
 			total += worlds.get(world).convertCreativeBlocks();
 		}
 		return total;
+	}
+
+	public boolean regionExists(ASRegion region){
+		return worlds.get(region.getWorld()).regionExists(region);
 	}
 
 	public void switchInventories(Player player, World worldFrom, GameMode gmFrom, World worldTo, GameMode gmTo){

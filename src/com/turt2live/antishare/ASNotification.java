@@ -5,6 +5,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import com.turt2live.antishare.enums.BlockedType;
+import com.turt2live.antishare.enums.NotificationType;
+
 public class ASNotification {
 
 	public static void sendNotification(NotificationType type, AntiShare plugin, Player player, String variable, Material material){

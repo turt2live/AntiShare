@@ -14,7 +14,7 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 
-public class ASRegion {
+public class ASRegion implements Cloneable {
 
 	private AntiShare plugin;
 	private World world;
@@ -58,6 +58,13 @@ public class ASRegion {
 		saveFolder.mkdirs();
 		File regionFile = new File(saveFolder, id + ".yml");
 		if(!regionFile.exists()){
+			try{
+				regionFile.createNewFile();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}else{
+			regionFile.delete();
 			try{
 				regionFile.createNewFile();
 			}catch(Exception e){
@@ -134,5 +141,16 @@ public class ASRegion {
 		if(showExitMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You left '" + name + "'");
 		}
+	}
+
+	@Override
+	public ASRegion clone(){
+		try{
+			ASRegion r = (ASRegion) super.clone();
+			return r;
+		}catch(CloneNotSupportedException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
