@@ -140,6 +140,16 @@ public class VirtualStorage implements Listener {
 		worlds.get(region.getWorld()).saveRegion(region);
 	}
 
+	public ASRegion getRegionByID(String id){
+		for(World world : worlds.keySet()){
+			ASRegion region = worlds.get(world).getRegionByID(id);
+			if(region != null){
+				return region;
+			}
+		}
+		return null;
+	}
+
 	// CAN BE NULL
 	public ASRegion getRegion(Location location){
 		return worlds.get(location.getWorld()).getRegion(location);

@@ -2,6 +2,7 @@ package com.turt2live.antishare.worldedit;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -19,7 +20,7 @@ public class ASRegionHandler {
 	private AntiShare plugin;
 	private boolean hasWorldEdit = false;
 	private ASWorldEdit worldedit;
-	private HashMap<Player, ASRegionPlayer> player_information = new HashMap<Player, ASRegionPlayer>();
+	private HashMap<String, ASRegionPlayer> player_information = new HashMap<String, ASRegionPlayer>();
 
 	public ASRegionHandler(AntiShare plugin){
 		this.plugin = plugin;
@@ -29,6 +30,7 @@ public class ASRegionHandler {
 		}else{
 			AntiShare.log.warning("[" + plugin.getDescription().getFullName() + "] WorldEdit is not installed!");
 		}
+		load();
 	}
 
 	public void newRegion(CommandSender sender, String gamemodeName){
@@ -78,6 +80,10 @@ public class ASRegionHandler {
 		return plugin.storage.getRegion(location) != null;
 	}
 
+	public ASRegion getRegionByID(String id){
+		return plugin.storage.getRegionByID(id);
+	}
+
 	public void checkRegion(Player player, Location newLocation){
 		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
 		if(AntiShare.DEBUG_MODE){
@@ -90,9 +96,9 @@ public class ASRegionHandler {
 		if(player.hasPermission("AntiShare.roam")){
 			return;
 		}
-		ASRegionPlayer asPlayer = player_information.get(player);
+		ASRegionPlayer asPlayer = player_information.get(player.getName());
 		if(asPlayer == null){
-			asPlayer = new ASRegionPlayer(player);
+			asPlayer = new ASRegionPlayer(player.getName());
 		}
 		if(region != null){
 			if(!player.getGameMode().equals(region.getGameModeSwitch())){
@@ -108,10 +114,10 @@ public class ASRegionHandler {
 				}
 			}
 		}
-		if(player_information.containsKey(player)){
-			player_information.remove(player);
+		if(player_information.containsKey(player.getName())){
+			player_information.remove(player.getName());
 		}
-		player_information.put(player, asPlayer);
+		player_information.put(player.getName(), asPlayer);
 	}
 
 	public void saveStatusToDisk(){
@@ -126,7 +132,34 @@ public class ASRegionHandler {
 		}
 		EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
 		listing.load();
+		for(String player : player_information.keySet()){
+			ASRegionPlayer asPlayer = player_information.get(player);
+			listing.set(player + ".gamemode", asPlayer.getLastGameMode().name());
+			listing.set(player + ".region", (asPlayer.getLastRegion() != null) ? asPlayer.getLastRegion().getUniqueID() : "none");
+			listing.save();
+		}
+	}
 
+	public void load(){
+		File saveFile = new File(plugin.getDataFolder(), "region_saves.yml");
+		if(!saveFile.exists()){
+			return;
+		}
+		EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
+		listing.load();
+		Set<String> section = listing.getConfigurationSection("").getKeys(false);
+		for(String path : section){
+			String playerName = path;
+			GameMode gamemode = GameMode.valueOf(listing.getString(path + ".gamemode"));
+			ASRegion region = null;
+			if(!listing.getString(path + ".region").equalsIgnoreCase("none")){
+				region = getRegionByID(listing.getString(path + ".region"));
+			}
+			ASRegionPlayer asPlayer = new ASRegionPlayer(playerName);
+			asPlayer.setLastGameMode(gamemode);
+			asPlayer.setLastRegion(region);
+			player_information.put(playerName, asPlayer);
+		}
 	}
 
 	public AntiShare getPlugin(){

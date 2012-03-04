@@ -1,19 +1,18 @@
 package com.turt2live.antishare.worldedit;
 
 import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
 
 public class ASRegionPlayer {
 
-	private Player player;
+	private String player;
 	private ASRegion lastRegion;
 	private GameMode lastGameMode;
 
-	public ASRegionPlayer(Player player){
-		this.player = player;
+	public ASRegionPlayer(String playername){
+		this.player = playername;
 	}
 
-	public Player getPlayer(){
+	public String getPlayerName(){
 		return player;
 	}
 

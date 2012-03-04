@@ -330,6 +330,15 @@ public class VirtualPerWorldStorage {
 		return null;
 	}
 
+	public ASRegion getRegionByID(String id){
+		for(ASRegion region : gamemode_regions){
+			if(region.getUniqueID().equals(id)){
+				return region;
+			}
+		}
+		return null;
+	}
+
 	public void saveToDisk(){
 		for(Player player : inventories.keySet()){
 			inventories.get(player).saveInventoryToDisk();

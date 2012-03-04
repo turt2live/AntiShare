@@ -73,6 +73,7 @@ public class AntiShare extends PluginWrapper {
 	public void onDisable(){
 		log.info("[" + getDescription().getFullName() + "] Saving virtual storage to disk/SQL");
 		storage.saveToDisk();
+		regions.saveStatusToDisk();
 		if(sql != null){
 			sql.disconnect();
 		}
