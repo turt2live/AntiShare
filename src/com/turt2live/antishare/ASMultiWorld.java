@@ -30,6 +30,9 @@ public class ASMultiWorld {
 		if(player.hasPermission("AntiShare.worlds")){
 			return true;
 		}
+		if(plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT){
+			return true;
+		}
 		World worldTo = to.getWorld();
 		boolean transfers = plugin.config().getBoolean("other.worldTransfer", worldTo);
 		boolean creative = plugin.config().getBoolean("other.only_if_creative", worldTo);

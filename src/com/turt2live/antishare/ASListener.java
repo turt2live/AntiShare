@@ -424,9 +424,6 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event){
-		if(plugin.getConflicts().GAMEMODE_CONFLICT_PRESENT){
-			return;
-		}
 		Player player = event.getPlayer();
 		if(plugin.config().getBoolean("other.inventory_swap", event.getPlayer().getWorld())
 				&& !plugin.getConflicts().INVENTORY_CONFLICT_PRESENT){

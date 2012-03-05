@@ -5,32 +5,32 @@ import org.bukkit.plugin.Plugin;
 public class Conflicts {
 
 	public boolean INVENTORY_CONFLICT_PRESENT = false;
-	public boolean GAMEMODE_CONFLICT_PRESENT = false;
 	public boolean CREATIVE_MANAGER_CONFLICT_PRESENT = false;
+	public boolean WORLD_MANAGER_CONFLICT_PRESENT = false;
 	public boolean OTHER_CONFLICT_PRESENT = false;
 
 	public String INVENTORY_CONFLICT = "None";
-	public String GAMEMODE_CONFLICT = "None";
 	public String CREATIVE_MANAGER_CONFLICT = "None";
+	public String WORLD_MANAGER_CONFLICT = "None";
 	public String OTHER_CONFLICT = "None";
 
 	public Conflicts(AntiShare plugin){
 		findInventoryManagerConflicts(plugin.getServer().getPluginManager().getPlugins());
-		findGamemodeManagerConflicts(plugin.getServer().getPluginManager().getPlugins());
 		findCreativeModeManagerConflicts(plugin.getServer().getPluginManager().getPlugins());
+		findWorldManagerConflicts(plugin.getServer().getPluginManager().getPlugins());
 		findOtherConflicts(plugin.getServer().getPluginManager().getPlugins());
 		if(INVENTORY_CONFLICT_PRESENT){
 			AntiShare.log.severe("[AntiShare-Conflicts] Inventory Manager Conflict: " + INVENTORY_CONFLICT);
 			AntiShare.log.severe("[AntiShare-Conflicts] AntiShare will not deal with inventories.");
 		}
-		if(GAMEMODE_CONFLICT_PRESENT){
-			AntiShare.log.severe("[AntiShare-Conflicts] GameMode Manager Conflict: " + GAMEMODE_CONFLICT);
-			AntiShare.log.severe("[AntiShare-Conflicts] AntiShare will not deal with gamemodes.");
-		}
 		if(CREATIVE_MANAGER_CONFLICT_PRESENT){
 			AntiShare.log.severe("[AntiShare-Conflicts] Creative Mode Manager Conflict: " + CREATIVE_MANAGER_CONFLICT);
 			AntiShare.log.severe("[AntiShare-Conflicts] AntiShare will disable itself.");
 			plugin.getServer().getPluginManager().disablePlugin(plugin);
+		}
+		if(WORLD_MANAGER_CONFLICT_PRESENT){
+			AntiShare.log.severe("[AntiShare-Conflicts] World Manager Conflict: " + WORLD_MANAGER_CONFLICT);
+			AntiShare.log.severe("[AntiShare-Conflicts] AntiShare will not deal with allowance of world transfers.");
 		}
 		if(OTHER_CONFLICT_PRESENT){
 			AntiShare.log.severe("[AntiShare-Conflicts] Other Conflict: " + OTHER_CONFLICT);
@@ -65,18 +65,6 @@ public class Conflicts {
 		}
 	}
 
-	// None found (yet?)
-	private void findGamemodeManagerConflicts(Plugin[] plugins){
-		//		for(Plugin plugin : plugins){
-		//			String name = plugin.getName();
-		//			if(name.equalsIgnoreCase("")){
-		//				GAMEMODE_CONFLICT_PRESENT = true;
-		//				GAMEMODE_CONFLICT = name;
-		//				break;
-		//			}
-		//		}
-	}
-
 	private void findCreativeModeManagerConflicts(Plugin[] plugins){
 		for(Plugin plugin : plugins){
 			String name = plugin.getName();
@@ -100,6 +88,29 @@ public class Conflicts {
 				CREATIVE_MANAGER_CONFLICT_PRESENT = true;
 				CREATIVE_MANAGER_CONFLICT = name;
 				break;
+			}else if(name.equalsIgnoreCase("GameModeNoPlace")){
+				CREATIVE_MANAGER_CONFLICT_PRESENT = true;
+				CREATIVE_MANAGER_CONFLICT = name;
+				break;
+			}else if(name.equalsIgnoreCase("NoDrop")){
+				CREATIVE_MANAGER_CONFLICT_PRESENT = true;
+				CREATIVE_MANAGER_CONFLICT = name;
+				break;
+			}
+		}
+	}
+
+	private void findWorldManagerConflicts(Plugin[] plugins){
+		for(Plugin plugin : plugins){
+			String name = plugin.getName();
+			if(name.toLowerCase().contains("multiverse")){ // Will likely have MV-Core
+				WORLD_MANAGER_CONFLICT_PRESENT = true;
+				WORLD_MANAGER_CONFLICT = "Multiverse";
+				break;
+			}else if(name.equalsIgnoreCase("Multiworld")){
+				OTHER_CONFLICT_PRESENT = true;
+				OTHER_CONFLICT = name;
+				break;
 			}
 		}
 	}
@@ -112,6 +123,22 @@ public class Conflicts {
 				OTHER_CONFLICT = name;
 				break;
 			}else if(name.equalsIgnoreCase("MobEggs")){
+				OTHER_CONFLICT_PRESENT = true;
+				OTHER_CONFLICT = name;
+				break;
+			}else if(name.equalsIgnoreCase("WorldGuard")){
+				OTHER_CONFLICT_PRESENT = true;
+				OTHER_CONFLICT = name;
+				break;
+			}else if(name.equalsIgnoreCase("CreativeStick")){
+				OTHER_CONFLICT_PRESENT = true;
+				OTHER_CONFLICT = name;
+				break;
+			}else if(name.equalsIgnoreCase("Regios")){
+				OTHER_CONFLICT_PRESENT = true;
+				OTHER_CONFLICT = name;
+				break;
+			}else if(name.toLowerCase().startsWith("voxel")){
 				OTHER_CONFLICT_PRESENT = true;
 				OTHER_CONFLICT = name;
 				break;

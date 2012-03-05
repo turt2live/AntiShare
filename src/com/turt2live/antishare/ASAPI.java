@@ -727,12 +727,12 @@ public class ASAPI {
 	}
 
 	/**
-	 * Determines if there is an gamemode change conflict on the server
+	 * Determines if there is a world manager conflict on the server
 	 * 
 	 * @return true if a conflict exists
 	 */
-	public boolean isGameModeConflictPresent(){
-		return plugin.getConflicts().GAMEMODE_CONFLICT_PRESENT;
+	public boolean isWorldManagerConflictPresent(){
+		return plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT;
 	}
 
 	/**
@@ -754,12 +754,12 @@ public class ASAPI {
 	}
 
 	/**
-	 * Gets the name of the currently conflicting gamemode plugin (first found)
+	 * Get's the name of the currently conflicting world manager plugin (first found)
 	 * 
 	 * @return 'None' if no plugin is found to be conflicting, anything else is a plugin name
 	 */
-	public String getGameModeConflictName(){
-		return plugin.getConflicts().GAMEMODE_CONFLICT;
+	public String getWorldManagerConflictName(){
+		return plugin.getConflicts().WORLD_MANAGER_CONFLICT;
 	}
 
 	/**
