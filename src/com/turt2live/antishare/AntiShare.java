@@ -124,20 +124,28 @@ public class AntiShare extends PluginWrapper {
 					return true;
 				}else if(args[0].equalsIgnoreCase("editregion")){
 					if(sender.hasPermission("AntiShare.regions")){
-						if(args.length < 4){
+						boolean valid = false;
+						if(args.length >= 3){
+							if(RegionKey.isKey(args[2])){
+								if(!RegionKey.requiresValue(RegionKey.getKey(args[2]))){
+									valid = true; // we have at least 3 values in args[] and the key does not need a value
+								}
+							}
+						}
+						if(!valid){
 							if(args.length >= 2){
 								if(args[1].equalsIgnoreCase("help")){
 									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "/as editregion <name> <key> <value>");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "name " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<any name>");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<player name>/none");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "'none'/'set'");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "survival/creative");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "area " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<player name>");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "area " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "No Value");
 									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'ShowEnterMessage'" + ChatColor.WHITE + " - True to show a message when entering a region");
 									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'ShowExitMessage'" + ChatColor.WHITE + " - True to show a message when leaving a region");
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'inventory'" + ChatColor.WHITE + " - Sets the default inventory");
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'area'" + ChatColor.WHITE + " - Sets the area based on <player name>'s WorldEdit selection");
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'inventory'" + ChatColor.WHITE + " - Sets the region's inventory. 'none' to not have a default inventory, 'set' to mirror yours");
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'area'" + ChatColor.WHITE + " - Sets the area based on your WorldEdit selection");
 								}else{
 									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>");
 									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help");

@@ -139,7 +139,15 @@ public class ASRegionHandler {
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Unsupported"); // TODO
 			break;
 		case GAMEMODE:
-			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Unsupported"); // TODO
+			if(value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")){
+				region.setGameMode(GameMode.CREATIVE);
+				changed = true;
+			}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")){
+				region.setGameMode(GameMode.SURVIVAL);
+				changed = true;
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + value + "' is!");
+			}
 			break;
 		}
 		if(changed){
@@ -147,7 +155,7 @@ public class ASRegionHandler {
 		}
 	}
 
-	public void checkRegion(Player player, Location newLocation){
+	public void checkRegion(Player player, Location newLocation, Location fromLocation){
 		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
 		ASRegionPlayer asPlayer = player_information.get(player.getName());
 		if(asPlayer == null){
@@ -156,8 +164,8 @@ public class ASRegionHandler {
 		if(region != null){
 			if(!player.getGameMode().equals(region.getGameModeSwitch())
 					&& !player.hasPermission("AntiShare.roam")){
-				asPlayer.setLastGameMode(player.getGameMode());
 				player.setGameMode(region.getGameModeSwitch());
+				asPlayer.setLastGameMode(player.getGameMode());
 			}
 			if(asPlayer.getLastRegion() != null){
 				if(!asPlayer.getLastRegion().equals(region)){
@@ -171,6 +179,7 @@ public class ASRegionHandler {
 			if(asPlayer.getLastRegion() != null){
 				if(!asPlayer.getLastGameMode().equals(player.getGameMode())){
 					player.setGameMode(asPlayer.getLastGameMode());
+					asPlayer.setLastGameMode(player.getGameMode());
 				}
 				asPlayer.getLastRegion().alertExit(player);
 				asPlayer.setLastRegion(null);

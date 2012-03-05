@@ -2,6 +2,7 @@ package com.turt2live.antishare;
 
 import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -32,6 +33,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
+import com.turt2live.antishare.worldedit.ASRegion;
 
 public class ASListener implements Listener {
 
@@ -50,6 +52,27 @@ public class ASListener implements Listener {
 		Player player = event.getPlayer();
 		if(player == null){
 			return;
+		}
+		ASRegion region = plugin.getRegionHandler().getRegion(player.getLocation());
+		if(region != null){
+			if(!player.hasPermission("AntiShare.roam")){
+				if(!player.getGameMode().equals(region.getGameModeSwitch())){
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, ChatColor.RED + "You are in the wrong GameMode for this area");
+					player.setGameMode(region.getGameModeSwitch());
+					return;
+				}
+			}
+		}
+		region = plugin.getRegionHandler().getRegion(event.getBlock().getLocation());
+		if(region != null){
+			if(!player.hasPermission("AntiShare.roam")){
+				if(!player.getGameMode().equals(region.getGameModeSwitch())){
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, ChatColor.RED + "You cannot break that due to a GameMode region");
+					return;
+				}
+			}
 		}
 		if(plugin.storage.bedrockBlocked(player.getWorld())
 				&& !player.hasPermission("AntiShare.bedrock")
@@ -155,6 +178,27 @@ public class ASListener implements Listener {
 			return;
 		}
 		Player player = event.getPlayer();
+		ASRegion region = plugin.getRegionHandler().getRegion(player.getLocation());
+		if(region != null){
+			if(!player.hasPermission("AntiShare.roam")){
+				if(!player.getGameMode().equals(region.getGameModeSwitch())){
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, ChatColor.RED + "You are in the wrong GameMode for this area");
+					player.setGameMode(region.getGameModeSwitch());
+					return;
+				}
+			}
+		}
+		region = plugin.getRegionHandler().getRegion(event.getBlock().getLocation());
+		if(region != null){
+			if(!player.hasPermission("AntiShare.roam")){
+				if(!player.getGameMode().equals(region.getGameModeSwitch())){
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, ChatColor.RED + "You cannot place there due to a GameMode region");
+					return;
+				}
+			}
+		}
 		if(plugin.storage.isBlocked(event.getBlock().getType(), BlockedType.BLOCK_PLACE, player.getWorld())
 				&& !player.hasPermission("AntiShare.allow.place")){
 			if(plugin.config().onlyIfCreative(player)){
@@ -489,7 +533,7 @@ public class ASListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
-		plugin.getRegionHandler().checkRegion(event.getPlayer(), event.getTo());
+		plugin.getRegionHandler().checkRegion(event.getPlayer(), event.getTo(), event.getFrom());
 	}
 
 	public void scheduleInventoryChange(final Player player, final PlayerTeleportEvent event){

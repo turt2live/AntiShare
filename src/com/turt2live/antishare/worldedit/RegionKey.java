@@ -37,4 +37,12 @@ public class RegionKey {
 		}
 		return RegionKeyType.UNKNOWN;
 	}
+
+	public static boolean requiresValue(RegionKeyType type){
+		switch (type){
+		case SELECTION_AREA:
+			return false;
+		}
+		return true;
+	}
 }
