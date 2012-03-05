@@ -21,7 +21,7 @@ import com.turt2live.antishare.worldedit.ASRegion;
 /**
  * AntiShare API
  * 
- * @author travpc@gmail.com
+ * @author <a href='https://github.com/turt2live'>turt2live</a>
  * 
  */
 public class ASAPI {

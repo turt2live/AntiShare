@@ -57,8 +57,9 @@ public class EnhancedConfigurationOptions extends YamlConfigurationOptions {
 		//String separator = System.getProperty("line.separator"); // This wont do anything...
 
 		for(String s : lines){
-			if(s == null)
+			if(s == null){
 				continue;
+			}
 			if(string.length() > 0){
 				string.append("\n");
 			}

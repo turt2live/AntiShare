@@ -347,8 +347,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onEntityTarget(EntityTargetEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 
 		Entity targetEntity = event.getTarget();
 		if(event.getEntity() instanceof Monster
