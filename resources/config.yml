@@ -1,28 +1,28 @@
 # AntiShare Configuration:
 # Events:
-# 	'block_place' - Blocks/items to deny for block placing
-# 	'block_break' - Blocks/items to deny for block breaking
-# 	'death' - Blocks/items to not allow to drop on death
-# 	'drop_item' - Block/items to not allow to drop when a player presses (default) Q
-# 	'interact' - Blocks/items to deny interactions to. (Left/Right click)
+#   'block_place' - Blocks/items to deny for block placing
+#   'block_break' - Blocks/items to deny for block breaking
+#   'death' - Blocks/items to not allow to drop on death
+#   'drop_item' - Block/items to not allow to drop when a player presses (default) Q
+#   'interact' - Blocks/items to deny interactions to. (Left/Right click)
 #   'commands' - Commands to block, define a new command with a SPACE (defaults block '/somecommand' and '/anothercommand')
-# 	-- Want all blocks/items to be denied? Put a *
-# 	-- Want no blocks/items to be denied? Put: none
-# 	-- Make sure item lists are space-seperated, not commas, periods, or fancy other things!
+#   -- Want all blocks/items to be denied? Put a *
+#   -- Want no blocks/items to be denied? Put: none
+#   -- Make sure item lists are space-seperated, not commas, periods, or fancy other things!
 # 
 # Messages:
-# 	All messages are when they are declined an action.
-# 	Chat colors are supported using the & sign (eg: &f = white)
+#   All messages are when they are declined an action.
+#   Chat colors are supported using the & sign (eg: &f = white)
 #   If you wouldn't like a message to show, set the value as 'noshow'
 # 
 # Other:
-# 	'only_if_creative' - Auto-decline if they are in creative, permissions still apply.
-# 		(eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)
+#   'only_if_creative' - Auto-decline if they are in creative, permissions still apply.
+#     (eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)
 #       For per-player support, set the permission "AntiShare.onlyIfCreative". See the permissions section for more information
-# 	'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)
-# 	'inventory_swap' - If true then creative and survival inventories will be swapped
-# 	'track_blocks' - If true then creative mode blocks will be tracked where only creative mode players can break them
-#  						(unless they have the permission "AntiShare.blockBypass")	
+#   'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)
+#   'inventory_swap' - If true then creative and survival inventories will be swapped
+#   'track_blocks' - If true then creative mode blocks will be tracked where only creative mode players can break them
+#              (unless they have the permission "AntiShare.blockBypass")  
 #   'allow_bedrock' - If false then bedrock will never be broken or placed
 #   'pvp' - True if you want to allow creative players to hit other players ("AntiShare.pvp" to allow to specific players)
 #   'pvp-mobs' - True if you want to allow creative players to be able to hit mobs ("AntiShare.mobpvp" to allow to specific players)
@@ -47,7 +47,7 @@
 #   'port' - The SQL port, this is unused thus far (will be used in later support)
 #   'database' - The SQL database to use, this must already be made
 # 
-# Notifications: 
+# Notifications:
 #   - Used to alert specific people of actions taking place
 #   'send' - True to send notifications, false otherwise
 #   'illegal' - All the illegal (blocked) actions, the name of the action relates to the action (eg: block_place means an illegal block was placed)
@@ -55,37 +55,37 @@
 #   'general' - Everything else that doesn't fit into a category (illegal/legal)
 #  
 # Permissions:
-# 	'AntiShare.*' - Deny all events
-# 	'AntiShare.place' - Deny block placing
-# 	'AntiShare.break' - Deny block breaking
-# 	'AntiShare.death' - Deny item drops on death
-# 	'AntiShare.drop' - Deny item dropping
-# 	'AntiShare.interact' - Deny interactions
-# 	'AntiShare.eggs' - Deny eggs that spawn mobs
+#   'AntiShare.*' - Deny all events
+#   'AntiShare.place' - Deny block placing
+#   'AntiShare.break' - Deny block breaking
+#   'AntiShare.death' - Deny item drops on death
+#   'AntiShare.drop' - Deny item dropping
+#   'AntiShare.interact' - Deny interactions
+#   'AntiShare.eggs' - Deny eggs that spawn mobs
 #   'AntiShare.commands' - Deny command usage (for specified commands)
-# 	-- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)
+#   -- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)
 #   'AntiShare.onlyIfCreative' - Only deny actions if the player is in creative mode, false to deny regardless of Game Mode (this is default FALSE)
 #   'AntiShare.onlyIfCreative.global' - Uses the configuration value and overrides the 'AntiShare.onlyIfCreative' permission (this is default TRUE)
-# 	'AntiShare.reload' - Permission to use /antishare reload
+#   'AntiShare.reload' - Permission to use /antishare reload
 #   'AntiShare.regions' - Permission to set/remove GameMode Regions
 #   'AntiShare.roam' - If set as true, the target can roam through regions without having their gamemode change
-# 	'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched
-# 	'AntiShare.blockBypass' - If true, then the player can bypass the "Creative mode players can only break this block" message
+#   'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched
+#   'AntiShare.blockBypass' - If true, then the player can bypass the "Creative mode players can only break this block" message
 #                           - As well they can break a block and get drops if 'blockDrops' (under 'other') is true
-# 	'AntiShare.freePlace' - If true, then the player can place a "creative-mode" block without it being registered as a "creative-mode" block
-# 	'AntiShare.bedrock' - If true, then the player can break and place bedrock
+#   'AntiShare.freePlace' - If true, then the player can place a "creative-mode" block without it being registered as a "creative-mode" block
+#   'AntiShare.bedrock' - If true, then the player can break and place bedrock
 #   'AntiShare.pvp' - Allows PVP to a creative mode player
 #   'AntiShare.mobpvp' - Allows Mob PVP to a creative mode player
 #   'AntiShare.worlds' - Allows world teleporting without being blocked, also stops multi-world inventories for the target
 #   'AntiShare.notify' - Sends notifications to the player
 #   'AntiShare.silent' - Stops the sending of notifications from this player
-# 	'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam", "AntiShare.blockBypass", 
+#   'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam", "AntiShare.blockBypass", 
 #                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", 
 #                         and "AntiShare.mobpvp".
 # 
 # Commands:
-# 	'/antishare'
-# 		Aliases: '/as', '/antis', '/ashare'
+#   '/antishare'
+#     Aliases: '/as', '/antis', '/ashare'
 #   '/as help' - Displays command usage
 #   '/as reload' - Reloads configuration
 #   '/as region <gamemode> <name>' - Sets your currently selected WorldEdit region as a GameMode Region and names the region
@@ -96,11 +96,11 @@
 #   '/as listregions #' - List the regions by page
 # 
 # Notes:
-# 	- Permissions default to all deny as true while all allow as OP or higher.
-# 	- 'only_if_creative' will override the permissions meaning if a player is in survival-mode while 'only_if_creative' is true then 
-# 	  the deny permissions will be ignored (eg: That survival player places a block: it is placed)
-# 	- The default settings decline interactions with furnaces, chests, dispensers, and chest-minecarts
-# 	- The event 'block_break' is set to 'none' because in creative-mode, no blocks are dropped when broken
+#   - Permissions default to all deny as true while all allow as OP or higher.
+#   - 'only_if_creative' will override the permissions meaning if a player is in survival-mode while 'only_if_creative' is true then 
+#     the deny permissions will be ignored (eg: That survival player places a block: it is placed)
+#   - The default settings decline interactions with furnaces, chests, dispensers, and chest-minecarts
+#   - The event 'block_break' is set to 'none' because in creative-mode, no blocks are dropped when broken
 #   - Messages support colors, use '&' to define a color. Eg: "&aWelcome!" will display "Welcome!" in green.
 #   - By default, the 'onlyIfCreative' permissions mirror the default configuration (to avoid breaking)
 # 
