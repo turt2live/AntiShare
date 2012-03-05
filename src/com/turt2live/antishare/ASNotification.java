@@ -186,6 +186,16 @@ public class ASNotification {
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " changed to gamemode " + ChatColor.BLUE + variable + ChatColor.AQUA + "!";
 			}
 			break;
+		case REGION_ENTER:
+			if(plugin.getConfig().getBoolean("notifications.general.region_enter")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " entered the region " + ChatColor.BLUE + variable + ChatColor.AQUA + "!";
+			}
+			break;
+		case REGION_EXIT:
+			if(plugin.getConfig().getBoolean("notifications.general.region_exit")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " left the region " + ChatColor.BLUE + variable + ChatColor.AQUA + "!";
+			}
+			break;
 		}
 		if(message.length() > 0){
 			Bukkit.broadcast(message, "AntiShare.notify");

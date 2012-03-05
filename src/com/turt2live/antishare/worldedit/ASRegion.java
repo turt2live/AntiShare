@@ -11,8 +11,10 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.turt2live.antishare.ASNotification;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.enums.NotificationType;
 
 public class ASRegion {
 
@@ -133,12 +135,14 @@ public class ASRegion {
 	public void alertEntry(Player player){
 		if(showEnterMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You entered '" + name + "'");
+			ASNotification.sendNotification(NotificationType.REGION_ENTER, player, name);
 		}
 	}
 
 	public void alertExit(Player player){
 		if(showExitMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You left '" + name + "'");
+			ASNotification.sendNotification(NotificationType.REGION_EXIT, player, name);
 		}
 	}
 }

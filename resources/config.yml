@@ -53,6 +53,7 @@
 #   'illegal' - All the illegal (blocked) actions, the name of the action relates to the action (eg: block_place means an illegal block was placed)
 #   'legal' - All the legal (allowed) actions, the name of the action relates to the action (eg: block_place means an legal block was placed)
 #   'general' - Everything else that doesn't fit into a category (illegal/legal)
+#             - Note: region_enter/exit is affected by a region's 'Show Message' property, you can read about these messages a bit further down
 #  
 # Permissions:
 #   'AntiShare.*' - Deny all events
@@ -217,3 +218,5 @@ notifications:
     world_transfer: false
   general:
     gamemode_change: false
+    region_enter: false
+    region_exit: false

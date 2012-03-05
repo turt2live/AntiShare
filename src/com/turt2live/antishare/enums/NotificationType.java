@@ -31,5 +31,7 @@ public enum NotificationType{
 	LEGAL_BEDROCK,
 
 	// GENERAL actions
-	GAMEMODE_CHANGE
+	GAMEMODE_CHANGE,
+	REGION_ENTER,
+	REGION_EXIT
 }
