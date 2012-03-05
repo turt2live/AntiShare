@@ -68,7 +68,7 @@
 #   'AntiShare.onlyIfCreative.global' - Uses the configuration value and overrides the 'AntiShare.onlyIfCreative' permission (this is default TRUE)
 # 	'AntiShare.reload' - Permission to use /antishare reload
 #   'AntiShare.regions' - Permission to set/remove GameMode Regions
-#   'AntiShare.roam' - If set as true, the target can roam through regions without being affected
+#   'AntiShare.roam' - If set as true, the target can roam through regions without having their gamemode change
 # 	'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched
 # 	'AntiShare.blockBypass' - If true, then the player can bypass the "Creative mode players can only break this block" message
 #                           - As well they can break a block and get drops if 'blockDrops' (under 'other') is true
@@ -88,8 +88,12 @@
 # 		Aliases: '/as', '/antis', '/ashare'
 #   '/as help' - Displays command usage
 #   '/as reload' - Reloads configuration
-#   '/as region <gamemode>' - Sets your currently selected WorldEdit region as a GameMode Region
+#   '/as region <gamemode> <name>' - Sets your currently selected WorldEdit region as a GameMode Region and names the region
 #   '/as rmregion' - Removes the GameMode region you are in
+#   '/as rmregion <name>' - Removes a region by name (console friendly)
+#   '/as editregion <name> <key> <value>' - Set various properties of a region, see below for help
+#   '/as listregions' - List the regions available
+#   '/as listregions #' - List the regions by page
 # 
 # Notes:
 # 	- Permissions default to all deny as true while all allow as OP or higher.
@@ -98,11 +102,11 @@
 # 	- The default settings decline interactions with furnaces, chests, dispensers, and chest-minecarts
 # 	- The event 'block_break' is set to 'none' because in creative-mode, no blocks are dropped when broken
 #   - Messages support colors, use '&' to define a color. Eg: "&aWelcome!" will display "Welcome!" in green.
-#   - **** The new permissions for 'only if creative' do not need to be set ****
-#         - The default values mirror the pre-permissions setup to stop servers from breaking.
+#   - By default, the 'onlyIfCreative' permissions mirror the default configuration (to avoid breaking)
 # 
 # World Transfer Help:
 #   Here is a table of values to show you what would happen depending on settings:
+#   If a world manager is detected (like Multiverse), AnitShare will not do anything to avoid conflict (regardless of settings)
 #   ------------------------------------------------------------------------------
 #   | worldTransfers | only_if_creative |                  Result                |
 #   ------------------------------------------------------------------------------
@@ -117,8 +121,30 @@
 #
 # WHAT IS A GAMEMODE REGION?
 #   A GameMode region is a WorldEdit region where a player automatically changes GameModes. Upon leaving their GameMode is restored.
-#   All the same functions apply, such as inventory changes, blocks, etc. Future support may be added to have a configuration per region.
-#   Currently you cannot name a region. See the permissions for information on what is required and how to not be affected by these regions.
+#   All the same functions apply, such as inventory changes, blocks, etc. You can configure the region to have properties like a
+#   a specific inventory to be given to the player upon entry, or to let the player know when they enter/leave the area. All of the 
+#   options are configurable in-game using /as editregion. Type /as editregion <region name> <key> <value> to set a property.
+#   
+#   KEYS AND VALUES (with explanations):
+#   Note: Keys are case in-sensitive
+#   -------------------------------------------------------------------------------------------------------------
+#   | KEY              | POSSIBLE VALUES      | DESCRIPTION                                                     |
+#   -------------------------------------------------------------------------------------------------------------
+#   | name             | <a name>             | Sets the name of the region                                     |
+#   -------------------------------------------------------------------------------------------------------------
+#   | ShowEnterMessage | true/false           | Set to true to enable the 'onEnter message'                     |
+#   -------------------------------------------------------------------------------------------------------------
+#   | ShowExitMessage  | true/false           | Set to true to enable the 'onExit message'                      |
+#   -------------------------------------------------------------------------------------------------------------
+#   |                  |                      | Sets the region's inventory; 'none' to stop the changing        |
+#   | inventory        | 'none'/'set'         | of inventories, 'set' to set the region's inventory to          |
+#   |                  |                      | mirror yours. 'set' cannot be done from console, 'none' can.    |
+#   -------------------------------------------------------------------------------------------------------------
+#   | gamemode         | 'creative'/'surival' | Sets the gamemode of the region                                 |
+#   -------------------------------------------------------------------------------------------------------------
+#   | area             | No Value             | No value required; Sets the area of the region to your current  |
+#   |                  |                      | WorldEdit selection.                                            |
+#   -------------------------------------------------------------------------------------------------------------
 events:
   block_break: none
   block_place: 57 41 42
