@@ -174,6 +174,7 @@ public class AntiShare extends PluginWrapper {
 						}
 					}else if(args[0].equalsIgnoreCase("listregions")){
 						// TODO
+						// Note: args[2] can equal a number, or may not exist. # = page
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}

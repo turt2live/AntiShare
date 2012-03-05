@@ -131,7 +131,6 @@ public class ASRegion {
 	}
 
 	// TODO: Allow the API to create regions WITHOUT players (and etc)
-	// TODO: Check gamemode vs region on block place, break, on gm change
 	public void alertEntry(Player player){
 		if(showEnterMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You entered '" + name + "'");

@@ -58,7 +58,7 @@ public class ASAPI {
 	 * Determines if a block can be broken. This method uses the block's world
 	 * 
 	 * @param block the block, with world, to check
-	 * @param player the player who woul be breaking the block
+	 * @param player the player who would be breaking the block
 	 * @return true if the player can break the block
 	 */
 	public boolean canBreakBlock(Block block, Player player){
