@@ -14,7 +14,7 @@ public class ASNotification {
 		if(!plugin.getConfig().getBoolean("notifications.send")){
 			return;
 		}
-		if(player.hasPermission("AntiShare.silent")){
+		if(plugin.getPermissions().has(player, "AntiShare.silent", player.getWorld())){
 			return;
 		}
 		variable = variable.replaceAll("_", " ");

@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Debugger;
+import com.turt2live.antishare.permissions.ASPermissionsHandler;
 import com.turt2live.antishare.storage.VirtualStorage;
 import com.turt2live.antishare.worldedit.ASRegionHandler;
 import com.turt2live.antishare.worldedit.RegionKey;
@@ -29,6 +30,7 @@ public class AntiShare extends PluginWrapper {
 	private Conflicts conflicts;
 	private Debugger debugger;
 	private TimedSave timedSave;
+	private ASPermissionsHandler perms;
 
 	@Override
 	public void onEnable(){
@@ -55,6 +57,7 @@ public class AntiShare extends PluginWrapper {
 			getServer().getPluginManager().registerEvents(debugger, this);
 		}
 		conflicts = new Conflicts(this);
+		perms = new ASPermissionsHandler(this);
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 		if(getConfig().getInt("settings.save-interval") > 0){
 			int saveTime = (getConfig().getInt("settings.save-interval") * 60 * 1000) / 20;
@@ -84,7 +87,7 @@ public class AntiShare extends PluginWrapper {
 				cmd.equalsIgnoreCase("ashare")){
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
-					if(sender.hasPermission("AntiShare.reload")){
+					if(perms.has(sender, "AntiShare.regions")){
 						reloadConfig();
 						ASMultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
 						storage.reload(sender);
@@ -97,7 +100,7 @@ public class AntiShare extends PluginWrapper {
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("region")){
-					if(sender.hasPermission("AntiShare.regions")){
+					if(perms.has(sender, "AntiShare.regions")){
 						if(args.length < 3){
 							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax error, try: /as region <gamemode> <name>");
 						}else{
@@ -108,7 +111,7 @@ public class AntiShare extends PluginWrapper {
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion")){
-					if(sender.hasPermission("AntiShare.regions")){
+					if(perms.has(sender, "AntiShare.regions")){
 						if(args.length > 1){
 							regions.removeRegion(args[1], sender);
 						}else{
@@ -123,7 +126,7 @@ public class AntiShare extends PluginWrapper {
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("editregion")){
-					if(sender.hasPermission("AntiShare.regions")){
+					if(perms.has(sender, "AntiShare.regions")){
 						boolean valid = false;
 						if(args.length >= 3){
 							if(RegionKey.isKey(args[2])){
@@ -203,5 +206,9 @@ public class AntiShare extends PluginWrapper {
 
 	public Debugger getDebugger(){
 		return debugger;
+	}
+
+	public ASPermissionsHandler getPermissions(){
+		return perms;
 	}
 }

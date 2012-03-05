@@ -27,7 +27,7 @@ public class ASMultiWorld {
 
 	// Returns allowance of worldSwap
 	public static boolean worldSwap(AntiShare plugin, Player player, Location from, Location to){
-		if(player.hasPermission("AntiShare.worlds")){
+		if(plugin.getPermissions().has(player, "AntiShare.worlds", to.getWorld())){
 			return true;
 		}
 		if(plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT){

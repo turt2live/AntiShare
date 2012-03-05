@@ -7,7 +7,7 @@ public class TimedSave {
 	private int id = -1;
 
 	public TimedSave(final AntiShare plugin, int ticks){
-		id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+		id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				plugin.getServer().dispatchCommand(Bukkit.getConsoleSender(), "as rl");

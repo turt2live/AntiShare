@@ -163,7 +163,7 @@ public class ASRegionHandler {
 		}
 		if(region != null){
 			if(!player.getGameMode().equals(region.getGameModeSwitch())
-					&& !player.hasPermission("AntiShare.roam")){
+					&& !plugin.getPermissions().has(player, "AntiShare.roam", player.getWorld())){
 				player.setGameMode(region.getGameModeSwitch());
 				asPlayer.setLastGameMode(player.getGameMode());
 			}
@@ -178,7 +178,7 @@ public class ASRegionHandler {
 		}else{ // Left region/is out of region
 			if(asPlayer.getLastRegion() != null){
 				if(!asPlayer.getLastGameMode().equals(player.getGameMode())
-						&& !player.hasPermission("AntiShare.roam")){
+						&& !plugin.getPermissions().has(player, "AntiShare.roam", player.getWorld())){
 					player.setGameMode(asPlayer.getLastGameMode());
 					asPlayer.setLastGameMode(player.getGameMode());
 				}

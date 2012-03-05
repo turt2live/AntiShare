@@ -4,6 +4,7 @@ version: 3.0.0
 description: Create social awkwardness for creative-mode players
 authors: [Turt2Live, Sayshal]
 website: http://dev.bukkit.org/server-mods/antishare
+softdepend: [Vault]
 commands:
   antishare:
     description: AntiShare command

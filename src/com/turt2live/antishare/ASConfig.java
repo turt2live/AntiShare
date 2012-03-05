@@ -24,9 +24,9 @@ public class ASConfig {
 	}
 
 	public boolean onlyIfCreative(Player player){
-		if(player.hasPermission("AntiShare.onlyIfCreative.global")){
+		if(plugin.getPermissions().has(player, "AntiShare.onlyIfCreative.global", player.getWorld())){
 			return getBoolean("other.only_if_creative", player.getWorld());
-		}else if(player.hasPermission("AntiShare.onlyIfCreative")){
+		}else if(plugin.getPermissions().has(player, "AntiShare.onlyIfCreative", player.getWorld())){
 			return true;
 		}
 		return false;

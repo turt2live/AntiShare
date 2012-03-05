@@ -66,7 +66,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.break")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", block.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(block.getType(), BlockedType.BLOCK_BREAK, block.getWorld());
@@ -85,7 +85,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.break")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.break", world)){
 			return true;
 		}
 		return !plugin.storage.isBlocked(block.getType(), BlockedType.BLOCK_BREAK, world);
@@ -124,7 +124,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.interact")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", block.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(block.getType(), BlockedType.INTERACT, block.getWorld());
@@ -153,7 +153,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.death")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", player.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(item, BlockedType.DEATH, player.getWorld());
@@ -172,7 +172,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.death")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.death", world)){
 			return true;
 		}
 		return !plugin.storage.isBlocked(item, BlockedType.DEATH, world);
@@ -211,7 +211,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.place")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", block.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(block.getType(), BlockedType.BLOCK_PLACE, block.getWorld());
@@ -230,7 +230,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.place")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.place", world)){
 			return true;
 		}
 		return !plugin.storage.isBlocked(block.getType(), BlockedType.BLOCK_PLACE, world);
@@ -254,7 +254,7 @@ public class ASAPI {
 	 * @return true if the player can hit other players
 	 */
 	public boolean canPVP(Player player){
-		if(player.hasPermission("AntiShare.pvp")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", player.getWorld())){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(player.getWorld()) && !player.getGameMode().equals(GameMode.CREATIVE)){
@@ -271,7 +271,7 @@ public class ASAPI {
 	 * @return true if the player can hit other players in the specified world
 	 */
 	public boolean canPVP(Player player, World world){
-		if(player.hasPermission("AntiShare.pvp")){
+		if(plugin.getPermissions().has(player, "AntiShare.pvp", world)){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(world) && !player.getGameMode().equals(GameMode.CREATIVE)){
@@ -297,7 +297,7 @@ public class ASAPI {
 	 * @return true if the player can hit mobs
 	 */
 	public boolean canPVPAgainstMobs(Player player){
-		if(player.hasPermission("AntiShare.mobpvp")){
+		if(plugin.getPermissions().has(player, "AntiShare.mobpvp", player.getWorld())){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(player.getWorld()) && !player.getGameMode().equals(GameMode.CREATIVE)){
@@ -314,7 +314,7 @@ public class ASAPI {
 	 * @return true if the player can hit mobs in the specified world
 	 */
 	public boolean canPVPAgainstMobs(Player player, World world){
-		if(player.hasPermission("AntiShare.mobpvp")){
+		if(plugin.getPermissions().has(player, "AntiShare.mobpvp", world)){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(world) && !player.getGameMode().equals(GameMode.CREATIVE)){
@@ -334,7 +334,7 @@ public class ASAPI {
 	}
 
 	/**
-	 * Determines if a player can throw an item. Based off the player's worl
+	 * Determines if a player can throw an item. Based off the player's world
 	 * 
 	 * @param item the item to be thrown
 	 * @param player the player, with world, throwing
@@ -345,7 +345,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.drop")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", player.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(item, BlockedType.DROP_ITEM, player.getWorld());
@@ -364,7 +364,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.allow.drop")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", world)){
 			return true;
 		}
 		return !plugin.storage.isBlocked(item, BlockedType.DROP_ITEM, world);
@@ -392,7 +392,7 @@ public class ASAPI {
 		if(isOnlyIfCreativeOn(world) && !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.worlds")){
+		if(plugin.getPermissions().has(player, "AntiShare.worlds", world)){
 			return true;
 		}
 		return plugin.config().getBoolean("other.worldTransfer", world);
@@ -418,7 +418,7 @@ public class ASAPI {
 		if(plugin.config().getBoolean("other.allow_bedrock", player.getWorld())){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.bedrock")){
+		if(plugin.getPermissions().has(player, "AntiShare.bedrock", player.getWorld())){
 			return true;
 		}
 		return false;
@@ -435,7 +435,7 @@ public class ASAPI {
 		if(plugin.config().getBoolean("other.allow_bedrock", world)){
 			return true;
 		}
-		if(player.hasPermission("AntiShare.bedrock")){
+		if(plugin.getPermissions().has(player, "AntiShare.bedrock", world)){
 			return true;
 		}
 		return false;
@@ -452,7 +452,7 @@ public class ASAPI {
 		if(!command.startsWith("/")){
 			command = "/" + command;
 		}
-		if(player.hasPermission("AntiShare.allow.commands")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.commands", player.getWorld())){
 			return true;
 		}
 		return !plugin.storage.commandBlocked(command, player.getWorld());
@@ -470,7 +470,7 @@ public class ASAPI {
 		if(!command.startsWith("/")){
 			command = "/" + command;
 		}
-		if(player.hasPermission("AntiShare.allow.commands")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.commands", world)){
 			return true;
 		}
 		return !plugin.storage.commandBlocked(command, world);
@@ -497,7 +497,7 @@ public class ASAPI {
 	 * @return true if the player can use monster eggs in their current world
 	 */
 	public boolean canUseEgg(Player player){
-		if(player.hasPermission("AntiShare.allow.eggs")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.eggs", player.getWorld())){
 			return true;
 		}
 		if(plugin.config().getBoolean("other.allow_eggs", player.getWorld()) == false){
@@ -522,7 +522,7 @@ public class ASAPI {
 	 * @return true if the player is allowed to use monster eggs in the specified world
 	 */
 	public boolean canUseEgg(Player player, World world){
-		if(player.hasPermission("AntiShare.allow.eggs")){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.eggs", world)){
 			return true;
 		}
 		if(plugin.config().getBoolean("other.allow_eggs", world) == false){

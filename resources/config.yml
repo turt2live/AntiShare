@@ -56,15 +56,16 @@
 #             - Note: region_enter/exit is affected by a region's 'Show Message' property, you can read about these messages a bit further down
 #  
 # Permissions:
-#   'AntiShare.*' - Deny all events
-#   'AntiShare.place' - Deny block placing
-#   'AntiShare.break' - Deny block breaking
-#   'AntiShare.death' - Deny item drops on death
-#   'AntiShare.drop' - Deny item dropping
-#   'AntiShare.interact' - Deny interactions
-#   'AntiShare.eggs' - Deny eggs that spawn mobs
-#   'AntiShare.commands' - Deny command usage (for specified commands)
-#   -- If you want to allow an event, change the node to 'AntiShare.allow' (eg: 'AntiShare.allow.place' would allow placing)
+#   'AntiShare.allow.*' - Allow all events
+#   'AntiShare.allow.place' - Allow block placing
+#   'AntiShare.allow.break' - Allow block breaking
+#   'AntiShare.allow.death' - Allow item drops on death
+#   'AntiShare.allow.drop' - Allow item dropping
+#   'AntiShare.allow.interact' - Allow interactions
+#   'AntiShare.allow.eggs' - Allow eggs that spawn mobs
+#   'AntiShare.allow.commands' - Allow command usage (for specified commands)
+#   ** If you would like to deny an event, set the node to false (default is false)
+#   ** By default, AntiShare assumes "Deny" on all creative mode players (or all players if 'onlyIfCreative' is set to false)
 #   'AntiShare.onlyIfCreative' - Only deny actions if the player is in creative mode, false to deny regardless of Game Mode (this is default FALSE)
 #   'AntiShare.onlyIfCreative.global' - Uses the configuration value and overrides the 'AntiShare.onlyIfCreative' permission (this is default TRUE)
 #   'AntiShare.reload' - Permission to use /antishare reload
