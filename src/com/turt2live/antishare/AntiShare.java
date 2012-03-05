@@ -87,7 +87,7 @@ public class AntiShare extends PluginWrapper {
 				cmd.equalsIgnoreCase("ashare")){
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
-					if(perms.has(sender, "AntiShare.regions")){
+					if(perms.has(sender, "AntiShare.reload")){
 						reloadConfig();
 						ASMultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
 						storage.reload(sender);

@@ -77,38 +77,6 @@ permissions:
             AntiShare.notify: true
             AntiShare.silent: true
             AntiShare.regions: true
-    AntiShare.*:
-        description: deny all AntiShare events
-        default: true
-        children:
-            AntiShare.place: true
-            AntiShare.break: true
-            AntiShare.death: true
-            AntiShare.drop: true
-            AntiShare.interact: true
-            AntiShare.eggs: true
-            AntiShare.commands: true
-    AntiShare.place:
-        description: deny place of defined blocks
-        default: true
-    AntiShare.break:
-        description: deny break of defined blocks
-        default: true
-    AntiShare.death:
-        description: deny defined items dropped on death
-        default: true
-    AntiShare.drop:
-        description: deny defined items from being dropped
-        default: true
-    AntiShare.interact:
-        description: deny interaction of defined blocks
-        default: true
-    AntiShare.eggs:
-        description: deny use of mob spawning eggs
-        default: true
-    AntiShare.commands:
-        description: deny use of specified commands
-        default: true
     AntiShare.allow.*:
         description: allow all AntiShare.allow events
         default: op

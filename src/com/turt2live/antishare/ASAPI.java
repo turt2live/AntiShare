@@ -66,7 +66,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", block.getWorld())){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.break", block.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(block.getType(), BlockedType.BLOCK_BREAK, block.getWorld());
@@ -124,7 +124,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", block.getWorld())){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.interact", block.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(block.getType(), BlockedType.INTERACT, block.getWorld());
@@ -153,7 +153,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", player.getWorld())){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.death", player.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(item, BlockedType.DEATH, player.getWorld());
@@ -211,7 +211,7 @@ public class ASAPI {
 				&& !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", block.getWorld())){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.place", block.getWorld())){
 			return true;
 		}
 		return !plugin.storage.isBlocked(block.getType(), BlockedType.BLOCK_PLACE, block.getWorld());
@@ -254,7 +254,7 @@ public class ASAPI {
 	 * @return true if the player can hit other players
 	 */
 	public boolean canPVP(Player player){
-		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", player.getWorld())){
+		if(plugin.getPermissions().has(player, "AntiShare.pvp", player.getWorld())){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(player.getWorld()) && !player.getGameMode().equals(GameMode.CREATIVE)){
