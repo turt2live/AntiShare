@@ -177,7 +177,8 @@ public class ASRegionHandler {
 			asPlayer.setLastRegion(region);
 		}else{ // Left region/is out of region
 			if(asPlayer.getLastRegion() != null){
-				if(!asPlayer.getLastGameMode().equals(player.getGameMode())){
+				if(!asPlayer.getLastGameMode().equals(player.getGameMode())
+						&& !player.hasPermission("AntiShare.roam")){
 					player.setGameMode(asPlayer.getLastGameMode());
 					asPlayer.setLastGameMode(player.getGameMode());
 				}
