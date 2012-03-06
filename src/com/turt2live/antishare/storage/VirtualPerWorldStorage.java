@@ -265,6 +265,7 @@ public class VirtualPerWorldStorage {
 			inventories.get(player).reload();
 		}
 		// Gamemode regions
+		// TODO: SQL Support
 		File[] listing = new File(plugin.getDataFolder(), "regions").listFiles();
 		if(listing != null){
 			for(File regionFile : listing){
@@ -291,6 +292,10 @@ public class VirtualPerWorldStorage {
 				region.setUniqueID(regionFile.getName().replace(".yml", ""));
 				region.setName(name);
 				region.setMessageOptions(enterMessage, exitMessage);
+				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", region.getUniqueID() + ".yml");
+				if(saveFile.exists()){
+					region.setInventory(ASVirtualInventory.getInventoryFromFile(saveFile, plugin));
+				}
 				gamemode_regions.add(region);
 			}
 		}

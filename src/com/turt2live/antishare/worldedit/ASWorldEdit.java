@@ -50,6 +50,14 @@ public class ASWorldEdit {
 		return plugin.getRegionHandler().isRegion(wePlugin.getSelection(player).getMaximumPoint());
 	}
 
+	public boolean regionExistsInSelectionAndNot(Player player, ASRegion region){
+		return plugin.getRegionHandler().getRegion(wePlugin.getSelection(player).getMaximumPoint()) != region;
+	}
+
+	public Selection getSelection(Player player){
+		return wePlugin.getSelection(player);
+	}
+
 	public AntiShare getPlugin(){
 		return plugin;
 	}

@@ -11,9 +11,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.enums.RegionKeyType;
+import com.turt2live.antishare.storage.ASVirtualInventory;
 
 public class ASRegionHandler {
 
@@ -133,10 +135,36 @@ public class ASRegionHandler {
 			}
 			break;
 		case INVENTORY:
-			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Unsupported"); // TODO
+			if(value.equalsIgnoreCase("none")){
+				region.setInventory(null);
+				changed = true;
+			}else if(value.equalsIgnoreCase("set")){
+				if(sender instanceof Player){
+					region.setInventory(ASVirtualInventory.getInventoryFromPlayer((Player) sender));
+					changed = true;
+				}else{
+					ASUtils.sendToPlayer(sender, ChatColor.RED + "You can't set an inventory from the console, only clear.");
+				}
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown to me, did you mean 'none' or 'set'?");
+			}
 			break;
 		case SELECTION_AREA:
-			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Unsupported"); // TODO
+			if(!hasWorldEdit){
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "WorldEdit is not installed. No region set.");
+				break;
+			}
+			if(!(sender instanceof Player)){
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, sorry!");
+				break;
+			}
+			if(worldedit.regionExistsInSelectionAndNot((Player) sender, region)){
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "There is a region where you have selected!");
+				break;
+			}
+			Selection selection = worldedit.getSelection((Player) sender);
+			region.setRegion(selection);
+			changed = true;
 			break;
 		case GAMEMODE:
 			if(value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")){
@@ -164,10 +192,13 @@ public class ASRegionHandler {
 		if(region != null){
 			if(!player.getGameMode().equals(region.getGameModeSwitch())
 					&& !plugin.getPermissions().has(player, "AntiShare.roam", player.getWorld())){
+				asPlayer.setLastGameMode(player.getGameMode());
 				player.setGameMode(region.getGameModeSwitch());
+			}else if(asPlayer.getLastRegion() == null){
 				asPlayer.setLastGameMode(player.getGameMode());
 			}
-			if(asPlayer.getLastRegion() != null){
+			if(asPlayer.getLastRegion() != null
+					&& !plugin.getPermissions().has(player, "AntiShare.roam", player.getWorld())){
 				if(!asPlayer.getLastRegion().equals(region)){
 					region.alertEntry(player);
 				}
@@ -177,12 +208,12 @@ public class ASRegionHandler {
 			asPlayer.setLastRegion(region);
 		}else{ // Left region/is out of region
 			if(asPlayer.getLastRegion() != null){
+				asPlayer.getLastRegion().alertExit(player);
 				if(!asPlayer.getLastGameMode().equals(player.getGameMode())
 						&& !plugin.getPermissions().has(player, "AntiShare.roam", player.getWorld())){
 					player.setGameMode(asPlayer.getLastGameMode());
 					asPlayer.setLastGameMode(player.getGameMode());
 				}
-				asPlayer.getLastRegion().alertExit(player);
 				asPlayer.setLastRegion(null);
 			}
 		}
@@ -192,6 +223,7 @@ public class ASRegionHandler {
 		player_information.put(player.getName(), asPlayer);
 	}
 
+	// TODO: SQL Support
 	public void saveStatusToDisk(){
 		File saveFile = new File(plugin.getDataFolder(), "region_saves.yml");
 		if(saveFile.exists()){
@@ -212,6 +244,7 @@ public class ASRegionHandler {
 		}
 	}
 
+	// TODO: SQL Support
 	public void load(){
 		File saveFile = new File(plugin.getDataFolder(), "region_saves.yml");
 		if(!saveFile.exists()){

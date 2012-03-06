@@ -135,6 +135,9 @@ public class AntiShare extends PluginWrapper {
 								}
 							}
 						}
+						if(args.length >= 4){
+							valid = true;
+						}
 						if(!valid){
 							if(args.length >= 2){
 								if(args[1].equalsIgnoreCase("help")){

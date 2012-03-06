@@ -17,6 +17,7 @@ import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
 import com.turt2live.antishare.storage.VirtualStorage;
 import com.turt2live.antishare.worldedit.ASRegion;
+import com.turt2live.antishare.worldedit.ASRegionHandler;
 
 /**
  * AntiShare API
@@ -754,7 +755,7 @@ public class ASAPI {
 	}
 
 	/**
-	 * Get's the name of the currently conflicting world manager plugin (first found)
+	 * Gets the name of the currently conflicting world manager plugin (first found)
 	 * 
 	 * @return 'None' if no plugin is found to be conflicting, anything else is a plugin name
 	 */
@@ -819,5 +820,14 @@ public class ASAPI {
 	 */
 	public void removeRegion(Location location){
 		plugin.getRegionHandler().removeRegion(location, null);
+	}
+
+	/**
+	 * Gets the region handler used by AntiShare
+	 * 
+	 * @return the region handler
+	 */
+	public ASRegionHandler getRegionHandler(){
+		return plugin.getRegionHandler();
 	}
 }

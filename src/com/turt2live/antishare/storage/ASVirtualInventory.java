@@ -25,6 +25,9 @@ public class ASVirtualInventory {
 	private World world;
 	private HashMap<Integer, ItemStack> survival = new HashMap<Integer, ItemStack>();
 	private HashMap<Integer, ItemStack> creative = new HashMap<Integer, ItemStack>();
+	private HashMap<Integer, ItemStack> temporary = new HashMap<Integer, ItemStack>();
+	private HashMap<Integer, ItemStack> previous = new HashMap<Integer, ItemStack>();
+	private boolean isInTemp = false;
 
 	public ASVirtualInventory(Player player, World world, AntiShare plugin){
 		this.player = player;
@@ -46,8 +49,50 @@ public class ASVirtualInventory {
 		creative = load(GameMode.CREATIVE);
 	}
 
+	public void setTemporaryInventory(HashMap<Integer, ItemStack> inventory){
+		temporary = inventory;
+	}
+
+	@SuppressWarnings ("deprecation")
+	public void loadToTemporary(){
+		saveInventory(player.getGameMode());
+		isInTemp = true;
+		HashMap<Integer, ItemStack> inventory = temporary;
+		player.getInventory().clear();
+		for(Integer slot : inventory.keySet()){
+			player.getInventory().setItem(slot, inventory.get(slot));
+		}
+		player.updateInventory();
+	}
+
+	@SuppressWarnings ("deprecation")
+	public void unloadFromTemporary(){
+		isInTemp = false;
+		HashMap<Integer, ItemStack> inventory = previous;
+		player.getInventory().clear();
+		for(Integer slot : inventory.keySet()){
+			player.getInventory().setItem(slot, inventory.get(slot));
+		}
+		player.updateInventory();
+	}
+
+	public boolean isTemp(){
+		return isInTemp;
+	}
+
+	public HashMap<Integer, ItemStack> getInventory(GameMode gamemode){
+		if(gamemode.equals(GameMode.CREATIVE)){
+			return getCreativeInventory();
+		}else if(gamemode.equals(GameMode.SURVIVAL)){
+			return getSurvivalInventory();
+		}
+		return null;
+	}
+
 	public void switchInventories(GameMode from, GameMode to){
-		saveInventory(from);
+		if(!isInTemp){
+			saveInventory(from);
+		}
 		loadInventory(to);
 	}
 
@@ -64,6 +109,7 @@ public class ASVirtualInventory {
 			player.getInventory().setItem(slot, inventory.get(slot));
 		}
 		player.updateInventory();
+		previous = inventory;
 	}
 
 	private HashMap<Integer, ItemStack> load(GameMode gamemode){
@@ -233,5 +279,68 @@ public class ASVirtualInventory {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public static HashMap<Integer, ItemStack> getInventoryFromPlayer(Player player){
+		HashMap<Integer, ItemStack> newInventory = new HashMap<Integer, ItemStack>();
+		for(int slot = 0; slot < player.getInventory().getSize(); slot++){
+			ItemStack item = player.getInventory().getItem(slot);
+			newInventory.put(slot, item);
+		}
+		return newInventory;
+	}
+
+	// TODO: SQL Support
+	public static void saveInventoryToFile(File file, HashMap<Integer, ItemStack> inventory, AntiShare plugin){
+		if(inventory == null){
+			return;
+		}
+		if(inventory.size() <= 0){
+			return;
+		}
+		try{
+			File sdir = file.getParentFile();
+			sdir.mkdirs();
+			File saveFile = file;
+			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
+			if(!config.load()){
+				AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+			}
+			for(Integer slot : inventory.keySet()){
+				config.set(String.valueOf(slot), inventory.get(slot));
+				if(!config.save()){
+					AntiShare.log.severe("[AntiShare] CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	// TODO: SQL Support
+	public static HashMap<Integer, ItemStack> getInventoryFromFile(File file, AntiShare plugin){
+		HashMap<Integer, ItemStack> inventoryMap = new HashMap<Integer, ItemStack>();
+		if(!file.exists()){
+			return null;
+		}
+		try{
+			File sdir = new File(plugin.getDataFolder(), "inventories");
+			sdir.mkdirs();
+			File saveFile = file;
+			if(!saveFile.exists()){
+				saveFile.createNewFile();
+			}
+			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
+			if(!config.load()){
+				AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+			}
+			Set<String> keys = config.getConfigurationSection("").getKeys(false);
+			for(String key : keys){
+				inventoryMap.put(Integer.valueOf(key), config.getItemStack(key));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return inventoryMap;
 	}
 }
