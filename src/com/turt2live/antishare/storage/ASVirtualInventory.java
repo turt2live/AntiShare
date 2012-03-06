@@ -56,6 +56,7 @@ public class ASVirtualInventory {
 	@SuppressWarnings ("deprecation")
 	public void loadToTemporary(){
 		saveInventory(player.getGameMode());
+		previous = getInventory(player.getGameMode());
 		isInTemp = true;
 		HashMap<Integer, ItemStack> inventory = temporary;
 		player.getInventory().clear();
@@ -109,7 +110,6 @@ public class ASVirtualInventory {
 			player.getInventory().setItem(slot, inventory.get(slot));
 		}
 		player.updateInventory();
-		previous = inventory;
 	}
 
 	private HashMap<Integer, ItemStack> load(GameMode gamemode){
