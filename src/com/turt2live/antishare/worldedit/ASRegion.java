@@ -40,14 +40,6 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 		name = id;
-
-		// TODO: Remove debug
-		this.inventory = new HashMap<Integer, ItemStack>();
-		this.inventory.put(1, new ItemStack(1));
-		this.inventory.put(2, new ItemStack(2));
-		this.inventory.put(3, new ItemStack(3));
-		this.inventory.put(4, new ItemStack(4));
-		this.inventory.put(5, new ItemStack(5));
 	}
 
 	public void setUniqueID(String ID){
@@ -72,7 +64,7 @@ public class ASRegion {
 	}
 
 	public void setInventory(HashMap<Integer, ItemStack> inventory){
-		//this.inventory = inventory; // TODO: Fix
+		this.inventory = inventory;
 	}
 
 	// TODO: SQL Support
