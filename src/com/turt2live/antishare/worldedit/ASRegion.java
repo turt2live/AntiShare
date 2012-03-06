@@ -106,12 +106,21 @@ public class ASRegion {
 			if(saveFile.exists()){
 				saveFile.delete();
 				try{
-					saveFile.createNewFile();
+					if(inventory.size() > 0){
+						saveFile.createNewFile();
+					}
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 			}
-			ASVirtualInventory.saveInventoryToFile(saveFile, inventory, plugin);
+			if(inventory.size() > 0){
+				ASVirtualInventory.saveInventoryToFile(saveFile, inventory, plugin);
+			}
+		}else{
+			File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
+			if(saveFile.exists()){
+				saveFile.delete();
+			}
 		}
 	}
 
