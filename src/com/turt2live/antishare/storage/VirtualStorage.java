@@ -101,13 +101,13 @@ public class VirtualStorage implements Listener {
 	}
 
 	public void reload(final CommandSender sender){
-		ASUtils.sendToPlayer(sender, ChatColor.GRAY + "[AntiShare] " + ChatColor.DARK_RED + "Reloading virtual storage. This could take a while...");
-		ASUtils.sendToPlayer(sender, ChatColor.GRAY + "[AntiShare] " + ChatColor.RED + "The configuration will not work correctly until the virtual storage is reloaded.");
+		ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Reloading virtual storage. This could take a while...");
+		ASUtils.sendToPlayer(sender, ChatColor.RED + "The configuration will not work correctly until the virtual storage is reloaded.");
 		new Thread(new Runnable(){
 			@Override
 			public void run(){
 				reload();
-				ASUtils.sendToPlayer(sender, ChatColor.GRAY + "[AntiShare] " + ChatColor.DARK_GREEN + "Virtual Storage Reloaded!");
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_GREEN + "Virtual Storage Reloaded!");
 			}
 		}).start();
 	}
