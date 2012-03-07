@@ -39,6 +39,7 @@
 #   This means the above settings will check if they are in creative or not and act upon that
 # Settings:
 #   'save-interval' - This is the interval, in minutes, you want AntiShare to save it's data to disk (default is 30 minutes)
+#   'send-use-info' - Set to false to stop sending usage stats to turt2live. (What stats are sent is explained later)
 # SQL:
 #   'use' - If this is false, flat-file storage will be used instead
 #   'host' - The SQL host, usually localhost
@@ -147,6 +148,10 @@
 #   | area             | No Value             | No value required; Sets the area of the region to your current  |
 #   |                  |                      | WorldEdit selection.                                            |
 #   -------------------------------------------------------------------------------------------------------------
+#
+# What is sent in usage statistics?
+#   - Plugin Version
+#   - CraftBukkit Version
 events:
   block_break: none
   block_place: 57 41 42
@@ -189,6 +194,7 @@ SQL:
   database: AntiShare
 settings:
   save-interval: 30
+  send-use-info: true
 notifications:
   send: true
   illegal:
