@@ -55,6 +55,7 @@ public class ASVirtualInventory {
 
 	@SuppressWarnings ("deprecation")
 	public void loadToTemporary(){
+
 		saveInventory(player.getGameMode());
 		previous = getInventory(player.getGameMode());
 		isInTemp = true;

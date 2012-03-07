@@ -168,7 +168,7 @@ public class ASRegion {
 		if(showEnterMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You entered '" + name + "'");
 			ASNotification.sendNotification(NotificationType.REGION_ENTER, player, name);
-			if(!player.hasPermission("AntiShare.roam") && this.inventory != null){
+			if(!plugin.getPermissions().has(player, "AntiShare.roam", world) && this.inventory != null){
 				ASVirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
 				inventory.setTemporaryInventory(this.inventory);
 				inventory.loadToTemporary();
@@ -180,7 +180,7 @@ public class ASRegion {
 		if(showExitMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You left '" + name + "'");
 			ASNotification.sendNotification(NotificationType.REGION_EXIT, player, name);
-			if(!player.hasPermission("AntiShare.roam")){
+			if(!plugin.getPermissions().has(player, "AntiShare.roam", world)){
 				ASVirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
 				if(inventory.isTemp()){
 					inventory.unloadFromTemporary();

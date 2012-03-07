@@ -197,8 +197,7 @@ public class ASRegionHandler {
 			}else if(asPlayer.getLastRegion() == null){
 				asPlayer.setLastGameMode(player.getGameMode());
 			}
-			if(asPlayer.getLastRegion() != null
-					&& !plugin.getPermissions().has(player, "AntiShare.roam", player.getWorld())){
+			if(asPlayer.getLastRegion() != null){
 				if(!asPlayer.getLastRegion().equals(region)){
 					region.alertEntry(player);
 				}

@@ -60,6 +60,9 @@ permissions:
     AntiShare.regions:
         description: allows creating/removing of GameMode regions
         default: op
+    AntiShare.roam:
+        description: allows roaming through GameMode regions without being affected
+        default: op
     AntiShare.admin:
         description: All AntiShare permissions
         default: op
@@ -77,6 +80,7 @@ permissions:
             AntiShare.notify: true
             AntiShare.silent: true
             AntiShare.regions: true
+            AntiShare.roam: true
     AntiShare.allow.*:
         description: allow all AntiShare.allow events
         default: op

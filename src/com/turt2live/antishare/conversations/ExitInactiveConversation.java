@@ -8,14 +8,42 @@ import com.turt2live.antishare.AntiShare;
 
 public class ExitInactiveConversation extends InactivityConversationCanceller {
 
+	String time = "";
+
 	public ExitInactiveConversation(AntiShare plugin, int timeout){
 		super(plugin, timeout);
+		int hours = (int) Math.floor(timeout / 3600);
+		int minutes = (int) Math.floor((timeout - (hours * 3600)) / 60);
+		int seconds = (timeout - ((minutes * 60) + (hours * 3600)));
+		if(hours > 0){
+			time = hours + " Hour" + (hours > 1 ? "s" : "");
+		}
+		if(minutes > 0){
+			if(time.length() > 0){
+				time = time + ", " + minutes + " Minute" + (minutes > 1 ? "s" : "");
+			}else{
+				time = minutes + " Minute" + (minutes > 1 ? "s" : "");
+			}
+		}
+		if(seconds > 0){
+			if(time.length() > 0){
+				time = time + ", " + seconds + " Second" + (seconds > 1 ? "s" : "");
+			}else{
+				time = seconds + " Second" + (seconds > 1 ? "s" : "");
+			}
+		}
 	}
 
 	@Override
 	protected void cancelling(Conversation conversation){
+		conversation.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.DARK_RED + "Session closed, no data saved.");
+		conversation.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.RED + "Your session was closed due to " + time + " of inactivity.");
 		super.cancelling(conversation);
-		conversation.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.DARK_RED + "Conversation closed due to timeout. Data not saved.");
+	}
+
+	@Override
+	public ExitInactiveConversation clone(){
+		return new ExitInactiveConversation((AntiShare) plugin, timeoutSeconds);
 	}
 
 }

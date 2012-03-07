@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversable;
-import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.ConversationPrefix;
@@ -32,9 +31,6 @@ public class ConfigurationConversation extends ConversationFactory {
 		withConversationCanceller(new ExitInactiveConversation(plugin, 600));
 		withConversationCanceller(new ExitMessageConversation());
 		buildConversation(target).begin();
-		for(ConversationCanceller c : this.cancellers){
-			System.out.println(c.getClass().getName());
-		}
 	}
 
 	public static boolean isValid(List<String> list, String input){
