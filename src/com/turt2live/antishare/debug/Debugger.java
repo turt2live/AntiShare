@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.conversations.ConfigurationConversation;
 import com.turt2live.antishare.enums.AlertType;
 
 /*
@@ -64,7 +65,8 @@ public class Debugger implements Listener {
 		}
 		if(event.getMessage().equalsIgnoreCase("/astest")){
 			if(AntiShare.DEBUG_MODE){
-				plugin.getRegionHandler().getWorldEditHandler().forceDisplayWorldEditInformation(event.getPlayer());
+				//plugin.getRegionHandler().getWorldEditHandler().forceDisplayWorldEditInformation(event.getPlayer());
+				new ConfigurationConversation(plugin, event.getPlayer());
 				event.setCancelled(true);
 			}
 		}
