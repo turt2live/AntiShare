@@ -58,9 +58,10 @@ public class AntiShare extends PluginWrapper {
 		}
 		conflicts = new Conflicts(this);
 		perms = new ASPermissionsHandler(this);
+		UsageStatistics.send(this);
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 		if(getConfig().getInt("settings.save-interval") > 0){
-			int saveTime = (getConfig().getInt("settings.save-interval") * 60 * 1000) / 20;
+			int saveTime = (getConfig().getInt("settings.save-interval") * 60) * 20;
 			timedSave = new TimedSave(this, saveTime);
 		}
 	}
@@ -176,7 +177,7 @@ public class AntiShare extends PluginWrapper {
 							}
 						}
 					}else if(args[0].equalsIgnoreCase("listregions")){
-						// TODO
+						// TODO Region listing
 						// Note: args[2] can equal a number, or may not exist. # = page
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
