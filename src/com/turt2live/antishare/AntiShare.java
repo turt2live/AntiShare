@@ -19,6 +19,16 @@ import com.turt2live.antishare.worldedit.RegionKey;
 
 public class AntiShare extends PluginWrapper {
 
+	/* TODO: All this
+	 * Exp bottle blocks
+	 * onLogin sanity checks (check GM vs inventory, Essentials)
+	 * SQL Support where listed
+	 * Conversation Configuration
+	 * Fix API
+	 * (if possible) Per-region configuration
+	 * Regions: Change enter/exit messages
+	 */
+
 	// TODO: SET TO FALSE BEFORE RELEASE
 	public static boolean DEBUG_MODE = true;
 
