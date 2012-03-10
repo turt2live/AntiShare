@@ -21,12 +21,14 @@ public class AntiShare extends PluginWrapper {
 
 	/* TODO: All this
 	 * Exp bottle blocks [WAITING ON API]
-	 * onLogin sanity checks (check GM vs inventory, for Essentials)
 	 * SQL Support where listed
 	 * Conversation Configuration
 	 * Fix API (add all missing methods, restructure)
 	 * (if possible) Per-region configuration
 	 * Regions: Change enter/exit messages
+	 * Fix 'throw items into regions'
+	 * "Ranked Chests" - Permission-ranked chests (LWC?)
+	 * No exp gain in creative
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE

@@ -49,6 +49,18 @@ public class ASVirtualInventory {
 		creative = load(GameMode.CREATIVE);
 	}
 
+	public void makeMatch(){
+		// Match each item
+		HashMap<Integer, ItemStack> current = getCurrentInventory();
+		HashMap<Integer, ItemStack> proper = getInventory(player.getGameMode());
+		for(Integer slot : current.keySet()){
+			if(!current.get(slot).equals(proper.get(slot))){
+				switchInventories((player.getGameMode().equals(GameMode.SURVIVAL) ? GameMode.CREATIVE : GameMode.SURVIVAL), player.getGameMode());
+				return;
+			}
+		}
+	}
+
 	public void setTemporaryInventory(HashMap<Integer, ItemStack> inventory){
 		temporary = inventory;
 	}
@@ -89,6 +101,15 @@ public class ASVirtualInventory {
 			return getSurvivalInventory();
 		}
 		return null;
+	}
+
+	public HashMap<Integer, ItemStack> getCurrentInventory(){
+		HashMap<Integer, ItemStack> inventory = new HashMap<Integer, ItemStack>();
+		for(int slot = 0; slot < player.getInventory().getSize(); slot++){
+			ItemStack item = player.getInventory().getItem(slot);
+			inventory.put(slot, item);
+		}
+		return inventory;
 	}
 
 	public void switchInventories(GameMode from, GameMode to){

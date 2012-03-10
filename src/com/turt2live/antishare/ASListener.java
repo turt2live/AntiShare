@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -36,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
 import com.turt2live.antishare.regions.ASRegion;
+import com.turt2live.antishare.storage.ASVirtualInventory;
 
 public class ASListener implements Listener {
 
@@ -428,11 +430,11 @@ public class ASListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
-		// TODO
+		// TODO Fix this
 		if(plugin.config().getBoolean("other.cannot_throw_into_regions", player.getWorld())){
 			Item item = event.getItemDrop();
 			ASRegion region = plugin.getRegionHandler().getRegion(item.getLocation());
-			if(!player.hasPermission("AntiShare.allow.throwIntoRegions")){
+			if(!plugin.getPermissions().has(player, "AntiShare.allow.throwIntoRegions")){
 				if(plugin.getRegionHandler().isRegion(item.getLocation())){
 					event.setCancelled(true);
 					ASNotification.sendNotification(NotificationType.ILLEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
@@ -456,7 +458,7 @@ public class ASListener implements Listener {
 		if(plugin.config().getBoolean("other.inventory_swap", event.getPlayer().getWorld())
 				&& !plugin.getConflicts().INVENTORY_CONFLICT_PRESENT){
 			if(player != null){
-				if(!plugin.getPermissions().has(player, "AntiShare.allow.noswap", player.getWorld())){
+				if(!plugin.getPermissions().has(player, "AntiShare.noswap", player.getWorld())){
 					plugin.storage.getInventoryManager(player, player.getWorld()).switchInventories(player.getGameMode(), event.getNewGameMode());
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.inventory_swap", player.getWorld()));
 				}
@@ -633,6 +635,13 @@ public class ASListener implements Listener {
 			return;
 		}
 		plugin.getRegionHandler().checkRegion(event.getPlayer(), event.getTo(), event.getFrom());
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onPlayerJoin(PlayerJoinEvent event){
+		Player player = event.getPlayer();
+		ASVirtualInventory manager = plugin.storage.getInventoryManager(player, player.getWorld());
+		manager.makeMatch();
 	}
 
 	public void scheduleInventoryChange(final Player player, final PlayerTeleportEvent event){
