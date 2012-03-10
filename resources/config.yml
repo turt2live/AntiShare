@@ -20,6 +20,7 @@
 #     (eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)
 #       For per-player support, set the permission "AntiShare.onlyIfCreative". See the permissions section for more information
 #   'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)
+#   'allow_exp_bottle' - Allows the experience bottle, set to false to block
 #   'inventory_swap' - If true then creative and survival inventories will be swapped
 #   'track_blocks' - If true then creative mode blocks will be tracked where only creative mode players can break them
 #              (unless they have the permission "AntiShare.blockBypass")  
@@ -166,6 +167,7 @@ messages:
   drop_item: You can't do that!
   interact: You can't do that!
   eggs: You can't use the spawn eggs!
+  exp_bottle: You can't use experience bottles!
   inventory_swap: Your inventory has been changed.
   creativeModeBlock: You cannot break that block! It was placed by a creative mode player.
   bedrock: You cannot play with bedrock!
@@ -177,6 +179,7 @@ messages:
 other:
   only_if_creative: true
   allow_eggs: false
+  allow_exp_bottle: false
   inventory_swap: true
   track_blocks: true
   allow_bedrock: false
@@ -205,6 +208,7 @@ notifications:
     interact: true
     command: true
     egg: true
+    exp_bottle: true
     creative_block_break: true
     pvp: true
     mob-pvp: true
@@ -218,6 +222,7 @@ notifications:
     interact: false
     command: false
     egg: false
+    exp_bottle: false
     creative_block_break: false
     pvp: false
     mob-pvp: false

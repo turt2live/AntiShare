@@ -15,6 +15,7 @@ public enum NotificationType{
 	ILLEGAL_MOB_PVP,
 	ILLEGAL_EGG,
 	ILLEGAL_BEDROCK,
+	ILLEGAL_EXP_BOTTLE,
 
 	// LEGAL actions
 	LEGAL_BLOCK_PLACE,
@@ -29,6 +30,7 @@ public enum NotificationType{
 	LEGAL_MOB_PVP,
 	LEGAL_EGG,
 	LEGAL_BEDROCK,
+	LEGAL_EXP_BOTTLE,
 
 	// GENERAL actions
 	GAMEMODE_CHANGE,

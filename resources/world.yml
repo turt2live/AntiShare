@@ -17,6 +17,7 @@ messages:
   drop_item: global
   interact: global
   eggs: global
+  exp_bottle: global
   inventory_swap: global
   creativeModeBlock: global
   bedrock: global
@@ -28,6 +29,7 @@ messages:
 other:
   only_if_creative: global
   allow_eggs: global
+  allow_exp_bottle: global
   inventory_swap: global
   track_blocks: global
   allow_bedrock: global

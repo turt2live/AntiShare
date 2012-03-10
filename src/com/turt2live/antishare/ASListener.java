@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -257,6 +258,7 @@ public class ASListener implements Listener {
 				|| event.isCancelled()){
 			return;
 		}
+		String entityName = event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", "");
 		Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 		if(damager instanceof Player){
 			Player dealer = (Player) damager;
@@ -267,26 +269,27 @@ public class ASListener implements Listener {
 			}
 			//System.out.println("GM: " + dealer.getGameMode().toString());
 			if(event.getEntity() instanceof Player){
+				String targetName = ((Player) event.getEntity()).getName();
 				if(plugin.config().getBoolean("other.pvp", dealer.getWorld())){
-					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
+					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, targetName, null);
 					return;
 				}
 				if(!plugin.getPermissions().has(dealer, "AntiShare.pvp", dealer.getWorld())){
 					ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.pvp", event.getEntity().getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
+					ASNotification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, targetName, null);
 					event.setCancelled(true);
 				}
 			}else{
 				if(plugin.config().getBoolean("other.pvp-mobs", dealer.getWorld())){
-					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""), null);
+					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, entityName, null);
 					return;
 				}
 				if(!plugin.getPermissions().has(dealer, "AntiShare.mobpvp", dealer.getWorld())){
-					ASNotification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""), null);
+					ASNotification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, dealer, entityName, null);
 					ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.mobpvp", event.getEntity().getWorld()));
 					event.setCancelled(true);
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", ""), null);
+					ASNotification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, entityName, null);
 				}
 			}
 		}else if(damager instanceof Projectile){
@@ -294,15 +297,15 @@ public class ASListener implements Listener {
 			if(shooter instanceof Player){
 				Player dealer = ((Player) shooter);
 				if(!dealer.getGameMode().equals(GameMode.CREATIVE) && !plugin.config().onlyIfCreative(dealer)){
-					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
+					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
 					return;
 				}else if(!dealer.getGameMode().equals(GameMode.CREATIVE)){
-					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
+					ASNotification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
 					return;
 				}
 				if(!plugin.getPermissions().has(dealer, "AntiShare.pvp", dealer.getWorld())){
 					ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.pvp", dealer.getWorld()));
-					ASNotification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, ((Player) event.getEntity()).getName(), null);
+					ASNotification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
 					event.setCancelled(true);
 				}
 			}
@@ -441,7 +444,49 @@ public class ASListener implements Listener {
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPlayerInteract(PlayerInteractEvent event){
 		Player player = event.getPlayer();
-		if(event.isCancelled() || player == null || event.getClickedBlock() == null){
+		if(event.isCancelled() || player == null){
+			return;
+		}
+		//		// Exp Bottle Check (stuck here to avoid the null check)
+		//		if(plugin.config().getBoolean("other.allow_exp_bottle", player.getWorld()) == false){
+		//			boolean skip = false;
+		//			ItemStack possibleBottle = event.getItem();
+		//			if(possibleBottle != null){
+		//				if(!possibleBottle.getType().equals(Material.EXP_BOTTLE)){
+		//					skip = true;
+		//				}
+		//			}else{
+		//				skip = true;
+		//			}
+		//			possibleBottle = player.getItemInHand();
+		//			if(possibleBottle != null){
+		//				if(!possibleBottle.getType().equals(Material.EXP_BOTTLE)){
+		//					skip = true;
+		//				}
+		//			}else{
+		//				skip = true;
+		//			}
+		//			if(!skip){
+		//				if(plugin.getPermissions().has(player, "AntiShare.allow.exp", player.getWorld())){
+		//					ASNotification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+		//					return;
+		//				}
+		//				if(plugin.config().onlyIfCreative(player)){
+		//					if(player.getGameMode().equals(GameMode.CREATIVE)){
+		//						event.setCancelled(true);
+		//						ASNotification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+		//						ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
+		//					}else{
+		//						ASNotification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+		//					}
+		//				}else{
+		//					event.setCancelled(true);
+		//					ASNotification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+		//					ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
+		//				}
+		//			}
+		//		}
+		if(event.getClickedBlock() == null || event.isCancelled()){
 			return;
 		}
 		if(!plugin.getPermissions().has(player, "AntiShare.allow.interact", player.getWorld())
@@ -469,32 +514,63 @@ public class ASListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
+		boolean skip = false;
 		//Egg check
 		if(plugin.config().getBoolean("other.allow_eggs", player.getWorld()) == false){
 			ItemStack possibleEgg = event.getItem();
 			if(possibleEgg != null){
 				if(possibleEgg.getTypeId() != 383){
-					return;
+					skip = true;
 				}
 			}else{
-				return;
+				skip = true;
 			}
+			if(!skip){
+				if(plugin.getPermissions().has(player, "AntiShare.allow.eggs", player.getWorld())){
+					ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
+					return;
+				}
+				// At this point the player is not allowed to use eggs, and we are dealing with an egg
+				if(plugin.config().onlyIfCreative(player)){
+					if(player.getGameMode().equals(GameMode.CREATIVE)){
+						event.setCancelled(true);
+						ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
+					}else{
+						ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
+					}
+				}else{
+					event.setCancelled(true);
+					ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
+				}
+			}
+		}
+		if(event.isCancelled()){
+			return;
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onEggThrow(PlayerEggThrowEvent event){
+		Player player = event.getPlayer();
+		if(plugin.config().getBoolean("other.allow_eggs", player.getWorld()) == false){
 			if(plugin.getPermissions().has(player, "AntiShare.allow.eggs", player.getWorld())){
-				ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
+				ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "EGG", null);
 				return;
 			}
 			// At this point the player is not allowed to use eggs, and we are dealing with an egg
 			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
-					event.setCancelled(true);
-					ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
+					event.setHatching(false);
+					ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "EGG", null);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
 				}else{
-					ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
+					ASNotification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "EGG", null);
 				}
 			}else{
-				event.setCancelled(true);
-				ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
+				event.setHatching(false);
+				ASNotification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "EGG", null);
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
 			}
 		}

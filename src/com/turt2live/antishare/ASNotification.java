@@ -94,6 +94,11 @@ public class ASNotification {
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 			}
 			break;
+		case ILLEGAL_EXP_BOTTLE:
+			if(plugin.getConfig().getBoolean("notifications.illegal.exp_bottle")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use an " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+			}
+			break;
 		case ILLEGAL_BEDROCK:
 			if(plugin.getConfig().getBoolean("notifications.illegal.bedrock_attempt")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
@@ -172,6 +177,11 @@ public class ASNotification {
 		case LEGAL_EGG:
 			if(plugin.getConfig().getBoolean("notifications.legal.egg")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+			}
+			break;
+		case LEGAL_EXP_BOTTLE:
+			if(plugin.getConfig().getBoolean("notifications.legal.exp_bottle")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used an " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 			}
 			break;
 		case LEGAL_BEDROCK:
