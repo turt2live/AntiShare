@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -34,7 +35,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
-import com.turt2live.antishare.worldedit.ASRegion;
+import com.turt2live.antishare.regions.ASRegion;
 
 public class ASListener implements Listener {
 
@@ -424,6 +425,29 @@ public class ASListener implements Listener {
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.drop_item", player.getWorld()));
 			}
 		}
+		if(event.isCancelled()){
+			return;
+		}
+		// TODO
+		if(plugin.config().getBoolean("other.cannot_throw_into_regions", player.getWorld())){
+			Item item = event.getItemDrop();
+			ASRegion region = plugin.getRegionHandler().getRegion(item.getLocation());
+			if(!player.hasPermission("AntiShare.allow.throwIntoRegions")){
+				if(plugin.getRegionHandler().isRegion(item.getLocation())){
+					event.setCancelled(true);
+					ASNotification.sendNotification(NotificationType.ILLEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.throwItemIntoRegion", player.getWorld()));
+				}else{
+					if(region != null){
+						ASNotification.sendNotification(NotificationType.LEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
+					}
+				}
+			}else{
+				if(region != null){
+					ASNotification.sendNotification(NotificationType.LEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
+				}
+			}
+		}
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST)
@@ -617,9 +641,11 @@ public class ASListener implements Listener {
 			public void run(){
 				long time = System.currentTimeMillis();
 				while (player.getLocation().getWorld() != event.getTo().getWorld()){
-					if((System.currentTimeMillis() - time) >= 5000){
-						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] ERROR: World transfer inventory change took longer than 5 seconds!");
+					if((System.currentTimeMillis() - time) >= 10000){
+						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] ERROR: World transfer inventory change took longer than 10 seconds!");
 						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Please report this to turt2live! http://mc.turt2live.com/plugins/bug.php?simple&plugin=AntiShare");
+						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Please provide this next line in your bug report:");
+						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] FROM: " + event.getFrom().getWorld().getName() + " TO: " + event.getTo().getWorld().getName() + " LOC: " + player.getLocation().getWorld().getName());
 						return;
 					}
 				}

@@ -35,6 +35,8 @@
 #   'tracked-blocks' - The blocks the plugin should track and mark as "creative" blocks (if the player placing is in creative). This list is SPACE defined (see default)
 #                    You can set this to 'none' or '*' as well if you prefer, 'none' meaning don't track (set 'track_blocks' to false to reduce some possible lag), '*' meaning
 #                    track everything placed.
+#   'cannot_throw_into_regions' - If true, players (regardless of Game Mode) cannot throw items into regions (stand outside border, throw item into the region to be picked up).
+#                    See the permissions section for information on how to be exempt
 # 
 #   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
@@ -56,7 +58,8 @@
 #   'legal' - All the legal (allowed) actions, the name of the action relates to the action (eg: block_place means an legal block was placed)
 #   'general' - Everything else that doesn't fit into a category (illegal/legal)
 #             - Note: region_enter/exit is affected by a region's 'Show Message' property, you can read about these messages a bit further down
-#  
+#             - "drop_item_to_region" is fired when someone drops an item into a region (stands outside region border and throws the item into the region) 
+# 
 # Permissions:
 #   'AntiShare.allow.*' - Allow all events
 #   'AntiShare.allow.place' - Allow block placing
@@ -66,7 +69,8 @@
 #   'AntiShare.allow.interact' - Allow interactions
 #   'AntiShare.allow.eggs' - Allow eggs that spawn mobs
 #   'AntiShare.allow.commands' - Allow command usage (for specified commands)
-#   ** If you would like to deny an event, set the node to false (default is false)
+#   'AntiShare.allow.throwIntoRegions' - Allows the throwing of objects into regions
+#   ** If you would like to deny an event, set the node to false (all 'allow' nodes have a default of 'OP')
 #   ** By default, AntiShare assumes "Deny" on all creative mode players (or all players if 'onlyIfCreative' is set to false)
 #   'AntiShare.onlyIfCreative' - Only deny actions if the player is in creative mode, false to deny regardless of Game Mode (this is default FALSE)
 #   'AntiShare.onlyIfCreative.global' - Uses the configuration value and overrides the 'AntiShare.onlyIfCreative' permission (this is default TRUE)
@@ -176,6 +180,7 @@ messages:
   noBlockDrop: You will not get anything from breaking that!
   illegalCommand: You cannot use that command!
   worldSwap: You cannot transfer to that world!
+  throwItemIntoRegion: You cannot throw items into regions!
 other:
   only_if_creative: true
   allow_eggs: false
@@ -188,6 +193,7 @@ other:
   blockDrops: false
   worldTransfer: false
   tracked-blocks: '*'
+  cannot_throw_into_regions: true
 SQL:
   use: false
   host: localhost
@@ -214,6 +220,7 @@ notifications:
     mob-pvp: true
     bedrock_attempt: true
     world_transfer: true
+    drop_item_to_region: true
   legal:
     block_place: false
     block_break: false
@@ -228,6 +235,7 @@ notifications:
     mob-pvp: false
     bedrock_attempt: false
     world_transfer: false
+    drop_item_to_region: false
   general:
     gamemode_change: false
     region_enter: false

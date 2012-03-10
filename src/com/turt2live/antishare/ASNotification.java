@@ -104,6 +104,11 @@ public class ASNotification {
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 			}
 			break;
+		case ILLEGAL_ITEM_THROW_INTO_REGION:
+			if(plugin.getConfig().getBoolean("notifications.illegal.drop_item_to_region")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " threw an item into the region " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+			}
+			break;
 
 		// LEGAL actions
 		case LEGAL_BLOCK_PLACE:
@@ -187,6 +192,11 @@ public class ASNotification {
 		case LEGAL_BEDROCK:
 			if(plugin.getConfig().getBoolean("notifications.legal.bedrock_attempt")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+			}
+			break;
+		case LEGAL_ITEM_THROW_INTO_REGION:
+			if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " threw an item into the region " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 			}
 			break;
 

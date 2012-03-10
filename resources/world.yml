@@ -26,6 +26,7 @@ messages:
   noBlockDrop: global
   illegalCommand: global
   worldSwap: global
+  throwItemIntoRegion: global
 other:
   only_if_creative: global
   allow_eggs: global
@@ -37,3 +38,4 @@ other:
   pvp-mobs: global
   blockDrops: global
   worldTransfer: global
+  cannot_throw_into_regions: global

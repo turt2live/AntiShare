@@ -68,7 +68,6 @@ permissions:
         default: op
         children:
             AntiShare.allow.*: true
-            AntiShare.*: false
             AntiShare.reload: true
             AntiShare.noswap: true
             AntiShare.blockBypass: true
@@ -93,6 +92,7 @@ permissions:
             AntiShare.allow.eggs: true
             AntiShare.allow.commands: true
             AntiShare.allow.exp: true
+            AntiShare.allow.throwIntoRegions: true
     AntiShare.allow.place:
         description: allow place of defined blocks
         default: op
@@ -116,4 +116,7 @@ permissions:
         default: op
     AntiShare.allow.exp:
         description: allow use of experience bottles
+        default: op
+    AntiShare.allow.throwIntoRegions:
+        description: allow the throwing of items into regions
         default: op
