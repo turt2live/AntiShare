@@ -291,10 +291,10 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 		set(path, null);
 	}
 
-	@SuppressWarnings ({"rawtypes", "unchecked"})
+	@SuppressWarnings ("rawtypes")
 	@Override
-	public List<Object> getList(String path, List<?> def){
-		List<Object> list = (List<Object>) super.getList(path, def);
+	public List<?> getList(String path, List<?> def){
+		List<?> list = super.getList(path, def);
 		return list == null ? new ArrayList(0) : list;
 	}
 
@@ -309,7 +309,7 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 
 	// Replaces \n with System line.separator
 	@Override
-	public String saveToString(){
+	public String saveToString(){ // TODO: Custom YAML loader/saver?
 		String separator = System.getProperty("line.separator");
 		if(separator.equals("\n")){ // Do nothing
 			return super.saveToString();
