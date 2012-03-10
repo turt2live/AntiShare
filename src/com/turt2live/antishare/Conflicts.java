@@ -142,6 +142,10 @@ public class Conflicts {
 				OTHER_CONFLICT_PRESENT = true;
 				OTHER_CONFLICT = name;
 				break;
+			}else if(name.toLowerCase().startsWith("essentials")){
+				OTHER_CONFLICT_PRESENT = true;
+				OTHER_CONFLICT = name;
+				break;
 			}
 		}
 	}
