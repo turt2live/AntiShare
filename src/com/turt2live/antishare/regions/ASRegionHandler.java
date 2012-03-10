@@ -1,8 +1,9 @@
-package com.turt2live.antishare.worldedit;
+package com.turt2live.antishare.regions;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.Vector;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -220,6 +221,10 @@ public class ASRegionHandler {
 			player_information.remove(player.getName());
 		}
 		player_information.put(player.getName(), asPlayer);
+	}
+
+	public Vector<ASRegion> getRegionsNearby(Location location, int distance){
+		return plugin.storage.getRegionsNearby(location, distance);
 	}
 
 	// TODO: SQL Support

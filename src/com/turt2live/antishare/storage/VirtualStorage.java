@@ -3,6 +3,7 @@ package com.turt2live.antishare.storage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.Vector;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,8 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.enums.BlockedType;
-import com.turt2live.antishare.worldedit.ASRegion;
-import com.turt2live.antishare.worldedit.ASWorldEdit;
+import com.turt2live.antishare.regions.ASRegion;
+import com.turt2live.antishare.regions.ASWorldEdit;
 
 public class VirtualStorage implements Listener {
 
@@ -165,6 +166,10 @@ public class VirtualStorage implements Listener {
 
 	public ASRegion getRegion(Location location){
 		return worlds.get(location.getWorld()).getRegion(location);
+	}
+
+	public Vector<ASRegion> getRegionsNearby(Location location, int distance){
+		return worlds.get(location.getWorld()).getRegionsNearby(location, distance);
 	}
 
 	public void removeRegion(ASRegion region){

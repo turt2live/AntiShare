@@ -21,7 +21,7 @@ import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.enums.BlockedType;
-import com.turt2live.antishare.worldedit.ASRegion;
+import com.turt2live.antishare.regions.ASRegion;
 
 public class VirtualPerWorldStorage {
 
@@ -350,6 +350,39 @@ public class VirtualPerWorldStorage {
 			}
 		}
 		return null;
+	}
+
+	public Vector<ASRegion> getRegionsNearby(Location location, int distance){
+		Vector<ASRegion> regions = new Vector<ASRegion>();
+		for(ASRegion region : gamemode_regions){
+			// Top (Y)
+			if(Math.abs(region.getSelection().getMaximumPoint().getBlockY() - location.getBlockY()) <= distance){
+				regions.add(region);
+				continue;
+			}
+			// Side (X)
+			if(Math.abs(region.getSelection().getMaximumPoint().getBlockX() - location.getBlockX()) <= distance){
+				regions.add(region);
+				continue;
+			}
+			if(Math.abs(region.getSelection().getMinimumPoint().getBlockX() - location.getBlockX()) <= distance){
+				regions.add(region);
+				continue;
+			}
+			// Face  (Z)
+			if(Math.abs(region.getSelection().getMaximumPoint().getBlockZ() - location.getBlockZ()) <= distance){
+				regions.add(region);
+				continue;
+			}
+			if(Math.abs(region.getSelection().getMinimumPoint().getBlockZ() - location.getBlockZ()) <= distance){
+				regions.add(region);
+				continue;
+			}
+		}
+		if(regions.size() == 0){
+			return null;
+		}
+		return regions;
 	}
 
 	public boolean regionExists(ASRegion region){

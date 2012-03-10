@@ -13,9 +13,9 @@ import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.permissions.ASPermissionsHandler;
+import com.turt2live.antishare.regions.ASRegionHandler;
+import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.storage.VirtualStorage;
-import com.turt2live.antishare.worldedit.ASRegionHandler;
-import com.turt2live.antishare.worldedit.RegionKey;
 
 public class AntiShare extends PluginWrapper {
 

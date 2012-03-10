@@ -1,4 +1,4 @@
-package com.turt2live.antishare.worldedit;
+package com.turt2live.antishare.regions;
 
 import org.bukkit.GameMode;
 
