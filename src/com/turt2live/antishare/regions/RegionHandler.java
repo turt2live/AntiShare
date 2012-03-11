@@ -19,20 +19,20 @@ import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.enums.RegionKeyType;
-import com.turt2live.antishare.storage.ASVirtualInventory;
+import com.turt2live.antishare.storage.VirtualInventory;
 
-public class ASRegionHandler {
+public class RegionHandler {
 
 	private AntiShare plugin;
 	private boolean hasWorldEdit = false;
-	private ASWorldEdit worldedit;
-	private HashMap<String, ASRegionPlayer> player_information = new HashMap<String, ASRegionPlayer>();
+	private WorldEditHook worldedit;
+	private HashMap<String, RegionPlayer> player_information = new HashMap<String, RegionPlayer>();
 
-	public ASRegionHandler(AntiShare plugin){
+	public RegionHandler(AntiShare plugin){
 		this.plugin = plugin;
 		if(plugin.getServer().getPluginManager().getPlugin("WorldEdit") != null){
 			hasWorldEdit = true;
-			worldedit = new ASWorldEdit(plugin);
+			worldedit = new WorldEditHook(plugin);
 		}else{
 			AntiShare.log.warning("[" + plugin.getDescription().getFullName() + "] WorldEdit is not installed!");
 		}
@@ -144,7 +144,7 @@ public class ASRegionHandler {
 				changed = true;
 			}else if(value.equalsIgnoreCase("set")){
 				if(sender instanceof Player){
-					region.setInventory(ASVirtualInventory.getInventoryFromPlayer((Player) sender));
+					region.setInventory(VirtualInventory.getInventoryFromPlayer((Player) sender));
 					changed = true;
 				}else{
 					ASUtils.sendToPlayer(sender, ChatColor.RED + "You can't set an inventory from the console, only clear.");
@@ -197,9 +197,9 @@ public class ASRegionHandler {
 
 	public void checkRegion(Player player, Location newLocation, Location fromLocation){
 		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
-		ASRegionPlayer asPlayer = player_information.get(player.getName());
+		RegionPlayer asPlayer = player_information.get(player.getName());
 		if(asPlayer == null){
-			asPlayer = new ASRegionPlayer(player.getName());
+			asPlayer = new RegionPlayer(player.getName());
 		}
 		if(region != null){
 			if(!player.getGameMode().equals(region.getGameModeSwitch())
@@ -246,7 +246,7 @@ public class ASRegionHandler {
 				SQLManager sql = plugin.getSQLManager();
 				sql.deleteQuery("DELETE FROM AntiShare_RegionInfo");
 				for(String player : player_information.keySet()){
-					ASRegionPlayer asPlayer = player_information.get(player);
+					RegionPlayer asPlayer = player_information.get(player);
 					sql.insertQuery("INSERT INTO AntiShare_RegionInfo (player, region, gamemode) " +
 							"VALUES ('" + player + "', '"
 							+ (asPlayer.getLastRegion() != null ? asPlayer.getLastRegion().getUniqueID() : "none") + "', '"
@@ -267,7 +267,7 @@ public class ASRegionHandler {
 			EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
 			listing.load();
 			for(String player : player_information.keySet()){
-				ASRegionPlayer asPlayer = player_information.get(player);
+				RegionPlayer asPlayer = player_information.get(player);
 				listing.set(player + ".gamemode", asPlayer.getLastGameMode().name());
 				listing.set(player + ".region", (asPlayer.getLastRegion() != null) ? asPlayer.getLastRegion().getUniqueID() : "none");
 				listing.save();
@@ -290,7 +290,7 @@ public class ASRegionHandler {
 							if(!results.getString("region").equalsIgnoreCase("none")){
 								region = getRegionByID(results.getString("region"));
 							}
-							ASRegionPlayer asPlayer = new ASRegionPlayer(playerName);
+							RegionPlayer asPlayer = new RegionPlayer(playerName);
 							asPlayer.setLastGameMode(gamemode);
 							asPlayer.setLastRegion(region);
 							player_information.put(playerName, asPlayer);
@@ -317,7 +317,7 @@ public class ASRegionHandler {
 				if(!listing.getString(path + ".region").equalsIgnoreCase("none")){
 					region = getRegionByID(listing.getString(path + ".region"));
 				}
-				ASRegionPlayer asPlayer = new ASRegionPlayer(playerName);
+				RegionPlayer asPlayer = new RegionPlayer(playerName);
 				asPlayer.setLastGameMode(gamemode);
 				asPlayer.setLastRegion(region);
 				player_information.put(playerName, asPlayer);
@@ -329,7 +329,7 @@ public class ASRegionHandler {
 		return plugin;
 	}
 
-	public ASWorldEdit getWorldEditHandler(){
+	public WorldEditHook getWorldEditHandler(){
 		return worldedit;
 	}
 

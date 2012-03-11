@@ -24,7 +24,7 @@ import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.regions.ASRegion;
-import com.turt2live.antishare.regions.ASWorldEdit;
+import com.turt2live.antishare.regions.WorldEditHook;
 
 public class VirtualStorage implements Listener {
 
@@ -76,7 +76,7 @@ public class VirtualStorage implements Listener {
 		}
 	}
 
-	public ASVirtualInventory getInventoryManager(Player player, World world){
+	public VirtualInventory getInventoryManager(Player player, World world){
 		return worlds.get(world).getInventoryManager(player);
 	}
 
@@ -133,7 +133,7 @@ public class VirtualStorage implements Listener {
 	}
 
 	public void saveToDisk(){
-		ASWorldEdit.clean(plugin);
+		WorldEditHook.clean(plugin);
 		Set<World> worldListing = worlds.keySet();
 		for(World world : worldListing){
 			worlds.get(world).saveToDisk();

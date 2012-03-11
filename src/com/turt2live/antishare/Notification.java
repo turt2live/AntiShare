@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
 
-public class ASNotification {
+public class Notification {
 
 	public static void sendNotification(NotificationType type, AntiShare plugin, Player player, String variable, Material material){
 		if(!plugin.getConfig().getBoolean("notifications.send")){

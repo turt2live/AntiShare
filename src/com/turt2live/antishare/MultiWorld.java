@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
-public class ASMultiWorld {
+public class MultiWorld {
 
 	public static void detectWorlds(AntiShare plugin){
 		for(World w : Bukkit.getWorlds()){

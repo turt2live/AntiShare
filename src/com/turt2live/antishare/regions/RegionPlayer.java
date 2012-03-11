@@ -2,13 +2,13 @@ package com.turt2live.antishare.regions;
 
 import org.bukkit.GameMode;
 
-public class ASRegionPlayer {
+public class RegionPlayer {
 
 	private String player;
 	private ASRegion lastRegion;
 	private GameMode lastGameMode;
 
-	public ASRegionPlayer(String playername){
+	public RegionPlayer(String playername){
 		this.player = playername;
 	}
 

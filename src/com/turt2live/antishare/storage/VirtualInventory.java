@@ -18,7 +18,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 
-public class ASVirtualInventory {
+public class VirtualInventory {
 
 	private AntiShare plugin;
 	private Player player;
@@ -29,7 +29,7 @@ public class ASVirtualInventory {
 	private HashMap<Integer, ItemStack> previous = new HashMap<Integer, ItemStack>();
 	private boolean isInTemp = false;
 
-	public ASVirtualInventory(Player player, World world, AntiShare plugin){
+	public VirtualInventory(Player player, World world, AntiShare plugin){
 		this.player = player;
 		this.world = world;
 		this.plugin = plugin;

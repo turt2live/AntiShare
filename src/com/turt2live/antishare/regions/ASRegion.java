@@ -13,12 +13,12 @@ import org.bukkit.inventory.ItemStack;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.Selection;
-import com.turt2live.antishare.ASNotification;
+import com.turt2live.antishare.Notification;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.enums.NotificationType;
-import com.turt2live.antishare.storage.ASVirtualInventory;
+import com.turt2live.antishare.storage.VirtualInventory;
 
 public class ASRegion {
 
@@ -141,9 +141,9 @@ public class ASRegion {
 	public void alertEntry(Player player){
 		if(showEnterMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + enterMessage.replaceAll("\\{name\\}", name));
-			ASNotification.sendNotification(NotificationType.REGION_ENTER, player, name);
+			Notification.sendNotification(NotificationType.REGION_ENTER, player, name);
 			if(!plugin.getPermissions().has(player, "AntiShare.roam", world) && this.inventory != null){
-				ASVirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
+				VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
 				inventory.setTemporaryInventory(this.inventory);
 				inventory.loadToTemporary();
 			}
@@ -153,9 +153,9 @@ public class ASRegion {
 	public void alertExit(Player player){
 		if(showExitMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name));
-			ASNotification.sendNotification(NotificationType.REGION_EXIT, player, name);
+			Notification.sendNotification(NotificationType.REGION_EXIT, player, name);
 			if(!plugin.getPermissions().has(player, "AntiShare.roam", world)){
-				ASVirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
+				VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
 				if(inventory.isTemp()){
 					inventory.unloadFromTemporary();
 				}
@@ -222,7 +222,7 @@ public class ASRegion {
 			if(inventory != null){
 				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
 				if(inventory.size() > 0){
-					ASVirtualInventory.saveInventoryToDisk(saveFile, inventory, plugin);
+					VirtualInventory.saveInventoryToDisk(saveFile, inventory, plugin);
 				}
 			}else{
 				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");

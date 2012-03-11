@@ -7,11 +7,11 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
-public class ASConfig {
+public class Configuration {
 
 	private AntiShare plugin;
 
-	public ASConfig(AntiShare plugin){
+	public Configuration(AntiShare plugin){
 		this.plugin = plugin;
 	}
 

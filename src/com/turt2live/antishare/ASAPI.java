@@ -17,7 +17,7 @@ import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
 import com.turt2live.antishare.regions.ASRegion;
-import com.turt2live.antishare.regions.ASRegionHandler;
+import com.turt2live.antishare.regions.RegionHandler;
 import com.turt2live.antishare.storage.VirtualStorage;
 
 /**
@@ -615,7 +615,7 @@ public class ASAPI {
 	 * @param variable the variable. This is the red or green portion at the end of the notification
 	 */
 	public void sendNotification(NotificationType type, Player player, String variable){
-		ASNotification.sendNotification(type, player, variable);
+		Notification.sendNotification(type, player, variable);
 	}
 
 	/**
@@ -657,7 +657,7 @@ public class ASAPI {
 		new Thread(new Runnable(){
 			@Override
 			public void run(){
-				ASMultiWorld.detectWorlds(plugin);
+				MultiWorld.detectWorlds(plugin);
 			}
 		});
 		plugin.storage.reload();
@@ -677,7 +677,7 @@ public class ASAPI {
 		new Thread(new Runnable(){
 			@Override
 			public void run(){
-				ASMultiWorld.detectWorlds(plugin);
+				MultiWorld.detectWorlds(plugin);
 			}
 		});
 		plugin.storage.reload(sender);
@@ -817,7 +817,7 @@ public class ASAPI {
 	 * 
 	 * @return the region handler
 	 */
-	public ASRegionHandler getRegionHandler(){
+	public RegionHandler getRegionHandler(){
 		return plugin.getRegionHandler();
 	}
 

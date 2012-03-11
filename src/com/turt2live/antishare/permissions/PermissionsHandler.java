@@ -11,11 +11,11 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.turt2live.antishare.AntiShare;
 
-public class ASPermissionsHandler {
+public class PermissionsHandler {
 
 	private VaultPermission vault;
 
-	public ASPermissionsHandler(AntiShare plugin){
+	public PermissionsHandler(AntiShare plugin){
 		if(plugin.getServer().getPluginManager().getPlugin("Vault") != null){
 			vault = new VaultPermission(plugin);
 		}

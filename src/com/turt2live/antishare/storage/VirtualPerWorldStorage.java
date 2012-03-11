@@ -36,7 +36,7 @@ public class VirtualPerWorldStorage {
 	private Vector<Material> tracked_creative_blocks = new Vector<Material>();
 	private Vector<ASRegion> gamemode_regions = new Vector<ASRegion>();
 	private boolean blocked_bedrock = false;
-	private HashMap<Player, ASVirtualInventory> inventories = new HashMap<Player, ASVirtualInventory>();
+	private HashMap<Player, VirtualInventory> inventories = new HashMap<Player, VirtualInventory>();
 	public boolean blockDrops;
 
 	public VirtualPerWorldStorage(World world, AntiShare plugin){
@@ -69,9 +69,9 @@ public class VirtualPerWorldStorage {
 		inventories.remove(player);
 	}
 
-	public ASVirtualInventory getInventoryManager(Player player){
+	public VirtualInventory getInventoryManager(Player player){
 		if(!inventories.containsKey(player)){
-			inventories.put(player, new ASVirtualInventory(player, world, plugin));
+			inventories.put(player, new VirtualInventory(player, world, plugin));
 		}
 		return inventories.get(player);
 	}
@@ -120,7 +120,7 @@ public class VirtualPerWorldStorage {
 							if(Bukkit.getPlayer(username) != null){
 								Player player = Bukkit.getPlayer(username);
 								if(player.isOnline()){
-									inventories.put(player, new ASVirtualInventory(player, world, plugin));
+									inventories.put(player, new VirtualInventory(player, world, plugin));
 								}
 							}
 						}
@@ -140,7 +140,7 @@ public class VirtualPerWorldStorage {
 					if(Bukkit.getPlayer(username) != null){
 						Player player = Bukkit.getPlayer(username);
 						if(player.isOnline()){
-							inventories.put(player, new ASVirtualInventory(player, world, plugin));
+							inventories.put(player, new VirtualInventory(player, world, plugin));
 						}
 					}
 				}
@@ -335,7 +335,7 @@ public class VirtualPerWorldStorage {
 					region.setExitMessage(regionYAML.getString("exitMessage"));
 					region.setMessageOptions(enterMessage, exitMessage);
 					File saveFile = new File(plugin.getDataFolder() + "/region_inventories", region.getUniqueID() + ".yml");
-					region.setInventory(ASVirtualInventory.getInventoryFromDisk(saveFile, plugin));
+					region.setInventory(VirtualInventory.getInventoryFromDisk(saveFile, plugin));
 					gamemode_regions.add(region);
 				}
 			}

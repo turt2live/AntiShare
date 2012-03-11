@@ -13,12 +13,12 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 
-public class ASWorldEdit {
+public class WorldEditHook {
 
 	private AntiShare plugin;
 	private WorldEditPlugin wePlugin;
 
-	public ASWorldEdit(AntiShare plugin){
+	public WorldEditHook(AntiShare plugin){
 		this.plugin = plugin;
 		wePlugin = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 	}
