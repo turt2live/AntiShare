@@ -181,6 +181,14 @@ public class ASRegionHandler {
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + value + "' is!");
 			}
 			break;
+		case ENTER_MESSAGE:
+			region.setEnterMessage(value);
+			changed = true;
+			break;
+		case EXIT_MESSAGE:
+			region.setExitMessage(value);
+			changed = true;
+			break;
 		}
 		if(changed){
 			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region saved.");

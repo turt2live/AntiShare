@@ -100,6 +100,8 @@ public class SQLManager {
 				"  `showExit` int(11) NOT NULL," +
 				"  `world` varchar(100) NOT NULL," +
 				"  `uniqueID` varchar(100) NOT NULL," +
+				"  `enterMessage` varchar(300) NOT NULL," +
+				"  `exitMessage` varchar(300) NOT NULL," +
 				"  PRIMARY KEY (`id`)" +
 				")");
 		createQuery("CREATE TABLE IF NOT EXISTS `AntiShare_RegionInfo` (" +

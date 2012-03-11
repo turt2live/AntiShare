@@ -32,6 +32,8 @@ public class ASRegion {
 	private boolean showEnterMessage = true;
 	private boolean showExitMessage = true;
 	private HashMap<Integer, ItemStack> inventory;
+	private String enterMessage = "You entered '{name}'!";
+	private String exitMessage = "You left '{name}'!";
 
 	public ASRegion(Selection region, String setBy, GameMode gamemode){
 		this.region = region;
@@ -61,6 +63,9 @@ public class ASRegion {
 	}
 
 	public void setRegion(Selection selection){
+		if(selection == null){
+			return;
+		}
 		region = selection;
 	}
 
@@ -68,75 +73,24 @@ public class ASRegion {
 		this.inventory = inventory;
 	}
 
-	public void saveToDisk(){
-		boolean flatfile = true;
-		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
-			if(plugin.getSQLManager().isConnected()){
-				flatfile = false;
-				SQLManager sql = plugin.getSQLManager();
-				double mix = this.region.getMinimumPoint().getX();
-				double miy = this.region.getMinimumPoint().getY();
-				double miz = this.region.getMinimumPoint().getZ();
-				double max = this.region.getMaximumPoint().getX();
-				double may = this.region.getMaximumPoint().getY();
-				double maz = this.region.getMaximumPoint().getZ();
-				sql.insertQuery("INSERT INTO AntiShare_Regions (regionName, mix, miy, miz, max, may, maz, creator, gamemode, showEnter, showExit, world, uniqueID) " +
-						"VALUES ('" + name + "', '"
-						+ mix + "', '" + miy + "', '" + miz + "', '"
-						+ max + "', '" + may + "', '" + maz + "', '"
-						+ setBy + "', '" + gamemode.name() + "', '"
-						+ (showEnterMessage ? 1 : 0) + "', '" + (showExitMessage ? 1 : 0) + "', '" + world.getName() + "', '" + id + "')");
+	public void setEnterMessage(String message){
+		if(message == null){
+			message = "You entered '{name}'!";
+		}
+		enterMessage = message;
+	}
 
-			}
+	public void setExitMessage(String message){
+		if(message == null){
+			message = "You left '{name}'!";
 		}
-		if(flatfile){
-			File saveFolder = new File(plugin.getDataFolder(), "regions");
-			saveFolder.mkdirs();
-			File regionFile = new File(saveFolder, id + ".yml");
-			if(!regionFile.exists()){
-				try{
-					regionFile.createNewFile();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}else{
-				regionFile.delete();
-				try{
-					regionFile.createNewFile();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-			EnhancedConfiguration regionYAML = new EnhancedConfiguration(regionFile, plugin);
-			regionYAML.load();
-			regionYAML.set("worldName", world.getName());
-			regionYAML.set("mi-x", region.getMinimumPoint().getX());
-			regionYAML.set("mi-y", region.getMinimumPoint().getY());
-			regionYAML.set("mi-z", region.getMinimumPoint().getZ());
-			regionYAML.set("ma-x", region.getMaximumPoint().getX());
-			regionYAML.set("ma-y", region.getMaximumPoint().getY());
-			regionYAML.set("ma-z", region.getMaximumPoint().getZ());
-			regionYAML.set("set-by", setBy);
-			regionYAML.set("gamemode", gamemode.name());
-			regionYAML.set("name", name);
-			regionYAML.set("showEnter", showEnterMessage);
-			regionYAML.set("showExit", showExitMessage);
-			regionYAML.save();
-			if(inventory != null){
-				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
-				if(inventory.size() > 0){
-					ASVirtualInventory.saveInventoryToDisk(saveFile, inventory, plugin);
-				}
-			}else{
-				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
-				if(saveFile.exists()){
-					saveFile.delete();
-				}
-			}
-		}
+		exitMessage = message;
 	}
 
 	public boolean has(Location location){
+		if(location == null){
+			return false;
+		}
 		return region.contains(location);
 	}
 
@@ -172,13 +126,21 @@ public class ASRegion {
 		return id;
 	}
 
+	public String getEnterMessage(){
+		return enterMessage;
+	}
+
+	public String getExitMessage(){
+		return exitMessage;
+	}
+
 	public AntiShare getPlugin(){
 		return plugin;
 	}
 
 	public void alertEntry(Player player){
 		if(showEnterMessage){
-			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You entered '" + name + "'");
+			ASUtils.sendToPlayer(player, ChatColor.GOLD + enterMessage.replaceAll("\\{name\\}", name));
 			ASNotification.sendNotification(NotificationType.REGION_ENTER, player, name);
 			if(!plugin.getPermissions().has(player, "AntiShare.roam", world) && this.inventory != null){
 				ASVirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
@@ -190,12 +152,82 @@ public class ASRegion {
 
 	public void alertExit(Player player){
 		if(showExitMessage){
-			ASUtils.sendToPlayer(player, ChatColor.GOLD + "You left '" + name + "'");
+			ASUtils.sendToPlayer(player, ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name));
 			ASNotification.sendNotification(NotificationType.REGION_EXIT, player, name);
 			if(!plugin.getPermissions().has(player, "AntiShare.roam", world)){
 				ASVirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
 				if(inventory.isTemp()){
 					inventory.unloadFromTemporary();
+				}
+			}
+		}
+	}
+
+	public void saveToDisk(){
+		boolean flatfile = true;
+		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				flatfile = false;
+				SQLManager sql = plugin.getSQLManager();
+				double mix = this.region.getMinimumPoint().getX();
+				double miy = this.region.getMinimumPoint().getY();
+				double miz = this.region.getMinimumPoint().getZ();
+				double max = this.region.getMaximumPoint().getX();
+				double may = this.region.getMaximumPoint().getY();
+				double maz = this.region.getMaximumPoint().getZ();
+				sql.insertQuery("INSERT INTO AntiShare_Regions (regionName, mix, miy, miz, max, may, maz, creator, gamemode, showEnter, showExit, world, uniqueID, enterMessage, exitMessage) " +
+						"VALUES ('" + name + "', '"
+						+ mix + "', '" + miy + "', '" + miz + "', '"
+						+ max + "', '" + may + "', '" + maz + "', '"
+						+ setBy + "', '" + gamemode.name() + "', '"
+						+ (showEnterMessage ? 1 : 0) + "', '" + (showExitMessage ? 1 : 0) + "', '" + world.getName() + "', '" + id + "', '" + enterMessage + "', '" + exitMessage + "')");
+
+			}
+		}
+		if(flatfile){
+			File saveFolder = new File(plugin.getDataFolder(), "regions");
+			saveFolder.mkdirs();
+			File regionFile = new File(saveFolder, id + ".yml");
+			if(!regionFile.exists()){
+				try{
+					regionFile.createNewFile();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}else{
+				regionFile.delete();
+				try{
+					regionFile.createNewFile();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+			EnhancedConfiguration regionYAML = new EnhancedConfiguration(regionFile, plugin);
+			regionYAML.load();
+			regionYAML.set("worldName", world.getName());
+			regionYAML.set("mi-x", region.getMinimumPoint().getX());
+			regionYAML.set("mi-y", region.getMinimumPoint().getY());
+			regionYAML.set("mi-z", region.getMinimumPoint().getZ());
+			regionYAML.set("ma-x", region.getMaximumPoint().getX());
+			regionYAML.set("ma-y", region.getMaximumPoint().getY());
+			regionYAML.set("ma-z", region.getMaximumPoint().getZ());
+			regionYAML.set("set-by", setBy);
+			regionYAML.set("gamemode", gamemode.name());
+			regionYAML.set("name", name);
+			regionYAML.set("showEnter", showEnterMessage);
+			regionYAML.set("showExit", showExitMessage);
+			regionYAML.set("enterMessage", enterMessage);
+			regionYAML.set("exitMessage", exitMessage);
+			regionYAML.save();
+			if(inventory != null){
+				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
+				if(inventory.size() > 0){
+					ASVirtualInventory.saveInventoryToDisk(saveFile, inventory, plugin);
+				}
+			}else{
+				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
+				if(saveFile.exists()){
+					saveFile.delete();
 				}
 			}
 		}

@@ -293,6 +293,8 @@ public class VirtualPerWorldStorage {
 							boolean exitMessage = results.getInt("showExit") == 1;
 							ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
 							region.setUniqueID(results.getString("unqiueID"));
+							region.setEnterMessage(results.getString("enterMessage"));
+							region.setExitMessage(results.getString("exitMessage"));
 							region.setName(name);
 							region.setMessageOptions(enterMessage, exitMessage);
 							gamemode_regions.add(region);
@@ -329,6 +331,8 @@ public class VirtualPerWorldStorage {
 					ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
 					region.setUniqueID(regionFile.getName().replace(".yml", ""));
 					region.setName(name);
+					region.setEnterMessage(regionYAML.getString("enterMessage"));
+					region.setExitMessage(regionYAML.getString("exitMessage"));
 					region.setMessageOptions(enterMessage, exitMessage);
 					File saveFile = new File(plugin.getDataFolder() + "/region_inventories", region.getUniqueID() + ".yml");
 					region.setInventory(ASVirtualInventory.getInventoryFromDisk(saveFile, plugin));

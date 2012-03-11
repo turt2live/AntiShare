@@ -10,7 +10,9 @@ public class RegionKey {
 				|| key.equalsIgnoreCase("ShowExitMessage")
 				|| key.equalsIgnoreCase("inventory")
 				|| key.equalsIgnoreCase("area")
-				|| key.equalsIgnoreCase("gamemode")){
+				|| key.equalsIgnoreCase("gamemode")
+				|| key.equalsIgnoreCase("EnterMessage")
+				|| key.equalsIgnoreCase("ExitMessage")){
 			return true;
 		}
 		return false;
@@ -34,6 +36,12 @@ public class RegionKey {
 		}
 		if(key.equalsIgnoreCase("area")){
 			return RegionKeyType.SELECTION_AREA;
+		}
+		if(key.equalsIgnoreCase("entermessage")){
+			return RegionKeyType.ENTER_MESSAGE;
+		}
+		if(key.equalsIgnoreCase("exitmessage")){
+			return RegionKeyType.EXIT_MESSAGE;
 		}
 		return RegionKeyType.UNKNOWN;
 	}

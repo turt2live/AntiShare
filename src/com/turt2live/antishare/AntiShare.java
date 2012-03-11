@@ -23,7 +23,6 @@ public class AntiShare extends PluginWrapper {
 	 * Exp bottle blocks [WAITING ON API]
 	 * Conversation Configuration
 	 * (if possible) Per-region configuration
-	 * Regions: Change enter/exit messages
 	 * Fix 'throw items into regions'
 	 * "Ranked Chests" - Permission-ranked chests (LWC?)
 	 * No exp gain in creative
@@ -156,11 +155,13 @@ public class AntiShare extends PluginWrapper {
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "name " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<any name>");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "EnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<enter message>");
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<exit message>");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "'none'/'set'");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "survival/creative");
 									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "area " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "No Value");
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'ShowEnterMessage'" + ChatColor.WHITE + " - True to show a message when entering a region");
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'ShowExitMessage'" + ChatColor.WHITE + " - True to show a message when leaving a region");
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'Show____Message'" + ChatColor.WHITE + " - True to show the message");
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'____Message'" + ChatColor.WHITE + " - Use {name} to input the region name.");
 									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'inventory'" + ChatColor.WHITE + " - Sets the region's inventory. 'none' to not have a default inventory, 'set' to mirror yours");
 									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'area'" + ChatColor.WHITE + " - Sets the area based on your WorldEdit selection");
 								}else{
@@ -175,6 +176,12 @@ public class AntiShare extends PluginWrapper {
 							String name = args[1];
 							String key = args[2];
 							String value = args[3];
+							if(args.length > 4){
+								for(int i = 4; i < args.length; i++){ // Starts at args[4]
+									value = value + args[i] + " ";
+								}
+								value = value.substring(0, value.length() - 1);
+							}
 							if(regions.getRegionByName(name) == null){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "That region does not exist!");
 							}else{
