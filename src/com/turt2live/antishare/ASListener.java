@@ -48,11 +48,8 @@ public class ASListener implements Listener {
 		plugin = p;
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event){
-		if(event.isCancelled()){
-			return;
-		}
 		Player player = event.getPlayer();
 		if(player == null){
 			return;
@@ -176,9 +173,9 @@ public class ASListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event){
-		if(event.isCancelled() || event.getPlayer() == null){
+		if(event.getPlayer() == null){
 			return;
 		}
 		Player player = event.getPlayer();
@@ -255,7 +252,7 @@ public class ASListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event){
 		if(!(event instanceof EntityDamageByEntityEvent)
 				|| event.isCancelled()){
@@ -315,9 +312,8 @@ public class ASListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event){
-		// System.out.println("onDeath | " + event.getEntity());
 		if(event.getEntity() instanceof Player){
 			Player player = (Player) event.getEntity();
 			if(player == null){
@@ -351,12 +347,8 @@ public class ASListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityTarget(EntityTargetEvent event){
-		if(event.isCancelled()){
-			return;
-		}
-
 		Entity targetEntity = event.getTarget();
 		if(event.getEntity() instanceof Monster
 				&& targetEntity != null
@@ -378,12 +370,9 @@ public class ASListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event){
 		String commandSent = event.getMessage();
-		if(event.isCancelled()){
-			return;
-		}
 		Player sender = event.getPlayer();
 		if(plugin.getPermissions().has(sender, "AntiShare.allow.commands", sender.getWorld())){
 			ASNotification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent, null);
@@ -402,11 +391,8 @@ public class ASListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event){
-		if(event.isCancelled() || event.getPlayer() == null){
-			return;
-		}
 		Player player = event.getPlayer();
 		if(plugin.getPermissions().has(player, "AntiShare.allow.drop", player.getWorld())){
 			ASNotification.sendNotification(NotificationType.LEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
@@ -467,7 +453,7 @@ public class ASListener implements Listener {
 		ASNotification.sendNotification(NotificationType.GAMEMODE_CHANGE, plugin, player, event.getNewGameMode().toString(), null);
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event){
 		Player player = event.getPlayer();
 		if(event.isCancelled() || player == null){
@@ -572,9 +558,6 @@ public class ASListener implements Listener {
 				}
 			}
 		}
-		if(event.isCancelled()){
-			return;
-		}
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST)
@@ -607,13 +590,10 @@ public class ASListener implements Listener {
 		onPlayerTeleport(event);
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
 		if(plugin.getConflicts().INVENTORY_CONFLICT_PRESENT
 				|| plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT){
-			return;
-		}
-		if(event.isCancelled()){
 			return;
 		}
 		Player player = event.getPlayer();
@@ -629,11 +609,8 @@ public class ASListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler (ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event){
-		if(event.isCancelled()){
-			return;
-		}
 		plugin.getRegionHandler().checkRegion(event.getPlayer(), event.getTo(), event.getFrom());
 	}
 
