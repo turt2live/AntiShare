@@ -1,6 +1,7 @@
 package com.turt2live.antishare;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,15 +35,6 @@ public class ASAPI {
 	 */
 	public ASAPI(){
 		plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
-	}
-
-	/**
-	 * Forces a block into the creative mode block registry
-	 * 
-	 * @param block the block to add
-	 */
-	public void addBlockToCreativeRegistry(Block block){
-		plugin.storage.saveCreativeBlock(block, BlockedType.CREATIVE_BLOCK_PLACE, block.getWorld());
 	}
 
 	/**
@@ -541,12 +533,33 @@ public class ASAPI {
 	}
 
 	/**
-	 * The AntiShare plugin
+	 * Determines if 'only_if_creative' is on in a specific world
 	 * 
-	 * @return the AntiShare instance used within the server
+	 * @param world the world to test
+	 * @return true if creative-mode only is active in the world
 	 */
-	public AntiShare getPlugin(){
-		return plugin;
+	public boolean isOnlyIfCreativeOn(World world){
+		return plugin.config().getBoolean("other.only_if_creative", world);
+	}
+
+	/**
+	 * Determines if a player is subject to "only if creative" mode
+	 * 
+	 * @param player the player to test
+	 * @return true if the player has to be in creative to be blocked an action, false for denial regardless of game mode
+	 */
+	public boolean isOnlyIfCreativeOn(Player player){
+		return plugin.config().onlyIfCreative(player);
+	}
+
+	/**
+	 * Determines if an inventory swap will occur when switching Game Modes in a world
+	 * 
+	 * @param world the world to test
+	 * @return true if players will find their inventory changed in a world
+	 */
+	public boolean isSwapInventoriesOn(World world){
+		return plugin.config().getBoolean("other.inventory_swap", world);
 	}
 
 	/**
@@ -567,21 +580,21 @@ public class ASAPI {
 	}
 
 	/**
-	 * Gets the SQL Manager being used
+	 * Forces a block into the creative mode block registry
 	 * 
-	 * @return the SQL Manager instance
+	 * @param block the block to add
 	 */
-	public SQLManager getSQLManager(){
-		return plugin.getSQLManager();
+	public void addBlockToCreativeRegistry(Block block){
+		plugin.storage.saveCreativeBlock(block, BlockedType.CREATIVE_BLOCK_PLACE, block.getWorld());
 	}
 
 	/**
-	 * Gets the virtual storage system
+	 * Force remove a block from the creative-mode registry. Based on the block's world
 	 * 
-	 * @return the virtual storage
+	 * @param block the block, with world, to remove
 	 */
-	public VirtualStorage getStorage(){
-		return plugin.storage;
+	public void removeBlockFromCreativeRegistry(Block block){
+		plugin.storage.saveCreativeBlock(block, BlockedType.CREATIVE_BLOCK_BREAK, block.getWorld());
 	}
 
 	/**
@@ -595,23 +608,14 @@ public class ASAPI {
 	}
 
 	/**
-	 * Determines if 'only_if_creative' is on in a specific world
+	 * Sends a notification through the AntiShare notification system
 	 * 
-	 * @param world the world to test
-	 * @return true if creative-mode only is active in the world
+	 * @param type the notification type
+	 * @param player the player who is involved
+	 * @param variable the variable. This is the red or green portion at the end of the notification
 	 */
-	public boolean isOnlyIfCreativeOn(World world){
-		return plugin.config().getBoolean("other.only_if_creative", world);
-	}
-
-	/**
-	 * Determines if a player is subject to "only if creative" mode
-	 * 
-	 * @param player the player to test
-	 * @return true if the player has to be in creative to be blocked an action, false for denial regardless of game mode
-	 */
-	public boolean isOnlyIfCreativeOn(Player player){
-		return plugin.config().onlyIfCreative(player);
+	public void sendNotification(NotificationType type, Player player, String variable){
+		ASNotification.sendNotification(type, player, variable);
 	}
 
 	/**
@@ -633,16 +637,6 @@ public class ASAPI {
 	 */
 	public boolean isSQLEnabled(){
 		return plugin.getConfig().getBoolean("SQL.use");
-	}
-
-	/**
-	 * Determines if an inventory swap will occur when switching Game Modes in a world
-	 * 
-	 * @param world the world to test
-	 * @return true if players will find their inventory changed in a world
-	 */
-	public boolean isSwapInventoriesOn(World world){
-		return plugin.config().getBoolean("other.inventory_swap", world);
 	}
 
 	/**
@@ -687,26 +681,6 @@ public class ASAPI {
 			}
 		});
 		plugin.storage.reload(sender);
-	}
-
-	/**
-	 * Force remove a block from the creative-mode registry. Based on the block's world
-	 * 
-	 * @param block the block, with world, to remove
-	 */
-	public void removeBlockFromCreativeRegistry(Block block){
-		plugin.storage.saveCreativeBlock(block, BlockedType.CREATIVE_BLOCK_BREAK, block.getWorld());
-	}
-
-	/**
-	 * Sends a notification through the AntiShare notification system
-	 * 
-	 * @param type the notification type
-	 * @param player the player who is involved
-	 * @param variable the variable. This is the red or green portion at the end of the notification
-	 */
-	public void sendNotification(NotificationType type, Player player, String variable){
-		ASNotification.sendNotification(type, player, variable);
 	}
 
 	/**
@@ -823,11 +797,54 @@ public class ASAPI {
 	}
 
 	/**
+	 * Gets a vector of all regions nearby to the location (based off distance)<br>
+	 * "nearby" means that the edge (border) of the region is within (or equal) to the distance. <br>
+	 * For example: If a region is directly below the location, the region's roof would need to be within (or equal) to the distance<br>
+	 * <br>
+	 * <b>Note:</b> This does not use decimals, it uses blocks to determine distance.<br>
+	 * <b>Note:</b> The location's world is used to determine regions nearby
+	 * 
+	 * @param location the location to test at
+	 * @param distance the distance (in blocks) to look for regions
+	 * @return a Vector of all the regions nearby to the location
+	 */
+	public Vector<ASRegion> getRegionsNearby(Location location, int distance){
+		return plugin.getRegionHandler().getRegionsNearby(location, distance);
+	}
+
+	/**
 	 * Gets the region handler used by AntiShare
 	 * 
 	 * @return the region handler
 	 */
 	public ASRegionHandler getRegionHandler(){
 		return plugin.getRegionHandler();
+	}
+
+	/**
+	 * Gets the SQL Manager being used
+	 * 
+	 * @return the SQL Manager instance
+	 */
+	public SQLManager getSQLManager(){
+		return plugin.getSQLManager();
+	}
+
+	/**
+	 * Gets the virtual storage system
+	 * 
+	 * @return the virtual storage
+	 */
+	public VirtualStorage getStorage(){
+		return plugin.storage;
+	}
+
+	/**
+	 * The AntiShare plugin
+	 * 
+	 * @return the AntiShare instance used within the server
+	 */
+	public AntiShare getPlugin(){
+		return plugin;
 	}
 }

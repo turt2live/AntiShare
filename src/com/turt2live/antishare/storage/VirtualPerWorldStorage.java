@@ -390,6 +390,7 @@ public class VirtualPerWorldStorage {
 	}
 
 	public Vector<ASRegion> getRegionsNearby(Location location, int distance){
+		distance = Math.abs(distance);
 		Vector<ASRegion> regions = new Vector<ASRegion>();
 		for(ASRegion region : gamemode_regions){
 			// Top (Y)

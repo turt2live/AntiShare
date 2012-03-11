@@ -22,7 +22,6 @@ public class AntiShare extends PluginWrapper {
 	/* TODO: All this
 	 * Exp bottle blocks [WAITING ON API]
 	 * Conversation Configuration
-	 * Fix API (add all missing methods, restructure)
 	 * (if possible) Per-region configuration
 	 * Regions: Change enter/exit messages
 	 * Fix 'throw items into regions'
