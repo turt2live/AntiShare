@@ -1,4 +1,4 @@
-package com.turt2live.antishare.conversations.prompts;
+package com.turt2live.antishare.conversations.configuration;
 
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversable;
@@ -6,6 +6,7 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 
 import com.turt2live.antishare.ASUtils;
+import com.turt2live.antishare.conversations.ASMenu;
 
 public class EditConfigurationMenu extends ASMenu {
 

@@ -9,7 +9,6 @@ import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.ConversationPrefix;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.conversations.prompts.StartupMessage;
 
 public class ConfigurationConversation extends ConversationFactory {
 

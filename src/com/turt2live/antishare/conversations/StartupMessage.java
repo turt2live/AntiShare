@@ -1,4 +1,4 @@
-package com.turt2live.antishare.conversations.prompts;
+package com.turt2live.antishare.conversations;
 
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
