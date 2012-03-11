@@ -3,13 +3,11 @@ package com.turt2live.antishare.conversations.prompts;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.FixedSetPrompt;
 import org.bukkit.conversations.Prompt;
 
 import com.turt2live.antishare.ASUtils;
-import com.turt2live.antishare.conversations.ConfigurationConversation;
 
-public class MainMenu extends FixedSetPrompt implements ASMenu {
+public class MainMenu extends ASMenu {
 
 	public MainMenu(){
 		super("edit configuration", "edit config", "edit region", "add region", "permissions help", "perms", "perms help",
@@ -17,28 +15,9 @@ public class MainMenu extends FixedSetPrompt implements ASMenu {
 	}
 
 	@Override
-	protected boolean isInputValid(ConversationContext context, String input){
-		if(ConfigurationConversation.isValid(fixedSet, input)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	protected Prompt acceptValidatedInput(ConversationContext context, String input){
 		// TODO: Menus
 		return null;
-	}
-
-	@Override
-	protected String getFailedValidationText(ConversationContext context, String invalidInput){
-		return "Please enter one of the following: ";
-	}
-
-	@Override
-	public String getPromptText(ConversationContext context){
-		displayMenu(context.getForWhom());
-		return "Enter an option (" + ChatColor.DARK_AQUA + "dark aqua" + ChatColor.WHITE + " text) from above:";
 	}
 
 	@Override
