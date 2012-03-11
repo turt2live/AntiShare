@@ -10,14 +10,24 @@ import com.turt2live.antishare.ASUtils;
 public class MainMenu extends ASMenu {
 
 	public MainMenu(){
-		super("edit configuration", "edit config", "edit region", "add region", "permissions help", "perms", "perms help",
-				"/edit configuration", "/edit config", "/edit region", "/add region", "/permissions help", "/perms", "/perms help");
+		super("edit configuration", "edit config", "edit region", "add region", "permissions help", "permissions", "perms", "perms help",
+				"/edit configuration", "/edit config", "/edit region", "/add region", "/permissions help", "/permissions", "/perms", "/perms help");
 	}
 
 	@Override
 	protected Prompt acceptValidatedInput(ConversationContext context, String input){
-		// TODO: Menus
-		return null;
+		input = input.replace("/", "");
+		if(input.equalsIgnoreCase("edit configuration") || input.equalsIgnoreCase("edit config")){
+			return new EditConfigurationMenu();
+		}else if(input.equalsIgnoreCase("edit region")){
+			return new EditRegionMenu();
+		}else if(input.equalsIgnoreCase("add region")){
+			return new AddRegionMenu();
+		}else if(input.equalsIgnoreCase("permissions help") || input.equalsIgnoreCase("perms help")
+				|| input.equalsIgnoreCase("permissions") || input.equalsIgnoreCase("perms")){
+			return new PermissionsMenu();
+		}
+		return Prompt.END_OF_CONVERSATION;
 	}
 
 	@Override
