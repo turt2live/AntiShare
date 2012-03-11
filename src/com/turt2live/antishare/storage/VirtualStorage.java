@@ -172,6 +172,14 @@ public class VirtualStorage implements Listener {
 		return worlds.get(location.getWorld()).getRegionsNearby(location, distance);
 	}
 
+	public Vector<ASRegion> getAllRegions(){
+		Vector<ASRegion> regions = new Vector<ASRegion>();
+		for(World world : worlds.keySet()){
+			regions.addAll(worlds.get(world).getAllRegions());
+		}
+		return regions;
+	}
+
 	public void removeRegion(ASRegion region){
 		File regionFile = new File(plugin.getDataFolder() + "/regions", region.getUniqueID() + ".yml");
 		if(regionFile.exists()){

@@ -58,7 +58,7 @@ permissions:
         description: stops the sending of notifications from the player
         default: op
     AntiShare.regions:
-        description: allows creating/removing of GameMode regions
+        description: allows creating/removing/listing of GameMode regions
         default: op
     AntiShare.roam:
         description: allows roaming through GameMode regions without being affected

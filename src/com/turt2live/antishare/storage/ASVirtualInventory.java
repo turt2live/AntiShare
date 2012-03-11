@@ -54,9 +54,11 @@ public class ASVirtualInventory {
 		HashMap<Integer, ItemStack> current = getCurrentInventory();
 		HashMap<Integer, ItemStack> proper = getInventory(player.getGameMode());
 		for(Integer slot : current.keySet()){
-			if(!current.get(slot).equals(proper.get(slot))){
-				switchInventories((player.getGameMode().equals(GameMode.SURVIVAL) ? GameMode.CREATIVE : GameMode.SURVIVAL), player.getGameMode());
-				return;
+			if(current.get(slot) != null && proper.get(slot) != null){
+				if(!current.get(slot).equals(proper.get(slot))){
+					switchInventories((player.getGameMode().equals(GameMode.SURVIVAL) ? GameMode.CREATIVE : GameMode.SURVIVAL), player.getGameMode());
+					return;
+				}
 			}
 		}
 	}

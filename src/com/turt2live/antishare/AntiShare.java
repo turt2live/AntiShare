@@ -1,6 +1,7 @@
 package com.turt2live.antishare;
 
 import java.io.File;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -13,6 +14,7 @@ import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.permissions.ASPermissionsHandler;
+import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.ASRegionHandler;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.storage.VirtualStorage;
@@ -193,9 +195,43 @@ public class AntiShare extends PluginWrapper {
 								}
 							}
 						}
-					}else if(args[0].equalsIgnoreCase("listregions")){
-						// TODO Region listing
-						// Note: args[2] can equal a number, or may not exist. # = page
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("listregions")){
+					if(perms.has(sender, "AntiShare.regions")){
+						int page = 1;
+						if(args.length >= 2){
+							try{
+								page = Integer.parseInt(args[1]);
+							}catch(Exception e){
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "'" + args[1] + "' is not a number!");
+								return true;
+							}
+						}
+						page = Math.abs(page);
+						int resultsPerPage = 6; // For ease of changing
+						Vector<ASRegion> regions = storage.getAllRegions();
+						if(regions == null){
+
+						}
+						int maxPages = (int) Math.ceil(regions.size() / resultsPerPage);
+						if(maxPages < 1){
+							maxPages = 1;
+						}
+						if(maxPages < page){
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "Page " + page + " does not exist! The last page is " + maxPages);
+							return true;
+						}
+						String pagenation = ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "AntiShare Regions " + ChatColor.DARK_GREEN + "|" + ChatColor.GREEN + " Page " + page + "/" + maxPages + ChatColor.DARK_GREEN + " ]=======";
+						ASUtils.sendToPlayer(sender, pagenation);
+						for(int i = ((page - 1) * resultsPerPage); i < (resultsPerPage < regions.size() ? (resultsPerPage * page) : regions.size()); i++){
+							ASUtils.sendToPlayer(sender, ChatColor.DARK_AQUA + "#" + (i + 1) + " " + ChatColor.GOLD + regions.get(i).getName()
+									+ ChatColor.YELLOW + " Created By: " + ChatColor.AQUA + regions.get(i).getWhoSet()
+									+ ChatColor.YELLOW + " World: " + ChatColor.AQUA + regions.get(i).getWorld().getName());
+						}
+						ASUtils.sendToPlayer(sender, pagenation);
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}

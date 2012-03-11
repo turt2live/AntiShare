@@ -75,7 +75,7 @@
 #   'AntiShare.onlyIfCreative' - Only deny actions if the player is in creative mode, false to deny regardless of Game Mode (this is default FALSE)
 #   'AntiShare.onlyIfCreative.global' - Uses the configuration value and overrides the 'AntiShare.onlyIfCreative' permission (this is default TRUE)
 #   'AntiShare.reload' - Permission to use /antishare reload
-#   'AntiShare.regions' - Permission to set/remove GameMode Regions
+#   'AntiShare.regions' - Permission to set/remove/list GameMode Regions
 #   'AntiShare.roam' - If set as true, the target can roam through regions without having their gamemode change
 #   'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched
 #   'AntiShare.blockBypass' - If true, then the player can bypass the "Creative mode players can only break this block" message

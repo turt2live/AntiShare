@@ -431,6 +431,10 @@ public class VirtualPerWorldStorage {
 		return gamemode_regions.contains(region);
 	}
 
+	public Vector<ASRegion> getAllRegions(){
+		return gamemode_regions;
+	}
+
 	public void saveToDisk(){
 		// Clear SQL
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
