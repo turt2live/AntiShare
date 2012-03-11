@@ -312,56 +312,138 @@ public class ASVirtualInventory {
 		return newInventory;
 	}
 
-	// TODO: SQL Support
-	public static void saveInventoryToFile(File file, HashMap<Integer, ItemStack> inventory, AntiShare plugin){
-		if(inventory == null){
+	public static void saveInventoryToDisk(File file, HashMap<Integer, ItemStack> inventory, AntiShare plugin){
+		if(inventory == null || file == null || plugin == null){
 			return;
 		}
 		if(inventory.size() <= 0){
 			return;
 		}
-		try{
-			File sdir = file.getParentFile();
-			sdir.mkdirs();
-			File saveFile = file;
-			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
-			if(!config.load()){
-				AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+		boolean flatfile = true;
+		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				SQLManager sql = plugin.getSQLManager();
+				for(Integer slot : inventory.keySet()){
+					ItemStack item = inventory.get(slot);
+					String id = item.getTypeId() + "";
+					String name = item.getType().name();
+					String durability = item.getDurability() + "";
+					String amount = item.getAmount() + "";
+					String data = item.getData().getData() + "";
+					String enchant = "";
+					Set<Enchantment> enchantsSet = item.getEnchantments().keySet();
+					Map<Enchantment, Integer> enchantsMap = item.getEnchantments();
+					for(Enchantment e : enchantsSet){
+						enchant = enchant + e.getId() + "|" + enchantsMap.get(e) + " ";
+					}
+					if(enchant.length() > 0){
+						enchant = enchant.substring(0, enchant.length() - 1);
+					}
+					sql.insertQuery("INSERT INTO AntiShare_MiscInventory (uniqueID, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant) " +
+							"VALUES ('" + file.getName() + "', '" + slot + "', '" + id + "', '" + name + "', '" + durability + "', '" + amount + "', '" + data + "', '" + enchant + "')");
+				}
+				flatfile = false;
 			}
-			for(Integer slot : inventory.keySet()){
-				config.set(String.valueOf(slot), inventory.get(slot));
-				if(!config.save()){
-					AntiShare.log.severe("[AntiShare] CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
+		}
+		if(flatfile){
+			if(file.exists()){
+				file.delete();
+				try{
+					file.createNewFile();
+				}catch(Exception e){
+					e.printStackTrace();
 				}
 			}
-		}catch(Exception e){
-			e.printStackTrace();
+			try{
+				File sdir = file.getParentFile();
+				sdir.mkdirs();
+				File saveFile = file;
+				EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
+				if(!config.load()){
+					AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+				}
+				for(Integer slot : inventory.keySet()){
+					config.set(String.valueOf(slot), inventory.get(slot));
+					if(!config.save()){
+						AntiShare.log.severe("[AntiShare] CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
+					}
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 
-	// TODO: SQL Support
-	public static HashMap<Integer, ItemStack> getInventoryFromFile(File file, AntiShare plugin){
-		HashMap<Integer, ItemStack> inventoryMap = new HashMap<Integer, ItemStack>();
-		if(!file.exists()){
+	public static HashMap<Integer, ItemStack> getInventoryFromDisk(File file, AntiShare plugin){
+		if(file == null || plugin == null){
 			return null;
 		}
-		try{
-			File sdir = new File(plugin.getDataFolder(), "inventories");
-			sdir.mkdirs();
-			File saveFile = file;
-			if(!saveFile.exists()){
-				saveFile.createNewFile();
+		HashMap<Integer, ItemStack> inventoryMap = new HashMap<Integer, ItemStack>();
+		boolean flatfile = true;
+		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				SQLManager sql = plugin.getSQLManager();
+				ResultSet inventory = sql.getQuery("SELECT * FROM AntiShare_MiscInventory WHERE uniqueID='" + file.getName() + "'");
+				try{
+					if(inventory != null){
+						while (inventory.next()){
+							int slot = inventory.getInt("slot");
+							int id = inventory.getInt("itemID");
+							String durability = inventory.getString("itemDurability");
+							int amount = inventory.getInt("itemAmount");
+							byte data = Byte.parseByte(inventory.getString("itemData"));
+							String enchants[] = inventory.getString("itemEnchant").split(" ");
+							ItemStack item = new ItemStack(id);
+							item.setAmount(amount);
+							MaterialData itemData = item.getData();
+							itemData.setData(data);
+							item.setData(itemData);
+							item.setDurability(Short.parseShort(durability));
+							if(inventory.getString("itemEnchant").length() > 0){
+								for(String enchant : enchants){
+									String parts[] = enchant.split("\\|");
+									String enchantID = parts[0];
+									int level = Integer.parseInt(parts[1]);
+									Enchantment e = Enchantment.getById(Integer.parseInt(enchantID));
+									item.addEnchantment(e, level);
+								}
+							}
+							inventoryMap.put(slot, item);
+						}
+					}
+					flatfile = false;
+				}catch(SQLException e){
+					AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle misc inventory: " + e.getMessage());
+				}
 			}
-			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
-			if(!config.load()){
-				AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+		}
+		if(flatfile){
+			if(file.exists()){
+				file.delete();
+				try{
+					file.createNewFile();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 			}
-			Set<String> keys = config.getConfigurationSection("").getKeys(false);
-			for(String key : keys){
-				inventoryMap.put(Integer.valueOf(key), config.getItemStack(key));
+			try{
+				File sdir = new File(plugin.getDataFolder(), "inventories");
+				sdir.mkdirs();
+				File saveFile = file;
+				if(!saveFile.exists()){
+					saveFile.createNewFile();
+				}
+				EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
+				if(!config.load()){
+					AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+				}
+				Set<String> keys = config.getConfigurationSection("").getKeys(false);
+				for(String key : keys){
+					inventoryMap.put(Integer.valueOf(key), config.getItemStack(key));
+				}
+			}catch(Exception e){
+				e.printStackTrace();
 			}
-		}catch(Exception e){
-			e.printStackTrace();
 		}
 		return inventoryMap;
 	}

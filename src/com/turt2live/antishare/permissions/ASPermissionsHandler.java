@@ -21,6 +21,16 @@ public class ASPermissionsHandler {
 		}
 	}
 
+	public String[] getGroups(Player player){
+		if(vault != null){
+			return vault.getGroups(player);
+		}else{
+			String[] group = new String[1];
+			group[0] = player.isOp() ? "OP" : "NON-OP";
+			return group;
+		}
+	}
+
 	public boolean has(Player player, String node, World world){
 		if(vault != null){
 			return vault.has(player, node, world);
@@ -56,6 +66,10 @@ public class ASPermissionsHandler {
 		public VaultPermission(AntiShare plugin){
 			RegisteredServiceProvider<Permission> rsp = plugin.getServer().getServicesManager().getRegistration(Permission.class);
 			perms = rsp.getProvider();
+		}
+
+		public String[] getGroups(Player player){
+			return perms.getPlayerGroups(player);
 		}
 
 		public boolean has(OfflinePlayer player, String node, World world){

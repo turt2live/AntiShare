@@ -21,7 +21,6 @@ public class AntiShare extends PluginWrapper {
 
 	/* TODO: All this
 	 * Exp bottle blocks [WAITING ON API]
-	 * SQL Support where listed
 	 * Conversation Configuration
 	 * Fix API (add all missing methods, restructure)
 	 * (if possible) Per-region configuration

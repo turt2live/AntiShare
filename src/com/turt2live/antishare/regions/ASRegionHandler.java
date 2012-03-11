@@ -1,6 +1,8 @@
 package com.turt2live.antishare.regions;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
@@ -15,6 +17,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.enums.RegionKeyType;
 import com.turt2live.antishare.storage.ASVirtualInventory;
 
@@ -227,47 +230,90 @@ public class ASRegionHandler {
 		return plugin.storage.getRegionsNearby(location, distance);
 	}
 
-	// TODO: SQL Support
 	public void saveStatusToDisk(){
-		File saveFile = new File(plugin.getDataFolder(), "region_saves.yml");
-		if(saveFile.exists()){
-			saveFile.delete();
-			try{
-				saveFile.createNewFile();
-			}catch(Exception e){
-				e.printStackTrace();
+		boolean flatfile = true;
+		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				flatfile = false;
+				SQLManager sql = plugin.getSQLManager();
+				sql.deleteQuery("DELETE FROM AntiShare_RegionInfo");
+				for(String player : player_information.keySet()){
+					ASRegionPlayer asPlayer = player_information.get(player);
+					sql.insertQuery("INSERT INTO AntiShare_RegionInfo (player, region, gamemode) " +
+							"VALUES ('" + player + "', '"
+							+ (asPlayer.getLastRegion() != null ? asPlayer.getLastRegion().getUniqueID() : "none") + "', '"
+							+ asPlayer.getLastGameMode().name() + "')");
+				}
 			}
 		}
-		EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
-		listing.load();
-		for(String player : player_information.keySet()){
-			ASRegionPlayer asPlayer = player_information.get(player);
-			listing.set(player + ".gamemode", asPlayer.getLastGameMode().name());
-			listing.set(player + ".region", (asPlayer.getLastRegion() != null) ? asPlayer.getLastRegion().getUniqueID() : "none");
-			listing.save();
+		if(flatfile){
+			File saveFile = new File(plugin.getDataFolder(), "region_saves.yml");
+			if(saveFile.exists()){
+				saveFile.delete();
+				try{
+					saveFile.createNewFile();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+			EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
+			listing.load();
+			for(String player : player_information.keySet()){
+				ASRegionPlayer asPlayer = player_information.get(player);
+				listing.set(player + ".gamemode", asPlayer.getLastGameMode().name());
+				listing.set(player + ".region", (asPlayer.getLastRegion() != null) ? asPlayer.getLastRegion().getUniqueID() : "none");
+				listing.save();
+			}
 		}
 	}
 
-	// TODO: SQL Support
 	public void load(){
-		File saveFile = new File(plugin.getDataFolder(), "region_saves.yml");
-		if(!saveFile.exists()){
-			return;
-		}
-		EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
-		listing.load();
-		Set<String> section = listing.getConfigurationSection("").getKeys(false);
-		for(String path : section){
-			String playerName = path;
-			GameMode gamemode = GameMode.valueOf(listing.getString(path + ".gamemode"));
-			ASRegion region = null;
-			if(!listing.getString(path + ".region").equalsIgnoreCase("none")){
-				region = getRegionByID(listing.getString(path + ".region"));
+		boolean flatfile = true;
+		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+			if(plugin.getSQLManager().isConnected()){
+				SQLManager sql = plugin.getSQLManager();
+				ResultSet results = sql.getQuery("SELECT * FROM AntiShare_RegionInfo");
+				try{
+					if(results != null){
+						while (results.next()){
+							String playerName = results.getString("player");
+							GameMode gamemode = GameMode.valueOf(results.getString("gamemode"));
+							ASRegion region = null;
+							if(!results.getString("region").equalsIgnoreCase("none")){
+								region = getRegionByID(results.getString("region"));
+							}
+							ASRegionPlayer asPlayer = new ASRegionPlayer(playerName);
+							asPlayer.setLastGameMode(gamemode);
+							asPlayer.setLastRegion(region);
+							player_information.put(playerName, asPlayer);
+						}
+					}
+					flatfile = false;
+				}catch(SQLException e){
+					AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle region information: " + e.getMessage());
+				}
 			}
-			ASRegionPlayer asPlayer = new ASRegionPlayer(playerName);
-			asPlayer.setLastGameMode(gamemode);
-			asPlayer.setLastRegion(region);
-			player_information.put(playerName, asPlayer);
+		}
+		if(flatfile){
+			File saveFile = new File(plugin.getDataFolder(), "region_saves.yml");
+			if(!saveFile.exists()){
+				return;
+			}
+			EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
+			listing.load();
+			Set<String> section = listing.getConfigurationSection("").getKeys(false);
+			for(String path : section){
+				String playerName = path;
+				GameMode gamemode = GameMode.valueOf(listing.getString(path + ".gamemode"));
+				ASRegion region = null;
+				if(!listing.getString(path + ".region").equalsIgnoreCase("none")){
+					region = getRegionByID(listing.getString(path + ".region"));
+				}
+				ASRegionPlayer asPlayer = new ASRegionPlayer(playerName);
+				asPlayer.setLastGameMode(gamemode);
+				asPlayer.setLastRegion(region);
+				player_information.put(playerName, asPlayer);
+			}
 		}
 	}
 
