@@ -24,7 +24,6 @@ public class AntiShare extends PluginWrapper {
 	/* TODO: All this
 	 * Exp bottle blocks [WAITING ON API]
 	 * Conversation Configuration
-	 * (if possible) Per-region configuration
 	 * Fix 'throw items into regions'
 	 * "Ranked Chests" - Permission-ranked chests (LWC?)
 	 * No exp gain in creative
