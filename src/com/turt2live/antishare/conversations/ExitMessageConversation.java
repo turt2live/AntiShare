@@ -9,17 +9,15 @@ public class ExitMessageConversation implements ConversationCanceller {
 
 	private Conversation conversation;
 
-	// No Constructor
-
 	@Override
 	public boolean cancelBasedOnInput(ConversationContext context, String input){
-		if(input.equalsIgnoreCase("/quit")){
+		if(input.toLowerCase().startsWith("/quit") || input.toLowerCase().startsWith("quit")){
 			context.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.DARK_RED + "Session closed. Data not saved.");
+			conversation.getContext().setSessionData("terminate", "message");
 			return true;
-		}else if(input.equalsIgnoreCase("/save-all")){
-			context.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.DARK_GREEN + "Session closed. Data saved.");
+		}else if(input.toLowerCase().startsWith("/save") || input.toLowerCase().startsWith("save")){
+			context.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.DARK_GREEN + "Data saved.");
 			// TODO: Save data
-			return true;
 		}
 		return false;
 	}

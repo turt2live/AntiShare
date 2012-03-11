@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.InactivityConversationCanceller;
 
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 
 public class ExitInactiveConversation extends InactivityConversationCanceller {
@@ -36,8 +37,9 @@ public class ExitInactiveConversation extends InactivityConversationCanceller {
 
 	@Override
 	protected void cancelling(Conversation conversation){
-		conversation.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.DARK_RED + "Session closed, no data saved.");
-		conversation.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.RED + "Your session was closed due to " + time + " of inactivity.");
+		ASUtils.sendToConversable(conversation.getForWhom(), ChatColor.DARK_RED + "Session closed. Unsaved data was not saved.");
+		ASUtils.sendToConversable(conversation.getForWhom(), ChatColor.RED + "You were inactive for " + time + ".");
+		conversation.getContext().setSessionData("terminate", "timeout;" + time);
 		super.cancelling(conversation);
 	}
 

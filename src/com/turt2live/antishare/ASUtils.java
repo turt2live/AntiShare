@@ -8,6 +8,7 @@ import java.io.OutputStream;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.Conversable;
 
 public class ASUtils {
 	public static String addColor(String message){
@@ -48,6 +49,20 @@ public class ASUtils {
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.WHITE + message;
 			}
 			target.sendMessage(message);
+		}
+	}
+
+	public static void sendToConversable(Conversable target, String message){
+		if(!message.equalsIgnoreCase("nomsg")
+				&& !message.equalsIgnoreCase("no message")
+				&& !message.equalsIgnoreCase("none")
+				&& !message.equalsIgnoreCase("noshow")
+				&& !message.equalsIgnoreCase("no show")){
+			message = addColor(message);
+			if(!ChatColor.stripColor(message).startsWith("[AntiShare]")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.WHITE + message;
+			}
+			target.sendRawMessage(message);
 		}
 	}
 
