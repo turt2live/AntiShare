@@ -37,7 +37,6 @@ public class ExitInactiveConversation extends InactivityConversationCanceller {
 
 	@Override
 	protected void cancelling(Conversation conversation){
-		ASUtils.sendToConversable(conversation.getForWhom(), ChatColor.DARK_RED + "Session closed. Unsaved data was not saved.");
 		ASUtils.sendToConversable(conversation.getForWhom(), ChatColor.RED + "You were inactive for " + time + ".");
 		conversation.getContext().setSessionData("terminate", "timeout;" + time);
 		super.cancelling(conversation);

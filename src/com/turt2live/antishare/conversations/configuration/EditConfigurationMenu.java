@@ -7,18 +7,31 @@ import org.bukkit.conversations.Prompt;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.conversations.ASMenu;
+import com.turt2live.antishare.conversations.MainMenu;
 
 public class EditConfigurationMenu extends ASMenu {
 
 	public EditConfigurationMenu(){
-		super("events", "messages", "notifications", "sql", "other",
-				"/events", "/messages", "/notifications", "/sql", "/other");
+		super("events", "messages", "notifications", "sql", "other");
 	}
 
 	@Override
 	protected Prompt acceptValidatedInput(ConversationContext context, String input){
-		// TODO Auto-generated method stub
-		return null;
+		input = input.replaceFirst("/", "");
+		if(input.equalsIgnoreCase("events")){
+			return new EventEditor();
+		}else if(input.equalsIgnoreCase("messages")){
+			return new MessageEditor();
+		}else if(input.equalsIgnoreCase("notifications")){
+			return new NotificationEditor();
+		}else if(input.equalsIgnoreCase("sql")){
+			return new SQLEditor();
+		}else if(input.equalsIgnoreCase("other")){
+			return new OtherEditor();
+		}else if(input.equalsIgnoreCase("back")){
+			return new MainMenu();
+		}
+		return new EditConfigurationMenu();
 	}
 
 	@Override

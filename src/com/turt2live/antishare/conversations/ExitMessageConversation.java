@@ -13,15 +13,10 @@ public class ExitMessageConversation implements ConversationCanceller {
 
 	@Override
 	public boolean cancelBasedOnInput(ConversationContext context, String input){
-		if(input.toLowerCase().startsWith("/quit") || input.toLowerCase().startsWith("quit")){
-			context.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.DARK_RED + "Session closed. Unsaved data was not saved");
-			conversation.getContext().setSessionData("terminate", "message");
+		input = input.replaceFirst("/", "");
+		if(input.toLowerCase().startsWith("quit") || input.toLowerCase().startsWith("exit")){
 			return true;
-		}else if(input.toLowerCase().startsWith("/save") || input.toLowerCase().startsWith("save")){
-			context.getForWhom().sendRawMessage(ConfigurationConversation.PREFIX + ChatColor.DARK_GREEN + "Data saved.");
-			// TODO: Save data
-		}else if(input.toLowerCase().startsWith("/main") || input.toLowerCase().startsWith("main")
-				|| input.toLowerCase().startsWith("/home") || input.toLowerCase().startsWith("home")){
+		}else if(input.toLowerCase().startsWith("main")){
 			ASUtils.sendToConversable(context.getForWhom(), ChatColor.LIGHT_PURPLE + "Unsupported!");
 		}
 		return false;

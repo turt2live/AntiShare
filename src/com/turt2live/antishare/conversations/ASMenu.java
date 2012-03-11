@@ -5,6 +5,7 @@ import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.FixedSetPrompt;
 
+import com.turt2live.antishare.ASUtils;
 
 public abstract class ASMenu extends FixedSetPrompt {
 
@@ -22,12 +23,14 @@ public abstract class ASMenu extends FixedSetPrompt {
 
 	@Override
 	protected String getFailedValidationText(ConversationContext context, String invalidInput){
+		ASUtils.sendToConversable(context.getForWhom(), ChatColor.DARK_RED + "=======[ " + ChatColor.RED + "Invalid Option" + ChatColor.DARK_RED + " ]=======");
 		return "Please enter one of the following: ";
 	}
 
 	@Override
 	protected boolean isInputValid(ConversationContext context, String input){
-		if(ConfigurationConversation.isValid(fixedSet, input)){
+		input = input.replaceFirst("/", "");
+		if(ConfigurationConversation.isValid(fixedSet, input, context)){
 			return true;
 		}
 		return false;

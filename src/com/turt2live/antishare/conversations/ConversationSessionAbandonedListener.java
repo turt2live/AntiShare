@@ -10,12 +10,7 @@ public class ConversationSessionAbandonedListener implements ConversationAbandon
 
 	@Override
 	public void conversationAbandoned(ConversationAbandonedEvent event){
-		if(event.getContext().getSessionData("terminate") == null && !event.gracefulExit()){
-			ASUtils.sendToConversable(event.getContext().getForWhom(), ChatColor.RED + "Your session was closed because turt2live failed. Please tell him you got this error.");
-		}
-		if(event.gracefulExit()){ //Null prompt
-			ASUtils.sendToConversable(event.getContext().getForWhom(), ChatColor.GREEN + "Your session was closed.");
-		}
+		ASUtils.sendToConversable(event.getContext().getForWhom(), ChatColor.GREEN + "Your session was closed.");
 	}
 
 }
