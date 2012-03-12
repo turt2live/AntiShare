@@ -1,5 +1,6 @@
 package com.turt2live.antishare.conversations.configuration;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
@@ -53,7 +54,7 @@ public class MessageEditor extends ASMenu {
 			String value = (String) context.getSessionData("msg_no_node");
 			plugin.getConfig().set("messages." + getProperNode(input), value);
 			plugin.getConfig().save();
-			plugin.reloadConfig();
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
 			ASUtils.sendToConversable(context.getForWhom(), ChatColor.GREEN + "Value Saved!");
 			return new WaitPrompt(new MessageEditor());
 		}

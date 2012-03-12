@@ -14,8 +14,7 @@ public class StartupMessage extends MessagePrompt {
 		ASUtils.sendToConversable(context.getForWhom(), ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "AntiShare Configuration Helper" + ChatColor.DARK_GREEN + " ]=======");
 		ASUtils.sendToConversable(context.getForWhom(), ChatColor.GREEN + "These commands will work at anytime!");
 		ASUtils.sendToConversable(context.getForWhom(), ChatColor.DARK_AQUA + "exit" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Exits your session, be sure to save first!");
-		ASUtils.sendToConversable(context.getForWhom(), ChatColor.DARK_AQUA + "back" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Sends you back one screen");
-		return ChatColor.DARK_AQUA + "main" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Sends you to the main menu " + ChatColor.DARK_PURPLE + "[TODO]";
+		return ChatColor.DARK_AQUA + "back" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Sends you back one screen";
 		// Final line is a return to avoid formatting issues client-side
 	}
 

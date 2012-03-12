@@ -142,9 +142,6 @@ public class CommandHandler implements CommandExecutor {
 						page = Math.abs(page);
 						int resultsPerPage = 6; // For ease of changing
 						Vector<ASRegion> regions = plugin.storage.getAllRegions();
-						if(plugin.getRegionHandler() == null){
-
-						}
 						int maxPages = (int) Math.ceil(regions.size() / resultsPerPage);
 						if(maxPages < 1){
 							maxPages = 1;

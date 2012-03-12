@@ -1,5 +1,6 @@
 package com.turt2live.antishare.conversations.configuration;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
@@ -74,7 +75,7 @@ public class SQLEditor extends ASMenu {
 			return new EditConfigurationMenu();
 		}
 		plugin.getConfig().save();
-		plugin.reloadConfig();
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
 		ASUtils.sendToConversable(context.getForWhom(), ChatColor.GREEN + "Value Saved!");
 		return new SQLEditor();
 	}

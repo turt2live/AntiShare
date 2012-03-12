@@ -1,5 +1,6 @@
 package com.turt2live.antishare.conversations.configuration;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
@@ -60,13 +61,13 @@ public class NotificationEditor extends ASMenu {
 		}else if(input.equalsIgnoreCase("on")){
 			plugin.getConfig().set("notification.send", true);
 			plugin.getConfig().save();
-			plugin.reloadConfig();
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
 			ASUtils.sendToConversable(context.getForWhom(), ChatColor.GREEN + "Value Saved!");
 			return new WaitPrompt(new NotificationEditor());
 		}else if(input.equalsIgnoreCase("off")){
 			plugin.getConfig().set("notification.send", false);
 			plugin.getConfig().save();
-			plugin.reloadConfig();
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
 			ASUtils.sendToConversable(context.getForWhom(), ChatColor.GREEN + "Value Saved!");
 			return new WaitPrompt(new NotificationEditor());
 		}else{ // All the other nodes
@@ -77,7 +78,7 @@ public class NotificationEditor extends ASMenu {
 			}else{
 				plugin.getConfig().set("notification." + getProperNode(input), value);
 				plugin.getConfig().save();
-				plugin.reloadConfig();
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
 				ASUtils.sendToConversable(context.getForWhom(), ChatColor.GREEN + "Value Saved!");
 				return new WaitPrompt(new NotificationEditor());
 			}

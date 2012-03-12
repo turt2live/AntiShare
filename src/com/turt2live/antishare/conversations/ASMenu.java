@@ -29,7 +29,6 @@ public abstract class ASMenu extends FixedSetPrompt {
 
 	@Override
 	protected boolean isInputValid(ConversationContext context, String input){
-		input = input.replaceFirst("/", "");
 		if(ConfigurationConversation.isValid(fixedSet, input, context)){
 			return true;
 		}
