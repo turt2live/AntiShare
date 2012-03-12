@@ -2,6 +2,7 @@ package com.turt2live.antishare;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -23,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -619,6 +621,11 @@ public class ASListener implements Listener {
 		Player player = event.getPlayer();
 		VirtualInventory manager = plugin.storage.getInventoryManager(player, player.getWorld());
 		manager.makeMatch();
+	}
+
+	@EventHandler
+	public void onPotionSplash(PotionSplashEvent event){
+		Bukkit.broadcastMessage(event.getEntityType().toString() + " | " + event.getPotion().toString() + " | " + event.getEntity().toString());
 	}
 
 	public void scheduleInventoryChange(final Player player, final PlayerTeleportEvent event){

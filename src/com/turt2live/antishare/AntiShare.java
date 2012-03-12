@@ -21,8 +21,8 @@ public class AntiShare extends PluginWrapper {
 	 * "Ranked Chests" - Permission-ranked chests (LWC?)
 	 * No exp gain in creative
 	 * Find a work around to get CommandSender from Conversable
-	 * 		- This is for the Edit Region inventory/area options
-	 *  	- For Add Region
+	 *      - This is for the Edit Region inventory/area options
+	 *      - For Add Region
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
