@@ -1,6 +1,6 @@
 name: AntiShare
 main: com.turt2live.antishare.AntiShare
-version: 3.0.0
+version: 3.1.0
 description: Create social awkwardness for creative-mode players
 authors: [Turt2Live, Sayshal]
 website: http://dev.bukkit.org/server-mods/antishare
@@ -18,9 +18,13 @@ commands:
       /<command> editregion <name> <key> <value> = Edit a GameMode region
       /<command> listregions = List all regions
       /<command> listregions # = List regions found on page #
+      /<command> config - Shows the configuration helper
       /<command> help = This menu
 
 permissions:
+    AntiShare.config:
+        description: allows use of the configuration helper
+        default: false
     AntiShare.onlyIfCreative:
         description: only block actions if in creative
         default: false

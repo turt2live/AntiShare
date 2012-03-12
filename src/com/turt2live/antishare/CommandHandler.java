@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.turt2live.antishare.conversations.ConfigurationConversation;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.RegionKey;
 
@@ -41,7 +42,7 @@ public class CommandHandler implements CommandExecutor {
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("region")){
-					if(plugin.getPermissions().has(sender, "AntiShare.plugin.getRegionHandler()")){
+					if(plugin.getPermissions().has(sender, "AntiShare.regions")){
 						if(args.length < 3){
 							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax error, try: /as region <gamemode> <name>");
 						}else{
@@ -52,7 +53,7 @@ public class CommandHandler implements CommandExecutor {
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion")){
-					if(plugin.getPermissions().has(sender, "AntiShare.plugin.getRegionHandler()")){
+					if(plugin.getPermissions().has(sender, "AntiShare.regions")){
 						if(args.length > 1){
 							plugin.getRegionHandler().removeRegion(args[1], sender);
 						}else{
@@ -67,7 +68,7 @@ public class CommandHandler implements CommandExecutor {
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("editregion")){
-					if(plugin.getPermissions().has(sender, "AntiShare.plugin.getRegionHandler()")){
+					if(plugin.getPermissions().has(sender, "AntiShare.regions")){
 						boolean valid = false;
 						if(args.length >= 3){
 							if(RegionKey.isKey(args[2])){
@@ -128,8 +129,8 @@ public class CommandHandler implements CommandExecutor {
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
 					return true;
-				}else if(args[0].equalsIgnoreCase("listplugin.getRegionHandler()")){
-					if(plugin.getPermissions().has(sender, "AntiShare.plugin.getRegionHandler()")){
+				}else if(args[0].equalsIgnoreCase("listplugins")){
+					if(plugin.getPermissions().has(sender, "AntiShare.regions")){
 						int page = 1;
 						if(args.length >= 2){
 							try{
@@ -162,6 +163,14 @@ public class CommandHandler implements CommandExecutor {
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
 					return true;
+				}else if(args[0].equalsIgnoreCase("config")){
+					if(plugin.getPermissions().has(sender, "AntiShare.config")){
+						if(sender instanceof Player){
+							new ConfigurationConversation(plugin, (Player) sender);
+						}else{
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "There is no console support for the configuration helper.");
+						}
+					}
 				}else{
 					return false; //Shows usage in plugin.yml
 				}
