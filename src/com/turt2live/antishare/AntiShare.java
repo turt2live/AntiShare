@@ -16,13 +16,13 @@ public class AntiShare extends PluginWrapper {
 
 	/* TODO: All this
 	 * Exp bottle blocks [WAITING ON API]
-	 * Conversation Configuration
 	 * Fix 'throw items into regions'
 	 * "Ranked Chests" - Permission-ranked chests (LWC?)
 	 * No exp gain in creative
 	 * Find a work around to get CommandSender from Conversable
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
+	 *      - Permissions check on edit region
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
