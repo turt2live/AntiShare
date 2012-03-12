@@ -28,6 +28,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -625,7 +626,23 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void onPotionSplash(PotionSplashEvent event){
-		Bukkit.broadcastMessage(event.getEntityType().toString() + " | " + event.getPotion().toString() + " | " + event.getEntity().toString());
+		if(AntiShare.DEBUG_MODE){
+			Bukkit.broadcastMessage(event.getEntityType().toString() + " | " + event.getPotion().toString() + " | " + event.getEntity().toString());
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onExpGain(PlayerExpChangeEvent event){
+		if(!plugin.getPermissions().has(event.getPlayer(), "AntiShare.allow.expGain")){
+			if(plugin.config().onlyIfCreative(event.getPlayer())){
+				if(event.getPlayer().getGameMode().equals(GameMode.CREATIVE)){
+					event.setAmount(0);
+					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + "You cannot gain experience in creative!");
+				}
+			}else{
+				ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + "You cannot gain experience!");
+			}
+		}
 	}
 
 	public void scheduleInventoryChange(final Player player, final PlayerTeleportEvent event){

@@ -97,6 +97,7 @@ permissions:
             AntiShare.allow.commands: true
             AntiShare.allow.exp: true
             AntiShare.allow.throwIntoRegions: true
+            AntiShare.allow.expGain: true
     AntiShare.allow.place:
         description: allow place of defined blocks
         default: op
@@ -123,4 +124,7 @@ permissions:
         default: op
     AntiShare.allow.throwIntoRegions:
         description: allow the throwing of items into regions
+        default: op
+    AntiShare.allow.expGain:
+        description: allow exp gain
         default: op
