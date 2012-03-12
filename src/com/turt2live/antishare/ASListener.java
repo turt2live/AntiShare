@@ -37,6 +37,7 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.turt2live.antishare.enums.AlertType;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
 import com.turt2live.antishare.regions.ASRegion;
@@ -637,10 +638,10 @@ public class ASListener implements Listener {
 			if(plugin.config().onlyIfCreative(event.getPlayer())){
 				if(event.getPlayer().getGameMode().equals(GameMode.CREATIVE)){
 					event.setAmount(0);
-					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + "You cannot gain experience in creative!");
+					plugin.getDebugger().alertOverrideDebug(ChatColor.RED + "You cannot gain experience!", event.getPlayer(), AlertType.EXP_GAIN);
 				}
 			}else{
-				ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + "You cannot gain experience!");
+				plugin.getDebugger().alertOverrideDebug(ChatColor.RED + "You cannot gain experience!", event.getPlayer(), AlertType.EXP_GAIN);
 			}
 		}
 	}

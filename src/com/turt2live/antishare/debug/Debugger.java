@@ -58,6 +58,23 @@ public class Debugger implements Listener {
 		}
 	}
 
+	public void alertOverrideDebug(String message, CommandSender target, AlertType type){
+		boolean foundtimer = false;
+		for(AlertTimer timer : alertTimers){
+			if(timer.getTarget().equals(target)){
+				if(timer.getType().equals(type)){
+					timer.sendMessage(message);
+					foundtimer = true;
+				}
+			}
+		}
+		if(!foundtimer){
+			AlertTimer timer = new AlertTimer(type, target);
+			timer.sendMessage(message);
+			alertTimers.add(timer);
+		}
+	}
+
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent event){
 		if(!AntiShare.DEBUG_MODE){
