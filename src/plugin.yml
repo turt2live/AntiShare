@@ -20,6 +20,14 @@ commands:
       /<command> listregions # = List regions found on page #
       /<command> config - Shows the configuration helper
       /<command> help = This menu
+  gamemode:
+    description: Change your gamemode
+    aliases: [gm]
+    usage: |
+      -------- GameMode Menu --------
+      /<command> c - Creative Mode
+      /<command> s - Survival Mode
+      /<command> - Toggle GameModes
 
 permissions:
     AntiShare.config:
@@ -67,6 +75,12 @@ permissions:
     AntiShare.roam:
         description: allows roaming through GameMode regions without being affected
         default: op
+    AntiShare.gamemode:
+        description: allows a player to change their own gamemode
+        default: op
+    AntiShare.mirroe:
+        description: allows the player to look at other people's inventories
+        default: op
     AntiShare.admin:
         description: All AntiShare permissions
         default: op
@@ -84,6 +98,8 @@ permissions:
             AntiShare.silent: true
             AntiShare.regions: true
             AntiShare.roam: true
+            AntiShare.gamemode: true
+            AntiShare.mirror: true
     AntiShare.allow.*:
         description: allow all AntiShare.allow events
         default: op

@@ -21,6 +21,24 @@ public class AntiShare extends PluginWrapper {
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
 	 *      - Permissions check on edit region
+	 * Mirror inventory (with restore)
+	 * GameMode Changer
+	 *      
+	 * TODO: Add these permissions to the config helper:
+	 * AntiShare.mirror
+	 * AntiShare.gamemode
+	 * 
+	 * TODO: Add these to the config.yml:
+	 * AntiShare.mirror
+	 * GameMode Changer (AntiShare.gamemode)
+	 * 
+	 * TODO: This is how I (can) fix the item in regions thing
+	 * 1) Tag item as it comes out of player
+	 * 2) Set a pickup delay of 20 ticks on item
+	 * 3) Add chunk to a scheduler list to scan
+	 * 4) On scan, check for item
+	 * 5) Check item location and stuff
+	 * 6) Return item if required
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
@@ -55,6 +73,7 @@ public class AntiShare extends PluginWrapper {
 				sql.checkValues();
 			}
 		}
+		String.format("%.2f", 1.22222);
 		regions = new RegionHandler(this);
 		debugger = new Debugger(this);
 		if(DEBUG_MODE){
