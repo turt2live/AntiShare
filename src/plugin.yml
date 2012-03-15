@@ -78,7 +78,7 @@ permissions:
     AntiShare.gamemode:
         description: allows a player to change their own gamemode
         default: op
-    AntiShare.mirroe:
+    AntiShare.mirror:
         description: allows the player to look at other people's inventories
         default: op
     AntiShare.admin:
