@@ -1,0 +1,146 @@
+name: AntiShare
+main: com.turt2live.antishare.AntiShare
+version: 3.1.0
+description: Create social awkwardness for creative-mode players
+authors: [Turt2Live, Sayshal]
+website: http://dev.bukkit.org/server-mods/antishare
+softdepend: [Vault]
+commands:
+  antishare:
+    description: AntiShare command
+    aliases: [as, antis, ashare]
+    usage: |
+      -------- AntiShare Help Menu --------
+      /<command> rl = Reloads configuration and saves to disk/SQL
+      /<command> region <gamemode> <name> = Create a GameMode region
+      /<command> rmregion = Remove GameMode region at your location
+      /<command> rmregion <name> = Remove a GameMode region by name
+      /<command> editregion <name> <key> <value> = Edit a GameMode region
+      /<command> listregions = List all regions
+      /<command> listregions # = List regions found on page #
+      /<command> config - Shows the configuration helper
+      /<command> help = This menu
+  gamemode:
+    description: Change your gamemode
+    aliases: [gm]
+    usage: |
+      -------- GameMode Menu --------
+      /<command> c - Creative Mode
+      /<command> s - Survival Mode
+      /<command> - Toggle GameModes
+
+permissions:
+    AntiShare.config:
+        description: allows use of the configuration helper
+        default: false
+    AntiShare.onlyIfCreative:
+        description: only block actions if in creative
+        default: false
+    AntiShare.onlyIfCreative.global:
+        description: only block actions if in creative based on configuration instead of permissions
+        default: true
+    AntiShare.reload:
+        description: reload plugin
+        default: op
+    AntiShare.noswap:
+        description: immunity (if true) to inventory swapping on GameMode changes
+        default: op
+    AntiShare.blockBypass:
+        description: immunity to creative-mode only blocks
+        default: op
+    AntiShare.freePlace:
+        description: can place a creative-mode block without it being registered as such
+        default: op
+    AntiShare.bedrock:
+        description: can break and place bedrock
+        default: op
+    AntiShare.pvp:
+        description: can use pvp
+        default: op
+    AntiShare.mobpvp:
+        description: can use pvp against mobs
+        default: op
+    AntiShare.worlds:
+        description: can teleport to worlds without being blocked
+        default: op
+    AntiShare.notify:
+        description: get alerts from the plugin on actions
+        default: op
+    AntiShare.silent:
+        description: stops the sending of notifications from the player
+        default: op
+    AntiShare.regions:
+        description: allows creating/removing/listing of GameMode regions
+        default: op
+    AntiShare.roam:
+        description: allows roaming through GameMode regions without being affected
+        default: op
+    AntiShare.gamemode:
+        description: allows a player to change their own gamemode
+        default: op
+    AntiShare.mirror:
+        description: allows the player to look at other people's inventories
+        default: op
+    AntiShare.admin:
+        description: All AntiShare permissions
+        default: op
+        children:
+            AntiShare.allow.*: true
+            AntiShare.reload: true
+            AntiShare.noswap: true
+            AntiShare.blockBypass: true
+            AntiShare.freePlace: true
+            AntiShare.bedrock: true
+            AntiShare.pvp: true
+            AntiShare.mobpvp: true
+            AntiShare.worlds: true
+            AntiShare.notify: true
+            AntiShare.silent: true
+            AntiShare.regions: true
+            AntiShare.roam: true
+            AntiShare.gamemode: true
+            AntiShare.mirror: true
+    AntiShare.allow.*:
+        description: allow all AntiShare.allow events
+        default: op
+        children:
+            AntiShare.allow.place: true
+            AntiShare.allow.break: true
+            AntiShare.allow.death: true
+            AntiShare.allow.drop: true
+            AntiShare.allow.interact: true
+            AntiShare.allow.eggs: true
+            AntiShare.allow.commands: true
+            AntiShare.allow.exp: true
+            AntiShare.allow.throwIntoRegions: true
+            AntiShare.allow.expGain: true
+    AntiShare.allow.place:
+        description: allow place of defined blocks
+        default: op
+    AntiShare.allow.break:
+        description: allow break of defined blocks
+        default: op
+    AntiShare.allow.death:
+        description: allow defined items dropped on death
+        default: op
+    AntiShare.allow.drop:
+        description: allow defined items from being dropped
+        default: op
+    AntiShare.allow.interact:
+        description: allow interaction of defined blocks
+        default: op
+    AntiShare.allow.eggs:
+        description: allow use of mob spawning eggs
+        default: op
+    AntiShare.allow.commands:
+        description: allow use of specified commands
+        default: op
+    AntiShare.allow.exp:
+        description: allow use of experience bottles
+        default: op
+    AntiShare.allow.throwIntoRegions:
+        description: allow the throwing of items into regions
+        default: op
+    AntiShare.allow.expGain:
+        description: allow exp gain
+        default: op
