@@ -15,7 +15,7 @@ public class PermissionsMenu extends ASMenu {
 	public PermissionsMenu(){
 		super("AntiShare.allow", "AntiShare.onlyIfCreative", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam",
 				"AntiShare.noswap", "AntiShare.freeplace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.mobpvp",
-				"AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", "AntiShare.admin");
+				"AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", "AntiShare.admin", "AntiShare.mirror", "AntiShare.gamemode");
 	}
 
 	@Override
@@ -36,7 +36,8 @@ public class PermissionsMenu extends ASMenu {
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.regions  AntiShare.roam  AntiShare.noswap");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.blockBypass  AntiShare.freeplace  AntiShare.bedrock");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.pvp  AntiShare.mobpvp  AntiShare.worlds");
-			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.notify  AntiShare.silent  AntiShare.admin");
+			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.notify  AntiShare.silent  AntiShare.gamemode");
+			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.mirror  AntiShare.admin");
 			return new WaitPrompt(new PermissionsMenu());
 		}else{
 			ASUtils.sendToConversable(target, ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + input + ChatColor.DARK_GREEN + " ]=======");
@@ -85,6 +86,12 @@ public class PermissionsMenu extends ASMenu {
 				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
 			}else if(input.equalsIgnoreCase("AntiShare.admin")){
 				ASUtils.sendToConversable(target, "Set this to true if you want the target to be able to have full access to AntiShare and it's features, this also negates any blocking they may experience, such as interactions, block place/break, and throwing items.");
+				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
+			}else if(input.equalsIgnoreCase("AntiShare.mirror")){
+				ASUtils.sendToConversable(target, "If this is true, the target can view people's inventories through a command.");
+				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
+			}else if(input.equalsIgnoreCase("AntiShare.gamemode")){
+				ASUtils.sendToConversable(target, "If this is true, the target can change their own gamemode through /gm or another person's through the same command.");
 				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
 			}else{
 				ASUtils.sendToConversable(target, ChatColor.RED + "That is not a permission node!");

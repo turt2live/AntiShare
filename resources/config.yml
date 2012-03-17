@@ -104,6 +104,7 @@
 #   '/as editregion <name> <key> <value>' - Set various properties of a region, see below for help
 #   '/as listregions' - List the regions available
 #   '/as listregions #' - List the regions by page
+#   '/as mirror <player>' - Mirror <player>'s inventory. Partial names are allowed (eg: turt instead of turt2live)
 #   '/gm' - Toggle gamemode
 #   '/gm c' - Creative mode
 #   '/gm s' - Survival mode

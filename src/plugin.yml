@@ -19,6 +19,7 @@ commands:
       /<command> listregions = List all regions
       /<command> listregions # = List regions found on page #
       /<command> config - Shows the configuration helper
+      /<command> mirror <player> - Mirror <player>'s inventory
       /<command> help = This menu
   gm:
     description: Change your gamemode

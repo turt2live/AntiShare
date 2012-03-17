@@ -170,7 +170,31 @@ public class CommandHandler implements CommandExecutor {
 						}else{
 							ASUtils.sendToPlayer(sender, ChatColor.RED + "There is no console support for the configuration helper.");
 						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("mirror")){
+					if(!(sender instanceof Player)){
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, and therefore cannot view inventories. Sorry!");
+					}else{
+						if(plugin.getPermissions().has(sender, "AntiShare.mirror")){
+							if(args.length < 2){
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "No player name provided! Try /as mirror <player>");
+							}else{
+								String playername = args[1];
+								Player player = Bukkit.getPlayer(playername);
+								if(player == null){
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "Player '" + playername + "' could not be found, sorry!");
+								}else{
+									InventoryMirror.mirror(player, (Player) sender, plugin);
+								}
+							}
+						}else{
+							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+						}
+					}
+					return true;
 				}else{
 					return false; //Shows usage in plugin.yml
 				}

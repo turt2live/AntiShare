@@ -21,11 +21,8 @@ public class AntiShare extends PluginWrapper {
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
 	 *      - Permissions check on edit region
-	 * Mirror inventory (with restore)
-	 *      
-	 * TODO: Add these permissions to the config helper:
-	 * AntiShare.mirror
-	 * AntiShare.gamemode
+	 * TNT Blocking (explosions)
+	 * Potential Bug: Notifications reporting AIR
 	 * 
 	 * TODO: This is how I (can) fix the item in regions thing
 	 * 1) Tag item as it comes out of player

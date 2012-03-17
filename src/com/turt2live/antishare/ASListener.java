@@ -1,12 +1,14 @@
 package com.turt2live.antishare;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -36,6 +38,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 
 import com.turt2live.antishare.enums.AlertType;
 import com.turt2live.antishare.enums.BlockedType;
@@ -57,6 +60,28 @@ public class ASListener implements Listener {
 		Player player = event.getPlayer();
 		if(player == null){
 			return;
+		}
+		if(event.getBlock().hasMetadata("invmirror")){
+			List<MetadataValue> values = event.getBlock().getMetadata("invmirror");
+			boolean remove = false;
+			for(MetadataValue value : values){
+				if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
+					if(value.asString().equalsIgnoreCase(player.getName())){
+						Chest chest = (Chest) event.getBlock().getState();
+						chest.getInventory().clear();
+						ASUtils.sendToPlayer(player, ChatColor.YELLOW + "Invenotry chest cleared.");
+					}else{
+						event.setCancelled(true);
+						ASUtils.sendToPlayer(player, ChatColor.RED + "That is not a normal chest, you cannot break it");
+						return;
+					}
+					remove = true;
+					break;
+				}
+			}
+			if(remove){
+				event.getBlock().removeMetadata("invmirror", plugin);
+			}
 		}
 		ASRegion region = plugin.getRegionHandler().getRegion(player.getLocation());
 		if(region != null){
@@ -463,6 +488,7 @@ public class ASListener implements Listener {
 		if(event.isCancelled() || player == null){
 			return;
 		}
+		// TODO: Implement
 		//		// Exp Bottle Check (stuck here to avoid the null check)
 		//		if(plugin.config().getBoolean("other.allow_exp_bottle", player.getWorld()) == false){
 		//			boolean skip = false;
@@ -504,6 +530,23 @@ public class ASListener implements Listener {
 		//		}
 		if(event.getClickedBlock() == null || event.isCancelled()){
 			return;
+		}
+		// Check for inventory mirror
+		if(event.getClickedBlock().getType().equals(Material.CHEST)){
+			Block block = event.getClickedBlock();
+			Chest chest = (Chest) block.getState();
+			if(chest.hasMetadata("invmirror")){
+				List<MetadataValue> lockedTo = chest.getMetadata("invmirror");
+				for(MetadataValue value : lockedTo){
+					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
+						if(!value.asString().equalsIgnoreCase(player.getName())){
+							ASUtils.sendToPlayer(player, ChatColor.RED + "That is not a normal chest! It cannot be used.");
+							event.setCancelled(true);
+							return;
+						}
+					}
+				}
+			}
 		}
 		if(!plugin.getPermissions().has(player, "AntiShare.allow.interact", player.getWorld())
 				&& plugin.storage.isBlocked(event.getClickedBlock().getType(), BlockedType.INTERACT, player.getWorld())){
