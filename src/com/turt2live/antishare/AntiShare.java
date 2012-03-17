@@ -22,15 +22,10 @@ public class AntiShare extends PluginWrapper {
 	 *      - For Add Region
 	 *      - Permissions check on edit region
 	 * Mirror inventory (with restore)
-	 * GameMode Changer
 	 *      
 	 * TODO: Add these permissions to the config helper:
 	 * AntiShare.mirror
 	 * AntiShare.gamemode
-	 * 
-	 * TODO: Add these to the config.yml:
-	 * AntiShare.mirror
-	 * GameMode Changer (AntiShare.gamemode)
 	 * 
 	 * TODO: This is how I (can) fix the item in regions thing
 	 * 1) Tag item as it comes out of player
@@ -83,6 +78,7 @@ public class AntiShare extends PluginWrapper {
 		perms = new PermissionsHandler(this);
 		UsageStatistics.send(this);
 		getCommand("as").setExecutor(new CommandHandler(this));
+		getCommand("gm").setExecutor(new GameModeCommand(this));
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 		if(getConfig().getInt("settings.save-interval") > 0){
 			int saveTime = (getConfig().getInt("settings.save-interval") * 60) * 20;

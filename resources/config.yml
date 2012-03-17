@@ -87,9 +87,11 @@
 #   'AntiShare.worlds' - Allows world teleporting without being blocked, also stops multi-world inventories for the target
 #   'AntiShare.notify' - Sends notifications to the player
 #   'AntiShare.silent' - Stops the sending of notifications from this player
+#   'AntiShare.mirror' - Allows viewing of inventories
+#   'AntiShare.gamemode' - Allows use of /gm
 #   'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam", "AntiShare.blockBypass", 
 #                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", 
-#                         and "AntiShare.mobpvp".
+#                         "AntiShare.mirror", "AntiShare.gamemode", and "AntiShare.mobpvp".
 # 
 # Commands:
 #   '/antishare'
@@ -102,6 +104,9 @@
 #   '/as editregion <name> <key> <value>' - Set various properties of a region, see below for help
 #   '/as listregions' - List the regions available
 #   '/as listregions #' - List the regions by page
+#   '/gm' - Toggle gamemode
+#   '/gm c' - Creative mode
+#   '/gm s' - Survival mode
 # 
 # Notes:
 #   - Permissions default to all deny as true while all allow as OP or higher.

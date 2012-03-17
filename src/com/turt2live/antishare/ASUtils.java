@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
 
@@ -94,6 +95,15 @@ public class ASUtils {
 		}else if(value.equalsIgnoreCase("false") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("off")
 				|| value.equalsIgnoreCase("inactive") || value.equalsIgnoreCase("0")){
 			return false;
+		}
+		return null;
+	}
+
+	public static GameMode getGameMode(String value){
+		if(value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c")){
+			return GameMode.CREATIVE;
+		}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s")){
+			return GameMode.SURVIVAL;
 		}
 		return null;
 	}

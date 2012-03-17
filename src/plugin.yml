@@ -20,14 +20,16 @@ commands:
       /<command> listregions # = List regions found on page #
       /<command> config - Shows the configuration helper
       /<command> help = This menu
-  gamemode:
+  gm:
     description: Change your gamemode
-    aliases: [gm]
+    aliases: [gamemode]
+    permission: AntiShare.gamemode
     usage: |
       -------- GameMode Menu --------
       /<command> c - Creative Mode
       /<command> s - Survival Mode
-      /<command> - Toggle GameModes
+      /<command> - Toggle Game Mode
+      /<command> <player> <c/s> - Change a player's Game Mode
 
 permissions:
     AntiShare.config:
