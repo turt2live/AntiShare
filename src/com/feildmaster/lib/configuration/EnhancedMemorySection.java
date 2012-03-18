@@ -4,8 +4,6 @@ import java.util.regex.Pattern;
 
 import org.bukkit.configuration.MemorySection;
 
-// TODO: Make configuration *always* use Enhanced Sections
-// TODO: Move section overrides to this class
 /**
  * A placeholder for enhanced sections
  * 

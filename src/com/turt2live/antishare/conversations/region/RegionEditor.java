@@ -17,18 +17,7 @@ public class RegionEditor extends ASMenu {
 
 	private ASRegion region;
 
-	/*
-	 * TODO: Create a work around
-	 * ===================
-	 * AREA IS UNSUPPORTED
-	 * ===================
-	 * ========================
-	 * INVENTORY IS UNSUPPORTED
-	 * ========================
-	 * 
-	 * Both are unsupported because there is currently no way to
-	 * get the CommandSender involved.
-	 */
+	// inventory and area are unsupported due to a chat lock
 
 	public RegionEditor(ASRegion region){
 		super("name", "show enter message", "show exit message", "enter message", "exit message"/*, "inventory"*/, "gamemode"/*, "area"*/, "current");

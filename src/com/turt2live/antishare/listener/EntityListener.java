@@ -89,6 +89,7 @@ public class EntityListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), null);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -120,6 +121,7 @@ public class EntityListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), (Player) event.getTarget());
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 }

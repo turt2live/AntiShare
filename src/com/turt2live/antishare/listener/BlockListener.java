@@ -181,6 +181,7 @@ public class BlockListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -212,6 +213,7 @@ public class BlockListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -315,6 +317,7 @@ public class BlockListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 }

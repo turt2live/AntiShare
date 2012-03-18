@@ -68,6 +68,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -120,6 +121,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -140,6 +142,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -234,6 +237,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -264,6 +268,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -274,6 +279,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -286,6 +292,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -305,6 +312,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -343,6 +351,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -353,6 +362,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -375,6 +385,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 
@@ -393,6 +404,7 @@ public class PlayerListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
 			plugin.getDebugger().sendBug(bug);
+			e.printStackTrace();
 		}
 	}
 }

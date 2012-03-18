@@ -14,18 +14,10 @@ import com.turt2live.antishare.conversations.region.EditRegionMenu;
 
 public class MainMenu extends ASMenu {
 
-	/*
-	 * TODO: Create a work around
-	 * =========================
-	 * ADD REGION IS UNSUPPORTED
-	 * =========================
-	 * 
-	 * This is because there is no way to get the CommandSender
-	 * involved.
-	 */
+	// Add Region is unsupported due to a chat lock
 
 	public MainMenu(){
-		super("edit configuration", "edit config", "edit region", "add region", "permissions help", "permissions", "perms", "perms help");
+		super("edit configuration", "edit config", "edit region", /*"add region", */"permissions help", "permissions", "perms", "perms help");
 	}
 
 	@Override
