@@ -1,6 +1,7 @@
 package com.turt2live.antishare.conversations;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -42,7 +43,13 @@ public class MainMenu extends ASMenu {
 		if(input.equalsIgnoreCase("edit configuration") || input.equalsIgnoreCase("edit config")){
 			return new EditConfigurationMenu();
 		}else if(input.equalsIgnoreCase("edit region")){
-			return new EditRegionMenu(1, (AntiShare) context.getPlugin());
+			CommandSender sender = (CommandSender) context.getForWhom();
+			if(((AntiShare) context.getPlugin()).getPermissions().has(sender, "AntiShare.regions")){
+				return new EditRegionMenu(1, (AntiShare) context.getPlugin());
+			}else{
+				ConfigurationConversation.showError(context.getForWhom(), "You can't do that because of your permissions!");
+				return new WaitPrompt(new MainMenu());
+			}
 		}else if(input.equalsIgnoreCase("permissions help") || input.equalsIgnoreCase("perms help")
 				|| input.equalsIgnoreCase("permissions") || input.equalsIgnoreCase("perms")){
 			return new PermissionsMenu();

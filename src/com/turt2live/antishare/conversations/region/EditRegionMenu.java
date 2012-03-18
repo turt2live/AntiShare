@@ -27,7 +27,6 @@ public class EditRegionMenu extends ASMenu {
 		if(maxPages < 1){
 			maxPages = 1;
 		}
-
 	}
 
 	@Override

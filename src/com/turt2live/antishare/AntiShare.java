@@ -14,13 +14,7 @@ import com.turt2live.antishare.storage.VirtualStorage;
 
 public class AntiShare extends PluginWrapper {
 
-	/* TODO: All this
-	 * Find a work around to get CommandSender from Conversable
-	 *      - This is for the Edit Region inventory/area options
-	 *      - For Add Region
-	 *      - Permissions check on edit region
-	 * 
-	 * TODO: Wait until a better (less resource intensive) solution is better
+	/* TODO: Wait until a better (less resource intensive) solution is better
 	 * - Throw items in region 
 	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
 	 * 
