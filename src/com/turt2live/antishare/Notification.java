@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
+import com.turt2live.antishare.event.AntiShareEvent;
 
 public class Notification {
 
@@ -18,6 +19,7 @@ public class Notification {
 			return;
 		}
 		variable = variable.replaceAll("_", " ");
+		plugin.getServer().getPluginManager().callEvent(new AntiShareEvent(type, variable, player));
 		String message = "";
 		switch (type){
 		// ILLEGAL actions

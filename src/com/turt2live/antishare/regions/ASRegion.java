@@ -13,10 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.Selection;
-import com.turt2live.antishare.Notification;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Notification;
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.debug.Bug;
 import com.turt2live.antishare.enums.NotificationType;
 import com.turt2live.antishare.storage.VirtualInventory;
 
@@ -192,6 +193,9 @@ public class ASRegion {
 				try{
 					regionFile.createNewFile();
 				}catch(Exception e){
+					Bug bug = new Bug(e, "Region save error", this.getClass());
+					bug.setWorld(getWorld());
+					plugin.getDebugger().sendBug(bug);
 					e.printStackTrace();
 				}
 			}else{
@@ -199,6 +203,9 @@ public class ASRegion {
 				try{
 					regionFile.createNewFile();
 				}catch(Exception e){
+					Bug bug = new Bug(e, "Region save error", this.getClass());
+					bug.setWorld(getWorld());
+					plugin.getDebugger().sendBug(bug);
 					e.printStackTrace();
 				}
 			}

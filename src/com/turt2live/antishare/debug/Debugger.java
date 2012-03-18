@@ -3,6 +3,7 @@ package com.turt2live.antishare.debug;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,6 +12,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.enums.AlertType;
+import com.turt2live.antishare.event.AntiShareBugEvent;
 
 /*
  * This is used mostly while developing. There may be reminaing code here
@@ -22,7 +24,7 @@ public class Debugger implements Listener {
 		if(!AntiShare.DEBUG_MODE){
 			return;
 		}
-		Logger log = Logger.getLogger("Minecraft");
+		Logger log = AntiShare.log;
 		log.severe("[AntiShare Debugger] *** BUG REPORT ***");
 		log.severe("[AntiShare Debugger] Class: " + bug.getInvolvedClass().getName());
 		log.severe("[AntiShare Debugger] Sender: " + bug.getSenderInvolved());
@@ -36,6 +38,11 @@ public class Debugger implements Listener {
 
 	public Debugger(AntiShare plugin){
 		this.plugin = plugin;
+	}
+
+	public void sendBug(Bug bug){
+		Bukkit.getServer().getPluginManager().callEvent(new AntiShareBugEvent(bug));
+		displayBug(bug);
 	}
 
 	public void alert(String message, CommandSender target, AlertType type){

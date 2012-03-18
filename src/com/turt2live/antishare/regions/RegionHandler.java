@@ -18,6 +18,7 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.debug.Bug;
 import com.turt2live.antishare.enums.RegionKeyType;
 import com.turt2live.antishare.storage.VirtualInventory;
 
@@ -261,6 +262,8 @@ public class RegionHandler {
 				try{
 					saveFile.createNewFile();
 				}catch(Exception e){
+					Bug bug = new Bug(e, "Region save error", this.getClass());
+					plugin.getDebugger().sendBug(bug);
 					e.printStackTrace();
 				}
 			}
@@ -301,6 +304,8 @@ public class RegionHandler {
 					}
 					flatfile = false;
 				}catch(SQLException e){
+					Bug bug = new Bug(e, "cannot handle region information", this.getClass());
+					plugin.getDebugger().sendBug(bug);
 					AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle region information: " + e.getMessage());
 				}
 			}

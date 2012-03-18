@@ -22,6 +22,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.debug.Bug;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.regions.ASRegion;
 
@@ -150,6 +151,8 @@ public class VirtualPerWorldStorage {
 							}
 						}
 					}catch(SQLException e){
+						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass());
+						plugin.getDebugger().sendBug(bug);
 						e.printStackTrace();
 					}
 				}
@@ -326,6 +329,8 @@ public class VirtualPerWorldStorage {
 							gamemode_regions.add(region);
 						}
 					}catch(SQLException e){
+						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass());
+						plugin.getDebugger().sendBug(bug);
 						e.printStackTrace();
 					}
 				}
@@ -518,6 +523,8 @@ public class VirtualPerWorldStorage {
 						}
 						sql.deleteQuery("DELETE FROM AntiShare_Blocks"); // Free up space
 					}catch(SQLException e){
+						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass());
+						plugin.getDebugger().sendBug(bug);
 						e.printStackTrace();
 					}
 				}
