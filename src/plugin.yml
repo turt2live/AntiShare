@@ -26,7 +26,7 @@ commands:
     aliases: [gamemode]
     permission: AntiShare.gamemode
     usage: |
-      -------- GameMode Menu --------
+      -------- Game Mode Help Menu --------
       /<command> c - Creative Mode
       /<command> s - Survival Mode
       /<command> - Toggle Game Mode

@@ -69,7 +69,7 @@ public class ASListener implements Listener {
 					if(value.asString().equalsIgnoreCase(player.getName())){
 						Chest chest = (Chest) event.getBlock().getState();
 						chest.getInventory().clear();
-						ASUtils.sendToPlayer(player, ChatColor.YELLOW + "Invenotry chest cleared.");
+						ASUtils.sendToPlayer(player, ChatColor.YELLOW + "Inventory chest cleared.");
 					}else{
 						event.setCancelled(true);
 						ASUtils.sendToPlayer(player, ChatColor.RED + "That is not a normal chest, you cannot break it");
@@ -120,7 +120,7 @@ public class ASListener implements Listener {
 				Notification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 				event.setCancelled(true);
 			}
-		}else{
+		}else if(event.getBlock().getType().equals(Material.BEDROCK)){
 			Notification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 		}
 		if(event.isCancelled()){
@@ -267,7 +267,7 @@ public class ASListener implements Listener {
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
 				Notification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 			}
-		}else{
+		}else if(event.getBlock().getType().equals(Material.BEDROCK)){
 			Notification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
 		}
 		if(event.isCancelled()){
@@ -568,7 +568,9 @@ public class ASListener implements Listener {
 				}
 			}
 		}else{
-			Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
+			if(ASUtils.isInteractable(event.getClickedBlock().getType())){
+				Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
+			}
 		}
 		if(event.isCancelled()){
 			return;

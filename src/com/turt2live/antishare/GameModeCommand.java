@@ -22,10 +22,9 @@ public class GameModeCommand implements CommandExecutor {
 		Player target = null;
 		if(command.getName().equalsIgnoreCase("gm") || command.getName().equalsIgnoreCase("gamemode")){
 			if(!(sender instanceof Player)){
-				if(args.length < 1){
-					return false;
-				}else{
-
+				if(args.length < 2){
+					ASUtils.sendToPlayer(sender, ChatColor.RED + "You don't have a gamemode to change!");
+					return true;
 				}
 			}
 			if(args.length < 1){
