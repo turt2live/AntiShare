@@ -16,7 +16,7 @@ public class PermissionsMenu extends ASMenu {
 		super("AntiShare.allow", "AntiShare.onlyIfCreative", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam",
 				"AntiShare.noswap", "AntiShare.freeplace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.mobpvp",
 				"AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", "AntiShare.admin", "AntiShare.mirror",
-				"AntiShare.gamemode", "AntiShare.tnt");
+				"AntiShare.gamemode"/*, "AntiShare.tnt"*/);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class PermissionsMenu extends ASMenu {
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.blockBypass  AntiShare.freeplace  AntiShare.bedrock");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.pvp  AntiShare.mobpvp  AntiShare.worlds");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.notify  AntiShare.silent  AntiShare.gamemode");
-			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.mirror  AntiShare.tnt AntiShare.admin");
+			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.mirror  " + /*AntiShare.tnt*/" AntiShare.admin");
 			return new WaitPrompt(new PermissionsMenu());
 		}else{
 			ASUtils.sendToConversable(target, ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + input + ChatColor.DARK_GREEN + " ]=======");
@@ -94,9 +94,9 @@ public class PermissionsMenu extends ASMenu {
 			}else if(input.equalsIgnoreCase("AntiShare.gamemode")){
 				ASUtils.sendToConversable(target, "If this is true, the target can change their own gamemode through /gm or another person's through the same command.");
 				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
-			}else if(input.equalsIgnoreCase("AntiShare.tnt")){
-				ASUtils.sendToConversable(target, "If true, the target can place TNT that, when it explodes, drops items regardless of settings/permissions.");
-				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
+				//			}else if(input.equalsIgnoreCase("AntiShare.tnt")){
+				//				ASUtils.sendToConversable(target, "If true, the target can place TNT that, when it explodes, drops items regardless of settings/permissions.");
+				//				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
 			}else{
 				ASUtils.sendToConversable(target, ChatColor.RED + "That is not a permission node!");
 			}

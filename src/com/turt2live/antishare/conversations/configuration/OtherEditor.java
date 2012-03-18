@@ -18,7 +18,7 @@ public class OtherEditor extends ASMenu {
 
 	public OtherEditor(){
 		super("show", "allow eggs", "allow exp bottle", "allow bedrock", "inventories", "track blocks", "pvp", "mob pvp", "no drops",
-				"worlds", /*"throw to region", */"tracked blocks", "tnt drops");
+				"worlds", /*"throw to region", */"tracked blocks"/*, "tnt drops"*/);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class OtherEditor extends ASMenu {
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "worlds <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "True to allow transfer of worlds");
 		//ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "throw to region <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow throwing of items into regions?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tracked blocks <items>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Set which creative blocks to track");
-		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tnt drops <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "When a creative TNT block explodes, drop items?");
+		//ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tnt drops <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "When a creative TNT block explodes, drop items?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "show <node>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Show the value of an above <node>");
 		ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "For 'tracked blocks', '*' means all, and 'none' means none. Remember to use ID's!");
 		ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "<t/f> means you have to enter true or false!");
@@ -135,14 +135,14 @@ public class OtherEditor extends ASMenu {
 		}else if(input.startsWith("tracked blocks")){
 			String value = input.replace("tracked blocks", "").trim();
 			plugin.getConfig().set("other.tracked-blocks", value);
-		}else if(input.startsWith("tnt drops")){
-			String value = input.replace("tnt drops", "").trim();
-			if(ASUtils.getValueOf(value) == null){
-				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
-			}else{
-				plugin.getConfig().set("other.noTNTDrops", !ASUtils.getValueOf(value));
-			}
+			//		}else if(input.startsWith("tnt drops")){
+			//			String value = input.replace("tnt drops", "").trim();
+			//			if(ASUtils.getValueOf(value) == null){
+			//				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
+			//				return new NotificationEditor();
+			//			}else{
+			//				plugin.getConfig().set("other.noTNTDrops", !ASUtils.getValueOf(value));
+			//			}
 		}
 		plugin.getConfig().save();
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
@@ -174,8 +174,8 @@ public class OtherEditor extends ASMenu {
 			//	value = String.valueOf(!plugin.getConfig().getBoolean("other.cannot_throw_to_regions")); // Inverse
 		}else if(input.startsWith("tracked blocks")){
 			value = plugin.getConfig().getString("other.tracked-blocks");
-		}else if(input.startsWith("tnt drops")){
-			value = String.valueOf(!plugin.getConfig().getBoolean("other.noTNTDrops")); // Inverse
+			//		}else if(input.startsWith("tnt drops")){
+			//			value = String.valueOf(!plugin.getConfig().getBoolean("other.noTNTDrops")); // Inverse
 		}
 		ASUtils.sendToConversable(target, ChatColor.GOLD + input + ChatColor.YELLOW + " is currently set to " + ChatColor.GOLD + value);
 	}

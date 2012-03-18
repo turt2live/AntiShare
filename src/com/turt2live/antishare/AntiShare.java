@@ -19,12 +19,16 @@ public class AntiShare extends PluginWrapper {
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
 	 *      - Permissions check on edit region
-	 * TNT Creative Explosions
+	 * Survival block tracking
 	 * API Update
 	 * 
 	 * TODO: Wait until a better (less resource intensive) solution is better
 	 * - Throw items in region 
 	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
+	 * 
+	 * TODO: Wait until an API solution is available
+	 *  - TNT Creative Explosions
+	 *  	- Refs in plugin.yml, config.yml, world.yml, PermissionsMenu.java, and OtherEditor.java have been removed
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE

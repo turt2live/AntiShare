@@ -11,14 +11,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Notification;
-import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
 
 public class EntityListener implements Listener {
@@ -85,41 +82,6 @@ public class EntityListener implements Listener {
 					Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
 					event.setCancelled(true);
 				}
-			}
-		}
-	}
-
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityDeath(EntityDeathEvent event){
-		if(event.getEntity() instanceof Player){
-			Player player = (Player) event.getEntity();
-			if(player == null){
-				return;
-			}
-			boolean illegal = false;
-			if(!plugin.getPermissions().has(player, "AntiShare.allow.death", player.getWorld())){
-				boolean doCheck = false;
-				if(plugin.config().onlyIfCreative(player)){
-					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						doCheck = true;
-					}
-				}else{
-					doCheck = true;
-				}
-				if(doCheck){
-					for(ItemStack item : event.getDrops()){
-						if(plugin.storage.isBlocked(item, BlockedType.DEATH, player.getWorld())){
-							illegal = true;
-							item.setAmount(0);
-						}
-					}
-				}
-			}
-			if(illegal){
-				ASUtils.sendToPlayer(player, plugin.config().getString("messages.death", player.getWorld()));
-				Notification.sendNotification(NotificationType.ILLEGAL_DEATH, plugin, player, player.getGameMode().toString(), null);
-			}else{
-				Notification.sendNotification(NotificationType.LEGAL_DEATH, plugin, player, player.getGameMode().toString(), null);
 			}
 		}
 	}

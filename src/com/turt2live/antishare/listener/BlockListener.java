@@ -15,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
 import com.turt2live.antishare.ASUtils;
@@ -261,20 +260,18 @@ public class BlockListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
-		// TNT Explosions
-		if(event.getBlock().getType().equals(Material.TNT)){
-			if(plugin.config().getBoolean("other.noTNTDrops", event.getBlock().getWorld())){
-				if(!plugin.getPermissions().has(player, "AntiShare.tnt", event.getBlock().getWorld())){
-					if(plugin.config().onlyIfCreative(player)){
-						if(player.getGameMode().equals(GameMode.CREATIVE)){
-							event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
-							// TODO
-						}
-					}else{
-						event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
-					}
-				}
-			}
-		}
+		// TNT Explosions TODO: Waiting on API solution
+		//		if(event.getBlock().getType().equals(Material.TNT)
+		//				&& !plugin.getPermissions().has(player, "AntiShare.tnt", event.getBlock().getWorld())
+		//				&& plugin.config().getBoolean("other.noTNTDrops", event.getBlock().getWorld())){
+		//			if(plugin.config().onlyIfCreative(player)){
+		//				if(player.getGameMode().equals(GameMode.CREATIVE)){
+		//					event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
+		//					System.out.println(event.getBlock().getLocation());
+		//				}
+		//			}else{
+		//				event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
+		//			}
+		//		}
 	}
 }

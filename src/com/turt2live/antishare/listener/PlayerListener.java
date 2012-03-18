@@ -12,6 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -237,30 +239,6 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
-	public void onPlayerPortal(PlayerPortalEvent event){
-		onPlayerTeleport(event);
-	}
-
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerTeleport(PlayerTeleportEvent event){
-		if(plugin.getConflicts().INVENTORY_CONFLICT_PRESENT
-				|| plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT){
-			return;
-		}
-		Player player = event.getPlayer();
-		if(!event.getFrom().getWorld().equals(event.getTo().getWorld())){
-			boolean cancel = !MultiWorld.worldSwap(plugin, player, event.getFrom(), event.getTo());
-			if(cancel){
-				ASUtils.sendToPlayer(player, plugin.config().getString("messages.worldSwap", event.getTo().getWorld()));
-				Notification.sendNotification(NotificationType.ILLEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName(), null);
-				event.setCancelled(true);
-			}else{
-				scheduleInventoryChange(player, event);
-			}
-		}
-	}
-
 	@EventHandler (ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event){
 		plugin.getRegionHandler().checkRegion(event.getPlayer(), event.getTo(), event.getFrom());
@@ -287,25 +265,71 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	public void scheduleInventoryChange(final Player player, final PlayerTeleportEvent event){
-		new Thread(new Runnable(){
-			@Override
-			public void run(){
-				long time = System.currentTimeMillis();
-				while (player.getLocation().getWorld() != event.getTo().getWorld()){
-					if((System.currentTimeMillis() - time) >= 10000){
-						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] ERROR: World transfer inventory change took longer than 10 seconds!");
-						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Please report this to turt2live! http://mc.turt2live.com/plugins/bug.php?simple&plugin=AntiShare");
-						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Please provide this next line in your bug report:");
-						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] FROM: " + event.getFrom().getWorld().getName() + " TO: " + event.getTo().getWorld().getName() + " LOC: " + player.getLocation().getWorld().getName());
-						return;
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerDeath(PlayerDeathEvent event){
+		Player player = event.getEntity();
+		if(player == null){
+			return;
+		}
+		boolean illegal = false;
+		if(!plugin.getPermissions().has(player, "AntiShare.allow.death", player.getWorld())){
+			boolean doCheck = false;
+			if(plugin.config().onlyIfCreative(player)){
+				if(player.getGameMode().equals(GameMode.CREATIVE)){
+					doCheck = true;
+				}
+			}else{
+				doCheck = true;
+			}
+			if(doCheck){
+				for(ItemStack item : event.getDrops()){
+					if(plugin.storage.isBlocked(item, BlockedType.DEATH, player.getWorld())){
+						illegal = true;
+						item.setAmount(0);
 					}
 				}
-				if(!plugin.getPermissions().has(player, "AntiShare.worlds", event.getTo().getWorld())){
-					plugin.storage.switchInventories(player, event.getFrom().getWorld(), player.getGameMode(), event.getTo().getWorld(), player.getGameMode());
-				}
-				Notification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName(), null);
 			}
-		}).start();
+		}
+		if(illegal){
+			ASUtils.sendToPlayer(player, plugin.config().getString("messages.death", player.getWorld()));
+			Notification.sendNotification(NotificationType.ILLEGAL_DEATH, plugin, player, player.getGameMode().toString(), null);
+		}else{
+			Notification.sendNotification(NotificationType.LEGAL_DEATH, plugin, player, player.getGameMode().toString(), null);
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onPlayerPortal(PlayerPortalEvent event){
+		onPlayerTeleport(event);
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerTeleport(PlayerTeleportEvent event){
+		if(plugin.getConflicts().INVENTORY_CONFLICT_PRESENT
+				|| plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT){
+			return;
+		}
+		Player player = event.getPlayer();
+		if(!event.getFrom().getWorld().equals(event.getTo().getWorld())){
+			boolean cancel = !MultiWorld.worldSwap(plugin, player, event.getFrom(), event.getTo());
+			if(cancel){
+				ASUtils.sendToPlayer(player, plugin.config().getString("messages.worldSwap", event.getTo().getWorld()));
+				Notification.sendNotification(NotificationType.ILLEGAL_WORLD_CHANGE, plugin, player, event.getTo().getWorld().getName(), null);
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerWorldChange(PlayerChangedWorldEvent event){
+		if(plugin.getConflicts().INVENTORY_CONFLICT_PRESENT
+				|| plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT){
+			return;
+		}
+		Player player = event.getPlayer();
+		if(!plugin.getPermissions().has(player, "AntiShare.worlds", player.getWorld())){
+			plugin.storage.switchInventories(player, event.getFrom(), player.getGameMode(), player.getWorld(), player.getGameMode());
+		}
+		Notification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, player.getWorld().getName(), null);
 	}
 }

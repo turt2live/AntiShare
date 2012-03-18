@@ -50,4 +50,29 @@ public class MultiWorld {
 			}
 		}
 	}
+
+	// Returns allowance of worldSwap
+	public static boolean worldSwap(AntiShare plugin, Player player, World from, World to){
+		if(plugin.getPermissions().has(player, "AntiShare.worlds", to)){
+			return true;
+		}
+		if(plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT){
+			return true;
+		}
+		boolean transfers = plugin.config().getBoolean("other.worldTransfer", to);
+		boolean creative = plugin.config().onlyIfCreative(player);
+		if(transfers){
+			return true;
+		}else{
+			if(creative){
+				if(player.getGameMode() == GameMode.CREATIVE){
+					return false;
+				}else{
+					return true;
+				}
+			}else{
+				return false;
+			}
+		}
+	}
 }
