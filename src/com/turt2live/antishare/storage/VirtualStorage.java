@@ -70,6 +70,10 @@ public class VirtualStorage implements Listener {
 		return worlds.get(world).isCreativeBlock(block, type);
 	}
 
+	public boolean isSurvivalBlock(Block block, BlockedType type, World world){
+		return worlds.get(world).isSurvivalBlock(block, type);
+	}
+
 	private void freePlayer(Player player){
 		for(World world : worlds.keySet()){
 			worlds.get(world).freePlayer(player);
@@ -128,6 +132,17 @@ public class VirtualStorage implements Listener {
 			break;
 		case CREATIVE_BLOCK_BREAK:
 			worlds.get(world).removeCreativeBlock(block);
+			break;
+		}
+	}
+
+	public void saveSurvivalBlock(Block block, BlockedType type, World world){
+		switch (type){
+		case SURVIVAL_BLOCK_PLACE:
+			worlds.get(world).saveSurvivalBlock(block);
+			break;
+		case SURVIVAL_BLOCK_BREAK:
+			worlds.get(world).removeSurvivalBlock(block);
 			break;
 		}
 	}

@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -15,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
@@ -34,6 +36,7 @@ public class VirtualPerWorldStorage {
 	private Vector<Integer> blocked_interact = new Vector<Integer>();
 	private Vector<String> blocked_commands = new Vector<String>();
 	private Vector<Material> tracked_creative_blocks = new Vector<Material>();
+	private Vector<Material> tracked_survival_blocks = new Vector<Material>();
 	private Vector<ASRegion> gamemode_regions = new Vector<ASRegion>();
 	private boolean blocked_bedrock = false;
 	private HashMap<Player, VirtualInventory> inventories = new HashMap<Player, VirtualInventory>();
@@ -100,7 +103,29 @@ public class VirtualPerWorldStorage {
 			return false;
 		case CREATIVE_BLOCK_BREAK:
 			if(material.hasMetadata("ASCreative")){
-				return material.getMetadata("ASCreative").get(0).asBoolean();
+				List<MetadataValue> meta = material.getMetadata("ASCreative");
+				for(MetadataValue value : meta){
+					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
+						return value.asBoolean();
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean isSurvivalBlock(Block material, BlockedType type){
+		switch (type){
+		case SURVIVAL_BLOCK_PLACE:
+			return false;
+		case SURVIVAL_BLOCK_BREAK:
+			if(material.hasMetadata("ASSurvival")){
+				List<MetadataValue> meta = material.getMetadata("ASSurvuval");
+				for(MetadataValue value : meta){
+					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
+						return value.asBoolean();
+					}
+				}
 			}
 		}
 		return false;
@@ -164,6 +189,7 @@ public class VirtualPerWorldStorage {
 				tracked_creative_blocks.add(Material.getMaterial(id));
 			}
 		}
+		tracked_survival_blocks.addAll(tracked_creative_blocks); //TODO: Implement better solution
 		String blockedBreak[] = plugin.config().getString("events.block_break", world).split(" ");
 		String blockedPlace[] = plugin.config().getString("events.block_place", world).split(" ");
 		String blockedDrop[] = plugin.config().getString("events.drop_item", world).split(" ");
@@ -348,14 +374,25 @@ public class VirtualPerWorldStorage {
 	}
 
 	public void removeCreativeBlock(Block block){
-		block.setMetadata("ASCreative", new FixedMetadataValue(plugin, false));
+		block.removeMetadata("ASCreative", plugin);
 	}
 
 	public void saveCreativeBlock(Block block){
-		if(!trackBlock(block)){
+		if(!trackCreativeBlock(block)){
 			return;
 		}
 		block.setMetadata("ASCreative", new FixedMetadataValue(plugin, true));
+	}
+
+	public void removeSurvivalBlock(Block block){
+		block.removeMetadata("ASSurvival", plugin);
+	}
+
+	public void saveSurvivalBlock(Block block){
+		if(!trackCreativeBlock(block)){
+			return;
+		}
+		block.setMetadata("ASSurvival", new FixedMetadataValue(plugin, true));
 	}
 
 	public void saveRegion(ASRegion region){
@@ -453,8 +490,12 @@ public class VirtualPerWorldStorage {
 		}
 	}
 
-	public boolean trackBlock(Block block){
+	public boolean trackCreativeBlock(Block block){
 		return tracked_creative_blocks.contains(block.getType());
+	}
+
+	public boolean trackSurvivalBlock(Block block){
+		return tracked_survival_blocks.contains(block.getType());
 	}
 
 	public int convertCreativeBlocks(){

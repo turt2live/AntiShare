@@ -54,6 +54,17 @@ public class Notification {
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break the creative block " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 			}
 			break;
+		case ILLEGAL_SURVIVAL_BLOCK_BREAK:
+			if(variable.equalsIgnoreCase("BEDROCK")){
+				break;
+			}
+			if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
+				break;
+			}
+			if(plugin.getConfig().getBoolean("notifications.illegal.survival_block_break")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break the survival block " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+			}
+			break;
 		case ILLEGAL_WORLD_CHANGE:
 			if(plugin.getConfig().getBoolean("notifications.illegal.world_transfer")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to go to world " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
@@ -142,6 +153,17 @@ public class Notification {
 			}
 			if(plugin.getConfig().getBoolean("notifications.legal.creative_block_break")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " broke the creative block " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+			}
+			break;
+		case LEGAL_SURVIVAL_BLOCK_BREAK:
+			if(variable.equalsIgnoreCase("BEDROCK")){
+				break;
+			}
+			if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
+				break;
+			}
+			if(plugin.getConfig().getBoolean("notifications.legal.survival_block_break")){
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " broke the survival block " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 			}
 			break;
 		case LEGAL_WORLD_CHANGE:

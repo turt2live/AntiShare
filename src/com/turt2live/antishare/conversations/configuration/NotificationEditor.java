@@ -14,16 +14,18 @@ import com.turt2live.antishare.conversations.WaitPrompt;
 
 public class NotificationEditor extends ASMenu {
 
+	// TODO: Uncomment throw to region when known issue is fixed
+
 	public NotificationEditor(){
 		super("show", "help", "on", "off",
 
 				"legal block break", "legal block place", "legal death", "legal drop item", "legal eggs", "legal interact",
-				"legal exp bottle", "legal bedrock", "legal creative block", "legal pvp", "legal mob pvp", "legal command", "legal world swap",
-				"legal throw to region",
+				"legal exp bottle", "legal bedrock", "legal creative block", "legal survival block", "legal pvp", "legal mob pvp",
+				"legal command", "legal world swap", //"legal throw to region",
 
 				"illegal block break", "illegal block place", "illegal death", "illegal drop item", "illegal eggs", "illegal interact",
-				"illegal exp bottle", "illegal bedrock", "illegal creative block", "illegal pvp", "illegal mob pvp", "illegal command", "illegal world swap",
-				"illegal throw to region",
+				"illegal exp bottle", "illegal bedrock", "illegal creative block", "illegal survival block", "illegal pvp", "illegal mob pvp",
+				"illegal command", "illegal world swap", //"illegal throw to region",
 
 				"gamemode change", "region enter", "region exit");
 	}
@@ -102,6 +104,8 @@ public class NotificationEditor extends ASMenu {
 			node = "gamemode_change";
 		}else if(node.startsWith("creative block")){
 			node = "creative_block_break";
+		}else if(node.startsWith("survival block")){
+			node = "survival_block_break";
 		}else if(node.startsWith("eggs")){
 			node = "egg";
 		}else if(node.startsWith("exp bottle")){
@@ -112,8 +116,8 @@ public class NotificationEditor extends ASMenu {
 			node = "illegalCommand";
 		}else if(node.startsWith("world swap")){
 			node = "world_transfer";
-		}else if(node.startsWith("throw to region")){
-			node = "drop_item_to_region";
+			//		}else if(node.startsWith("throw to region")){
+			//			node = "drop_item_to_region";
 		}else if(node.startsWith("bedrock")){
 			node = "bedrock_attempt";
 		}else if(node.startsWith("region")){ // Enter / Exit
@@ -137,14 +141,14 @@ public class NotificationEditor extends ASMenu {
 		return node.startsWith("legal block break") || node.startsWith("legal block place") || node.startsWith("legal death")
 				|| node.startsWith("legal drop item") || node.startsWith("legal eggs") || node.startsWith("legal interact")
 				|| node.startsWith("legal exp bottle") || node.startsWith("legal bedrock") || node.startsWith("legal creative block")
-				|| node.startsWith("legal pvp") || node.startsWith("legal mob pvp") || node.startsWith("legal command")
-				|| node.startsWith("legal world swap") || node.startsWith("legal throw to region")
+				|| node.startsWith("legal survival block") || node.startsWith("legal pvp") || node.startsWith("legal mob pvp")
+				|| node.startsWith("legal command") || node.startsWith("legal world swap") //|| node.startsWith("legal throw to region")
 
 				|| node.startsWith("illegal block break") || node.startsWith("illegal block place") || node.startsWith("illegal death")
 				|| node.startsWith("illegal drop item") || node.startsWith("illegal eggs") || node.startsWith("illegal interact")
 				|| node.startsWith("illegal exp bottle") || node.startsWith("illegal bedrock") || node.startsWith("illegal creative block")
-				|| node.startsWith("illegal pvp") || node.startsWith("illegal mob pvp") || node.startsWith("illegal command")
-				|| node.startsWith("illegal world swap") || node.startsWith("illegal throw to region")
+				|| node.startsWith("illegal survival block") || node.startsWith("illegal pvp") || node.startsWith("illegal mob pvp")
+				|| node.startsWith("illegal command") || node.startsWith("illegal world swap") //|| node.startsWith("illegal throw to region")
 
 				|| node.startsWith("gamemode change") || node.startsWith("region enter") || node.startsWith("region exit");
 
@@ -166,14 +170,15 @@ public class NotificationEditor extends ASMenu {
 				+ "  <i/l> bedrock");
 		ASUtils.sendToConversable(target, ChatColor.AQUA
 				+ "<i/l> creative block  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
-				+ "  <i/l> pvp  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
+				+ "<i/l> survival block  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
 				+ "  <i/l> mob pvp");
 		ASUtils.sendToConversable(target, ChatColor.AQUA
-				+ "<i/l> throw to region  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
-				+ "  <i/l> world swap  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
-				+ "  gamemode change");
+				+ "<i/l> pvp  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
+				+ "  <i/l> world swap  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA);
+		//+ "  <i/l> throw to region");
 		ASUtils.sendToConversable(target, ChatColor.AQUA
 				+ "region enter  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
+				+ "  gamemode change" + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
 				+ "  region exit");
 		ASUtils.sendToConversable(target, ChatColor.GREEN + "Note: " + ChatColor.DARK_GREEN + "<i/l>" + ChatColor.GREEN + " means you need to specify illegal or legal");
 	}

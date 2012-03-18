@@ -22,7 +22,7 @@
 #   'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)
 #   'allow_exp_bottle' - Allows the experience bottle, set to false to block
 #   'inventory_swap' - If true then creative and survival inventories will be swapped
-#   'track_blocks' - If true then creative mode blocks will be tracked where only creative mode players can break them
+#   'track_blocks' - If true then creative/survival mode blocks will be tracked where only creative/survival mode players can break them
 #              (unless they have the permission "AntiShare.blockBypass")  
 #   'allow_bedrock' - If false then bedrock will never be broken or placed
 #   'pvp' - True if you want to allow creative players to hit other players ("AntiShare.pvp" to allow to specific players)
@@ -32,11 +32,9 @@
 #                  'noBlockDrop' to the player once per second, or for every different block. As well, when the block is 100% broken it will show 'creativeModeBlock'.
 #   'worldTransfer' - True if you would like to allow players to transfer worlds. See the section towards the end of this documentation labeled "world transfer information" for help.
 #                     True means you can transfer TO the world, false means you cannot.
-#   'tracked-blocks' - The blocks the plugin should track and mark as "creative" blocks (if the player placing is in creative). This list is SPACE defined (see default)
+#   'tracked-blocks' - The blocks the plugin should track and mark as "creative"/"survival" blocks (if the player placing is in creative/survival). This list is SPACE defined (see default)
 #                    You can set this to 'none' or '*' as well if you prefer, 'none' meaning don't track (set 'track_blocks' to false to reduce some possible lag), '*' meaning
 #                    track everything placed.
-#   'cannot_throw_into_regions' - If true, players (regardless of Game Mode) cannot throw items into regions (stand outside border, throw item into the region to be picked up).
-#                    See the permissions section for information on how to be exempt
 # 
 #   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
@@ -77,9 +75,9 @@
 #   'AntiShare.regions' - Permission to set/remove/list GameMode Regions
 #   'AntiShare.roam' - If set as true, the target can roam through regions without having their gamemode change
 #   'AntiShare.noswap' - If true, the player is exempt from inventory swapping, otherwise they will have their inventory switched
-#   'AntiShare.blockBypass' - If true, then the player can bypass the "Creative mode players can only break this block" message
+#   'AntiShare.blockBypass' - If true, then the player can bypass the "Creative/Survival mode players can only break this block" message
 #                           - As well they can break a block and get drops if 'blockDrops' (under 'other') is true
-#   'AntiShare.freePlace' - If true, then the player can place a "creative-mode" block without it being registered as a "creative-mode" block
+#   'AntiShare.freePlace' - If true, then the player can place a "creative-mode" or "survival-mode" block without it being registered as a "creative-mode" or "survival-mode" block
 #   'AntiShare.bedrock' - If true, then the player can break and place bedrock
 #   'AntiShare.pvp' - Allows PVP to a creative mode player
 #   'AntiShare.mobpvp' - Allows Mob PVP to a creative mode player
@@ -179,6 +177,7 @@ messages:
   exp_bottle: You can't use experience bottles!
   inventory_swap: Your inventory has been changed.
   creativeModeBlock: You cannot break that block! It was placed by a creative mode player.
+  survivalModeBlock: You cannot break that block! It was placed by a survival mode player.
   bedrock: You cannot play with bedrock!
   pvp: You cannot hit other players!
   mobpvp: You cannot hit mobs!
@@ -218,6 +217,7 @@ notifications:
     egg: true
     exp_bottle: true
     creative_block_break: true
+    survival_block_break: true
     pvp: true
     mob-pvp: true
     bedrock_attempt: true
@@ -232,6 +232,7 @@ notifications:
     egg: false
     exp_bottle: false
     creative_block_break: false
+    survival_block_break: false
     pvp: false
     mob-pvp: false
     bedrock_attempt: false

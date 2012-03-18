@@ -20,6 +20,7 @@ messages:
   exp_bottle: global
   inventory_swap: global
   creativeModeBlock: global
+  survivalModeBlock: global
   bedrock: global
   pvp: global
   mobpvp: global

@@ -105,7 +105,6 @@ public class BlockListener implements Listener {
 			return;
 		}
 		if(plugin.storage.isBlocked(event.getBlock().getType(), BlockedType.BLOCK_BREAK, player.getWorld())){
-			//System.out.println("BLOCK BREAK: ILLEGAL");
 			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)
 						&& !plugin.getPermissions().has(player, "AntiShare.allow.break", player.getWorld())){
@@ -130,28 +129,52 @@ public class BlockListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
+		Block block = event.getBlock();
+		boolean creativeBlock = plugin.storage.isCreativeBlock(block, BlockedType.CREATIVE_BLOCK_BREAK, block.getWorld());
+		boolean survivalBlock = plugin.storage.isSurvivalBlock(block, BlockedType.SURVIVAL_BLOCK_BREAK, block.getWorld());
 		if(plugin.config().getBoolean("other.track_blocks", player.getWorld())
 				&& !plugin.getPermissions().has(player, "AntiShare.blockBypass", player.getWorld())){
-			if(player.getGameMode().equals(GameMode.SURVIVAL)){
-				boolean isBlocked = plugin.storage.isCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld());
-				if(isBlocked){
+			if(creativeBlock && !survivalBlock){
+				if(player.getGameMode().equals(GameMode.SURVIVAL)){
 					if(!plugin.config().getBoolean("other.blockDrops", player.getWorld())){
 						ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
 						event.setCancelled(true);
 					}else{
 						ASUtils.sendToPlayer(player, plugin.config().getString("messages.creativeModeBlock", player.getWorld()));
-						plugin.storage.saveCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld());
-						Block block = event.getBlock();
+						plugin.storage.saveCreativeBlock(block, BlockedType.CREATIVE_BLOCK_BREAK, block.getWorld());
 						event.setCancelled(true);
 						block.setTypeId(0); // Fakes a break
 					}
-					Notification.sendNotification(NotificationType.ILLEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
+					Notification.sendNotification(NotificationType.ILLEGAL_CREATIVE_BLOCK_BREAK, plugin, player, block.getType().name(), block.getType());
+				}else{
+					plugin.storage.saveCreativeBlock(block, BlockedType.CREATIVE_BLOCK_BREAK, block.getWorld());
 				}
+			}else if(survivalBlock && !creativeBlock){
+				if(player.getGameMode().equals(GameMode.CREATIVE)){
+					if(!plugin.config().getBoolean("other.blockDrops", player.getWorld())){
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.survivalModeBlock", player.getWorld()));
+						event.setCancelled(true);
+					}else{
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.survivalModeBlock", player.getWorld()));
+						plugin.storage.saveSurvivalBlock(block, BlockedType.SURVIVAL_BLOCK_BREAK, block.getWorld());
+						event.setCancelled(true);
+						block.setTypeId(0); // Fakes a break
+					}
+					Notification.sendNotification(NotificationType.ILLEGAL_SURVIVAL_BLOCK_BREAK, plugin, player, block.getType().name(), block.getType());
+				}else{
+					plugin.storage.saveCreativeBlock(block, BlockedType.SURVIVAL_BLOCK_BREAK, block.getWorld());
+				}
+			}else if(creativeBlock && survivalBlock){
+				AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Sanity check on block break failed.");
 			}else{
-				plugin.storage.saveCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld());
+				// "generated" block
 			}
 		}else{
-			Notification.sendNotification(NotificationType.LEGAL_CREATIVE_BLOCK_BREAK, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
+			if(creativeBlock){
+				Notification.sendNotification(NotificationType.LEGAL_CREATIVE_BLOCK_BREAK, player, block.getType().name());
+			}else if(survivalBlock){
+				Notification.sendNotification(NotificationType.LEGAL_SURVIVAL_BLOCK_BREAK, player, block.getType().name());
+			}
 		}
 	}
 
@@ -164,7 +187,8 @@ public class BlockListener implements Listener {
 		if(!event.isCancelled()){
 			if(plugin.config().getBoolean("other.blockDrops", player.getWorld())
 					&& !plugin.getPermissions().has(player, "AntiShare.blockBypass", player.getWorld())
-					&& plugin.storage.isCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld())){
+					&& (plugin.storage.isCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_BREAK, event.getBlock().getWorld())
+					|| plugin.storage.isSurvivalBlock(event.getBlock(), BlockedType.SURVIVAL_BLOCK_BREAK, event.getBlock().getWorld()))){
 				long systemTime = System.currentTimeMillis();
 				if(blockDropTextWarnings.containsKey(player)){
 					if((systemTime - blockDropTextWarnings.get(player)) > 1000){
@@ -253,9 +277,12 @@ public class BlockListener implements Listener {
 		}
 		//Creative Mode Placing
 		if(plugin.config().getBoolean("other.track_blocks", player.getWorld())
-				&& player.getGameMode() == GameMode.CREATIVE
 				&& !plugin.getPermissions().has(player, "AntiShare.freePlace", player.getWorld())){
-			plugin.storage.saveCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_PLACE, event.getBlock().getWorld());
+			if(player.getGameMode().equals(GameMode.CREATIVE)){
+				plugin.storage.saveCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_PLACE, event.getBlock().getWorld());
+			}else if(player.getGameMode().equals(GameMode.SURVIVAL)){
+				plugin.storage.saveSurvivalBlock(event.getBlock(), BlockedType.SURVIVAL_BLOCK_PLACE, event.getBlock().getWorld());
+			}
 		}
 		if(event.isCancelled()){
 			return;
