@@ -312,7 +312,7 @@ public class RegionHandler {
 			}
 			EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
 			listing.load();
-			Set<String> section = listing.getConfigurationSection("").getKeys(false);
+			Set<String> section = listing.getKeys(false);
 			for(String path : section){
 				String playerName = path;
 				GameMode gamemode = GameMode.valueOf(listing.getString(path + ".gamemode"));

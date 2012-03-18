@@ -117,8 +117,6 @@ public class ASUtils {
 			return true;
 		case BED_BLOCK:
 			return true;
-		case TNT:
-			return true;
 		case CHEST:
 			return true;
 		case WORKBENCH:

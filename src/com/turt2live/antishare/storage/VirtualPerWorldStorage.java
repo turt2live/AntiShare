@@ -530,7 +530,7 @@ public class VirtualPerWorldStorage {
 					if(file.getName().startsWith(world.getName())){
 						EnhancedConfiguration blockRegistryData = new EnhancedConfiguration(file, plugin);
 						blockRegistryData.load();
-						Set<String> keys = blockRegistryData.getConfigurationSection("").getKeys(false);
+						Set<String> keys = blockRegistryData.getKeys(false);
 						for(String x : keys){
 							Set<String> keys2 = blockRegistryData.getConfigurationSection(x).getKeys(false);
 							for(String y : keys2){

@@ -440,7 +440,7 @@ public class VirtualInventory {
 				if(!config.load()){
 					AntiShare.log.severe("[AntiShare] CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
 				}
-				Set<String> keys = config.getConfigurationSection("").getKeys(false);
+				Set<String> keys = config.getKeys(false);
 				for(String key : keys){
 					inventoryMap.put(Integer.valueOf(key), config.getItemStack(key));
 				}
