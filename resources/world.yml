@@ -39,3 +39,4 @@ other:
   blockDrops: global
   worldTransfer: global
   cannot_throw_into_regions: global
+  noTNTDrops: global

@@ -37,6 +37,8 @@
 #                    track everything placed.
 #   'cannot_throw_into_regions' - If true, players (regardless of Game Mode) cannot throw items into regions (stand outside border, throw item into the region to be picked up).
 #                    See the permissions section for information on how to be exempt
+#   'noTNTDrops' - Set to true if you don't want the resulting explosion of TNT to drop anything. Set this to false to allow explosions to drop things. 
+#                    This setting is affected by onlyIfCreative where what gamemode they are in affects which explosions will drop items or not.
 # 
 #   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
@@ -89,9 +91,10 @@
 #   'AntiShare.silent' - Stops the sending of notifications from this player
 #   'AntiShare.mirror' - Allows viewing of inventories
 #   'AntiShare.gamemode' - Allows use of /gm
+#   'AntiShare.tnt' - Allows placement of TNT that produces drops, no exceptions
 #   'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam", "AntiShare.blockBypass", 
 #                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", 
-#                         "AntiShare.mirror", "AntiShare.gamemode", and "AntiShare.mobpvp".
+#                         "AntiShare.mirror", "AntiShare.gamemode", "AntiShare.tnt", and "AntiShare.mobpvp".
 # 
 # Commands:
 #   '/antishare'
@@ -200,6 +203,7 @@ other:
   worldTransfer: false
   tracked-blocks: '*'
   cannot_throw_into_regions: true
+  noTNTDrops: true
 SQL:
   use: false
   host: localhost

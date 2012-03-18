@@ -21,8 +21,12 @@ public class AntiShare extends PluginWrapper {
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
 	 *      - Permissions check on edit region
-	 * TNT Blocking (explosions)
 	 * Potential Bug: Notifications reporting AIR
+	 * TNT Creative Explosions
+	 * 
+	 * TODO: Add these to config helper
+	 * [config option] noTNTDrops
+	 * [perm] AntiShare.tnt
 	 * 
 	 * TODO: This is how I (can) fix the item in regions thing
 	 * 1) Tag item as it comes out of player

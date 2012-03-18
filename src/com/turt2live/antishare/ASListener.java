@@ -15,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,7 +26,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -38,8 +41,10 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
+import com.sk89q.worldedit.EntityType;
 import com.turt2live.antishare.enums.AlertType;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
@@ -278,6 +283,24 @@ public class ASListener implements Listener {
 				&& player.getGameMode() == GameMode.CREATIVE
 				&& !plugin.getPermissions().has(player, "AntiShare.freePlace", player.getWorld())){
 			plugin.storage.saveCreativeBlock(event.getBlock(), BlockedType.CREATIVE_BLOCK_PLACE, event.getBlock().getWorld());
+		}
+		if(event.isCancelled()){
+			return;
+		}
+		// TNT Explosions
+		if(event.getBlock().getType().equals(Material.TNT)){
+			if(plugin.config().getBoolean("other.noTNTDrops", event.getBlock().getWorld())){
+				if(!plugin.getPermissions().has(player, "AntiShare.tnt", event.getBlock().getWorld())){
+					if(plugin.config().onlyIfCreative(player)){
+						if(player.getGameMode().equals(GameMode.CREATIVE)){
+							event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
+							// TODO
+						}
+					}else{
+						event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
+					}
+				}
+			}
 		}
 	}
 
@@ -689,6 +712,28 @@ public class ASListener implements Listener {
 				plugin.getDebugger().alertOverrideDebug(ChatColor.RED + "You cannot gain experience!", event.getPlayer(), AlertType.EXP_GAIN);
 			}
 		}
+	}
+
+	// TODO
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onTNTPrime(ExplosionPrimeEvent event){
+		if(event.getEntityType().equals(EntityType.TNT)){
+			TNTPrimed tnt = (TNTPrimed) event.getEntity();
+			if(tnt.hasMetadata("tnt-no-explode")){
+				System.out.println("TNT");
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onTNTExplode(EntityExplodeEvent event){
+		if(event.getEntityType().equals(EntityType.TNT)){
+			TNTPrimed tnt = (TNTPrimed) event.getEntity();
+			if(tnt.hasMetadata("tnt-no-explode")){
+				System.out.println("TNT2");
+			}
+		}
+		//event.setYield(0);
 	}
 
 	public void scheduleInventoryChange(final Player player, final PlayerTeleportEvent event){
