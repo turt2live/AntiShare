@@ -107,7 +107,7 @@ public class CommandHandler implements CommandExecutor {
 						}else{
 							String name = args[1];
 							String key = args[2];
-							String value = args[3];
+							String value = args.length > 3 ? args[3] : "";
 							if(args.length > 4){
 								for(int i = 4; i < args.length; i++){ // Starts at args[4]
 									value = value + args[i] + " ";

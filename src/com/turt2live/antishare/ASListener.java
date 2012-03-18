@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -470,26 +469,26 @@ public class ASListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
-		// TODO Fix this
-		if(plugin.config().getBoolean("other.cannot_throw_into_regions", player.getWorld())){
-			Item item = event.getItemDrop();
-			ASRegion region = plugin.getRegionHandler().getRegion(item.getLocation());
-			if(!plugin.getPermissions().has(player, "AntiShare.allow.throwIntoRegions")){
-				if(plugin.getRegionHandler().isRegion(item.getLocation())){
-					event.setCancelled(true);
-					Notification.sendNotification(NotificationType.ILLEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
-					ASUtils.sendToPlayer(player, plugin.config().getString("messages.throwItemIntoRegion", player.getWorld()));
-				}else{
-					if(region != null){
-						Notification.sendNotification(NotificationType.LEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
-					}
-				}
-			}else{
-				if(region != null){
-					Notification.sendNotification(NotificationType.LEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
-				}
-			}
-		}
+		// TODO Waiting on less resource intensive solution
+		//		if(plugin.config().getBoolean("other.cannot_throw_into_regions", player.getWorld())){
+		//			Item item = event.getItemDrop();
+		//			ASRegion region = plugin.getRegionHandler().getRegion(item.getLocation());
+		//			if(!plugin.getPermissions().has(player, "AntiShare.allow.throwIntoRegions")){
+		//				if(plugin.getRegionHandler().isRegion(item.getLocation())){
+		//					event.setCancelled(true);
+		//					Notification.sendNotification(NotificationType.ILLEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
+		//					ASUtils.sendToPlayer(player, plugin.config().getString("messages.throwItemIntoRegion", player.getWorld()));
+		//				}else{
+		//					if(region != null){
+		//						Notification.sendNotification(NotificationType.LEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
+		//					}
+		//				}
+		//			}else{
+		//				if(region != null){
+		//					Notification.sendNotification(NotificationType.LEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
+		//				}
+		//			}
+		//		}
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST)
@@ -681,7 +680,8 @@ public class ASListener implements Listener {
 	public void onTNTPrime(ExplosionPrimeEvent event){
 		if(event.getEntityType().equals(EntityType.TNT)){
 			TNTPrimed tnt = (TNTPrimed) event.getEntity();
-			if(tnt.hasMetadata("tnt-no-explode")){
+			Block potentialTNT = tnt.getLocation().getWorld().getBlockAt(tnt.getLocation());
+			if(potentialTNT.hasMetadata("tnt-no-explode")){
 				System.out.println("TNT");
 			}
 		}

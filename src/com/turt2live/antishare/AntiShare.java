@@ -15,24 +15,14 @@ import com.turt2live.antishare.storage.VirtualStorage;
 public class AntiShare extends PluginWrapper {
 
 	/* TODO: All this
-	 * Fix 'throw items into regions' [WAITING ON... Something?]
 	 * Find a work around to get CommandSender from Conversable
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
 	 *      - Permissions check on edit region
 	 * TNT Creative Explosions
 	 * 
-	 * TODO: Add these to config helper
-	 * [config option] noTNTDrops
-	 * [perm] AntiShare.tnt
-	 * 
-	 * TODO: This is how I (can) fix the item in regions thing
-	 * 1) Tag item as it comes out of player
-	 * 2) Set a pickup delay of 20 ticks on item
-	 * 3) Add chunk to a scheduler list to scan
-	 * 4) On scan, check for item
-	 * 5) Check item location and stuff
-	 * 6) Return item if required
+	 * TODO: Wait until a better (less resource intensive) solution is better
+	 * - Throw items in region
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE

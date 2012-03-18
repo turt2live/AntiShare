@@ -189,7 +189,6 @@ messages:
   noBlockDrop: You will not get anything from breaking that!
   illegalCommand: You cannot use that command!
   worldSwap: You cannot transfer to that world!
-  throwItemIntoRegion: You cannot throw items into regions!
 other:
   only_if_creative: true
   allow_eggs: false
@@ -202,7 +201,6 @@ other:
   blockDrops: false
   worldTransfer: false
   tracked-blocks: '*'
-  cannot_throw_into_regions: true
   noTNTDrops: true
 SQL:
   use: false
@@ -230,7 +228,6 @@ notifications:
     mob-pvp: true
     bedrock_attempt: true
     world_transfer: true
-    drop_item_to_region: true
   legal:
     block_place: false
     block_break: false
@@ -245,7 +242,6 @@ notifications:
     mob-pvp: false
     bedrock_attempt: false
     world_transfer: false
-    drop_item_to_region: false
   general:
     gamemode_change: false
     region_enter: false

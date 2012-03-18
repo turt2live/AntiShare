@@ -268,6 +268,9 @@ public class RegionHandler {
 			listing.load();
 			for(String player : player_information.keySet()){
 				RegionPlayer asPlayer = player_information.get(player);
+				if(asPlayer == null){
+					continue;
+				}
 				listing.set(player + ".gamemode", asPlayer.getLastGameMode().name());
 				listing.set(player + ".region", (asPlayer.getLastRegion() != null) ? asPlayer.getLastRegion().getUniqueID() : "none");
 				listing.save();

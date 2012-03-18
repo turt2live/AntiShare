@@ -432,6 +432,7 @@ public class VirtualInventory {
 				File sdir = new File(plugin.getDataFolder(), "inventories");
 				sdir.mkdirs();
 				File saveFile = file;
+				saveFile.getParentFile().mkdirs();
 				if(!saveFile.exists()){
 					saveFile.createNewFile();
 				}
