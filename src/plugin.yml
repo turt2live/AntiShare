@@ -115,7 +115,6 @@ permissions:
             AntiShare.allow.eggs: true
             AntiShare.allow.commands: true
             AntiShare.allow.exp: true
-            AntiShare.allow.throwIntoRegions: true
             AntiShare.allow.expGain: true
     AntiShare.allow.place:
         description: allow place of defined blocks
@@ -140,9 +139,6 @@ permissions:
         default: op
     AntiShare.allow.exp:
         description: allow use of experience bottles
-        default: op
-    AntiShare.allow.throwIntoRegions:
-        description: allow the throwing of items into regions
         default: op
     AntiShare.allow.expGain:
         description: allow exp gain

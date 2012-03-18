@@ -22,7 +22,8 @@ public class AntiShare extends PluginWrapper {
 	 * TNT Creative Explosions
 	 * 
 	 * TODO: Wait until a better (less resource intensive) solution is better
-	 * - Throw items in region
+	 * - Throw items in region 
+	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
