@@ -19,7 +19,6 @@ public class AntiShare extends PluginWrapper {
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
 	 *      - Permissions check on edit region
-	 * Survival block tracking
 	 * API Update
 	 * 
 	 * TODO: Wait until a better (less resource intensive) solution is better
@@ -29,6 +28,11 @@ public class AntiShare extends PluginWrapper {
 	 * TODO: Wait until an API solution is available
 	 *  - TNT Creative Explosions
 	 *  	- Refs in plugin.yml, config.yml, world.yml, PermissionsMenu.java, and OtherEditor.java have been removed
+	 *  
+	 *  TODO: Test code when BUKKIT issues fixed:
+	 *  ** For self ref: https://bukkit.atlassian.net/browse/BUKKIT-####
+	 *  - Creative/Survival Block Tracking (BUKKIT-1214, BUKKIT-1211)
+	 *  - Inventory mirror creative-glitch (BUKKIT-1211)
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
