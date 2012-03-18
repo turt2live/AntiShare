@@ -151,7 +151,7 @@ public class VirtualPerWorldStorage {
 							}
 						}
 					}catch(SQLException e){
-						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass());
+						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass(), null);
 						plugin.getDebugger().sendBug(bug);
 						e.printStackTrace();
 					}
@@ -329,7 +329,7 @@ public class VirtualPerWorldStorage {
 							gamemode_regions.add(region);
 						}
 					}catch(SQLException e){
-						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass());
+						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass(), null);
 						plugin.getDebugger().sendBug(bug);
 						e.printStackTrace();
 					}
@@ -523,7 +523,7 @@ public class VirtualPerWorldStorage {
 						}
 						sql.deleteQuery("DELETE FROM AntiShare_Blocks"); // Free up space
 					}catch(SQLException e){
-						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass());
+						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass(), null);
 						plugin.getDebugger().sendBug(bug);
 						e.printStackTrace();
 					}

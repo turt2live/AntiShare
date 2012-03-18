@@ -88,7 +88,7 @@ public class ASUtils {
 			in.close();
 			out.close();
 		}catch(Exception e){
-			Bug bug = new Bug(e, "ASUtilsBug", ASUtils.class);
+			Bug bug = new Bug(e, "ASUtilsBug", ASUtils.class, null);
 			((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare")).getDebugger().sendBug(bug);
 			e.printStackTrace();
 		}

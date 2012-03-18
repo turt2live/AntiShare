@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Debugger;
+import com.turt2live.antishare.listener.ASListener;
 import com.turt2live.antishare.permissions.PermissionsHandler;
 import com.turt2live.antishare.regions.RegionHandler;
 import com.turt2live.antishare.storage.VirtualStorage;

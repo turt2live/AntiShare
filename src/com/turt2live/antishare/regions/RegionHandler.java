@@ -262,7 +262,7 @@ public class RegionHandler {
 				try{
 					saveFile.createNewFile();
 				}catch(Exception e){
-					Bug bug = new Bug(e, "Region save error", this.getClass());
+					Bug bug = new Bug(e, "Region save error", this.getClass(), null);
 					plugin.getDebugger().sendBug(bug);
 					e.printStackTrace();
 				}
@@ -304,7 +304,7 @@ public class RegionHandler {
 					}
 					flatfile = false;
 				}catch(SQLException e){
-					Bug bug = new Bug(e, "cannot handle region information", this.getClass());
+					Bug bug = new Bug(e, "cannot handle region information", this.getClass(), null);
 					plugin.getDebugger().sendBug(bug);
 					AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle region information: " + e.getMessage());
 				}

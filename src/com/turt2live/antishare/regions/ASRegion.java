@@ -193,7 +193,7 @@ public class ASRegion {
 				try{
 					regionFile.createNewFile();
 				}catch(Exception e){
-					Bug bug = new Bug(e, "Region save error", this.getClass());
+					Bug bug = new Bug(e, "Region save error", this.getClass(), null);
 					bug.setWorld(getWorld());
 					plugin.getDebugger().sendBug(bug);
 					e.printStackTrace();
@@ -203,7 +203,7 @@ public class ASRegion {
 				try{
 					regionFile.createNewFile();
 				}catch(Exception e){
-					Bug bug = new Bug(e, "Region save error", this.getClass());
+					Bug bug = new Bug(e, "Region save error", this.getClass(), null);
 					bug.setWorld(getWorld());
 					plugin.getDebugger().sendBug(bug);
 					e.printStackTrace();

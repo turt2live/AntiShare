@@ -17,12 +17,6 @@ public class Bug {
 	private String message;
 	private Class<?> calledFrom;
 
-	public Bug(Exception e, String message, Class<?> involvedClass){
-		this.e = e;
-		this.message = message;
-		this.calledFrom = involvedClass;
-	}
-
 	public Bug(Exception e, String message, Class<?> involvedClass, CommandSender sender){
 		this.e = e;
 		this.message = message;

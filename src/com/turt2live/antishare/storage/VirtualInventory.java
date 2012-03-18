@@ -172,7 +172,7 @@ public class VirtualInventory {
 						}
 						skip = true;
 					}catch(SQLException e){
-						Bug bug = new Bug(e, "Cannot handle inventory", this.getClass());
+						Bug bug = new Bug(e, "Cannot handle inventory", this.getClass(), this.player);
 						plugin.getDebugger().sendBug(bug);
 						AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle inventory: " + e.getMessage());
 					}
@@ -203,7 +203,7 @@ public class VirtualInventory {
 					}
 				}
 			}catch(Exception e){
-				Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass());
+				Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass(), this.player);
 				plugin.getDebugger().sendBug(bug);
 				e.printStackTrace();
 			}
@@ -281,7 +281,7 @@ public class VirtualInventory {
 				}
 			}
 		}catch(Exception e){
-			Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass());
+			Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass(), this.player);
 			plugin.getDebugger().sendBug(bug);
 			e.printStackTrace();
 		}
@@ -307,7 +307,7 @@ public class VirtualInventory {
 			try{
 				saveFile.createNewFile();
 			}catch(Exception e){
-				Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass());
+				Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass(), this.player);
 				plugin.getDebugger().sendBug(bug);
 				e.printStackTrace();
 			}
@@ -362,7 +362,7 @@ public class VirtualInventory {
 				try{
 					file.createNewFile();
 				}catch(Exception e){
-					Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class);
+					Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
 					plugin.getDebugger().sendBug(bug);
 					e.printStackTrace();
 				}
@@ -382,7 +382,7 @@ public class VirtualInventory {
 					}
 				}
 			}catch(Exception e){
-				Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class);
+				Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
 				plugin.getDebugger().sendBug(bug);
 				e.printStackTrace();
 			}
@@ -428,7 +428,7 @@ public class VirtualInventory {
 					}
 					flatfile = false;
 				}catch(SQLException e){
-					Bug bug = new Bug(e, "Cannot handle inventory", VirtualInventory.class);
+					Bug bug = new Bug(e, "Cannot handle inventory", VirtualInventory.class, null);
 					plugin.getDebugger().sendBug(bug);
 					AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle misc inventory: " + e.getMessage());
 				}
@@ -440,7 +440,7 @@ public class VirtualInventory {
 				try{
 					file.createNewFile();
 				}catch(Exception e){
-					Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class);
+					Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
 					plugin.getDebugger().sendBug(bug);
 					e.printStackTrace();
 				}
@@ -462,7 +462,7 @@ public class VirtualInventory {
 					inventoryMap.put(Integer.valueOf(key), config.getItemStack(key));
 				}
 			}catch(Exception e){
-				Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class);
+				Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
 				plugin.getDebugger().sendBug(bug);
 				e.printStackTrace();
 			}

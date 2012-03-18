@@ -53,7 +53,7 @@ public class SQLManager {
 					connection.close();
 				}
 			}catch(SQLException e){
-				Bug bug = new Bug(e, "Cannot close SQL", this.getClass());
+				Bug bug = new Bug(e, "Cannot close SQL", this.getClass(), null);
 				plugin.getDebugger().sendBug(bug);
 				AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot close SQL connection: " + e.getMessage());
 			}
@@ -145,7 +145,7 @@ public class SQLManager {
 			Statement stmt = connection.createStatement();
 			return stmt.executeQuery(query);
 		}catch(SQLException e){
-			Bug bug = new Bug(e, "QUERY: " + query, this.getClass());
+			Bug bug = new Bug(e, "QUERY: " + query, this.getClass(), null);
 			plugin.getDebugger().sendBug(bug);
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
@@ -159,7 +159,7 @@ public class SQLManager {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(query);
 		}catch(SQLException e){
-			Bug bug = new Bug(e, "QUERY: " + query, this.getClass());
+			Bug bug = new Bug(e, "QUERY: " + query, this.getClass(), null);
 			plugin.getDebugger().sendBug(bug);
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
@@ -172,7 +172,7 @@ public class SQLManager {
 			Statement stmt = connection.createStatement();
 			return stmt.executeUpdate(query);
 		}catch(SQLException e){
-			Bug bug = new Bug(e, "QUERY: " + query, this.getClass());
+			Bug bug = new Bug(e, "QUERY: " + query, this.getClass(), null);
 			plugin.getDebugger().sendBug(bug);
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Something went wrong with the query. Send this to the developer:");
 			AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] QUERY: " + query);
