@@ -8,8 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.conversations.ConfigurationConversation;
 import com.turt2live.antishare.enums.AlertType;
 
 /*
@@ -58,6 +58,7 @@ public class Debugger implements Listener {
 		}
 	}
 
+	// Used by exp gained event
 	public void alertOverrideDebug(String message, CommandSender target, AlertType type){
 		boolean foundtimer = false;
 		for(AlertTimer timer : alertTimers){
@@ -83,7 +84,9 @@ public class Debugger implements Listener {
 		if(event.getMessage().equalsIgnoreCase("/astest")){
 			if(AntiShare.DEBUG_MODE){
 				//plugin.getRegionHandler().getWorldEditHandler().forceDisplayWorldEditInformation(event.getPlayer());
-				new ConfigurationConversation(plugin, event.getPlayer());
+				//new ConfigurationConversation(plugin, event.getPlayer());
+				// Lazy solution to "unused" members
+				ASUtils.sendToPlayer(event.getPlayer(), plugin.getDescription().getFullName());
 				event.setCancelled(true);
 			}
 		}

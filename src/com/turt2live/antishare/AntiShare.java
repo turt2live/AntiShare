@@ -20,6 +20,7 @@ public class AntiShare extends PluginWrapper {
 	 *      - For Add Region
 	 *      - Permissions check on edit region
 	 * TNT Creative Explosions
+	 * API Update
 	 * 
 	 * TODO: Wait until a better (less resource intensive) solution is better
 	 * - Throw items in region 
