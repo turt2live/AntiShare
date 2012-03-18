@@ -12,6 +12,8 @@ import com.turt2live.antishare.conversations.WaitPrompt;
 
 public class PermissionsMenu extends ASMenu {
 
+	// TODO: Uncomment tnt explosions when a better solution is ready
+
 	public PermissionsMenu(){
 		super("AntiShare.allow", "AntiShare.onlyIfCreative", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam",
 				"AntiShare.noswap", "AntiShare.freeplace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.mobpvp",

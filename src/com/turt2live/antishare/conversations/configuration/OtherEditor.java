@@ -15,6 +15,7 @@ import com.turt2live.antishare.conversations.WaitPrompt;
 public class OtherEditor extends ASMenu {
 
 	// TODO: Uncomment throw to region when a better solution is ready
+	// TODO: Uncomment tnt explosions when a better solution is ready
 
 	public OtherEditor(){
 		super("show", "allow eggs", "allow exp bottle", "allow bedrock", "inventories", "track blocks", "pvp", "mob pvp", "no drops",
