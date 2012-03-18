@@ -19,7 +19,6 @@ public class AntiShare extends PluginWrapper {
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
 	 *      - Permissions check on edit region
-	 * API Update
 	 * 
 	 * TODO: Wait until a better (less resource intensive) solution is better
 	 * - Throw items in region 

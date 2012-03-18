@@ -14,10 +14,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.conversations.ConfigurationConversation;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
+import com.turt2live.antishare.permissions.PermissionsHandler;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.RegionHandler;
+import com.turt2live.antishare.storage.VirtualInventory;
 import com.turt2live.antishare.storage.VirtualStorage;
 
 /**
@@ -608,6 +611,34 @@ public class ASAPI {
 	}
 
 	/**
+	 * Forces a block into the survival mode block registry
+	 * 
+	 * @param block the block to add
+	 */
+	public void addBlockToSurivalRegistry(Block block){
+		plugin.storage.saveCreativeBlock(block, BlockedType.SURVIVAL_BLOCK_PLACE, block.getWorld());
+	}
+
+	/**
+	 * Force remove a block from the survival-mode registry. Based on the block's world
+	 * 
+	 * @param block the block, with world, to remove
+	 */
+	public void removeBlockFromSurvivalRegistry(Block block){
+		plugin.storage.saveCreativeBlock(block, BlockedType.SURVIVAL_BLOCK_BREAK, block.getWorld());
+	}
+
+	/**
+	 * Determines if a block is a survival block. Based on the block's world
+	 * 
+	 * @param block the block, with world, to test
+	 * @return true if the specified block is a 'survival mode' block
+	 */
+	public boolean isSurvivalBlock(Block block){
+		return plugin.storage.isCreativeBlock(block, BlockedType.SURVIVAL_BLOCK_BREAK, block.getWorld());
+	}
+
+	/**
 	 * Sends a notification through the AntiShare notification system
 	 * 
 	 * @param type the notification type
@@ -837,6 +868,34 @@ public class ASAPI {
 	 */
 	public VirtualStorage getStorage(){
 		return plugin.storage;
+	}
+
+	/**
+	 * Force starts a configuration helper upon a Player
+	 * 
+	 * @param player the player to send the helper to
+	 */
+	public void startConfigurationHelper(Player player){
+		new ConfigurationConversation(plugin, player);
+	}
+
+	/**
+	 * Gets the permission handler used by AntiShare
+	 * 
+	 * @return the handler
+	 */
+	public PermissionsHandler getPermissionsHandler(){
+		return plugin.getPermissions();
+	}
+
+	/**
+	 * Gets the inventory of a player in HashMap form
+	 * 
+	 * @param player the player to get the inventory from
+	 * @return the inventory
+	 */
+	public HashMap<Integer, ItemStack> getInventory(Player player){
+		return VirtualInventory.getInventoryFromPlayer(player);
 	}
 
 	/**

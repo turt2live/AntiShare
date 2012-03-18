@@ -129,7 +129,7 @@ public class CommandHandler implements CommandExecutor {
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}
 					return true;
-				}else if(args[0].equalsIgnoreCase("listplugins")){
+				}else if(args[0].equalsIgnoreCase("listregions")){
 					if(plugin.getPermissions().has(sender, "AntiShare.regions")){
 						int page = 1;
 						if(args.length >= 2){
