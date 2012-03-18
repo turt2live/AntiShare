@@ -15,13 +15,11 @@ import com.turt2live.antishare.storage.VirtualStorage;
 public class AntiShare extends PluginWrapper {
 
 	/* TODO: All this
-	 * Exp bottle blocks [WAITING ON API]
 	 * Fix 'throw items into regions' [WAITING ON... Something?]
 	 * Find a work around to get CommandSender from Conversable
 	 *      - This is for the Edit Region inventory/area options
 	 *      - For Add Region
 	 *      - Permissions check on edit region
-	 * Potential Bug: Notifications reporting AIR
 	 * TNT Creative Explosions
 	 * 
 	 * TODO: Add these to config helper

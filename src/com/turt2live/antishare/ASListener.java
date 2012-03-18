@@ -16,6 +16,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -30,6 +31,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -511,46 +513,6 @@ public class ASListener implements Listener {
 		if(event.isCancelled() || player == null){
 			return;
 		}
-		// TODO: Implement
-		//		// Exp Bottle Check (stuck here to avoid the null check)
-		//		if(plugin.config().getBoolean("other.allow_exp_bottle", player.getWorld()) == false){
-		//			boolean skip = false;
-		//			ItemStack possibleBottle = event.getItem();
-		//			if(possibleBottle != null){
-		//				if(!possibleBottle.getType().equals(Material.EXP_BOTTLE)){
-		//					skip = true;
-		//				}
-		//			}else{
-		//				skip = true;
-		//			}
-		//			possibleBottle = player.getItemInHand();
-		//			if(possibleBottle != null){
-		//				if(!possibleBottle.getType().equals(Material.EXP_BOTTLE)){
-		//					skip = true;
-		//				}
-		//			}else{
-		//				skip = true;
-		//			}
-		//			if(!skip){
-		//				if(plugin.getPermissions().has(player, "AntiShare.allow.exp", player.getWorld())){
-		//					ASNotification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
-		//					return;
-		//				}
-		//				if(plugin.config().onlyIfCreative(player)){
-		//					if(player.getGameMode().equals(GameMode.CREATIVE)){
-		//						event.setCancelled(true);
-		//						ASNotification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
-		//						ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
-		//					}else{
-		//						ASNotification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
-		//					}
-		//				}else{
-		//					event.setCancelled(true);
-		//					ASNotification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
-		//					ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
-		//				}
-		//			}
-		//		}
 		if(event.getClickedBlock() == null || event.isCancelled()){
 			return;
 		}
@@ -734,6 +696,36 @@ public class ASListener implements Listener {
 			}
 		}
 		//event.setYield(0);
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onExpBottleThrown(ProjectileLaunchEvent event){
+		if(!(event.getEntity().getShooter() instanceof Player) || !(event.getEntity() instanceof ThrownExpBottle)){
+			return;
+		}
+		Player player = (Player) event.getEntity().getShooter();
+		if(player == null){
+			return;
+		}
+		if(plugin.config().getBoolean("other.allow_exp_bottle", player.getWorld()) == false){
+			if(plugin.getPermissions().has(player, "AntiShare.allow.exp", player.getWorld())){
+				Notification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+				return;
+			}
+			if(plugin.config().onlyIfCreative(player)){
+				if(player.getGameMode().equals(GameMode.CREATIVE)){
+					event.setCancelled(true);
+					Notification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
+				}else{
+					Notification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+				}
+			}else{
+				event.setCancelled(true);
+				Notification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+				ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
+			}
+		}
 	}
 
 	public void scheduleInventoryChange(final Player player, final PlayerTeleportEvent event){
