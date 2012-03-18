@@ -66,7 +66,6 @@ public class AntiShare extends PluginWrapper {
 				sql.checkValues();
 			}
 		}
-		String.format("%.2f", 1.22222);
 		regions = new RegionHandler(this);
 		debugger = new Debugger(this);
 		if(DEBUG_MODE){
@@ -74,7 +73,9 @@ public class AntiShare extends PluginWrapper {
 		}
 		conflicts = new Conflicts(this);
 		perms = new PermissionsHandler(this);
-		UsageStatistics.send(this);
+		if(!DEBUG_MODE){
+			UsageStatistics.send(this);
+		}
 		getCommand("as").setExecutor(new CommandHandler(this));
 		getCommand("gm").setExecutor(new GameModeCommand(this));
 		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");

@@ -13,7 +13,7 @@ public class UsageStatistics {
 			return;
 		}
 		String pluginVersion = plugin.getDescription().getVersion();
-		String bukkitVersion = Bukkit.getBukkitVersion();
+		String bukkitVersion = Bukkit.getVersion();
 		try{
 			URL statsURL = new URL("http://mc.turt2live.com/plugins/plugin_stats.php?plugin=AntiShare&version=" + pluginVersion + "&cbVersion=" + bukkitVersion);
 			BufferedReader in = new BufferedReader(new InputStreamReader(statsURL.openConnection().getInputStream()));
