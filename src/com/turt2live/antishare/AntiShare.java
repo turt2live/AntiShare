@@ -15,17 +15,15 @@ import com.turt2live.antishare.storage.VirtualStorage;
 
 public class AntiShare extends PluginWrapper {
 
-	/* TODO: Wait until a better (less resource intensive) solution is better
-	 * - Throw items in region 
-	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
-	 * 
-	 * TODO: Wait until an API solution is available
+	/* TODO: Wait until an API solution is available
 	 *  - TNT Creative Explosions
 	 *  	- Refs in plugin.yml, config.yml, world.yml, PermissionsMenu.java, and OtherEditor.java have been removed
+	 * - Throw items in region 
+	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
 	 *  
 	 *  TODO: Test code when BUKKIT issues fixed:
 	 *  ** For self ref: https://bukkit.atlassian.net/browse/BUKKIT-####
-	 *  - Creative/Survival Block Tracking (BUKKIT-1214, BUKKIT-1211)
+	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211)
 	 *  - Inventory mirror creative-glitch (BUKKIT-1211)
 	 */
 
@@ -33,7 +31,7 @@ public class AntiShare extends PluginWrapper {
 	public static boolean DEBUG_MODE = true;
 
 	private Configuration config;
-	public static Logger log = Logger.getLogger("Minecraft");
+	public Logger log;
 	private SQLManager sql;
 	public VirtualStorage storage;
 	private RegionHandler regions;
@@ -44,6 +42,7 @@ public class AntiShare extends PluginWrapper {
 
 	@Override
 	public void onEnable(){
+		log = getLogger();
 		config = new Configuration(this);
 		config.create();
 		config.reload();
@@ -52,9 +51,9 @@ public class AntiShare extends PluginWrapper {
 		getServer().getPluginManager().registerEvents(new ASListener(this), this);
 		MultiWorld.detectWorlds(this);
 		storage = new VirtualStorage(this);
-		log.info("[" + getDescription().getFullName() + "] Converting pre-3.0.0 creative blocks...");
+		log.info("Converting pre-3.0.0 creative blocks...");
 		int converted = storage.convertCreativeBlocks();
-		log.info("[" + getDescription().getFullName() + "] Converted " + converted + " blocks!");
+		log.info("Converted " + converted + " blocks!");
 		if(getConfig().getBoolean("SQL.use")){
 			sql = new SQLManager(this);
 			if(sql.attemptConnectFromConfig()){
@@ -73,11 +72,11 @@ public class AntiShare extends PluginWrapper {
 		}
 		getCommand("as").setExecutor(new CommandHandler(this));
 		getCommand("gm").setExecutor(new GameModeCommand(this));
-		log.info("[" + getDescription().getFullName() + "] Enabled! (turt2live)");
 		if(getConfig().getInt("settings.save-interval") > 0){
 			int saveTime = (getConfig().getInt("settings.save-interval") * 60) * 20;
 			timedSave = new TimedSave(this, saveTime);
 		}
+		log.info("Enabled! (turt2live)");
 	}
 
 	@Override
@@ -85,13 +84,13 @@ public class AntiShare extends PluginWrapper {
 		if(timedSave != null){
 			timedSave.cancel();
 		}
-		log.info("[" + getDescription().getFullName() + "] Saving virtual storage to disk/SQL");
+		log.info("Saving virtual storage to disk/SQL");
 		storage.saveToDisk();
 		regions.saveStatusToDisk();
 		if(sql != null){
 			sql.disconnect();
 		}
-		log.info("[" + getDescription().getFullName() + "] Disabled! (turt2live)");
+		log.info("Disabled! (turt2live)");
 	}
 
 	public Configuration config(){

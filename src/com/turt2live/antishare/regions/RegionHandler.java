@@ -35,7 +35,7 @@ public class RegionHandler {
 			hasWorldEdit = true;
 			worldedit = new WorldEditHook(plugin);
 		}else{
-			AntiShare.log.warning("[" + plugin.getDescription().getFullName() + "] WorldEdit is not installed!");
+			plugin.log.warning("["+plugin.getDescription().getVersion()+"] "+"WorldEdit is not installed!");
 		}
 		load();
 	}
@@ -306,7 +306,7 @@ public class RegionHandler {
 				}catch(SQLException e){
 					Bug bug = new Bug(e, "cannot handle region information", this.getClass(), null);
 					plugin.getDebugger().sendBug(bug);
-					AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Cannot handle region information: " + e.getMessage());
+					plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Cannot handle region information: " + e.getMessage());
 				}
 			}
 		}

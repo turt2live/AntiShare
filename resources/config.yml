@@ -8,7 +8,7 @@
 #   'commands' - Commands to block, define a new command with a SPACE (defaults block '/somecommand' and '/anothercommand')
 #   -- Want all blocks/items to be denied? Put a *
 #   -- Want no blocks/items to be denied? Put: none
-#   -- Make sure item lists are space-seperated, not commas, periods, or fancy other things!
+#   -- Make sure item lists are comma-separated, not spaces, periods, or fancy other things!
 # 
 # Messages:
 #   All messages are when they are declined an action.
@@ -162,11 +162,11 @@
 #   - CraftBukkit Version
 events:
   block_break: none
-  block_place: 57 41 42
+  block_place: 57,41,42
   death: '*'
   drop_item: '*'
-  interact: 23 61 62 54 342
-  commands: '/somecommand /anothercommand'
+  interact: 23,61,62,54,342
+  commands: '/somecommand,/anothercommand'
 messages:
   block_break: You can't do that!
   block_place: You can't do that!

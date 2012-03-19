@@ -33,7 +33,7 @@ public class CommandHandler implements CommandExecutor {
 						plugin.reloadConfig();
 						MultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
 						plugin.storage.reload(sender);
-						AntiShare.log.info("AntiShare Reloaded.");
+						plugin.log.info("["+plugin.getDescription().getVersion()+"] "+"AntiShare Reloaded.");
 						if(sender instanceof Player){
 							ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
 						}

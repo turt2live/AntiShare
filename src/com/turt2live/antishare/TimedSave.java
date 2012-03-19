@@ -14,7 +14,7 @@ public class TimedSave {
 			}
 		}, ticks, ticks);
 		if(id == -1){
-			AntiShare.log.severe("[AntiShare] Save thread cannot be created.");
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Save thread cannot be created.");
 		}
 	}
 

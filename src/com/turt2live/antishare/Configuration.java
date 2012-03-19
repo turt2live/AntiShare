@@ -21,6 +21,16 @@ public class Configuration {
 			plugin.getConfig().saveDefaults();
 		}
 		load();
+		// Check the events for spaces (3.1.0)
+		plugin.getConfig().set("events.block_break", (!plugin.getConfig().getString("events.block_break").contains(",") ? plugin.getConfig().getString("events.block_break").replaceAll(" ", ",") : plugin.getConfig().getString("events.block_break")));
+		plugin.getConfig().set("events.block_place", (!plugin.getConfig().getString("events.block_place").contains(",") ? plugin.getConfig().getString("events.block_place").replaceAll(" ", ",") : plugin.getConfig().getString("events.block_place")));
+		plugin.getConfig().set("events.death", (!plugin.getConfig().getString("events.death").contains(",") ? plugin.getConfig().getString("events.death").replaceAll(" ", ",") : plugin.getConfig().getString("events.death")));
+		plugin.getConfig().set("events.drop_item", (!plugin.getConfig().getString("events.drop_item").contains(",") ? plugin.getConfig().getString("events.drop_item").replaceAll(" ", ",") : plugin.getConfig().getString("events.drop_item")));
+		plugin.getConfig().set("events.interact", (!plugin.getConfig().getString("events.interact").contains(",") ? plugin.getConfig().getString("events.interact").replaceAll(" ", ",") : plugin.getConfig().getString("events.interact")));
+		plugin.getConfig().set("events.commands", (!plugin.getConfig().getString("events.commands").contains(",") ? plugin.getConfig().getString("events.commands").replaceAll(" ", ",") : plugin.getConfig().getString("events.commands")));
+		plugin.getConfig().set("other.tracked-blocks", (!plugin.getConfig().getString("other.tracked-blocks").contains(",") ? plugin.getConfig().getString("other.tracked-blocks").replaceAll(" ", ",") : plugin.getConfig().getString("other.tracked-blocks")));
+		save();
+		load();
 	}
 
 	public boolean onlyIfCreative(Player player){

@@ -20,21 +20,21 @@ public class Conflicts {
 		findWorldManagerConflicts(plugin.getServer().getPluginManager().getPlugins());
 		findOtherConflicts(plugin.getServer().getPluginManager().getPlugins());
 		if(INVENTORY_CONFLICT_PRESENT){
-			AntiShare.log.severe("[AntiShare-Conflicts] Inventory Manager Conflict: " + INVENTORY_CONFLICT);
-			AntiShare.log.severe("[AntiShare-Conflicts] AntiShare will not deal with inventories because of the conflict");
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"[CONFLICT] Inventory Manager Conflict: " + INVENTORY_CONFLICT);
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"[CONFLICT] AntiShare will not deal with inventories because of the conflict");
 		}
 		if(CREATIVE_MANAGER_CONFLICT_PRESENT){
-			AntiShare.log.severe("[AntiShare-Conflicts] Creative Mode Manager Conflict: " + CREATIVE_MANAGER_CONFLICT);
-			AntiShare.log.severe("[AntiShare-Conflicts] AntiShare will disable itself because of the conflict");
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"[CONFLICT] Creative Mode Manager Conflict: " + CREATIVE_MANAGER_CONFLICT);
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"[CONFLICT] AntiShare will disable itself because of the conflict");
 			plugin.getServer().getPluginManager().disablePlugin(plugin);
 		}
 		if(WORLD_MANAGER_CONFLICT_PRESENT){
-			AntiShare.log.severe("[AntiShare-Conflicts] World Manager Conflict: " + WORLD_MANAGER_CONFLICT);
-			AntiShare.log.severe("[AntiShare-Conflicts] AntiShare will not deal with allowance of world transfers because of the conflict");
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"[CONFLICT] World Manager Conflict: " + WORLD_MANAGER_CONFLICT);
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"[CONFLICT] AntiShare will not deal with allowance of world transfers because of the conflict");
 		}
 		if(OTHER_CONFLICT_PRESENT){
-			AntiShare.log.severe("[AntiShare-Conflicts] Other Conflict: " + OTHER_CONFLICT);
-			AntiShare.log.severe("[AntiShare-Conflicts] AntiShare won't do anything, but there may be problems because of the conflict");
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"[CONFLICT] Other Conflict: " + OTHER_CONFLICT);
+			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"[CONFLICT] AntiShare won't do anything, but there may be problems because of the conflict");
 		}
 	}
 

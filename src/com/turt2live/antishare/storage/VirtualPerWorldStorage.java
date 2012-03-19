@@ -174,7 +174,7 @@ public class VirtualPerWorldStorage {
 				}
 			}
 		}
-		String trackedBlocks[] = plugin.getConfig().getString("other.tracked-blocks").split(" ");
+		String trackedBlocks[] = plugin.getConfig().getString("other.tracked-blocks").replaceAll(" ", "").split(",");
 		boolean notNoneOrAll = false;
 		if(trackedBlocks.length == 1){
 			if(trackedBlocks[0].equalsIgnoreCase("*")){
@@ -193,12 +193,12 @@ public class VirtualPerWorldStorage {
 			}
 		}
 		tracked_survival_blocks.addAll(tracked_creative_blocks); //TODO: Implement better solution
-		String blockedBreak[] = plugin.config().getString("events.block_break", world).split(" ");
-		String blockedPlace[] = plugin.config().getString("events.block_place", world).split(" ");
-		String blockedDrop[] = plugin.config().getString("events.drop_item", world).split(" ");
-		String blockedDeath[] = plugin.config().getString("events.death", world).split(" ");
-		String blockedInteract[] = plugin.config().getString("events.interact", world).split(" ");
-		String blockedCommands[] = plugin.config().getString("events.commands", world).split(" ");
+		String blockedBreak[] = plugin.config().getString("events.block_break", world).replaceAll(" ", "").split(",");
+		String blockedPlace[] = plugin.config().getString("events.block_place", world).replaceAll(" ", "").split(",");
+		String blockedDrop[] = plugin.config().getString("events.drop_item", world).replaceAll(" ", "").split(",");
+		String blockedDeath[] = plugin.config().getString("events.death", world).replaceAll(" ", "").split(",");
+		String blockedInteract[] = plugin.config().getString("events.interact", world).replaceAll(" ", "").split(",");
+		String blockedCommands[] = plugin.config().getString("events.commands", world).replaceAll(" ", "").split(",");
 		boolean skip = false;
 		/*## Block Break ##*/
 		if(blockedBreak.length == 1){

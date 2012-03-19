@@ -19,11 +19,11 @@ public class UsageStatistics {
 			BufferedReader in = new BufferedReader(new InputStreamReader(statsURL.openConnection().getInputStream()));
 			String line = in.readLine();
 			if(!line.equalsIgnoreCase("sent")){
-				AntiShare.log.warning("[AntiShare] Could not send usage statistics.");
+				plugin.log.warning("["+plugin.getDescription().getVersion()+"] "+"Could not send usage statistics.");
 			}
 			in.close();
 		}catch(Exception e){
-			AntiShare.log.warning("[AntiShare] Could not send usage statistics.");
+			plugin.log.warning("["+plugin.getDescription().getVersion()+"] "+"Could not send usage statistics.");
 		}
 	}
 

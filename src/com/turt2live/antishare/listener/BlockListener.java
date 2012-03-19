@@ -167,7 +167,7 @@ public class BlockListener implements Listener {
 						plugin.storage.saveCreativeBlock(block, BlockedType.SURVIVAL_BLOCK_BREAK, block.getWorld());
 					}
 				}else if(creativeBlock && survivalBlock){
-					AntiShare.log.severe("[" + plugin.getDescription().getFullName() + "] Sanity check on block break failed.");
+					plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Sanity check on block break failed.");
 				}else{
 					// "generated" block
 				}

@@ -24,13 +24,14 @@ public class Debugger implements Listener {
 		if(!AntiShare.DEBUG_MODE){
 			return;
 		}
-		Logger log = AntiShare.log;
-		log.severe("[AntiShare Debugger] *** BUG REPORT ***");
-		log.severe("[AntiShare Debugger] Class: " + bug.getInvolvedClass().getName());
-		log.severe("[AntiShare Debugger] Sender: " + bug.getSenderInvolved());
-		log.severe("[AntiShare Debugger] Exception: " + bug.getException().getMessage());
-		log.severe("[AntiShare Debugger] Message: " + bug.getMessage());
-		log.severe("[AntiShare Debugger] World: " + bug.getWorld());
+		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		Logger log = plugin.log;
+		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] *** BUG REPORT ***");
+		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] Class: " + bug.getInvolvedClass().getName());
+		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] Sender: " + bug.getSenderInvolved());
+		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] Exception: " + bug.getException().getMessage());
+		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] Message: " + bug.getMessage());
+		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] World: " + bug.getWorld());
 	}
 
 	private AntiShare plugin;
