@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -84,25 +83,6 @@ public class BlockListener implements Listener {
 					}
 				}
 			}
-			if(plugin.storage.bedrockBlocked(player.getWorld())
-					&& !plugin.getPermissions().has(player, "AntiShare.bedrock", player.getWorld())
-					&& event.getBlock().getType().equals(Material.BEDROCK)){
-				if(plugin.config().onlyIfCreative(player)){
-					if(player.getGameMode() == GameMode.CREATIVE){
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-						Notification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
-						event.setCancelled(true);
-					}else{
-						Notification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
-					}
-				}else{
-					ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-					Notification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
-					event.setCancelled(true);
-				}
-			}else if(event.getBlock().getType().equals(Material.BEDROCK)){
-				Notification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
-			}
 			if(event.isCancelled()){
 				return;
 			}
@@ -167,7 +147,7 @@ public class BlockListener implements Listener {
 						plugin.storage.saveCreativeBlock(block, BlockedType.SURVIVAL_BLOCK_BREAK, block.getWorld());
 					}
 				}else if(creativeBlock && survivalBlock){
-					plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Sanity check on block break failed.");
+					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Sanity check on block break failed.");
 				}else{
 					// "generated" block
 				}
@@ -185,7 +165,7 @@ public class BlockListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockDamage(BlockDamageEvent event){
 		if(event.isCancelled() || event.getPlayer() == null){
 			return;
@@ -266,29 +246,6 @@ public class BlockListener implements Listener {
 			if(event.isCancelled()){
 				return;
 			}
-			//Bedrock check
-			if(plugin.storage.bedrockBlocked(player.getWorld())
-					&& !plugin.getPermissions().has(player, "AntiShare.bedrock", player.getWorld())
-					&& event.getBlock().getType().equals(Material.BEDROCK)){
-				if(plugin.config().onlyIfCreative(player)){
-					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						event.setCancelled(true);
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-						Notification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
-					}else{
-						Notification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
-					}
-				}else{
-					event.setCancelled(true);
-					ASUtils.sendToPlayer(player, plugin.config().getString("messages.bedrock", player.getWorld()));
-					Notification.sendNotification(NotificationType.ILLEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
-				}
-			}else if(event.getBlock().getType().equals(Material.BEDROCK)){
-				Notification.sendNotification(NotificationType.LEGAL_BEDROCK, plugin, player, "BEDROCK", Material.BEDROCK);
-			}
-			if(event.isCancelled()){
-				return;
-			}
 			//Creative Mode Placing
 			if(plugin.config().getBoolean("other.track_blocks", player.getWorld())
 					&& !plugin.getPermissions().has(player, "AntiShare.freePlace", player.getWorld())){
@@ -298,22 +255,6 @@ public class BlockListener implements Listener {
 					plugin.storage.saveSurvivalBlock(event.getBlock(), BlockedType.SURVIVAL_BLOCK_PLACE, event.getBlock().getWorld());
 				}
 			}
-			if(event.isCancelled()){
-				return;
-			}
-			// TNT Explosions TODO: Waiting on API solution
-			//		if(event.getBlock().getType().equals(Material.TNT)
-			//				&& !plugin.getPermissions().has(player, "AntiShare.tnt", event.getBlock().getWorld())
-			//				&& plugin.config().getBoolean("other.noTNTDrops", event.getBlock().getWorld())){
-			//			if(plugin.config().onlyIfCreative(player)){
-			//				if(player.getGameMode().equals(GameMode.CREATIVE)){
-			//					event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
-			//					System.out.println(event.getBlock().getLocation());
-			//				}
-			//			}else{
-			//				event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
-			//			}
-			//		}	
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);

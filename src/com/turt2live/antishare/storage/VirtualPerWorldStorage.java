@@ -158,7 +158,7 @@ public class VirtualPerWorldStorage {
 				}
 			}
 		}
-		blocked_bedrock = !plugin.config().getBoolean("other.allow_bedrock", world);
+		blocked_bedrock = !plugin.config().getBoolean("hazards.allow_bedrock", world);
 		blockDrops = plugin.config().getBoolean("other.blockDrops", world);
 		if(flatfile){
 			File listing[] = new File(plugin.getDataFolder(), "inventories").listFiles();

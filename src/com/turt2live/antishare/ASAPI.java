@@ -411,7 +411,7 @@ public class ASAPI {
 	 * @return true if the player is allowed to place/break bedrock
 	 */
 	public boolean canUseBedrock(Player player){
-		if(plugin.config().getBoolean("other.allow_bedrock", player.getWorld())){
+		if(plugin.config().getBoolean("hazards.allow_bedrock", player.getWorld())){
 			return true;
 		}
 		if(plugin.getPermissions().has(player, "AntiShare.bedrock", player.getWorld())){
@@ -428,7 +428,7 @@ public class ASAPI {
 	 * @return true if the player can place bedrock in the specified world
 	 */
 	public boolean canUseBedrock(Player player, World world){
-		if(plugin.config().getBoolean("other.allow_bedrock", world)){
+		if(plugin.config().getBoolean("hazards.allow_bedrock", world)){
 			return true;
 		}
 		if(plugin.getPermissions().has(player, "AntiShare.bedrock", world)){
@@ -496,7 +496,7 @@ public class ASAPI {
 		if(plugin.getPermissions().has(player, "AntiShare.allow.eggs", player.getWorld())){
 			return true;
 		}
-		if(plugin.config().getBoolean("other.allow_eggs", player.getWorld()) == false){
+		if(plugin.config().getBoolean("hazards.allow_eggs", player.getWorld()) == false){
 			if(isOnlyIfCreativeOn(player.getWorld())){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					return false;
@@ -521,7 +521,7 @@ public class ASAPI {
 		if(plugin.getPermissions().has(player, "AntiShare.allow.eggs", world)){
 			return true;
 		}
-		if(plugin.config().getBoolean("other.allow_eggs", world) == false){
+		if(plugin.config().getBoolean("hazards.allow_eggs", world) == false){
 			if(isOnlyIfCreativeOn(world)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){
 					return false;

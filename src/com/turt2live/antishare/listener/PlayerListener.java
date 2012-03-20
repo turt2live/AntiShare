@@ -16,7 +16,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -125,7 +124,7 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event){
 		Player player = event.getPlayer();
 		try{
@@ -202,69 +201,6 @@ public class PlayerListener implements Listener {
 			if(event.isCancelled()){
 				return;
 			}
-			boolean skip = false;
-			//Egg check
-			if(plugin.config().getBoolean("other.allow_eggs", player.getWorld()) == false){
-				ItemStack possibleEgg = event.getItem();
-				if(possibleEgg != null){
-					if(possibleEgg.getTypeId() != 383){
-						skip = true;
-					}
-				}else{
-					skip = true;
-				}
-				if(!skip){
-					if(plugin.getPermissions().has(player, "AntiShare.allow.eggs", player.getWorld())){
-						Notification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
-						return;
-					}
-					// At this point the player is not allowed to use eggs, and we are dealing with an egg
-					if(plugin.config().onlyIfCreative(player)){
-						if(player.getGameMode().equals(GameMode.CREATIVE)){
-							event.setCancelled(true);
-							Notification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
-							ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
-						}else{
-							Notification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
-						}
-					}else{
-						event.setCancelled(true);
-						Notification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
-					}
-				}
-			}
-		}catch(Exception e){
-			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
-		}
-	}
-
-	@EventHandler (priority = EventPriority.LOWEST)
-	public void onEggThrow(PlayerEggThrowEvent event){
-		Player player = event.getPlayer();
-		try{
-			if(plugin.config().getBoolean("other.allow_eggs", player.getWorld()) == false){
-				if(plugin.getPermissions().has(player, "AntiShare.allow.eggs", player.getWorld())){
-					Notification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "EGG", null);
-					return;
-				}
-				// At this point the player is not allowed to use eggs, and we are dealing with an egg
-				if(plugin.config().onlyIfCreative(player)){
-					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						event.setHatching(false);
-						Notification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "EGG", null);
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
-					}else{
-						Notification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "EGG", null);
-					}
-				}else{
-					event.setHatching(false);
-					Notification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "EGG", null);
-					ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
-				}
-			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
@@ -283,7 +219,7 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
 		try{
@@ -355,7 +291,7 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerPortal(PlayerPortalEvent event){
 		try{
 			onPlayerTeleport(event);

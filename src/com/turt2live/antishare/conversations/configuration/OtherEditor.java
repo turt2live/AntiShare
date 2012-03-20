@@ -16,6 +16,7 @@ public class OtherEditor extends ASMenu {
 
 	// TODO: Uncomment throw to region when a better solution is ready
 	// TODO: Uncomment tnt explosions when a better solution is ready
+	// TODO: Transfer out 'hazards' from here into own prompt
 
 	public OtherEditor(){
 		super("show", "allow eggs", "allow exp bottle", "allow bedrock", "inventories", "track blocks", "pvp", "mob pvp", "no drops",
@@ -59,7 +60,7 @@ public class OtherEditor extends ASMenu {
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
 				return new NotificationEditor();
 			}else{
-				plugin.getConfig().set("other.allow_eggs", ASUtils.getValueOf(value));
+				plugin.getConfig().set("hazards.allow_eggs", ASUtils.getValueOf(value));
 			}
 		}else if(input.startsWith("allow exp bottle")){
 			String value = input.replace("allow exp bottle", "").trim();
@@ -67,7 +68,7 @@ public class OtherEditor extends ASMenu {
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
 				return new NotificationEditor();
 			}else{
-				plugin.getConfig().set("other.allow_exp_bottle", ASUtils.getValueOf(value));
+				plugin.getConfig().set("hazards.allow_exp_bottle", ASUtils.getValueOf(value));
 			}
 		}else if(input.startsWith("allow bedrock")){
 			String value = input.replace("allow bedrock", "").trim();
@@ -75,7 +76,7 @@ public class OtherEditor extends ASMenu {
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
 				return new NotificationEditor();
 			}else{
-				plugin.getConfig().set("other.allow_bedrock", ASUtils.getValueOf(value));
+				plugin.getConfig().set("hazards.allow_bedrock", ASUtils.getValueOf(value));
 			}
 		}else if(input.startsWith("inventories")){
 			String value = input.replace("inventories", "").trim();
@@ -154,11 +155,11 @@ public class OtherEditor extends ASMenu {
 	private void displayValue(String input, Conversable target, AntiShare plugin){
 		String value = "UNKNOWN";
 		if(input.startsWith("allow eggs")){
-			value = String.valueOf(plugin.getConfig().getBoolean("other.allow_eggs"));
+			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_eggs"));
 		}else if(input.startsWith("allow exp bottle")){
-			value = String.valueOf(plugin.getConfig().getBoolean("other.allow_exp_bottle"));
+			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_exp_bottle"));
 		}else if(input.startsWith("allow bedrock")){
-			value = String.valueOf(plugin.getConfig().getBoolean("other.allow_bedrock"));
+			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_bedrock"));
 		}else if(input.startsWith("inventories")){
 			value = String.valueOf(plugin.getConfig().getBoolean("other.inventory_swap"));
 		}else if(input.startsWith("track blocks")){

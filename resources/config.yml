@@ -14,17 +14,23 @@
 #   All messages are when they are declined an action.
 #   Chat colors are supported using the & sign (eg: &f = white)
 #   If you wouldn't like a message to show, set the value as 'noshow'
+#
+# Hazards:
+#   'allow_eggs' - If false then eggs cannot be used (both 'mob-spawning' and chicken eggs are covered by this)
+#   'allow_exp_bottle' - Allows the experience bottle, set to false to block
+#   'allow_bedrock' - If false then bedrock will never be broken or placed
+#   'allow_buckets' - Allows use of buckets (water and lava)
+#   'allow_fire_charge' - Allows use of the fire charge
+#   'allow_flint' - Allows use of Flint and Tinder (also blocks use of the Fire block)
+#   'allow_tnt' - Allows placement of TNT
 # 
 # Other:
 #   'only_if_creative' - Auto-decline if they are in creative, permissions still apply.
 #     (eg: A player doesn't have the allow or decline permission to place, and is in creative, places a block: declined)
 #       For per-player support, set the permission "AntiShare.onlyIfCreative". See the permissions section for more information
-#   'allow_eggs' - If false then eggs cannot be used (the ones that spawn mobs, like creepers)
-#   'allow_exp_bottle' - Allows the experience bottle, set to false to block
 #   'inventory_swap' - If true then creative and survival inventories will be swapped
 #   'track_blocks' - If true then creative/survival mode blocks will be tracked where only creative/survival mode players can break them
 #              (unless they have the permission "AntiShare.blockBypass")  
-#   'allow_bedrock' - If false then bedrock will never be broken or placed
 #   'pvp' - True if you want to allow creative players to hit other players ("AntiShare.pvp" to allow to specific players)
 #   'pvp-mobs' - True if you want to allow creative players to be able to hit mobs ("AntiShare.mobpvp" to allow to specific players)
 #   'blockDrops' - Only works if 'track_blocks' is in effect. If true, you allow allow the creative-mode block to be broken, but no drops will be produced
@@ -36,8 +42,9 @@
 #                    You can set this to 'none' or '*' as well if you prefer, 'none' meaning don't track (set 'track_blocks' to false to reduce some possible lag), '*' meaning
 #                    track everything placed.
 # 
-#   The following are affected by 'only_if_creative': 'allow_eggs', 'allow_bedrock', 'pvp', 'pvp-mobs', 'worldTransfer', and all the 'events'
+#   The following are affected by 'only_if_creative': 'pvp', 'pvp-mobs', 'worldTransfer', all the 'hazards', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
+# 
 # Settings:
 #   'save-interval' - This is the interval, in minutes, you want AntiShare to save it's data to disk (default is 30 minutes)
 #   'send-use-info' - Set to false to stop sending usage stats to turt2live. (What stats are sent is explained later)
@@ -174,7 +181,7 @@ messages:
   death: You can't do that!
   drop_item: You can't do that!
   interact: You can't do that!
-  eggs: You can't use the spawn eggs!
+  eggs: You can't use eggs!
   exp_bottle: You can't use experience bottles!
   inventory_swap: Your inventory has been changed.
   creativeModeBlock: You cannot break that block! It was placed by a creative mode player.
@@ -185,13 +192,22 @@ messages:
   noBlockDrop: You will not get anything from breaking that!
   illegalCommand: You cannot use that command!
   worldSwap: You cannot transfer to that world!
-other:
-  only_if_creative: true
+  bucket: You cannot use buckets!
+  flint: You cannot use fire!
+  tnt: You cannot use TNT!
+  fire_charge: You cannot use the Fire Charge!
+hazards:
   allow_eggs: false
   allow_exp_bottle: false
+  allow_bedrock: false
+  allow_buckets: false
+  allow_fire_charge: false
+  allow_flint: false
+  allow_tnt: false
+other:
+  only_if_creative: true
   inventory_swap: true
   track_blocks: true
-  allow_bedrock: false
   pvp: false
   pvp-mobs: false
   blockDrops: false
