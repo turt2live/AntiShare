@@ -25,6 +25,20 @@ public class AntiShare extends PluginWrapper {
 	 *  ** For self ref: https://bukkit.atlassian.net/browse/BUKKIT-####
 	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211)
 	 *  - Inventory mirror creative-glitch (BUKKIT-1211)
+	 *  
+	 *  TODO: Add these features
+	 *  - AntiShare log file (with analyzer)
+	 *  - Remove griefers (buckets, water/lava, fire charge, etc)
+	 *  - Explicit support for "exploits" (fire charges, flint & steel, etc)
+	 *  - Bug catching (sanity checks)
+	 *  
+	 *  TODO: Test/verify these potential bugs
+	 *  - Minecart (storage/furnace) may be accesiable (explicit support?)
+	 *  
+	 *  TODO: Fix these known bugs:
+	 *  - /as rl resets people's inventories while in regions
+	 *  - Metadata related (fix?)
+	 *  - TNT Related (waiting on PR to be accepted)
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
