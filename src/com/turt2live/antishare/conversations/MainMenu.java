@@ -9,6 +9,7 @@ import org.bukkit.conversations.Prompt;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.conversations.configuration.EditConfigurationMenu;
+import com.turt2live.antishare.conversations.hazards.HazardMenu;
 import com.turt2live.antishare.conversations.permissions.PermissionsMenu;
 import com.turt2live.antishare.conversations.region.EditRegionMenu;
 
@@ -17,7 +18,7 @@ public class MainMenu extends ASMenu {
 	// Add Region is unsupported due to a chat lock
 
 	public MainMenu(){
-		super("edit configuration", "edit config", "edit region", /*"add region", */"permissions help", "permissions", "perms", "perms help");
+		super("edit configuration", "edit config", "edit region", /*"add region", */"permissions help", "permissions", "perms", "perms help", "hazards");
 	}
 
 	@Override
@@ -27,6 +28,7 @@ public class MainMenu extends ASMenu {
 		//ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "add region" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Create a GameMode Region");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "edit region" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Edit a GameMode Region");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "permissions help" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Get help with the permissions");
+		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "hazards" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Configure the 'hazards' settings");
 	}
 
 	@Override
@@ -45,6 +47,8 @@ public class MainMenu extends ASMenu {
 		}else if(input.equalsIgnoreCase("permissions help") || input.equalsIgnoreCase("perms help")
 				|| input.equalsIgnoreCase("permissions") || input.equalsIgnoreCase("perms")){
 			return new PermissionsMenu();
+		}else if(input.equalsIgnoreCase("hazards")){
+			return new HazardMenu();
 		}else if(input.equalsIgnoreCase("back")){
 			ASUtils.sendToConversable(context.getForWhom(), ChatColor.RED + "You cannot go back from here! If you want to leave try: exit");
 		}

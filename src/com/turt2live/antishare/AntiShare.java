@@ -32,7 +32,7 @@ public class AntiShare extends PluginWrapper {
 	 *  - Bug catching (sanity checks)
 	 *  
 	 *  TODO: Test/verify these potential bugs
-	 *  - Minecart (storage/furnace) may be accesiable (explicit support?)
+	 *  - Minecart (storage/furnace) may be accessible (explicit support?)
 	 *  
 	 *  TODO: Fix these known bugs:
 	 *  - /as rl resets people's inventories while in regions
@@ -40,7 +40,8 @@ public class AntiShare extends PluginWrapper {
 	 *  - TNT Related (waiting on PR to be accepted)
 	 *  
 	 *  NOTES:
-	 *  - Buckets, Fire Charges, etc: https://github.com/GreenZack/AntiGrief/blob/master/src/main/java/us/GreenZack/AntiGrief/MyPlayerListener.java
+	 *  - Buckets, Fire Charges, etc: 
+	 *  		https://github.com/GreenZack/AntiGrief/blob/master/src/main/java/us/GreenZack/AntiGrief/MyPlayerListener.java
 	 *  
 	 */
 

@@ -16,19 +16,15 @@ public class OtherEditor extends ASMenu {
 
 	// TODO: Uncomment throw to region when a better solution is ready
 	// TODO: Uncomment tnt explosions when a better solution is ready
-	// TODO: Transfer out 'hazards' from here into own prompt
 
 	public OtherEditor(){
-		super("show", "allow eggs", "allow exp bottle", "allow bedrock", "inventories", "track blocks", "pvp", "mob pvp", "no drops",
+		super("show", "inventories", "track blocks", "pvp", "mob pvp", "no drops",
 				"worlds", /*"throw to region", */"tracked blocks"/*, "tnt drops"*/);
 	}
 
 	@Override
 	public void displayMenu(Conversable target){
 		ASUtils.sendToConversable(target, ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "Messages" + ChatColor.DARK_GREEN + " ]=======");
-		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "allow eggs <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow mob eggs?");
-		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "allow exp bottle <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow exp bottles?");
-		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "allow bedrock <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow bedrock?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "inventories <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Gamemode inventories, on?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "track blocks <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Track 'creative mode' blocks?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "pvp <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "True to allow pvp");
@@ -54,35 +50,11 @@ public class OtherEditor extends ASMenu {
 			return new WaitPrompt(new OtherEditor());
 		}else if(input.equals("back")){
 			return new EditConfigurationMenu();
-		}else if(input.startsWith("allow eggs")){
-			String value = input.replace("allow eggs", "").trim();
-			if(ASUtils.getValueOf(value) == null){
-				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
-			}else{
-				plugin.getConfig().set("hazards.allow_eggs", ASUtils.getValueOf(value));
-			}
-		}else if(input.startsWith("allow exp bottle")){
-			String value = input.replace("allow exp bottle", "").trim();
-			if(ASUtils.getValueOf(value) == null){
-				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
-			}else{
-				plugin.getConfig().set("hazards.allow_exp_bottle", ASUtils.getValueOf(value));
-			}
-		}else if(input.startsWith("allow bedrock")){
-			String value = input.replace("allow bedrock", "").trim();
-			if(ASUtils.getValueOf(value) == null){
-				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
-			}else{
-				plugin.getConfig().set("hazards.allow_bedrock", ASUtils.getValueOf(value));
-			}
 		}else if(input.startsWith("inventories")){
 			String value = input.replace("inventories", "").trim();
 			if(ASUtils.getValueOf(value) == null){
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
+				return new OtherEditor();
 			}else{
 				plugin.getConfig().set("other.inventory_swap", ASUtils.getValueOf(value));
 			}
@@ -90,7 +62,7 @@ public class OtherEditor extends ASMenu {
 			String value = input.replace("track blocks", "").trim();
 			if(ASUtils.getValueOf(value) == null){
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
+				return new OtherEditor();
 			}else{
 				plugin.getConfig().set("other.track_blocks", ASUtils.getValueOf(value));
 			}
@@ -98,7 +70,7 @@ public class OtherEditor extends ASMenu {
 			String value = input.replace("pvp", "").trim();
 			if(ASUtils.getValueOf(value) == null){
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
+				return new OtherEditor();
 			}else{
 				plugin.getConfig().set("other.pvp", ASUtils.getValueOf(value));
 			}
@@ -106,7 +78,7 @@ public class OtherEditor extends ASMenu {
 			String value = input.replace("mob pvp", "").trim();
 			if(ASUtils.getValueOf(value) == null){
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
+				return new OtherEditor();
 			}else{
 				plugin.getConfig().set("other.pvp-mobs", ASUtils.getValueOf(value));
 			}
@@ -114,7 +86,7 @@ public class OtherEditor extends ASMenu {
 			String value = input.replace("no drops", "").trim();
 			if(ASUtils.getValueOf(value) == null){
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
+				return new OtherEditor();
 			}else{
 				plugin.getConfig().set("other.blockDrops", ASUtils.getValueOf(value));
 			}
@@ -122,7 +94,7 @@ public class OtherEditor extends ASMenu {
 			String value = input.replace("worlds", "").trim();
 			if(ASUtils.getValueOf(value) == null){
 				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-				return new NotificationEditor();
+				return new OtherEditor();
 			}else{
 				plugin.getConfig().set("other.worldTransfer", ASUtils.getValueOf(value));
 			}
@@ -130,7 +102,7 @@ public class OtherEditor extends ASMenu {
 				String value = input.replace("throw to region", "").trim();
 				if(ASUtils.getValueOf(value) == null){
 					ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-					return new NotificationEditor();
+					return new OtherEditor();
 				}else{
 					plugin.getConfig().set("other.cannot_throw_to_regions", !ASUtils.getValueOf(value)); //Inverse
 				}*/
@@ -141,7 +113,7 @@ public class OtherEditor extends ASMenu {
 			//			String value = input.replace("tnt drops", "").trim();
 			//			if(ASUtils.getValueOf(value) == null){
 			//				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-			//				return new NotificationEditor();
+			//				return new OtherEditor();
 			//			}else{
 			//				plugin.getConfig().set("other.noTNTDrops", !ASUtils.getValueOf(value));
 			//			}
@@ -154,15 +126,7 @@ public class OtherEditor extends ASMenu {
 
 	private void displayValue(String input, Conversable target, AntiShare plugin){
 		String value = "UNKNOWN";
-		if(input.startsWith("allow eggs")){
-			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_eggs"));
-		}else if(input.startsWith("allow exp bottle")){
-			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_exp_bottle"));
-		}else if(input.startsWith("allow bedrock")){
-			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_bedrock"));
-		}else if(input.startsWith("inventories")){
-			value = String.valueOf(plugin.getConfig().getBoolean("other.inventory_swap"));
-		}else if(input.startsWith("track blocks")){
+		if(input.startsWith("track blocks")){
 			value = String.valueOf(plugin.getConfig().getBoolean("other.track_blocks"));
 		}else if(input.startsWith("pvp")){
 			value = String.valueOf(plugin.getConfig().getBoolean("other.pvp"));
