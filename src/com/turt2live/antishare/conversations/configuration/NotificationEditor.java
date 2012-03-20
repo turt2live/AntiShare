@@ -21,14 +21,18 @@ public class NotificationEditor extends ASMenu {
 
 				"legal block break", "legal block place", "legal death", "legal drop item", "legal eggs", "legal interact",
 				"legal exp bottle", "legal bedrock", "legal creative block", "legal survival block", "legal pvp", "legal mob pvp",
-				"legal command", "legal world swap", //"legal throw to region",
+				"legal command", "legal world swap", /*"legal throw to region", */"legal fire charge", "legal bucket", "legal fire",
+				"legal tnt",
 
 				"illegal block break", "illegal block place", "illegal death", "illegal drop item", "illegal eggs", "illegal interact",
 				"illegal exp bottle", "illegal bedrock", "illegal creative block", "illegal survival block", "illegal pvp", "illegal mob pvp",
-				"illegal command", "illegal world swap", //"illegal throw to region",
+				"illegal command", "illegal world swap", /*"illegal throw to region", */"illegal fire charge", "illegal bucket", "illegal fire",
+				"illegal tnt",
 
 				"gamemode change", "region enter", "region exit");
 	}
+
+	// TODO: Complete implementation of fire charge, bucket, fire, and TNT notifications
 
 	@Override
 	public void displayMenu(Conversable target){

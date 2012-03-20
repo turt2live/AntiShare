@@ -701,7 +701,7 @@ public class ASAPI {
 	 */
 	public void reloadPlugin(CommandSender sender){
 		plugin.reloadConfig();
-		plugin.log.info("["+plugin.getDescription().getVersion()+"] "+"AntiShare Reloaded.");
+		plugin.log.logTechnical("[" + plugin.getDescription().getVersion() + "] " + "AntiShare Reloaded.");
 		if(sender instanceof Player){
 			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
 		}

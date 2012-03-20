@@ -239,6 +239,10 @@ notifications:
     mob-pvp: true
     bedrock_attempt: true
     world_transfer: true
+    fire_charge: true
+    fire: true
+    bucket: true
+    tnt-place: true
   legal:
     block_place: false
     block_break: false
@@ -254,6 +258,10 @@ notifications:
     mob-pvp: false
     bedrock_attempt: false
     world_transfer: false
+    fire_charge: false
+    fire: false
+    bucket: false
+    tnt-place: false
   general:
     gamemode_change: false
     region_enter: false

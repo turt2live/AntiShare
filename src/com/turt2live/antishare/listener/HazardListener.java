@@ -184,6 +184,23 @@ public class HazardListener implements Listener {
 				}
 			}
 		}
+		if(event.isCancelled()){
+			return;
+		}
+		if(player.getItemInHand() == null){
+			return;
+		}
+		// Fire Charges
+		// Thanks go to AntiGrief for the following code (modified version)
+		if(!plugin.config().getBoolean("hazards.allow_fire_charge", player.getWorld())){
+			if(!player.hasPermission("AntiShare.allow.firecharge")){
+				if(player.getItemInHand().getTypeId() == 385){
+					Notification.sendNotification(NotificationType.ILLEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.fire_charge", player.getWorld()));
+				}
+			}
+		}
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)

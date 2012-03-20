@@ -11,6 +11,8 @@ import com.turt2live.antishare.event.AntiShareEvent;
 
 public class Notification {
 
+	// TODO: Implement notifications for fire charge, fire, bucket, and TNT
+
 	public static void sendNotification(NotificationType type, AntiShare plugin, Player player, String variable, Material material){
 		boolean send = true;
 		if(!plugin.getConfig().getBoolean("notifications.send")){
@@ -244,8 +246,9 @@ public class Notification {
 				break;
 			}
 			plugin.log.logEvent(message);
+			plugin.log.log(message);
 		}
-		plugin.log.logEventForce(message);
+		plugin.log.logForce(message);
 		if(message.length() > 0){
 			Bukkit.broadcast(message, "AntiShare.notify");
 		}
