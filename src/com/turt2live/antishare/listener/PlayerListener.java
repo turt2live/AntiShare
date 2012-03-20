@@ -333,7 +333,7 @@ public class PlayerListener implements Listener {
 				return;
 			}
 			Player player = event.getPlayer();
-			if(!plugin.getPermissions().has(player, "AntiShare.worlds", player.getWorld())){
+			if(!plugin.getPermissions().has(player, "AntiShare.allow.worlds", player.getWorld())){
 				plugin.storage.switchInventories(player, event.getFrom(), player.getGameMode(), player.getWorld(), player.getGameMode());
 			}
 			Notification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, player.getWorld().getName(), null);

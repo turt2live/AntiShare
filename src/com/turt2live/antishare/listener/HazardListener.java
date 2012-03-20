@@ -82,7 +82,7 @@ public class HazardListener implements Listener {
 	public void onBlockBreak(BlockBreakEvent event){
 		Player player = event.getPlayer();
 		if(plugin.storage.bedrockBlocked(player.getWorld())
-				&& !plugin.getPermissions().has(player, "AntiShare.bedrock", player.getWorld())
+				&& !plugin.getPermissions().has(player, "AntiShare.allow.bedrock", player.getWorld())
 				&& event.getBlock().getType().equals(Material.BEDROCK)){
 			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode() == GameMode.CREATIVE){
@@ -106,7 +106,7 @@ public class HazardListener implements Listener {
 	public void onBlockPlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
 		if(plugin.storage.bedrockBlocked(player.getWorld())
-				&& !plugin.getPermissions().has(player, "AntiShare.bedrock", player.getWorld())
+				&& !plugin.getPermissions().has(player, "AntiShare.allow.bedrock", player.getWorld())
 				&& event.getBlock().getType().equals(Material.BEDROCK)){
 			if(plugin.config().onlyIfCreative(player)){
 				if(player.getGameMode().equals(GameMode.CREATIVE)){

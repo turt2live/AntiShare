@@ -36,54 +36,6 @@ permissions:
     AntiShare.config:
         description: allows use of the configuration helper
         default: false
-    AntiShare.onlyIfCreative:
-        description: only block actions if in creative
-        default: false
-    AntiShare.onlyIfCreative.global:
-        description: only block actions if in creative based on configuration instead of permissions
-        default: true
-    AntiShare.reload:
-        description: reload plugin
-        default: op
-    AntiShare.noswap:
-        description: immunity (if true) to inventory swapping on GameMode changes
-        default: op
-    AntiShare.blockBypass:
-        description: immunity to creative-mode only blocks
-        default: op
-    AntiShare.freePlace:
-        description: can place a creative-mode block without it being registered as such
-        default: op
-    AntiShare.bedrock:
-        description: can break and place bedrock
-        default: op
-    AntiShare.pvp:
-        description: can use pvp
-        default: op
-    AntiShare.mobpvp:
-        description: can use pvp against mobs
-        default: op
-    AntiShare.worlds:
-        description: can teleport to worlds without being blocked
-        default: op
-    AntiShare.notify:
-        description: get alerts from the plugin on actions
-        default: op
-    AntiShare.silent:
-        description: stops the sending of notifications from the player
-        default: op
-    AntiShare.regions:
-        description: allows creating/editing/removing/listing of GameMode regions
-        default: op
-    AntiShare.roam:
-        description: allows roaming through GameMode regions without being affected
-        default: op
-    AntiShare.gamemode:
-        description: allows a player to change their own gamemode
-        default: op
-    AntiShare.mirror:
-        description: allows the player to look at other people's inventories
-        default: op
     AntiShare.admin:
         description: All AntiShare permissions
         default: op
@@ -93,10 +45,6 @@ permissions:
             AntiShare.noswap: true
             AntiShare.blockBypass: true
             AntiShare.freePlace: true
-            AntiShare.bedrock: true
-            AntiShare.pvp: true
-            AntiShare.mobpvp: true
-            AntiShare.worlds: true
             AntiShare.notify: true
             AntiShare.silent: true
             AntiShare.regions: true
@@ -116,6 +64,14 @@ permissions:
             AntiShare.allow.commands: true
             AntiShare.allow.exp: true
             AntiShare.allow.expGain: true
+            AntiShare.allow.bedrock: true
+            AntiShare.allow.pvp: true
+            AntiShare.allow.mobpvp: true
+            AntiShare.allow.worlds: true
+            AntiShare.allow.buckets: true
+            AntiShare.allow.fire: true
+            AntiShare.allow.firecharge: true
+            AntiShare.allow.tnt: true
     AntiShare.allow.place:
         description: allow place of defined blocks
         default: op
@@ -142,4 +98,64 @@ permissions:
         default: op
     AntiShare.allow.expGain:
         description: allow exp gain
+        default: op
+    AntiShare.allow.bedrock:
+        description: allow bedrock place/break
+        default: op
+    AntiShare.allow.pvp:
+        description: allow pvp to players
+        default: op
+    AntiShare.allow.mobpvp:
+        description: allow ability to hit mobs
+        default: op
+    AntiShare.allow.worlds:
+        description: allow transfer to all worlds
+        default: op
+    AntiShare.allow.buckets:
+        description: allow use of buckets
+        default: op
+    AntiShare.allow.fire:
+        description: allow use of fire (flint and tinder)
+        default: op
+    AntiShare.allow.firecharge:
+        description: allow use of the fire charge
+        default: op
+    AntiShare.allow.tnt:
+        description: allow placement of TNT
+        default: op
+    AntiShare.onlyIfCreative:
+        description: only block actions if in creative
+        default: false
+    AntiShare.onlyIfCreative.global:
+        description: only block actions if in creative based on configuration instead of permissions
+        default: true
+    AntiShare.reload:
+        description: reload plugin
+        default: op
+    AntiShare.noswap:
+        description: immunity (if true) to inventory swapping on GameMode changes
+        default: op
+    AntiShare.blockBypass:
+        description: immunity to creative-mode only blocks
+        default: op
+    AntiShare.freePlace:
+        description: can place a creative-mode block without it being registered as such
+        default: op
+    AntiShare.notify:
+        description: get alerts from the plugin on actions
+        default: op
+    AntiShare.silent:
+        description: stops the sending of notifications from the player
+        default: op
+    AntiShare.regions:
+        description: allows creating/editing/removing/listing of GameMode regions
+        default: op
+    AntiShare.roam:
+        description: allows roaming through GameMode regions without being affected
+        default: op
+    AntiShare.gamemode:
+        description: allows a player to change their own gamemode
+        default: op
+    AntiShare.mirror:
+        description: allows the player to look at other people's inventories
         default: op

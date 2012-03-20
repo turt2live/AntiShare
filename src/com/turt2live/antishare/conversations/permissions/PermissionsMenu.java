@@ -16,9 +16,8 @@ public class PermissionsMenu extends ASMenu {
 
 	public PermissionsMenu(){
 		super("AntiShare.allow", "AntiShare.onlyIfCreative", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam",
-				"AntiShare.noswap", "AntiShare.freeplace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.mobpvp",
-				"AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", "AntiShare.admin", "AntiShare.mirror",
-				"AntiShare.gamemode"/*, "AntiShare.tnt"*/);
+				"AntiShare.noswap", "AntiShare.freeplace", "AntiShare.notify", "AntiShare.silent", "AntiShare.admin",
+				"AntiShare.mirror", "AntiShare.gamemode"/*, "AntiShare.tnt"*/);
 	}
 
 	@Override
@@ -37,10 +36,9 @@ public class PermissionsMenu extends ASMenu {
 		}else if(input.equalsIgnoreCase("list")){
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.allow  AntiShare.onlyIfCreative  AntiShare.reload");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.regions  AntiShare.roam  AntiShare.noswap");
-			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.blockBypass  AntiShare.freeplace  AntiShare.bedrock");
-			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.pvp  AntiShare.mobpvp  AntiShare.worlds");
+			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.blockBypass  AntiShare.freeplace  AntiShare.mirror");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.notify  AntiShare.silent  AntiShare.gamemode");
-			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.mirror  " + /*AntiShare.tnt*/" AntiShare.admin");
+			ASUtils.sendToConversable(target, ChatColor.GOLD + /*AntiShare.tnt*/" AntiShare.admin");
 			return new WaitPrompt(new PermissionsMenu());
 		}else{
 			ASUtils.sendToConversable(target, ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + input + ChatColor.DARK_GREEN + " ]=======");
@@ -68,18 +66,6 @@ public class PermissionsMenu extends ASMenu {
 				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
 			}else if(input.equalsIgnoreCase("AntiShare.freeplace")){
 				ASUtils.sendToConversable(target, "Set this to true if you want the target to be able to place creative blocks without it ever showing up in the creative block database.");
-				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
-			}else if(input.equalsIgnoreCase("AntiShare.bedrock")){
-				ASUtils.sendToConversable(target, "Set this to true if you want the target to be able to play with (break/place) bedrock.");
-				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
-			}else if(input.equalsIgnoreCase("AntiShare.pvp")){
-				ASUtils.sendToConversable(target, "Set this to true if you want the target to be able to hit other players, regardless of restrictions");
-				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
-			}else if(input.equalsIgnoreCase("AntiShare.mobpvp")){
-				ASUtils.sendToConversable(target, "Set this to true if you want the target to be able to hit mobs, regardless of restrictions");
-				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
-			}else if(input.equalsIgnoreCase("AntiShare.worlds")){
-				ASUtils.sendToConversable(target, "Set this to true if you want the target to be able to switch worlds regardless of restrictions");
 				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
 			}else if(input.equalsIgnoreCase("AntiShare.notify")){
 				ASUtils.sendToConversable(target, "Set this to true if you want the target to be able to get AntiShare messages when specified events occur");

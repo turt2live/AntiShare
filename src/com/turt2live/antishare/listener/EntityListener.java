@@ -50,7 +50,7 @@ public class EntityListener implements Listener {
 						Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, targetName, null);
 						return;
 					}
-					if(!plugin.getPermissions().has(dealer, "AntiShare.pvp", dealer.getWorld())){
+					if(!plugin.getPermissions().has(dealer, "AntiShare.allow.pvp", dealer.getWorld())){
 						ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.pvp", event.getEntity().getWorld()));
 						Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, targetName, null);
 						event.setCancelled(true);
@@ -60,7 +60,7 @@ public class EntityListener implements Listener {
 						Notification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, entityName, null);
 						return;
 					}
-					if(!plugin.getPermissions().has(dealer, "AntiShare.mobpvp", dealer.getWorld())){
+					if(!plugin.getPermissions().has(dealer, "AntiShare.allow.mobpvp", dealer.getWorld())){
 						Notification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, dealer, entityName, null);
 						ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.mobpvp", event.getEntity().getWorld()));
 						event.setCancelled(true);
@@ -79,7 +79,7 @@ public class EntityListener implements Listener {
 						Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
 						return;
 					}
-					if(!plugin.getPermissions().has(dealer, "AntiShare.pvp", dealer.getWorld())){
+					if(!plugin.getPermissions().has(dealer, "AntiShare.allow.pvp", dealer.getWorld())){
 						ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.pvp", dealer.getWorld()));
 						Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
 						event.setCancelled(true);
@@ -106,13 +106,13 @@ public class EntityListener implements Listener {
 				Player player = (Player) targetEntity;
 				if(plugin.config().onlyIfCreative(player)){
 					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						if(!plugin.getPermissions().has(player, "AntiShare.mobpvp", player.getWorld())
+						if(!plugin.getPermissions().has(player, "AntiShare.allow.mobpvp", player.getWorld())
 								&& !plugin.config().getBoolean("other.pvp-mobs", player.getWorld())){
 							event.setCancelled(true);
 						}
 					}
 				}else{
-					if(!plugin.getPermissions().has(player, "AntiShare.mobpvp", player.getWorld())
+					if(!plugin.getPermissions().has(player, "AntiShare.allow.mobpvp", player.getWorld())
 							&& !plugin.config().getBoolean("other.pvp-mobs", player.getWorld())){
 						event.setCancelled(true);
 					}

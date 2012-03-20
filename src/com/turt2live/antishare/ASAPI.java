@@ -250,7 +250,7 @@ public class ASAPI {
 	 * @return true if the player can hit other players
 	 */
 	public boolean canPVP(Player player){
-		if(plugin.getPermissions().has(player, "AntiShare.pvp", player.getWorld())){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.pvp", player.getWorld())){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(player.getWorld()) && !player.getGameMode().equals(GameMode.CREATIVE)){
@@ -267,7 +267,7 @@ public class ASAPI {
 	 * @return true if the player can hit other players in the specified world
 	 */
 	public boolean canPVP(Player player, World world){
-		if(plugin.getPermissions().has(player, "AntiShare.pvp", world)){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.pvp", world)){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(world) && !player.getGameMode().equals(GameMode.CREATIVE)){
@@ -293,7 +293,7 @@ public class ASAPI {
 	 * @return true if the player can hit mobs
 	 */
 	public boolean canPVPAgainstMobs(Player player){
-		if(plugin.getPermissions().has(player, "AntiShare.mobpvp", player.getWorld())){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.mobpvp", player.getWorld())){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(player.getWorld()) && !player.getGameMode().equals(GameMode.CREATIVE)){
@@ -310,7 +310,7 @@ public class ASAPI {
 	 * @return true if the player can hit mobs in the specified world
 	 */
 	public boolean canPVPAgainstMobs(Player player, World world){
-		if(plugin.getPermissions().has(player, "AntiShare.mobpvp", world)){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.mobpvp", world)){
 			return true;
 		}
 		if(isOnlyIfCreativeOn(world) && !player.getGameMode().equals(GameMode.CREATIVE)){
@@ -388,7 +388,7 @@ public class ASAPI {
 		if(isOnlyIfCreativeOn(world) && !player.getGameMode().equals(GameMode.CREATIVE)){
 			return true;
 		}
-		if(plugin.getPermissions().has(player, "AntiShare.worlds", world)){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.worlds", world)){
 			return true;
 		}
 		return plugin.config().getBoolean("other.worldTransfer", world);
@@ -414,7 +414,7 @@ public class ASAPI {
 		if(plugin.config().getBoolean("hazards.allow_bedrock", player.getWorld())){
 			return true;
 		}
-		if(plugin.getPermissions().has(player, "AntiShare.bedrock", player.getWorld())){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.bedrock", player.getWorld())){
 			return true;
 		}
 		return false;
@@ -431,7 +431,7 @@ public class ASAPI {
 		if(plugin.config().getBoolean("hazards.allow_bedrock", world)){
 			return true;
 		}
-		if(plugin.getPermissions().has(player, "AntiShare.bedrock", world)){
+		if(plugin.getPermissions().has(player, "AntiShare.allow.bedrock", world)){
 			return true;
 		}
 		return false;
