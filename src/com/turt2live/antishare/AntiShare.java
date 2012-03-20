@@ -1,7 +1,6 @@
 package com.turt2live.antishare;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
@@ -49,7 +48,7 @@ public class AntiShare extends PluginWrapper {
 	public static boolean DEBUG_MODE = true;
 
 	private Configuration config;
-	public Logger log;
+	public ASLog log;
 	private SQLManager sql;
 	public VirtualStorage storage;
 	private RegionHandler regions;
@@ -60,7 +59,8 @@ public class AntiShare extends PluginWrapper {
 
 	@Override
 	public void onEnable(){
-		log = getLogger();
+		log = new ASLog(this, getLogger());
+		log.logTechnical("Starting up...");
 		config = new Configuration(this);
 		config.create();
 		config.reload();
@@ -99,6 +99,7 @@ public class AntiShare extends PluginWrapper {
 
 	@Override
 	public void onDisable(){
+		log.logTechnical("Shutting down...");
 		if(timedSave != null){
 			timedSave.cancel();
 		}

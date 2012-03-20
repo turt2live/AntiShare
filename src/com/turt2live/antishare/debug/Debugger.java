@@ -1,7 +1,6 @@
 package com.turt2live.antishare.debug;
 
 import java.util.Vector;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -9,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import com.turt2live.antishare.ASLog;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.enums.AlertType;
@@ -25,7 +25,7 @@ public class Debugger implements Listener {
 			return;
 		}
 		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
-		Logger log = plugin.log;
+		ASLog log = plugin.log;
 		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] *** BUG REPORT ***");
 		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] Class: " + bug.getInvolvedClass().getName());
 		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] Sender: " + bug.getSenderInvolved());
