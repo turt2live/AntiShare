@@ -2,11 +2,10 @@ package com.turt2live.antishare.listener;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.ExpBottleEvent;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
@@ -39,8 +38,8 @@ public class ASListener implements Listener {
 	//	}
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onExpBottleThrown(ProjectileLaunchEvent event){
-		if(!(event.getEntity().getShooter() instanceof Player) || !(event.getEntity() instanceof ThrownExpBottle)){
+	public void onExpBottleThrown(ExpBottleEvent event){
+		if(!(event.getEntity().getShooter() instanceof Player)){
 			return;
 		}
 		Player player = (Player) event.getEntity().getShooter();
@@ -55,14 +54,16 @@ public class ASListener implements Listener {
 				}
 				if(plugin.config().onlyIfCreative(player)){
 					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						event.setCancelled(true);
+						event.setExperience(0);
+						event.setShowEffect(false);
 						Notification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
 						ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
 					}else{
 						Notification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
 					}
 				}else{
-					event.setCancelled(true);
+					event.setExperience(0);
+					event.setShowEffect(false);
 					Notification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
 				}

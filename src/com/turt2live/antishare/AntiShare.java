@@ -39,6 +39,10 @@ public class AntiShare extends PluginWrapper {
 	 *  - /as rl resets people's inventories while in regions
 	 *  - Metadata related (fix?)
 	 *  - TNT Related (waiting on PR to be accepted)
+	 *  
+	 *  NOTES:
+	 *  - Buckets, Fire Charges, etc: https://github.com/GreenZack/AntiGrief/blob/master/src/main/java/us/GreenZack/AntiGrief/MyPlayerListener.java
+	 *  
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
