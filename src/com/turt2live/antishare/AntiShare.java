@@ -27,7 +27,7 @@ public class AntiShare extends PluginWrapper {
 	 *  - Inventory mirror creative-glitch (BUKKIT-1211)
 	 *  
 	 *  TODO: Add these features
-	 *  - AntiShare log file (with analyzer)
+	 *  - AntiShare log file analyzer
 	 *  - Remove griefers (buckets, water/lava, fire charge, etc)
 	 *  - Explicit support for "exploits" (fire charges, flint & steel, etc)
 	 *  - Bug catching (sanity checks)
