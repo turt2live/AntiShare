@@ -128,6 +128,8 @@ public class OtherEditor extends ASMenu {
 		String value = "UNKNOWN";
 		if(input.startsWith("track blocks")){
 			value = String.valueOf(plugin.getConfig().getBoolean("other.track_blocks"));
+		}else if(input.startsWith("inventories")){
+			value = String.valueOf(plugin.getConfig().getBoolean("other.inventory_swap"));
 		}else if(input.startsWith("pvp")){
 			value = String.valueOf(plugin.getConfig().getBoolean("other.pvp"));
 		}else if(input.startsWith("mob pvp")){
