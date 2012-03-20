@@ -28,8 +28,7 @@ public class AntiShare extends PluginWrapper {
 	 *  
 	 *  TODO: Add these features
 	 *  - AntiShare log file analyzer
-	 *  - Remove griefers (buckets, water/lava, fire charge, etc)
-	 *  - Explicit support for "exploits" (fire charges, flint & steel, etc)
+	 *  - Finish hazard detection
 	 *  - Bug catching (sanity checks)
 	 *  
 	 *  TODO: Test/verify these potential bugs
