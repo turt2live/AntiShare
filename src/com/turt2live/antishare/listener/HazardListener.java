@@ -23,6 +23,14 @@ public class HazardListener implements Listener {
 
 	private AntiShare plugin;
 
+	/*
+	 * TODO: Remaining hazards
+	 * - buckets
+	 * - fire
+	 * - fire charge
+	 * - TNT
+	 */
+
 	public HazardListener(AntiShare plugin){
 		this.plugin = plugin;
 	}
