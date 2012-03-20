@@ -1,4 +1,4 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.log;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.debug.Bug;
 
 public class ASLog {
