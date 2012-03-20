@@ -64,6 +64,9 @@ public class AntiShare extends PluginWrapper {
 		config = new Configuration(this);
 		config.create();
 		config.reload();
+		if(getConfig().getBoolean("settings.debug-override")){
+			DEBUG_MODE = true;
+		}
 		new File(getDataFolder(), "inventories").mkdirs(); // Setup folders
 		cleanInventoryFolder();
 		getServer().getPluginManager().registerEvents(new ASListener(this), this);

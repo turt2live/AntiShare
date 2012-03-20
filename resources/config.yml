@@ -41,6 +41,7 @@
 # Settings:
 #   'save-interval' - This is the interval, in minutes, you want AntiShare to save it's data to disk (default is 30 minutes)
 #   'send-use-info' - Set to false to stop sending usage stats to turt2live. (What stats are sent is explained later)
+#   'debug-override' - If true, you override the hardcoded debug value with "true". This is strongly recommended to stay as "false"
 # SQL:
 #   'use' - If this is false, flat-file storage will be used instead
 #   'host' - The SQL host, usually localhost
@@ -205,6 +206,7 @@ SQL:
 settings:
   save-interval: 30
   send-use-info: true
+  debug-override: false
 notifications:
   send: true
   illegal:
