@@ -27,14 +27,24 @@ messages:
   noBlockDrop: global
   illegalCommand: global
   worldSwap: global
-other:
-  only_if_creative: global
+  bucket: global
+  flint: global
+  tnt: global
+  fire_charge: global
+hazards:
   allow_eggs: global
   allow_exp_bottle: global
+  allow_bedrock: global
+  allow_buckets: global
+  allow_fire_charge: global
+  allow_flint: global
+  allow_tnt: global
+other:
+  only_if_creative: global
   inventory_swap: global
   track_blocks: global
-  allow_bedrock: global
   pvp: global
   pvp-mobs: global
   blockDrops: global
   worldTransfer: global
+  tracked-blocks: global
