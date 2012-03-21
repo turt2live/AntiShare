@@ -6,9 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,14 +24,6 @@ import com.turt2live.antishare.enums.NotificationType;
 public class HazardListener implements Listener {
 
 	private AntiShare plugin;
-
-	/*
-	 * TODO: Remaining hazards
-	 * - buckets
-	 * - fire
-	 * - fire charge
-	 * - TNT
-	 */
 
 	public HazardListener(AntiShare plugin){
 		this.plugin = plugin;
@@ -135,6 +129,26 @@ public class HazardListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
+		if(event.getBlock().getType().equals(Material.TNT)){
+			if(!plugin.config().getBoolean("hazards.allow_tnt", player.getWorld())){
+				if(plugin.config().onlyIfCreative(player)){
+					if(player.getGameMode().equals(GameMode.CREATIVE)){
+						event.setCancelled(true);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.tnt", player.getWorld()));
+						Notification.sendNotification(NotificationType.ILLEGAL_TNT_PLACE, player, "TNT");
+					}else{
+						Notification.sendNotification(NotificationType.LEGAL_TNT_PLACE, player, "TNT");
+					}
+				}else{
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.tnt", player.getWorld()));
+					Notification.sendNotification(NotificationType.ILLEGAL_TNT_PLACE, player, "TNT");
+				}
+			}
+		}
+		if(event.isCancelled()){
+			return;
+		}
 		// TNT Explosions TODO: Waiting on API solution
 		//		if(event.getBlock().getType().equals(Material.TNT)
 		//				&& !plugin.getPermissions().has(player, "AntiShare.tnt", event.getBlock().getWorld())
@@ -192,13 +206,51 @@ public class HazardListener implements Listener {
 		}
 		// Fire Charges
 		// Thanks go to AntiGrief for the following code (modified version)
-		if(!plugin.config().getBoolean("hazards.allow_fire_charge", player.getWorld())){
+		if(!plugin.config().getBoolean("hazards.allow_fire_charge", player.getWorld())
+				&& player.getItemInHand().getTypeId() == 385
+				&& event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 			if(!player.hasPermission("AntiShare.allow.firecharge")){
-				if(player.getItemInHand().getTypeId() == 385){
+				if(plugin.config().onlyIfCreative(player)){
+					if(player.getGameMode().equals(GameMode.CREATIVE)){
+						Notification.sendNotification(NotificationType.ILLEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
+						event.setCancelled(true);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.fire_charge", player.getWorld()));
+					}else{
+						Notification.sendNotification(NotificationType.LEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
+					}
+				}else{
 					Notification.sendNotification(NotificationType.ILLEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
 					event.setCancelled(true);
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.fire_charge", player.getWorld()));
 				}
+			}else{
+				Notification.sendNotification(NotificationType.LEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
+			}
+		}
+		if(event.isCancelled()){
+			return;
+		}
+		// Flint / Fire
+		if(!plugin.config().getBoolean("hazards.allow_flint", player.getWorld())){
+			if(!player.hasPermission("AntiShare.allow.fire")){
+				if((player.getItemInHand().getType().equals(Material.FIRE) || player.getItemInHand().getType().equals(Material.FLINT_AND_STEEL))
+						&& event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+					if(plugin.config().onlyIfCreative(player)){
+						if(player.getGameMode().equals(GameMode.CREATIVE)){
+							Notification.sendNotification(NotificationType.ILLEGAL_FIRE, player, player.getItemInHand().getType().name());
+							event.setCancelled(true);
+							ASUtils.sendToPlayer(player, plugin.config().getString("messages.flint", player.getWorld()));
+						}else{
+							Notification.sendNotification(NotificationType.LEGAL_FIRE, player, player.getItemInHand().getType().name());
+						}
+					}else{
+						Notification.sendNotification(NotificationType.ILLEGAL_FIRE, player, player.getItemInHand().getType().name());
+						event.setCancelled(true);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.flint", player.getWorld()));
+					}
+				}
+			}else{
+				Notification.sendNotification(NotificationType.LEGAL_FIRE, player, player.getItemInHand().getType().name());
 			}
 		}
 	}
@@ -231,6 +283,31 @@ public class HazardListener implements Listener {
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			plugin.getDebugger().sendBug(bug);
 			e.printStackTrace();
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onBucket(PlayerBucketEmptyEvent event){
+		Player player = event.getPlayer();
+		Material bucket = event.getBucket();
+		if(!plugin.config().getBoolean("hazards.allow_buckets", player.getWorld())){
+			if(!player.hasPermission("AntiShare.allow.buckets")){
+				if(plugin.config().onlyIfCreative(player)){
+					if(player.getGameMode().equals(GameMode.CREATIVE)){
+						Notification.sendNotification(NotificationType.ILLEGAL_BUCKET, player, bucket.name());
+						event.setCancelled(true);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.bucket", player.getWorld()));
+					}else{
+						Notification.sendNotification(NotificationType.LEGAL_BUCKET, player, bucket.name());
+					}
+				}else{
+					Notification.sendNotification(NotificationType.ILLEGAL_BUCKET, player, bucket.name());
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.bucket", player.getWorld()));
+				}
+			}else{
+				Notification.sendNotification(NotificationType.LEGAL_BUCKET, player, bucket.name());
+			}
 		}
 	}
 }

@@ -11,8 +11,6 @@ import com.turt2live.antishare.event.AntiShareEvent;
 
 public class Notification {
 
-	// TODO: Implement notifications for fire charge, fire, bucket, and TNT
-
 	public static void sendNotification(NotificationType type, AntiShare plugin, Player player, String variable, Material material){
 		boolean send = true;
 		if(!plugin.getConfig().getBoolean("notifications.send")){
@@ -126,6 +124,26 @@ public class Notification {
 					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " threw an item into the region " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 				}
 				break;
+			case ILLEGAL_FIRE_CHARGE:
+				if(plugin.getConfig().getBoolean("notifications.illegal.drop_item_to_region")){
+					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				}
+				break;
+			case ILLEGAL_FIRE:
+				if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
+					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				}
+				break;
+			case ILLEGAL_BUCKET:
+				if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
+					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				}
+				break;
+			case ILLEGAL_TNT_PLACE:
+				if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
+					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " placed a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				}
+				break;
 
 			// LEGAL actions
 			case LEGAL_BLOCK_PLACE:
@@ -225,6 +243,26 @@ public class Notification {
 			case LEGAL_ITEM_THROW_INTO_REGION:
 				if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
 					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " threw an item into the region " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+				}
+				break;
+			case LEGAL_FIRE_CHARGE:
+				if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
+					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+				}
+				break;
+			case LEGAL_FIRE:
+				if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
+					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+				}
+				break;
+			case LEGAL_BUCKET:
+				if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
+					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+				}
+				break;
+			case LEGAL_TNT_PLACE:
+				if(plugin.getConfig().getBoolean("notifications.legal.drop_item_to_region")){
+					message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " placed a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				}
 				break;
 

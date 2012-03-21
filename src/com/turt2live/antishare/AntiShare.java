@@ -28,8 +28,8 @@ public class AntiShare extends PluginWrapper {
 	 *  
 	 *  TODO: Add these features
 	 *  - AntiShare log file analyzer
-	 *  - Finish hazard detection
 	 *  - Bug catching (sanity checks)
+	 *  - Isolated creative / survival tracked blocks
 	 *  
 	 *  TODO: Test/verify these potential bugs
 	 *  - Minecart (storage/furnace) may be accessible (explicit support?)
@@ -39,11 +39,10 @@ public class AntiShare extends PluginWrapper {
 	 *  - /as rl resets people's inventories while in regions
 	 *  - Metadata related (fix?)
 	 *  - TNT Related (waiting on PR to be accepted)
+	 *  - Using a projectile to hit mobs is considered hitting a player
 	 *  
-	 *  NOTES:
-	 *  - Buckets, Fire Charges, etc: 
-	 *  		https://github.com/GreenZack/AntiGrief/blob/master/src/main/java/us/GreenZack/AntiGrief/MyPlayerListener.java
-	 *  
+	 *  TODO: Add permissions to config.yml
+	 *  - Fire charge, fire, tnt, bucket  
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE

@@ -208,7 +208,7 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event){
 		try{
 			plugin.getRegionHandler().checkRegion(event.getPlayer(), event.getTo(), event.getFrom());

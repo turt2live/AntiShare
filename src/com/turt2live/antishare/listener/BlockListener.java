@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -200,6 +201,9 @@ public class BlockListener implements Listener {
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event){
 		if(event.getPlayer() == null){
+			return;
+		}
+		if(event.getBlock().getType().equals(Material.BEDROCK) || event.getBlock().getType().equals(Material.TNT)){
 			return;
 		}
 		Player player = event.getPlayer();

@@ -24,6 +24,8 @@ public class ASLog {
 	private String eventLogFilename = "events-log.txt";
 	private String technicalLogFilename = "antishare-log.txt";
 
+	// TODO: Cache log messages and save on disable (CPU Use)
+
 	public ASLog(AntiShare plugin, Logger logger){
 		this.plugin = plugin;
 		this.log = logger;
