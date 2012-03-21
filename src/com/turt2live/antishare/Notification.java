@@ -288,7 +288,12 @@ public class Notification {
 		}
 		plugin.log.logForce(((type.name().startsWith("LEGAL")) ? "[LEGAL]" : "[ILLEGAL]") + message.replace("[AntiShare]", ""));
 		if(message.length() > 0){
-			Bukkit.broadcast(message, "AntiShare.notify");
+			for(Player online : Bukkit.getOnlinePlayers()){
+				if(online.hasPermission("AntiShare.notify")){
+					online.sendMessage(message);
+				}
+			}
+			Bukkit.getConsoleSender().sendMessage(((type.name().startsWith("LEGAL")) ? "[LEGAL] " : "[ILLEGAL] ") + message);
 		}
 	}
 
