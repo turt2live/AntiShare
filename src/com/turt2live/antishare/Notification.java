@@ -245,10 +245,10 @@ public class Notification {
 				}
 				break;
 			}
-			plugin.log.logEvent(message);
-			plugin.log.log(message);
+			plugin.log.logEvent(((type.name().startsWith("LEGAL")) ? "[LEGAL]" : "[ILLEGAL]") + message.replace("[AntiShare]", ""));
+			plugin.log.log(((type.name().startsWith("LEGAL")) ? "[LEGAL]" : "[ILLEGAL]") + message.replace("[AntiShare]", ""));
 		}
-		plugin.log.logForce(message);
+		plugin.log.logForce(((type.name().startsWith("LEGAL")) ? "[LEGAL]" : "[ILLEGAL]") + message.replace("[AntiShare]", ""));
 		if(message.length() > 0){
 			Bukkit.broadcast(message, "AntiShare.notify");
 		}

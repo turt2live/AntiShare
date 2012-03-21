@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -684,34 +683,16 @@ public class ASAPI {
 	 * Reloads the plugin, saving everything to disk/to the database
 	 */
 	public void reloadPlugin(){
-		plugin.reloadConfig();
-		new Thread(new Runnable(){
-			@Override
-			public void run(){
-				MultiWorld.detectWorlds(plugin);
-			}
-		});
-		plugin.storage.reload();
+		reloadPlugin(Bukkit.getConsoleSender());
 	}
 
 	/**
-	 * Reloads the plugin, saving everything to disk/to the database. This alerts a CommandSender of status and does <b>NOT</b> check permissions
+	 * Reloads the plugin, saving everything to disk/to the database. This alerts a CommandSender of status.
 	 * 
 	 * @param sender the CommandSender to be alerted, regardless of permissions
 	 */
 	public void reloadPlugin(CommandSender sender){
-		plugin.reloadConfig();
-		plugin.log.logTechnical("[" + plugin.getDescription().getVersion() + "] " + "AntiShare Reloaded.");
-		if(sender instanceof Player){
-			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
-		}
-		new Thread(new Runnable(){
-			@Override
-			public void run(){
-				MultiWorld.detectWorlds(plugin);
-			}
-		});
-		plugin.storage.reload(sender);
+		plugin.getServer().dispatchCommand(sender, "as rl");
 	}
 
 	/**

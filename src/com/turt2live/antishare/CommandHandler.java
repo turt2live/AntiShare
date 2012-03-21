@@ -31,12 +31,10 @@ public class CommandHandler implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(plugin.getPermissions().has(sender, "AntiShare.reload")){
 						plugin.reloadConfig();
-						MultiWorld.detectWorlds((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare"));
+						MultiWorld.detectWorlds(plugin);
 						plugin.storage.reload(sender);
 						plugin.log.logTechnical("[" + plugin.getDescription().getVersion() + "] " + "AntiShare Reloaded.");
-						if(sender instanceof Player){
-							ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
-						}
+						ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
 					}

@@ -32,13 +32,13 @@ public class ASLog {
 
 	// Used to log minor events
 	public void log(String line){
+		line = ChatColor.stripColor(line);
 		if(!line.startsWith("[AntiShare]")){
 			line = "[AntiShare] " + line;
 		}
-		line = ChatColor.stripColor(line);
 		File logFile = new File(plugin.getDataFolder(), logDir + File.separator + logFilename);
 		try{
-			BufferedWriter out = new BufferedWriter(new FileWriter(logFile));
+			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
 			out.write("[" + timestamp(false) + "] " + line + "\r\n");
 			out.close();
 		}catch(Exception e){
@@ -50,13 +50,13 @@ public class ASLog {
 
 	// Used to log ALL events (Notification)
 	public void logForce(String line){
+		line = ChatColor.stripColor(line);
 		if(!line.startsWith("[AntiShare]")){
 			line = "[AntiShare] " + line;
 		}
-		line = ChatColor.stripColor(line);
 		File logFile = new File(plugin.getDataFolder(), logDir + File.separator + logFullFilename);
 		try{
-			BufferedWriter out = new BufferedWriter(new FileWriter(logFile));
+			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
 			out.write("[" + timestamp(false) + "] " + line + "\r\n");
 			out.close();
 		}catch(Exception e){
@@ -68,13 +68,13 @@ public class ASLog {
 
 	// Main console log, but for AntiShare exclusively
 	public void logTechnical(String line){
+		line = ChatColor.stripColor(line);
 		if(!line.startsWith("[AntiShare]")){
 			line = "[AntiShare] " + line;
 		}
-		line = ChatColor.stripColor(line);
 		File logFile = new File(plugin.getDataFolder(), logDir + File.separator + technicalLogFilename);
 		try{
-			BufferedWriter out = new BufferedWriter(new FileWriter(logFile));
+			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
 			out.write("[" + timestamp(false) + "] " + line + "\r\n");
 			out.close();
 		}catch(Exception e){
@@ -89,7 +89,7 @@ public class ASLog {
 		event = ChatColor.stripColor(event);
 		File logFile = new File(plugin.getDataFolder(), logDir + File.separator + eventLogFilename);
 		try{
-			BufferedWriter out = new BufferedWriter(new FileWriter(logFile));
+			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
 			out.write("[" + timestamp(false) + "] " + event + "\r\n");
 			out.close();
 		}catch(Exception e){
@@ -101,18 +101,21 @@ public class ASLog {
 
 	// Main things used by other parts of the code
 	public void info(String line){
+		line = ChatColor.stripColor(line);
 		log.info(line);
-		logTechnical("[" + timestamp(false) + "] [INFO] " + line);
+		logTechnical("[INFO] " + line);
 	}
 
 	public void warning(String line){
+		line = ChatColor.stripColor(line);
 		log.warning(line);
-		logTechnical("[" + timestamp(false) + "] [WARNING] " + line);
+		logTechnical("[WARNING] " + line);
 	}
 
 	public void severe(String line){
+		line = ChatColor.stripColor(line);
 		log.severe(line);
-		logTechnical("[" + timestamp(false) + "] [SEVERE] " + line);
+		logTechnical("[SEVERE] " + line);
 	}
 
 	// Timestamp
