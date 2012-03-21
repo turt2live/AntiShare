@@ -84,11 +84,8 @@ public class VirtualStorage implements Listener {
 		return worlds.get(world).getInventoryManager(player);
 	}
 
-	@EventHandler
+	@EventHandler (ignoreCancelled = true)
 	public void playerKickedEvent(PlayerKickEvent event){
-		if(event.isCancelled()){
-			return;
-		}
 		freePlayer(event.getPlayer());
 	}
 
