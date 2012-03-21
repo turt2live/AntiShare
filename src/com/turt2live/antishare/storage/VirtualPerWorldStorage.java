@@ -63,7 +63,12 @@ public class VirtualPerWorldStorage {
 	}
 
 	public boolean command(String command, BlockedType type){
-		return blocked_commands.contains(command);
+		for(String c : blocked_commands){
+			if(c.toLowerCase().startsWith(command.toLowerCase())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void freePlayer(Player player){

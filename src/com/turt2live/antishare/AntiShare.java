@@ -34,15 +34,14 @@ public class AntiShare extends PluginWrapper {
 	 *  TODO: Test/verify these potential bugs
 	 *  - Minecart (storage/furnace) may be accessible (explicit support?)
 	 *  - MobArena potential issue (see bug report)
+	 *  - Tim the Enchanter conflict (waiting on information)
+	 *  - Item duplication glitch on fast relog
 	 *  
 	 *  TODO: Fix these known bugs:
 	 *  - /as rl resets people's inventories while in regions
 	 *  - Metadata related (fix?)
 	 *  - TNT Related (waiting on PR to be accepted)
 	 *  - Using a projectile to hit mobs is considered hitting a player
-	 *  
-	 *  TODO: Add permissions to config.yml
-	 *  - Fire charge, fire, tnt, bucket  
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
