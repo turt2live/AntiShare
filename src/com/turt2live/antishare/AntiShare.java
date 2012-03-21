@@ -41,6 +41,10 @@ public class AntiShare extends PluginWrapper {
 	 *  - Metadata related (fix?)
 	 *  - TNT Related (waiting on PR to be accepted)
 	 *  - Surround a MobArena Region with a "Creative Region", join MA, you are now creative.
+	 *  
+	 *  NOTES:
+	 *  - MobArena API:
+	 *  	http://dev.bukkit.org/server-mods/mobarena/pages/main/hooking-into-mob-arena/
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE

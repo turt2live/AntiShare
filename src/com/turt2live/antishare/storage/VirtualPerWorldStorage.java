@@ -474,6 +474,10 @@ public class VirtualPerWorldStorage {
 				regions.add(region);
 				continue;
 			}
+			if(Math.abs(region.getSelection().getMinimumPoint().getBlockY() - location.getBlockY()) <= distance){
+				regions.add(region);
+				continue;
+			}
 			// Side (X)
 			if(Math.abs(region.getSelection().getMaximumPoint().getBlockX() - location.getBlockX()) <= distance){
 				regions.add(region);

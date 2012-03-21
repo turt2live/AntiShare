@@ -47,7 +47,7 @@ public class WorldEditHook {
 	}
 
 	public boolean regionExistsInSelection(Player player){
-		return plugin.getRegionHandler().isRegion(wePlugin.getSelection(player).getMaximumPoint());
+		return plugin.getRegionHandler().getRegion(wePlugin.getSelection(player).getMaximumPoint()) != null;
 	}
 
 	public boolean regionExistsInSelectionAndNot(Player player, ASRegion region){
