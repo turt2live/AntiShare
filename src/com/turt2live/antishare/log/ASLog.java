@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -24,7 +25,10 @@ public class ASLog {
 	private String eventLogFilename = "events-log.txt";
 	private String technicalLogFilename = "antishare-log.txt";
 
-	// TODO: Cache log messages and save on disable (CPU Use)
+	private Vector<String> logLines = new Vector<String>();
+	private Vector<String> logFullLines = new Vector<String>();
+	private Vector<String> logTechnicalLines = new Vector<String>();
+	private Vector<String> logEventLines = new Vector<String>();
 
 	public ASLog(AntiShare plugin, Logger logger){
 		this.plugin = plugin;
@@ -34,71 +38,22 @@ public class ASLog {
 
 	// Used to log minor events
 	public void log(String line){
-		line = ChatColor.stripColor(line);
-		if(!line.startsWith("[AntiShare]")){
-			line = "[AntiShare] " + line;
-		}
-		File logFile = new File(plugin.getDataFolder(), logDir + File.separator + logFilename);
-		try{
-			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
-			out.write("[" + timestamp(false) + "] " + line + "\r\n");
-			out.close();
-		}catch(Exception e){
-			e.printStackTrace();
-			Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
-			plugin.getDebugger().sendBug(bug);
-		}
+		logLines.add(line);
 	}
 
 	// Used to log ALL events (Notification)
 	public void logForce(String line){
-		line = ChatColor.stripColor(line);
-		if(!line.startsWith("[AntiShare]")){
-			line = "[AntiShare] " + line;
-		}
-		File logFile = new File(plugin.getDataFolder(), logDir + File.separator + logFullFilename);
-		try{
-			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
-			out.write("[" + timestamp(false) + "] " + line + "\r\n");
-			out.close();
-		}catch(Exception e){
-			e.printStackTrace();
-			Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
-			plugin.getDebugger().sendBug(bug);
-		}
+		logFullLines.add(line);
 	}
 
 	// Main console log, but for AntiShare exclusively
 	public void logTechnical(String line){
-		line = ChatColor.stripColor(line);
-		if(!line.startsWith("[AntiShare]")){
-			line = "[AntiShare] " + line;
-		}
-		File logFile = new File(plugin.getDataFolder(), logDir + File.separator + technicalLogFilename);
-		try{
-			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
-			out.write("[" + timestamp(false) + "] " + line + "\r\n");
-			out.close();
-		}catch(Exception e){
-			e.printStackTrace();
-			Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
-			plugin.getDebugger().sendBug(bug);
-		}
+		logTechnicalLines.add(line);
 	}
 
 	// Event log
 	public void logEvent(String event){
-		event = ChatColor.stripColor(event);
-		File logFile = new File(plugin.getDataFolder(), logDir + File.separator + eventLogFilename);
-		try{
-			BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
-			out.write("[" + timestamp(false) + "] " + event + "\r\n");
-			out.close();
-		}catch(Exception e){
-			e.printStackTrace();
-			Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
-			plugin.getDebugger().sendBug(bug);
-		}
+		logEventLines.add(event);
 	}
 
 	// Main things used by other parts of the code
@@ -118,6 +73,74 @@ public class ASLog {
 		line = ChatColor.stripColor(line);
 		log.severe(line);
 		logTechnical("[SEVERE] " + line);
+	}
+
+	public void save(){
+		// Save Log
+		for(String line : logLines){
+			line = ChatColor.stripColor(line);
+			if(!line.startsWith("[AntiShare]")){
+				line = "[AntiShare] " + line;
+			}
+			File logFile = new File(plugin.getDataFolder(), logDir + File.separator + logFilename);
+			try{
+				BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
+				out.write("[" + timestamp(false) + "] " + line + "\r\n");
+				out.close();
+			}catch(Exception e){
+				e.printStackTrace();
+				Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
+				plugin.getDebugger().sendBug(bug);
+			}
+		}
+		// Save Full Log
+		for(String line : logFullLines){
+			line = ChatColor.stripColor(line);
+			if(!line.startsWith("[AntiShare]")){
+				line = "[AntiShare] " + line;
+			}
+			File logFile = new File(plugin.getDataFolder(), logDir + File.separator + logFullFilename);
+			try{
+				BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
+				out.write("[" + timestamp(false) + "] " + line + "\r\n");
+				out.close();
+			}catch(Exception e){
+				e.printStackTrace();
+				Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
+				plugin.getDebugger().sendBug(bug);
+			}
+		}
+		// Save Technical Log
+		for(String line : logTechnicalLines){
+			line = ChatColor.stripColor(line);
+			if(!line.startsWith("[AntiShare]")){
+				line = "[AntiShare] " + line;
+			}
+			File logFile = new File(plugin.getDataFolder(), logDir + File.separator + technicalLogFilename);
+			try{
+				BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
+				out.write("[" + timestamp(false) + "] " + line + "\r\n");
+				out.close();
+			}catch(Exception e){
+				e.printStackTrace();
+				Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
+				plugin.getDebugger().sendBug(bug);
+			}
+		}
+		// Save Event Log
+		for(String event : logEventLines){
+			event = ChatColor.stripColor(event);
+			File logFile = new File(plugin.getDataFolder(), logDir + File.separator + eventLogFilename);
+			try{
+				BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
+				out.write("[" + timestamp(false) + "] " + event + "\r\n");
+				out.close();
+			}catch(Exception e){
+				e.printStackTrace();
+				Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
+				plugin.getDebugger().sendBug(bug);
+			}
+		}
 	}
 
 	// Timestamp

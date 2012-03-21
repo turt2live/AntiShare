@@ -120,6 +120,7 @@ public class AntiShare extends PluginWrapper {
 			sql.disconnect();
 		}
 		log.info("Disabled! (turt2live)");
+		log.save();
 	}
 
 	public Configuration config(){
