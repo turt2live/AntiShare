@@ -14,7 +14,7 @@
 #   All messages are when they are declined an action.
 #   Chat colors are supported using the & sign (eg: &f = white)
 #   If you wouldn't like a message to show, set the value as 'noshow'
-#
+# 
 # Hazards:
 #   'allow_eggs' - If false then eggs cannot be used (both 'mob-spawning' and chicken eggs are covered by this)
 #   'allow_exp_bottle' - Allows the experience bottle, set to false to block
@@ -140,7 +140,7 @@
 #   ------------------------------------------------------------------------------
 #   |      false     |       false      | All players are blocked from transfers |
 #   ------------------------------------------------------------------------------
-#
+# 
 # WHAT IS A GAMEMODE REGION?
 #   A GameMode region is a WorldEdit region where a player automatically changes GameModes. Upon leaving their GameMode is restored.
 #   All the same functions apply, such as inventory changes, blocks, etc. You can configure the region to have properties like a
@@ -167,7 +167,7 @@
 #   | area             | No Value             | No value required; Sets the area of the region to your current  |
 #   |                  |                      | WorldEdit selection.                                            |
 #   -------------------------------------------------------------------------------------------------------------
-#
+# 
 # What is sent in usage statistics?
 #   - Plugin Version
 #   - CraftBukkit Version
