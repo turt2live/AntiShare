@@ -33,6 +33,7 @@ public class AntiShare extends PluginWrapper {
 	 *  
 	 *  TODO: Test/verify these potential bugs
 	 *  - Minecart (storage/furnace) may be accessible (explicit support?)
+	 *  - MobArena potential issue (see bug report)
 	 *  
 	 *  TODO: Fix these known bugs:
 	 *  - /as rl resets people's inventories while in regions

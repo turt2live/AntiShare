@@ -40,6 +40,7 @@ public class LogAnalyzer extends JFrame {
 	 * Lines (warning):
 	 * [<timestamp>] [WARNING] [<version>] WorldEdit is not installed!
 	 * [<timestamp>] [WARNING] [<version>] Could not send usage statistics.
+	 * [<timestamp>] [WARNING] Configuration Problem: '<value>' is not a number
 	 * 
 	 * Lines (info):
 	 * [<timestamp>] [INFO] Converting pre-3.0.0 creative blocks...

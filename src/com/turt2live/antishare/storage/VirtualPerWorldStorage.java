@@ -193,12 +193,12 @@ public class VirtualPerWorldStorage {
 			}
 		}
 		tracked_survival_blocks.addAll(tracked_creative_blocks); //TODO: Implement better solution
-		String blockedBreak[] = plugin.config().getString("events.block_break", world).replaceAll(" ", "").split(",");
-		String blockedPlace[] = plugin.config().getString("events.block_place", world).replaceAll(" ", "").split(",");
-		String blockedDrop[] = plugin.config().getString("events.drop_item", world).replaceAll(" ", "").split(",");
-		String blockedDeath[] = plugin.config().getString("events.death", world).replaceAll(" ", "").split(",");
-		String blockedInteract[] = plugin.config().getString("events.interact", world).replaceAll(" ", "").split(",");
-		String blockedCommands[] = plugin.config().getString("events.commands", world).replaceAll(" ", "").split(",");
+		String blockedBreak[] = plugin.config().getString("events.block_break", world).split(",");
+		String blockedPlace[] = plugin.config().getString("events.block_place", world).split(",");
+		String blockedDrop[] = plugin.config().getString("events.drop_item", world).split(",");
+		String blockedDeath[] = plugin.config().getString("events.death", world).split(",");
+		String blockedInteract[] = plugin.config().getString("events.interact", world).split(",");
+		String blockedCommands[] = plugin.config().getString("events.commands", world).split(",");
 		boolean skip = false;
 		/*## Block Break ##*/
 		if(blockedBreak.length == 1){
@@ -213,7 +213,12 @@ public class VirtualPerWorldStorage {
 		}
 		if(!skip){
 			for(String blocked : blockedBreak){
-				blocked_break.add(Integer.valueOf(blocked));
+				blocked = blocked.trim();
+				try{
+					blocked_break.add(Integer.valueOf(blocked));
+				}catch(Exception e){
+					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
+				}
 			}
 		}
 		skip = false;
@@ -230,7 +235,12 @@ public class VirtualPerWorldStorage {
 		}
 		if(!skip){
 			for(String blocked : blockedPlace){
-				blocked_place.add(Integer.valueOf(blocked));
+				blocked = blocked.trim();
+				try{
+					blocked_place.add(Integer.valueOf(blocked));
+				}catch(Exception e){
+					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
+				}
 			}
 		}
 		skip = false;
@@ -247,7 +257,12 @@ public class VirtualPerWorldStorage {
 		}
 		if(!skip){
 			for(String blocked : blockedDrop){
-				blocked_drop.add(Integer.valueOf(blocked));
+				blocked = blocked.trim();
+				try{
+					blocked_drop.add(Integer.valueOf(blocked));
+				}catch(Exception e){
+					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
+				}
 			}
 		}
 		skip = false;
@@ -264,7 +279,12 @@ public class VirtualPerWorldStorage {
 		}
 		if(!skip){
 			for(String blocked : blockedDeath){
-				blocked_death.add(Integer.valueOf(blocked));
+				blocked = blocked.trim();
+				try{
+					blocked_death.add(Integer.valueOf(blocked));
+				}catch(Exception e){
+					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
+				}
 			}
 		}
 		skip = false;
@@ -281,13 +301,18 @@ public class VirtualPerWorldStorage {
 		}
 		if(!skip){
 			for(String blocked : blockedInteract){
-				blocked_interact.add(Integer.valueOf(blocked));
+				blocked = blocked.trim();
+				try{
+					blocked_interact.add(Integer.valueOf(blocked));
+				}catch(Exception e){
+					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
+				}
 			}
 		}
 		skip = false;
 		/*## Commands ##*/
 		for(String blocked : blockedCommands){
-			blocked_commands.add(blocked);
+			blocked_commands.add(blocked.trim());
 		}
 		/*## Inventories ##*/
 		for(Player player : inventories.keySet()){
