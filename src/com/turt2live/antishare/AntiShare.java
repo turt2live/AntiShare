@@ -40,11 +40,15 @@ public class AntiShare extends PluginWrapper {
 	 *  - /as rl resets people's inventories while in regions
 	 *  - Metadata related (fix?)
 	 *  - TNT Related (waiting on PR to be accepted)
-	 *  - Surround a MobArena Region with a "Creative Region", join MA, you are now creative.
+	 *  
+	 *  TODO: If there is time...
+	 *  - MobArena Region Detection
+	 *  - WorldGuard Region Detection
+	 *  - Other Region-related plugin region detection
 	 *  
 	 *  NOTES:
 	 *  - MobArena API:
-	 *  	http://dev.bukkit.org/server-mods/mobarena/pages/main/hooking-into-mob-arena/
+	 *  	http://dev.bukkit.org/server-mods/mobarena/pages/main/hooking-into-mob-arena/  
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
