@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.PoweredMinecart;
+import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,6 +20,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -325,7 +328,7 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerWorldChange(PlayerChangedWorldEvent event){
 		try{
 			if(plugin.getConflicts().INVENTORY_CONFLICT_PRESENT
@@ -341,6 +344,45 @@ public class PlayerListener implements Listener {
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
 			plugin.getDebugger().sendBug(bug);
 			e.printStackTrace();
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerHitEntity(PlayerInteractEntityEvent event){
+		if(!(event.getRightClicked() instanceof StorageMinecart)
+				&& !(event.getRightClicked() instanceof PoweredMinecart)){
+			return;
+		}
+		Player player = event.getPlayer();
+		Material item = Material.AIR;
+		if(event.getRightClicked() instanceof StorageMinecart){
+			item = Material.STORAGE_MINECART;
+		}else if(event.getRightClicked() instanceof PoweredMinecart){
+			item = Material.POWERED_MINECART;
+		}
+		if(!plugin.getPermissions().has(player, "AntiShare.allow.interact", player.getWorld())
+				&& plugin.storage.isBlocked(item, BlockedType.INTERACT, player.getWorld())){
+			if(plugin.config().onlyIfCreative(player)){
+				if(player.getGameMode().equals(GameMode.CREATIVE)){
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
+					Notification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, item.name(), item);
+
+				}else{
+					if(ASUtils.isInteractable(item)){
+						Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, item.name(), item);
+					}
+				}
+			}else{
+				event.setCancelled(true);
+				ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
+				Notification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, item.name(), item);
+
+			}
+		}else{
+			if(ASUtils.isInteractable(item)){
+				Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, item.name(), item);
+			}
 		}
 	}
 }
