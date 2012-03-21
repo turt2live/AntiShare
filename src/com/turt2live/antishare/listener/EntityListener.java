@@ -1,8 +1,8 @@
 package com.turt2live.antishare.listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 
 import com.turt2live.antishare.ASUtils;
@@ -28,61 +27,102 @@ public class EntityListener implements Listener {
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityDamage(EntityDamageEvent event){
-		if(!(event instanceof EntityDamageByEntityEvent)
-				|| event.isCancelled()){
-			return;
-		}
+	public void onEntityDamage(EntityDamageByEntityEvent event){
 		try{
 			String entityName = event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", "");
-			Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
-			if(damager instanceof Player){
-				Player dealer = (Player) damager;
-				if(!dealer.getGameMode().equals(GameMode.CREATIVE) && !plugin.config().onlyIfCreative(dealer)){
-					return;
-				}else if(!dealer.getGameMode().equals(GameMode.CREATIVE)){
-					return;
+			Entity damager = event.getDamager();
+			if(event.getEntity() instanceof Player){
+				Bukkit.broadcastMessage("PLAYER");
+				entityName = ((Player) event.getEntity()).getName();
+				if(damager instanceof Projectile){
+					if(((Projectile) damager).getShooter() instanceof Player){
+						Player player = (Player) ((Projectile) damager).getShooter();
+						if(!plugin.config().getBoolean("other.pvp", player.getWorld())){
+							if(!plugin.getPermissions().has(player, "AntiShare.allow.pvp", player.getWorld())){
+								if(plugin.config().onlyIfCreative(player)){
+									if(player.getGameMode().equals(GameMode.CREATIVE)){
+										Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, player, entityName, null);
+										ASUtils.sendToPlayer(player, plugin.config().getString("messages.pvp", event.getEntity().getWorld()));
+										event.setCancelled(true);
+									}else{
+										Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, player, entityName, null);
+									}
+								}else{
+									Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, player, entityName, null);
+									ASUtils.sendToPlayer(player, plugin.config().getString("messages.pvp", event.getEntity().getWorld()));
+									event.setCancelled(true);
+								}
+							}else{
+								Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, player, entityName, null);
+							}
+						}
+					}
+				}else if(damager instanceof Player){
+					Player player = (Player) damager;
+					if(!plugin.config().getBoolean("other.pvp", player.getWorld())){
+						if(!plugin.getPermissions().has(player, "AntiShare.allow.pvp", player.getWorld())){
+							if(plugin.config().onlyIfCreative(player)){
+								if(player.getGameMode().equals(GameMode.CREATIVE)){
+									Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, player, entityName, null);
+									ASUtils.sendToPlayer(player, plugin.config().getString("messages.pvp", event.getEntity().getWorld()));
+									event.setCancelled(true);
+								}else{
+									Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, player, entityName, null);
+								}
+							}else{
+								Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, player, entityName, null);
+								ASUtils.sendToPlayer(player, plugin.config().getString("messages.pvp", event.getEntity().getWorld()));
+								event.setCancelled(true);
+							}
+						}else{
+							Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, player, entityName, null);
+						}
+					}
 				}
-				//System.out.println("GM: " + dealer.getGameMode().toString());
-				if(event.getEntity() instanceof Player){
-					String targetName = ((Player) event.getEntity()).getName();
-					if(plugin.config().getBoolean("other.pvp", dealer.getWorld())){
-						Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, targetName, null);
-						return;
+			}else{ //Mob
+				if(damager instanceof Projectile){
+					if(((Projectile) damager).getShooter() instanceof Player){
+						Player player = (Player) ((Projectile) damager).getShooter();
+						if(!plugin.config().getBoolean("other.pvp-mobs", player.getWorld())){
+							if(!plugin.getPermissions().has(player, "AntiShare.allow.mobpvp", player.getWorld())){
+								if(plugin.config().onlyIfCreative(player)){
+									if(player.getGameMode().equals(GameMode.CREATIVE)){
+										Notification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, player, entityName, null);
+										ASUtils.sendToPlayer(player, plugin.config().getString("messages.mobpvp", event.getEntity().getWorld()));
+										event.setCancelled(true);
+									}else{
+										Notification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, player, entityName, null);
+									}
+								}else{
+									Notification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, player, entityName, null);
+									ASUtils.sendToPlayer(player, plugin.config().getString("messages.mobpvp", event.getEntity().getWorld()));
+									event.setCancelled(true);
+								}
+							}else{
+								Notification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, player, entityName, null);
+							}
+						}
 					}
-					if(!plugin.getPermissions().has(dealer, "AntiShare.allow.pvp", dealer.getWorld())){
-						ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.pvp", event.getEntity().getWorld()));
-						Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, targetName, null);
-						event.setCancelled(true);
-					}
-				}else{
-					if(plugin.config().getBoolean("other.pvp-mobs", dealer.getWorld())){
-						Notification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, entityName, null);
-						return;
-					}
-					if(!plugin.getPermissions().has(dealer, "AntiShare.allow.mobpvp", dealer.getWorld())){
-						Notification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, dealer, entityName, null);
-						ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.mobpvp", event.getEntity().getWorld()));
-						event.setCancelled(true);
-					}else{
-						Notification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, dealer, entityName, null);
-					}
-				}
-			}else if(damager instanceof Projectile){
-				LivingEntity shooter = ((Projectile) damager).getShooter();
-				if(shooter instanceof Player){
-					Player dealer = ((Player) shooter);
-					if(!dealer.getGameMode().equals(GameMode.CREATIVE) && !plugin.config().onlyIfCreative(dealer)){
-						Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
-						return;
-					}else if(!dealer.getGameMode().equals(GameMode.CREATIVE)){
-						Notification.sendNotification(NotificationType.LEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
-						return;
-					}
-					if(!plugin.getPermissions().has(dealer, "AntiShare.allow.pvp", dealer.getWorld())){
-						ASUtils.sendToPlayer(dealer, plugin.config().getString("messages.pvp", dealer.getWorld()));
-						Notification.sendNotification(NotificationType.ILLEGAL_PLAYER_PVP, plugin, dealer, entityName, null);
-						event.setCancelled(true);
+				}else if(damager instanceof Player){
+					Player player = (Player) damager;
+					if(!plugin.config().getBoolean("other.pvp-mobs", damager.getWorld())){
+						if(!plugin.getPermissions().has(player, "AntiShare.allow.mobpvp", damager.getWorld())){
+							if(plugin.config().onlyIfCreative((Player) damager)){
+								if(player.getGameMode().equals(GameMode.CREATIVE)){
+									Notification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, player, entityName, null);
+									ASUtils.sendToPlayer(player, plugin.config().getString("messages.mobpvp", event.getEntity().getWorld()));
+									event.setCancelled(true);
+								}else{
+									Notification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, player, entityName, null);
+								}
+							}else{
+								Notification.sendNotification(NotificationType.ILLEGAL_MOB_PVP, plugin, player, entityName, null);
+								ASUtils.sendToPlayer(player, plugin.config().getString("messages.mobpvp", event.getEntity().getWorld()));
+								event.setCancelled(true);
+							}
+						}else{
+							Notification.sendNotification(NotificationType.LEGAL_MOB_PVP, plugin, player, entityName, null);
+						}
 					}
 				}
 			}
@@ -93,6 +133,7 @@ public class EntityListener implements Listener {
 		}
 	}
 
+	// TODO: Rewrite
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityTarget(EntityTargetEvent event){
 		if(!(event.getTarget() instanceof Player)){
