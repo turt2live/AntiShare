@@ -37,7 +37,7 @@ public class AntiShare extends PluginWrapper {
 	 *  - Item duplication glitch on fast relog [Cannot Confirm]
 	 *  
 	 *  TODO: Fix these known bugs:
-	 *  - /as rl resets people's inventories while in regions
+	 *  - /as rl does not save region inventories (while in)
 	 *  - Metadata related (fix?)
 	 *  - TNT Related (waiting on PR to be accepted)
 	 *  

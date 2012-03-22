@@ -213,7 +213,7 @@ public class RegionHandler {
 				asPlayer.setLastGameMode(player.getGameMode());
 			}
 			if(asPlayer.getLastRegion() != null){
-				if(!asPlayer.getLastRegion().equals(region)){
+				if(!asPlayer.getLastRegion().getUniqueID().equals(region.getUniqueID())){
 					region.alertEntry(player);
 				}
 			}else{
@@ -298,6 +298,7 @@ public class RegionHandler {
 							ASRegion region = null;
 							if(!results.getString("region").equalsIgnoreCase("none")){
 								region = getRegionByID(results.getString("region"));
+								BugCheck.verifyNotEqualRegion(region, null, "[TYPE 1] Region load failed to find a region", this.getClass());
 							}
 							RegionPlayer asPlayer = new RegionPlayer(playerName);
 							asPlayer.setLastGameMode(gamemode);
@@ -327,6 +328,7 @@ public class RegionHandler {
 				ASRegion region = null;
 				if(!listing.getString(path + ".region").equalsIgnoreCase("none")){
 					region = getRegionByID(listing.getString(path + ".region"));
+					BugCheck.verifyNotEqualRegion(region, null, "[TYPE 2] Region load failed to find a region", this.getClass());
 				}
 				RegionPlayer asPlayer = new RegionPlayer(playerName);
 				asPlayer.setLastGameMode(gamemode);

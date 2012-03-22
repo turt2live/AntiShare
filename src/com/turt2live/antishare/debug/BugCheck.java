@@ -18,6 +18,7 @@ public class BugCheck {
 			return; //Equal
 		}else if(object1 == null || object2 == null){ //Either
 			Bug bug = new Bug(new BugException("[TYPE 1] Failed to make region " + (object1 == null ? "null" : object1.getUniqueID()) + " equal to " + (object2 == null ? "null" : object2.getUniqueID())), message, offendingClass, null);
+			bug.getMessage();
 			Debugger.sendBug(bug);
 		}
 		try{
@@ -39,6 +40,44 @@ public class BugCheck {
 		try{
 			if(!object1.equals(object2)){
 				Bug bug = new Bug(new BugException("Failed to make " + object1 + " equal to " + object2), message, offendingClass, null);
+				Debugger.sendBug(bug);
+			}
+		}catch(Exception e){
+			throwInternalBug(e, "Failed: " + message);
+		}
+	}
+
+	public static void verifyNotEqualRegion(ASRegion object1, ASRegion object2, String message, Class<?> offendingClass){
+		if(message == null || offendingClass == null){
+			Bug bug = new Bug(new BugException("Null: REGION NOT EQUAL TO"), "Values: '" + object1 + "' '" + object2 + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
+			Debugger.sendBug(bug);
+			return;
+		}
+		if(object1 == null && object2 == null){ //Equal
+			Bug bug = new Bug(new BugException("[TYPE 1] Failed to make region " + (object1 == null ? "null" : object1.getUniqueID()) + " not equal to " + (object2 == null ? "null" : object2.getUniqueID())), message, offendingClass, null);
+			Debugger.sendBug(bug);
+		}else if(object1 == null || object2 == null){ //Either
+			return;
+		}
+		try{
+			if(object1.hashCode() == object2.hashCode()){
+				Bug bug = new Bug(new BugException("[TYPE 2] Failed to make region " + object1.getUniqueID() + " not equal to " + object2.getUniqueID()), message, offendingClass, null);
+				Debugger.sendBug(bug);
+			}
+		}catch(Exception e){
+			throwInternalBug(e, "Failed: " + message);
+		}
+	}
+
+	public static void verifyNotEqual(Object object1, Object object2, String message, Class<?> offendingClass){
+		if(object1 == null || object2 == null || message == null || offendingClass == null){
+			Bug bug = new Bug(new BugException("Null: NOT EQUAL TO"), "Values: '" + object1 + "' '" + object2 + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
+			Debugger.sendBug(bug);
+			return;
+		}
+		try{
+			if(object1.equals(object2)){
+				Bug bug = new Bug(new BugException("Failed to make " + object1 + " not equal to " + object2), message, offendingClass, null);
 				Debugger.sendBug(bug);
 			}
 		}catch(Exception e){
