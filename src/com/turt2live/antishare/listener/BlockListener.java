@@ -228,20 +228,13 @@ public class BlockListener implements Listener {
 					}
 				}
 			}
-			if(plugin.storage.isBlocked(event.getBlock().getType(), BlockedType.BLOCK_PLACE, player.getWorld())
-					&& !plugin.getPermissions().has(player, "AntiShare.allow.place", player.getWorld())){
-				if(plugin.config().onlyIfCreative(player)){
-					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						event.setCancelled(true);
-						Notification.sendNotification(NotificationType.ILLEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_place", player.getWorld()));
-					}else{
-						Notification.sendNotification(NotificationType.LEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
-					}
-				}else{
+			if(plugin.storage.isBlocked(event.getBlock().getType(), BlockedType.BLOCK_PLACE, player.getWorld())){
+				if(plugin.isBlocked(player, "AntiShare.allow.place", player.getWorld())){
 					event.setCancelled(true);
 					Notification.sendNotification(NotificationType.ILLEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.block_place", player.getWorld()));
+				}else{
+					Notification.sendNotification(NotificationType.LEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());
 				}
 			}else{
 				Notification.sendNotification(NotificationType.LEGAL_BLOCK_PLACE, plugin, player, event.getBlock().getType().name(), event.getBlock().getType());

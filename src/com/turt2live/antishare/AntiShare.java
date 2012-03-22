@@ -3,6 +3,9 @@ package com.turt2live.antishare;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
@@ -172,6 +175,21 @@ public class AntiShare extends PluginWrapper {
 					f.renameTo(newName);
 				}
 			}
+		}
+	}
+
+	public boolean isBlocked(Player player, String permission, World world){
+		if(getPermissions().has(player, permission, world)){
+			return false;
+		}
+		if(config().onlyIfCreative(player)){
+			if(player.getGameMode().equals(GameMode.CREATIVE)){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return true;
 		}
 	}
 }

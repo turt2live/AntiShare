@@ -51,22 +51,16 @@ public class PlayerListener implements Listener {
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event){
 		String commandSent = event.getMessage();
-		Player sender = event.getPlayer();
+		Player player = event.getPlayer();
 		try{
-			if(plugin.getPermissions().has(sender, "AntiShare.allow.commands", sender.getWorld())){
-				Notification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent, null);
-				return;
-			}
-			if(plugin.config().onlyIfCreative(sender)){
-				if(sender.getGameMode().equals(GameMode.SURVIVAL)){
-					Notification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, sender, commandSent, null);
-					return;
+			if(plugin.isBlocked(player, "AntiShare.allow.commands", player.getWorld())){
+				if(plugin.storage.commandBlocked(commandSent, player.getWorld())){
+					ASUtils.sendToPlayer(player, plugin.getConfig().getString("messages.illegalCommand"));
+					Notification.sendNotification(NotificationType.ILLEGAL_COMMAND, plugin, player, commandSent, null);
+					event.setCancelled(true);
+				}else{
+					Notification.sendNotification(NotificationType.LEGAL_COMMAND, plugin, player, commandSent, null);
 				}
-			}
-			if(plugin.storage.commandBlocked(commandSent, sender.getWorld())){
-				ASUtils.sendToPlayer(sender, plugin.getConfig().getString("messages.illegalCommand"));
-				Notification.sendNotification(NotificationType.ILLEGAL_COMMAND, plugin, sender, commandSent, null);
-				event.setCancelled(true);
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
@@ -78,23 +72,13 @@ public class PlayerListener implements Listener {
 	public void onPlayerDropItem(PlayerDropItemEvent event){
 		Player player = event.getPlayer();
 		try{
-			if(plugin.getPermissions().has(player, "AntiShare.allow.drop", player.getWorld())){
-				Notification.sendNotification(NotificationType.LEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
-				return;
-			}
 			if(plugin.storage.isBlocked(event.getItemDrop().getItemStack(), BlockedType.DROP_ITEM, player.getWorld())){
-				if(plugin.config().onlyIfCreative(player)){
-					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						event.setCancelled(true);
-						Notification.sendNotification(NotificationType.ILLEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
-						ASUtils.sendToPlayer(player, plugin.config().getString("messages.drop_item", player.getWorld()));
-					}else{
-						Notification.sendNotification(NotificationType.LEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
-					}
-				}else{
+				if(plugin.isBlocked(player, "AntiShare.allow.drop", player.getWorld())){
 					event.setCancelled(true);
 					Notification.sendNotification(NotificationType.ILLEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
 					ASUtils.sendToPlayer(player, plugin.config().getString("messages.drop_item", player.getWorld()));
+				}else{
+					Notification.sendNotification(NotificationType.LEGAL_DROP_ITEM, plugin, player, event.getItemDrop().getItemStack().getType().name(), event.getItemDrop().getItemStack().getType());
 				}
 			}
 			if(event.isCancelled()){
@@ -173,6 +157,7 @@ public class PlayerListener implements Listener {
 					}
 				}
 			}
+			// TODO: Condense
 			if(!plugin.getPermissions().has(player, "AntiShare.allow.interact", player.getWorld())
 					&& plugin.storage.isBlocked(event.getClickedBlock().getType(), BlockedType.INTERACT, player.getWorld())){
 				if(plugin.config().onlyIfCreative(player)){
@@ -199,6 +184,7 @@ public class PlayerListener implements Listener {
 					Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
 				}
 			}
+			// END CONDENSE
 			if(event.isCancelled()){
 				return;
 			}
@@ -350,24 +336,15 @@ public class PlayerListener implements Listener {
 		}else if(event.getRightClicked() instanceof PoweredMinecart){
 			item = Material.POWERED_MINECART;
 		}
-		if(!plugin.getPermissions().has(player, "AntiShare.allow.interact", player.getWorld())
-				&& plugin.storage.isBlocked(item, BlockedType.INTERACT, player.getWorld())){
-			if(plugin.config().onlyIfCreative(player)){
-				if(player.getGameMode().equals(GameMode.CREATIVE)){
-					event.setCancelled(true);
-					ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
-					Notification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, item.name(), item);
-
-				}else{
-					if(ASUtils.isInteractable(item)){
-						Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, item.name(), item);
-					}
-				}
-			}else{
+		if(plugin.storage.isBlocked(item, BlockedType.INTERACT, player.getWorld())){
+			if(plugin.isBlocked(player, "AntiShare.allow.interact", player.getWorld())){
 				event.setCancelled(true);
 				ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
 				Notification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, item.name(), item);
-
+			}else{
+				if(ASUtils.isInteractable(item)){
+					Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, item.name(), item);
+				}
 			}
 		}else{
 			if(ASUtils.isInteractable(item)){
