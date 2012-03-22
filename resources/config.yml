@@ -11,9 +11,21 @@
 #   -- Make sure item lists are comma-separated, not spaces, periods, or fancy other things!
 # 
 # Messages:
-#   All messages are when they are declined an action.
-#   Chat colors are supported using the & sign (eg: &f = white)
-#   If you wouldn't like a message to show, set the value as 'noshow'
+#   - All messages are when they are declined an action.
+#   - If you wouldn't like a message to show, set the value as 'noshow'
+#   - All messages support chat colors (and formats):
+#      &0 = BLACK      &1 = DARK BLUE
+#      &2 = DARK GREEN &3 = DARK AQUA
+#      &4 = DARK RED   &5 = DARK PURPLE
+#      &6 = GOLD       &7 = GRAY
+#      &8 = DARK GRAY  &9 = BLUE
+#      &a = GREEN      &b = AQUA
+#      &c = RED        &d = LIGHT PURPLE
+#      &e = YELLOW     &f = WHITE
+#      Note: MAGIC is simply random characters
+#      &k = MAGIC      &l = BOLD
+#      &m = STRIKE     &n = UNDERLINE
+#      &o = ITALIC     &r = RESET (remove formatting, reset to WHITE)
 # 
 # Hazards:
 #   'allow_eggs' - If false then eggs cannot be used (both 'mob-spawning' and chicken eggs are covered by this)

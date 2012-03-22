@@ -8,30 +8,7 @@ import org.bukkit.conversations.Conversable;
 
 public class ASUtils {
 	public static String addColor(String message){
-		String colorSeperator = "&";
-		message = message.replaceAll(colorSeperator + "0", ChatColor.getByChar('0').toString());
-		message = message.replaceAll(colorSeperator + "1", ChatColor.getByChar('1').toString());
-		message = message.replaceAll(colorSeperator + "2", ChatColor.getByChar('2').toString());
-		message = message.replaceAll(colorSeperator + "3", ChatColor.getByChar('3').toString());
-		message = message.replaceAll(colorSeperator + "4", ChatColor.getByChar('4').toString());
-		message = message.replaceAll(colorSeperator + "5", ChatColor.getByChar('5').toString());
-		message = message.replaceAll(colorSeperator + "6", ChatColor.getByChar('6').toString());
-		message = message.replaceAll(colorSeperator + "7", ChatColor.getByChar('7').toString());
-		message = message.replaceAll(colorSeperator + "8", ChatColor.getByChar('8').toString());
-		message = message.replaceAll(colorSeperator + "9", ChatColor.getByChar('9').toString());
-		message = message.replaceAll(colorSeperator + "a", ChatColor.getByChar('a').toString());
-		message = message.replaceAll(colorSeperator + "b", ChatColor.getByChar('b').toString());
-		message = message.replaceAll(colorSeperator + "c", ChatColor.getByChar('c').toString());
-		message = message.replaceAll(colorSeperator + "d", ChatColor.getByChar('d').toString());
-		message = message.replaceAll(colorSeperator + "e", ChatColor.getByChar('e').toString());
-		message = message.replaceAll(colorSeperator + "f", ChatColor.getByChar('f').toString());
-		message = message.replaceAll(colorSeperator + "A", ChatColor.getByChar('a').toString());
-		message = message.replaceAll(colorSeperator + "B", ChatColor.getByChar('b').toString());
-		message = message.replaceAll(colorSeperator + "C", ChatColor.getByChar('c').toString());
-		message = message.replaceAll(colorSeperator + "D", ChatColor.getByChar('d').toString());
-		message = message.replaceAll(colorSeperator + "E", ChatColor.getByChar('e').toString());
-		message = message.replaceAll(colorSeperator + "F", ChatColor.getByChar('f').toString());
-		return message;
+		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 
 	public static void sendToPlayer(CommandSender target, String message){
