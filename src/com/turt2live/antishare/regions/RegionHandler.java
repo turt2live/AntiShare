@@ -229,6 +229,8 @@ public class RegionHandler {
 					asPlayer.setLastGameMode(player.getGameMode());
 				}
 				asPlayer.setLastRegion(null);
+			}else{
+				asPlayer.setLastGameMode(player.getGameMode());
 			}
 		}
 		if(player_information.containsKey(player.getName())){

@@ -43,6 +43,7 @@ public class AntiShare extends PluginWrapper {
 	 *  - Metadata related (fix?)
 	 *  - TNT Related (waiting on PR to be accepted)
 	 *  - Bug reports not sent on plugin disable are never sent
+	 *  - No support for "don't touch surival when x-fering worlds"
 	 *  
 	 *  TODO: If there is time...
 	 *  - MobArena Region Detection
