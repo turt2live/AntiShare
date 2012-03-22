@@ -157,26 +157,16 @@ public class PlayerListener implements Listener {
 					}
 				}
 			}
-			// TODO: Condense
-			if(!plugin.getPermissions().has(player, "AntiShare.allow.interact", player.getWorld())
-					&& plugin.storage.isBlocked(event.getClickedBlock().getType(), BlockedType.INTERACT, player.getWorld())){
-				if(plugin.config().onlyIfCreative(player)){
-					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
-							event.setCancelled(true);
-							ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
-							Notification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
-						}
-					}else{
-						if(ASUtils.isInteractable(event.getClickedBlock().getType())){
-							Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
-						}
-					}
-				}else{
+			if(plugin.storage.isBlocked(event.getClickedBlock().getType(), BlockedType.INTERACT, player.getWorld())){
+				if(plugin.isBlocked(player, "AntiShare.allow.interact", player.getWorld())){
 					if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 						event.setCancelled(true);
 						ASUtils.sendToPlayer(player, plugin.config().getString("messages.interact", player.getWorld()));
 						Notification.sendNotification(NotificationType.ILLEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
+					}
+				}else{
+					if(ASUtils.isInteractable(event.getClickedBlock().getType())){
+						Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
 					}
 				}
 			}else{
@@ -184,7 +174,6 @@ public class PlayerListener implements Listener {
 					Notification.sendNotification(NotificationType.LEGAL_INTERACTION, plugin, player, event.getClickedBlock().getType().name(), event.getClickedBlock().getType());
 				}
 			}
-			// END CONDENSE
 			if(event.isCancelled()){
 				return;
 			}
@@ -324,7 +313,7 @@ public class PlayerListener implements Listener {
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerHitEntity(PlayerInteractEntityEvent event){
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event){
 		if(!(event.getRightClicked() instanceof StorageMinecart)
 				&& !(event.getRightClicked() instanceof PoweredMinecart)){
 			return;

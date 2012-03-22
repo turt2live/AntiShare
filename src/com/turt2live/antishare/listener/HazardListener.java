@@ -178,6 +178,25 @@ public class HazardListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
+		try{
+			if(!plugin.config().getBoolean("hazards.allow_exp_bottle", player.getWorld())
+					&& player.getItemInHand().getType().equals(Material.EXP_BOTTLE)){
+				if(plugin.isBlocked(player, "AntiShare.allow.exp", player.getWorld())){
+					event.setCancelled(true);
+					Notification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
+				}else{
+					Notification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			Bug bug = new Bug(e, "Exp Bottle Thrown", this.getClass(), player);
+			bug.setWorld(player.getWorld());
+		}
+		if(event.isCancelled()){
+			return;
+		}
 		// Flint / Fire
 		if(!plugin.config().getBoolean("hazards.allow_flint", player.getWorld())){
 			if(plugin.isBlocked(player, "AntiShare.allow.fire", player.getWorld())){
