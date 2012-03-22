@@ -210,6 +210,9 @@ public class VirtualStorage implements Listener {
 	}
 
 	public boolean regionExists(ASRegion region){
+		if(region == null){
+			return false;
+		}
 		return worlds.get(region.getWorld()).regionExists(region);
 	}
 

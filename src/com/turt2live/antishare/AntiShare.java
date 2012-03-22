@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.debug.Bug;
 import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.listener.ASListener;
 import com.turt2live.antishare.log.ASLog;
@@ -37,9 +38,11 @@ public class AntiShare extends PluginWrapper {
 	 *  - Item duplication glitch on fast relog [Cannot Confirm]
 	 *  
 	 *  TODO: Fix these known bugs:
-	 *  - /as rl does not save region inventories (while in)
+	 *  - /as rl does not save old inventories (in region, reload, exit region)
+	 *  - regions do not save inventories (pre-set) [Related to above?]
 	 *  - Metadata related (fix?)
 	 *  - TNT Related (waiting on PR to be accepted)
+	 *  - Bug reports not sent on plugin disable are never sent
 	 *  
 	 *  TODO: If there is time...
 	 *  - MobArena Region Detection
@@ -66,61 +69,71 @@ public class AntiShare extends PluginWrapper {
 
 	@Override
 	public void onEnable(){
-		log = new ASLog(this, getLogger());
-		log.logTechnical("Starting up...");
-		config = new Configuration(this);
-		config.create();
-		config.reload();
-		if(getConfig().getBoolean("settings.debug-override")){
-			DEBUG_MODE = true;
-		}
-		new File(getDataFolder(), "inventories").mkdirs(); // Setup folders
-		cleanInventoryFolder();
-		getServer().getPluginManager().registerEvents(new ASListener(this), this);
-		MultiWorld.detectWorlds(this);
-		storage = new VirtualStorage(this);
-		log.info("Converting pre-3.0.0 creative blocks...");
-		int converted = storage.convertCreativeBlocks();
-		log.info("Converted " + converted + " blocks!");
-		if(getConfig().getBoolean("SQL.use")){
-			sql = new SQLManager(this);
-			if(sql.attemptConnectFromConfig()){
-				sql.checkValues();
+		try{
+			debugger = new Debugger();
+			if(DEBUG_MODE){
+				getServer().getPluginManager().registerEvents(debugger, this);
 			}
+			log = new ASLog(this, getLogger());
+			log.logTechnical("Starting up...");
+			config = new Configuration(this);
+			config.create();
+			config.reload();
+			if(getConfig().getBoolean("settings.debug-override")){
+				DEBUG_MODE = true;
+			}
+			new File(getDataFolder(), "inventories").mkdirs(); // Setup folders
+			cleanInventoryFolder();
+			getServer().getPluginManager().registerEvents(new ASListener(this), this);
+			MultiWorld.detectWorlds(this);
+			storage = new VirtualStorage(this);
+			log.info("Converting pre-3.0.0 creative blocks...");
+			int converted = storage.convertCreativeBlocks();
+			log.info("Converted " + converted + " blocks!");
+			if(getConfig().getBoolean("SQL.use")){
+				sql = new SQLManager(this);
+				if(sql.attemptConnectFromConfig()){
+					sql.checkValues();
+				}
+			}
+			regions = new RegionHandler(this);
+			conflicts = new Conflicts(this);
+			perms = new PermissionsHandler(this);
+			if(!DEBUG_MODE){
+				UsageStatistics.send(this);
+			}
+			getCommand("as").setExecutor(new CommandHandler(this));
+			getCommand("gm").setExecutor(new GameModeCommand(this));
+			if(getConfig().getInt("settings.save-interval") > 0){
+				int saveTime = (getConfig().getInt("settings.save-interval") * 60) * 20;
+				timedSave = new TimedSave(this, saveTime);
+			}
+			log.info("Enabled! (turt2live)");
+		}catch(Exception e){
+			Bug bug = new Bug(e, e.getMessage(), this.getClass(), null);
+			Debugger.sendBug(bug);
 		}
-		regions = new RegionHandler(this);
-		debugger = new Debugger();
-		if(DEBUG_MODE){
-			getServer().getPluginManager().registerEvents(debugger, this);
-		}
-		conflicts = new Conflicts(this);
-		perms = new PermissionsHandler(this);
-		if(!DEBUG_MODE){
-			UsageStatistics.send(this);
-		}
-		getCommand("as").setExecutor(new CommandHandler(this));
-		getCommand("gm").setExecutor(new GameModeCommand(this));
-		if(getConfig().getInt("settings.save-interval") > 0){
-			int saveTime = (getConfig().getInt("settings.save-interval") * 60) * 20;
-			timedSave = new TimedSave(this, saveTime);
-		}
-		log.info("Enabled! (turt2live)");
 	}
 
 	@Override
 	public void onDisable(){
-		log.logTechnical("Shutting down...");
-		if(timedSave != null){
-			timedSave.cancel();
+		try{
+			log.logTechnical("Shutting down...");
+			if(timedSave != null){
+				timedSave.cancel();
+			}
+			log.info("Saving virtual storage to disk/SQL");
+			storage.saveToDisk();
+			regions.saveStatusToDisk();
+			if(sql != null){
+				sql.disconnect();
+			}
+			log.info("Disabled! (turt2live)");
+			log.save();
+		}catch(Exception e){
+			Bug bug = new Bug(e, e.getMessage(), this.getClass(), null);
+			Debugger.sendBug(bug);
 		}
-		log.info("Saving virtual storage to disk/SQL");
-		storage.saveToDisk();
-		regions.saveStatusToDisk();
-		if(sql != null){
-			sql.disconnect();
-		}
-		log.info("Disabled! (turt2live)");
-		log.save();
 	}
 
 	public Configuration config(){

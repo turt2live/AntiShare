@@ -18,6 +18,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.BugException;
 import com.turt2live.antishare.debug.Debugger;
 
 public class VirtualInventory {
@@ -194,6 +195,8 @@ public class VirtualInventory {
 				EnhancedConfiguration config = new EnhancedConfiguration("inventories/" + saveFile.getName(), plugin);
 				if(!config.load()){
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+					Bug bug = new Bug(new BugException("Inventory Issue, Type 1"), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
+					Debugger.sendBug(bug);
 				}
 				Integer i = 0;
 				Integer size = player.getInventory().getSize();
@@ -230,7 +233,11 @@ public class VirtualInventory {
 	}
 
 	public void saveInventoryToDisk(){
-		saveInventory(player.getGameMode());
+		if(plugin.getRegionHandler() != null){
+			if(!plugin.getRegionHandler().isRegion(player.getLocation())){
+				saveInventory(player.getGameMode());
+			}
+		}
 		saveToDisk(GameMode.CREATIVE, getCreativeInventory());
 		saveToDisk(GameMode.SURVIVAL, getSurvivalInventory());
 	}
@@ -273,11 +280,15 @@ public class VirtualInventory {
 			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 			if(!config.load()){
 				plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+				Bug bug = new Bug(new BugException("Inventory Issue, Type 2"), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
+				Debugger.sendBug(bug);
 			}
 			for(Integer slot : inventoryMap.keySet()){
 				config.set(String.valueOf(slot), inventoryMap.get(slot));
 				if(!config.save()){
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
+					Bug bug = new Bug(new BugException("Inventory Issue, Type 3"), "CANNOT SAVE INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
+					Debugger.sendBug(bug);
 				}
 			}
 		}catch(Exception e){
@@ -371,11 +382,15 @@ public class VirtualInventory {
 				EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 				if(!config.load()){
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+					Bug bug = new Bug(new BugException("Inventory Issue, Type 4"), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
+					Debugger.sendBug(bug);
 				}
 				for(Integer slot : inventory.keySet()){
 					config.set(String.valueOf(slot), inventory.get(slot));
 					if(!config.save()){
 						plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
+						Bug bug = new Bug(new BugException("Inventory Issue, Type 5"), "CANNOT SAVE INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
+						Debugger.sendBug(bug);
 					}
 				}
 			}catch(Exception e){
@@ -451,6 +466,8 @@ public class VirtualInventory {
 				EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 				if(!config.load()){
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+					Bug bug = new Bug(new BugException("Inventory Issue, Type 6"), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
+					Debugger.sendBug(bug);
 				}
 				Set<String> keys = config.getKeys(false);
 				for(String key : keys){

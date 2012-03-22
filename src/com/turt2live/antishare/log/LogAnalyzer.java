@@ -29,11 +29,20 @@ public class LogAnalyzer extends JFrame {
 	 * [<timestamp>] [AntiShare] [SEVERE] [<version>] Cannot handle inventory: <errormessage>
 	 * [<timestamp>] [AntiShare] [SEVERE] [<version>] Cannot handle misc inventory: <errormessage>
 	 * [<timestamp>] [AntiShare] [SEVERE] [<version>] Save thread cannot be created.
+	 * [<timestamp>] [AntiShare] [SEVERE] [<version>] [Debugger] *** BUG REPORT ***
+	 * [<timestamp>] [AntiShare] [SEVERE] [<version>] [Debugger] Class: <class>
+	 * [<timestamp>] [AntiShare] [SEVERE] [<version>] [Debugger] Exception: <exceptionmessage>
+	 * [<timestamp>] [AntiShare] [SEVERE] [<version>] [Debugger] Message: <message>
+	 * [<timestamp>] [AntiShare] [SEVERE] [<version>] [Debugger] World: <world>
+	 * [<timestamp>] [AntiShare] [SEVERE] Critical: Exception is null.
 	 * 
 	 * Lines (warning):
 	 * [<timestamp>] [AntiShare] [WARNING] [<version>] WorldEdit is not installed!
 	 * [<timestamp>] [AntiShare] [WARNING] [<version>] Could not send usage statistics.
 	 * [<timestamp>] [AntiShare] [WARNING] Configuration Problem: '<value>' is not a number
+	 * [<timestamp>] [AntiShare] [WARNING] An error has occured.
+	 * [<timestamp>] [AntiShare] [WARNING] Error Overflow. Output cancelled.
+	 * [<timestamp>] [AntiShare] [WARNING] A plugin has chosen not to display the stack trace to you. (Do you have the debugger?)
 	 * 
 	 * Lines (info):
 	 * [<timestamp>] [AntiShare] [INFO] Converting pre-3.0.0 creative blocks...

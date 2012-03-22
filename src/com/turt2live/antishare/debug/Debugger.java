@@ -43,6 +43,10 @@ public class Debugger implements Listener {
 		displayBug(bug);
 		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 		plugin.log.warning("An error has occured.");
+		if(bugEvent.getBug().getException() == null){
+			plugin.log.severe("Critical: Exception is null.");
+			return;
+		}
 		boolean timerActive = false;
 		if(plugin.getDebugger().antiSpamTimers.containsKey(bugEvent.getBug().getException().getMessage())){
 			timerActive = (System.currentTimeMillis() - plugin.getDebugger().antiSpamTimers.get(bugEvent.getBug().getException().getMessage())) < 1000;

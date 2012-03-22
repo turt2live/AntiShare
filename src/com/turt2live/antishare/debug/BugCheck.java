@@ -10,7 +10,7 @@ public class BugCheck {
 
 	public static void verifyEqualRegion(ASRegion object1, ASRegion object2, String message, Class<?> offendingClass){
 		if(message == null || offendingClass == null){
-			Bug bug = new Bug(new BugException("Null: REEGION EQUAL TO"), "Values: '" + object1 + "' '" + object2 + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
+			Bug bug = new Bug(new BugException("Null: REGION EQUAL TO"), "Values: '" + object1 + "' '" + object2 + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
 			Debugger.sendBug(bug);
 			return;
 		}
@@ -55,6 +55,7 @@ public class BugCheck {
 		}
 		if(object1 == null && object2 == null){ //Equal
 			Bug bug = new Bug(new BugException("[TYPE 1] Failed to make region " + (object1 == null ? "null" : object1.getUniqueID()) + " not equal to " + (object2 == null ? "null" : object2.getUniqueID())), message, offendingClass, null);
+			System.out.println(bug);
 			Debugger.sendBug(bug);
 		}else if(object1 == null || object2 == null){ //Either
 			return;
