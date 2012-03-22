@@ -118,7 +118,7 @@ public class Notification {
 				if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 					break;
 				}
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to place " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to place " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_BLOCK_BREAK:
 				if(variable.equalsIgnoreCase("BEDROCK")){
@@ -127,7 +127,7 @@ public class Notification {
 				if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 					break;
 				}
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_CREATIVE_BLOCK_BREAK:
 				if(variable.equalsIgnoreCase("BEDROCK")){
@@ -136,7 +136,7 @@ public class Notification {
 				if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 					break;
 				}
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break the creative block " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break the creative block " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_SURVIVAL_BLOCK_BREAK:
 				if(variable.equalsIgnoreCase("BEDROCK")){
@@ -145,52 +145,52 @@ public class Notification {
 				if(plugin.storage.isBlocked(material, BlockedType.INTERACT, player.getWorld())){
 					break;
 				}
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break the survival block " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to break the survival block " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_WORLD_CHANGE:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to go to world " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to go to world " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_COMMAND:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to send the command " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to send the command " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_DEATH:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to die in " + ChatColor.DARK_RED + variable + ChatColor.AQUA + " mode!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to die in " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + " mode!";
 				break;
 			case LEGAL_DROP_ITEM:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to drop the item " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to drop the item " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_INTERACTION:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to interact with " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to interact with " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_PLAYER_PVP:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to hit " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to hit " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_MOB_PVP:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to hit a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to hit a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_EGG:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_EXP_BOTTLE:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use an " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use an " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_BEDROCK:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_ITEM_THROW_INTO_REGION:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " threw an item into the region " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " threw an item into the region " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_FIRE_CHARGE:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to use a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_FIRE:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_BUCKET:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " used a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 			case LEGAL_TNT_PLACE:
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " placed a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " placed a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
 				break;
 
 			// GENERAL actions
