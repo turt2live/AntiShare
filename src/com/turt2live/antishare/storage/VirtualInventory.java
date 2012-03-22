@@ -18,6 +18,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 
 public class VirtualInventory {
 
@@ -173,8 +174,8 @@ public class VirtualInventory {
 						skip = true;
 					}catch(SQLException e){
 						Bug bug = new Bug(e, "Cannot handle inventory", this.getClass(), this.player);
-						plugin.getDebugger().sendBug(bug);
-						plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Cannot handle inventory: " + e.getMessage());
+						Debugger.sendBug(bug);
+						plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Cannot handle inventory: " + e.getMessage());
 					}
 				}else{
 					skip = true;
@@ -192,7 +193,7 @@ public class VirtualInventory {
 				}
 				EnhancedConfiguration config = new EnhancedConfiguration("inventories/" + saveFile.getName(), plugin);
 				if(!config.load()){
-					plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
 				}
 				Integer i = 0;
 				Integer size = player.getInventory().getSize();
@@ -204,8 +205,7 @@ public class VirtualInventory {
 				}
 			}catch(Exception e){
 				Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass(), this.player);
-				plugin.getDebugger().sendBug(bug);
-				e.printStackTrace();
+				Debugger.sendBug(bug);
 			}
 		}
 		return inventoryMap;
@@ -272,18 +272,17 @@ public class VirtualInventory {
 			File saveFile = new File(sdir, player.getName() + "_" + gamemode.toString() + "_" + world.getName() + ".yml");
 			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 			if(!config.load()){
-				plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+				plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
 			}
 			for(Integer slot : inventoryMap.keySet()){
 				config.set(String.valueOf(slot), inventoryMap.get(slot));
 				if(!config.save()){
-					plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
+					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
 				}
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass(), this.player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -308,8 +307,7 @@ public class VirtualInventory {
 				saveFile.createNewFile();
 			}catch(Exception e){
 				Bug bug = new Bug(e, "VirtualInventoryBug", this.getClass(), this.player);
-				plugin.getDebugger().sendBug(bug);
-				e.printStackTrace();
+				Debugger.sendBug(bug);
 			}
 		}
 	}
@@ -363,8 +361,7 @@ public class VirtualInventory {
 					file.createNewFile();
 				}catch(Exception e){
 					Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
-					plugin.getDebugger().sendBug(bug);
-					e.printStackTrace();
+					Debugger.sendBug(bug);
 				}
 			}
 			try{
@@ -373,18 +370,17 @@ public class VirtualInventory {
 				File saveFile = file;
 				EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 				if(!config.load()){
-					plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
 				}
 				for(Integer slot : inventory.keySet()){
 					config.set(String.valueOf(slot), inventory.get(slot));
 					if(!config.save()){
-						plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
+						plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
 					}
 				}
 			}catch(Exception e){
 				Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
-				plugin.getDebugger().sendBug(bug);
-				e.printStackTrace();
+				Debugger.sendBug(bug);
 			}
 		}
 	}
@@ -429,8 +425,8 @@ public class VirtualInventory {
 					flatfile = false;
 				}catch(SQLException e){
 					Bug bug = new Bug(e, "Cannot handle inventory", VirtualInventory.class, null);
-					plugin.getDebugger().sendBug(bug);
-					plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Cannot handle misc inventory: " + e.getMessage());
+					Debugger.sendBug(bug);
+					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Cannot handle misc inventory: " + e.getMessage());
 				}
 			}
 		}
@@ -441,8 +437,7 @@ public class VirtualInventory {
 					file.createNewFile();
 				}catch(Exception e){
 					Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
-					plugin.getDebugger().sendBug(bug);
-					e.printStackTrace();
+					Debugger.sendBug(bug);
 				}
 			}
 			try{
@@ -455,7 +450,7 @@ public class VirtualInventory {
 				}
 				EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 				if(!config.load()){
-					plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
+					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
 				}
 				Set<String> keys = config.getKeys(false);
 				for(String key : keys){
@@ -463,8 +458,7 @@ public class VirtualInventory {
 				}
 			}catch(Exception e){
 				Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
-				plugin.getDebugger().sendBug(bug);
-				e.printStackTrace();
+				Debugger.sendBug(bug);
 			}
 		}
 		return inventoryMap;

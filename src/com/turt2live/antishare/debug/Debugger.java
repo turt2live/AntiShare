@@ -4,18 +4,15 @@ import java.util.Vector;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.enums.AlertType;
 import com.turt2live.antishare.event.AntiShareBugEvent;
 import com.turt2live.antishare.log.ASLog;
 
 /*
- * This is used mostly while developing. There may be reminaing code here
+ * This is used mostly while developing. There may be remaining code here
  * but that code will be disabled if AntiShare.DEBUG_MODE is false
  */
 public class Debugger implements Listener {
@@ -34,16 +31,21 @@ public class Debugger implements Listener {
 		log.severe("[" + plugin.getDescription().getVersion() + "] " + "[Debugger] World: " + bug.getWorld());
 	}
 
-	private AntiShare plugin;
 	private Vector<AlertTimer> alertTimers = new Vector<AlertTimer>();
 
-	public Debugger(AntiShare plugin){
-		this.plugin = plugin;
-	}
+	public Debugger(){} // Not Required
 
-	public void sendBug(Bug bug){
-		Bukkit.getServer().getPluginManager().callEvent(new AntiShareBugEvent(bug));
+	public static void sendBug(Bug bug){
+		AntiShareBugEvent bugEvent = new AntiShareBugEvent(bug);
+		Bukkit.getServer().getPluginManager().callEvent(bugEvent);
 		displayBug(bug);
+		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		plugin.log.warning("An error has occured.");
+		if(bugEvent.getPrintTrace()){
+			bugEvent.getBug().getException().printStackTrace();
+		}else{
+			plugin.log.warning("A plugin has chosen not to display the stack trace to you. (Do you have the debugger?)");
+		}
 	}
 
 	public void alert(String message, CommandSender target, AlertType type){
@@ -81,22 +83,6 @@ public class Debugger implements Listener {
 			AlertTimer timer = new AlertTimer(type, target);
 			timer.sendMessage(message);
 			alertTimers.add(timer);
-		}
-	}
-
-	@EventHandler
-	public void onCommand(PlayerCommandPreprocessEvent event){
-		if(!AntiShare.DEBUG_MODE){
-			return;
-		}
-		if(event.getMessage().equalsIgnoreCase("/astest")){
-			if(AntiShare.DEBUG_MODE){
-				//plugin.getRegionHandler().getWorldEditHandler().forceDisplayWorldEditInformation(event.getPlayer());
-				//new ConfigurationConversation(plugin, event.getPlayer());
-				// Lazy solution to "unused" members
-				ASUtils.sendToPlayer(event.getPlayer(), plugin.getDescription().getFullName());
-				event.setCancelled(true);
-			}
 		}
 	}
 }

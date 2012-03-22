@@ -89,7 +89,7 @@ public class AntiShare extends PluginWrapper {
 			}
 		}
 		regions = new RegionHandler(this);
-		debugger = new Debugger(this);
+		debugger = new Debugger();
 		if(DEBUG_MODE){
 			getServer().getPluginManager().registerEvents(debugger, this);
 		}

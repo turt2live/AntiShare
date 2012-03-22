@@ -21,6 +21,7 @@ import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Notification;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
 import com.turt2live.antishare.regions.ASRegion;
@@ -161,8 +162,7 @@ public class BlockListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -193,8 +193,7 @@ public class BlockListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -261,8 +260,7 @@ public class BlockListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 }

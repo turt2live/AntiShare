@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -14,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
 
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 
 public class ASUtils {
 	public static String addColor(String message){
@@ -89,8 +89,7 @@ public class ASUtils {
 			out.close();
 		}catch(Exception e){
 			Bug bug = new Bug(e, "ASUtilsBug", ASUtils.class, null);
-			((AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare")).getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 

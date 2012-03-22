@@ -13,6 +13,7 @@ import org.bukkit.ChatColor;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 
 public class ASLog {
 
@@ -88,9 +89,8 @@ public class ASLog {
 				out.write("[" + timestamp(false) + "] " + line + "\r\n");
 				out.close();
 			}catch(Exception e){
-				e.printStackTrace();
 				Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
-				plugin.getDebugger().sendBug(bug);
+				Debugger.sendBug(bug);
 			}
 		}
 		// Save Full Log
@@ -105,9 +105,8 @@ public class ASLog {
 				out.write("[" + timestamp(false) + "] " + line + "\r\n");
 				out.close();
 			}catch(Exception e){
-				e.printStackTrace();
 				Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
-				plugin.getDebugger().sendBug(bug);
+				Debugger.sendBug(bug);
 			}
 		}
 		// Save Technical Log
@@ -122,9 +121,8 @@ public class ASLog {
 				out.write("[" + timestamp(false) + "] " + line + "\r\n");
 				out.close();
 			}catch(Exception e){
-				e.printStackTrace();
 				Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
-				plugin.getDebugger().sendBug(bug);
+				Debugger.sendBug(bug);
 			}
 		}
 		// Save Event Log
@@ -136,9 +134,8 @@ public class ASLog {
 				out.write("[" + timestamp(false) + "] " + event + "\r\n");
 				out.close();
 			}catch(Exception e){
-				e.printStackTrace();
 				Bug bug = new Bug(e, "Log all save error", this.getClass(), null);
-				plugin.getDebugger().sendBug(bug);
+				Debugger.sendBug(bug);
 			}
 		}
 	}

@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 
 /*
  * Thanks go to Example Depot for teaching me everything in this class.
@@ -39,9 +40,9 @@ public class SQLManager {
 			connection = DriverManager.getConnection(url, username, password);
 			return true;
 		}catch(ClassNotFoundException e){
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"You do not have a MySQL driver, please install one. AntiShare will use Flat-File for now");
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "You do not have a MySQL driver, please install one. AntiShare will use Flat-File for now");
 		}catch(SQLException e){
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 		}
 		return false;
 	}
@@ -54,8 +55,8 @@ public class SQLManager {
 				}
 			}catch(SQLException e){
 				Bug bug = new Bug(e, "Cannot close SQL", this.getClass(), null);
-				plugin.getDebugger().sendBug(bug);
-				plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Cannot close SQL connection: " + e.getMessage());
+				Debugger.sendBug(bug);
+				plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Cannot close SQL connection: " + e.getMessage());
 			}
 		}
 	}
@@ -146,10 +147,10 @@ public class SQLManager {
 			return stmt.executeQuery(query);
 		}catch(SQLException e){
 			Bug bug = new Bug(e, "QUERY: " + query, this.getClass(), null);
-			plugin.getDebugger().sendBug(bug);
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Something went wrong with the query. Send this to the developer:");
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"QUERY: " + query);
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"MESSAGE: " + e.getMessage());
+			Debugger.sendBug(bug);
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Something went wrong with the query. Send this to the developer:");
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "QUERY: " + query);
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "MESSAGE: " + e.getMessage());
 		}
 		return null;
 	}
@@ -160,10 +161,10 @@ public class SQLManager {
 			stmt.executeUpdate(query);
 		}catch(SQLException e){
 			Bug bug = new Bug(e, "QUERY: " + query, this.getClass(), null);
-			plugin.getDebugger().sendBug(bug);
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Something went wrong with the query. Send this to the developer:");
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"QUERY: " + query);
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"MESSAGE: " + e.getMessage());
+			Debugger.sendBug(bug);
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Something went wrong with the query. Send this to the developer:");
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "QUERY: " + query);
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "MESSAGE: " + e.getMessage());
 		}
 	}
 
@@ -173,10 +174,10 @@ public class SQLManager {
 			return stmt.executeUpdate(query);
 		}catch(SQLException e){
 			Bug bug = new Bug(e, "QUERY: " + query, this.getClass(), null);
-			plugin.getDebugger().sendBug(bug);
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Something went wrong with the query. Send this to the developer:");
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"QUERY: " + query);
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"MESSAGE: " + e.getMessage());
+			Debugger.sendBug(bug);
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Something went wrong with the query. Send this to the developer:");
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "QUERY: " + query);
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "MESSAGE: " + e.getMessage());
 		}
 		return 0;
 	}

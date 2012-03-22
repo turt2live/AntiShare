@@ -8,6 +8,7 @@ import com.turt2live.antishare.debug.Bug;
 public class AntiShareBugEvent extends Event {
 
 	private Bug bug;
+	private boolean printTrace = true;
 
 	/**
 	 * Creates a new AntiShareBugEvent
@@ -25,6 +26,24 @@ public class AntiShareBugEvent extends Event {
 	 */
 	public Bug getBug(){
 		return bug;
+	}
+
+	/**
+	 * Sets whether or not to print the error to the console
+	 * 
+	 * @param print true to print the error
+	 */
+	public void setPrintTrace(boolean print){
+		printTrace = print;
+	}
+
+	/**
+	 * Determines if the Debugger will be printing the error to the console
+	 * 
+	 * @return true if the Debugger will be printing the error
+	 */
+	public boolean getPrintTrace(){
+		return printTrace;
 	}
 
 	// Bukkit stuff

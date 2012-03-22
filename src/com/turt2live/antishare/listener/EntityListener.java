@@ -16,6 +16,7 @@ import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Notification;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.enums.NotificationType;
 
 public class EntityListener implements Listener {
@@ -128,8 +129,7 @@ public class EntityListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), null);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -161,8 +161,7 @@ public class EntityListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), (Player) event.getTarget());
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 }

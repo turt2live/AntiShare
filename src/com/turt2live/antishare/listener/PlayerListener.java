@@ -34,6 +34,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.MultiWorld;
 import com.turt2live.antishare.Notification;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.enums.AlertType;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.enums.NotificationType;
@@ -69,8 +70,7 @@ public class PlayerListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -122,8 +122,7 @@ public class PlayerListener implements Listener {
 			//		}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -143,8 +142,7 @@ public class PlayerListener implements Listener {
 			Notification.sendNotification(NotificationType.GAMEMODE_CHANGE, plugin, player, event.getNewGameMode().toString(), null);
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -206,8 +204,7 @@ public class PlayerListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -217,8 +214,7 @@ public class PlayerListener implements Listener {
 			plugin.getRegionHandler().checkRegion(event.getPlayer(), event.getTo(), event.getFrom());
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -230,8 +226,7 @@ public class PlayerListener implements Listener {
 			manager.makeMatch();
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -250,8 +245,7 @@ public class PlayerListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -289,8 +283,7 @@ public class PlayerListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -300,8 +293,7 @@ public class PlayerListener implements Listener {
 			onPlayerTeleport(event);
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -323,8 +315,7 @@ public class PlayerListener implements Listener {
 			}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 
@@ -342,8 +333,7 @@ public class PlayerListener implements Listener {
 			Notification.sendNotification(NotificationType.LEGAL_WORLD_CHANGE, plugin, player, player.getWorld().getName(), null);
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
-			plugin.getDebugger().sendBug(bug);
-			e.printStackTrace();
+			Debugger.sendBug(bug);
 		}
 	}
 

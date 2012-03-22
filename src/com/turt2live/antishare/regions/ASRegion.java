@@ -18,6 +18,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Notification;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.enums.NotificationType;
 import com.turt2live.antishare.storage.VirtualInventory;
 
@@ -195,8 +196,7 @@ public class ASRegion {
 				}catch(Exception e){
 					Bug bug = new Bug(e, "Region save error", this.getClass(), null);
 					bug.setWorld(getWorld());
-					plugin.getDebugger().sendBug(bug);
-					e.printStackTrace();
+					Debugger.sendBug(bug);
 				}
 			}else{
 				regionFile.delete();
@@ -205,8 +205,7 @@ public class ASRegion {
 				}catch(Exception e){
 					Bug bug = new Bug(e, "Region save error", this.getClass(), null);
 					bug.setWorld(getWorld());
-					plugin.getDebugger().sendBug(bug);
-					e.printStackTrace();
+					Debugger.sendBug(bug);
 				}
 			}
 			EnhancedConfiguration regionYAML = new EnhancedConfiguration(regionFile, plugin);

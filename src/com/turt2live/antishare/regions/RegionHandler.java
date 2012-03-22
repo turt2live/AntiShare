@@ -19,6 +19,7 @@ import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.enums.RegionKeyType;
 import com.turt2live.antishare.storage.VirtualInventory;
 
@@ -198,10 +199,7 @@ public class RegionHandler {
 
 	public void checkRegion(Player player, Location newLocation, Location fromLocation){
 		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
-		RegionPlayer asPlayer = player_information.get(player.getName());
-		if(asPlayer == null){
-			asPlayer = new RegionPlayer(player.getName());
-		}
+		RegionPlayer asPlayer = new RegionPlayer(player.getName());
 		if(region != null){
 			if(!player.getGameMode().equals(region.getGameModeSwitch())
 					&& !plugin.getPermissions().has(player, "AntiShare.roam", player.getWorld())){
@@ -233,6 +231,7 @@ public class RegionHandler {
 			player_information.remove(player.getName());
 		}
 		player_information.put(player.getName(), asPlayer);
+
 	}
 
 	public Vector<ASRegion> getRegionsNearby(Location location, int distance){
@@ -263,8 +262,7 @@ public class RegionHandler {
 					saveFile.createNewFile();
 				}catch(Exception e){
 					Bug bug = new Bug(e, "Region save error", this.getClass(), null);
-					plugin.getDebugger().sendBug(bug);
-					e.printStackTrace();
+					Debugger.sendBug(bug);
 				}
 			}
 			EnhancedConfiguration listing = new EnhancedConfiguration(saveFile, plugin);
@@ -305,7 +303,7 @@ public class RegionHandler {
 					flatfile = false;
 				}catch(SQLException e){
 					Bug bug = new Bug(e, "cannot handle region information", this.getClass(), null);
-					plugin.getDebugger().sendBug(bug);
+					Debugger.sendBug(bug);
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Cannot handle region information: " + e.getMessage());
 				}
 			}
