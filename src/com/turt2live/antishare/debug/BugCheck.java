@@ -54,26 +54,42 @@ public class BugCheck {
 		}
 	}
 
-	public static void verifyWritten(File file, String line, String message, Class<?> offendingClass, boolean caseSensitive){
+	public static void verifyWritten(File file, String line, String message, Class<?> offendingClass, boolean caseSensitive, boolean startsWith){
 		if(file == null || message == null || offendingClass == null){
 			Bug bug = new Bug(new NullPointerException("Null: WRITTEN"), "Values: " + file + " " + message + " " + offendingClass, BugCheck.class, null);
 			Debugger.sendBug(bug);
 			return;
 		}
 		try{
+			line = line.trim().replace("\t", "");
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			boolean found = false;
 			String rline;
 			while ((rline = in.readLine()) != null){
-				if(caseSensitive){
-					if(rline.equals(line)){
-						found = true;
-						break;
+				rline = rline.trim().replace("\t", "");
+				if(startsWith){
+					if(caseSensitive){
+						if(rline.startsWith(line)){
+							found = true;
+							break;
+						}
+					}else{
+						if(rline.toLowerCase().startsWith(line.toLowerCase())){
+							found = true;
+							break;
+						}
 					}
 				}else{
-					if(rline.equalsIgnoreCase(line)){
-						found = true;
-						break;
+					if(caseSensitive){
+						if(rline.equals(line)){
+							found = true;
+							break;
+						}
+					}else{
+						if(rline.equalsIgnoreCase(line)){
+							found = true;
+							break;
+						}
 					}
 				}
 			}
