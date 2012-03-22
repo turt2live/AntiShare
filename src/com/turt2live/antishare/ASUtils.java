@@ -1,19 +1,10 @@
 package com.turt2live.antishare;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
-
-import com.turt2live.antishare.debug.Bug;
-import com.turt2live.antishare.debug.Debugger;
 
 public class ASUtils {
 	public static String addColor(String message){
@@ -68,28 +59,6 @@ public class ASUtils {
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.WHITE + message;
 			}
 			target.sendRawMessage(message);
-		}
-	}
-
-	public static void transfer(File original, File destination){
-		try{
-			if(!destination.exists()){
-				File d = new File(destination.getParent());
-				d.mkdirs();
-				destination.createNewFile();
-			}
-			InputStream in = new FileInputStream(original);
-			OutputStream out = new FileOutputStream(destination);
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0){
-				out.write(buf, 0, len);
-			}
-			in.close();
-			out.close();
-		}catch(Exception e){
-			Bug bug = new Bug(e, "ASUtilsBug", ASUtils.class, null);
-			Debugger.sendBug(bug);
 		}
 	}
 
