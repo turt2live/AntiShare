@@ -1,5 +1,6 @@
 package com.turt2live.antishare.debug;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ public class Debugger implements Listener {
 	}
 
 	private Vector<AlertTimer> alertTimers = new Vector<AlertTimer>();
+	public HashMap<String, Long> antiSpamTimers = new HashMap<String, Long>();
 
 	public Debugger(){} // Not Required
 
@@ -41,10 +43,21 @@ public class Debugger implements Listener {
 		displayBug(bug);
 		AntiShare plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 		plugin.log.warning("An error has occured.");
-		if(bugEvent.getPrintTrace()){
+		boolean timerActive = false;
+		if(plugin.getDebugger().antiSpamTimers.containsKey(bugEvent.getBug().getException().getMessage())){
+			timerActive = (System.currentTimeMillis() - plugin.getDebugger().antiSpamTimers.get(bugEvent.getBug().getException().getMessage())) < 1000;
+			if(!timerActive){
+				plugin.getDebugger().antiSpamTimers.remove(bugEvent.getBug().getException().getMessage());
+			}
+		}
+		if(bugEvent.getPrintTrace() && !timerActive){
 			bugEvent.getBug().getException().printStackTrace();
-		}else{
+			plugin.getDebugger().antiSpamTimers.put(bugEvent.getBug().getException().getMessage(), System.currentTimeMillis());
+		}else if(!timerActive){
 			plugin.log.warning("A plugin has chosen not to display the stack trace to you. (Do you have the debugger?)");
+			plugin.getDebugger().antiSpamTimers.put(bugEvent.getBug().getException().getMessage(), System.currentTimeMillis());
+		}else{
+			plugin.log.warning("Error Overflow. Output cancelled.");
 		}
 	}
 

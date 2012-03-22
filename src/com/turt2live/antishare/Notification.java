@@ -283,17 +283,20 @@ public class Notification {
 				}
 				break;
 			}
-			plugin.log.logEvent(((type.name().startsWith("LEGAL")) ? "[LEGAL]" : "[ILLEGAL]") + message.replace("[AntiShare]", ""));
-			plugin.log.log(((type.name().startsWith("LEGAL")) ? "[LEGAL]" : "[ILLEGAL]") + message.replace("[AntiShare]", ""));
+			String prefix = type.name().startsWith("LEGAL") ? "[LEGAL]" : (type.name().startsWith("ILLEGAL") ? "[ILLEGAL]" : "");
+			plugin.log.logEvent(prefix + message.replace("[AntiShare]", ""));
+			plugin.log.log(prefix + message.replace("[AntiShare]", ""));
 		}
-		plugin.log.logForce(((type.name().startsWith("LEGAL")) ? "[LEGAL]" : "[ILLEGAL]") + message.replace("[AntiShare]", ""));
+		String prefix = type.name().startsWith("LEGAL") ? "[LEGAL]" : (type.name().startsWith("ILLEGAL") ? "[ILLEGAL]" : "");
+		plugin.log.logForce(prefix + message.replace("[AntiShare]", ""));
 		if(message.length() > 0){
 			for(Player online : Bukkit.getOnlinePlayers()){
 				if(online.hasPermission("AntiShare.notify")){
 					online.sendMessage(message);
 				}
 			}
-			Bukkit.getConsoleSender().sendMessage(((type.name().startsWith("LEGAL")) ? "[LEGAL] " : "[ILLEGAL] ") + message);
+			prefix = type.name().startsWith("LEGAL") ? "[LEGAL] " : (type.name().startsWith("ILLEGAL") ? "[ILLEGAL] " : "");
+			Bukkit.getConsoleSender().sendMessage(prefix + message);
 		}
 	}
 

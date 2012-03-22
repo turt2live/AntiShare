@@ -19,6 +19,7 @@ import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Bug;
+import com.turt2live.antishare.debug.BugCheck;
 import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.enums.RegionKeyType;
 import com.turt2live.antishare.storage.VirtualInventory;
@@ -199,7 +200,10 @@ public class RegionHandler {
 
 	public void checkRegion(Player player, Location newLocation, Location fromLocation){
 		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
-		RegionPlayer asPlayer = new RegionPlayer(player.getName());
+		RegionPlayer asPlayer = player_information.get(player.getName());
+		if(asPlayer == null){
+			asPlayer = new RegionPlayer(player.getName());
+		}
 		if(region != null){
 			if(!player.getGameMode().equals(region.getGameModeSwitch())
 					&& !plugin.getPermissions().has(player, "AntiShare.roam", player.getWorld())){
@@ -231,7 +235,8 @@ public class RegionHandler {
 			player_information.remove(player.getName());
 		}
 		player_information.put(player.getName(), asPlayer);
-
+		BugCheck.verifyEqualRegion(asPlayer.getLastRegion(), region, "Region handler not saving regions", this.getClass());
+		BugCheck.verifyEqual(asPlayer.getLastGameMode(), player.getGameMode(), "Region handler not saving gamemode", this.getClass());
 	}
 
 	public Vector<ASRegion> getRegionsNearby(Location location, int distance){

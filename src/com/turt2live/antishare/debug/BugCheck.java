@@ -4,11 +4,35 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import com.turt2live.antishare.regions.ASRegion;
+
 public class BugCheck {
+
+	public static void verifyEqualRegion(ASRegion object1, ASRegion object2, String message, Class<?> offendingClass){
+		if(message == null || offendingClass == null){
+			Bug bug = new Bug(new BugException("Null: REEGION EQUAL TO"), "Values: '" + object1 + "' '" + object2 + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
+			Debugger.sendBug(bug);
+			return;
+		}
+		if(object1 == null && object2 == null){
+			return; //Equal
+		}else if(object1 == null || object2 == null){ //Either
+			Bug bug = new Bug(new BugException("[TYPE 1] Failed to make region " + (object1 == null ? "null" : object1.getUniqueID()) + " equal to " + (object2 == null ? "null" : object2.getUniqueID())), message, offendingClass, null);
+			Debugger.sendBug(bug);
+		}
+		try{
+			if(object1.hashCode() != object2.hashCode()){
+				Bug bug = new Bug(new BugException("[TYPE 2] Failed to make region " + object1.getUniqueID() + " equal to " + object2.getUniqueID()), message, offendingClass, null);
+				Debugger.sendBug(bug);
+			}
+		}catch(Exception e){
+			throwInternalBug(e, "Failed: " + message);
+		}
+	}
 
 	public static void verifyEqual(Object object1, Object object2, String message, Class<?> offendingClass){
 		if(object1 == null || object2 == null || message == null || offendingClass == null){
-			Bug bug = new Bug(new NullPointerException("Null: EQUAL TO"), "Values: " + object1 + " " + object2 + " " + message + " " + offendingClass, BugCheck.class, null);
+			Bug bug = new Bug(new BugException("Null: EQUAL TO"), "Values: '" + object1 + "' '" + object2 + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
 			Debugger.sendBug(bug);
 			return;
 		}
@@ -24,7 +48,7 @@ public class BugCheck {
 
 	public static void verifyLessThan(Float object1, Float object2, String message, Class<?> offendingClass){
 		if(object1 == null || object2 == null || message == null || offendingClass == null){
-			Bug bug = new Bug(new NullPointerException("Null: LESS THAN"), "Values: " + object1 + " " + object2 + " " + message + " " + offendingClass, BugCheck.class, null);
+			Bug bug = new Bug(new BugException("Null: LESS THAN"), "Values: '" + object1 + "' '" + object2 + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
 			Debugger.sendBug(bug);
 			return;
 		}
@@ -40,7 +64,7 @@ public class BugCheck {
 
 	public static void verifyGreaterThan(Float object1, Float object2, String message, Class<?> offendingClass){
 		if(object1 == null || object2 == null || message == null || offendingClass == null){
-			Bug bug = new Bug(new NullPointerException("Null: GREATER THAN"), "Values: " + object1 + " " + object2 + " " + message + " " + offendingClass, BugCheck.class, null);
+			Bug bug = new Bug(new BugException("Null: GREATER THAN"), "Values: '" + object1 + "' '" + object2 + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
 			Debugger.sendBug(bug);
 			return;
 		}
@@ -56,7 +80,7 @@ public class BugCheck {
 
 	public static void verifyWritten(File file, String line, String message, Class<?> offendingClass, boolean caseSensitive, boolean startsWith){
 		if(file == null || message == null || offendingClass == null){
-			Bug bug = new Bug(new NullPointerException("Null: WRITTEN"), "Values: " + file + " " + message + " " + offendingClass, BugCheck.class, null);
+			Bug bug = new Bug(new BugException("Null: WRITTEN"), "Values: '" + file + "' '" + message + "' '" + offendingClass + "'", BugCheck.class, null);
 			Debugger.sendBug(bug);
 			return;
 		}
