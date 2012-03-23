@@ -34,7 +34,6 @@ public class AntiShare extends PluginWrapper {
 	 *  
 	 *  TODO: Add these features
 	 *  - AntiShare log file analyzer
-	 *  - Bug catching (sanity checks)
 	 *  - Isolated creative / survival tracked blocks
 	 *  
 	 *  TODO: Test/verify these potential bugs
