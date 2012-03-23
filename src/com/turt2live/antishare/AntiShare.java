@@ -37,13 +37,13 @@ public class AntiShare extends PluginWrapper {
 	 *  TODO: Test/verify these potential bugs
 	 *  - Tim the Enchanter conflict (waiting on information)
 	 *  - Item duplication glitch on fast relog [Cannot Confirm]
+	 *  - server.log overflow
 	 *  
 	 *  TODO: Fix these known bugs:
 	 *  - /as rl does not save old inventories (in region, reload, exit region)
 	 *  - regions do not save inventories (pre-set) [Related to above?]
-	 *  - Metadata related (fix?)
+	 *  - Metadata related (fix?) [UNTESTED fix in place]
 	 *  - TNT Related (waiting on PR to be accepted)
-	 *  - Bug reports not sent on plugin disable are never sent
 	 *  - No support for "don't touch survival when x-fering worlds"
 	 *  - Configuration resets on server startup
 	 *  
