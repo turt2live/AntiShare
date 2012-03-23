@@ -47,5 +47,6 @@ other:
   pvp-mobs: global
   blockDrops: global
   worldTransfer: global
+  worlds-ignore-survival: global
   tracked-blocks-creative: global
   tracked-blocks-survival: global

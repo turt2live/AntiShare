@@ -27,8 +27,8 @@ public class AntiShare extends PluginWrapper {
 	 *  
 	 *  TODO: Test code when BUKKIT issues fixed:
 	 *  ** For self ref: https://bukkit.atlassian.net/browse/BUKKIT-####
-	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211)
-	 *  - Inventory mirror creative-glitch (BUKKIT-1211)
+	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211) [Untested code in place]
+	 *  - Inventory mirror creative-glitch (BUKKIT-1211) [Untested code in place]
 	 *  - Event messages (See if space is removed, BUKKIT-1285)
 	 *  
 	 *  TODO: Add these features
@@ -42,10 +42,15 @@ public class AntiShare extends PluginWrapper {
 	 *  TODO: Fix these known bugs:
 	 *  - /as rl does not save old inventories (in region, reload, exit region)
 	 *  - regions do not save inventories (pre-set) [Related to above?]
-	 *  - Metadata related (fix?) [UNTESTED fix in place]
 	 *  - TNT Related (waiting on PR to be accepted)
-	 *  - No support for "don't touch survival when x-fering worlds"
-	 *  - Configuration resets on server startup
+	 *  - Configuration resets on config helper save
+	 *  
+	 *  TODO: Add to configuration helper
+	 *  - Configuration values
+	 *  	- worlds-ignore-survival
+	 *  	- tracked-blocks-GAMEMODE
+	 *  	- new notifications
+	 *  - Permissions (unsure if they are outdated or not...)
 	 *  
 	 *  TODO: If there is time...
 	 *  - MobArena Region Detection

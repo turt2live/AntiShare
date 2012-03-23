@@ -50,8 +50,9 @@
 #                  'noBlockDrop' to the player once per second, or for every different block. As well, when the block is 100% broken it will show 'creativeModeBlock'.
 #   'worldTransfer' - True if you would like to allow players to transfer worlds. See the section towards the end of this documentation labeled "world transfer information" for help.
 #                     True means you can transfer TO the world, false means you cannot.
-#   'tracked-blocks-creative' - A list (or '*' for all, 'none' for none) of blocks to track. Make sure 'track_blocks' is true if you want to use this list!
-#   'tracked-blocks-survival' - A list (or '*' for all, 'none' for none) of blocks to track. Make sure 'track_blocks' is true if you want to use this list!
+#   'worlds-ignore-survival' - Set to true if the world transfer settings should be ignored for survival players. 
+#   'tracked-blocks-creative' - A list (or '*' for all, 'none' for none) of blocks to track. Make sure 'track_blocks' is true if you want to use this list! This list is comma-separated.
+#   'tracked-blocks-survival' - A list (or '*' for all, 'none' for none) of blocks to track. Make sure 'track_blocks' is true if you want to use this list! This list is comma-separated.
 # 
 #   The following are affected by 'only_if_creative': 'pvp', 'pvp-mobs', 'worldTransfer', all the 'hazards', and all the 'events'
 #   This means the above settings will check if they are in creative or not and act upon that
@@ -227,6 +228,7 @@ other:
   pvp-mobs: false
   blockDrops: false
   worldTransfer: false
+  worlds-ignore-survival: true
   tracked-blocks-creative: '*'
   tracked-blocks-survival: '*'
 SQL:

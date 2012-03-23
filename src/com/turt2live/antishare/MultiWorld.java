@@ -38,6 +38,9 @@ public class MultiWorld {
 		if(plugin.getConflicts().WORLD_MANAGER_CONFLICT_PRESENT){
 			return true;
 		}
+		if(plugin.config().getBoolean("other.worlds-ignore-survival", to) && player.getGameMode().equals(GameMode.SURVIVAL)){
+			return true;
+		}
 		boolean transfers = plugin.config().getBoolean("other.worldTransfer", to);
 		boolean creative = plugin.config().onlyIfCreative(player);
 		if(transfers){
