@@ -29,7 +29,6 @@ public class AntiShare extends PluginWrapper {
 	 *  ** For self ref: https://bukkit.atlassian.net/browse/BUKKIT-####
 	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211)
 	 *  - Inventory mirror creative-glitch (BUKKIT-1211)
-	 *  - Attacking Players (BUKKIT-1258)
 	 *  - Event messages (See if space is removed, BUKKIT-1285)
 	 *  
 	 *  TODO: Add these features
