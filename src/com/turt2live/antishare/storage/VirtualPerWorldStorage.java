@@ -4,7 +4,6 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -15,8 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
@@ -43,10 +40,12 @@ public class VirtualPerWorldStorage {
 	private boolean blocked_bedrock = false;
 	private HashMap<Player, VirtualInventory> inventories = new HashMap<Player, VirtualInventory>();
 	public boolean blockDrops;
+	private MetadataHack meta;
 
 	public VirtualPerWorldStorage(World world, AntiShare plugin){
 		this.plugin = plugin;
 		this.world = world;
+		meta = new MetadataHack(plugin);
 		build();
 	}
 
@@ -104,40 +103,6 @@ public class VirtualPerWorldStorage {
 		return false;
 	}
 
-	public boolean isCreativeBlock(Block material, BlockedType type){
-		switch (type){
-		case CREATIVE_BLOCK_PLACE:
-			return false;
-		case CREATIVE_BLOCK_BREAK:
-			if(material.hasMetadata("ASCreative")){
-				List<MetadataValue> meta = material.getMetadata("ASCreative");
-				for(MetadataValue value : meta){
-					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
-						return value.asBoolean();
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	public boolean isSurvivalBlock(Block material, BlockedType type){
-		switch (type){
-		case SURVIVAL_BLOCK_PLACE:
-			return false;
-		case SURVIVAL_BLOCK_BREAK:
-			if(material.hasMetadata("ASSurvival")){
-				List<MetadataValue> meta = material.getMetadata("ASSurvuval");
-				for(MetadataValue value : meta){
-					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
-						return value.asBoolean();
-					}
-				}
-			}
-		}
-		return false;
-	}
-
 	private void load(){
 		boolean flatfile = true;
 		if(plugin.getSQLManager() != null){
@@ -179,7 +144,7 @@ public class VirtualPerWorldStorage {
 				}
 			}
 		}
-		String trackedBlocks[] = plugin.getConfig().getString("other.tracked-blocks").replaceAll(" ", "").split(",");
+		String trackedBlocks[] = plugin.getConfig().getString("other.tracked-blocks-creative").replaceAll(" ", "").split(",");
 		boolean notNoneOrAll = false;
 		if(trackedBlocks.length == 1){
 			if(trackedBlocks[0].equalsIgnoreCase("*")){
@@ -197,7 +162,24 @@ public class VirtualPerWorldStorage {
 				tracked_creative_blocks.add(Material.getMaterial(id));
 			}
 		}
-		tracked_survival_blocks.addAll(tracked_creative_blocks); //TODO: Implement better solution
+		trackedBlocks = plugin.getConfig().getString("other.tracked-blocks-survival").replaceAll(" ", "").split(",");
+		notNoneOrAll = false;
+		if(trackedBlocks.length == 1){
+			if(trackedBlocks[0].equalsIgnoreCase("*")){
+				for(Material m : Material.values()){
+					tracked_survival_blocks.add(m);
+				}
+				notNoneOrAll = false;
+			}else if(trackedBlocks[0].equalsIgnoreCase("none")){
+				notNoneOrAll = false;
+			}
+		}
+		if(notNoneOrAll){
+			for(String tracked : trackedBlocks){
+				int id = Integer.valueOf(tracked);
+				tracked_survival_blocks.add(Material.getMaterial(id));
+			}
+		}
 		String blockedBreak[] = plugin.config().getString("events.block_break", world).split(",");
 		String blockedPlace[] = plugin.config().getString("events.block_place", world).split(",");
 		String blockedDrop[] = plugin.config().getString("events.drop_item", world).split(",");
@@ -407,26 +389,84 @@ public class VirtualPerWorldStorage {
 		build();
 	}
 
+	// TODO Remove metadata hack from below methods when metadata fixed
+
 	public void removeCreativeBlock(Block block){
-		block.removeMetadata("ASCreative", plugin);
+		//block.removeMetadata("ASCreative", plugin);
+		meta.remove(block, "ASCreative");
 	}
 
 	public void saveCreativeBlock(Block block){
 		if(!trackCreativeBlock(block)){
 			return;
 		}
-		block.setMetadata("ASCreative", new FixedMetadataValue(plugin, true));
+		//block.setMetadata("ASCreative", new FixedMetadataValue(plugin, true));
+		meta.set(block, "ASCreative", true);
 	}
 
 	public void removeSurvivalBlock(Block block){
-		block.removeMetadata("ASSurvival", plugin);
+		//block.removeMetadata("ASSurvival", plugin);
+		meta.remove(block, "ASSurival");
 	}
 
 	public void saveSurvivalBlock(Block block){
 		if(!trackCreativeBlock(block)){
 			return;
 		}
-		block.setMetadata("ASSurvival", new FixedMetadataValue(plugin, true));
+		//block.setMetadata("ASSurvival", new FixedMetadataValue(plugin, true));
+		meta.set(block, "ASSurvival", true);
+	}
+
+	public boolean isInventoryChest(Block chest){
+		return meta.get(chest, "invmirror") != null;
+	}
+
+	public String getOwnerOfInventoryChest(Block chest){
+		return (String) meta.get(chest, "invmirror");
+	}
+
+	public void setInventoryChest(Block chest, String owner){
+		meta.set(chest, "invmirror", owner);
+	}
+
+	public void removeInventoryChest(Block chest){
+		meta.remove(chest, "invmirror");
+	}
+
+	public boolean isCreativeBlock(Block material, BlockedType type){
+		switch (type){
+		case CREATIVE_BLOCK_PLACE:
+			return false;
+		case CREATIVE_BLOCK_BREAK:
+			/*if(material.hasMetadata("ASCreative")){
+				List<MetadataValue> meta = material.getMetadata("ASCreative");
+				for(MetadataValue value : meta){
+					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
+						return value.asBoolean();
+					}
+				}
+			}*/
+			return meta.get(material, "ASCreative") != null;
+		}
+		return false;
+	}
+
+	public boolean isSurvivalBlock(Block material, BlockedType type){
+		switch (type){
+		case SURVIVAL_BLOCK_PLACE:
+			return false;
+		case SURVIVAL_BLOCK_BREAK:
+			/*if(material.hasMetadata("ASSurvival")){
+				List<MetadataValue> meta = material.getMetadata("ASSurvuval");
+				for(MetadataValue value : meta){
+					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
+						return value.asBoolean();
+					}
+				}
+			}*/
+			return meta.get(material, "ASCreative") != null;
+		}
+		return false;
 	}
 
 	public void saveRegion(ASRegion region){
@@ -511,6 +551,8 @@ public class VirtualPerWorldStorage {
 	}
 
 	public void saveToDisk(){
+		// Save metadata
+		meta.save();
 		// Clear SQL
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){

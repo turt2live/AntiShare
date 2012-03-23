@@ -33,7 +33,6 @@ public class AntiShare extends PluginWrapper {
 	 *  
 	 *  TODO: Add these features
 	 *  - AntiShare log file analyzer
-	 *  - Isolated creative / survival tracked blocks
 	 *  
 	 *  TODO: Test/verify these potential bugs
 	 *  - Tim the Enchanter conflict (waiting on information)

@@ -36,6 +36,10 @@ public class VirtualStorage implements Listener {
 		build();
 	}
 
+	public VirtualPerWorldStorage getManager(World world){
+		return worlds.get(world);
+	}
+
 	public boolean bedrockBlocked(World world){
 		return worlds.get(world).isBlocked(Material.BEDROCK, BlockedType.BEDROCK);
 	}
@@ -72,6 +76,22 @@ public class VirtualStorage implements Listener {
 
 	public boolean isSurvivalBlock(Block block, BlockedType type, World world){
 		return worlds.get(world).isSurvivalBlock(block, type);
+	}
+
+	public boolean isInventoryChest(Block block, World world){
+		return worlds.get(world).isInventoryChest(block);
+	}
+
+	public String getOwnerOfInventoryChest(Block block, World world){
+		return worlds.get(world).getOwnerOfInventoryChest(block);
+	}
+
+	public void setInventoryChest(Block block, String owner, World world){
+		worlds.get(world).setInventoryChest(block, owner);
+	}
+
+	public void removeInventoryChest(Block block, World world){
+		worlds.get(world).removeInventoryChest(block);
 	}
 
 	private void freePlayer(Player player){

@@ -32,6 +32,5 @@ public class InventoryMirror {
 		otherBlock.setMetadata("invmirror", new FixedMetadataValue(plugin, to.getName()));
 		ASUtils.sendToPlayer(to, ChatColor.YELLOW + "A chest has spawned with " + from.getName() + "'s inventory.");
 		ASUtils.sendToPlayer(to, ChatColor.YELLOW + "Break the chest when done, it will not spew items.");
-		System.out.println("Called");
 	}
 }

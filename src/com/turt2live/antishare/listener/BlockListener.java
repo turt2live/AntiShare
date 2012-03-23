@@ -1,7 +1,6 @@
 package com.turt2live.antishare.listener;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -15,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.metadata.MetadataValue;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
@@ -42,27 +40,18 @@ public class BlockListener implements Listener {
 			return;
 		}
 		try{
-			if(event.getBlock().hasMetadata("invmirror")){
-				List<MetadataValue> values = event.getBlock().getMetadata("invmirror");
-				boolean remove = false;
-				for(MetadataValue value : values){
-					System.out.println("Size: " + values.size() + " Value: " + value.value() + " Plugin: " + value.getOwningPlugin().getName());
-					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
-						if(value.asString().equals(player.getName())){
-							Chest chest = (Chest) event.getBlock().getState();
-							chest.getInventory().clear();
-							ASUtils.sendToPlayer(player, ChatColor.YELLOW + "Inventory chest cleared.");
-						}else{
-							event.setCancelled(true);
-							ASUtils.sendToPlayer(player, ChatColor.RED + "That is not a normal chest, you cannot break it");
-							return;
-						}
-						remove = true;
-						break;
-					}
-				}
-				if(remove){
-					event.getBlock().removeMetadata("invmirror", plugin);
+			if(plugin.storage.isInventoryChest(event.getBlock(), event.getBlock().getWorld())){
+				String value = plugin.storage.getOwnerOfInventoryChest(event.getBlock(), event.getBlock().getWorld());
+				if(value.equals(player.getName())){
+					Chest chest = (Chest) event.getBlock().getState();
+					chest.getInventory().clear();
+					ASUtils.sendToPlayer(player, ChatColor.YELLOW + "Inventory chest cleared.");
+
+					plugin.storage.removeInventoryChest(event.getBlock(), event.getBlock().getWorld());
+				}else{
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, ChatColor.RED + "That is not a normal chest, you cannot break it");
+					return;
 				}
 			}
 			ASRegion region = plugin.getRegionHandler().getRegion(player.getLocation());
