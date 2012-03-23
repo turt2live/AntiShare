@@ -17,7 +17,7 @@ public class NotificationEditor extends ASMenu {
 	// TODO: Uncomment throw to region when known issue is fixed
 
 	public NotificationEditor(){
-		super("show", "help", "on", "off",
+		super("show", "help", "on", "off", "console",
 
 				"legal block break", "legal block place", "legal death", "legal drop item", "legal eggs", "legal interact",
 				"legal exp bottle", "legal bedrock", "legal creative block", "legal survival block", "legal pvp", "legal mob pvp",
@@ -41,6 +41,7 @@ public class NotificationEditor extends ASMenu {
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "help" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Shows a list of <type>'s");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "on" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allows sending of notifications");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "off" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Stops sending of notifications");
+		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "console <true/false>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "True to alert console");
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class NotificationEditor extends ASMenu {
 		}else if(input.startsWith("show")){
 			String node = input.replace("show", "").trim();
 			if(nodeIsValid(node)){
-				String value = plugin.getConfig().getString("messages." + getProperNode(node));
+				String value = plugin.getConfig().getString("notification." + getProperNode(node));
 				ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "Current value for '" + node + "': " + value);
 			}else{
 				ASUtils.sendToConversable(context.getForWhom(), ChatColor.DARK_RED + "=======[ " + ChatColor.RED + "Invalid Type" + ChatColor.DARK_RED + " ]=======");
@@ -75,6 +76,18 @@ public class NotificationEditor extends ASMenu {
 			plugin.getConfig().save();
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
 			ASUtils.sendToConversable(context.getForWhom(), ChatColor.GREEN + "Value Saved!");
+			return new WaitPrompt(new NotificationEditor());
+		}else if(input.startsWith("console")){
+			String value = input.replace("console", "").trim();
+			if(ASUtils.getValueOf(value) != null){
+				plugin.getConfig().set("notification.console", ASUtils.getValueOf(value));
+				plugin.getConfig().save();
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
+				ASUtils.sendToConversable(context.getForWhom(), ChatColor.GREEN + "Value Saved!");
+			}else{
+				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
+				return new NotificationEditor();
+			}
 			return new WaitPrompt(new NotificationEditor());
 		}else{ // All the other nodes
 			String value = (String) context.getSessionData("notifications_no_node");
@@ -126,8 +139,12 @@ public class NotificationEditor extends ASMenu {
 			node = "bedrock_attempt";
 		}else if(node.startsWith("region")){ // Enter / Exit
 			node = node.replace("region ", "region_");
+		}else if(node.startsWith("fire charge")){
+			node = node.replace("fire charge", "fire_charge");
+		}else if(node.startsWith("tnt")){
+			node = node.replace("tnt", "tnt-place");
 		}
-		// death, interact, and pvp are all covered
+		// death, interact, bucket, fire, and pvp are all covered
 		String prefix = "general.";
 		if(legal){
 			prefix = "legal.";
@@ -147,12 +164,14 @@ public class NotificationEditor extends ASMenu {
 				|| node.startsWith("legal exp bottle") || node.startsWith("legal bedrock") || node.startsWith("legal creative block")
 				|| node.startsWith("legal survival block") || node.startsWith("legal pvp") || node.startsWith("legal mob pvp")
 				|| node.startsWith("legal command") || node.startsWith("legal world swap") //|| node.startsWith("legal throw to region")
+				|| node.startsWith("legal fire") /* Covers fire charge */|| node.startsWith("legal tnt") || node.startsWith("legal bucket")
 
 				|| node.startsWith("illegal block break") || node.startsWith("illegal block place") || node.startsWith("illegal death")
 				|| node.startsWith("illegal drop item") || node.startsWith("illegal eggs") || node.startsWith("illegal interact")
 				|| node.startsWith("illegal exp bottle") || node.startsWith("illegal bedrock") || node.startsWith("illegal creative block")
 				|| node.startsWith("illegal survival block") || node.startsWith("illegal pvp") || node.startsWith("illegal mob pvp")
 				|| node.startsWith("illegal command") || node.startsWith("illegal world swap") //|| node.startsWith("illegal throw to region")
+				|| node.startsWith("illegal fire") /* Covers fire charge */|| node.startsWith("illegal tnt") || node.startsWith("illegal bucket")
 
 				|| node.startsWith("gamemode change") || node.startsWith("region enter") || node.startsWith("region exit");
 
@@ -178,7 +197,12 @@ public class NotificationEditor extends ASMenu {
 				+ "  <i/l> mob pvp");
 		ASUtils.sendToConversable(target, ChatColor.AQUA
 				+ "<i/l> pvp  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
-				+ "  <i/l> world swap  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA);
+				+ "  <i/l> world swap  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
+				+ "  <i/l> fire");
+		ASUtils.sendToConversable(target, ChatColor.AQUA
+				+ "<i/l> fire charge  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
+				+ "  <i/l> bucket  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
+				+ "  <i/l> tnt");
 		//+ "  <i/l> throw to region");
 		ASUtils.sendToConversable(target, ChatColor.AQUA
 				+ "region enter  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA

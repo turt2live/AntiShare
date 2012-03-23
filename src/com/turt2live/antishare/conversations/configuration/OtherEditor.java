@@ -32,8 +32,9 @@ public class OtherEditor extends ASMenu {
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "no drops <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "True allows breaking of creative blocks, no drops though");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "worlds <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "True to allow transfer of worlds");
 		//ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "throw to region <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow throwing of items into regions?");
-		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tracked blocks <items>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Set which creative blocks to track");
+		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tracked blocks <gamemode> <items>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Set which blocks to track for the gamemode");
 		//ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tnt drops <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "When a creative TNT block explodes, drop items?");
+		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "worlds ignore survival <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Ignore survival players on world transfer?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "show <node>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Show the value of an above <node>");
 		ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "For 'tracked blocks', '*' means all, and 'none' means none. Remember to use ID's!");
 		ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "<t/f> means you have to enter true or false!");
@@ -90,6 +91,37 @@ public class OtherEditor extends ASMenu {
 			}else{
 				plugin.getConfig().set("other.blockDrops", ASUtils.getValueOf(value));
 			}
+		}else if(input.startsWith("tracked blocks")){
+			String parts[] = input.split(" ");
+			if(parts.length < 4){
+				ConfigurationConversation.showError(target, "Incorrect amount of arguments. Please use 'tracked blocks <gamemode> <blocks>");
+				return new WaitPrompt(new OtherEditor());
+			}else{
+				String gamemode = parts[2];
+				if(ASUtils.getGameMode(gamemode) != null){
+					String value = input.replace("tracked blocks " + gamemode, "").trim();
+					plugin.getConfig().set("other.tracked-blocks-" + ASUtils.getGameMode(gamemode).name().toLowerCase(), value);
+				}else{
+					ConfigurationConversation.showError(target, "That is not a gamemode!");
+					return new WaitPrompt(new OtherEditor());
+				}
+			}
+			//		}else if(input.startsWith("tnt drops")){
+			//			String value = input.replace("tnt drops", "").trim();
+			//			if(ASUtils.getValueOf(value) == null){
+			//				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
+			//				return new OtherEditor();
+			//			}else{
+			//				plugin.getConfig().set("other.noTNTDrops", !ASUtils.getValueOf(value));
+			//			}		
+		}else if(input.startsWith("worlds ignore survival")){
+			String value = input.replace("worlds ignore survival", "").trim();
+			if(ASUtils.getValueOf(value) == null){
+				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
+				return new OtherEditor();
+			}else{
+				plugin.getConfig().set("other.worlds-ignore-survival", ASUtils.getValueOf(value));
+			}
 		}else if(input.startsWith("worlds")){
 			String value = input.replace("worlds", "").trim();
 			if(ASUtils.getValueOf(value) == null){
@@ -106,17 +138,6 @@ public class OtherEditor extends ASMenu {
 				}else{
 					plugin.getConfig().set("other.cannot_throw_to_regions", !ASUtils.getValueOf(value)); //Inverse
 				}*/
-		}else if(input.startsWith("tracked blocks")){
-			String value = input.replace("tracked blocks", "").trim();
-			plugin.getConfig().set("other.tracked-blocks", value);
-			//		}else if(input.startsWith("tnt drops")){
-			//			String value = input.replace("tnt drops", "").trim();
-			//			if(ASUtils.getValueOf(value) == null){
-			//				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-			//				return new OtherEditor();
-			//			}else{
-			//				plugin.getConfig().set("other.noTNTDrops", !ASUtils.getValueOf(value));
-			//			}
 		}
 		plugin.getConfig().save();
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");

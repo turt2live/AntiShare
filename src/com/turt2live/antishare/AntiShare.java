@@ -43,14 +43,7 @@ public class AntiShare extends PluginWrapper {
 	 *  - /as rl does not save old inventories (in region, reload, exit region)
 	 *  - regions do not save inventories (pre-set) [Related to above?]
 	 *  - TNT Related (waiting on PR to be accepted)
-	 *  - Configuration resets on config helper save
-	 *  
-	 *  TODO: Add to configuration helper
-	 *  - Configuration values
-	 *  	- worlds-ignore-survival
-	 *  	- tracked-blocks-GAMEMODE
-	 *  	- new notifications
-	 *  - Permissions (unsure if they are outdated or not...)
+	 *  - Configuration resets on config helper save [fixed? Need to test some more...]
 	 *  
 	 *  TODO: If there is time...
 	 *  - MobArena Region Detection
