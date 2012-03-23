@@ -137,75 +137,90 @@ public class HazardListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent event){
 		Player player = event.getPlayer();
 		boolean skip = false;
-		if(plugin.config().getBoolean("hazards.allow_eggs", player.getWorld()) == false){
-			ItemStack possibleEgg = event.getItem();
-			if(possibleEgg != null){
-				if(possibleEgg.getTypeId() != 383){
+		try{
+			if(plugin.config().getBoolean("hazards.allow_eggs", player.getWorld()) == false){
+				ItemStack possibleEgg = event.getItem();
+				if(possibleEgg != null){
+					if(possibleEgg.getTypeId() != 383){
+						skip = true;
+					}
+				}else{
 					skip = true;
 				}
-			}else{
-				skip = true;
-			}
-			if(!skip){
-				if(plugin.isBlocked(player, "AntiShare.allow.eggs", player.getWorld())){
-					event.setCancelled(true);
-					Notification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
-					ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
-				}else{
-					Notification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
+				if(!skip){
+					if(plugin.isBlocked(player, "AntiShare.allow.eggs", player.getWorld())){
+						event.setCancelled(true);
+						Notification.sendNotification(NotificationType.ILLEGAL_EGG, plugin, player, "MONSTER EGG", null);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.eggs", player.getWorld()));
+					}else{
+						Notification.sendNotification(NotificationType.LEGAL_EGG, plugin, player, "MONSTER EGG", null);
+					}
 				}
 			}
-		}
-		if(event.isCancelled()){
-			return;
-		}
-		if(player.getItemInHand() == null){
-			return;
-		}
-		// Fire Charges
-		// Thanks go to AntiGrief for the following code (modified version)
-		if(!plugin.config().getBoolean("hazards.allow_fire_charge", player.getWorld())
-				&& player.getItemInHand().getTypeId() == 385
-				&& event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
-			if(plugin.isBlocked(player, "AntiShare.allow.firecharge", player.getWorld())){
-				Notification.sendNotification(NotificationType.ILLEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
-				event.setCancelled(true);
-				ASUtils.sendToPlayer(player, plugin.config().getString("messages.fire_charge", player.getWorld()));
-			}else{
-				Notification.sendNotification(NotificationType.LEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
+			if(event.isCancelled()){
+				return;
 			}
-		}
-		if(event.isCancelled()){
-			return;
-		}
-		try{
-			if(!plugin.config().getBoolean("hazards.allow_exp_bottle", player.getWorld())
-					&& player.getItemInHand().getType().equals(Material.EXP_BOTTLE)){
-				if(plugin.isBlocked(player, "AntiShare.allow.exp", player.getWorld())){
+			if(player.getItemInHand() == null){
+				return;
+			}
+			// Fire Charges
+			// Thanks go to AntiGrief for the following code (modified version)
+			if(!plugin.config().getBoolean("hazards.allow_fire_charge", player.getWorld())
+					&& player.getItemInHand().getTypeId() == 385
+					&& event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+				if(plugin.isBlocked(player, "AntiShare.allow.firecharge", player.getWorld())){
+					Notification.sendNotification(NotificationType.ILLEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
 					event.setCancelled(true);
-					Notification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
-					ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.fire_charge", player.getWorld()));
 				}else{
-					Notification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+					Notification.sendNotification(NotificationType.LEGAL_FIRE_CHARGE, player, "FIRE CHARGE");
+				}
+			}
+			if(event.isCancelled()){
+				return;
+			}
+			try{
+				boolean isBottle = false;
+				if(player.getItemInHand() != null){
+					isBottle = player.getItemInHand().getType().equals(Material.EXP_BOTTLE);
+				}
+				if(!plugin.config().getBoolean("hazards.allow_exp_bottle", player.getWorld()) && isBottle
+						&& (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+					if(plugin.isBlocked(player, "AntiShare.allow.exp", player.getWorld())){
+						event.setCancelled(true);
+						Notification.sendNotification(NotificationType.ILLEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+						ASUtils.sendToPlayer(player, plugin.config().getString("messages.exp_bottle", player.getWorld()));
+					}else{
+						Notification.sendNotification(NotificationType.LEGAL_EXP_BOTTLE, plugin, player, "EXPERIENCE BOTTLE", null);
+					}
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+				Bug bug = new Bug(e, "Exp Bottle Thrown", this.getClass(), player);
+				bug.setWorld(player.getWorld());
+			}
+			if(event.isCancelled()){
+				return;
+			}
+			// Flint / Fire
+			boolean isFire = false;
+			if(player.getItemInHand() != null){
+				Material item = player.getItemInHand().getType();
+				isFire = item.equals(Material.FLINT_AND_STEEL) || item.equals(Material.FIRE) || item.equals(Material.FIREBALL);
+			}
+			if(!plugin.config().getBoolean("hazards.allow_flint", player.getWorld()) && isFire
+					&& (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))){
+				if(plugin.isBlocked(player, "AntiShare.allow.fire", player.getWorld())){
+					Notification.sendNotification(NotificationType.ILLEGAL_FIRE, player, player.getItemInHand().getType().name());
+					event.setCancelled(true);
+					ASUtils.sendToPlayer(player, plugin.config().getString("messages.flint", player.getWorld()));
+				}else{
+					Notification.sendNotification(NotificationType.LEGAL_FIRE, player, player.getItemInHand().getType().name());
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
-			Bug bug = new Bug(e, "Exp Bottle Thrown", this.getClass(), player);
-			bug.setWorld(player.getWorld());
-		}
-		if(event.isCancelled()){
-			return;
-		}
-		// Flint / Fire
-		if(!plugin.config().getBoolean("hazards.allow_flint", player.getWorld())){
-			if(plugin.isBlocked(player, "AntiShare.allow.fire", player.getWorld())){
-				Notification.sendNotification(NotificationType.ILLEGAL_FIRE, player, player.getItemInHand().getType().name());
-				event.setCancelled(true);
-				ASUtils.sendToPlayer(player, plugin.config().getString("messages.flint", player.getWorld()));
-			}else{
-				Notification.sendNotification(NotificationType.LEGAL_FIRE, player, player.getItemInHand().getType().name());
-			}
+			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
+			Debugger.sendBug(bug);
 		}
 	}
 

@@ -19,9 +19,9 @@ public enum NotificationType{
 	ILLEGAL_EXP_BOTTLE("notifications.illegal.exp_bottle"),
 	ILLEGAL_ITEM_THROW_INTO_REGION("notifications.illegal.drop_item_to_region"),
 	ILLEGAL_FIRE_CHARGE("notifications.illegal.fire_charge"),
-	ILLEGAL_BUCKET("notifications.legal.bucket"),
-	ILLEGAL_FIRE("notifications.legal.fire"),
-	ILLEGAL_TNT_PLACE("notifications.legal.tnt-place"),
+	ILLEGAL_BUCKET("notifications.illegal.bucket"),
+	ILLEGAL_FIRE("notifications.illegal.fire"),
+	ILLEGAL_TNT_PLACE("notifications.illegal.tnt-place"),
 
 	// LEGAL actions
 	LEGAL_BLOCK_PLACE("notifications.legal.block_place"),

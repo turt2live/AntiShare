@@ -29,7 +29,6 @@ public class EntityListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageByEntityEvent event){
-		System.out.println(event.getEntity().getClass().getSimpleName());
 		try{
 			String entityName = event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", "");
 			Entity damager = event.getDamager();
