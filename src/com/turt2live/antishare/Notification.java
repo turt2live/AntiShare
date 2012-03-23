@@ -216,8 +216,10 @@ public class Notification {
 					online.sendMessage(message);
 				}
 			}
-			prefix = type.name().startsWith("LEGAL") ? "[LEGAL] " : (type.name().startsWith("ILLEGAL") ? "[ILLEGAL] " : "");
-			Bukkit.getConsoleSender().sendMessage(prefix + message);
+			if(plugin.getConfig().getBoolean("notifications.console")){
+				prefix = type.name().startsWith("LEGAL") ? "[LEGAL] " : (type.name().startsWith("ILLEGAL") ? "[ILLEGAL] " : "");
+				Bukkit.getConsoleSender().sendMessage(prefix + message);
+			}
 		}
 	}
 
