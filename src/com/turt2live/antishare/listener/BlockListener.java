@@ -46,8 +46,9 @@ public class BlockListener implements Listener {
 				List<MetadataValue> values = event.getBlock().getMetadata("invmirror");
 				boolean remove = false;
 				for(MetadataValue value : values){
+					System.out.println("Size: " + values.size() + " Value: " + value.value() + " Plugin: " + value.getOwningPlugin().getName());
 					if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
-						if(value.asString().equalsIgnoreCase(player.getName())){
+						if(value.asString().equals(player.getName())){
 							Chest chest = (Chest) event.getBlock().getState();
 							chest.getInventory().clear();
 							ASUtils.sendToPlayer(player, ChatColor.YELLOW + "Inventory chest cleared.");

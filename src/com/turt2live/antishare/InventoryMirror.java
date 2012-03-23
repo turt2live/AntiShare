@@ -10,6 +10,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class InventoryMirror {
 
+	// from = target, to = viewer
 	public static void mirror(Player from, Player to, AntiShare plugin){
 		//Find where the chest can be placed
 		Block block = to.getTargetBlock(null, 5);
@@ -31,5 +32,6 @@ public class InventoryMirror {
 		otherBlock.setMetadata("invmirror", new FixedMetadataValue(plugin, to.getName()));
 		ASUtils.sendToPlayer(to, ChatColor.YELLOW + "A chest has spawned with " + from.getName() + "'s inventory.");
 		ASUtils.sendToPlayer(to, ChatColor.YELLOW + "Break the chest when done, it will not spew items.");
+		System.out.println("Called");
 	}
 }

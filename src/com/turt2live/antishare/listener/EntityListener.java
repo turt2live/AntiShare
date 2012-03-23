@@ -1,6 +1,5 @@
 package com.turt2live.antishare.listener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
@@ -33,7 +32,6 @@ public class EntityListener implements Listener {
 			String entityName = event.getEntity().getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", "");
 			Entity damager = event.getDamager();
 			if(event.getEntity() instanceof Player){
-				Bukkit.broadcastMessage("PLAYER");
 				entityName = ((Player) event.getEntity()).getName();
 				if(damager instanceof Projectile){
 					if(((Projectile) damager).getShooter() instanceof Player){

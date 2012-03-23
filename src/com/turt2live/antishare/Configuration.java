@@ -20,6 +20,7 @@ public class Configuration {
 		if(!plugin.getConfig().fileExists() || !plugin.getConfig().checkDefaults()){
 			plugin.getConfig().saveDefaults();
 		}
+		plugin.getConfig().clearDefaults();
 		load();
 		// Check the events for spaces (3.1.0)
 		plugin.getConfig().set("events.block_break", (!plugin.getConfig().getString("events.block_break").contains(",") ? plugin.getConfig().getString("events.block_break").replaceAll(" ", ",") : plugin.getConfig().getString("events.block_break")));
