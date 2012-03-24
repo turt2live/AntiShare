@@ -45,6 +45,9 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 		name = id;
+	}
+
+	public void setup(){
 		loadInventory();
 	}
 

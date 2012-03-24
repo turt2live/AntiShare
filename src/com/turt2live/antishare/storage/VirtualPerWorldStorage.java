@@ -385,6 +385,10 @@ public class VirtualPerWorldStorage {
 				}
 			}
 		}
+		// Start regions
+		for(ASRegion region : gamemode_regions){
+			region.setup();
+		}
 	}
 
 	public void reload(){
