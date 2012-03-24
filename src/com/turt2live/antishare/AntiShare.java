@@ -40,7 +40,6 @@ public class AntiShare extends PluginWrapper {
 	 *  - /as rl does not save old inventories (in region, reload, exit region)
 	 *  - regions do not save inventories (pre-set) [Related to above?]
 	 *  - TNT Related (waiting on PR to be accepted)
-	 *  - Configuration resets on config helper save [fixed? Need to test some more...]
 	 *  
 	 *  TODO: If there is time...
 	 *  - MobArena Region Detection

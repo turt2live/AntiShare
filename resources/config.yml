@@ -110,6 +110,7 @@
 #   'AntiShare.silent' - Stops the sending of notifications from this player
 #   'AntiShare.mirror' - Allows viewing of inventories
 #   'AntiShare.gamemode' - Allows use of /gm
+#   'AntiShare.gamemode.others' - Allows use of /gm <player> [mode]
 #   'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam", "AntiShare.blockBypass", 
 #                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", 
 #                         "AntiShare.mirror", "AntiShare.gamemode", and "AntiShare.mobpvp".

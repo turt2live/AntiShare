@@ -17,7 +17,7 @@ public class PermissionsMenu extends ASMenu {
 	public PermissionsMenu(){
 		super("AntiShare.allow", "AntiShare.onlyIfCreative", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam",
 				"AntiShare.noswap", "AntiShare.freeplace", "AntiShare.notify", "AntiShare.silent", "AntiShare.admin",
-				"AntiShare.mirror", "AntiShare.gamemode"/*, "AntiShare.tnt"*/);
+				"AntiShare.mirror", "AntiShare.gamemode", "AntiShare.gamemode.others"/*, "AntiShare.tnt"*/);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class PermissionsMenu extends ASMenu {
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.regions  AntiShare.roam  AntiShare.noswap");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.blockBypass  AntiShare.freeplace  AntiShare.mirror");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.notify  AntiShare.silent  AntiShare.gamemode");
-			ASUtils.sendToConversable(target, ChatColor.GOLD + /*AntiShare.tnt*/" AntiShare.admin");
+			ASUtils.sendToConversable(target, ChatColor.GOLD + /*AntiShare.tnt*/"AntiShare.gamemode.others AntiShare.admin");
 			return new WaitPrompt(new PermissionsMenu());
 		}else{
 			ASUtils.sendToConversable(target, ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + input + ChatColor.DARK_GREEN + " ]=======");
@@ -80,7 +80,10 @@ public class PermissionsMenu extends ASMenu {
 				ASUtils.sendToConversable(target, "If this is true, the target can view people's inventories through a command.");
 				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
 			}else if(input.equalsIgnoreCase("AntiShare.gamemode")){
-				ASUtils.sendToConversable(target, "If this is true, the target can change their own gamemode through /gm or another person's through the same command.");
+				ASUtils.sendToConversable(target, "If this is true, the target can change their own gamemode through /gm.");
+				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
+			}else if(input.equalsIgnoreCase("AntiShare.gamemode.others")){
+				ASUtils.sendToConversable(target, "If this is true, the target can change other people's gamemode through /gm <player> [mode]");
 				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
 				//			}else if(input.equalsIgnoreCase("AntiShare.tnt")){
 				//				ASUtils.sendToConversable(target, "If true, the target can place TNT that, when it explodes, drops items regardless of settings/permissions.");
