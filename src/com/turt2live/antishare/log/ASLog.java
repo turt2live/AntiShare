@@ -178,7 +178,7 @@ public class ASLog {
 
 	// Timestamp
 	public static String timestamp(boolean filemode){
-		DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MMM d");
 		Date date = new Date();
 		return (filemode) ? (dateFormat.format(date)).replaceAll(" ", "-").replaceAll("\\:", "").replaceAll("\\,", "") : dateFormat.format(date);
 	}
