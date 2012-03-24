@@ -20,7 +20,7 @@ public class GameModeCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
 		GameMode to = null;
 		Player target = null;
-		if(command.getName().equalsIgnoreCase("gm") || command.getName().equalsIgnoreCase("gamemode")){
+		if(command.getName().equalsIgnoreCase("gm")){
 			if(!(sender instanceof Player)){
 				if(args.length < 2){
 					target = Bukkit.getPlayer(args[0]);

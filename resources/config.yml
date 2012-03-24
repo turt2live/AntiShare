@@ -113,7 +113,7 @@
 #   'AntiShare.gamemode.others' - Allows use of /gm <player> [mode]
 #   'AntiShare.admin' - Includes "AntiShare.allow.*", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam", "AntiShare.blockBypass", 
 #                         "AntiShare.freePlace", "AntiShare.bedrock", "AntiShare.pvp", "AntiShare.worlds", "AntiShare.notify", "AntiShare.silent", 
-#                         "AntiShare.mirror", "AntiShare.gamemode", and "AntiShare.mobpvp".
+#                         "AntiShare.mirror", "AntiShare.gamemode", "AntiShare.gamemode.others", and "AntiShare.mobpvp".
 # 
 # Commands:
 #   '/antishare'
@@ -185,6 +185,7 @@
 # What is sent in usage statistics?
 #   - Plugin Version
 #   - CraftBukkit Version
+# 
 events:
   block_break: none
   block_place: 57,41,42
@@ -193,13 +194,13 @@ events:
   interact: 23,61,62,54,342
   commands: '/somecommand,/anothercommand'
 messages:
-  block_break: You can't do that!
-  block_place: You can't do that!
-  death: You can't do that!
-  drop_item: You can't do that!
-  interact: You can't do that!
-  eggs: You can't use eggs!
-  exp_bottle: You can't use experience bottles!
+  block_break: You cannot do that!
+  block_place: You cannot do that!
+  death: You cannot do that!
+  drop_item: You cannot do that!
+  interact: You cannot do that!
+  eggs: You cannot use eggs!
+  exp_bottle: You cannot use experience bottles!
   inventory_swap: Your inventory has been changed.
   creativeModeBlock: You cannot break that block! It was placed by a creative mode player.
   survivalModeBlock: You cannot break that block! It was placed by a survival mode player.

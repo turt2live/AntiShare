@@ -32,9 +32,8 @@ public class AntiShare extends PluginWrapper {
 	 *  - AntiShare log file analyzer
 	 *  
 	 *  TODO: Test/verify these potential bugs
-	 *  - Tim the Enchanter conflict (waiting on information)
+	 *  - Tim the Enchanter conflict (waiting on information) [Cannot Confirm]
 	 *  - Item duplication glitch on fast relog [Cannot Confirm]
-	 *  - server.log overflow
 	 *  
 	 *  TODO: Fix these known bugs:
 	 *  - /as rl does not save old inventories (in region, reload, exit region)

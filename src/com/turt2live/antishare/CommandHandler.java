@@ -23,14 +23,11 @@ public class CommandHandler implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args){
-		if(cmd.equalsIgnoreCase("antishare") ||
-				cmd.equalsIgnoreCase("as") ||
-				cmd.equalsIgnoreCase("antis") ||
-				cmd.equalsIgnoreCase("ashare")){
+		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(plugin.getPermissions().has(sender, "AntiShare.reload")){
-						plugin.reloadConfig();
+						plugin.getConfig().load();
 						MultiWorld.detectWorlds(plugin);
 						plugin.storage.reload(sender);
 						plugin.log.logTechnical("[" + plugin.getDescription().getVersion() + "] " + "AntiShare Reloaded.");
