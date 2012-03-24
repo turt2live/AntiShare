@@ -27,11 +27,12 @@ public class FrameActions implements ActionListener, ListSelectionListener {
 		open.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int result = open.showOpenDialog(null);
 		if(result == JFileChooser.APPROVE_OPTION){
-			log = new LogFile(open.getSelectedFile());
+			LogFile log = new LogFile(open.getSelectedFile());
 			if(log.invalid()){
 				JOptionPane.showMessageDialog(null, "That is not an AntiShare log!", "Invalid File", JOptionPane.ERROR_MESSAGE);
 			}else{
-				log.displayTo(panel.list);
+				this.log = log;
+				this.log.displayTo(panel.list);
 				panel.frame.setTitle("AntiShare Log Analyzer (" + log.file.getName() + ")");
 			}
 		}

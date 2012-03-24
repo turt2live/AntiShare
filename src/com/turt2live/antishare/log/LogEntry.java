@@ -1,5 +1,10 @@
 package com.turt2live.antishare.log;
 
+import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import javax.swing.JTextArea;
 
 public class LogEntry {
@@ -48,9 +53,30 @@ public class LogEntry {
 		return listName;
 	}
 
-	public void displayTo(JTextArea area){
-		area.setText(type.name() + "\n"
-				+ type.getRawFormat() + "\n"
-				+ rawLine);
+	public void displayTo(final JTextArea area){
+		area.setText("Loading...");
+		area.setEnabled(false);
+		area.setBackground(Color.LIGHT_GRAY);
+		new Thread(new Runnable(){
+			@Override
+			public void run(){
+				StringBuilder text = new StringBuilder();
+				try{
+					URL statsURL = new URL("http://antishare.turt2live.com/log/?type=" + type.name());
+					BufferedReader in = new BufferedReader(new InputStreamReader(statsURL.openConnection().getInputStream()));
+					String line;
+					while ((line = in.readLine()) != null){
+						text.append(line + "\n");
+					}
+					in.close();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				text.append("\n------------------------------\nOriginal Line: \n" + rawLine);
+				area.setText(text.toString());
+				area.setEnabled(true);
+				area.setBackground(Color.WHITE);
+			}
+		}).start();
 	}
 }

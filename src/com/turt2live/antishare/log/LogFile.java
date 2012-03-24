@@ -20,6 +20,7 @@ public class LogFile {
 	}
 
 	public void analyze(){
+		Vector<LogEntry> entries = new Vector<LogEntry>();
 		try{
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String line;
@@ -29,6 +30,18 @@ public class LogFile {
 			in.close();
 		}catch(Exception e){
 			e.printStackTrace();
+		}
+		double invalidEntries = 0.0;
+		double numEntries = entries.size();
+		for(LogEntry entry : entries){
+			if(entry.getType().equals(LogEntryType.UNKNOWN)){
+				invalidEntries++;
+			}
+		}
+		if(((invalidEntries / numEntries) * 100) >= 25){
+			invalid = true;
+		}else{
+			this.entries = entries;
 		}
 	}
 
