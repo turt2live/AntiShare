@@ -28,8 +28,8 @@ public class MetadataHack {
 		metadata.load();
 		Set<String> keys = metadata.getKeys(false);
 		for(String key : keys){ // Blocks only! (for now?)
-			// Format: [x]-[y]-[z]-[world]
-			String parts[] = key.split("-");
+			// Format: [x];[y];[z];[world]
+			String parts[] = key.split(";");
 			Location location = new Location(Bukkit.getWorld(parts[3]), Double.parseDouble(parts[0]), Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));
 			Block block = location.getBlock();
 			Meta meta = new Meta();
@@ -40,7 +40,7 @@ public class MetadataHack {
 				meta.add("ASSurvival", metadata.getBoolean(key + ".ASSurvival"));
 			}
 			if(metadata.get(key + ".invmirror") != null){
-				meta.add("invmirror", metadata.getBoolean(key + ".invmirror"));
+				meta.add("invmirror", metadata.getString(key + ".invmirror"));
 			}
 			this.metadata.put(block, meta);
 		}
@@ -55,7 +55,7 @@ public class MetadataHack {
 		for(Object obj : keys){
 			if(obj instanceof Block){ // Should be
 				Block block = (Block) obj;
-				String path = block.getX() + "-" + block.getY() + "-" + block.getZ() + "-" + block.getWorld().getName();
+				String path = block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName();
 				Meta meta = this.metadata.get(obj);
 				if(meta.get("ASCreative") != null){
 					metadata.set(path + ".ASCreative", meta.get("ASCreative"));

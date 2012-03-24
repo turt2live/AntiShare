@@ -30,12 +30,17 @@ commands:
       /<command> c - Creative Mode
       /<command> s - Survival Mode
       /<command> - Toggle Game Mode
-      /<command> <player> <c/s> - Change a player's Game Mode
+      /<command> <player> [c/s] - Change a player's Game Mode
 
 permissions:
     AntiShare.config:
         description: allows use of the configuration helper
         default: false
+    AntiShare.gamemode.others:
+        description: Allows changing of other people's gamemode
+        default: op
+        children:
+            AntiShare.gamemode: true
     AntiShare.admin:
         description: All AntiShare permissions
         default: op

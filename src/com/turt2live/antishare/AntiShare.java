@@ -26,9 +26,6 @@ public class AntiShare extends PluginWrapper {
 	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
 	 *  
 	 *  TODO: Test code when BUKKIT issues fixed:
-	 *  ** For self ref: https://bukkit.atlassian.net/browse/BUKKIT-####
-	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211) [Untested code in place]
-	 *  - Inventory mirror creative-glitch (BUKKIT-1211) [Untested code in place]
 	 *  - Event messages (See if space is removed, BUKKIT-1285)
 	 *  
 	 *  TODO: Add these features
@@ -50,9 +47,15 @@ public class AntiShare extends PluginWrapper {
 	 *  - WorldGuard Region Detection
 	 *  - Other Region-related plugin region detection
 	 *  
+	 *  Not officially a "todo", just a potential optimization:
+	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211) [Hackish code]
+	 *  - Inventory mirror creative-glitch (BUKKIT-1211) [Hackish code]
+	 *  
 	 *  NOTES:
 	 *  - MobArena API:
 	 *  	http://dev.bukkit.org/server-mods/mobarena/pages/main/hooking-into-mob-arena/  
+	 *  - Leaky:
+	 *  	https://bukkit.atlassian.net/browse/BUKKIT-####
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE

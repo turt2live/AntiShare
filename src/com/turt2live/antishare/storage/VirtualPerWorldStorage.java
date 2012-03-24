@@ -464,7 +464,7 @@ public class VirtualPerWorldStorage {
 					}
 				}
 			}*/
-			return meta.get(material, "ASCreative") != null;
+			return meta.get(material, "ASSurvival") != null;
 		}
 		return false;
 	}

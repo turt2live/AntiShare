@@ -46,11 +46,11 @@ public class BlockListener implements Listener {
 					Chest chest = (Chest) event.getBlock().getState();
 					chest.getInventory().clear();
 					ASUtils.sendToPlayer(player, ChatColor.YELLOW + "Inventory chest cleared.");
-
 					plugin.storage.removeInventoryChest(event.getBlock(), event.getBlock().getWorld());
 				}else{
-					event.setCancelled(true);
 					ASUtils.sendToPlayer(player, ChatColor.RED + "That is not a normal chest, you cannot break it");
+					event.setCancelled(true);
+					System.out.println("BREAK");
 					return;
 				}
 			}

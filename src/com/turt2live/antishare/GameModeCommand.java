@@ -23,27 +23,58 @@ public class GameModeCommand implements CommandExecutor {
 		if(command.getName().equalsIgnoreCase("gm") || command.getName().equalsIgnoreCase("gamemode")){
 			if(!(sender instanceof Player)){
 				if(args.length < 2){
-					ASUtils.sendToPlayer(sender, ChatColor.RED + "You don't have a gamemode to change!");
-					return true;
+					target = Bukkit.getPlayer(args[0]);
+					if(target != null){
+						to = target.getGameMode().equals(GameMode.CREATIVE) ? GameMode.SURVIVAL : GameMode.CREATIVE;
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.RED + "Player not found! Sorry :(");
+						return true;
+					}
 				}
 			}
 			if(args.length < 1){
 				target = (Player) sender;
 				to = target.getGameMode() == GameMode.CREATIVE ? GameMode.SURVIVAL : GameMode.CREATIVE;
-			}else if(args.length == 1){
+			}else if(args.length == 1 && sender instanceof Player){
 				target = (Player) sender;
 				to = ASUtils.getGameMode(args[0]);
+				if(to == null){ // for /gm turt2live
+					target = Bukkit.getPlayer(args[0]);
+					if(target == null){
+						// Reset
+						target = (Player) sender;
+					}else{
+						to = target.getGameMode() == GameMode.CREATIVE ? GameMode.SURVIVAL : GameMode.CREATIVE;
+					}
+				}
+			}else if(args.length == 1 && !(sender instanceof Player)){
+				target = Bukkit.getPlayer(args[0]);
+				if(target != null){
+					to = target.getGameMode().equals(GameMode.CREATIVE) ? GameMode.SURVIVAL : GameMode.CREATIVE;
+				}
 			}else if(args.length == 2){
 				target = Bukkit.getPlayer(args[0]);
 				to = ASUtils.getGameMode(args[1]);
 			}
 			if(target == null || to == null){
+				if(target == null){
+					ASUtils.sendToPlayer(sender, ChatColor.RED + "Player not found! Sorry :(");
+				}else{
+					ASUtils.sendToPlayer(sender, ChatColor.RED + "Gamemode not known! Sorry :(");
+				}
 				return false;
 			}
 			// Double check permissions
 			if(!plugin.getPermissions().has(sender, "AntiShare.gamemode")){
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "You cannot do that!");
-				return false;
+				return true;
+			}
+			if(sender instanceof Player && !target.getName().equals(sender.getName())){
+				// For safer casting
+				if(!plugin.getPermissions().has(sender, "AntiShare.gamemode.others")){
+					ASUtils.sendToPlayer(sender, ChatColor.RED + "You cannot do that!");
+					return true;
+				}
 			}
 			target.setGameMode(to);
 			// Alert the right people
