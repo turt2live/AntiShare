@@ -35,7 +35,7 @@
     <target name="clean" >
 
         <echo>
-Cleaning 
+Cleaning 
         </echo>
 
         <delete dir="${build}" />
@@ -52,7 +52,7 @@ Cleaning
         depends="clean" >
 
         <echo>
-Compiling 
+Compiling 
         </echo>
 
         <javac
@@ -67,7 +67,7 @@ Compiling
         depends="compile" >
 
         <echo>
-Building
+Building
         </echo>
 
         <copy todir="${build}" >
@@ -89,7 +89,15 @@ Building
         <jar
             basedir="${build}"
             compress="true"
-            destfile="${dist}/${ant.project.name}.jar" />
+            destfile="${dist}/${ant.project.name}.jar" >
+
+            <manifest>
+
+                <attribute
+                    name="Main-Class"
+                    value="com.turt2live.antishare.log.LogAnalyzer" />
+            </manifest>
+        </jar>
 
         <copy todir="${build}" >
 
@@ -102,7 +110,15 @@ Building
         <jar
             basedir="${build}"
             compress="true"
-            destfile="${dist}/${ant.project.name}-source.jar" />
+            destfile="${dist}/${ant.project.name}-source.jar" >
+
+            <manifest>
+
+                <attribute
+                    name="Main-Class"
+                    value="com.turt2live.antishare.log.LogAnalyzer" />
+            </manifest>
+        </jar>
     </target>
 
 </project>
