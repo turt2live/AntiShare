@@ -43,7 +43,7 @@ public class LogAnalyzer extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
-		contentPane.add(new LogPanel(), BorderLayout.CENTER);
+		contentPane.add(new LogPanel(this), BorderLayout.CENTER);
 	}
 
 }

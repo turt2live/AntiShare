@@ -32,6 +32,7 @@ public class FrameActions implements ActionListener, ListSelectionListener {
 				JOptionPane.showMessageDialog(null, "That is not an AntiShare log!", "Invalid File", JOptionPane.ERROR_MESSAGE);
 			}else{
 				log.displayTo(panel.list);
+				panel.frame.setTitle("AntiShare Log Analyzer (" + log.file.getName() + ")");
 			}
 		}
 	}

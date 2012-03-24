@@ -10,7 +10,7 @@ import javax.swing.JTextArea;
 
 public class LogFile {
 
-	private File file;
+	public File file;
 	private Vector<LogEntry> entries = new Vector<LogEntry>();
 	private boolean invalid = false;
 

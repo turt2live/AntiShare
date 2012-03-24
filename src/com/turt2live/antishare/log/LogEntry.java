@@ -20,6 +20,11 @@ public class LogEntry {
 		String[] parts = rawLine.split("]");
 		timestamp = parts[0].replace("[", "").trim();
 		message = parts[parts.length - 1].trim();
+		if(rawLine.contains("[ILLEGAL]")){
+			message = "[ILLEGAL] " + message;
+		}else if(rawLine.contains("[LEGAL]")){
+			message = "[LEGAL] " + message;
+		}
 		listName = "[" + timestamp + "] " + message;
 	}
 
@@ -44,6 +49,8 @@ public class LogEntry {
 	}
 
 	public void displayTo(JTextArea area){
-		area.setText(type.name());
+		area.setText(type.name() + "\n"
+				+ type.getRawFormat() + "\n"
+				+ rawLine);
 	}
 }

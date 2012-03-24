@@ -69,10 +69,48 @@ public enum LogEntryType{
 
 	public static LogEntryType getType(String line){
 		String[] parts = line.split("]");
-		String[] messageParts = parts[parts.length - 1].trim().split("<");
-		String message = messageParts[0];
-		if(line.contains("ILLEGAL") || line.contains("LEGAL")){
+		String message = parts[parts.length - 1].trim();
+		if(line.contains("[ILLEGAL]") || line.contains("[LEGAL]")){
 			return LogEntryType.GENERAL_NOTIFICATION;
+		}else if(line.contains("[INFO] Converted ")){
+			return LogEntryType.INFO_CONVERT_END;
+		}else if(line.contains("[WARNING] Configuration Problem:")){
+			return LogEntryType.WARNING_CONFIGURATION_VALUE_NOT_NUMBER;
+		}else if(line.contains("[Debugger] Class:")){
+			return LogEntryType.SEVERE_DEBUGGER_BUG_CLASS;
+		}else if(line.contains("[Debugger] Exception:")){
+			return LogEntryType.SEVERE_DEBUGGER_BUG_EXCEPTION;
+		}else if(line.contains("[Debugger] Message:")){
+			return LogEntryType.SEVERE_DEBUGGER_BUG_MESSAGE;
+		}else if(line.contains("[Debugger] World:")){
+			return LogEntryType.SEVERE_DEBUGGER_BUG_WORLD;
+		}else if(line.contains("QUERY:")){
+			return LogEntryType.SEVERE_SQL_IMPROPER_QUERY_QUERY;
+		}else if(line.contains("MESSAGE:")){
+			return LogEntryType.SEVERE_SQL_IMPROPER_QUERY_MESSAGE;
+		}else if(line.contains("CANNOT LOAD INVENTORY FILE:")){
+			return LogEntryType.SEVERE_INVENTORY_CANNOT_LOAD_FILE;
+		}else if(line.contains("CANNOT SAVE INVENTORY FILE:")){
+			return LogEntryType.SEVERE_INVENTORY_CANNOT_SAVE_FILE;
+		}else if(line.contains("Cannot handle inventory:")){
+			return LogEntryType.SEVERE_INVENTORY_CANNOT_HANDLE;
+		}else if(line.contains("Cannot handle misc inventory:")){
+			return LogEntryType.SEVERE_INVENTORY_CANNOT_HANDLE_MISC;
+		}else if(line.contains("[CONFLICT] Inventory Manager Conflict:")){
+			return LogEntryType.SEVERE_CONFLICT_INVENTORY;
+		}else if(line.contains("[CONFLICT] Creative Mode Manager Conflict:")){
+			return LogEntryType.SEVERE_CONFLICT_CREATIVE;
+		}else if(line.contains("[CONFLICT] World Manager Conflict:")){
+			return LogEntryType.SEVERE_CONFLICT_WORLD;
+		}else if(line.contains("[CONFLICT] Other Conflict:")){
+			return LogEntryType.SEVERE_CONFLICT_OTHER;
+		}else if(line.contains("Cannot handle region information:")){
+			return LogEntryType.SEVERE_REGION_HANDLE_INFORMATION;
+		}else if(line.contains("left the region")
+				|| line.contains("entered the region")
+				|| line.contains("changed to gamemode")){
+			return LogEntryType.GENERAL_NOTIFICATION;
+
 		}
 		for(LogEntryType type : LogEntryType.values()){
 			if(type.getRawFormat().contains(message)){
