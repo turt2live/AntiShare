@@ -48,6 +48,12 @@ public class MetadataHack {
 
 	public void save(){
 		File file = new File(plugin.getDataFolder(), "metadata.yml");
+		if(file.exists()){
+			file.delete();
+			try{
+				file.createNewFile();
+			}catch(Exception e){} // Why not make it more hackish?
+		}
 		EnhancedConfiguration metadata = new EnhancedConfiguration(file, plugin);
 		metadata.save();
 		metadata.load();
