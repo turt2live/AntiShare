@@ -4,16 +4,17 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 
 public class LogPanel extends JPanel {
 
 	private static final long serialVersionUID = -2029283584832117230L;
-	public JTextArea textArea;
+	public JLabel text;
 	public JList list;
 	public JFrame frame;
 
@@ -47,11 +48,12 @@ public class LogPanel extends JPanel {
 								.addContainerGap())
 				);
 
-		textArea = new JTextArea();
-		textArea.setLineWrap(true);
-		textArea.setTabSize(4);
-		textArea.setEditable(false);
-		scrollPane_1.setViewportView(textArea);
+		text = new JLabel("<html><div style='margin-left:5px;'><h2>Please open a file</h2></div></html>", SwingConstants.LEFT);
+		//text.setLineWrap(true);
+		//text.setTabSize(4);
+		//text.setEditable(false);
+		text.setVerticalAlignment(SwingConstants.TOP);
+		scrollPane_1.setViewportView(text);
 		list = new JList();
 		FrameActions actions = new FrameActions(this);
 		btnOpenFile.addActionListener(actions);

@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import javax.swing.JTextArea;
+import javax.swing.JLabel;
 
 public class LogEntry {
 
@@ -53,9 +53,8 @@ public class LogEntry {
 		return listName;
 	}
 
-	public void displayTo(final JTextArea area){
+	public void displayTo(final JLabel area){
 		area.setText("Loading...");
-		area.setEnabled(false);
 		area.setBackground(Color.LIGHT_GRAY);
 		new Thread(new Runnable(){
 			@Override
@@ -74,9 +73,10 @@ public class LogEntry {
 				}
 				text.append("\n------------------------------\nOriginal Line: \n" + rawLine);
 				area.setText(text.toString());
-				area.setEnabled(true);
 				area.setBackground(Color.WHITE);
+
 			}
 		}).start();
 	}
+
 }

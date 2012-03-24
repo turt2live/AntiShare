@@ -25,9 +25,6 @@ public class AntiShare extends PluginWrapper {
 	 * - Throw items in region 
 	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
 	 *  
-	 *  TODO: Add these features
-	 *  - AntiShare log file analyzer
-	 *  
 	 *  TODO: Fix these known bugs:
 	 *  - TNT Related (waiting on PR to be accepted)
 	 *  

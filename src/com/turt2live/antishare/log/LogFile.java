@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Vector;
 
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JTextArea;
 
 public class LogFile {
 
@@ -57,7 +57,7 @@ public class LogFile {
 		list.setListData(values);
 	}
 
-	public void display(int index, JTextArea area){
+	public void display(int index, JLabel area){
 		if(index >= 0){
 			entries.get(index).displayTo(area);
 		}

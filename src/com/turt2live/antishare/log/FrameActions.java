@@ -41,7 +41,7 @@ public class FrameActions implements ActionListener, ListSelectionListener {
 	@Override
 	public void valueChanged(ListSelectionEvent event){
 		if(log != null){
-			log.display(panel.list.getSelectedIndex(), panel.textArea);
+			log.display(panel.list.getSelectedIndex(), panel.text);
 		}else{
 			System.out.println("Null");
 		}
