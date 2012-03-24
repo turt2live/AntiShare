@@ -29,8 +29,6 @@ public class AntiShare extends PluginWrapper {
 	 *  - AntiShare log file analyzer
 	 *  
 	 *  TODO: Fix these known bugs:
-	 *  - /as rl does not save old inventories (in region, reload, exit region)
-	 *  - regions do not save inventories (pre-set) [Related to above?]
 	 *  - TNT Related (waiting on PR to be accepted)
 	 *  
 	 *  TODO: If there is time...
@@ -74,6 +72,8 @@ public class AntiShare extends PluginWrapper {
 			config = new Configuration(this);
 			config.create();
 			config.reload();
+			conflicts = new Conflicts(this);
+			perms = new PermissionsHandler(this);
 			if(getConfig().getBoolean("settings.debug-override")){
 				DEBUG_MODE = true;
 			}
@@ -92,8 +92,6 @@ public class AntiShare extends PluginWrapper {
 				}
 			}
 			regions = new RegionHandler(this);
-			conflicts = new Conflicts(this);
-			perms = new PermissionsHandler(this);
 			if(!DEBUG_MODE){
 				UsageStatistics.send(this);
 			}

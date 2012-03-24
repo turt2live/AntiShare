@@ -58,7 +58,11 @@ public class Debugger implements Listener {
 			bugEvent.getBug().getException().printStackTrace();
 			plugin.getDebugger().antiSpamTimers.put(bugEvent.getBug().getException().getMessage(), System.currentTimeMillis());
 		}else if(!timerActive){
-			plugin.log.warning("A plugin has chosen not to display the stack trace to you. (Do you have the debugger?)");
+			if(AntiShare.DEBUG_MODE){
+				bugEvent.getBug().getException().printStackTrace();
+			}else{
+				plugin.log.warning("A plugin has chosen not to display the stack trace to you. (Do you have the debugger?)");
+			}
 			plugin.getDebugger().antiSpamTimers.put(bugEvent.getBug().getException().getMessage(), System.currentTimeMillis());
 		}else{
 			plugin.log.warning("Error Overflow. Output cancelled.");

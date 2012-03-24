@@ -54,12 +54,13 @@ public class VirtualInventory {
 
 	public void makeMatch(){
 		// Match each item
+		// Note: this only takes action in rare cases
 		HashMap<Integer, ItemStack> current = getCurrentInventory();
 		HashMap<Integer, ItemStack> proper = getInventory(player.getGameMode());
 		for(Integer slot : current.keySet()){
 			if(current.get(slot) != null && proper.get(slot) != null){
 				if(!current.get(slot).equals(proper.get(slot))){
-					System.out.println("Make Match");
+					// Switch from the opposing current GM to the current GM
 					switchInventories((player.getGameMode().equals(GameMode.SURVIVAL) ? GameMode.CREATIVE : GameMode.SURVIVAL), player.getGameMode());
 					return;
 				}
@@ -73,7 +74,6 @@ public class VirtualInventory {
 
 	@SuppressWarnings ("deprecation")
 	public void loadToTemporary(){
-
 		saveInventory(player.getGameMode());
 		previous = getInventory(player.getGameMode());
 		isInTemp = true;
@@ -110,6 +110,9 @@ public class VirtualInventory {
 	}
 
 	public HashMap<Integer, ItemStack> getCurrentInventory(){
+		if(isTemp()){
+			return getInventory(player.getGameMode());
+		}
 		HashMap<Integer, ItemStack> inventory = new HashMap<Integer, ItemStack>();
 		for(int slot = 0; slot < player.getInventory().getSize(); slot++){
 			ItemStack item = player.getInventory().getItem(slot);
@@ -119,7 +122,7 @@ public class VirtualInventory {
 	}
 
 	public void switchInventories(GameMode from, GameMode to){
-		if(!isInTemp){
+		if(!isTemp()){
 			saveInventory(from);
 		}
 		loadInventory(to);
@@ -138,6 +141,33 @@ public class VirtualInventory {
 			player.getInventory().setItem(slot, inventory.get(slot));
 		}
 		player.updateInventory();
+	}
+
+	public void reload(){
+		saveInventoryToDisk();
+		load();
+	}
+
+	public void saveInventory(GameMode gamemode){
+		HashMap<Integer, ItemStack> newInventory = new HashMap<Integer, ItemStack>();
+		for(int slot = 0; slot < player.getInventory().getSize(); slot++){
+			ItemStack item = player.getInventory().getItem(slot);
+			newInventory.put(slot, item);
+		}
+		if(gamemode.equals(GameMode.CREATIVE)){
+			creative = newInventory;
+		}else if(gamemode.equals(GameMode.SURVIVAL)){
+			survival = newInventory;
+		}
+	}
+
+	public void saveInventoryToDisk(){
+		if(isTemp()){
+			unloadFromTemporary();
+		}
+		saveInventory(player.getGameMode());
+		saveToDisk(GameMode.CREATIVE, getCreativeInventory());
+		saveToDisk(GameMode.SURVIVAL, getSurvivalInventory());
 	}
 
 	private HashMap<Integer, ItemStack> load(GameMode gamemode){
@@ -196,7 +226,7 @@ public class VirtualInventory {
 				EnhancedConfiguration config = new EnhancedConfiguration("inventories/" + saveFile.getName(), plugin);
 				if(!config.load()){
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
-					Bug bug = new Bug(new BugException("Inventory Issue, Type 1"), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
+					Bug bug = new Bug(new BugException("Inventory Issue, Type 1", config.getLastException()), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
 					Debugger.sendBug(bug);
 				}
 				Integer i = 0;
@@ -215,34 +245,6 @@ public class VirtualInventory {
 		return inventoryMap;
 	}
 
-	public void reload(){
-		saveInventoryToDisk();
-		load();
-	}
-
-	public void saveInventory(GameMode gamemode){
-		HashMap<Integer, ItemStack> newInventory = new HashMap<Integer, ItemStack>();
-		for(int slot = 0; slot < player.getInventory().getSize(); slot++){
-			ItemStack item = player.getInventory().getItem(slot);
-			newInventory.put(slot, item);
-		}
-		if(gamemode.equals(GameMode.CREATIVE)){
-			creative = newInventory;
-		}else if(gamemode.equals(GameMode.SURVIVAL)){
-			survival = newInventory;
-		}
-	}
-
-	public void saveInventoryToDisk(){
-		if(plugin.getRegionHandler() != null){
-			if(!plugin.getRegionHandler().isRegion(player.getLocation())){
-				saveInventory(player.getGameMode());
-			}
-		}
-		saveToDisk(GameMode.CREATIVE, getCreativeInventory());
-		saveToDisk(GameMode.SURVIVAL, getSurvivalInventory());
-	}
-
 	private void saveToDisk(GameMode gamemode, HashMap<Integer, ItemStack> inventoryMap){
 		wipe(gamemode);
 		boolean skip = false;
@@ -250,6 +252,9 @@ public class VirtualInventory {
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
 				for(Integer slot : inventoryMap.keySet()){
+					if(inventoryMap.get(slot) == null){
+						continue;
+					}
 					ItemStack item = inventoryMap.get(slot);
 					String id = item.getTypeId() + "";
 					String name = item.getType().name();
@@ -281,14 +286,17 @@ public class VirtualInventory {
 			EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 			if(!config.load()){
 				plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
-				Bug bug = new Bug(new BugException("Inventory Issue, Type 2"), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
+				Bug bug = new Bug(new BugException("Inventory Issue, Type 2", config.getLastException()), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
 				Debugger.sendBug(bug);
 			}
 			for(Integer slot : inventoryMap.keySet()){
+				if(inventoryMap.get(slot) == null){
+					continue;
+				}
 				config.set(String.valueOf(slot), inventoryMap.get(slot));
 				if(!config.save()){
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
-					Bug bug = new Bug(new BugException("Inventory Issue, Type 3"), "CANNOT SAVE INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
+					Bug bug = new Bug(new BugException("Inventory Issue, Type 3", config.getLastException()), "CANNOT SAVE INVENTORY FILE: " + saveFile.getName(), this.getClass(), null);
 					Debugger.sendBug(bug);
 				}
 			}
@@ -324,6 +332,8 @@ public class VirtualInventory {
 		}
 	}
 
+	// STATIC METHODS 
+
 	public static HashMap<Integer, ItemStack> getInventoryFromPlayer(Player player){
 		HashMap<Integer, ItemStack> newInventory = new HashMap<Integer, ItemStack>();
 		for(int slot = 0; slot < player.getInventory().getSize(); slot++){
@@ -345,6 +355,9 @@ public class VirtualInventory {
 			if(plugin.getSQLManager().isConnected()){
 				SQLManager sql = plugin.getSQLManager();
 				for(Integer slot : inventory.keySet()){
+					if(inventory.get(slot) == null){
+						continue;
+					}
 					ItemStack item = inventory.get(slot);
 					String id = item.getTypeId() + "";
 					String name = item.getType().name();
@@ -367,30 +380,32 @@ public class VirtualInventory {
 			}
 		}
 		if(flatfile){
+			file.getParentFile().mkdirs();
 			if(file.exists()){
 				file.delete();
-				try{
-					file.createNewFile();
-				}catch(Exception e){
-					Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
-					Debugger.sendBug(bug);
-				}
 			}
 			try{
-				File sdir = file.getParentFile();
-				sdir.mkdirs();
+				file.createNewFile();
+			}catch(Exception e){
+				Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
+				Debugger.sendBug(bug);
+			}
+			try{
 				File saveFile = file;
 				EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 				if(!config.load()){
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
-					Bug bug = new Bug(new BugException("Inventory Issue, Type 4"), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
+					Bug bug = new Bug(new BugException("Inventory Issue, Type 4", config.getLastException()), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
 					Debugger.sendBug(bug);
 				}
 				for(Integer slot : inventory.keySet()){
+					if(inventory.get(slot) == null){
+						continue;
+					}
 					config.set(String.valueOf(slot), inventory.get(slot));
 					if(!config.save()){
 						plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT SAVE INVENTORY FILE: " + saveFile.getName());
-						Bug bug = new Bug(new BugException("Inventory Issue, Type 5"), "CANNOT SAVE INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
+						Bug bug = new Bug(new BugException("Inventory Issue, Type 5", config.getLastException()), "CANNOT SAVE INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
 						Debugger.sendBug(bug);
 					}
 				}
@@ -447,15 +462,6 @@ public class VirtualInventory {
 			}
 		}
 		if(flatfile){
-			if(file.exists()){
-				file.delete();
-				try{
-					file.createNewFile();
-				}catch(Exception e){
-					Bug bug = new Bug(e, "VirtualInventoryBug", VirtualInventory.class, null);
-					Debugger.sendBug(bug);
-				}
-			}
 			try{
 				File sdir = new File(plugin.getDataFolder(), "inventories");
 				sdir.mkdirs();
@@ -467,7 +473,7 @@ public class VirtualInventory {
 				EnhancedConfiguration config = new EnhancedConfiguration(saveFile, plugin);
 				if(!config.load()){
 					plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "CANNOT LOAD INVENTORY FILE: " + saveFile.getName());
-					Bug bug = new Bug(new BugException("Inventory Issue, Type 6"), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
+					Bug bug = new Bug(new BugException("Inventory Issue, Type 6", config.getLastException()), "CANNOT LOAD INVENTORY FILE: " + saveFile.getName(), VirtualInventory.class, null);
 					Debugger.sendBug(bug);
 				}
 				Set<String> keys = config.getKeys(false);

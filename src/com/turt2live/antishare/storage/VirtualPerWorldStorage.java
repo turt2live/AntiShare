@@ -302,6 +302,9 @@ public class VirtualPerWorldStorage {
 			blocked_commands.add(blocked.trim());
 		}
 		/*## Inventories ##*/
+		for(Player player : Bukkit.getOnlinePlayers()){
+			inventories.put(player, new VirtualInventory(player, world, plugin));
+		}
 		for(Player player : inventories.keySet()){
 			inventories.get(player).reload();
 		}
@@ -468,6 +471,8 @@ public class VirtualPerWorldStorage {
 		}
 		return false;
 	}
+
+	// End metadata hack
 
 	public void saveRegion(ASRegion region){
 		gamemode_regions.add(region);

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -40,6 +41,13 @@ public class RegionHandler {
 			plugin.log.warning("[" + plugin.getDescription().getVersion() + "] " + "WorldEdit is not installed!");
 		}
 		load();
+		// Check player regions
+		for(Player player : Bukkit.getOnlinePlayers()){
+			if(isRegion(player.getLocation())){
+				ASRegion region = getRegion(player.getLocation());
+				region.alertEntry(player);
+			}
+		}
 	}
 
 	public void newRegion(CommandSender sender, String gamemodeName, String name){

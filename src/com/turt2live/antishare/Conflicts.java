@@ -174,7 +174,7 @@ public class Conflicts {
 				OTHER_CONFLICT = name;
 				showOtherConflict(name);
 				continue;
-			}else if(name.toLowerCase().startsWith("essentials")){
+			}else if(name.equalsIgnoreCase("Essentials")){
 				OTHER_CONFLICT_PRESENT = true;
 				OTHER_CONFLICT = name;
 				showOtherConflict(name);

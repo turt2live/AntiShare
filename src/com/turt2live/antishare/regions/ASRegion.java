@@ -45,6 +45,7 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
 		name = id;
+		loadInventory();
 	}
 
 	public void setUniqueID(String ID){
@@ -136,6 +137,10 @@ public class ASRegion {
 		return exitMessage;
 	}
 
+	public HashMap<Integer, ItemStack> getInventory(){
+		return inventory;
+	}
+
 	public AntiShare getPlugin(){
 		return plugin;
 	}
@@ -163,6 +168,11 @@ public class ASRegion {
 				}
 			}
 		}
+	}
+
+	private void loadInventory(){
+		File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
+		setInventory(VirtualInventory.getInventoryFromDisk(saveFile, plugin));
 	}
 
 	public void saveToDisk(){
@@ -225,16 +235,14 @@ public class ASRegion {
 			regionYAML.set("enterMessage", enterMessage);
 			regionYAML.set("exitMessage", exitMessage);
 			regionYAML.save();
-			if(inventory != null){
-				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
-				if(inventory.size() > 0){
-					VirtualInventory.saveInventoryToDisk(saveFile, inventory, plugin);
-				}
-			}else{
-				File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
-				if(saveFile.exists()){
-					saveFile.delete();
-				}
+		}
+		File saveFile = new File(plugin.getDataFolder() + "/region_inventories", id + ".yml");
+		if(saveFile.exists()){
+			saveFile.delete();
+		}
+		if(inventory != null){
+			if(inventory.size() > 0){
+				VirtualInventory.saveInventoryToDisk(saveFile, inventory, plugin);
 			}
 		}
 	}
