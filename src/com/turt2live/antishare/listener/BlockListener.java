@@ -50,7 +50,6 @@ public class BlockListener implements Listener {
 				}else{
 					ASUtils.sendToPlayer(player, ChatColor.RED + "That is not a normal chest, you cannot break it");
 					event.setCancelled(true);
-					System.out.println("BREAK");
 					return;
 				}
 			}
