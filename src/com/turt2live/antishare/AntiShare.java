@@ -25,15 +25,8 @@ public class AntiShare extends PluginWrapper {
 	 * - Throw items in region 
 	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
 	 *  
-	 *  TODO: Test code when BUKKIT issues fixed:
-	 *  - Event messages (See if space is removed, BUKKIT-1285)
-	 *  
 	 *  TODO: Add these features
 	 *  - AntiShare log file analyzer
-	 *  
-	 *  TODO: Test/verify these potential bugs
-	 *  - Tim the Enchanter conflict (waiting on information) [Cannot Confirm]
-	 *  - Item duplication glitch on fast relog [Cannot Confirm]
 	 *  
 	 *  TODO: Fix these known bugs:
 	 *  - /as rl does not save old inventories (in region, reload, exit region)

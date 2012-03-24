@@ -59,6 +59,7 @@ public class VirtualInventory {
 		for(Integer slot : current.keySet()){
 			if(current.get(slot) != null && proper.get(slot) != null){
 				if(!current.get(slot).equals(proper.get(slot))){
+					System.out.println("Make Match");
 					switchInventories((player.getGameMode().equals(GameMode.SURVIVAL) ? GameMode.CREATIVE : GameMode.SURVIVAL), player.getGameMode());
 					return;
 				}

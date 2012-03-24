@@ -85,6 +85,15 @@ public class ASLog {
 			}
 			File logFile = new File(plugin.getDataFolder(), logDir + File.separator + logFilename);
 			try{
+				if(!logFile.exists()){
+					logFile.getParentFile().mkdirs();
+					try{
+						logFile.createNewFile();
+					}catch(Exception e){
+						Bug bug = new Bug(e, "Log create error: " + logFile.getName(), this.getClass(), null);
+						Debugger.sendBug(bug);
+					}
+				}
 				BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
 				out.write("[" + timestamp(false) + "] " + line + "\r\n");
 				out.close();
@@ -101,6 +110,15 @@ public class ASLog {
 			}
 			File logFile = new File(plugin.getDataFolder(), logDir + File.separator + logFullFilename);
 			try{
+				if(!logFile.exists()){
+					logFile.getParentFile().mkdirs();
+					try{
+						logFile.createNewFile();
+					}catch(Exception e){
+						Bug bug = new Bug(e, "Log create error: " + logFile.getName(), this.getClass(), null);
+						Debugger.sendBug(bug);
+					}
+				}
 				BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
 				out.write("[" + timestamp(false) + "] " + line + "\r\n");
 				out.close();
@@ -117,6 +135,15 @@ public class ASLog {
 			}
 			File logFile = new File(plugin.getDataFolder(), logDir + File.separator + technicalLogFilename);
 			try{
+				if(!logFile.exists()){
+					logFile.getParentFile().mkdirs();
+					try{
+						logFile.createNewFile();
+					}catch(Exception e){
+						Bug bug = new Bug(e, "Log create error: " + logFile.getName(), this.getClass(), null);
+						Debugger.sendBug(bug);
+					}
+				}
 				BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
 				out.write("[" + timestamp(false) + "] " + line + "\r\n");
 				out.close();
@@ -130,6 +157,15 @@ public class ASLog {
 			event = ChatColor.stripColor(event);
 			File logFile = new File(plugin.getDataFolder(), logDir + File.separator + eventLogFilename);
 			try{
+				if(!logFile.exists()){
+					logFile.getParentFile().mkdirs();
+					try{
+						logFile.createNewFile();
+					}catch(Exception e){
+						Bug bug = new Bug(e, "Log create error: " + logFile.getName(), this.getClass(), null);
+						Debugger.sendBug(bug);
+					}
+				}
 				BufferedWriter out = new BufferedWriter(new FileWriter(logFile, true));
 				out.write("[" + timestamp(false) + "] " + event + "\r\n");
 				out.close();
