@@ -14,9 +14,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Bug;
@@ -309,85 +309,88 @@ public class VirtualPerWorldStorage {
 			inventories.get(player).reload();
 		}
 		/*## GameMode Regions ##*/
-		flatfile = true;
-		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
-			if(plugin.getSQLManager().isConnected()){
-				SQLManager sql = plugin.getSQLManager();
-				ResultSet results = sql.getQuery("SELECT * FROM AntiShare_Regions");
-				if(results != null){
-					flatfile = false;
-					try{
-						while (results.next()){
-							World world = plugin.getServer().getWorld(results.getString("world"));
-							if(!this.world.equals(world)){
-								continue;
+		Plugin p = plugin.getServer().getPluginManager().getPlugin("WorldEdit");
+		if(p != null){
+			flatfile = true;
+			if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
+				if(plugin.getSQLManager().isConnected()){
+					SQLManager sql = plugin.getSQLManager();
+					ResultSet results = sql.getQuery("SELECT * FROM AntiShare_Regions");
+					if(results != null){
+						flatfile = false;
+						try{
+							while (results.next()){
+								World world = plugin.getServer().getWorld(results.getString("world"));
+								if(!this.world.equals(world)){
+									continue;
+								}
+								Location minimum = new Location(world,
+										results.getDouble("mix"),
+										results.getDouble("miy"),
+										results.getDouble("miz"));
+								Location maximum = new Location(world,
+										results.getDouble("max"),
+										results.getDouble("may"),
+										results.getDouble("maz"));
+								String setBy = results.getString("creator");
+								GameMode gamemode = GameMode.valueOf(results.getString("gamemode"));
+								String name = results.getString("regionName");
+								boolean enterMessage = results.getInt("showEnter") == 1;
+								boolean exitMessage = results.getInt("showExit") == 1;
+								ASRegion region = new ASRegion(world, minimum, maximum, setBy, gamemode);
+								region.setUniqueID(results.getString("unqiueID"));
+								region.setEnterMessage(results.getString("enterMessage"));
+								region.setExitMessage(results.getString("exitMessage"));
+								region.setName(name);
+								region.setMessageOptions(enterMessage, exitMessage);
+								gamemode_regions.add(region);
 							}
-							Location minimum = new Location(world,
-									results.getDouble("mix"),
-									results.getDouble("miy"),
-									results.getDouble("miz"));
-							Location maximum = new Location(world,
-									results.getDouble("max"),
-									results.getDouble("may"),
-									results.getDouble("maz"));
-							String setBy = results.getString("creator");
-							GameMode gamemode = GameMode.valueOf(results.getString("gamemode"));
-							String name = results.getString("regionName");
-							boolean enterMessage = results.getInt("showEnter") == 1;
-							boolean exitMessage = results.getInt("showExit") == 1;
-							ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
-							region.setUniqueID(results.getString("unqiueID"));
-							region.setEnterMessage(results.getString("enterMessage"));
-							region.setExitMessage(results.getString("exitMessage"));
-							region.setName(name);
-							region.setMessageOptions(enterMessage, exitMessage);
-							gamemode_regions.add(region);
+						}catch(SQLException e){
+							Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass(), null);
+							Debugger.sendBug(bug);
 						}
-					}catch(SQLException e){
-						Bug bug = new Bug(e, "VirtualPerWorldStorageBug", this.getClass(), null);
-						Debugger.sendBug(bug);
 					}
 				}
 			}
-		}
-		if(flatfile){
-			File[] listing = new File(plugin.getDataFolder(), "regions").listFiles();
-			if(listing != null){
-				for(File regionFile : listing){
-					EnhancedConfiguration regionYAML = new EnhancedConfiguration(regionFile, plugin);
-					regionYAML.load();
-					World world = plugin.getServer().getWorld(regionYAML.getString("worldName"));
-					if(!this.world.equals(world)){
-						continue;
+			if(flatfile){
+				File[] listing = new File(plugin.getDataFolder(), "regions").listFiles();
+				if(listing != null){
+					for(File regionFile : listing){
+						EnhancedConfiguration regionYAML = new EnhancedConfiguration(regionFile, plugin);
+						regionYAML.load();
+						World world = plugin.getServer().getWorld(regionYAML.getString("worldName"));
+						if(!this.world.equals(world)){
+							continue;
+						}
+						Location minimum = new Location(world,
+								regionYAML.getDouble("mi-x"),
+								regionYAML.getDouble("mi-y"),
+								regionYAML.getDouble("mi-z"));
+						Location maximum = new Location(world,
+								regionYAML.getDouble("ma-x"),
+								regionYAML.getDouble("ma-y"),
+								regionYAML.getDouble("ma-z"));
+						String setBy = regionYAML.getString("set-by");
+						GameMode gamemode = GameMode.valueOf(regionYAML.getString("gamemode"));
+						String name = regionYAML.getString("name");
+						boolean enterMessage = regionYAML.getBoolean("showEnter");
+						boolean exitMessage = regionYAML.getBoolean("showExit");
+						ASRegion region = new ASRegion(world, minimum, maximum, setBy, gamemode);
+						region.setUniqueID(regionFile.getName().replace(".yml", ""));
+						region.setName(name);
+						region.setEnterMessage(regionYAML.getString("enterMessage"));
+						region.setExitMessage(regionYAML.getString("exitMessage"));
+						region.setMessageOptions(enterMessage, exitMessage);
+						File saveFile = new File(plugin.getDataFolder() + "/region_inventories", region.getUniqueID() + ".yml");
+						region.setInventory(VirtualInventory.getInventoryFromDisk(saveFile, plugin));
+						gamemode_regions.add(region);
 					}
-					Location minimum = new Location(world,
-							regionYAML.getDouble("mi-x"),
-							regionYAML.getDouble("mi-y"),
-							regionYAML.getDouble("mi-z"));
-					Location maximum = new Location(world,
-							regionYAML.getDouble("ma-x"),
-							regionYAML.getDouble("ma-y"),
-							regionYAML.getDouble("ma-z"));
-					String setBy = regionYAML.getString("set-by");
-					GameMode gamemode = GameMode.valueOf(regionYAML.getString("gamemode"));
-					String name = regionYAML.getString("name");
-					boolean enterMessage = regionYAML.getBoolean("showEnter");
-					boolean exitMessage = regionYAML.getBoolean("showExit");
-					ASRegion region = new ASRegion(new CuboidSelection(world, minimum, maximum), setBy, gamemode);
-					region.setUniqueID(regionFile.getName().replace(".yml", ""));
-					region.setName(name);
-					region.setEnterMessage(regionYAML.getString("enterMessage"));
-					region.setExitMessage(regionYAML.getString("exitMessage"));
-					region.setMessageOptions(enterMessage, exitMessage);
-					File saveFile = new File(plugin.getDataFolder() + "/region_inventories", region.getUniqueID() + ".yml");
-					region.setInventory(VirtualInventory.getInventoryFromDisk(saveFile, plugin));
-					gamemode_regions.add(region);
 				}
 			}
-		}
-		// Start regions
-		for(ASRegion region : gamemode_regions){
-			region.setup();
+			// Start regions
+			for(ASRegion region : gamemode_regions){
+				region.setup();
+			}
 		}
 	}
 

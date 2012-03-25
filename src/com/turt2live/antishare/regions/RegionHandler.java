@@ -81,6 +81,9 @@ public class RegionHandler {
 	}
 
 	public void removeRegion(Location location, Player sender){
+		if(!hasWorldEdit){
+			return;
+		}
 		if(isRegion(location)){
 			worldedit.removeRegionAtLocation(location);
 			if(sender != null){
@@ -94,6 +97,10 @@ public class RegionHandler {
 	}
 
 	public void removeRegion(String name, CommandSender sender){
+		if(!hasWorldEdit){
+			ASUtils.sendToPlayer(sender, ChatColor.RED + "WorldEdit is not installed.");
+			return;
+		}
 		if(!regionNameExists(name)){
 			ASUtils.sendToPlayer(sender, ChatColor.RED + "Region '" + name + "' does not exist.");
 			return;
@@ -103,26 +110,45 @@ public class RegionHandler {
 	}
 
 	public ASRegion getRegion(Location location){
+		if(!hasWorldEdit){
+			return null;
+		}
 		return plugin.storage.getRegion(location);
 	}
 
 	public boolean isRegion(Location location){
+		if(!hasWorldEdit){
+			return false;
+		}
 		return plugin.storage.regionExists(getRegion(location));
 	}
 
 	public boolean regionNameExists(String name){
+		if(!hasWorldEdit){
+			return false;
+		}
 		return plugin.storage.getRegionByName(name) != null;
 	}
 
 	public ASRegion getRegionByName(String name){
+		if(!hasWorldEdit){
+			return null;
+		}
 		return plugin.storage.getRegionByName(name);
 	}
 
 	public ASRegion getRegionByID(String id){
+		if(!hasWorldEdit){
+			return null;
+		}
 		return plugin.storage.getRegionByID(id);
 	}
 
 	public void editRegion(ASRegion region, RegionKeyType key, String value, CommandSender sender){
+		if(!hasWorldEdit){
+			ASUtils.sendToPlayer(sender, ChatColor.RED + "WorldEdit is not installed.");
+			return;
+		}
 		boolean changed = false;
 		switch (key){
 		case NAME:
@@ -207,6 +233,9 @@ public class RegionHandler {
 	}
 
 	public void checkRegion(Player player, Location newLocation, Location fromLocation){
+		if(!hasWorldEdit){
+			return;
+		}
 		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
 		RegionPlayer asPlayer = player_information.get(player.getName());
 		if(asPlayer == null){
@@ -250,10 +279,16 @@ public class RegionHandler {
 	}
 
 	public Vector<ASRegion> getRegionsNearby(Location location, int distance){
+		if(!hasWorldEdit){
+			return null;
+		}
 		return plugin.storage.getRegionsNearby(location, distance);
 	}
 
 	public void saveStatusToDisk(){
+		if(!hasWorldEdit){
+			return;
+		}
 		boolean flatfile = true;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
@@ -295,6 +330,9 @@ public class RegionHandler {
 	}
 
 	public void load(){
+		if(!hasWorldEdit){
+			return;
+		}
 		boolean flatfile = true;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){

@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
@@ -39,6 +40,16 @@ public class ASRegion {
 
 	public ASRegion(Selection region, String setBy, GameMode gamemode){
 		this.region = region;
+		this.setBy = setBy;
+		this.gamemode = gamemode;
+		this.world = region.getWorld();
+		id = String.valueOf(System.currentTimeMillis());
+		plugin = (AntiShare) Bukkit.getServer().getPluginManager().getPlugin("AntiShare");
+		name = id;
+	}
+
+	public ASRegion(World world, Location minimum, Location maximum, String setBy, GameMode gamemode){
+		this.region = new CuboidSelection(world, minimum, maximum);
 		this.setBy = setBy;
 		this.gamemode = gamemode;
 		this.world = region.getWorld();
