@@ -8,10 +8,6 @@
     <property
         name="src"
         location="src" />
-    
-    <property
-        name="yaml"
-        location="YAML" />
 
     <property
         name="build"
@@ -64,12 +60,6 @@ Compiling
             destdir="${build}"
             includeantruntime="false"
             srcdir="${src}" />
-
-        <javac
-            classpathref="classpath"
-            destdir="${build}"
-            includeantruntime="false"
-            srcdir="${yaml}" />
     </target>
 
     <target
@@ -84,10 +74,6 @@ Building
 
             <fileset
                 dir="${src}"
-                excludes="**/*.java,**/*.form"
-                includes="**" />
-            <fileset
-                dir="${yaml}"
                 excludes="**/*.java,**/*.form"
                 includes="**" />
         </copy>
@@ -118,10 +104,6 @@ Building
             <fileset
                 dir="${src}"
                 excludes="**/*.form"
-                includes="**" />
-            <fileset
-                dir="${yaml}"
-                excludes="**/*.java,**/*.form"
                 includes="**" />
         </copy>
 
