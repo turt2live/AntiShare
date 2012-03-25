@@ -20,7 +20,8 @@ public class LogAnalyzer extends JFrame {
 			public void run(){
 				try{
 					try{
-						UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+						//UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					}catch(Exception e){} // Don't handle
 					LogAnalyzer frame = new LogAnalyzer();
 					frame.setVisible(true);

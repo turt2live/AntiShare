@@ -1,5 +1,9 @@
 package com.turt2live.antishare.log;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -48,7 +52,7 @@ public class LogPanel extends JPanel {
 								.addContainerGap())
 				);
 
-		text = new JLabel("<html><div style='margin-left:5px;'><h2>Please open a file</h2></div></html>", SwingConstants.LEFT);
+		text = new JLabel(getHomePage(), SwingConstants.LEFT);
 		//text.setLineWrap(true);
 		//text.setTabSize(4);
 		//text.setEditable(false);
@@ -60,5 +64,21 @@ public class LogPanel extends JPanel {
 		list.addListSelectionListener(actions);
 		scrollPane.setViewportView(list);
 		setLayout(groupLayout);
+	}
+
+	private String getHomePage(){
+		StringBuilder text = new StringBuilder();
+		try{
+			URL statsURL = new URL("http://antishare.turt2live.com/log/?type=HOME");
+			BufferedReader in = new BufferedReader(new InputStreamReader(statsURL.openConnection().getInputStream()));
+			String line;
+			while ((line = in.readLine()) != null){
+				text.append(line);
+			}
+			in.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return text.toString();
 	}
 }

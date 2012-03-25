@@ -65,16 +65,26 @@ public class LogEntry {
 					BufferedReader in = new BufferedReader(new InputStreamReader(statsURL.openConnection().getInputStream()));
 					String line;
 					while ((line = in.readLine()) != null){
-						text.append(line + "\n");
+						text.append(line);
 					}
 					in.close();
 				}catch(Exception e){
 					e.printStackTrace();
 				}
-				text.append("\n------------------------------\nOriginal Line: \n" + rawLine);
-				area.setText(text.toString());
+				String contents = text.toString();
+				String parts[] = message.split("Conflict: ");
+				if(parts.length > 1){
+					contents = contents.replace("-CONFLICT-", parts[parts.length - 1]);
+				}
+				if(rawLine.contains("[LEGAL]")){
+					contents = contents.replace("-TYPE-", "<font color='green'>legal</font>");
+				}else if(rawLine.contains("[ILLEGAL]")){
+					contents = contents.replace("-TYPE-", "<font color='red'>illegal</font>");
+				}
+				contents = contents.replace("-ORIG-", rawLine);
+				contents = contents.replace("-MESSAGE-", message);
+				area.setText(contents);
 				area.setBackground(Color.WHITE);
-
 			}
 		}).start();
 	}
