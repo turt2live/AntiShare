@@ -24,7 +24,7 @@ import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.regions.ASRegion;
-import com.turt2live.antishare.regions.WorldEditHook;
+import com.turt2live.antishare.regions.hooks.WorldEditHook;
 
 public class VirtualStorage implements Listener {
 

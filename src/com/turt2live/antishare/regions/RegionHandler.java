@@ -23,23 +23,29 @@ import com.turt2live.antishare.debug.Bug;
 import com.turt2live.antishare.debug.BugCheck;
 import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.enums.RegionKeyType;
+import com.turt2live.antishare.regions.hooks.HookManager;
 import com.turt2live.antishare.storage.VirtualInventory;
 
 public class RegionHandler {
 
 	private AntiShare plugin;
+	private boolean hasHook = false;
 	private boolean hasWorldEdit = false;
-	private WorldEditHook worldedit;
+	private HookManager hooks;
+	private RegionManager manager;
 	private HashMap<String, RegionPlayer> player_information = new HashMap<String, RegionPlayer>();
 
 	public RegionHandler(AntiShare plugin){
 		this.plugin = plugin;
 		if(plugin.getServer().getPluginManager().getPlugin("WorldEdit") != null){
 			hasWorldEdit = true;
-			worldedit = new WorldEditHook(plugin);
 		}else{
 			plugin.log.warning("[" + plugin.getDescription().getVersion() + "] " + "WorldEdit is not installed!");
+			return; // Stop further potential issues
 		}
+		hooks = new HookManager(plugin);
+		hasHook = hooks.hasHook();
+		manager = new RegionManager(this);
 		load();
 		// Check player regions
 		for(Player player : Bukkit.getOnlinePlayers()){
@@ -68,24 +74,28 @@ public class RegionHandler {
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, sorry!");
 			return;
 		}
-		if(worldedit.regionExistsInSelection((Player) sender)){
+		if(hooks.getWorldEdit().getSelection((Player) sender) == null){
+			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You have no selection!");
+			return;
+		}
+		if(hooks.regionExistsInSelection((Player) sender)){
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "There is a region where you have selected!");
 			return;
 		}
-		if(worldedit.regionNameExists(name)){
+		if(manager.regionNameExists(name)){
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "That region name already exists!");
 			return;
 		}
-		worldedit.newRegion((Player) sender, gamemode, name);
+		manager.newRegion((Player) sender, gamemode, name);
 		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region '" + name + "' added.");
 	}
 
 	public void removeRegion(Location location, Player sender){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return;
 		}
 		if(isRegion(location)){
-			worldedit.removeRegionAtLocation(location);
+			manager.removeRegionAtLocation(location);
 			if(sender != null){
 				ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed.");
 			}
@@ -105,40 +115,40 @@ public class RegionHandler {
 			ASUtils.sendToPlayer(sender, ChatColor.RED + "Region '" + name + "' does not exist.");
 			return;
 		}
-		worldedit.removeRegionByName(name);
+		manager.removeRegionByName(name);
 		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed.");
 	}
 
 	public ASRegion getRegion(Location location){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return null;
 		}
 		return plugin.storage.getRegion(location);
 	}
 
 	public boolean isRegion(Location location){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return false;
 		}
 		return plugin.storage.regionExists(getRegion(location));
 	}
 
 	public boolean regionNameExists(String name){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return false;
 		}
 		return plugin.storage.getRegionByName(name) != null;
 	}
 
 	public ASRegion getRegionByName(String name){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return null;
 		}
 		return plugin.storage.getRegionByName(name);
 	}
 
 	public ASRegion getRegionByID(String id){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return null;
 		}
 		return plugin.storage.getRegionByID(id);
@@ -191,7 +201,7 @@ public class RegionHandler {
 			}
 			break;
 		case SELECTION_AREA:
-			if(!hasWorldEdit){
+			if(!hasHook){
 				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "WorldEdit is not installed. No region set.");
 				break;
 			}
@@ -199,11 +209,11 @@ public class RegionHandler {
 				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, sorry!");
 				break;
 			}
-			if(worldedit.regionExistsInSelectionAndNot((Player) sender, region)){
+			if(hooks.regionExistsInSelectionAndNot((Player) sender, region)){
 				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "There is a region where you have selected!");
 				break;
 			}
-			Selection selection = worldedit.getSelection((Player) sender);
+			Selection selection = hooks.getWorldEdit().getSelection((Player) sender);
 			region.setRegion(selection);
 			changed = true;
 			break;
@@ -233,7 +243,7 @@ public class RegionHandler {
 	}
 
 	public void checkRegion(Player player, Location newLocation, Location fromLocation){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return;
 		}
 		ASRegion region = plugin.getRegionHandler().getRegion(newLocation);
@@ -279,14 +289,14 @@ public class RegionHandler {
 	}
 
 	public Vector<ASRegion> getRegionsNearby(Location location, int distance){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return null;
 		}
 		return plugin.storage.getRegionsNearby(location, distance);
 	}
 
 	public void saveStatusToDisk(){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return;
 		}
 		boolean flatfile = true;
@@ -330,7 +340,7 @@ public class RegionHandler {
 	}
 
 	public void load(){
-		if(!hasWorldEdit){
+		if(!hasHook){
 			return;
 		}
 		boolean flatfile = true;
@@ -390,8 +400,7 @@ public class RegionHandler {
 		return plugin;
 	}
 
-	public WorldEditHook getWorldEditHandler(){
-		return worldedit;
+	public HookManager getHooks(){
+		return hooks;
 	}
-
 }
