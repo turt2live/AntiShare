@@ -1,5 +1,6 @@
 package com.turt2live.antishare.regions.hooks;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -23,6 +24,11 @@ public class WorldGuardHook implements Hook {
 
 	public WorldGuardPlugin getWorldGuard(){
 		return (WorldGuardPlugin) worldguard;
+	}
+
+	@Override
+	public boolean inRegion(Player player){
+		return false; // Used only by ASRegion on enter
 	}
 
 	@Override

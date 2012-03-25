@@ -22,6 +22,15 @@ public class HookManager {
 		//hooks.add(new MobArenaHook(plugin));
 	}
 
+	public boolean inRegion(Player player){
+		for(Hook hook : hooks){
+			if(hook.inRegion(player)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean hasRegion(Selection location){
 		for(Hook hook : hooks){
 			if(hook.hasRegion(location)){

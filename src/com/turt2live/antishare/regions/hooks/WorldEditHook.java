@@ -45,6 +45,11 @@ public class WorldEditHook implements Hook {
 	}
 
 	@Override
+	public boolean inRegion(Player player){
+		return false; // Used only by ASRegion on enter
+	}
+
+	@Override
 	public boolean hasRegion(com.turt2live.antishare.regions.Selection location){
 		return false; // WorldEdit has no "regions"
 	}

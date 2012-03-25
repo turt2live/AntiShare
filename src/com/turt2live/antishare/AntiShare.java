@@ -28,18 +28,11 @@ public class AntiShare extends PluginWrapper {
 	 *  TODO: Fix these known bugs:
 	 *  - TNT Related (waiting on PR to be accepted)
 	 *  
-	 *  TODO: If there is time...
-	 *  - MobArena Region Detection
-	 *  - WorldGuard Region Detection
-	 *  - Other Region-related plugin region detection
-	 *  
 	 *  Not officially a "todo", just a potential optimization:
 	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211) [Hackish code]
 	 *  - Inventory mirror creative-glitch (BUKKIT-1211) [Hackish code]
 	 *  
 	 *  NOTES:
-	 *  - MobArena API:
-	 *  	http://dev.bukkit.org/server-mods/mobarena/pages/main/hooking-into-mob-arena/  
 	 *  - Leaky:
 	 *  	https://bukkit.atlassian.net/browse/BUKKIT-####
 	 */

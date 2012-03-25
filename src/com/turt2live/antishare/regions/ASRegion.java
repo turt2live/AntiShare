@@ -160,6 +160,9 @@ public class ASRegion {
 	}
 
 	public void alertEntry(Player player){
+		if(plugin.getRegionHandler().getHooks().inRegion(player)){
+			return; // Do not modify them
+		}
 		if(showEnterMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + enterMessage.replaceAll("\\{name\\}", name));
 			Notification.sendNotification(NotificationType.REGION_ENTER, player, name);

@@ -16,6 +16,4 @@ public class Selection {
 		this.maximum = worldEditSelection.getMaximumPoint();
 		this.minimum = worldEditSelection.getMinimumPoint();
 	}
-
-	// TODO: Add MobArena constructor
 }
