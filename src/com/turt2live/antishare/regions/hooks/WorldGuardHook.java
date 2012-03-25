@@ -44,7 +44,6 @@ public class WorldGuardHook implements Hook {
 					|| location.minimum.getBlockY() > region.getMaximumPoint().getBlockY()){
 				continue;
 			}else{
-				System.out.println("Plane found!");
 				return true; // All 3 planes meet, therefore regions are in contact
 			}
 		}

@@ -24,7 +24,6 @@ public class HookManager {
 
 	public boolean hasRegion(Selection location){
 		for(Hook hook : hooks){
-			System.out.println("Checking hook: " + hook.getName()); // DEBUG
 			if(hook.hasRegion(location)){
 				return true;
 			}
