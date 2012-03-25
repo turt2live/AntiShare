@@ -39,7 +39,7 @@ public class MobArenaHook implements Hook {
 		// region check in it to ensure that if the player is 
 		// in a MobArena they will not be tortured by bugs.
 		// This fixes the issue first discovered where
-		// if a player enters an ovrlapping GM Region with a
+		// if a player enters an overlapping GM Region with a
 		// MA then the GM Region would override (and ignore)
 		// the MA region without further thought. Now AS gives
 		// priority to MA before playing with the player.
