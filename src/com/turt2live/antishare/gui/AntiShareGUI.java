@@ -2,9 +2,12 @@ package com.turt2live.antishare.gui;
 
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.io.File;
 import java.util.Locale;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -16,6 +19,8 @@ public class AntiShareGUI extends JFrame {
 
 	private static final long serialVersionUID = 6205053285347200574L;
 	private JPanel contentPane;
+	private File antishare;
+	private AntiShareConfiguration config;
 
 	public static void main(String[] args){
 		EventQueue.invokeLater(new Runnable(){
@@ -40,7 +45,7 @@ public class AntiShareGUI extends JFrame {
 		setLocale(Locale.CANADA);
 		setResizable(false);
 		setTitle("AntiShare");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 704, 599);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -64,6 +69,70 @@ public class AntiShareGUI extends JFrame {
 
 		tabbedPane.setSelectedIndex(0);
 		setLocationRelativeTo(null);
+
+		antishare = new File(System.getProperty("user.dir"), "AntiShare");
+		if(!antishare.exists()){
+			JOptionPane.showMessageDialog(null, "I couldn't find your AntiShare plugin folder!\nPlease guide me to it.", "Cannot Find Folder", JOptionPane.ERROR_MESSAGE);
+			boolean valid = false;
+			while (!valid){
+				JFileChooser open = new JFileChooser();
+				open.setApproveButtonText("Open Folder");
+				open.setDialogTitle("Find AntiShare Plugin Folder");
+				open.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				open.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int result = open.showOpenDialog(null);
+				if(result == JFileChooser.CANCEL_OPTION){
+					int exit = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION);
+					if(exit == JOptionPane.YES_OPTION){
+						System.exit(0);
+					}
+				}else{
+					antishare = open.getSelectedFile();
+					config = new AntiShareConfiguration(new File(antishare, "config.yml"));
+					if(!config.isValid()){
+						JOptionPane.showMessageDialog(null, "The selected folder has an invalid configuration :(\nPlease guide me to the valid folder.", "Invalid Folder", JOptionPane.ERROR_MESSAGE);
+					}else{
+						valid = true;
+					}
+				}
+			}
+		}else{
+			config = new AntiShareConfiguration(new File(antishare, "config.yml"));
+			if(!config.isValid()){
+				JOptionPane.showMessageDialog(null, "I found your AntiShare directory, but it has an invalid configuration :(\nPlease guide me to the valid folder.", "Invalid Folder", JOptionPane.ERROR_MESSAGE);
+				boolean valid = false;
+				while (!valid){
+					JFileChooser open = new JFileChooser();
+					open.setApproveButtonText("Open Folder");
+					open.setDialogTitle("Find AntiShare Plugin Folder");
+					open.setCurrentDirectory(new File(System.getProperty("user.dir")));
+					open.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					int result = open.showOpenDialog(null);
+					if(result == JFileChooser.CANCEL_OPTION){
+						int exit = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION);
+						if(exit == JOptionPane.YES_OPTION){
+							System.exit(0);
+						}
+					}else{
+						antishare = open.getSelectedFile();
+						config = new AntiShareConfiguration(new File(antishare, "config.yml"));
+						if(!config.isValid()){
+							JOptionPane.showMessageDialog(null, "The selected folder has an invalid configuration :(\nPlease guide me to the valid folder.", "Invalid Folder", JOptionPane.ERROR_MESSAGE);
+						}else{
+							valid = true;
+						}
+					}
+				}
+			}
+		}
+		addWindowListener(new FrameActions());
 	}
 
+	public File getPluginFolder(){
+		return antishare;
+	}
+
+	public AntiShareConfiguration getConfig(){
+		return config;
+	}
 }

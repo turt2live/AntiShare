@@ -7,7 +7,6 @@ import java.net.URL;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -15,14 +14,16 @@ import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 
+import com.turt2live.antishare.gui.AntiShareGUI;
+
 public class LogPanel extends JPanel {
 
 	private static final long serialVersionUID = -2029283584832117230L;
 	public JLabel text;
 	public JList list;
-	public JFrame frame;
+	public AntiShareGUI frame;
 
-	public LogPanel(JFrame frame){
+	public LogPanel(AntiShareGUI frame){
 		this.frame = frame;
 		JScrollPane scrollPane = new JScrollPane();
 		JButton btnOpenFile = new JButton("Open File");

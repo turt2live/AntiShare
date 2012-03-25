@@ -8,6 +8,10 @@
     <property
         name="src"
         location="src" />
+    
+    <property
+        name="yaml"
+        location="YAML" />
 
     <property
         name="build"
@@ -60,6 +64,12 @@ Compiling
             destdir="${build}"
             includeantruntime="false"
             srcdir="${src}" />
+
+        <javac
+            classpathref="classpath"
+            destdir="${build}"
+            includeantruntime="false"
+            srcdir="${yaml}" />
     </target>
 
     <target
@@ -74,6 +84,10 @@ Building
 
             <fileset
                 dir="${src}"
+                excludes="**/*.java,**/*.form"
+                includes="**" />
+            <fileset
+                dir="${yaml}"
                 excludes="**/*.java,**/*.form"
                 includes="**" />
         </copy>
@@ -95,7 +109,7 @@ Building
 
                 <attribute
                     name="Main-Class"
-                    value="com.turt2live.antishare.log.LogAnalyzer" />
+                    value="com.turt2live.antishare.gui.AntiShareGUI" />
             </manifest>
         </jar>
 
@@ -104,6 +118,10 @@ Building
             <fileset
                 dir="${src}"
                 excludes="**/*.form"
+                includes="**" />
+            <fileset
+                dir="${yaml}"
+                excludes="**/*.java,**/*.form"
                 includes="**" />
         </copy>
 
@@ -116,7 +134,7 @@ Building
 
                 <attribute
                     name="Main-Class"
-                    value="com.turt2live.antishare.log.LogAnalyzer" />
+                    value="com.turt2live.antishare.gui.AntiShareGUI" />
             </manifest>
         </jar>
     </target>
