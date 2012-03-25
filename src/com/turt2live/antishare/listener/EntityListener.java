@@ -1,8 +1,6 @@
 package com.turt2live.antishare.listener;
 
-import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -91,30 +89,16 @@ public class EntityListener implements Listener {
 		}
 	}
 
-	// TODO: Rewrite
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityTarget(EntityTargetEvent event){
 		if(!(event.getTarget() instanceof Player)){
 			return;
 		}
 		try{
-			Entity targetEntity = event.getTarget();
-			if(event.getEntity() instanceof Monster
-					&& targetEntity != null
-					&& targetEntity instanceof Player){
-				Player player = (Player) targetEntity;
-				if(plugin.config().onlyIfCreative(player)){
-					if(player.getGameMode().equals(GameMode.CREATIVE)){
-						if(!plugin.getPermissions().has(player, "AntiShare.allow.mobpvp", player.getWorld())
-								&& !plugin.config().getBoolean("other.pvp-mobs", player.getWorld())){
-							event.setCancelled(true);
-						}
-					}
-				}else{
-					if(!plugin.getPermissions().has(player, "AntiShare.allow.mobpvp", player.getWorld())
-							&& !plugin.config().getBoolean("other.pvp-mobs", player.getWorld())){
-						event.setCancelled(true);
-					}
+			Player player = (Player) event.getTarget();
+			if(!plugin.config().getBoolean("other.pvp-mobs", player.getWorld())){
+				if(plugin.isBlocked(player, "AntiShare.allow.mobpvp", player.getWorld())){
+					event.setCancelled(true);
 				}
 			}
 		}catch(Exception e){
