@@ -34,14 +34,14 @@ public class WorldGuardHook implements Hook {
 			ProtectedRegion region = getWorldGuard().getRegionManager(location.maximum.getWorld()).getRegion(key);
 			// Thanks to Sleaker for letting me use this code :D
 			// Modified from: https://github.com/MilkBowl/LocalShops/blob/master/src/net/milkbowl/localshops/ShopManager.java#L216
-			if(location.maximum.getBlockX() > region.getMinimumPoint().getBlockX()
-					|| location.minimum.getBlockX() < region.getMaximumPoint().getBlockX()){
+			if(location.maximum.getBlockX() < region.getMinimumPoint().getBlockX()
+					|| location.minimum.getBlockX() > region.getMaximumPoint().getBlockX()){
 				continue;
-			}else if(location.maximum.getBlockY() > region.getMinimumPoint().getBlockY()
-					|| location.minimum.getBlockY() < region.getMaximumPoint().getBlockY()){
+			}else if(location.maximum.getBlockY() < region.getMinimumPoint().getBlockY()
+					|| location.minimum.getBlockY() > region.getMaximumPoint().getBlockY()){
 				continue;
-			}else if(location.maximum.getBlockZ() > region.getMinimumPoint().getBlockZ()
-					|| location.minimum.getBlockZ() < region.getMaximumPoint().getBlockZ()){
+			}else if(location.maximum.getBlockZ() < region.getMinimumPoint().getBlockZ()
+					|| location.minimum.getBlockZ() > region.getMaximumPoint().getBlockZ()){
 				continue;
 			}else{
 				System.out.println("Plane found!");
