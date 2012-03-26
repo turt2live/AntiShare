@@ -41,6 +41,8 @@ public class UtilsAPI extends APIBase {
 	 * 
 	 * @return the latest release version
 	 */
+	// Borrowed from Vault, thanks Sleaker!
+	// https://github.com/MilkBowl/Vault/blob/master/src/net/milkbowl/vault/Vault.java#L520
 	public String getNewVersion(){
 		String pluginUrlString = "http://dev.bukkit.org/server-mods/antishare/files.rss";
 		try{
@@ -65,8 +67,6 @@ public class UtilsAPI extends APIBase {
 	 * 
 	 * @return the latest release version as a double
 	 */
-	// Borrowed from Vault, thanks Sleaker!
-	// https://github.com/MilkBowl/Vault/blob/master/src/net/milkbowl/vault/Vault.java#L520
 	public double getNewVersionAsNumber(){
 		return Double.valueOf(getNewVersion());
 	}
