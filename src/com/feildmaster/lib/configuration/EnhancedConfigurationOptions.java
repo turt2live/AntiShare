@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.YamlConfigurationOptions;
  * @author Feildmaster
  */
 public class EnhancedConfigurationOptions extends YamlConfigurationOptions {
-	//    private boolean lowercaseKeys = false;
+	//    private boolean lowercaseKeys = false; 
 
 	public EnhancedConfigurationOptions(EnhancedConfiguration configuration){
 		super(configuration);
