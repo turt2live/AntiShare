@@ -50,4 +50,25 @@ public class Utils {
 		return true;
 	}
 
+	/**
+	 * Counts the occurrence of a sequence in a String
+	 * 
+	 * @param sequence the sequence to search for
+	 * @param line the line to search in
+	 * @return the number of occurrences
+	 */
+	public static int count(String sequence, String line){
+		int count = 0;
+		int index = 0;
+		while (index < line.length()){
+			if(line.substring(index).contains(sequence)){
+				count++;
+				index += sequence.length();
+			}else{
+				break; // The rest of the string does not have it, why bother checking?
+			}
+		}
+		return count;
+	}
+
 }
