@@ -8,10 +8,12 @@
     <property
         name="src"
         location="src" />
-    
-    <!-- <property
+
+    <!--
+         <property
         name="yaml"
-        location="YAML" /> -->
+        location="YAML" />
+    -->
 
     <property
         name="build"
@@ -39,7 +41,7 @@
     <target name="clean" >
 
         <echo>
-Cleaning 
+Cleaning 
         </echo>
 
         <delete dir="${build}" />
@@ -56,7 +58,7 @@ Cleaning
         depends="clean" >
 
         <echo>
-Compiling 
+Compiling 
         </echo>
 
         <javac
@@ -65,11 +67,13 @@ Compiling
             includeantruntime="false"
             srcdir="${src}" />
 
-        <javac
+        <!--
+            <javac
             classpathref="classpath"
             destdir="${build}"
             includeantruntime="false"
             srcdir="${yaml}" />
+        -->
     </target>
 
     <target
@@ -77,7 +81,7 @@ Compiling
         depends="compile" >
 
         <echo>
-Building
+Building
         </echo>
 
         <copy todir="${build}" >
@@ -86,10 +90,12 @@ Building
                 dir="${src}"
                 excludes="**/*.java,**/*.form"
                 includes="**" />
-          <!-- <fileset
+            <!--
+               <fileset
                 dir="${yaml}"
                 excludes="**/*.java,**/*.form"
-                includes="**" /> -->
+                includes="**" />
+            -->
         </copy>
 
         <copy todir="${build}/resources" >
@@ -119,10 +125,12 @@ Building
                 dir="${src}"
                 excludes="**/*.form"
                 includes="**" />
-          <!-- <fileset
+            <!--
+               <fileset
                 dir="${yaml}"
                 excludes="**/*.form"
-                includes="**" /> -->
+                includes="**" />
+            -->
         </copy>
 
         <jar
