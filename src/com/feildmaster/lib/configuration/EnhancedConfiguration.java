@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -278,63 +279,36 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 
 		EnhancedMemorySection section = (EnhancedMemorySection) super.getConfigurationSection(path);
 		if(section == null){
-			section = createSection(path);
+			return createSection(path);
 		}
-
 		return section;
 	}
 
 	@Override
 	public EnhancedMemorySection createSection(String path){
-		if(path == null){
-			throw new IllegalArgumentException("Path cannot be null");
-		}else if(path.length() == 0){
-			throw new IllegalArgumentException("Cannot create section at empty path");
-		}
+		Validate.notNull(path, "Path cannot be null");
+		Validate.isTrue(path.length() != 0, "Cannot create section at empty path");
 
-		String[] split = path.split(Pattern.quote(Character.toString(getRoot().options().pathSeparator())));
+		final char seperator = getRoot().options().pathSeparator();
+		// i1 is the leading (higher) index
+		// i2 is the trailing (lower) index
+		int i1 = -1, i2;
 		EnhancedMemorySection section = null;
-
-		for(int i = 0; i < split.length - 1; i++){
-			EnhancedMemorySection last = section;
-			if(section != null){
-				section = getConfigurationSection(split[i]);
-			}
-
-			if(section == null){
-				if(last == null){
-					section = createLiteralSection(split[i]);
-				}else{
-					section = last.createLiteralSection(split[i]);
-				}
+		while ((i1 = path.indexOf(seperator, i2 = i1 + 1)) != -1){
+			String node = path.substring(i2, i1);
+			EnhancedMemorySection subSection = section == null ? getConfigurationSection(node) : section.getConfigurationSection(node);
+			if(subSection == null){
+				section = section.createLiteralSection(node);
+			}else{
+				section = subSection;
 			}
 		}
-		//        while (path.length() > 0 && split.length() > 0) {
-		//            if (!split.equals(path)) {
-		//                path = path.substring(path.length()+1);
-		//            } else {
-		//                path = "";
-		//            }
-		//
-		//            EnhancedMemorySection last = section;
-		//            if (section != null) {
-		//                section = section.getConfigurationSection(split);
-		//            }
-		//
-		//            if (section == null) {
-		//                if (last == null) {
-		//                    section = createLiteralSection(split);
-		//                } else {
-		//                    section = last.createLiteralSection(split);
-		//                }
-		//            }
-		//        }
-		String key = split[split.length - 1];
+
+		String key = path.substring(i2);
 		if(section == null){
 			return createLiteralSection(key);
-		}else{
-			return section.createLiteralSection(key);
 		}
+		return section.createLiteralSection(key);
 	}
 
 	public EnhancedMemorySection createLiteralSection(String key){
