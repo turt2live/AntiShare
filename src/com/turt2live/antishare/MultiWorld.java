@@ -27,6 +27,9 @@ public class MultiWorld {
 
 	// Returns allowance of worldSwap
 	public static boolean worldSwap(AntiShare plugin, Player player, Location from, Location to){
+		if(from.getWorld().equals(to.getWorld())){
+			return true;
+		}
 		return worldSwap(plugin, player, from.getWorld(), to.getWorld());
 	}
 

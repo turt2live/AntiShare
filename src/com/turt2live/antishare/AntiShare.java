@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.SQL.SQLManager;
+import com.turt2live.antishare.api.ASAPI;
 import com.turt2live.antishare.debug.Bug;
 import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.listener.ASListener;
@@ -49,10 +50,13 @@ public class AntiShare extends PluginWrapper {
 	private Debugger debugger;
 	private TimedSave timedSave;
 	private PermissionsHandler perms;
+	private UpdateChecker updates;
+	public ASAPI api;
 
 	@Override
 	public void onEnable(){
 		try{
+			api = new ASAPI();
 			debugger = new Debugger();
 			if(DEBUG_MODE){
 				getServer().getPluginManager().registerEvents(debugger, this);
@@ -91,6 +95,7 @@ public class AntiShare extends PluginWrapper {
 				int saveTime = (getConfig().getInt("settings.save-interval") * 60) * 20;
 				timedSave = new TimedSave(this, saveTime);
 			}
+			updates = new UpdateChecker(this);
 			log.info("Enabled! (turt2live)");
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), null);
@@ -105,6 +110,7 @@ public class AntiShare extends PluginWrapper {
 			if(timedSave != null){
 				timedSave.cancel();
 			}
+			updates.cancel();
 			log.info("Saving virtual storage to disk/SQL");
 			storage.saveToDisk();
 			regions.saveStatusToDisk();
