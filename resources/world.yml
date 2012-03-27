@@ -40,6 +40,7 @@ hazards:
   allow_flint: global
   allow_tnt: global
   tnt_explosions: global
+  region_items: global
 other:
   only_if_creative: global
   inventory_swap: global

@@ -30,6 +30,7 @@ public enum LogEntryType{
 	SEVERE_DEBUGGER_BUG_MESSAGE("[<timestamp>] [AntiShare] [SEVERE] [<version>] [Debugger] Message: <message>"),
 	SEVERE_DEBUGGER_BUG_WORLD("[<timestamp>] [AntiShare] [SEVERE] [<version>] [Debugger] World: <world>"),
 	SEVERE_BUG_EXCEPTION_NULL("[<timestamp>] [AntiShare] [SEVERE] Critical: Exception is null."),
+	SEVERE_RELOAD("[<timestamp>] [AntiShare] [SEVERE] Reloads may break AntiShare!"),
 
 	// Warning
 	WARNING_WORLD_EDIT_MISSING("[<timestamp>] [AntiShare] [WARNING] [<version>] WorldEdit is not installed!"),
@@ -106,6 +107,8 @@ public enum LogEntryType{
 			return LogEntryType.SEVERE_CONFLICT_OTHER;
 		}else if(line.contains("Cannot handle region information:")){
 			return LogEntryType.SEVERE_REGION_HANDLE_INFORMATION;
+		}else if(line.contains("Reloads may break AntiShare!")){
+			return LogEntryType.SEVERE_RELOAD;
 		}else if(line.contains("left the region")
 				|| line.contains("entered the region")
 				|| line.contains("changed to gamemode")){

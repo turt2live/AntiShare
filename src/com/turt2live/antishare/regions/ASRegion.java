@@ -224,17 +224,14 @@ public class ASRegion {
 	}
 
 	public void alertEntry(Player player){
-		if(plugin.getRegionHandler().getHooks().inRegion(player)){
-			return; // Do not modify them
-		}
 		if(showEnterMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + enterMessage.replaceAll("\\{name\\}", name));
-			Notification.sendNotification(NotificationType.REGION_ENTER, player, name);
-			if(!plugin.getPermissions().has(player, "AntiShare.roam", world) && this.inventory != null){
-				VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
-				inventory.setTemporaryInventory(this.inventory);
-				inventory.loadToTemporary();
-			}
+		}
+		Notification.sendNotification(NotificationType.REGION_ENTER, player, name);
+		if(!plugin.getPermissions().has(player, "AntiShare.roam", world) && this.inventory != null){
+			VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
+			inventory.setTemporaryInventory(this.inventory);
+			inventory.loadToTemporary();
 		}
 	}
 
@@ -245,27 +242,22 @@ public class ASRegion {
 	 * @param handler ASRegion Handler
 	 */
 	public void alertEntry(Player player, RegionHandler handler){
-		if(handler.getHooks().inRegion(player)){
-			return; // Do not modify them
-		}
-		if(showEnterMessage){
-			if(!plugin.getPermissions().has(player, "AntiShare.roam", world) && this.inventory != null){
-				VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
-				inventory.setTemporaryInventory(this.inventory);
-				inventory.loadToTemporary();
-			}
+		if(!plugin.getPermissions().has(player, "AntiShare.roam", world) && this.inventory != null){
+			VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
+			inventory.setTemporaryInventory(this.inventory);
+			inventory.loadToTemporary();
 		}
 	}
 
 	public void alertExit(Player player){
 		if(showExitMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name));
-			Notification.sendNotification(NotificationType.REGION_EXIT, player, name);
-			if(!plugin.getPermissions().has(player, "AntiShare.roam", world)){
-				VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
-				if(inventory.isTemp()){
-					inventory.unloadFromTemporary();
-				}
+		}
+		Notification.sendNotification(NotificationType.REGION_EXIT, player, name);
+		if(!plugin.getPermissions().has(player, "AntiShare.roam", world)){
+			VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
+			if(inventory.isTemp()){
+				inventory.unloadFromTemporary();
 			}
 		}
 	}

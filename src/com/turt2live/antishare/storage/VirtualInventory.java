@@ -37,6 +37,7 @@ public class VirtualInventory {
 		this.world = world;
 		this.plugin = plugin;
 		load();
+		previous = getInventory(player.getGameMode());
 	}
 
 	public HashMap<Integer, ItemStack> getCreativeInventory(){
@@ -60,8 +61,7 @@ public class VirtualInventory {
 		for(Integer slot : current.keySet()){
 			if(current.get(slot) != null && proper.get(slot) != null){
 				if(!current.get(slot).equals(proper.get(slot))){
-					// Switch from the opposing current GM to the current GM
-					switchInventories((player.getGameMode().equals(GameMode.SURVIVAL) ? GameMode.CREATIVE : GameMode.SURVIVAL), player.getGameMode());
+					loadInventory(player.getGameMode());
 					return;
 				}
 			}
@@ -143,11 +143,6 @@ public class VirtualInventory {
 		player.updateInventory();
 	}
 
-	public void reload(){
-		saveInventoryToDisk();
-		load();
-	}
-
 	public void saveInventory(GameMode gamemode){
 		HashMap<Integer, ItemStack> newInventory = new HashMap<Integer, ItemStack>();
 		for(int slot = 0; slot < player.getInventory().getSize(); slot++){
@@ -162,10 +157,10 @@ public class VirtualInventory {
 	}
 
 	public void saveInventoryToDisk(){
-		if(isTemp()){
-			unloadFromTemporary();
+		if(!isTemp()){
+			//unloadFromTemporary();
+			saveInventory(player.getGameMode());
 		}
-		saveInventory(player.getGameMode());
 		saveToDisk(GameMode.CREATIVE, getCreativeInventory());
 		saveToDisk(GameMode.SURVIVAL, getSurvivalInventory());
 	}

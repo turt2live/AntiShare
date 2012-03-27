@@ -306,9 +306,9 @@ public class VirtualPerWorldStorage {
 		for(Player player : Bukkit.getOnlinePlayers()){
 			inventories.put(player, new VirtualInventory(player, world, plugin));
 		}
-		for(Player player : inventories.keySet()){
-			inventories.get(player).reload();
-		}
+		//for(Player player : inventories.keySet()){
+		//	inventories.get(player).reload();
+		//}
 		/*## GameMode Regions ##*/
 		Plugin p = plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 		if(p != null){

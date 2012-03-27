@@ -15,7 +15,9 @@ import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.listener.ASListener;
 import com.turt2live.antishare.log.ASLog;
 import com.turt2live.antishare.permissions.PermissionsHandler;
+import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.RegionHandler;
+import com.turt2live.antishare.storage.VirtualInventory;
 import com.turt2live.antishare.storage.VirtualStorage;
 
 public class AntiShare extends PluginWrapper {
@@ -23,8 +25,6 @@ public class AntiShare extends PluginWrapper {
 	/* TODO: Wait until an API solution is available
 	 *  - TNT Creative Explosions
 	 *  	- Refs in plugin.yml, config.yml, world.yml, PermissionsMenu.java, and OtherEditor.java have been removed
-	 * - Throw items in region 
-	 * 		- Refs in plugin.yml, config.yml, world.yml, OtherEditor.java, and MessageEditor.java have been removed
 	 *  
 	 *  TODO: Fix these known bugs:
 	 *  - TNT Related (waiting on PR to be accepted)
@@ -32,6 +32,7 @@ public class AntiShare extends PluginWrapper {
 	 *  Not officially a "todo", just a potential optimization:
 	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211) [Hackish code]
 	 *  - Inventory mirror creative-glitch (BUKKIT-1211) [Hackish code]
+	 *  - Reload while in region overrides inventory [Has a 95% chance of breaking on /reload]
 	 *  
 	 *  NOTES:
 	 *  - Leaky:
@@ -94,6 +95,16 @@ public class AntiShare extends PluginWrapper {
 				new TimedSave(this, saveTime);
 			}
 			new UpdateChecker(this);
+			// Check player regions
+			for(Player player : Bukkit.getOnlinePlayers()){
+				if(regions.isRegion(player.getLocation())){
+					ASRegion region = regions.getRegion(player.getLocation());
+					region.alertEntry(player, regions);
+				}else{
+					VirtualInventory inventory = storage.getInventoryManager(player, player.getWorld());
+					inventory.makeMatch();
+				}
+			}
 			log.info("Enabled! (turt2live)");
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), null);

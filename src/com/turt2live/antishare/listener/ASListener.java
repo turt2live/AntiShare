@@ -17,6 +17,7 @@ public class ASListener implements Listener {
 		p.getServer().getPluginManager().registerEvents(new EntityListener(plugin), plugin);
 		p.getServer().getPluginManager().registerEvents(new BlockListener(plugin), plugin);
 		p.getServer().getPluginManager().registerEvents(new HazardListener(plugin), plugin);
+		p.getServer().getPluginManager().registerEvents(new ServerListener(plugin), plugin);
 	}
 
 	@EventHandler

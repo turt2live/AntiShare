@@ -25,22 +25,34 @@ public class Conflicts {
 	}
 
 	private void showInventoryConflict(String name){
+		if(plugin.getConfig().getBoolean("settings.ignore-conflict-warning")){
+			return;
+		}
 		plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "[CONFLICT] Inventory Manager Conflict: " + name);
 		plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "[CONFLICT] AntiShare will not deal with inventories because of the conflict");
 	}
 
 	private void showCreativeConflict(String name){
+		if(plugin.getConfig().getBoolean("settings.ignore-conflict-warning")){
+			return;
+		}
 		plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "[CONFLICT] Creative Mode Manager Conflict: " + name);
 		plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "[CONFLICT] AntiShare will disable itself because of the conflict");
 		plugin.getServer().getPluginManager().disablePlugin(plugin);
 	}
 
 	private void showWorldManagerConflict(String name){
+		if(plugin.getConfig().getBoolean("settings.ignore-conflict-warning")){
+			return;
+		}
 		plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "[CONFLICT] World Manager Conflict: " + name);
 		plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "[CONFLICT] AntiShare will not deal with allowance of world transfers because of the conflict");
 	}
 
 	private void showOtherConflict(String name){
+		if(plugin.getConfig().getBoolean("settings.ignore-conflict-warning")){
+			return;
+		}
 		plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "[CONFLICT] Other Conflict: " + name);
 		plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "[CONFLICT] AntiShare won't do anything, but there may be problems because of the conflict");
 	}

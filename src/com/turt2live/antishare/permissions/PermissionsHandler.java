@@ -74,7 +74,7 @@ public class PermissionsHandler {
 
 		public boolean has(OfflinePlayer player, String node, World world){
 			try{
-				return perms.has(world, player.getName(), node);
+				return perms.playerHas(world, player.getName(), node);
 			}catch(UnsupportedOperationException e){
 				return player.isOp();
 			}

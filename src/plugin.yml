@@ -78,6 +78,7 @@ permissions:
             AntiShare.allow.firecharge: true
             AntiShare.allow.tnt: true
             AntiShare.allow.explosions: true
+            AntiShare.allow.regionitems: true
     AntiShare.allow.place:
         description: allow place of defined blocks
         default: op
@@ -131,6 +132,9 @@ permissions:
         default: op
     AntiShare.allow.explosions:
         description: allow tnt placed by this player to explode without issue
+        default: op
+    AntiShare.allow.regionitems:
+        description: allow throwing/picking up of items into/from regions
         default: op
     AntiShare.onlyIfCreative:
         description: only block actions if in creative

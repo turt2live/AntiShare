@@ -18,7 +18,7 @@ public class HazardMenu extends ASMenu {
 
 	public HazardMenu(){
 		super("allow eggs", "allow exp bottle", "allow bedrock", "allow tnt", "allow fire charge",
-				"allow fire", "allow buckets", "tnt explosions");
+				"allow fire", "allow buckets", "tnt explosions", "region items");
 	}
 
 	@Override
@@ -32,6 +32,7 @@ public class HazardMenu extends ASMenu {
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "allow fire <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow fire/flint & tinder?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "allow buckets <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow buckets?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tnt explosions <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow TNT to explode?");
+		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "region items <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "F to disallow pickup/throw items into regions");
 		ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "<t/f> means you have to enter true or false!");
 	}
 
@@ -110,6 +111,14 @@ public class HazardMenu extends ASMenu {
 			}else{
 				plugin.getConfig().set("hazards.tnt_explosions", ASUtils.getValueOf(value));
 			}
+		}else if(input.startsWith("region items")){
+			String value = input.replace("region items", "").trim();
+			if(ASUtils.getValueOf(value) == null){
+				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
+				return new HazardMenu();
+			}else{
+				plugin.getConfig().set("hazards.region_items", ASUtils.getValueOf(value));
+			}
 		}
 		plugin.getConfig().save();
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
@@ -135,6 +144,8 @@ public class HazardMenu extends ASMenu {
 			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_buckets"));
 		}else if(input.startsWith("tnt explosions")){
 			value = String.valueOf(plugin.getConfig().getBoolean("hazards.tnt_explosions"));
+		}else if(input.startsWith("region items")){
+			value = String.valueOf(plugin.getConfig().getBoolean("hazards.region_items"));
 		}
 		ASUtils.sendToConversable(target, ChatColor.GOLD + input + ChatColor.YELLOW + " is currently set to " + ChatColor.GOLD + value);
 	}

@@ -241,19 +241,32 @@ public class HazardListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onItemThrow(PlayerDropItemEvent event){
-		// TODO: Permissions check
-		plugin.getRegionHandler().getScanner().addToTracker(event.getItemDrop(), event.getPlayer());
+		try{
+			if(plugin.config().getBoolean("hazards.region_items", event.getPlayer().getWorld())){
+				if(plugin.isBlocked(event.getPlayer(), "AntiShare.allow.regionitems", event.getPlayer().getWorld())){
+					event.getItemDrop().setPickupDelay(30); // 30 ticks, even though the scanner loops every 20
+					plugin.getRegionHandler().getScanner().addToTracker(event.getItemDrop(), event.getPlayer());
+				}
+			}
+		}catch(Exception e){
+			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
+			Debugger.sendBug(bug);
+		}
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onItemPickup(PlayerPickupItemEvent event){
-		// TODO: Permissions check
-		if(plugin.getRegionHandler().getScanner().isInTracker(event.getItem())){
-			if(plugin.getRegionHandler().getScanner().isIllegal(event.getItem())){
-				event.setCancelled(true);
-				ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + "Nope!");
-				// Don't move the item as the scanner will do that for us
+		try{
+			if(!plugin.config().getBoolean("hazards.region_items", event.getPlayer().getWorld())){
+				return;
 			}
+			if(plugin.getRegionHandler().getScanner().isIllegal(event.getItem(), event.getPlayer())){
+				event.setCancelled(true);
+				ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + "You can't pick that up!");
+			}
+		}catch(Exception e){
+			Bug bug = new Bug(e, e.getMessage(), this.getClass(), event.getPlayer());
+			Debugger.sendBug(bug);
 		}
 	}
 

@@ -37,6 +37,7 @@
 #   'allow_tnt' - Allows placement of TNT
 #   'tnt_explosions' - Global switch for allowing TNT to explode if the TNT placed was by a player who is not allowed to get drops
 #                      Set this to FALSE if you want explosions to be tracked and monitored (see "TNT Explosions" towards the end of this header)
+#   'region_items' - Would you like to deny people being able to pickup/throw items into regions not of their own? (false = deny, true = allow)
 # 
 # Other:
 #   'only_if_creative' - Auto-decline if they are in creative, permissions still apply.
@@ -63,6 +64,7 @@
 #   'save-interval' - This is the interval, in minutes, you want AntiShare to save it's data to disk (default is 30 minutes)
 #   'send-use-info' - Set to false to stop sending usage stats to turt2live. (What stats are sent is explained later)
 #   'debug-override' - If true, you override the hardcoded debug value with "true". This is strongly recommended to stay as "false"
+#   'ignore-conflict-warning' - If true, AntiShare will stop spamming that there is a conflict
 # SQL:
 #   'use' - If this is false, flat-file storage will be used instead
 #   'host' - The SQL host, usually localhost
@@ -232,6 +234,7 @@ hazards:
   allow_flint: false
   allow_tnt: false
   tnt_explosions: false
+  region_items: false
 other:
   only_if_creative: true
   inventory_swap: true
@@ -253,6 +256,7 @@ settings:
   save-interval: 30
   send-use-info: true
   debug-override: false
+  ignore-conflict-warning: false
 notifications:
   send: true
   console: true
