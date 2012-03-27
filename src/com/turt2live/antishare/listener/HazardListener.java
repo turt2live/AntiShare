@@ -1,5 +1,6 @@
 package com.turt2live.antishare.listener;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -12,8 +13,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.ASUtils;
@@ -233,6 +236,24 @@ public class HazardListener implements Listener {
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			Debugger.sendBug(bug);
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onItemThrow(PlayerDropItemEvent event){
+		// TODO: Permissions check
+		plugin.getRegionHandler().getScanner().addToTracker(event.getItemDrop(), event.getPlayer());
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onItemPickup(PlayerPickupItemEvent event){
+		// TODO: Permissions check
+		if(plugin.getRegionHandler().getScanner().isInTracker(event.getItem())){
+			if(plugin.getRegionHandler().getScanner().isIllegal(event.getItem())){
+				event.setCancelled(true);
+				ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + "Nope!");
+				// Don't move the item as the scanner will do that for us
+			}
 		}
 	}
 

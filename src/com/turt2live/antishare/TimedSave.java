@@ -14,13 +14,7 @@ public class TimedSave {
 			}
 		}, ticks, ticks);
 		if(id == -1){
-			plugin.log.severe("["+plugin.getDescription().getVersion()+"] "+"Save thread cannot be created.");
-		}
-	}
-
-	public void cancel(){
-		if(id != -1){
-			Bukkit.getScheduler().cancelTask(id);
+			plugin.log.severe("[" + plugin.getDescription().getVersion() + "] " + "Save thread cannot be created.");
 		}
 	}
 }

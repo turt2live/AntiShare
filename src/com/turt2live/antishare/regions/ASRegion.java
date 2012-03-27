@@ -21,6 +21,8 @@ import com.turt2live.antishare.SQL.SQLManager;
 import com.turt2live.antishare.debug.Bug;
 import com.turt2live.antishare.debug.Debugger;
 import com.turt2live.antishare.enums.NotificationType;
+import com.turt2live.antishare.regions.wall.RegionWall;
+import com.turt2live.antishare.regions.wall.Wall;
 import com.turt2live.antishare.storage.VirtualInventory;
 
 public class ASRegion {
@@ -157,6 +159,68 @@ public class ASRegion {
 
 	public AntiShare getPlugin(){
 		return plugin;
+	}
+
+	public RegionWall getWallLocation(Location location){
+		Location min = region.getMinimumPoint();
+		Location max = region.getMaximumPoint();
+		Location northWall = new Location(world, (min.getX() > max.getX() ? min.getX() : max.getX()), location.getY(), location.getZ());
+		Location southWall = new Location(world, (min.getX() > max.getX() ? max.getX() : min.getX()), location.getY(), location.getZ());
+		Location eastWall = new Location(world, location.getX(), location.getY(), (min.getZ() > max.getZ() ? min.getZ() : max.getZ()));
+		Location westWall = new Location(world, location.getX(), location.getY(), (min.getZ() > max.getZ() ? max.getZ() : min.getZ()));
+		double toNorth = Math.abs(northWall.distanceSquared(location));
+		double toSouth = Math.abs(southWall.distanceSquared(location));
+		double toEast = Math.abs(eastWall.distanceSquared(location));
+		double toWest = Math.abs(westWall.distanceSquared(location));
+		if(toNorth <= toSouth && toNorth <= toEast && toNorth <= toWest){
+			return new RegionWall(Wall.NORTH, northWall);
+		}else if(toSouth <= toNorth && toSouth <= toEast && toSouth <= toWest){
+			return new RegionWall(Wall.SOUTH, southWall);
+		}else if(toEast <= toNorth && toEast <= toSouth && toEast <= toWest){
+			return new RegionWall(Wall.EAST, eastWall);
+		}else if(toWest <= toNorth && toWest <= toEast && toWest <= toSouth){
+			return new RegionWall(Wall.WEST, westWall);
+		}
+		return null;
+	}
+
+	public Location getPointOutside(Location location, int fromBorder){
+		return getWallLocation(location).add(fromBorder).getPoint();
+	}
+
+	public RegionWall getFaceLocation(Location location){
+		Location min = region.getMinimumPoint();
+		Location max = region.getMaximumPoint();
+		Location northWall = new Location(world, (min.getX() > max.getX() ? min.getX() : max.getX()), location.getY(), location.getZ());
+		Location southWall = new Location(world, (min.getX() > max.getX() ? max.getX() : min.getX()), location.getY(), location.getZ());
+		Location eastWall = new Location(world, location.getX(), location.getY(), (min.getZ() > max.getZ() ? min.getZ() : max.getZ()));
+		Location westWall = new Location(world, location.getX(), location.getY(), (min.getZ() > max.getZ() ? max.getZ() : min.getZ()));
+		Location ceil = new Location(world, location.getX(), (min.getY() > max.getY() ? min.getY() : max.getY()), location.getZ());
+		Location floor = new Location(world, location.getX(), (min.getY() > max.getY() ? max.getY() : min.getY()), location.getZ());
+		double toNorth = Math.abs(northWall.distanceSquared(location));
+		double toSouth = Math.abs(southWall.distanceSquared(location));
+		double toEast = Math.abs(eastWall.distanceSquared(location));
+		double toWest = Math.abs(westWall.distanceSquared(location));
+		double toFloor = Math.abs(floor.distanceSquared(location));
+		double toCeil = Math.abs(ceil.distanceSquared(location));
+		if(toNorth <= toSouth && toNorth <= toEast && toNorth <= toWest){
+			return new RegionWall(Wall.NORTH, northWall);
+		}else if(toSouth <= toNorth && toSouth <= toEast && toSouth <= toWest){
+			return new RegionWall(Wall.SOUTH, southWall);
+		}else if(toEast <= toNorth && toEast <= toSouth && toEast <= toWest){
+			return new RegionWall(Wall.EAST, eastWall);
+		}else if(toWest <= toNorth && toWest <= toEast && toWest <= toSouth){
+			return new RegionWall(Wall.WEST, westWall);
+		}else if(toCeil <= toNorth && toCeil <= toEast && toCeil <= toWest && toCeil <= toFloor && toCeil <= toSouth){
+			return new RegionWall(Wall.CEILING, ceil);
+		}else if(toFloor <= toNorth && toFloor <= toEast && toFloor <= toWest && toFloor <= toCeil && toFloor <= toSouth){
+			return new RegionWall(Wall.FLOOR, floor);
+		}
+		return null;
+	}
+
+	public Location getPointOutsideFace(Location location, int fromBorder){
+		return getFaceLocation(location).add(fromBorder).getPoint();
 	}
 
 	public void alertEntry(Player player){

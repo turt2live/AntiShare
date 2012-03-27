@@ -48,9 +48,7 @@ public class AntiShare extends PluginWrapper {
 	private RegionHandler regions;
 	private Conflicts conflicts;
 	private Debugger debugger;
-	private TimedSave timedSave;
 	private PermissionsHandler perms;
-	private UpdateChecker updates;
 	public ASAPI api;
 
 	@Override
@@ -93,9 +91,9 @@ public class AntiShare extends PluginWrapper {
 			getCommand("gm").setExecutor(new GameModeCommand(this));
 			if(getConfig().getInt("settings.save-interval") > 0){
 				int saveTime = (getConfig().getInt("settings.save-interval") * 60) * 20;
-				timedSave = new TimedSave(this, saveTime);
+				new TimedSave(this, saveTime);
 			}
-			updates = new UpdateChecker(this);
+			new UpdateChecker(this);
 			log.info("Enabled! (turt2live)");
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), null);
@@ -107,10 +105,7 @@ public class AntiShare extends PluginWrapper {
 	public void onDisable(){
 		try{
 			log.logTechnical("Shutting down...");
-			if(timedSave != null){
-				timedSave.cancel();
-			}
-			updates.cancel();
+			getServer().getScheduler().cancelTasks(this);
 			log.info("Saving virtual storage to disk/SQL");
 			storage.saveToDisk();
 			regions.saveStatusToDisk();

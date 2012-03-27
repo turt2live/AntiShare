@@ -34,6 +34,7 @@ public class RegionHandler {
 	private HookManager hooks;
 	private RegionManager manager;
 	private HashMap<String, RegionPlayer> player_information = new HashMap<String, RegionPlayer>();
+	private RegionScanner scanner;
 
 	public RegionHandler(AntiShare plugin){
 		this.plugin = plugin;
@@ -46,6 +47,7 @@ public class RegionHandler {
 		hooks = new HookManager(plugin);
 		hasHook = hooks.hasHook();
 		manager = new RegionManager(this);
+		scanner = new RegionScanner(this, plugin);
 		load();
 		// Check player regions
 		for(Player player : Bukkit.getOnlinePlayers()){
@@ -54,6 +56,10 @@ public class RegionHandler {
 				region.alertEntry(player, this);
 			}
 		}
+	}
+
+	public RegionScanner getScanner(){
+		return scanner;
 	}
 
 	public void newRegion(CommandSender sender, String gamemodeName, String name){

@@ -84,26 +84,6 @@ public class PlayerListener implements Listener {
 			if(event.isCancelled()){
 				return;
 			}
-			// TODO Waiting on less resource intensive solution
-			//		if(plugin.config().getBoolean("other.cannot_throw_into_regions", player.getWorld())){
-			//			Item item = event.getItemDrop();
-			//			ASRegion region = plugin.getRegionHandler().getRegion(item.getLocation());
-			//			if(!plugin.getPermissions().has(player, "AntiShare.allow.throwIntoRegions")){
-			//				if(plugin.getRegionHandler().isRegion(item.getLocation())){
-			//					event.setCancelled(true);
-			//					Notification.sendNotification(NotificationType.ILLEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
-			//					ASUtils.sendToPlayer(player, plugin.config().getString("messages.throwItemIntoRegion", player.getWorld()));
-			//				}else{
-			//					if(region != null){
-			//						Notification.sendNotification(NotificationType.LEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
-			//					}
-			//				}
-			//			}else{
-			//				if(region != null){
-			//					Notification.sendNotification(NotificationType.LEGAL_ITEM_THROW_INTO_REGION, player, region.getName());
-			//				}
-			//			}
-			//		}
 		}catch(Exception e){
 			Bug bug = new Bug(e, e.getMessage(), this.getClass(), player);
 			Debugger.sendBug(bug);

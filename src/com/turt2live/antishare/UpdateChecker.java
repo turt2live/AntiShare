@@ -1,7 +1,5 @@
 package com.turt2live.antishare;
 
-import org.bukkit.Bukkit;
-
 public class UpdateChecker {
 
 	/*
@@ -10,10 +8,8 @@ public class UpdateChecker {
 	 * URL: https://github.com/MilkBowl/Vault/blob/master/src/net/milkbowl/vault/Vault.java#L118
 	 */
 
-	private int id = -1;
-
 	public UpdateChecker(final AntiShare plugin){
-		id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable(){
+		plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				try{
@@ -26,12 +22,6 @@ public class UpdateChecker {
 				}catch(Exception e){} // Don't handle
 			}
 		}, 0, 432000); // 30 minutes
-	}
-
-	public void cancel(){
-		if(id != -1){
-			Bukkit.getScheduler().cancelTask(id);
-		}
 	}
 
 }
