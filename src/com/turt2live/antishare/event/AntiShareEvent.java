@@ -16,7 +16,7 @@ public class AntiShareEvent extends Event {
 	 * Creates a new AntiShareEvent
 	 * 
 	 * @param type the Event Type
-	 * @param affectedBlock the involved block
+	 * @param variable the variable involved
 	 * @param playerInvolved the player involved
 	 */
 	public AntiShareEvent(NotificationType type, String variable, Player playerInvolved){

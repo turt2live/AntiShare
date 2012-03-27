@@ -47,7 +47,7 @@ public class ServerListener implements Listener {
 
 	private void warn(CommandSender sender){
 		plugin.getLogger().severe("****************************");
-		plugin.log.severe("Reloads may break AntiShare!");
+		plugin.log.severe        ("Reloads may break AntiShare!");
 		plugin.getLogger().severe("****************************");
 		if(sender instanceof Player){
 			ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + (ChatColor.BOLD + "Reloads may break AntiShare!"));
