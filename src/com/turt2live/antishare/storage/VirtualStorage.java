@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -92,6 +93,22 @@ public class VirtualStorage implements Listener {
 
 	public void removeInventoryChest(Block block, World world){
 		worlds.get(world).removeInventoryChest(block);
+	}
+
+	public void setTntNoExplode(Block tnt, World world){
+		worlds.get(world).setTntNoExplode(tnt);
+	}
+
+	public boolean getTntNoDrops(TNTPrimed tnt, World world){
+		return worlds.get(world).getTntNoDrops(tnt);
+	}
+
+	public boolean getTntNoDrops(Block tnt, World world){
+		return worlds.get(world).getTntNoDrops(tnt);
+	}
+
+	public boolean isTntTracked(Block tnt, World world){
+		return worlds.get(world).isTntTracked(tnt);
 	}
 
 	private void freePlayer(Player player){

@@ -32,8 +32,6 @@ public class NotificationEditor extends ASMenu {
 				"gamemode change", "region enter", "region exit");
 	}
 
-	// TODO: Complete implementation of fire charge, bucket, fire, and TNT notifications
-
 	@Override
 	public void displayMenu(Conversable target){
 		ASUtils.sendToConversable(target, ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "Notifications" + ChatColor.DARK_GREEN + " ]=======");

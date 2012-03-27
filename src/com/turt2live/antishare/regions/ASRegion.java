@@ -174,6 +174,25 @@ public class ASRegion {
 		}
 	}
 
+	/**
+	 * Used for silent checking
+	 * 
+	 * @param player the player
+	 * @param handler ASRegion Handler
+	 */
+	public void alertEntry(Player player, RegionHandler handler){
+		if(handler.getHooks().inRegion(player)){
+			return; // Do not modify them
+		}
+		if(showEnterMessage){
+			if(!plugin.getPermissions().has(player, "AntiShare.roam", world) && this.inventory != null){
+				VirtualInventory inventory = plugin.storage.getInventoryManager(player, world);
+				inventory.setTemporaryInventory(this.inventory);
+				inventory.loadToTemporary();
+			}
+		}
+	}
+
 	public void alertExit(Player player){
 		if(showExitMessage){
 			ASUtils.sendToPlayer(player, ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name));

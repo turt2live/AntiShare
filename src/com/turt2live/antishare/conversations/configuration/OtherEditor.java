@@ -15,11 +15,10 @@ import com.turt2live.antishare.conversations.WaitPrompt;
 public class OtherEditor extends ASMenu {
 
 	// TODO: Uncomment throw to region when a better solution is ready
-	// TODO: Uncomment tnt explosions when a better solution is ready
 
 	public OtherEditor(){
 		super("show", "inventories", "track blocks", "pvp", "mob pvp", "no drops",
-				"worlds", /*"throw to region", */"tracked blocks"/*, "tnt drops"*/);
+				"worlds", /*"throw to region", */"tracked blocks");
 	}
 
 	@Override
@@ -33,7 +32,6 @@ public class OtherEditor extends ASMenu {
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "worlds <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "True to allow transfer of worlds");
 		//ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "throw to region <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow throwing of items into regions?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tracked blocks <gamemode> <items>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Set which blocks to track for the gamemode");
-		//ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tnt drops <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "When a creative TNT block explodes, drop items?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "worlds ignore survival <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Ignore survival players on world transfer?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "show <node>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Show the value of an above <node>");
 		ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "For 'tracked blocks', '*' means all, and 'none' means none. Remember to use ID's!");
@@ -106,14 +104,6 @@ public class OtherEditor extends ASMenu {
 					return new WaitPrompt(new OtherEditor());
 				}
 			}
-			//		}else if(input.startsWith("tnt drops")){
-			//			String value = input.replace("tnt drops", "").trim();
-			//			if(ASUtils.getValueOf(value) == null){
-			//				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
-			//				return new OtherEditor();
-			//			}else{
-			//				plugin.getConfig().set("other.noTNTDrops", !ASUtils.getValueOf(value));
-			//			}		
 		}else if(input.startsWith("worlds ignore survival")){
 			String value = input.replace("worlds ignore survival", "").trim();
 			if(ASUtils.getValueOf(value) == null){
@@ -163,8 +153,6 @@ public class OtherEditor extends ASMenu {
 			//	value = String.valueOf(!plugin.getConfig().getBoolean("other.cannot_throw_to_regions")); // Inverse
 		}else if(input.startsWith("tracked blocks")){
 			value = plugin.getConfig().getString("other.tracked-blocks");
-			//		}else if(input.startsWith("tnt drops")){
-			//			value = String.valueOf(!plugin.getConfig().getBoolean("other.noTNTDrops")); // Inverse
 		}
 		ASUtils.sendToConversable(target, ChatColor.GOLD + input + ChatColor.YELLOW + " is currently set to " + ChatColor.GOLD + value);
 	}

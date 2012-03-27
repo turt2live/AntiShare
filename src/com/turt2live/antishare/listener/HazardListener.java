@@ -2,12 +2,14 @@ package com.turt2live.antishare.listener;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -29,18 +31,15 @@ public class HazardListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	// TODO Waiting on API solution
-	//	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
-	//	public void onTNTExplode(EntityExplodeEvent event){
-	//		if(event.getEntity() instanceof TNTPrimed){
-	//			TNTPrimed tnt = (TNTPrimed) event.getEntity();
-	//			System.out.println("TNT2 " + tnt.getLocation());
-	//			if(tnt.hasMetadata("tnt-no-explode")){
-	//				System.out.println("TNT2 " + tnt.getLocation());
-	//			}
-	//		}
-	//		//event.setYield(0);
-	//	}
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onTNTExplode(EntityExplodeEvent event){
+		if(event.getEntity() instanceof TNTPrimed){
+			TNTPrimed tnt = (TNTPrimed) event.getEntity();
+			if(plugin.storage.getTntNoDrops(tnt, tnt.getWorld())){
+				event.setYield(0); // Suppress drops
+			}
+		}
+	}
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onExpBottleThrown(ExpBottleEvent event){
@@ -118,19 +117,13 @@ public class HazardListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
-		// TNT Explosions TODO: Waiting on API solution
-		//		if(event.getBlock().getType().equals(Material.TNT)
-		//				&& !plugin.getPermissions().has(player, "AntiShare.tnt", event.getBlock().getWorld())
-		//				&& plugin.config().getBoolean("other.noTNTDrops", event.getBlock().getWorld())){
-		//			if(plugin.config().onlyIfCreative(player)){
-		//				if(player.getGameMode().equals(GameMode.CREATIVE)){
-		//					event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
-		//					System.out.println(event.getBlock().getLocation());
-		//				}
-		//			}else{
-		//				event.getBlock().setMetadata("tnt-no-explode", new FixedMetadataValue(plugin, true));
-		//			}
-		//		}	
+		if(event.getBlock().getType().equals(Material.TNT)){
+			if(plugin.config().getBoolean("hazards.tnt_explosions", event.getBlock().getWorld())){
+				if(plugin.isBlocked(player, "AntiShare.allow.explosions", event.getBlock().getWorld())){
+					plugin.storage.setTntNoExplode(event.getBlock(), event.getBlock().getWorld());
+				}
+			}
+		}
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)

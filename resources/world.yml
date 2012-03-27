@@ -39,6 +39,7 @@ hazards:
   allow_fire_charge: global
   allow_flint: global
   allow_tnt: global
+  tnt_explosions: global
 other:
   only_if_creative: global
   inventory_swap: global

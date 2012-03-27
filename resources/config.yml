@@ -35,6 +35,8 @@
 #   'allow_fire_charge' - Allows use of the fire charge
 #   'allow_flint' - Allows use of Flint and Tinder (also blocks use of the Fire block)
 #   'allow_tnt' - Allows placement of TNT
+#   'tnt_explosions' - Global switch for allowing TNT to explode if the TNT placed was by a player who is not allowed to get drops
+#                      Set this to FALSE if you want explosions to be tracked and monitored (see "TNT Explosions" towards the end of this header)
 # 
 # Other:
 #   'only_if_creative' - Auto-decline if they are in creative, permissions still apply.
@@ -87,6 +89,8 @@
 #   'AntiShare.allow.interact' - Allow interactions
 #   'AntiShare.allow.eggs' - Allow eggs that spawn mobs
 #   'AntiShare.allow.commands' - Allow command usage (for specified commands)
+#   'AntiShare.allow.exp' - Allows use of the exp bottle
+#   'AntiShare.allow.expGain' - Allows gaining of exp
 #   'AntiShare.allow.bedrock' - If true, then the player can break and place bedrock
 #   'AntiShare.allow.pvp' - Allows PVP to a creative mode player
 #   'AntiShare.allow.mobpvp' - Allows Mob PVP to a creative mode player
@@ -95,6 +99,7 @@
 #   'AntiShare.allow.tnt' - Allows placement of TNT
 #   'AntiShare.allow.flint' - Allows use of Flint and Steel and the Fire block
 #   'AntiShare.allow.buckets' - Allows use of Lava and Water Buckets
+#   'AntiShare.allow.explosions' - Allows this player's TNT to always explode with drops
 #   ** If you would like to deny an event, set the node to false (all 'allow' nodes have a default of 'OP')
 #   ** By default, AntiShare assumes "Deny" on all creative mode players (or all players if 'onlyIfCreative' is set to false)
 #   'AntiShare.onlyIfCreative' - Only deny actions if the player is in creative mode, false to deny regardless of Game Mode (this is default FALSE)
@@ -186,6 +191,10 @@
 #   - Plugin Version
 #   - CraftBukkit Version
 # 
+# TNT Explosions:
+#   - These are when a player (without the allow node or is met by the conditions of only if creative) places
+#     a TNT block and when that block explodes it doesn't drop anything, but still causes damage.
+# 
 events:
   block_break: none
   block_place: 57,41,42
@@ -222,6 +231,7 @@ hazards:
   allow_fire_charge: false
   allow_flint: false
   allow_tnt: false
+  tnt_explosions: false
 other:
   only_if_creative: true
   inventory_swap: true

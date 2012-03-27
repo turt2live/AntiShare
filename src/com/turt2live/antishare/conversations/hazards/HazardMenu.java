@@ -17,7 +17,8 @@ import com.turt2live.antishare.conversations.configuration.OtherEditor;
 public class HazardMenu extends ASMenu {
 
 	public HazardMenu(){
-		super("allow eggs", "allow exp bottle", "allow bedrock", "allow tnt", "allow fire charge", "allow fire", "allow buckets");
+		super("allow eggs", "allow exp bottle", "allow bedrock", "allow tnt", "allow fire charge",
+				"allow fire", "allow buckets", "tnt explosions");
 	}
 
 	@Override
@@ -30,6 +31,7 @@ public class HazardMenu extends ASMenu {
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "allow fire charge <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow fire charges?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "allow fire <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow fire/flint & tinder?");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "allow buckets <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow buckets?");
+		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "tnt explosions <t/f>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Allow TNT to explode?");
 		ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "<t/f> means you have to enter true or false!");
 	}
 
@@ -100,6 +102,14 @@ public class HazardMenu extends ASMenu {
 			}else{
 				plugin.getConfig().set("hazards.allow_buckets", ASUtils.getValueOf(value));
 			}
+		}else if(input.startsWith("tnt explosions")){
+			String value = input.replace("tnt explosions", "").trim();
+			if(ASUtils.getValueOf(value) == null){
+				ConfigurationConversation.showError(target, ChatColor.RED + "'" + input + "' is not valid! Did you mean true, or false?");
+				return new HazardMenu();
+			}else{
+				plugin.getConfig().set("hazards.tnt_explosions", ASUtils.getValueOf(value));
+			}
 		}
 		plugin.getConfig().save();
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "as rl");
@@ -123,6 +133,8 @@ public class HazardMenu extends ASMenu {
 			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_flint"));
 		}else if(input.startsWith("allow buckets")){
 			value = String.valueOf(plugin.getConfig().getBoolean("hazards.allow_buckets"));
+		}else if(input.startsWith("tnt explosions")){
+			value = String.valueOf(plugin.getConfig().getBoolean("hazards.tnt_explosions"));
 		}
 		ASUtils.sendToConversable(target, ChatColor.GOLD + input + ChatColor.YELLOW + " is currently set to " + ChatColor.GOLD + value);
 	}

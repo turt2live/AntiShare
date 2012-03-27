@@ -89,6 +89,17 @@ public class MetadataHack {
 		}
 	}
 
+	public void set(Block block, Meta meta){
+		metadata.put(block, meta);
+	}
+
+	public Meta get(Block block){
+		if(metadata.containsKey(block)){
+			return metadata.get(block);
+		}
+		return null;
+	}
+
 	public Object get(Block block, String key){
 		if(metadata.containsKey(block)){
 			return metadata.get(block).get(key);
@@ -99,28 +110,6 @@ public class MetadataHack {
 	public void remove(Block block, String key){
 		if(metadata.containsKey(block)){
 			metadata.get(block).unset(key);
-		}
-	}
-
-	private class Meta {
-
-		private HashMap<String, Object> values = new HashMap<String, Object>();
-
-		public Meta(){}
-
-		public void add(String key, Object value){
-			values.put(key, value);
-		}
-
-		public Object get(String key){
-			if(values.containsKey(key)){
-				return values.get(key);
-			}
-			return null;
-		}
-
-		public void unset(String key){
-			values.remove(key);
 		}
 	}
 }

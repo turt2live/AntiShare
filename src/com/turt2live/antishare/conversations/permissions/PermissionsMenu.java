@@ -12,12 +12,10 @@ import com.turt2live.antishare.conversations.WaitPrompt;
 
 public class PermissionsMenu extends ASMenu {
 
-	// TODO: Uncomment tnt explosions when a better solution is ready
-
 	public PermissionsMenu(){
 		super("AntiShare.allow", "AntiShare.onlyIfCreative", "AntiShare.reload", "AntiShare.regions", "AntiShare.roam",
 				"AntiShare.noswap", "AntiShare.freeplace", "AntiShare.notify", "AntiShare.silent", "AntiShare.admin",
-				"AntiShare.mirror", "AntiShare.gamemode", "AntiShare.gamemode.others"/*, "AntiShare.tnt"*/);
+				"AntiShare.mirror", "AntiShare.gamemode", "AntiShare.gamemode.others");
 	}
 
 	@Override
@@ -38,7 +36,7 @@ public class PermissionsMenu extends ASMenu {
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.regions  AntiShare.roam  AntiShare.noswap");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.blockBypass  AntiShare.freeplace  AntiShare.mirror");
 			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.notify  AntiShare.silent  AntiShare.gamemode");
-			ASUtils.sendToConversable(target, ChatColor.GOLD + /*AntiShare.tnt*/"AntiShare.gamemode.others AntiShare.admin");
+			ASUtils.sendToConversable(target, ChatColor.GOLD + "AntiShare.gamemode.others  AntiShare.admin");
 			return new WaitPrompt(new PermissionsMenu());
 		}else{
 			ASUtils.sendToConversable(target, ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + input + ChatColor.DARK_GREEN + " ]=======");
@@ -85,9 +83,6 @@ public class PermissionsMenu extends ASMenu {
 			}else if(input.equalsIgnoreCase("AntiShare.gamemode.others")){
 				ASUtils.sendToConversable(target, "If this is true, the target can change other people's gamemode through /gm <player> [mode]");
 				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
-				//			}else if(input.equalsIgnoreCase("AntiShare.tnt")){
-				//				ASUtils.sendToConversable(target, "If true, the target can place TNT that, when it explodes, drops items regardless of settings/permissions.");
-				//				ASUtils.sendToConversable(target, ChatColor.LIGHT_PURPLE + "This permission is false by default, unless you are an OP.");
 			}else{
 				ASUtils.sendToConversable(target, ChatColor.RED + "That is not a permission node!");
 			}

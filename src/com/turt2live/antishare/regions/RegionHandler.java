@@ -51,7 +51,7 @@ public class RegionHandler {
 		for(Player player : Bukkit.getOnlinePlayers()){
 			if(isRegion(player.getLocation())){
 				ASRegion region = getRegion(player.getLocation());
-				region.alertEntry(player);
+				region.alertEntry(player, this);
 			}
 		}
 	}

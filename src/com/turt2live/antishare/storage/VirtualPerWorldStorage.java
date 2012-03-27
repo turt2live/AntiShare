@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
@@ -399,7 +400,7 @@ public class VirtualPerWorldStorage {
 		build();
 	}
 
-	// TODO Remove metadata hack from below methods when metadata fixed
+	// TODO Remove metadata hack from below methods when a better solution can be used
 
 	public void removeCreativeBlock(Block block){
 		//block.removeMetadata("ASCreative", plugin);
@@ -477,6 +478,30 @@ public class VirtualPerWorldStorage {
 			return meta.get(material, "ASSurvival") != null;
 		}
 		return false;
+	}
+
+	public void setTntNoExplode(Block tnt){
+		TNTMeta meta = new TNTMeta(tnt, false);
+		this.meta.set(tnt, meta);
+	}
+
+	// True = drop nothing
+	public boolean getTntNoDrops(Block tnt){
+		Meta meta = this.meta.get(tnt);
+		if(meta instanceof TNTMeta){
+			return !((TNTMeta) meta).willExplode(); // willExplode() is literal
+		}
+		return false;
+	}
+
+	// True = drop nothing
+	public boolean getTntNoDrops(TNTPrimed tnt){
+		// TODO: Implement [feildmaster?]
+		return false;
+	}
+
+	public boolean isTntTracked(Block tnt){
+		return meta.get(tnt) != null && (meta.get(tnt) != null) ? (meta.get(tnt) instanceof TNTMeta) : false;
 	}
 
 	// End metadata hack
