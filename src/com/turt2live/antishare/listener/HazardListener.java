@@ -1,6 +1,7 @@
 package com.turt2live.antishare.listener;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -40,6 +41,9 @@ public class HazardListener implements Listener {
 			TNTPrimed tnt = (TNTPrimed) event.getEntity();
 			if(plugin.storage.getTntNoDrops(tnt, tnt.getWorld())){
 				event.setYield(0); // Suppress drops
+				Location location = tnt.getLocation();
+				Notification.sendNotification(NotificationType.TNT_CREATIVE_EXPLOSION, plugin.storage.getOwnerOfCreativeTNT(tnt, tnt.getWorld()),
+						"(" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ", " + location.getWorld() + ")");
 			}
 		}
 	}
@@ -123,7 +127,7 @@ public class HazardListener implements Listener {
 		if(event.getBlock().getType().equals(Material.TNT)){
 			if(plugin.config().getBoolean("hazards.tnt_explosions", event.getBlock().getWorld())){
 				if(plugin.isBlocked(player, "AntiShare.allow.explosions", event.getBlock().getWorld())){
-					plugin.storage.setTntNoExplode(event.getBlock(), event.getBlock().getWorld());
+					plugin.storage.setTntNoExplode(event.getBlock(), event.getPlayer(), event.getBlock().getWorld());
 				}
 			}
 		}

@@ -95,8 +95,8 @@ public class VirtualStorage implements Listener {
 		worlds.get(world).removeInventoryChest(block);
 	}
 
-	public void setTntNoExplode(Block tnt, World world){
-		worlds.get(world).setTntNoExplode(tnt);
+	public void setTntNoExplode(Block tnt, Player owner, World world){
+		worlds.get(world).setTntNoExplode(tnt, owner);
 	}
 
 	public boolean getTntNoDrops(TNTPrimed tnt, World world){
@@ -109,6 +109,14 @@ public class VirtualStorage implements Listener {
 
 	public boolean isTntTracked(Block tnt, World world){
 		return worlds.get(world).isTntTracked(tnt);
+	}
+
+	public Player getOwnerOfCreativeTNT(TNTPrimed tnt, World world){
+		return worlds.get(world).getOwnerOfCreativeTNT(tnt);
+	}
+
+	public Player getOwnerOfCreativeTNT(Block tnt, World world){
+		return worlds.get(world).getOwnerOfCreativeTNT(tnt);
 	}
 
 	private void freePlayer(Player player){

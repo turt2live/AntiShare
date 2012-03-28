@@ -315,3 +315,4 @@ notifications:
     gamemode_change: false
     region_enter: false
     region_exit: false
+    tnt_creative_explosion: false

@@ -209,6 +209,9 @@ public class Notification {
 			case REGION_EXIT:
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " left the region " + ChatColor.BLUE + variable + ChatColor.AQUA + "!";
 				break;
+			case TNT_CREATIVE_EXPLOSION:
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " set off a Creative TNT at " + ChatColor.BLUE + variable + ChatColor.AQUA + "!";
+				break;
 			}
 			String prefix = type.name().startsWith("LEGAL") ? "[LEGAL]" : (type.name().startsWith("ILLEGAL") ? "[ILLEGAL]" : "");
 			plugin.log.logEvent(prefix + message.replace("[AntiShare]", ""));

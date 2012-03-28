@@ -34,6 +34,11 @@ public class AntiShare extends PluginWrapper {
 	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211) [Hackish code]
 	 *  - Inventory mirror creative-glitch (BUKKIT-1211) [Hackish code]
 	 *  
+	 *  Updates:
+	 *  - BUKKIT-1211 has been fixed by deltahat in bleeding, waiting on BUKKIT-1215/1214
+	 *    to be implemented before dropping MetadataHack.java. BUKKIT-1211's fix has yet
+	 *    (as of right now) to be pushed to the (Craft)Bukkit repo(s).
+	 *  
 	 *  NOTES:
 	 *  - Leaky:
 	 *  	https://bukkit.atlassian.net/browse/BUKKIT-####

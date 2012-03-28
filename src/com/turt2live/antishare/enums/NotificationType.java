@@ -49,7 +49,8 @@ public enum NotificationType{
 	// GENERAL actions
 	GAMEMODE_CHANGE("notifications.general.gamemode_change"),
 	REGION_ENTER("notifications.general.region_enter"),
-	REGION_EXIT("notifications.general.region_exit");
+	REGION_EXIT("notifications.general.region_exit"),
+	TNT_CREATIVE_EXPLOSION("notifications.general.tnt_creative_explosion");
 
 	private String configValue;
 

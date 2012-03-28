@@ -29,7 +29,7 @@ public class NotificationEditor extends ASMenu {
 				"illegal command", "illegal world swap", "illegal throw to region", "illegal fire charge", "illegal bucket", "illegal fire",
 				"illegal tnt",
 
-				"gamemode change", "region enter", "region exit");
+				"gamemode change", "region enter", "region exit", "creative explosions");
 	}
 
 	@Override
@@ -141,6 +141,8 @@ public class NotificationEditor extends ASMenu {
 			node = node.replace("fire charge", "fire_charge");
 		}else if(node.startsWith("tnt")){
 			node = node.replace("tnt", "tnt-place");
+		}else if(node.startsWith("creative explosions")){
+			node = node.replace("creative explosions", "tnt_creative_explosion");
 		}
 		// death, interact, bucket, fire, and pvp are all covered
 		String prefix = "general.";
@@ -171,7 +173,8 @@ public class NotificationEditor extends ASMenu {
 				|| node.startsWith("illegal command") || node.startsWith("illegal world swap") || node.startsWith("illegal throw to region")
 				|| node.startsWith("illegal fire") /* Covers fire charge */|| node.startsWith("illegal tnt") || node.startsWith("illegal bucket")
 
-				|| node.startsWith("gamemode change") || node.startsWith("region enter") || node.startsWith("region exit");
+				|| node.startsWith("gamemode change") || node.startsWith("region enter") || node.startsWith("region exit")
+				|| node.startsWith("creative explosions");
 
 	}
 
@@ -204,9 +207,10 @@ public class NotificationEditor extends ASMenu {
 		ASUtils.sendToConversable(target, ChatColor.AQUA
 				+ "  <i/l> throw to region" + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
 				+ "region enter  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
-				+ "  gamemode change" + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA);
+				+ "  gamemode change");
 		ASUtils.sendToConversable(target, ChatColor.AQUA
-				+ "  region exit");
+				+ "  region exit  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
+				+ "  creative explosions");
 		ASUtils.sendToConversable(target, ChatColor.GREEN + "Note: " + ChatColor.DARK_GREEN + "<i/l>" + ChatColor.GREEN + " means you need to specify illegal or legal");
 	}
 

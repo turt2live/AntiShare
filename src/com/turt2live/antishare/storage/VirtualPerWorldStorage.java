@@ -331,14 +331,17 @@ public class VirtualPerWorldStorage {
 		return false;
 	}
 
-	public void setTntNoExplode(Block tnt){
-		TNTMeta meta = new TNTMeta(tnt, false);
+	public void setTntNoExplode(Block tnt, Player owner){
+		TNTMeta meta = new TNTMeta(tnt, false, owner);
 		this.meta.set(tnt, meta);
 	}
 
 	// True = drop nothing
 	public boolean getTntNoDrops(Block tnt){
 		Meta meta = this.meta.get(tnt);
+		if(meta == null){
+			return false;
+		}
 		if(meta instanceof TNTMeta){
 			return !((TNTMeta) meta).willExplode(); // willExplode() is literal
 		}
@@ -353,6 +356,22 @@ public class VirtualPerWorldStorage {
 
 	public boolean isTntTracked(Block tnt){
 		return meta.get(tnt) != null && (meta.get(tnt) != null) ? (meta.get(tnt) instanceof TNTMeta) : false;
+	}
+
+	public Player getOwnerOfCreativeTNT(Block tnt){
+		Meta meta = this.meta.get(tnt);
+		if(meta == null){
+			return null;
+		}
+		if(meta instanceof TNTMeta){
+			return ((TNTMeta) meta).getOwner();
+		}
+		return null;
+	}
+
+	public Player getOwnerOfCreativeTNT(TNTPrimed tnt){
+		// TODO: Implement [feildmaster?]
+		return null;
 	}
 
 	// End metadata hack

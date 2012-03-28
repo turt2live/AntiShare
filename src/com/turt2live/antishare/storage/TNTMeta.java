@@ -1,13 +1,15 @@
 package com.turt2live.antishare.storage;
 
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 public class TNTMeta extends Meta {
 
 	private Block tnt;
 	private Boolean explode;
+	private Player owner;
 
-	public TNTMeta(Block tnt, Boolean explode){
+	public TNTMeta(Block tnt, Boolean explode, Player owner){
 		this.tnt = tnt;
 		this.explode = explode;
 	}
@@ -18,6 +20,10 @@ public class TNTMeta extends Meta {
 
 	public boolean willExplode(){
 		return explode;
+	}
+
+	public Player getOwner(){
+		return owner;
 	}
 
 	public void setExplode(Boolean explode){
