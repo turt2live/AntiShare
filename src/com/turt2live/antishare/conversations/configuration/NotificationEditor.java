@@ -21,12 +21,12 @@ public class NotificationEditor extends ASMenu {
 
 				"legal block break", "legal block place", "legal death", "legal drop item", "legal eggs", "legal interact",
 				"legal exp bottle", "legal bedrock", "legal creative block", "legal survival block", "legal pvp", "legal mob pvp",
-				"legal command", "legal world swap", /*"legal throw to region", */"legal fire charge", "legal bucket", "legal fire",
+				"legal command", "legal world swap", "legal throw to region", "legal fire charge", "legal bucket", "legal fire",
 				"legal tnt",
 
 				"illegal block break", "illegal block place", "illegal death", "illegal drop item", "illegal eggs", "illegal interact",
 				"illegal exp bottle", "illegal bedrock", "illegal creative block", "illegal survival block", "illegal pvp", "illegal mob pvp",
-				"illegal command", "illegal world swap", /*"illegal throw to region", */"illegal fire charge", "illegal bucket", "illegal fire",
+				"illegal command", "illegal world swap", "illegal throw to region", "illegal fire charge", "illegal bucket", "illegal fire",
 				"illegal tnt",
 
 				"gamemode change", "region enter", "region exit");
@@ -131,8 +131,8 @@ public class NotificationEditor extends ASMenu {
 			node = "illegalCommand";
 		}else if(node.startsWith("world swap")){
 			node = "world_transfer";
-			//		}else if(node.startsWith("throw to region")){
-			//			node = "drop_item_to_region";
+		}else if(node.startsWith("throw to region")){
+			node = "region_item";
 		}else if(node.startsWith("bedrock")){
 			node = "bedrock_attempt";
 		}else if(node.startsWith("region")){ // Enter / Exit
@@ -161,14 +161,14 @@ public class NotificationEditor extends ASMenu {
 				|| node.startsWith("legal drop item") || node.startsWith("legal eggs") || node.startsWith("legal interact")
 				|| node.startsWith("legal exp bottle") || node.startsWith("legal bedrock") || node.startsWith("legal creative block")
 				|| node.startsWith("legal survival block") || node.startsWith("legal pvp") || node.startsWith("legal mob pvp")
-				|| node.startsWith("legal command") || node.startsWith("legal world swap") //|| node.startsWith("legal throw to region")
+				|| node.startsWith("legal command") || node.startsWith("legal world swap") || node.startsWith("legal throw to region")
 				|| node.startsWith("legal fire") /* Covers fire charge */|| node.startsWith("legal tnt") || node.startsWith("legal bucket")
 
 				|| node.startsWith("illegal block break") || node.startsWith("illegal block place") || node.startsWith("illegal death")
 				|| node.startsWith("illegal drop item") || node.startsWith("illegal eggs") || node.startsWith("illegal interact")
 				|| node.startsWith("illegal exp bottle") || node.startsWith("illegal bedrock") || node.startsWith("illegal creative block")
 				|| node.startsWith("illegal survival block") || node.startsWith("illegal pvp") || node.startsWith("illegal mob pvp")
-				|| node.startsWith("illegal command") || node.startsWith("illegal world swap") //|| node.startsWith("illegal throw to region")
+				|| node.startsWith("illegal command") || node.startsWith("illegal world swap") || node.startsWith("illegal throw to region")
 				|| node.startsWith("illegal fire") /* Covers fire charge */|| node.startsWith("illegal tnt") || node.startsWith("illegal bucket")
 
 				|| node.startsWith("gamemode change") || node.startsWith("region enter") || node.startsWith("region exit");
@@ -201,10 +201,11 @@ public class NotificationEditor extends ASMenu {
 				+ "<i/l> fire charge  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
 				+ "  <i/l> bucket  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
 				+ "  <i/l> tnt");
-		//+ "  <i/l> throw to region");
 		ASUtils.sendToConversable(target, ChatColor.AQUA
+				+ "  <i/l> throw to region" + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
 				+ "region enter  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
-				+ "  gamemode change" + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
+				+ "  gamemode change" + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA);
+		ASUtils.sendToConversable(target, ChatColor.AQUA
 				+ "  region exit");
 		ASUtils.sendToConversable(target, ChatColor.GREEN + "Note: " + ChatColor.DARK_GREEN + "<i/l>" + ChatColor.GREEN + " means you need to specify illegal or legal");
 	}

@@ -13,12 +13,10 @@ import com.turt2live.antishare.conversations.WaitPrompt;
 
 public class MessageEditor extends ASMenu {
 
-	// TODO: Uncomment throw to region when a better solution is ready
-
 	public MessageEditor(){
 		super("show", "help", "block break", "block place", "death", "drop item", "eggs", "interact",
 				"exp bottle", "inventory swap", "bedrock", "creative block", "pvp", "mob pvp", "no drops",
-				"command", "world swap"/*, "throw to region"*/);
+				"command", "world swap");
 	}
 
 	@Override
@@ -28,7 +26,6 @@ public class MessageEditor extends ASMenu {
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "help" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Shows a list of <type>'s");
 		ASUtils.sendToConversable(target, ChatColor.DARK_AQUA + "show <type>" + ChatColor.GOLD + " - " + ChatColor.AQUA + "Shows the current value of <type>");
 		ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "Messages are only sent on illegal actions");
-		//ASUtils.sendToConversable(target, ChatColor.GOLD + "Note: " + ChatColor.YELLOW + "For 'throw to region', use {name} to use the name of the region!");
 	}
 
 	@Override
@@ -82,8 +79,6 @@ public class MessageEditor extends ASMenu {
 			node = "illegalCommand";
 		}else if(node.startsWith("world swap")){
 			node = "worldSwap";
-			//}else if(node.startsWith("throw to region")){
-			//	node = "throwItemIntoRegion";
 		}
 		// death, interact, bedrock, pvp, and eggs are all covered
 		return node;
@@ -95,8 +90,7 @@ public class MessageEditor extends ASMenu {
 				|| node.startsWith("drop item") || node.startsWith("eggs") || node.startsWith("interact")
 				|| node.startsWith("exp bottle") || node.startsWith("inventory swap") || node.startsWith("bedrock")
 				|| node.startsWith("creative block") || node.startsWith("pvp") || node.startsWith("mob pvp")
-				|| node.startsWith("no drops") || node.startsWith("command") || node.startsWith("world swap")
-		/*|| node.startsWith("throw to region")*/;
+				|| node.startsWith("no drops") || node.startsWith("command") || node.startsWith("world swap");
 
 	}
 
@@ -122,7 +116,6 @@ public class MessageEditor extends ASMenu {
 				+ "no drops  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
 				+ "  command  " + ChatColor.DARK_AQUA + "|" + ChatColor.AQUA
 				+ "  world swap");
-		//ASUtils.sendToConversable(target, ChatColor.AQUA + "throw to region");
 	}
 
 }

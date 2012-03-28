@@ -109,6 +109,9 @@ public class Notification {
 			case ILLEGAL_TNT_PLACE:
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " placed a " + ChatColor.DARK_RED + variable + ChatColor.AQUA + "!";
 				break;
+			case ILLEGAL_REGION_ITEM:
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to throw " + ChatColor.DARK_RED + variable + ChatColor.AQUA + " into a region!";
+				break;
 
 			// LEGAL actions
 			case LEGAL_BLOCK_PLACE:
@@ -191,6 +194,9 @@ public class Notification {
 				break;
 			case LEGAL_TNT_PLACE:
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " placed a " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + "!";
+				break;
+			case LEGAL_REGION_ITEM:
+				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.AQUA + player.getName() + " tried to throw " + ChatColor.DARK_GREEN + variable + ChatColor.AQUA + " into a region!";
 				break;
 
 			// GENERAL actions

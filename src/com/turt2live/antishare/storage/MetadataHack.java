@@ -13,6 +13,17 @@ import com.turt2live.antishare.AntiShare;
 
 public class MetadataHack {
 
+	/* TODO: Hope that deltahat can fix Metadata before the RB
+	 * 
+	 * Note to self:
+	 * 	In the IRC deltahat was talking about metadata bugs, at
+	 *  one point the key check was brought up, he said he will
+	 *  try to fix it in time for the RB. If it is NOT in the RB,
+	 *  AntiShare should be released with this wonderful POS, if 
+	 *  it is able to get into the RB, fix this thing ASAP to get
+	 *  AS out with the RB, as per schedule.
+	 */
+
 	private AntiShare plugin;
 	private HashMap<Object, Meta> metadata = new HashMap<Object, Meta>();
 

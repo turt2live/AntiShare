@@ -290,6 +290,7 @@ notifications:
     fire: true
     bucket: true
     tnt-place: true
+    region_item: true
   legal:
     block_place: false
     block_break: false
@@ -309,6 +310,7 @@ notifications:
     fire: false
     bucket: false
     tnt-place: false
+    region_item: false
   general:
     gamemode_change: false
     region_enter: false

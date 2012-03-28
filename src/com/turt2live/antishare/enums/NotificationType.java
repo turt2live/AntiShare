@@ -22,6 +22,7 @@ public enum NotificationType{
 	ILLEGAL_BUCKET("notifications.illegal.bucket"),
 	ILLEGAL_FIRE("notifications.illegal.fire"),
 	ILLEGAL_TNT_PLACE("notifications.illegal.tnt-place"),
+	ILLEGAL_REGION_ITEM("notifications.illegal.region_item"),
 
 	// LEGAL actions
 	LEGAL_BLOCK_PLACE("notifications.legal.block_place"),
@@ -43,6 +44,7 @@ public enum NotificationType{
 	LEGAL_BUCKET("notifications.legal.bucket"),
 	LEGAL_FIRE("notifications.legal.fire"),
 	LEGAL_TNT_PLACE("notifications.legal.tnt-place"),
+	LEGAL_REGION_ITEM("notifications.legal.region_item"),
 
 	// GENERAL actions
 	GAMEMODE_CHANGE("notifications.general.gamemode_change"),

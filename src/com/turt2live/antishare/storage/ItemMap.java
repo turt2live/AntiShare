@@ -25,7 +25,7 @@ public class ItemMap {
 		if(list.getInt(name, -1) != -1){
 			return Material.getMaterial(list.getInt(name, -1));
 		}
-		return Material.getMaterial(name); // Returns null if not found
+		return Material.matchMaterial(name); // Returns null if not found
 	}
 
 	public void reload(){

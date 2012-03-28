@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Notification;
+import com.turt2live.antishare.enums.NotificationType;
 
 public class RegionScanner {
 
@@ -85,10 +87,12 @@ public class RegionScanner {
 						if(owner != null){
 							ASUtils.sendToPlayer(owner, ChatColor.RED + "An item of yours landed in a region.");
 						}
+						Notification.sendNotification(NotificationType.ILLEGAL_REGION_ITEM, owner, item.getItemStack().getType().name());
 					}else{
 						remove.add(item); // Just remove, it's legal
+						Notification.sendNotification(NotificationType.LEGAL_REGION_ITEM, owner, item.getItemStack().getType().name());
 					}
-					if(!hasMoved(item.getLocation(), items.get(item)) && !handler.isRegion(item.getLocation())){
+					if(!hasMoved(item.getLocation(), items.get(item)) && !handler.isRegion(item.getLocation()) && !remove.contains(item)){
 						remove.add(item);
 					}else{
 						updates.put(item, item.getLocation());
