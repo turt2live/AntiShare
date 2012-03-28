@@ -35,8 +35,8 @@ public class VirtualPerWorldStorage {
 	private EventList blocked_death;
 	private EventList blocked_interact;
 	private EventList blocked_commands;
-	private Vector<Material> tracked_creative_blocks = new Vector<Material>();
-	private Vector<Material> tracked_survival_blocks = new Vector<Material>();
+	private TrackerList tracked_creative_blocks;
+	private TrackerList tracked_survival_blocks;
 	private Vector<ASRegion> gamemode_regions = new Vector<ASRegion>();
 	private boolean blocked_bedrock = false;
 	private HashMap<Player, VirtualInventory> inventories = new HashMap<Player, VirtualInventory>();
@@ -135,41 +135,9 @@ public class VirtualPerWorldStorage {
 			}
 		}
 		String trackedBlocks[] = plugin.getConfig().getString("other.tracked-blocks-creative").replaceAll(" ", "").split(",");
-		boolean notNoneOrAll = false;
-		if(trackedBlocks.length == 1){
-			if(trackedBlocks[0].equalsIgnoreCase("*")){
-				for(Material m : Material.values()){
-					tracked_creative_blocks.add(m);
-				}
-				notNoneOrAll = false;
-			}else if(trackedBlocks[0].equalsIgnoreCase("none")){
-				notNoneOrAll = false;
-			}
-		}
-		if(notNoneOrAll){
-			for(String tracked : trackedBlocks){
-				int id = Integer.valueOf(tracked);
-				tracked_creative_blocks.add(Material.getMaterial(id));
-			}
-		}
+		tracked_creative_blocks = new TrackerList(plugin, trackedBlocks);
 		trackedBlocks = plugin.getConfig().getString("other.tracked-blocks-survival").replaceAll(" ", "").split(",");
-		notNoneOrAll = false;
-		if(trackedBlocks.length == 1){
-			if(trackedBlocks[0].equalsIgnoreCase("*")){
-				for(Material m : Material.values()){
-					tracked_survival_blocks.add(m);
-				}
-				notNoneOrAll = false;
-			}else if(trackedBlocks[0].equalsIgnoreCase("none")){
-				notNoneOrAll = false;
-			}
-		}
-		if(notNoneOrAll){
-			for(String tracked : trackedBlocks){
-				int id = Integer.valueOf(tracked);
-				tracked_survival_blocks.add(Material.getMaterial(id));
-			}
-		}
+		tracked_survival_blocks = new TrackerList(plugin, trackedBlocks);
 		String blockedBreak[] = plugin.config().getString("events.block_break", world).split(",");
 		String blockedPlace[] = plugin.config().getString("events.block_place", world).split(",");
 		String blockedDrop[] = plugin.config().getString("events.drop_item", world).split(",");
@@ -491,11 +459,11 @@ public class VirtualPerWorldStorage {
 	}
 
 	public boolean trackCreativeBlock(Block block){
-		return tracked_creative_blocks.contains(block.getType());
+		return tracked_creative_blocks.track(block.getType());
 	}
 
 	public boolean trackSurvivalBlock(Block block){
-		return tracked_survival_blocks.contains(block.getType());
+		return tracked_survival_blocks.track(block.getType());
 	}
 
 	public int convertCreativeBlocks(){
