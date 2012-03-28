@@ -17,6 +17,7 @@ import com.turt2live.antishare.log.ASLog;
 import com.turt2live.antishare.permissions.PermissionsHandler;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.RegionHandler;
+import com.turt2live.antishare.storage.ItemMap;
 import com.turt2live.antishare.storage.VirtualInventory;
 import com.turt2live.antishare.storage.VirtualStorage;
 
@@ -50,6 +51,7 @@ public class AntiShare extends PluginWrapper {
 	private Debugger debugger;
 	private PermissionsHandler perms;
 	public ASAPI api;
+	public ItemMap itemMap;
 
 	@Override
 	public void onEnable(){
@@ -64,6 +66,7 @@ public class AntiShare extends PluginWrapper {
 			config = new Configuration(this);
 			config.create();
 			config.reload();
+			itemMap = new ItemMap(this);
 			conflicts = new Conflicts(this);
 			perms = new PermissionsHandler(this);
 			if(getConfig().getBoolean("settings.debug-override")){

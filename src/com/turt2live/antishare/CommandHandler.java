@@ -28,6 +28,8 @@ public class CommandHandler implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(plugin.getPermissions().has(sender, "AntiShare.reload")){
 						plugin.getConfig().load();
+						plugin.config().reload();
+						plugin.itemMap.reload();
 						MultiWorld.detectWorlds(plugin);
 						plugin.storage.reload(sender);
 						plugin.log.logTechnical("[" + plugin.getDescription().getVersion() + "] " + "AntiShare Reloaded.");

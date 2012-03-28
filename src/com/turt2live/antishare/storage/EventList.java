@@ -37,9 +37,10 @@ public class EventList {
 					continue;
 				}
 				try{
-					this.blocked.add(Integer.valueOf(blocked));
+					this.blocked.add(plugin.itemMap.getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.itemMap.getItem(blocked).getId());
 				}catch(Exception e){
 					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
+					e.printStackTrace();
 				}
 				index++;
 			}
@@ -49,6 +50,11 @@ public class EventList {
 	public EventList(boolean stringsOnly, AntiShare plugin, String... configurationValue){
 		this.raw = configurationValue;
 		int index = 0;
+		if(raw.length == 1){
+			if(raw[0].equalsIgnoreCase("none")){
+
+			}
+		}
 		for(String blocked : raw){
 			blocked = blocked.trim();
 			if(blocked.equalsIgnoreCase("whitelist") && index == 0){

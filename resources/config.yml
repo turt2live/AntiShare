@@ -5,10 +5,14 @@
 #   'death' - Blocks/items to not allow to drop on death
 #   'drop_item' - Block/items to not allow to drop when a player presses (default) Q
 #   'interact' - Blocks/items to deny interactions to. (Left/Right click)
-#   'commands' - Commands to block, define a new command with a SPACE (defaults block '/somecommand' and '/anothercommand')
+#   'commands' - Commands to block, define a new command with a comma (defaults block '/somecommand' and '/anothercommand')
 #   -- Want all blocks/items to be denied? Put a *
 #   -- Want no blocks/items to be denied? Put: none
 #   -- Make sure item lists are comma-separated, not spaces, periods, or fancy other things!
+#   -- Commands do not support 'none' and '*' flags, as well they do not need the '/'
+#   -- Commands are checked where if the command sent starts with the command in the list, so
+#      if you were to block '/item' then if someone typed '/item 2', they would be blocked.
+#   -- Commands are checked before any other plugin (including AntiShare) can even handle it, so permissions are NOT checked.
 #   -- WHITELISTING: If you would like a whitelist function instead, simply put "whitelist" at the front of your list, for example:
 #                 block_place: whitelist,1,2,3
 #                 The above sample would ONLY allow blocks with the id's 1, 2, or 3 to be placed.

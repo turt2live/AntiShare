@@ -24,7 +24,7 @@ public class TrackerList {
 					}else if(value.equals("none")){
 						// Negated none, don't need to do anything
 					}else{
-						Integer block = Integer.parseInt(value);
+						Integer block = plugin.itemMap.getItem(value) == null ? Integer.parseInt(value) : plugin.itemMap.getItem(value).getId();
 						if(tracked_blocks.contains(block)){
 							tracked_blocks.remove(block);
 						}
@@ -41,7 +41,7 @@ public class TrackerList {
 					}else if(value.equals("none")){
 						// None, don't need to do anything
 					}else{
-						Integer block = Integer.parseInt(value);
+						Integer block = plugin.itemMap.getItem(value) == null ? Integer.parseInt(value) : plugin.itemMap.getItem(value).getId();
 						if(!tracked_blocks.contains(block)){
 							tracked_blocks.add(block);
 						}
