@@ -50,11 +50,6 @@ public class EventList {
 	public EventList(boolean stringsOnly, AntiShare plugin, String... configurationValue){
 		this.raw = configurationValue;
 		int index = 0;
-		if(raw.length == 1){
-			if(raw[0].equalsIgnoreCase("none")){
-
-			}
-		}
 		for(String blocked : raw){
 			blocked = blocked.trim();
 			if(blocked.equalsIgnoreCase("whitelist") && index == 0){
