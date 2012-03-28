@@ -9,6 +9,9 @@
 #   -- Want all blocks/items to be denied? Put a *
 #   -- Want no blocks/items to be denied? Put: none
 #   -- Make sure item lists are comma-separated, not spaces, periods, or fancy other things!
+#   -- WHITELISTING: If you would like a whitelist function instead, simply put "whitelist" at the front of your list, for example:
+#                 block_place: whitelist,1,2,3
+#                 The above sample would ONLY allow blocks with the id's 1, 2, or 3 to be placed.
 # 
 # Messages:
 #   - All messages are when they are declined an action.

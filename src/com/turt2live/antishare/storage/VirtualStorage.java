@@ -56,7 +56,7 @@ public class VirtualStorage implements Listener {
 	}
 
 	public boolean commandBlocked(String command, World world){
-		return worlds.get(world).command(command, BlockedType.COMMAND);
+		return worlds.get(world).command(command);
 	}
 
 	public boolean isBlocked(int itemID, BlockedType type, World world){

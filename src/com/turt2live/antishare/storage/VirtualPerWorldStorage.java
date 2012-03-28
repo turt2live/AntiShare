@@ -29,12 +29,12 @@ public class VirtualPerWorldStorage {
 
 	private AntiShare plugin;
 	private World world;
-	private Vector<Integer> blocked_break = new Vector<Integer>();
-	private Vector<Integer> blocked_place = new Vector<Integer>();
-	private Vector<Integer> blocked_drop = new Vector<Integer>();
-	private Vector<Integer> blocked_death = new Vector<Integer>();
-	private Vector<Integer> blocked_interact = new Vector<Integer>();
-	private Vector<String> blocked_commands = new Vector<String>();
+	private EventList blocked_break;
+	private EventList blocked_place;
+	private EventList blocked_drop;
+	private EventList blocked_death;
+	private EventList blocked_interact;
+	private EventList blocked_commands;
 	private Vector<Material> tracked_creative_blocks = new Vector<Material>();
 	private Vector<Material> tracked_survival_blocks = new Vector<Material>();
 	private Vector<ASRegion> gamemode_regions = new Vector<ASRegion>();
@@ -51,25 +51,14 @@ public class VirtualPerWorldStorage {
 	}
 
 	public void build(){
-		blocked_break.clear();
-		blocked_place.clear();
-		blocked_drop.clear();
-		blocked_death.clear();
-		blocked_interact.clear();
-		blocked_commands.clear();
 		blocked_bedrock = false;
 		inventories.clear();
 		gamemode_regions.clear();
 		load();
 	}
 
-	public boolean command(String command, BlockedType type){
-		for(String c : blocked_commands){
-			if(c.toLowerCase().startsWith(command.toLowerCase())){
-				return true;
-			}
-		}
-		return false;
+	public boolean command(String command){
+		return blocked_commands.isBlocked(command);
 	}
 
 	public void freePlayer(Player player){
@@ -91,15 +80,15 @@ public class VirtualPerWorldStorage {
 		case BEDROCK:
 			return blocked_bedrock;
 		case BLOCK_PLACE:
-			return blocked_place.contains(material.getId());
+			return blocked_place.isBlocked(material);
 		case BLOCK_BREAK:
-			return blocked_break.contains(material.getId());
+			return blocked_break.isBlocked(material);
 		case INTERACT:
-			return blocked_interact.contains(material.getId());
+			return blocked_interact.isBlocked(material);
 		case DEATH:
-			return blocked_death.contains(material.getId());
+			return blocked_death.isBlocked(material);
 		case DROP_ITEM:
-			return blocked_drop.contains(material.getId());
+			return blocked_drop.isBlocked(material);
 		}
 		return false;
 	}
@@ -187,128 +176,22 @@ public class VirtualPerWorldStorage {
 		String blockedDeath[] = plugin.config().getString("events.death", world).split(",");
 		String blockedInteract[] = plugin.config().getString("events.interact", world).split(",");
 		String blockedCommands[] = plugin.config().getString("events.commands", world).split(",");
-		boolean skip = false;
 		/*## Block Break ##*/
-		if(blockedBreak.length == 1){
-			if(blockedBreak[0].equalsIgnoreCase("*")){
-				for(Material m : Material.values()){
-					blocked_break.add(m.getId());
-				}
-				skip = true;
-			}else if(blockedBreak[0].equalsIgnoreCase("none")){
-				skip = true;
-			}
-		}
-		if(!skip){
-			for(String blocked : blockedBreak){
-				blocked = blocked.trim();
-				try{
-					blocked_break.add(Integer.valueOf(blocked));
-				}catch(Exception e){
-					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
-				}
-			}
-		}
-		skip = false;
+		blocked_break = new EventList(plugin, blockedBreak);
 		/*## Block Place ##*/
-		if(blockedPlace.length == 1){
-			if(blockedPlace[0].equalsIgnoreCase("*")){
-				for(Material m : Material.values()){
-					blocked_place.add(m.getId());
-				}
-				skip = true;
-			}else if(blockedPlace[0].equalsIgnoreCase("none")){
-				skip = true;
-			}
-		}
-		if(!skip){
-			for(String blocked : blockedPlace){
-				blocked = blocked.trim();
-				try{
-					blocked_place.add(Integer.valueOf(blocked));
-				}catch(Exception e){
-					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
-				}
-			}
-		}
-		skip = false;
+		blocked_place = new EventList(plugin, blockedPlace);
 		/*## Block Drop ##*/
-		if(blockedDrop.length == 1){
-			if(blockedDrop[0].equalsIgnoreCase("*")){
-				for(Material m : Material.values()){
-					blocked_drop.add(m.getId());
-				}
-				skip = true;
-			}else if(blockedDrop[0].equalsIgnoreCase("none")){
-				skip = true;
-			}
-		}
-		if(!skip){
-			for(String blocked : blockedDrop){
-				blocked = blocked.trim();
-				try{
-					blocked_drop.add(Integer.valueOf(blocked));
-				}catch(Exception e){
-					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
-				}
-			}
-		}
-		skip = false;
+		blocked_drop = new EventList(plugin, blockedDrop);
 		/*## Death ##*/
-		if(blockedDeath.length == 1){
-			if(blockedDeath[0].equalsIgnoreCase("*")){
-				for(Material m : Material.values()){
-					blocked_death.add(m.getId());
-				}
-				skip = true;
-			}else if(blockedDeath[0].equalsIgnoreCase("none")){
-				skip = true;
-			}
-		}
-		if(!skip){
-			for(String blocked : blockedDeath){
-				blocked = blocked.trim();
-				try{
-					blocked_death.add(Integer.valueOf(blocked));
-				}catch(Exception e){
-					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
-				}
-			}
-		}
-		skip = false;
+		blocked_death = new EventList(plugin, blockedDeath);
 		/*## Interact ##*/
-		if(blockedInteract.length == 1){
-			if(blockedInteract[0].equalsIgnoreCase("*")){
-				for(Material m : Material.values()){
-					blocked_interact.add(m.getId());
-				}
-				skip = true;
-			}else if(blockedInteract[0].equalsIgnoreCase("none")){
-				skip = true;
-			}
-		}
-		if(!skip){
-			for(String blocked : blockedInteract){
-				blocked = blocked.trim();
-				try{
-					blocked_interact.add(Integer.valueOf(blocked));
-				}catch(Exception e){
-					plugin.log.warning("Configuration Problem: '" + blocked + "' is not a number");
-				}
-			}
-		}
-		skip = false;
+		blocked_interact = new EventList(plugin, blockedInteract);
 		/*## Commands ##*/
-		for(String blocked : blockedCommands){
-			blocked_commands.add(blocked.trim());
-		}
+		blocked_commands = new EventList(true, plugin, blockedCommands);
 		/*## Inventories ##*/
 		for(Player player : Bukkit.getOnlinePlayers()){
 			inventories.put(player, new VirtualInventory(player, world, plugin));
 		}
-		//for(Player player : inventories.keySet()){
-		//	inventories.get(player).reload();
-		//}
 		/*## GameMode Regions ##*/
 		Plugin p = plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 		if(p != null){
