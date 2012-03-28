@@ -44,6 +44,35 @@ public class AntiShare extends PluginWrapper {
 	 *  	https://bukkit.atlassian.net/browse/BUKKIT-####
 	 */
 
+	/* =======================================================
+	 *  CHANGES SINCE 3.0.0 - AntiShare
+	 * =======================================================
+	 *  - Conflict detection
+	 *  - Configuration Helper
+	 *  - Regions
+	 *  - /gm
+	 *  - Inventory Mirror
+	 *  - Periodic Save
+	 *  - Update Check
+	 *  - Usage Statistics
+	 *  - Better API
+	 *  - Debugger
+	 *  - 'Hazards'
+	 *  - Survival block tracking
+	 *  - Negation in tracking lists
+	 *  - Negation in event lists
+	 *  - Words and ID's in the configuration lists
+	 *  - Log analyzer
+	 *  - Notification Event
+	 *  - Bug Event
+	 *  - CraftBukkit 1.2.4-R0.1 Support for Minecraft 1.2.4
+	 *  - Latest developer version of feildmaster's Enhanced Configuration
+	 *  - [Coming Soon] Graphical Configuration Editor
+	 *  - [Coming Soon] Graphical Permissions Editor
+	 *  - [Coming Soon] Graphical Help
+	 *  - [Coming Soon] Creative Explosions
+	 */
+
 	// TODO: SET TO FALSE BEFORE RELEASE
 	public static boolean DEBUG_MODE = true;
 
