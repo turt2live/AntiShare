@@ -157,10 +157,10 @@ public class VirtualInventory {
 	}
 
 	public void saveInventoryToDisk(){
-		if(!isTemp()){
-			//unloadFromTemporary();
-			saveInventory(player.getGameMode());
+		if(isTemp()){
+			unloadFromTemporary();
 		}
+		saveInventory(player.getGameMode());
 		saveToDisk(GameMode.CREATIVE, getCreativeInventory());
 		saveToDisk(GameMode.SURVIVAL, getSurvivalInventory());
 	}
