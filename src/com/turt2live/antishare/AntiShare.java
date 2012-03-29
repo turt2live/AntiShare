@@ -26,6 +26,12 @@ public class AntiShare extends PluginWrapper {
 	/* TODO: Wait until an API solution is available
 	 *  - TNT Creative Explosions
 	 *  
+	 *  TODO: Add these features:
+	 *  - Graphical configuration
+	 *  - Graphical permissions setup
+	 *  - Help GUI
+	 *  - TNT Creative Explosions
+	 *  
 	 *  Not officially a "todo", just a potential optimization:
 	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211) [Hackish code]
 	 *  - Inventory mirror creative-glitch (BUKKIT-1211) [Hackish code]
@@ -40,38 +46,14 @@ public class AntiShare extends PluginWrapper {
 	 *  	https://bukkit.atlassian.net/browse/BUKKIT-####
 	 */
 
-	/* =======================================================
-	 *  CHANGES SINCE 3.0.0 - AntiShare
-	 * =======================================================
-	 *  - Conflict detection
-	 *  - Configuration Helper
-	 *  - Regions
-	 *  - /gm
-	 *  - Inventory Mirror
-	 *  - Periodic Save
-	 *  - Update Check
-	 *  - Usage Statistics
-	 *  - Better API
-	 *  - Debugger
-	 *  - 'Hazards'
-	 *  - Survival block tracking
-	 *  - Negation in tracking lists
-	 *  - Negation in event lists
-	 *  - Words and ID's in the configuration lists
-	 *  - Log analyzer
-	 *  - Notification Event
-	 *  - Bug Event
-	 *  - Better permissions (makes more sense now)
-	 *  - CraftBukkit 1.2.4-R0.1 Support for Minecraft 1.2.4
-	 *  - Latest developer version of feildmaster's Enhanced Configuration
-	 *  - [Coming Soon] Graphical Configuration Editor
-	 *  - [Coming Soon] Graphical Permissions Editor
-	 *  - [Coming Soon] Graphical Help
-	 *  - [Coming Soon] Creative Explosions
+	/*
+	 * Note To Self:
+	 * The plugin.yml file has already been updated to 
+	 * 3.2.0-PRE RELEASE, don't change the version number >.<
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
-	public static boolean DEBUG_MODE = false;
+	public static boolean DEBUG_MODE = true;
 
 	private Configuration config;
 	public ASLog log;
