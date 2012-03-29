@@ -41,22 +41,24 @@
             </manifest>
         </jar>
     </target>
-	<target name="javadoc" description="Generate JavaDoc" depends="build">
-		<delete dir="/var/www/javadoc/vault" includes="**/*" failonerror="false" />
-		<javadoc packagenames="com.turt2live.antishare.api,com.turt2live.antishare.debug,com.turt2live.antishare.event"
-				sourcepath="${src}"
-				destdir="/var/www/javadoc/AntiShare"
-				access="public"
-				windowtitle="AntiShare"
-				verbose="false"
-				author="true"
-				version="true">
-			<classpath>
-				<fileset dir="lib" includes="**/*.jar"/>
-			</classpath>
-			<bottom>
-				<![CDATA[<b>Turt2Live, 2012</b>]]>
-			</bottom>
-		</javadoc>
-	</target>
+    <!-- Thanks to Sleaker for having a build.xml script :) -->
+    <target name="javadoc" depends="build">
+        <echo>Generating JavaDoc</echo>
+        <delete dir="/var/www/javadoc/AntiShare" includes="**/*" failonerror="false" />
+        <javadoc packagenames="com.turt2live.antishare.api,com.turt2live.antishare.debug,com.turt2live.antishare.event"
+                sourcepath="${src}"
+                destdir="/var/www/javadoc/AntiShare"
+                access="public"
+                windowtitle="AntiShare"
+                verbose="false"
+                author="true"
+                version="true">
+            <classpath>
+                <fileset dir="${lib}" includes="**/*.jar"/>
+            </classpath>
+            <bottom>
+                <![CDATA[<b>Turt2Live, 2012</b>]]>
+            </bottom>
+        </javadoc>
+    </target>
 </project>
