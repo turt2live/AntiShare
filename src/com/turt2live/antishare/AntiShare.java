@@ -25,10 +25,6 @@ public class AntiShare extends PluginWrapper {
 
 	/* TODO: Wait until an API solution is available
 	 *  - TNT Creative Explosions
-	 *  	- Refs in plugin.yml, config.yml, world.yml, PermissionsMenu.java, and OtherEditor.java have been removed
-	 *  
-	 *  TODO: Fix these known bugs:
-	 *  - TNT Related (waiting on PR to be accepted)
 	 *  
 	 *  Not officially a "todo", just a potential optimization:
 	 *  - Creative/Survival Block Tracking (BUKKIT-1215/1214, BUKKIT-1211) [Hackish code]
@@ -75,7 +71,7 @@ public class AntiShare extends PluginWrapper {
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
-	public static boolean DEBUG_MODE = true;
+	public static boolean DEBUG_MODE = false;
 
 	private Configuration config;
 	public ASLog log;
