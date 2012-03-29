@@ -208,7 +208,6 @@
 #   - These are when a player (without the allow node or is met by the conditions of only if creative) places
 #     a TNT block and when that block explodes it doesn't drop anything, but still causes damage.
 #   - NOTE: Due to a CraftBukkit restriction, this is not in play until a later release. Sorry!! 
-# 
 events:
   block_break: none
   block_place: 57,41,42
