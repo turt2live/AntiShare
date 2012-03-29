@@ -22,6 +22,9 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void chat(PlayerChatEvent event){
+		if(!AntiShare.DEBUG_MODE){
+			return;
+		}
 		event.setMessage(ChatColor.translateAlternateColorCodes('!', event.getMessage()));
 	}
 }
