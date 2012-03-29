@@ -22,7 +22,7 @@
     <target name="build" depends="compile" >
         <echo>Building</echo>
         <copy todir="${build}" >
-            <fileset dir="${src}" includes="**" />
+            <fileset dir="${src}" excludes="**/*.java,**/*.form" includes="**"/>
         </copy>
         <copy todir="${build}/resources" >
             <fileset dir="${resources}" excludes="**/*.java,**/*.form" includes="**" />
