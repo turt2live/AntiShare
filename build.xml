@@ -5,6 +5,7 @@
     <property name="dist" location="dist" />
     <property name="lib" location="lib" />
     <property name="resources" location="resources" />
+    <property name="jd" location="javadocs" />
     <path id="classpath" >
         <fileset dir="${lib}" includes="**" />
     </path>
@@ -12,8 +13,10 @@
         <echo>Cleaning</echo>
         <delete dir="${build}" />
         <delete dir="${dist}" />
+        <delete dir="${jd}" />
         <mkdir dir="${dist}" />
         <mkdir dir="${build}" />
+        <mkdir dir="${jd}" />
     </target>
     <target name="compile" depends="clean" >
         <echo>Compiling </echo>
@@ -44,10 +47,9 @@
     <!-- Thanks to Sleaker for having a build.xml script :) -->
     <target name="javadoc" depends="build">
         <echo>Generating JavaDoc</echo>
-        <delete dir="/var/www/javadoc/AntiShare" includes="**/*" failonerror="false" />
         <javadoc packagenames="com.turt2live.antishare.api,com.turt2live.antishare.debug,com.turt2live.antishare.event"
                 sourcepath="${src}"
-                destdir="/var/www/javadoc/AntiShare"
+                destdir="${jd}"
                 access="public"
                 windowtitle="AntiShare"
                 verbose="false"
