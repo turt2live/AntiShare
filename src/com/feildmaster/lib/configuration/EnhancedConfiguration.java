@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.Validate;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -37,7 +35,7 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	private final Plugin plugin;
 	private Exception exception;
 	private Map<String, Object> cache = new HashMap<String, Object>();
-	protected boolean modified = false;
+	private boolean modified = false;
 	private long last_modified = -1L;
 
 	/**
@@ -49,10 +47,6 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	 */
 	public EnhancedConfiguration(Plugin plugin){
 		this("config.yml", plugin);
-	}
-
-	public EnhancedConfiguration(Plugin plugin, boolean load){
-		this("config.yml", plugin, load);
 	}
 
 	/**
@@ -67,10 +61,6 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 		this(new File(plugin.getDataFolder(), file), plugin);
 	}
 
-	public EnhancedConfiguration(String file, Plugin plugin, boolean load){
-		this(new File(plugin.getDataFolder(), file), plugin, load);
-	}
-
 	/**
 	 * Creates a new EnhancedConfiguration with the file provided and a null {@link Plugin}
 	 * 
@@ -80,10 +70,6 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 		this(file, null);
 	}
 
-	public EnhancedConfiguration(File file, boolean load){
-		this(file, null, load);
-	}
-
 	/**
 	 * Creates a new EnhancedConfiguration with given File and Plugin.
 	 * 
@@ -91,24 +77,10 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	 * @param plugin The plugin registered to this Configuration
 	 */
 	public EnhancedConfiguration(File file, Plugin plugin){
-		this(file, plugin, true);
-	}
-
-	/**
-	 * Creates a new EnhancedConfiguration, with an option to load in the constructor
-	 * 
-	 * @param file The file to store in this configuration
-	 * @param plugin The plugin registered to this Configuration
-	 * @param load True to load configuration in constructor
-	 */
-	public EnhancedConfiguration(File file, Plugin plugin, boolean load){
 		this.file = file;
 		this.plugin = plugin;
 		options = new EnhancedConfigurationOptions(this);
-
-		if(load){
-			load();
-		}
+		load();
 	}
 
 	/**
@@ -120,14 +92,14 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	 * 
 	 * @return True on successful load
 	 */
-	public boolean load(){
+	public final boolean load(){
 		if(last_modified != -1L && !isFileModified()){ // File hasn't been modified since last load
 			return true;
 		}
 
 		try{
-			clearCache();
 			load(file);
+			clearCache();
 			last_modified = file.lastModified();
 			return true;
 		}catch(Exception ex){
@@ -143,7 +115,7 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	 * 
 	 * @return True on successful save
 	 */
-	public boolean save(){
+	public final boolean save(){
 		try{
 			save(file);
 			modified = false;
@@ -245,7 +217,7 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 	/**
 	 * Clear the defaults from memory
 	 */
-	public void clearDefaults(){
+	public final void clearDefaults(){
 		setDefaults(new MemoryConfiguration());
 	}
 
@@ -270,67 +242,6 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 		}
 	}
 
-	// This section lets me hack more into configuration
-	@Override
-	public EnhancedMemorySection getConfigurationSection(String path){ // Sections are exact paths now!
-		if(path == null){
-			throw new IllegalArgumentException("Path cannot be null");
-		}
-
-		EnhancedMemorySection section = (EnhancedMemorySection) super.getConfigurationSection(path);
-		if(section == null){
-			return createSection(path);
-		}
-		return section;
-	}
-
-	@Override
-	public EnhancedMemorySection createSection(String path){
-		Validate.notNull(path, "Path cannot be null");
-		Validate.isTrue(path.length() != 0, "Cannot create section at empty path");
-
-		final char seperator = getRoot().options().pathSeparator();
-		// i1 is the leading (higher) index
-		// i2 is the trailing (lower) index
-		int i1 = -1, i2;
-		EnhancedMemorySection section = null;
-		while ((i1 = path.indexOf(seperator, i2 = i1 + 1)) != -1){
-			String node = path.substring(i2, i1);
-			EnhancedMemorySection subSection = section == null ? getConfigurationSection(node) : section.getConfigurationSection(node);
-			if(subSection == null){
-				section = section.createLiteralSection(node);
-			}else{
-				section = subSection;
-			}
-		}
-
-		String key = path.substring(i2);
-		if(section == null){
-			return createLiteralSection(key);
-		}
-		return section.createLiteralSection(key);
-	}
-
-	public EnhancedMemorySection createLiteralSection(String key){
-		EnhancedMemorySection newSection = new EnhancedMemorySection(this, this, key);
-		map.put(key, newSection);
-		return newSection;
-	}
-
-	@Override
-	protected void convertMapsToSections(Map<?, ?> input, ConfigurationSection section){
-		for(Map.Entry<?, ?> entry : input.entrySet()){
-			String key = entry.getKey().toString();
-			Object value = entry.getValue();
-
-			if(value instanceof Map){
-				convertMapsToSections((Map<?, ?>) value, section.createSection(key));
-			}else{
-				section.set(key, value);
-			}
-		}
-	}
-
 	/**
 	 * @return {@link EnhancedConfigurationOptions}
 	 */
@@ -341,37 +252,12 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 
 	@Override
 	public Object get(String path, Object def){
-		Validate.notNull(path, "Path cannot be null");
-
-		if(path.length() == 0){
-			return this;
-		}
-
 		Object value = cache.get(path);
 		if(value != null){
 			return value;
 		}
 
-		final char seperator = getRoot().options().pathSeparator();
-		// i1 is the leading (higher) index
-		// i2 is the trailing (lower) index
-		int i1 = -1, i2;
-		ConfigurationSection section = this;
-		while ((i1 = path.indexOf(seperator, i2 = i1 + 1)) != -1){
-			section = section.getConfigurationSection(path.substring(i2, i1));
-			if(section == null){
-				return def;
-			}
-		}
-
-		String key = path.substring(i2);
-		if(section == this){
-			Object result = map.get(key);
-			value = (result == null) ? def : result;
-		}else{
-			value = section.get(path, def);
-		}
-
+		value = super.get(path, def);
 		if(value != null){
 			cache.put(path, value);
 		}
@@ -381,9 +267,6 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 
 	@Override
 	public void set(String path, Object value){
-		Validate.notNull(path, "Path cannot be null");
-		Validate.isTrue(path.length() != 0, "Cannot set to an empty path");
-
 		if(value == null && cache.containsKey(path)){
 			cache.remove(path);
 			modified = true;
@@ -392,39 +275,15 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 				modified = true;
 			}
 			cache.put(path, value);
-		}
 
-		final char seperator = getRoot().options().pathSeparator();
-		// i1 is the leading (higher) index
-		// i2 is the trailing (lower) index
-		int i1 = -1, i2;
-		ConfigurationSection section = this;
-		while ((i1 = path.indexOf(seperator, i2 = i1 + 1)) != -1){
-			String node = path.substring(i2, i1);
-			ConfigurationSection subSection = section.getConfigurationSection(node);
-			if(subSection == null){
-				section = section.createSection(node);
-			}else{
-				section = subSection;
-			}
 		}
-
-		String key = path.substring(i2);
-		if(section == this){
-			if(value == null){
-				map.remove(key);
-			}else{
-				map.put(key, value);
-			}
-		}else{
-			section.set(key, value);
-		}
+		super.set(path, value);
 	}
 
 	/**
 	 * Removes the specified path from the configuration.
 	 * <p />
-	 * Currently equivalent to set(path, null).
+	 * Currently equivilent to set(path, null).
 	 * 
 	 * @param path The path to remove
 	 */

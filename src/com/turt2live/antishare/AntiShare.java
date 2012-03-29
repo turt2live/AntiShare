@@ -89,6 +89,7 @@ public class AntiShare extends PluginWrapper {
 		try{
 			api = new ASAPI();
 			debugger = new Debugger();
+			MultiWorld.detectWorlds(this);
 			if(DEBUG_MODE){
 				getServer().getPluginManager().registerEvents(debugger, this);
 			}
@@ -106,7 +107,6 @@ public class AntiShare extends PluginWrapper {
 			new File(getDataFolder(), "inventories").mkdirs(); // Setup folders
 			cleanInventoryFolder();
 			getServer().getPluginManager().registerEvents(new ASListener(this), this);
-			MultiWorld.detectWorlds(this);
 			storage = new VirtualStorage(this);
 			log.info("Converting pre-3.0.0 creative blocks...");
 			int converted = storage.convertCreativeBlocks();
