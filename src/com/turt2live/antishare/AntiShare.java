@@ -65,6 +65,7 @@ public class AntiShare extends PluginWrapper {
 	 *  - Log analyzer
 	 *  - Notification Event
 	 *  - Bug Event
+	 *  - Better permissions (makes more sense now)
 	 *  - CraftBukkit 1.2.4-R0.1 Support for Minecraft 1.2.4
 	 *  - Latest developer version of feildmaster's Enhanced Configuration
 	 *  - [Coming Soon] Graphical Configuration Editor
