@@ -297,6 +297,7 @@ public class RegionHandler {
 		if(!hasHook){
 			return;
 		}
+		this.hooks.getWorldEdit().clean();
 		boolean flatfile = true;
 		if(plugin.getConfig().getBoolean("SQL.use") && plugin.getSQLManager() != null){
 			if(plugin.getSQLManager().isConnected()){
@@ -400,5 +401,9 @@ public class RegionHandler {
 
 	public HookManager getHooks(){
 		return hooks;
+	}
+
+	public RegionManager getManager(){
+		return manager;
 	}
 }

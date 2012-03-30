@@ -30,7 +30,7 @@ public class WorldEditHook implements Hook {
 		return wePlugin;
 	}
 
-	public static void clean(AntiShare plugin){
+	public void clean(){
 		File[] listing = new File(plugin.getDataFolder(), "regions").listFiles();
 		if(listing != null){
 			for(File regionFile : listing){

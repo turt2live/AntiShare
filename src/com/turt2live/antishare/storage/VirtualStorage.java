@@ -25,7 +25,6 @@ import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.enums.BlockedType;
 import com.turt2live.antishare.regions.ASRegion;
-import com.turt2live.antishare.regions.hooks.WorldEditHook;
 
 public class VirtualStorage implements Listener {
 
@@ -190,7 +189,6 @@ public class VirtualStorage implements Listener {
 	}
 
 	public void saveToDisk(){
-		WorldEditHook.clean(plugin);
 		Set<World> worldListing = worlds.keySet();
 		for(World world : worldListing){
 			worlds.get(world).saveToDisk();

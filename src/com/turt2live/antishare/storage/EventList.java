@@ -49,6 +49,7 @@ public class EventList {
 
 	public EventList(boolean stringsOnly, AntiShare plugin, String... configurationValue){
 		this.raw = configurationValue;
+		this.useString = stringsOnly;
 		int index = 0;
 		for(String blocked : raw){
 			blocked = blocked.trim();
@@ -79,10 +80,20 @@ public class EventList {
 		if(!command.startsWith("/")){
 			command = "/" + command;
 		}
-		if(whitelist){
-			return !blocked_strings.contains(command);
+		command = command.trim().toLowerCase();
+		boolean found = false;
+		for(String string : blocked_strings){
+			string = string.trim().toLowerCase();
+			if(command.startsWith(string)
+					|| command.equalsIgnoreCase(string)){
+				found = true;
+				break;
+			}
 		}
-		return blocked_strings.contains(command);
+		if(whitelist){
+			return found == false;
+		}
+		return found == true;
 	}
 
 	public String[] getRaw(){

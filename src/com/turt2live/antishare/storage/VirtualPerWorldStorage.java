@@ -492,6 +492,9 @@ public class VirtualPerWorldStorage {
 			if(plugin.getSQLManager().isConnected()){
 				flatfile = false;
 				SQLManager sql = plugin.getSQLManager();
+				if(!sql.tableExists("AntiShare_Blocks")){
+					return 0;
+				}
 				ResultSet results = sql.getQuery("SELECT * FROM AntiShare_Blocks");
 				if(results != null){
 					try{

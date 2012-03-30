@@ -30,6 +30,13 @@ public class RegionManager {
 		plugin.storage.saveRegion(region);
 	}
 
+	public ASRegion newRegion(Selection selection, String player, GameMode gamemode, String name){
+		ASRegion region = new ASRegion(selection, player, gamemode);
+		region.setName(name);
+		plugin.storage.saveRegion(region);
+		return region;
+	}
+
 	public void removeRegionAtLocation(Location location){
 		plugin.storage.removeRegion(plugin.storage.getRegion(location));
 	}

@@ -92,12 +92,12 @@ public class SQLManager {
 		createQuery("CREATE TABLE IF NOT EXISTS `AntiShare_Regions` (" +
 				"  `id` int(11) NOT NULL AUTO_INCREMENT," +
 				"  `regionName` varchar(255) NOT NULL," +
-				"  `mix` decimal(11,25) NOT NULL," +
-				"  `miy` decimal(11,25) NOT NULL," +
-				"  `miz` decimal(11,25) NOT NULL," +
-				"  `max` decimal(11,25) NOT NULL," +
-				"  `may` decimal(11,25) NOT NULL," +
-				"  `maz` decimal(11,25) NOT NULL," +
+				"  `mix` decimal(25,25) NOT NULL," +
+				"  `miy` decimal(25,25) NOT NULL," +
+				"  `miz` decimal(25,25) NOT NULL," +
+				"  `max` decimal(25,25) NOT NULL," +
+				"  `may` decimal(25,25) NOT NULL," +
+				"  `maz` decimal(25,25) NOT NULL," +
 				"  `creator` varchar(25) NOT NULL," +
 				"  `gamemode` varchar(25) NOT NULL," +
 				"  `showEnter` int(11) NOT NULL," +
@@ -131,6 +131,16 @@ public class SQLManager {
 
 	public String getDatabase(){
 		return plugin.getConfig().getString("SQL.database");
+	}
+
+	public boolean tableExists(String tablename){
+		try{
+			Statement stmt = connection.createStatement();
+			stmt.executeQuery("SELECT * FROM " + tablename);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
 	}
 
 	public void createQuery(String query){

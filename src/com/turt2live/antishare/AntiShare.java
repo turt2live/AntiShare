@@ -53,7 +53,7 @@ public class AntiShare extends PluginWrapper {
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
-	public static boolean DEBUG_MODE = false;
+	public static boolean DEBUG_MODE = true;
 
 	private Configuration config;
 	public ASLog log;
@@ -77,6 +77,12 @@ public class AntiShare extends PluginWrapper {
 			}
 			log = new ASLog(this, getLogger());
 			log.logTechnical("Starting up...");
+			if(getConfig().getBoolean("SQL.use")){
+				sql = new SQLManager(this);
+				if(sql.attemptConnectFromConfig()){
+					sql.checkValues();
+				}
+			}
 			config = new Configuration(this);
 			config.create();
 			config.reload();
@@ -93,12 +99,6 @@ public class AntiShare extends PluginWrapper {
 			log.info("Converting pre-3.0.0 creative blocks...");
 			int converted = storage.convertCreativeBlocks();
 			log.info("Converted " + converted + " blocks!");
-			if(getConfig().getBoolean("SQL.use")){
-				sql = new SQLManager(this);
-				if(sql.attemptConnectFromConfig()){
-					sql.checkValues();
-				}
-			}
 			regions = new RegionHandler(this);
 			if(!DEBUG_MODE){
 				UsageStatistics.send(this);
@@ -138,8 +138,8 @@ public class AntiShare extends PluginWrapper {
 			log.logTechnical("Shutting down...");
 			getServer().getScheduler().cancelTasks(this);
 			log.info("Saving virtual storage to disk/SQL");
-			storage.saveToDisk();
 			regions.saveStatusToDisk();
+			storage.saveToDisk();
 			if(sql != null){
 				sql.disconnect();
 			}
