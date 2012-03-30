@@ -53,7 +53,7 @@ public class AntiShare extends PluginWrapper {
 	 */
 
 	// TODO: SET TO FALSE BEFORE RELEASE
-	public static boolean DEBUG_MODE = true;
+	public static boolean DEBUG_MODE = false;
 
 	private Configuration config;
 	public ASLog log;
