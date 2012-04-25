@@ -35,7 +35,7 @@ public class UsageStatistics {
 			e1.printStackTrace();
 		}
 		try{
-			URL statsURL = new URL("http://mc.turt2live.com/plugins/test/plugin_stats.php?plugin=AntiShare&version=" + pluginVersion + "&cbVersion=" + bukkitVersion);
+			URL statsURL = new URL("http://mc.turt2live.com/plugins/plugin_stats.php?plugin=AntiShare&version=" + pluginVersion + "&cbVersion=" + bukkitVersion);
 			BufferedReader in = new BufferedReader(new InputStreamReader(statsURL.openConnection().getInputStream()));
 			String line;
 			boolean sent = false;
