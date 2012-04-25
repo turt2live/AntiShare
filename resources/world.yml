@@ -1,54 +1,37 @@
-# World Configuration
-# The defaults here are the same as the config.yml
-# If you would like to use a "global" value, set the value here as 'global' (like in defaults)
-# Otherwise, use a custom value.
-# For an explanation of each value, see config.yml
-events:
-  block_break: global
-  block_place: global
-  death: global
-  drop_item: global
-  interact: global
+# For help see the following page
+# http://dev.bukkit.org/server-mods/antishare/pages/3-2-x-help/#w-per-world-configuration
+# 
+# General Help:
+# http://dev.bukkit.org/server-mods/antishare/pages/3-2-x-help/
+blocked-actions:
+  block-place: global
+  block-break: global
+  drop-items-on-death: global
+  pickup-items: global
+  drop-items: global
+  right-click: global
+  use-items: global
   commands: global
-messages:
-  block_break: global
-  block_place: global
-  death: global
-  drop_item: global
-  interact: global
-  eggs: global
-  exp_bottle: global
-  inventory_swap: global
-  creativeModeBlock: global
-  survivalModeBlock: global
-  bedrock: global
-  pvp: global
-  mobpvp: global
-  noBlockDrop: global
-  illegalCommand: global
-  worldSwap: global
-  bucket: global
-  flint: global
-  tnt: global
-  fire_charge: global
-hazards:
-  allow_eggs: global
-  allow_exp_bottle: global
-  allow_bedrock: global
-  allow_buckets: global
-  allow_fire_charge: global
-  allow_flint: global
-  allow_tnt: global
-  tnt_explosions: global
-  region_items: global
-other:
-  only_if_creative: global
-  inventory_swap: global
-  track_blocks: global
-  pvp: global
-  pvp-mobs: global
-  blockDrops: global
-  worldTransfer: global
-  worlds-ignore-survival: global
-  tracked-blocks-creative: global
-  tracked-blocks-survival: global
+  combat-against-players: global
+  combat-against-mobs: global
+blocked-lists:
+  block-place: global
+  block-break: global
+  dropped-items-on-death: global
+  picked-up-items: global
+  dropped-items: global
+  right-click: global
+  use-items: global
+  commands: global
+enabled-features:
+  gamemode-regions: global
+  world-split: global
+  no-experience-for-creative: global
+  no-drops-when-block-break:
+    inventories: global
+    attached-blocks: global
+worldsplit:
+  split: none
+  value: 0
+  creative: 1
+  survival: 0

@@ -1,5 +1,10 @@
 package com.turt2live.antishare;
 
+/**
+ * Update Checker
+ * 
+ * @author turt2live
+ */
 public class UpdateChecker {
 
 	/*
@@ -8,14 +13,18 @@ public class UpdateChecker {
 	 * URL: https://github.com/MilkBowl/Vault/blob/master/src/net/milkbowl/vault/Vault.java#L118
 	 */
 
-	public UpdateChecker(final AntiShare plugin){
-		plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable(){
+	/**
+	 * Creates and starts the update checker
+	 */
+	public static void start(){
+		final AntiShare plugin = AntiShare.instance;
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				try{
-					if(plugin.api.getUtilsAPI().isOutdated()){
-						String newVersion = plugin.api.getUtilsAPI().getNewVersion();
-						String currentVersion = plugin.api.getVersion();
+					if(AntiShare.isOutdated()){
+						String newVersion = AntiShare.getNewVersion();
+						String currentVersion = AntiShare.getVersion();
 						plugin.getLogger().warning("AntiShare " + newVersion + " is out! You are running AntiShare " + currentVersion);
 						plugin.getLogger().warning("Update AntiShare at: http://dev.bukkit.org/server-mods/antishare");
 					}

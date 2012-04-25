@@ -1,0 +1,21 @@
+# For help please see the following page
+# http://dev.bukkit.org/server-mods/antishare/pages/3-2-x-help/#w-messages-configuration
+# 
+# General Help:
+# http://dev.bukkit.org/server-mods/antishare/pages/3-2-x-help/
+# 
+# If you don't want a message to show, set the message to "no message". AntiShare 
+# will know what you mean!
+blocked-action:
+  break-block: "You cannot break that"
+  place-block: "You cannot place that"
+  die-with-item: "You cannot die with illegal items"
+  drop-item: "You cannot drop that"
+  pickup-item: "You cannot pick that up"
+  right-click: "You cannot right click that"
+  use-item: "You cannot use that"
+  creative-block-break: "You can't break creative player's blocks!"
+  survival-block-break: "You can't break survival player's blocks!"
+  hit-player: "You cannot hit players"
+  hit-mob: "You cannot hit mobs"
+  command: "You cannot use that command"

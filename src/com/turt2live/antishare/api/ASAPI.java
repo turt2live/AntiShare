@@ -1,138 +1,82 @@
 package com.turt2live.antishare.api;
 
-import org.bukkit.entity.Player;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 
-import com.turt2live.antishare.Conflicts;
-import com.turt2live.antishare.SQL.SQLManager;
-import com.turt2live.antishare.conversations.ConfigurationConversation;
-import com.turt2live.antishare.permissions.PermissionsHandler;
-import com.turt2live.antishare.regions.RegionHandler;
-import com.turt2live.antishare.storage.VirtualStorage;
+import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.regions.ASRegion;
+import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 
 /**
- * AntiShare API
+ * The AntiShare API<br>
+ * Currently the API only supports regions
  * 
- * @author <a href='https://github.com/turt2live'>turt2live</a>
+ * @author turt2live
  */
-public class ASAPI extends APIBase {
+public class ASAPI {
 
-	private ConflictAPI conflicts;
-	private EventAPI events;
-	private RegionAPI regions;
-	private SettingsAPI settings;
-	private UtilsAPI utils;
+	private AntiShare plugin;
 
 	/**
-	 * Gets the conflict API
-	 * 
-	 * @return the conflict API
+	 * Creates a new AntiShare API instance
 	 */
-	public ConflictAPI getConflictAPI(){
-		if(conflicts == null){
-			conflicts = new ConflictAPI();
-		}
-		return conflicts;
+	public ASAPI(){
+		plugin = AntiShare.instance;
 	}
 
 	/**
-	 * Gets the event API
+	 * Gets the plugin instance of AntiShare
 	 * 
-	 * @return the event API
+	 * @return the plugin
 	 */
-	public EventAPI getEventAPI(){
-		if(events == null){
-			events = new EventAPI();
-		}
-		return events;
+	public AntiShare getPluginInstance(){
+		return plugin;
 	}
 
 	/**
-	 * Gets the region API
+	 * Creates a new AntiShare Region and adds it to the world
 	 * 
-	 * @return the region API
+	 * @param selection the WorldEdit selection
+	 * @param owner the region owner/creator (cannot be null, does not have to be unique)
+	 * @param gamemode the region's Game Mode
+	 * @param name the region name
 	 */
-	public RegionAPI getRegionAPI(){
-		if(regions == null){
-			regions = new RegionAPI();
-		}
-		return regions;
+	public void createRegion(Selection selection, String owner, GameMode gamemode, String name){
+		plugin.getRegionManager().addRegion(selection, owner, name, gamemode);
 	}
 
 	/**
-	 * Gets the settings API
+	 * Gets a region by name
 	 * 
-	 * @return the settings API
+	 * @param name the region name
+	 * @return the region (null if none found)
 	 */
-	public SettingsAPI getSettingsAPI(){
-		if(settings == null){
-			settings = new SettingsAPI();
-		}
-		return settings;
+	public ASRegion getRegion(String name){
+		return plugin.getRegionManager().getRegion(name);
 	}
 
 	/**
-	 * Get the utilities API
+	 * Gets a region by location. The location must be somewhere in the region (even border)
 	 * 
-	 * @return the utilities API
+	 * @param location the location
+	 * @return the region (null if none found)
 	 */
-	public UtilsAPI getUtilsAPI(){
-		if(utils == null){
-			utils = new UtilsAPI();
-		}
-		return utils;
+	public ASRegion getRegion(Location location){
+		return plugin.getRegionManager().getRegion(location);
 	}
 
 	/**
-	 * Gets the conflicts handler
+	 * Edits a region
 	 * 
-	 * @return AntiShare's conflict handler
+	 * @param region the region
+	 * @param key the key
+	 * @param value the value
+	 * @param target the target editing the region (cannot be null)
 	 */
-	public Conflicts getConflictHandler(){
-		return getPlugin().getConflicts();
+	public void editRegion(ASRegion region, RegionKeyType key, String value, CommandSender target){
+		plugin.getRegionFactory().editRegion(region, key, value, target);
 	}
 
-	/**
-	 * Gets the region handler used by AntiShare
-	 * 
-	 * @return the region handler
-	 */
-	public RegionHandler getRegionHandler(){
-		return getPlugin().getRegionHandler();
-	}
-
-	/**
-	 * Gets the SQL Manager being used
-	 * 
-	 * @return the SQL Manager instance
-	 */
-	public SQLManager getSQLManager(){
-		return getPlugin().getSQLManager();
-	}
-
-	/**
-	 * Gets the virtual storage system
-	 * 
-	 * @return the virtual storage
-	 */
-	public VirtualStorage getStorageHandler(){
-		return getPlugin().storage;
-	}
-
-	/**
-	 * Gets the permission handler used by AntiShare
-	 * 
-	 * @return the handler
-	 */
-	public PermissionsHandler getPermissionsHandler(){
-		return getPlugin().getPermissions();
-	}
-
-	/**
-	 * Force starts a configuration helper upon a Player
-	 * 
-	 * @param player the player to send the helper to
-	 */
-	public void startConfigurationHelper(Player player){
-		new ConfigurationConversation(getPlugin(), player);
-	}
 }
