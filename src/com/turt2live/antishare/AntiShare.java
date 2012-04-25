@@ -37,36 +37,6 @@ import com.turt2live.antishare.storage.SQL;
  */
 public class AntiShare extends PluginWrapper {
 
-	/* ===============================
-	 *  CHANGES SINCE 3.1.3
-	 * ===============================
-	 * 
-	 * - Changed how AntiShare deals with "blocked lists"
-	 * - Changed entire configuration structure
-	 * - Changed permissions
-	 * - Removed configuration helper
-	 * - Removed internal logging
-	 * - Removed log analyzer
-	 * - Added option to use the /gm command
-	 * - Changed alert system, dropping "kick for spam" feature added in development
-	 * - /rl safe
-	 * - /as rl now updates from the configuration correctly
-	 * - Updated SQL handling
-	 * - Added storage converter (SQL <-> File)
-	 * - Added AntiShare tool to determine what a block is (creative/survival/generated)
-	 * - Implemented new inventory system
-	 * - Modified /as mirror, now it allows editing and live watching
-	 * - Removed a piston exploit
-	 * - Removed WorldGuard and MobArena from conflicts
-	 * - Pickup Items event
-	 * - World split
-	 * - Fixed block drops
-	 * - Fixed regions 'moving' around the world
-	 * - [TODO] Add item data support to block lists (eg 17:1)
-	 * - Easier API
-	 * - Removed world denial, use a multi-world plugin
-	 */
-
 	/**
 	 * Represents a Log Entry Type
 	 * 
