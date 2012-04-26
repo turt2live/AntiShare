@@ -5,9 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
@@ -20,10 +17,9 @@ import com.turt2live.antishare.regions.ASRegion;
  * 
  * @author turt2live
  */
-public class GameModeCommand implements Listener {
+public class GameModeCommand {
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerCommand(PlayerCommandPreprocessEvent event){
+	public static void onPlayerCommand(PlayerCommandPreprocessEvent event){
 		if((event.getMessage().toLowerCase().startsWith("/gm")
 				|| event.getMessage().toLowerCase().startsWith("/gamemode"))
 				&& AntiShare.instance.getConfig().getBoolean("enabled-features.gamemode-command")){
