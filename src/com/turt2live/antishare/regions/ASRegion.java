@@ -58,6 +58,25 @@ public class ASRegion {
 	}
 
 	/**
+	 * Creates a new region
+	 * 
+	 * @param world the world
+	 * @param minimum the minimum point
+	 * @param maximum the maximum point
+	 * @param setBy the player who made this
+	 * @param gamemode the gamemode of the region
+	 */
+	public ASRegion(World world, Location minimum, Location maximum, String setBy, GameMode gamemode){
+		this.region = new CuboidSelection(world, minimum, maximum);
+		this.setBy = setBy;
+		this.gamemode = gamemode;
+		this.world = region.getWorld();
+		id = String.valueOf(System.currentTimeMillis());
+		plugin = AntiShare.instance;
+		name = id;
+	}
+
+	/**
 	 * Sets the unique ID of this region
 	 * 
 	 * @param ID the new Unique ID
