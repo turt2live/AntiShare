@@ -322,6 +322,12 @@ public class ASListener implements Listener {
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, block.getWorld())){
 				type = AlertType.LEGAL;
 			}
+<<<<<<< HEAD
+=======
+			if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.USE)){
+				type = AlertType.ILLEGAL;
+			}
+>>>>>>> 94c016d2ee1faca06ae42f3594320f23e443c0f7
 
 			// Set messages
 			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
@@ -334,8 +340,13 @@ public class ASListener implements Listener {
 			if(config.get(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
 				type = AlertType.ILLEGAL;
 			}
+<<<<<<< HEAD
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
 				type = AlertType.LEGAL;
+=======
+			if(config.get(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
+				type = AlertType.ILLEGAL;
+>>>>>>> 94c016d2ee1faca06ae42f3594320f23e443c0f7
 			}
 
 			// Set messages
