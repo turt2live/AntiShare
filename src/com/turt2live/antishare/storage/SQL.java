@@ -127,7 +127,7 @@ public class SQL {
 					"  `itemDurability` int(11) NOT NULL," +
 					"  `itemAmount` int(11) NOT NULL," +
 					"  `itemData` int(11) NOT NULL," +
-					"  `itemEnchant` varchar(100) NOT NULL," +
+					"  `itemEnchant` text NOT NULL," +
 					"  PRIMARY KEY (`id`)" +
 					")"));
 			createQuery(connection.prepareStatement("CREATE TABLE IF NOT EXISTS `" + REGIONS_TABLE + "` (" +

@@ -315,11 +315,11 @@ public class ASListener implements Listener {
 
 		// If this event is triggered as legal from the right click, check use lists
 		if(type == AlertType.LEGAL){
+			if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.USE)){
+				type = AlertType.ILLEGAL;
+			}
 			// Check if they should be blocked
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, block.getWorld())){
-				type = AlertType.LEGAL;
-			}
-			if(!config.get(block.getWorld()).isBlocked(block.getType(), ListType.USE)){
 				type = AlertType.LEGAL;
 			}
 
@@ -331,10 +331,10 @@ public class ASListener implements Listener {
 		// If the event is triggered as legal from the use lists, check the player's item in hand
 		if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
 			// Check if they should be blocked
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
-				type = AlertType.LEGAL;
+			if(config.get(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
+				type = AlertType.ILLEGAL;
 			}
-			if(!config.get(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
 				type = AlertType.LEGAL;
 			}
 
