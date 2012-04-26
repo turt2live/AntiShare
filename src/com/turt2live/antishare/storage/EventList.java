@@ -26,7 +26,7 @@ public class EventList {
 	 * 
 	 * @param configurationValue the values
 	 */
-	public EventList(String... configurationValue){
+	public EventList(String node, String... configurationValue){
 		if(configurationValue.length == 0){
 			return;
 		}
@@ -35,16 +35,19 @@ public class EventList {
 		AntiShare plugin = AntiShare.instance;
 		boolean skip = false;
 
+		// Sanity
+		if(configurationValue.length <= 0){
+			return;
+		}
+
 		// Check if it's an "all or nothing" list
-		if(configurationValue.length == 1){
-			if(configurationValue[0].startsWith("*") || configurationValue[0].toLowerCase().startsWith("all")){
-				for(Material m : Material.values()){
-					blocked.add(m.getId());
-				}
-				skip = true;
-			}else if(configurationValue[0].startsWith("none")){
-				skip = true;
+		if(configurationValue[0].startsWith("*") || configurationValue[0].toLowerCase().startsWith("all")){
+			for(Material m : Material.values()){
+				blocked.add(m.getId());
 			}
+			skip = true;
+		}else if(configurationValue[0].startsWith("none")){
+			skip = true;
 		}
 
 		// If it's not an "all or nothing", loop it
@@ -52,6 +55,11 @@ public class EventList {
 			int index = 0;
 			for(String blocked : configurationValue){
 				blocked = blocked.trim();
+
+				// Sanity
+				if(blocked.length() <= 0){
+					continue;
+				}
 
 				// Whitelist?
 				if(blocked.equalsIgnoreCase("whitelist") && index == 0){
@@ -84,7 +92,7 @@ public class EventList {
 				try{
 					this.blocked.add(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
 				}catch(Exception e){
-					plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid!", Level.WARNING, LogType.INFO);
+					plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your config)", Level.WARNING, LogType.INFO);
 				}
 				index++;
 			}
@@ -104,9 +112,19 @@ public class EventList {
 		this.useString = stringsOnly;
 		int index = 0;
 
+		// Sanity
+		if(configurationValue.length <= 0){
+			return;
+		}
+
 		// Loop through objects
 		for(String blocked : configurationValue){
 			blocked = blocked.trim();
+
+			// Sanity
+			if(blocked.length() <= 0){
+				continue;
+			}
 
 			// Whitelist?
 			if(blocked.equalsIgnoreCase("whitelist") && index == 0){
