@@ -673,14 +673,21 @@ public class ASListener implements Listener {
 		GameMode from = player.getGameMode();
 		GameMode to = event.getNewGameMode();
 		boolean ignore = true;
+		boolean checkRegion = true;
 
 		// Check to see if we should even bother
 		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
 			return;
 		}
 
+		// Tag check
+		if(player.hasMetadata("antishare-regionleave")){
+			player.removeMetadata("antishare-regionleave", plugin);
+			checkRegion = false;
+		}
+
 		// Region Check
-		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
+		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
 			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode");

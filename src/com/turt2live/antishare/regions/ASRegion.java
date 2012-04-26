@@ -8,6 +8,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
@@ -439,6 +440,9 @@ public class ASRegion {
 			playerMessage = ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name);
 		}
 		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " left the region " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
+
+		// Tag the player so the Game Mode listener knows to ignore them
+		player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
 
 		// Reset the player
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
