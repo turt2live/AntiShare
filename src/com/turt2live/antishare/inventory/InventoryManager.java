@@ -72,6 +72,10 @@ public class InventoryManager {
 	 * @param player the player
 	 */
 	public void releasePlayer(Player player){
+		if(player == null){
+			return;
+		}
+
 		// Release
 		if(isInTemporary(player)){
 			removeFromTemporary(player);
@@ -89,10 +93,12 @@ public class InventoryManager {
 
 		// Cleanup
 		for(World world : Bukkit.getWorlds()){
-			if(creative.get(player.getName() + "." + world.getName()) != null)
+			if(creative.get(player.getName() + "." + world.getName()) != null){
 				creative.get(player.getName() + "." + world.getName()).save();
-			if(survival.get(player.getName() + "." + world.getName()) != null)
+			}
+			if(survival.get(player.getName() + "." + world.getName()) != null){
 				survival.get(player.getName() + "." + world.getName()).save();
+			}
 			creative.remove(player.getName() + "." + world.getName());
 			survival.remove(player.getName() + "." + world.getName());
 		}

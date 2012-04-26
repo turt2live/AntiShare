@@ -8,6 +8,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
@@ -49,6 +50,25 @@ public class ASRegion {
 	 */
 	public ASRegion(Selection region, String setBy, GameMode gamemode){
 		this.region = new CuboidSelection(region.getWorld(), region.getMaximumPoint(), region.getMinimumPoint());
+		this.setBy = setBy;
+		this.gamemode = gamemode;
+		this.world = region.getWorld();
+		id = String.valueOf(System.currentTimeMillis());
+		plugin = AntiShare.instance;
+		name = id;
+	}
+
+	/**
+	 * Creates a new region
+	 * 
+	 * @param world the world
+	 * @param minimum the minimum point
+	 * @param maximum the maximum point
+	 * @param setBy the player who made this
+	 * @param gamemode the gamemode of the region
+	 */
+	public ASRegion(World world, Location minimum, Location maximum, String setBy, GameMode gamemode){
+		this.region = new CuboidSelection(world, minimum, maximum);
 		this.setBy = setBy;
 		this.gamemode = gamemode;
 		this.world = region.getWorld();
@@ -420,6 +440,9 @@ public class ASRegion {
 			playerMessage = ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name);
 		}
 		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " left the region " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
+
+		// Tag the player so the Game Mode listener knows to ignore them
+		player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
 
 		// Reset the player
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){

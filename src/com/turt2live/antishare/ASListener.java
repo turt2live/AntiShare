@@ -315,12 +315,12 @@ public class ASListener implements Listener {
 
 		// If this event is triggered as legal from the right click, check use lists
 		if(type == AlertType.LEGAL){
+			if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.USE)){
+				type = AlertType.ILLEGAL;
+			}
 			// Check if they should be blocked
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, block.getWorld())){
 				type = AlertType.LEGAL;
-			}
-			if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.USE)){
-				type = AlertType.ILLEGAL;
 			}
 
 			// Set messages
@@ -331,11 +331,11 @@ public class ASListener implements Listener {
 		// If the event is triggered as legal from the use lists, check the player's item in hand
 		if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
 			// Check if they should be blocked
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
-				type = AlertType.LEGAL;
-			}
 			if(config.get(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
 				type = AlertType.ILLEGAL;
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+				type = AlertType.LEGAL;
 			}
 
 			// Set messages
@@ -624,6 +624,12 @@ public class ASListener implements Listener {
 		String command = event.getMessage().toLowerCase();
 		AlertType type = AlertType.ILLEGAL;
 
+		// Game Mode command
+		GameModeCommand.onPlayerCommand(event);
+		if(event.isCancelled()){
+			return;
+		}
+
 		// Check if they should be blocked
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, player.getWorld())){
 			type = AlertType.LEGAL;
@@ -673,14 +679,21 @@ public class ASListener implements Listener {
 		GameMode from = player.getGameMode();
 		GameMode to = event.getNewGameMode();
 		boolean ignore = true;
+		boolean checkRegion = true;
 
 		// Check to see if we should even bother
 		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
 			return;
 		}
 
+		// Tag check
+		if(player.hasMetadata("antishare-regionleave")){
+			player.removeMetadata("antishare-regionleave", plugin);
+			checkRegion = false;
+		}
+
 		// Region Check
-		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
+		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
 			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode");

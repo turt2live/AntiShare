@@ -126,7 +126,7 @@ public class PerWorldConfig {
 		}
 
 		// Generate and return
-		return stringsOnly ? new EventList(true, list.split(",")) : new EventList(list.split(","));
+		return stringsOnly ? new EventList(true, list.split(",")) : new EventList("blocked-actions." + triggerPath, list.split(","));
 	}
 
 	/**

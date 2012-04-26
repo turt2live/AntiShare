@@ -44,7 +44,7 @@ public class ASAPI {
 	 * @param name the region name
 	 */
 	public void createRegion(Selection selection, String owner, GameMode gamemode, String name){
-		plugin.getRegionManager().addRegion(selection, owner, name, gamemode);
+		plugin.getRegionManager().addRegion(new com.turt2live.antishare.Selection(selection), owner, name, gamemode);
 	}
 
 	/**

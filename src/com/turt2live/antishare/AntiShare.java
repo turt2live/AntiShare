@@ -141,7 +141,6 @@ public class AntiShare extends PluginWrapper {
 
 		// Command handlers
 		getCommand("antishare").setExecutor(new CommandHandler());
-		getServer().getPluginManager().registerEvents(new GameModeCommand(), this);
 
 		// Check players
 		for(Player player : Bukkit.getOnlinePlayers()){

@@ -302,7 +302,7 @@ public class RegionFactory {
 		}
 
 		// Add the region
-		regions.addRegion(selection, player.getName(), name, gamemode);
+		regions.addRegion(new com.turt2live.antishare.Selection(selection), player.getName(), name, gamemode);
 		ASUtils.sendToPlayer(player, ChatColor.GREEN + "Region '" + name + "' added.");
 	}
 

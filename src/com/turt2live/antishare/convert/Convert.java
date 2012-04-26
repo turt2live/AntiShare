@@ -1,7 +1,11 @@
 package com.turt2live.antishare.convert;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,6 +59,20 @@ public class Convert {
 		// Check if we need to updated
 		plugin.getConfig().loadDefaults(plugin.getResource("resources/config.yml"));
 		if((!plugin.getConfig().fileExists() || !plugin.getConfig().checkDefaults()) && plugin.getConfig().getConfigurationSection("events") != null){
+
+			// Backup the current configuration
+			try{
+				BufferedReader in = new BufferedReader(new FileReader(new File(plugin.getDataFolder(), "config.yml")));
+				BufferedWriter out = new BufferedWriter(new FileWriter(new File(plugin.getDataFolder(), "config-backup-3.1.3.yml")));
+				String line;
+				while ((line = in.readLine()) != null){
+					out.write(line + "\r\n");
+				}
+				out.close();
+				in.close();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 
 			// Event lists
 			String blockBreakList = plugin.getConfig().getString("events.block_break");

@@ -18,10 +18,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
-import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.Selection;
 import com.turt2live.antishare.storage.SQL;
 
 /**
@@ -91,8 +90,7 @@ public class RegionManager {
 						String name = results.getString("regionName");
 						boolean enterMessage = results.getInt("showEnter") == 1;
 						boolean exitMessage = results.getInt("showExit") == 1;
-						Selection selection = new CuboidSelection(world, minimum, maximum);
-						ASRegion region = new ASRegion(selection, setBy, gamemode);
+						ASRegion region = new ASRegion(world, minimum, maximum, setBy, gamemode);
 						region.setUniqueID(results.getString("uniqueID"));
 						region.setEnterMessage(results.getString("enterMessage"));
 						region.setExitMessage(results.getString("exitMessage"));
@@ -129,8 +127,9 @@ public class RegionManager {
 
 					// Get objects
 					World world = Bukkit.getWorld(rfile.getString("worldName"));
-					Selection selection = new CuboidSelection(world, new Location(world, rfile.getDouble("mi-x"), rfile.getDouble("mi-y"), rfile.getDouble("mi-z")), new Location(world, rfile.getDouble("ma-x"), rfile.getDouble("ma-y"), rfile.getDouble("ma-z")));
-					ASRegion region = new ASRegion(selection, rfile.getString("set-by"), GameMode.valueOf(rfile.getString("gamemode")));
+					Location min = new Location(world, rfile.getDouble("mi-x"), rfile.getDouble("mi-y"), rfile.getDouble("mi-z"));
+					Location max = new Location(world, rfile.getDouble("ma-x"), rfile.getDouble("ma-y"), rfile.getDouble("ma-z"));
+					ASRegion region = new ASRegion(world, min, max, rfile.getString("set-by"), GameMode.valueOf(rfile.getString("gamemode")));
 					region.setUniqueID(uid);
 					region.setEnterMessage(rfile.getString("enterMessage"));
 					region.setExitMessage(rfile.getString("exitMessage"));
@@ -323,7 +322,7 @@ public class RegionManager {
 		}
 
 		// Create region
-		ASRegion region = new ASRegion(selection, owner, gamemode);
+		ASRegion region = new ASRegion(selection.getWorldEditSelection(), owner, gamemode);
 		region.setName(name);
 
 		// Add to set
