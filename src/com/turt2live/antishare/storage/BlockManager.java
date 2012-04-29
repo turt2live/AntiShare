@@ -54,6 +54,21 @@ public class BlockManager {
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
 			@Override
 			public void run(){
+				// Remove air blocks
+				for(Block block : creative_blocks){
+					if(block.getType() == Material.AIR){
+						creative_blocks.remove(block);
+						expected_creative.remove(block);
+					}
+				}
+				for(Block block : survival_blocks){
+					if(block.getType() == Material.AIR){
+						survival_blocks.remove(block);
+						expected_survival.remove(block);
+					}
+				}
+
+				// Check lists
 				ConcurrentHashMap<Block, ASBlock> creative = new ConcurrentHashMap<Block, ASBlock>();
 				ConcurrentHashMap<Block, ASBlock> survival = new ConcurrentHashMap<Block, ASBlock>();
 				creative.putAll(expected_creative);
