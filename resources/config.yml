@@ -65,5 +65,5 @@ other:
   debug: false
   silent-startup: false
   silent-shutdown: false
-  silent-blocks: false
+  silent-blocks: true
   silent-overall: false

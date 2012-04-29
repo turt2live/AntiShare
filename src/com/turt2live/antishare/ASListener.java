@@ -34,7 +34,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -1003,15 +1002,6 @@ public class ASListener implements Listener {
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to world " + ChatColor.YELLOW + to.getName();
 		String playerMessage = ignore ? "no message" : "Your inventory has been changed to " + ChatColor.YELLOW + to.getName();
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
-	}
-
-	@EventHandler (ignoreCancelled = true)
-	public void onBlockPhysics(BlockPhysicsEvent event){
-		Block block = event.getBlock();
-		Material material = event.getChangedType();
-
-		// Change block
-		plugin.getBlockManager().updateBlock(block, material);
 	}
 
 }
