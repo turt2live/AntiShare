@@ -174,15 +174,19 @@ public class ASListener implements Listener {
 		// Handle event
 		if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
 			event.setCancelled(true);
+		}else{
+			plugin.getBlockManager().removeBlock(block);
 		}
 
 		// Handle drops
 		if(drops != null){
 			if(drops){
 				if(event.isCancelled()){
+					plugin.getBlockManager().removeBlock(block);
 					block.breakNaturally();
 				}
 			}else{
+				plugin.getBlockManager().removeBlock(block);
 				block.setType(Material.AIR);
 			}
 		}
@@ -227,6 +231,7 @@ public class ASListener implements Listener {
 				for(BlockFace face : BlockFace.values()){
 					Block rel = block.getRelative(face);
 					if(ASUtils.isDroppedOnBreak(rel, block)){
+						plugin.getBlockManager().removeBlock(rel);
 						rel.setType(Material.AIR);
 					}
 				}
