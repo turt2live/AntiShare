@@ -1,6 +1,7 @@
 package com.turt2live.antishare.storage;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
@@ -15,7 +16,7 @@ import com.turt2live.antishare.AntiShare.LogType;
  */
 public class TrackerList {
 
-	private Vector<Integer> tracked = new Vector<Integer>();
+	private List<Integer> tracked = new ArrayList<Integer>();
 
 	/**
 	 * Creates a new Tracker List

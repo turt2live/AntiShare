@@ -2,8 +2,8 @@ package com.turt2live.antishare;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
@@ -592,7 +592,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			Vector<ItemStack> remove = new Vector<ItemStack>();
+			List<ItemStack> remove = new ArrayList<ItemStack>();
 			for(ItemStack item : drops){
 				if(config.get(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)){
 					illegalItems++;

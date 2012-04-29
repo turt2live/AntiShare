@@ -9,7 +9,8 @@ import java.io.FileWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
@@ -158,7 +159,7 @@ public class Convert {
 			}
 		}
 		if(recheck){
-			Vector<File> delete = new Vector<File>();
+			List<File> delete = new ArrayList<File>();
 			if(saveDir.listFiles() != null){
 				for(File file : saveDir.listFiles(new FileFilter(){
 					@Override

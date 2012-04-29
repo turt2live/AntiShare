@@ -1,7 +1,8 @@
 package com.turt2live.antishare.storage;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -33,8 +34,8 @@ public class BlockManager {
 	}
 
 	private AntiShare plugin;
-	private Vector<Block> creative_blocks = new Vector<Block>();
-	private Vector<Block> survival_blocks = new Vector<Block>();
+	private List<Block> creative_blocks = new ArrayList<Block>();
+	private List<Block> survival_blocks = new ArrayList<Block>();
 	private ConcurrentHashMap<Block, ASBlock> expected_creative = new ConcurrentHashMap<Block, ASBlock>();
 	private ConcurrentHashMap<Block, ASBlock> expected_survival = new ConcurrentHashMap<Block, ASBlock>();
 	private TrackerList tracked_creative;
@@ -82,8 +83,8 @@ public class BlockManager {
 	 */
 	public void save(){
 		// Load lists
-		Vector<Block> creative = new Vector<Block>();
-		Vector<Block> survival = new Vector<Block>();
+		List<Block> creative = new ArrayList<Block>();
+		List<Block> survival = new ArrayList<Block>();
 		creative.addAll(creative_blocks);
 		survival.addAll(survival_blocks);
 
