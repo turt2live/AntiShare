@@ -21,6 +21,7 @@ import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
+import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.notification.Messenger;
@@ -39,6 +40,13 @@ import com.turt2live.antishare.storage.SQL;
  * @author turt2live
  */
 public class AntiShare extends PluginWrapper {
+
+	/*
+	 * TODO: Fix potential bugs
+	 * - [Cannot Reproduce] Inventories wipe/merge when cleared and relog
+	 * - [Cannot Reproduce] Per-world inventories do not respect Game Mode
+	 * - [Cannot Reproduce] Per-world inventories wipe when traveling there and back
+	 */
 
 	/**
 	 * Represents a Log Entry Type
@@ -150,7 +158,7 @@ public class AntiShare extends PluginWrapper {
 		UpdateChecker.start();
 		UsageStatistics.send(); // Handles config internally
 		trackers.addTo(metrics);
-		trackers.getStartupTracker().increment(1);
+		trackers.getTracker(TrackerType.STARTUP).increment(1);
 		metrics.start();
 
 		// Start listeners

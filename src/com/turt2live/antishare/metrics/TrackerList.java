@@ -14,23 +14,27 @@ public class TrackerList extends ArrayList<Tracker> {
 	}
 
 	private static final long serialVersionUID = 8386186678486064850L;
-	private Tracker startupTracker;
 
 	/**
 	 * Creates a new Tracker List
 	 */
 	public TrackerList(){
-		startupTracker = new Tracker("Startup", TrackerType.STARTUP);
-		add(startupTracker);
+		add(new Tracker("Startup", TrackerType.STARTUP));
 	}
 
 	/**
-	 * Gets the startup tracker
+	 * Gets a tracker
 	 * 
-	 * @return the startup tracker
+	 * @return the tracker
 	 */
-	public Tracker getStartupTracker(){
-		return startupTracker;
+	public Tracker getTracker(TrackerType type){
+		for(int i = 0; i < size(); i++){
+			Tracker t = get(i);
+			if(t.getType() == type){
+				return t;
+			}
+		}
+		return null;
 	}
 
 	/**
