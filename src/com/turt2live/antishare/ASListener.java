@@ -131,6 +131,7 @@ public class ASListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 		boolean special = false;
 		boolean region = false;
+		Boolean drops = null;
 		AlertType specialType = AlertType.LEGAL;
 		String blockGM = "Unknown";
 
@@ -148,8 +149,13 @@ public class ASListener implements Listener {
 			if(blockGamemode != null){
 				special = true;
 				blockGM = blockGamemode.name().toLowerCase();
+				String oGM = blockGM.equalsIgnoreCase("creative") ? "survival" : "creative";
 				if(player.getGameMode() != blockGamemode){
-					specialType = AlertType.ILLEGAL;
+					boolean deny = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + blockGM + "-blocks.deny");
+					drops = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + blockGM + "-blocks.block-drops");
+					if(deny){
+						specialType = AlertType.ILLEGAL;
+					}
 				}
 			}
 		}
@@ -168,6 +174,17 @@ public class ASListener implements Listener {
 		// Handle event
 		if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
 			event.setCancelled(true);
+		}
+
+		// Handle drops
+		if(drops != null){
+			if(drops){
+				if(event.isCancelled()){
+					block.breakNaturally();
+				}
+			}else{
+				block.setType(Material.AIR);
+			}
 		}
 
 		// Alert

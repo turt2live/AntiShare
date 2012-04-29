@@ -38,6 +38,12 @@ settings:
   send-usage-statistics: true
   auto-save-interval: 30
   track-blocks: true
+  survival-breaking-creative-blocks:
+    block-drops: false
+    deny: true
+  creative-breaking-survival-blocks:
+    block-drops: false
+    deny: true
 blocked-lists:
   block-place: diamond block, gold block, iron block, bedrock, tnt
   block-break: none
