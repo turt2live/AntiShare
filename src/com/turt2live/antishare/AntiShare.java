@@ -1,5 +1,6 @@
 package com.turt2live.antishare;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
@@ -18,6 +19,8 @@ import org.w3c.dom.NodeList;
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
+import com.turt2live.antishare.metrics.Metrics;
+import com.turt2live.antishare.metrics.TrackerList;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.notification.Messenger;
@@ -86,6 +89,8 @@ public class AntiShare extends PluginWrapper {
 	private BlockManager blocks;
 	private InventoryManager inventories;
 	private SQL sql;
+	private Metrics metrics;
+	private TrackerList trackers;
 
 	@Override
 	public void onEnable(){
@@ -124,6 +129,12 @@ public class AntiShare extends PluginWrapper {
 		getConfig().load();
 
 		// Setup
+		try{
+			metrics = new Metrics(this);
+		}catch(IOException e1){
+			e1.printStackTrace();
+		}
+		trackers = new TrackerList();
 		messenger = new Messenger();
 		permissions = new Permissions();
 		itemMap = new ItemMap();
@@ -135,9 +146,12 @@ public class AntiShare extends PluginWrapper {
 		blocks = new BlockManager();
 		inventories = new InventoryManager();
 
-		// No need for variables here
+		// Statistics
 		UpdateChecker.start();
 		UsageStatistics.send(); // Handles config internally
+		trackers.addTo(metrics);
+		trackers.getStartupTracker().increment(1);
+		metrics.start();
 
 		// Start listeners
 		getServer().getPluginManager().registerEvents(permissions, this);
@@ -203,6 +217,8 @@ public class AntiShare extends PluginWrapper {
 		blocks = null;
 		inventories = null;
 		sql = null;
+		metrics = null;
+		trackers = null;
 	}
 
 	/**
@@ -221,6 +237,8 @@ public class AntiShare extends PluginWrapper {
 		blocks.reload();
 		inventories.reload();
 		// SQL has no reload
+		// Metrics has no reload
+		// Tracker List has no reload
 	}
 
 	/**
@@ -342,6 +360,24 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public InventoryManager getInventoryManager(){
 		return inventories;
+	}
+
+	/**
+	 * Gets the metrics being used by AntiShare
+	 * 
+	 * @return the metrics
+	 */
+	public Metrics getMetrics(){
+		return metrics;
+	}
+
+	/**
+	 * Gets the tracker list being used by AntiShare
+	 * 
+	 * @return the trackers
+	 */
+	public TrackerList getTrackers(){
+		return trackers;
 	}
 
 	/**

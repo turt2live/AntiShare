@@ -55,17 +55,25 @@ public class BlockManager {
 			@Override
 			public void run(){
 				// Remove air blocks
+				List<Block> remove = new ArrayList<Block>();
 				for(Block block : creative_blocks){
 					if(block.getType() == Material.AIR){
-						creative_blocks.remove(block);
-						expected_creative.remove(block);
+						remove.add(block);
 					}
 				}
+				for(Block block : remove){
+					creative_blocks.remove(block);
+					expected_creative.remove(block);
+				}
+				remove = new ArrayList<Block>();
 				for(Block block : survival_blocks){
 					if(block.getType() == Material.AIR){
-						survival_blocks.remove(block);
-						expected_survival.remove(block);
+						remove.add(block);
 					}
+				}
+				for(Block block : remove){
+					survival_blocks.remove(block);
+					expected_survival.remove(block);
 				}
 
 				// Check lists
