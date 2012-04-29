@@ -1,6 +1,7 @@
 package com.turt2live.antishare.storage;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
@@ -18,8 +19,8 @@ public class EventList {
 	private boolean whitelist = false;
 	private boolean useString = false;
 	private boolean expBlocked = false;
-	private Vector<Integer> blocked = new Vector<Integer>();
-	private Vector<String> blocked_strings = new Vector<String>();
+	private List<Integer> blocked = new ArrayList<Integer>();
+	private List<String> blocked_strings = new ArrayList<String>();
 
 	/**
 	 * Creates a new Event List
@@ -89,10 +90,20 @@ public class EventList {
 				}
 
 				// Try to add the item, warn otherwise
-				try{
-					this.blocked.add(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
-				}catch(Exception e){
-					plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your config)", Level.WARNING, LogType.INFO);
+				if(blocked.startsWith("-")){
+					// Negation
+					blocked = blocked.replaceFirst("-", "");
+					try{
+						this.blocked.remove(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
+					}catch(Exception e){
+						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your config)", Level.WARNING, LogType.INFO);
+					}
+				}else{
+					try{
+						this.blocked.add(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
+					}catch(Exception e){
+						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your config)", Level.WARNING, LogType.INFO);
+					}
 				}
 				index++;
 			}
@@ -133,13 +144,24 @@ public class EventList {
 				continue;
 			}
 
+			// Check negation
+			boolean negate = false;
+			if(blocked.startsWith("-")){
+				negate = true;
+				blocked = blocked.replaceFirst("-", "");
+			}
+
 			// Add a '/' to all strings
 			if(!blocked.startsWith("/")){
 				blocked = blocked + "/";
 			}
 
 			// Add item
-			this.blocked_strings.add(blocked.trim().toLowerCase());
+			if(negate){
+				this.blocked_strings.remove(blocked.trim().toLowerCase());
+			}else{
+				this.blocked_strings.add(blocked.trim().toLowerCase());
+			}
 			index++;
 		}
 	}
