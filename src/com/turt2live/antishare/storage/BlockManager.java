@@ -62,7 +62,7 @@ public class BlockManager {
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
 					if(atLocation.getType() != block.expectedType){
-						plugin.getMessenger().log("Creative block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING, LogType.BYPASS);
+						plugin.getMessenger().log("Creative block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING, LogType.BLOCK);
 						expected_creative.remove(block);
 					}
 				}
@@ -70,7 +70,7 @@ public class BlockManager {
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
 					if(atLocation.getType() != block.expectedType){
-						plugin.getMessenger().log("Survival block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING, LogType.BYPASS);
+						plugin.getMessenger().log("Survival block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING, LogType.BLOCK);
 						expected_survival.remove(block);
 					}
 				}
@@ -142,6 +142,32 @@ public class BlockManager {
 		expected_creative.clear();
 		expected_survival.clear();
 		load();
+	}
+
+	/**
+	 * Updates a block
+	 * 
+	 * @param block the block
+	 * @param newMaterial the new material
+	 */
+	public void updateBlock(Block block, Material newMaterial){
+		GameMode type = getType(block);
+		if(type != null){
+			switch (type){
+			case CREATIVE:
+				ASBlock asblock = expected_creative.get(block);
+				if(asblock != null){
+					asblock.expectedType = newMaterial;
+				}
+				break;
+			case SURVIVAL:
+				asblock = expected_survival.get(block);
+				if(asblock != null){
+					asblock.expectedType = newMaterial;
+				}
+				break;
+			}
+		}
 	}
 
 	/**

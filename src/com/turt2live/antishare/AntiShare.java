@@ -56,6 +56,10 @@ public class AntiShare extends PluginWrapper {
 		 */
 		INFO,
 		/**
+		 * Invalid block message
+		 */
+		BLOCK,
+		/**
 		 * Bypasses all "silent" checks
 		 */
 		BYPASS;
