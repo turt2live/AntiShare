@@ -685,11 +685,13 @@ public class ASListener implements Listener {
 		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
 		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
 
-		// Determine alert for World Split
-		config.get(player.getWorld()).warnSplit(player);
+		if(currentRegion == null){
+			// Determine alert for World Split
+			config.get(player.getWorld()).warnSplit(player);
 
-		// Check world split
-		config.get(player.getWorld()).checkSplit(player);
+			// Check world split
+			config.get(player.getWorld()).checkSplit(player);
+		}
 
 		// Check regions
 		if(currentRegion != toRegion){
