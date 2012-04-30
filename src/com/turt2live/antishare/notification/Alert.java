@@ -51,7 +51,8 @@ public class Alert {
 		HIT_PLAYER("types.hit-player"),
 		HIT_MOB("types.hit-mob"),
 		COMMAND("types.command"),
-		GENERAL("send-general-notifications");
+		GENERAL("send-general-notifications"),
+		CLOSE_TO_WORLD_SPLIT(null);
 
 		private String node;
 
@@ -65,6 +66,9 @@ public class Alert {
 		 * @return true if it should be shown
 		 */
 		public boolean show(){
+			if(node == null){
+				return false;
+			}
 			EnhancedConfiguration notifications = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder(), "notifications.yml"), AntiShare.instance);
 			notifications.loadDefaults(AntiShare.instance.getResource("resources/notifications.yml"));
 			if(!notifications.fileExists() || !notifications.checkDefaults()){
@@ -110,6 +114,20 @@ public class Alert {
 	 * @param trigger the Alert Trigger
 	 */
 	public void alert(String message, CommandSender sender, String playerMessage, AlertType type, AlertTrigger trigger){
+		alert(message, sender, playerMessage, type, trigger, 1000);
+	}
+
+	/**
+	 * Sends an alert
+	 * 
+	 * @param message the message
+	 * @param sender the sender
+	 * @param playerMessage the player message
+	 * @param type the Alert Type
+	 * @param trigger the Alert Trigger
+	 * @param time the time between alerts
+	 */
+	public void alert(String message, CommandSender sender, String playerMessage, AlertType type, AlertTrigger trigger, long time){
 		String hashmapKey = type.name() + message + playerMessage + sender.hashCode();
 		boolean sendToPlayer = true;
 		boolean sendToAdmins = true;
@@ -155,10 +173,10 @@ public class Alert {
 			details.player_last_sent = System.currentTimeMillis();
 		}else{
 			long now = System.currentTimeMillis();
-			if((now - details.admin_last_sent) < 1000){
+			if((now - details.admin_last_sent) < time){
 				sendToAdmins = false;
 			}
-			if((now - details.player_last_sent) < 1000){
+			if((now - details.player_last_sent) < time){
 				sendToPlayer = false;
 			}
 		}

@@ -35,3 +35,7 @@ worldsplit:
   value: 0
   creative: 1
   survival: 0
+  warning:
+    enabled: false
+    blocks: 15
+    warn-every: 2

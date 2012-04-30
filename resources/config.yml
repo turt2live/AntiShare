@@ -58,6 +58,10 @@ worldsplit:
   value: 0
   creative: 1
   survival: 0
+  warning:
+    enabled: false
+    blocks: 15
+    warn-every: 2
 block-tracking:
   tracked-survival-blocks: all
   tracked-creative-blocks: all

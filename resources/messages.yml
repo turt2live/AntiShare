@@ -19,3 +19,5 @@ blocked-action:
   hit-player: "You cannot hit players"
   hit-mob: "You cannot hit mobs"
   command: "You cannot use that command"
+world-split:
+  close-to-split: "You are near a world split! Prepare for a Game Mode change."

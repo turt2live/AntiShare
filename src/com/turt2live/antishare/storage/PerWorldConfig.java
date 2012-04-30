@@ -101,6 +101,11 @@ public class PerWorldConfig {
 			double creative = worldConfig.getString("worldsplit.creative").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.creative") : worldConfig.getDouble("worldsplit.creative");
 			double survival = worldConfig.getString("worldsplit.survival").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.survival") : worldConfig.getDouble("worldsplit.survival");
 			this.split = new WorldSplit(world, split, axis, creative, survival);
+			boolean warn = worldConfig.getString("worldsplit.warning.enabled").equalsIgnoreCase("global") ? plugin.getConfig().getBoolean("worldsplit.warning.enabled") : worldConfig.getBoolean("worldsplit.warning.enabled");
+			double before = worldConfig.getString("worldsplit.warning.blocks").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.warning.blocks") : worldConfig.getDouble("worldsplit.warning.blocks");
+			long warnEvery = worldConfig.getString("worldsplit.warning.warn-every").equalsIgnoreCase("global") ? plugin.getConfig().getLong("worldsplit.warning.warn-every") : worldConfig.getLong("worldsplit.warning.warn-every");
+			warnEvery *= 1000;
+			this.split.warning(warn, before, warnEvery);
 		}
 	}
 
@@ -211,6 +216,17 @@ public class PerWorldConfig {
 	public void checkSplit(Player player){
 		if(splitActive){
 			split.checkPlayer(player);
+		}
+	}
+
+	/**
+	 * Warn the player of a World Split boundary if required
+	 * 
+	 * @param player the player
+	 */
+	public void warnSplit(Player player){
+		if(splitActive){
+			split.warn(player);
 		}
 	}
 

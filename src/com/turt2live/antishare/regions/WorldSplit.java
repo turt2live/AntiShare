@@ -3,11 +3,14 @@ package com.turt2live.antishare.regions;
 import java.util.logging.Level;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.notification.Alert.AlertTrigger;
+import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
 /**
@@ -48,6 +51,9 @@ public class WorldSplit {
 	private Axis axis;
 	private double creative;
 	private double survival;
+	private double blockWarn = 15;
+	private boolean warn = false;
+	private long warnEvery = 2;
 	private AntiShare plugin;
 
 	/**
@@ -67,6 +73,37 @@ public class WorldSplit {
 		this.survival = survival;
 		this.plugin = AntiShare.instance;
 		checkValues();
+	}
+
+	/**
+	 * Sets up the warning options
+	 * 
+	 * @param warn true to warn, false otherwise
+	 * @param before the number of blocks to warn the user at
+	 */
+	public void warning(boolean warn, double before, long warnEvery){
+		this.warn = warn;
+		this.blockWarn = before;
+		this.warnEvery = warnEvery;
+	}
+
+	/**
+	 * Warn a player if required
+	 * 
+	 * @param player the player
+	 */
+	public void warn(Player player){
+		Location location = player.getLocation();
+		double distance = (axis == Axis.X ? location.getX() : location.getZ()) - split;
+
+		if(axis == Axis.NONE || !warn){
+			return;
+		}
+
+		if(Math.abs(distance) <= blockWarn){
+			String playerMessage = plugin.getMessage("world-split.close-to-split");
+			plugin.getAlerts().alert("none", player, playerMessage, AlertType.REGION, AlertTrigger.CLOSE_TO_WORLD_SPLIT, warnEvery);
+		}
 	}
 
 	/**

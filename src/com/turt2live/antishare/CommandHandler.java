@@ -83,6 +83,8 @@ public class CommandHandler implements CommandExecutor {
 							File file = new File(plugin.getDataFolder(), "debug.txt");
 							BufferedWriter out = new BufferedWriter(new FileWriter(file, false));
 							out.write("[v" + plugin.getDescription().getVersion() + "] AntiShare Debug Information:\r\n");
+							out.write("CraftBukkit: " + Bukkit.getBukkitVersion() + "\r\n");
+							out.write("Version: " + Bukkit.getVersion() + "\r\n");
 							out.write("----------------------------\r\n");
 							out.write("Plugins: \r\n");
 							for(Plugin p : Bukkit.getPluginManager().getPlugins()){

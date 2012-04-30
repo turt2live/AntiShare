@@ -607,6 +607,12 @@ public class ASListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 		int illegalItems = 0;
 
+		// Remove them from a region (if applicable)
+		ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
+		if(region != null){
+			region.alertExit(player);
+		}
+
 		// Check if they should be blocked
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, player.getWorld())){
 			type = AlertType.LEGAL;
@@ -678,6 +684,9 @@ public class ASListener implements Listener {
 		Player player = event.getPlayer();
 		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
 		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
+
+		// Determine alert for World Split
+		config.get(player.getWorld()).warnSplit(player);
 
 		// Check world split
 		config.get(player.getWorld()).checkSplit(player);

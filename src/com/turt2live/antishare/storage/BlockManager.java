@@ -150,6 +150,10 @@ public class BlockManager {
 			String[] keyParts = key.split(";");
 			Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
 			Block block = location.getBlock();
+			if(block == null){
+				location.getChunk().load();
+				block = location.getBlock();
+			}
 			GameMode gm = GameMode.valueOf(blocks.getString(key));
 			addBlock(gm, block);
 		}
