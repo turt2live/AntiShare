@@ -131,6 +131,23 @@ public class WorldSplit {
 		}
 	}
 
+	/**
+	 * Gets the side of the split a player is on, or null is not affected
+	 * 
+	 * @param player the player
+	 * @return the side of the split
+	 */
+	public GameMode getSide(Player player){
+		GameMode gamemode = player.getGameMode();
+		if(plugin.getPermissions().has(player, (gamemode == GameMode.CREATIVE ? PermissionNodes.WORLD_SPLIT_NO_SPLIT_CREATIVE : PermissionNodes.WORLD_SPLIT_NO_SPLIT_SURVIVAL))){
+			return null;
+		}
+
+		double value = axis.equals(Axis.X) ? player.getLocation().getX() : player.getLocation().getZ();
+		gamemode = getGameMode(value, player.getGameMode());
+		return gamemode;
+	}
+
 	// Gets the gamemode, or returns default if something is wrong
 	private GameMode getGameMode(double point, GameMode defaultMode){
 		if(point > split){

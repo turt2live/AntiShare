@@ -106,6 +106,16 @@ public class ASListener implements Listener {
 		}
 	}
 
+	/**
+	 * Gets the configuration for the world
+	 * 
+	 * @param world the world
+	 * @return the configuration
+	 */
+	public PerWorldConfig getConfig(World world){
+		return config.get(world);
+	}
+
 	// ################# World Load
 
 	@EventHandler

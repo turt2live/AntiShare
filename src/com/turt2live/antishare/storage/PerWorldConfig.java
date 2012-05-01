@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -228,6 +229,16 @@ public class PerWorldConfig {
 		if(splitActive){
 			split.warn(player);
 		}
+	}
+
+	/**
+	 * Gets the side of the split this player is on, or null if not affected
+	 * 
+	 * @param player the player
+	 * @return the side of the split
+	 */
+	public GameMode getSideOfSplit(Player player){
+		return split.getSide(player);
 	}
 
 }
