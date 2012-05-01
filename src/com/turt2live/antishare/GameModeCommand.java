@@ -104,10 +104,8 @@ public class GameModeCommand {
 			// Split check
 			GameMode split = plugin.getListener().getConfig(target.getWorld()).getSideOfSplit(target);
 			if(split != null){
-				if(split != to){
-					ASUtils.sendToPlayer(sender, ChatColor.RED + "Your target is in a World Split and therefore cannot change Game Mode");
-					skip = true;
-				}
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Your target is in a World Split and therefore cannot change Game Mode");
+				skip = true;
 			}
 
 			// Only do stuff if we are told not to skip it
