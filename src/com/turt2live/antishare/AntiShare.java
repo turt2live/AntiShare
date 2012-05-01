@@ -48,6 +48,21 @@ public class AntiShare extends PluginWrapper {
 	 * - [Cannot Reproduce] Per-world inventories wipe when traveling there and back
 	 */
 
+	/* Changes since 3.2.2
+	 * 
+	 * - Added negation to block lists
+	 * - Added options to drop blocks when a player breaks a block of the opposite Game Mode
+	 * - Bug Fix: Actually remove blocks when broken from the registry
+	 * - Fixed "X is not Y (found Z)" messages spamming (toggle option)
+	 * - Auto-Update blocks in the registry
+	 * - Cleanup registry blocks by removing AIR
+	 * - Fixed concurrent exceptions
+	 * - Added Metrics
+	 * - Added World Split warnings
+	 * - Fixed world splits and regions not getting along
+	 * - Fixed /gm working in world splits
+	 */
+
 	/**
 	 * Represents a Log Entry Type
 	 * 
