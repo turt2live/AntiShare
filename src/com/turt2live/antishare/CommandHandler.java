@@ -111,6 +111,11 @@ public class CommandHandler implements CommandExecutor {
 							out.write("----------------------------\r\n");
 							out.write("World Configurations: \r\n");
 							plugin.getListener().print(out);
+							out.write("----------------------------\r\n");
+							out.write("Region Configurations: \r\n");
+							for(ASRegion region : plugin.getRegionManager().getAllRegions()){
+								region.getConfig().print(out);
+							}
 							out.close();
 							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath());
 						}catch(Exception e){

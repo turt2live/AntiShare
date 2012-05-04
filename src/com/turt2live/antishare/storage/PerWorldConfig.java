@@ -113,10 +113,12 @@ public class PerWorldConfig {
 	private EventList getList(String triggerPath, String listPath, EnhancedConfiguration worldConfig, boolean stringsOnly){
 		// Setup
 		boolean enabled = false;
+		boolean global = false;
 		AntiShare plugin = AntiShare.instance;
 
 		// Determine if enabled
 		if(worldConfig.getString("blocked-actions." + triggerPath).equalsIgnoreCase("global")){
+			global = true;
 			enabled = plugin.getConfig().getBoolean("blocked-actions." + triggerPath);
 		}else{
 			enabled = worldConfig.getBoolean("blocked-actions." + triggerPath);
@@ -132,7 +134,7 @@ public class PerWorldConfig {
 		}
 
 		// Generate and return
-		return stringsOnly ? new EventList(true, list.split(",")) : new EventList("blocked-actions." + triggerPath, list.split(","));
+		return stringsOnly ? new EventList(true, list.split(",")) : new EventList(global ? "config.yml" : world.getName() + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
 	}
 
 	/**
@@ -239,6 +241,17 @@ public class PerWorldConfig {
 	 */
 	public GameMode getSideOfSplit(Player player){
 		return split.getSide(player);
+	}
+
+	/**
+	 * Gets the raw configuration
+	 * 
+	 * @return the raw configuration
+	 */
+	public EnhancedConfiguration getRaw(){
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder(), world.getName() + "_config.yml"), AntiShare.instance);
+		worldConfig.load();
+		return worldConfig;
 	}
 
 }

@@ -25,9 +25,11 @@ public class EventList {
 	/**
 	 * Creates a new Event List
 	 * 
+	 * @param file the configuration file name
+	 * @param node the configuration node
 	 * @param configurationValue the values
 	 */
-	public EventList(String node, String... configurationValue){
+	public EventList(String file, String node, String... configurationValue){
 		if(configurationValue.length == 0){
 			return;
 		}
@@ -96,13 +98,13 @@ public class EventList {
 					try{
 						this.blocked.remove(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
 					}catch(Exception e){
-						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your config)", Level.WARNING, LogType.INFO);
+						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in " + file + ")", Level.WARNING, LogType.INFO);
 					}
 				}else{
 					try{
 						this.blocked.add(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
 					}catch(Exception e){
-						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your config)", Level.WARNING, LogType.INFO);
+						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
 					}
 				}
 				index++;

@@ -19,6 +19,7 @@ import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.RegionWall.Wall;
+import com.turt2live.antishare.storage.PerRegionConfig;
 
 /**
  * AntiShare Region
@@ -40,6 +41,7 @@ public class ASRegion {
 	private String enterMessage = "You entered '{name}'!";
 	private String exitMessage = "You left '{name}'!";
 	private ConcurrentHashMap<String, GameMode> previousGameModes = new ConcurrentHashMap<String, GameMode>();
+	private PerRegionConfig config;
 
 	/**
 	 * Creates a new region
@@ -56,6 +58,7 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = AntiShare.instance;
 		name = id;
+		config = new PerRegionConfig(this);
 	}
 
 	/**
@@ -75,6 +78,7 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = AntiShare.instance;
 		name = id;
+		config = new PerRegionConfig(this);
 	}
 
 	/**
@@ -501,5 +505,14 @@ public class ASRegion {
 		for(String key : playerInfo.getKeys(false)){
 			previousGameModes.put(key, GameMode.valueOf(playerInfo.getString(key)));
 		}
+	}
+
+	/**
+	 * Gets this region's configuration
+	 * 
+	 * @return
+	 */
+	public PerRegionConfig getConfig(){
+		return config;
 	}
 }

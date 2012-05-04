@@ -149,8 +149,15 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, block.getWorld())){
 			type = AlertType.LEGAL;
 		}
-		if(!config.get(block.getWorld()).isBlocked(block.getType(), ListType.BLOCK_BREAK)){
-			type = AlertType.LEGAL;
+		ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(block.getType(), ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(block.getWorld()).isBlocked(block.getType(), ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		// Check creative/survival blocks
@@ -267,8 +274,15 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, block.getWorld())){
 			type = AlertType.LEGAL;
 		}
-		if(!config.get(block.getWorld()).isBlocked(block.getType(), ListType.BLOCK_PLACE)){
-			type = AlertType.LEGAL;
+		ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(block.getType(), ListType.BLOCK_PLACE)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(block.getWorld()).isBlocked(block.getType(), ListType.BLOCK_PLACE)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PLACE)){
@@ -333,8 +347,15 @@ public class ASListener implements Listener {
 		// Right click list
 		if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK){
 			// Check if they should be blocked
-			if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.RIGHT_CLICK)){
-				type = AlertType.ILLEGAL;
+			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			if(asregion != null){
+				if(asregion.getConfig().isBlocked(block.getType(), ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+				}
+			}else{
+				if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+				}
 			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, block.getWorld())){
 				type = AlertType.LEGAL;
@@ -347,8 +368,15 @@ public class ASListener implements Listener {
 
 		// If this event is triggered as legal from the right click, check use lists
 		if(type == AlertType.LEGAL){
-			if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.USE)){
-				type = AlertType.ILLEGAL;
+			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			if(asregion != null){
+				if(asregion.getConfig().isBlocked(block.getType(), ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
+			}else{
+				if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
 			}
 			// Check if they should be blocked
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, block.getWorld())){
@@ -363,8 +391,15 @@ public class ASListener implements Listener {
 		// If the event is triggered as legal from the use lists, check the player's item in hand
 		if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
 			// Check if they should be blocked
-			if(config.get(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
-				type = AlertType.ILLEGAL;
+			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			if(asregion != null){
+				if(asregion.getConfig().isBlocked(player.getItemInHand().getType(), ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
+			}else{
+				if(config.get(block.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
 			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
 				type = AlertType.LEGAL;
@@ -417,8 +452,15 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())){
 			type = AlertType.LEGAL;
 		}
-		if(!config.get(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
-			type = AlertType.LEGAL;
+		ASRegion asregion = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		// Handle event
@@ -454,8 +496,15 @@ public class ASListener implements Listener {
 		// Check internal inventories
 		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
 			// Check inventories
-			if(config.get(player.getWorld()).clearBlockInventoryOnBreak()){
-				cart.getInventory().clear();
+			ASRegion asregion = plugin.getRegionManager().getRegion(cart.getLocation());
+			if(asregion != null){
+				if(asregion.getConfig().clearBlockInventoryOnBreak()){
+					cart.getInventory().clear();
+				}
+			}else{
+				if(config.get(player.getWorld()).clearBlockInventoryOnBreak()){
+					cart.getInventory().clear();
+				}
 			}
 		}
 	}
@@ -472,8 +521,15 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
 			type = AlertType.LEGAL;
 		}
-		if(!config.get(player.getWorld()).isBlocked(item, ListType.USE)){
-			type = AlertType.LEGAL;
+		ASRegion asregion = plugin.getRegionManager().getRegion(event.getEgg().getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isBlocked(item, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		// Handle event
@@ -508,8 +564,15 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
 			type = AlertType.LEGAL;
 		}
-		if(!config.get(player.getWorld()).isBlocked(item, ListType.USE)){
-			type = AlertType.LEGAL;
+		ASRegion asregion = plugin.getRegionManager().getRegion(bottle.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isBlocked(item, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		// Handle event
@@ -540,8 +603,15 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, player.getWorld())){
 			type = AlertType.LEGAL;
 		}
-		if(!config.get(player.getWorld()).isBlocked(itemStack.getType(), ListType.DROP)){
-			type = AlertType.LEGAL;
+		ASRegion asregion = plugin.getRegionManager().getRegion(item.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.DROP)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isBlocked(itemStack.getType(), ListType.DROP)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		// Region Check
@@ -581,8 +651,15 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, player.getWorld())){
 			type = AlertType.LEGAL;
 		}
-		if(!config.get(player.getWorld()).isBlocked(itemStack.getType(), ListType.PICKUP)){
-			type = AlertType.LEGAL;
+		ASRegion asregion = plugin.getRegionManager().getRegion(item.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.PICKUP)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isBlocked(itemStack.getType(), ListType.PICKUP)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		// Region Check
@@ -631,10 +708,18 @@ public class ASListener implements Listener {
 		// Handle event
 		if(type == AlertType.ILLEGAL){
 			List<ItemStack> remove = new ArrayList<ItemStack>();
+			ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
 			for(ItemStack item : drops){
-				if(config.get(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)){
-					illegalItems++;
-					remove.add(item);
+				if(asregion != null){
+					if(asregion.getConfig().isBlocked(item.getType(), ListType.DEATH)){
+						illegalItems++;
+						remove.add(item);
+					}
+				}else{
+					if(config.get(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)){
+						illegalItems++;
+						remove.add(item);
+					}
 				}
 			}
 			// Remove items
@@ -672,8 +757,15 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, player.getWorld())){
 			type = AlertType.LEGAL;
 		}
-		if(!config.get(player.getWorld()).isBlocked(command, ListType.COMMAND)){
-			type = AlertType.LEGAL;
+		ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(command, ListType.COMMAND)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isBlocked(command, ListType.COMMAND)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		// Handle event
