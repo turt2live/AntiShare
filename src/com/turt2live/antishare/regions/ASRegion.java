@@ -510,7 +510,7 @@ public class ASRegion {
 	/**
 	 * Gets this region's configuration
 	 * 
-	 * @return
+	 * @return the configuration
 	 */
 	public PerRegionConfig getConfig(){
 		return config;

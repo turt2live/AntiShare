@@ -21,7 +21,6 @@ import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.notification.Messenger;
@@ -173,7 +172,6 @@ public class AntiShare extends PluginWrapper {
 		UpdateChecker.start();
 		UsageStatistics.send(); // Handles config internally
 		trackers.addTo(metrics);
-		trackers.getTracker(TrackerType.STARTUP).increment(1);
 		metrics.start();
 
 		// Start listeners

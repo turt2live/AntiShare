@@ -166,7 +166,7 @@ public class Metrics {
 	 * Construct and create a Graph that can be used to separate specific plotters to their own graphs
 	 * on the metrics website. Plotters can be added to the graph object returned.
 	 * 
-	 * @param name
+	 * @param name the graph name
 	 * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
 	 */
 	public Graph createGraph(final String name){
@@ -187,7 +187,7 @@ public class Metrics {
 	/**
 	 * Adds a custom data plotter to the default graph
 	 * 
-	 * @param plotter
+	 * @param plotter the plotter
 	 */
 	public void addCustomData(final Plotter plotter){
 		if(plotter == null){
@@ -268,7 +268,7 @@ public class Metrics {
 	/**
 	 * Has the server owner denied plugin metrics?
 	 * 
-	 * @return
+	 * @return true if opt-out
 	 */
 	public boolean isOptOut(){
 		synchronized (optOutLock){
@@ -289,7 +289,7 @@ public class Metrics {
 	/**
 	 * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
 	 * 
-	 * @throws IOException
+	 * @throws IOException if something went wrong
 	 */
 	public void enable() throws IOException{
 		// This has to be synchronized or it can collide with the check in the task.
@@ -310,7 +310,7 @@ public class Metrics {
 	/**
 	 * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
 	 * 
-	 * @throws IOException
+	 * @throws IOException if something went wrong
 	 */
 	public void disable() throws IOException{
 		// This has to be synchronized or it can collide with the check in the task.
@@ -430,7 +430,7 @@ public class Metrics {
 	/**
 	 * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
 	 * 
-	 * @return
+	 * @return true if Mineshafter is present
 	 */
 	private boolean isMineshafterPresent(){
 		try{
@@ -451,10 +451,9 @@ public class Metrics {
 	 * encodeDataPair(data, "version", description.getVersion());
 	 * </code>
 	 * 
-	 * @param buffer
-	 * @param key
-	 * @param value
-	 * @return
+	 * @param buffer the buffer
+	 * @param key the key
+	 * @param value the value
 	 */
 	private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException{
 		buffer.append('&').append(encode(key)).append('=').append(encode(value));
@@ -463,8 +462,8 @@ public class Metrics {
 	/**
 	 * Encode text as UTF-8
 	 * 
-	 * @param text
-	 * @return
+	 * @param text the text
+	 * @return the encoded text
 	 */
 	private static String encode(final String text) throws UnsupportedEncodingException{
 		return URLEncoder.encode(text, "UTF-8");
@@ -493,7 +492,7 @@ public class Metrics {
 		/**
 		 * Gets the graph's name
 		 * 
-		 * @return
+		 * @return the name
 		 */
 		public String getName(){
 			return name;
@@ -502,7 +501,7 @@ public class Metrics {
 		/**
 		 * Add a plotter to the graph, which will be used to plot entries
 		 * 
-		 * @param plotter
+		 * @param plotter the plotter
 		 */
 		public void addPlotter(final Plotter plotter){
 			plotters.add(plotter);
@@ -511,7 +510,7 @@ public class Metrics {
 		/**
 		 * Remove a plotter from the graph
 		 * 
-		 * @param plotter
+		 * @param plotter the plotter
 		 */
 		public void removePlotter(final Plotter plotter){
 			plotters.remove(plotter);
@@ -520,7 +519,7 @@ public class Metrics {
 		/**
 		 * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
 		 * 
-		 * @return
+		 * @return the plotters
 		 */
 		public Set<Plotter> getPlotters(){
 			return Collections.unmodifiableSet(plotters);
@@ -563,7 +562,7 @@ public class Metrics {
 		/**
 		 * Construct a plotter with a specific plot name
 		 * 
-		 * @param name
+		 * @param name the name
 		 */
 		public Plotter(final String name){
 			this.name = name;
@@ -572,7 +571,7 @@ public class Metrics {
 		/**
 		 * Get the current value for the plotted point
 		 * 
-		 * @return
+		 * @return the value
 		 */
 		public abstract int getValue();
 
