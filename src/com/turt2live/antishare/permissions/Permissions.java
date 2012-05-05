@@ -26,7 +26,7 @@ public class Permissions implements Listener {
 	 * Creates a new permissions handler
 	 */
 	public Permissions(){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
 		if(vault != null){
 			handleVault(true);
@@ -117,7 +117,7 @@ public class Permissions implements Listener {
 	public void onPluginEnable(PluginEnableEvent event){
 		if(event.getPlugin().getName().equalsIgnoreCase("Vault")){
 			handleVault(true);
-			AntiShare.instance.getMessenger().info("Vault enabled! AntiShare will use Vault for permissions");
+			AntiShare.getInstance().getMessenger().info("Vault enabled! AntiShare will use Vault for permissions");
 		}
 	}
 
@@ -125,7 +125,7 @@ public class Permissions implements Listener {
 	public void onPluginDisable(PluginDisableEvent event){
 		if(event.getPlugin().getName().equalsIgnoreCase("Vault")){
 			handleVault(false);
-			AntiShare.instance.getMessenger().info("Vault disabled! AntiShare will use OP/Non-OP for permissions");
+			AntiShare.getInstance().getMessenger().info("Vault disabled! AntiShare will use OP/Non-OP for permissions");
 		}
 	}
 }

@@ -17,7 +17,7 @@ public class UpdateChecker {
 	 * Creates and starts the update checker
 	 */
 	public static void start(){
-		final AntiShare plugin = AntiShare.instance;
+		final AntiShare plugin = AntiShare.getInstance();
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
 			@Override
 			public void run(){

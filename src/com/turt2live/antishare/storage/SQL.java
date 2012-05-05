@@ -32,7 +32,7 @@ public class SQL {
 	 * Creates a new SQL Manager
 	 */
 	public SQL(){
-		this.plugin = AntiShare.instance;
+		this.plugin = AntiShare.getInstance();
 	}
 
 	/**

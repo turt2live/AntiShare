@@ -85,14 +85,14 @@ public class ASInventory {
 		// Setup
 		List<ASInventory> inventories = new ArrayList<ASInventory>();
 
-		if(AntiShare.instance.useSQL()){
+		if(AntiShare.getInstance().useSQL()){
 			// SQL load
 
 			// Setup
 			for(World world : Bukkit.getWorlds()){
 				for(GameMode gamemode : GameMode.values()){
 					try{
-						ResultSet items = AntiShare.instance.getSQL().getQuery(AntiShare.instance.getSQL().getConnection().prepareStatement("SELECT * FROM " + SQL.INVENTORIES_TABLE + " WHERE name='" + name + "' AND type='" + type.name() + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "'"));
+						ResultSet items = AntiShare.getInstance().getSQL().getQuery(AntiShare.getInstance().getSQL().getConnection().prepareStatement("SELECT * FROM " + SQL.INVENTORIES_TABLE + " WHERE name='" + name + "' AND type='" + type.name() + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "'"));
 						ASInventory inventory = new ASInventory(type, name, world, gamemode);
 
 						// Get items
@@ -140,13 +140,13 @@ public class ASInventory {
 			// Flat-File (YAML) load
 
 			// Setup
-			File dir = new File(AntiShare.instance.getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
+			File dir = new File(AntiShare.getInstance().getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
 			dir.mkdirs();
 			File saveFile = new File(dir, name + ".yml");
 			if(!saveFile.exists()){
 				return inventories;
 			}
-			EnhancedConfiguration file = new EnhancedConfiguration(saveFile, AntiShare.instance);
+			EnhancedConfiguration file = new EnhancedConfiguration(saveFile, AntiShare.getInstance());
 			file.load();
 
 			// Load data
@@ -178,7 +178,7 @@ public class ASInventory {
 	 * Creates a new AntiShare Inventory
 	 */
 	public ASInventory(InventoryType type, String inventoryName, World world, GameMode gamemode){
-		plugin = AntiShare.instance;
+		plugin = AntiShare.getInstance();
 		this.type = type;
 		this.inventoryName = inventoryName;
 		this.world = world;

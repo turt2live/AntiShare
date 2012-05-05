@@ -37,7 +37,7 @@ public class PerRegionConfig {
 	 * @param region the region
 	 */
 	public PerRegionConfig(ASRegion region){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		this.world = region.getWorld();
 		this.region = region;
 
@@ -85,7 +85,7 @@ public class PerRegionConfig {
 		boolean enabled = false;
 		boolean global = false;
 		boolean gworld = false;
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 
 		// Determine if enabled
 		if(regionConfig.getString("blocked-actions." + triggerPath).equalsIgnoreCase("global")){
@@ -130,7 +130,7 @@ public class PerRegionConfig {
 	 */
 	public void print(BufferedWriter out) throws IOException{
 		out.write("## REGION: " + region.getName() + ": \r\n");
-		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder() + File.separator + "region_configurations", region.getName() + ".yml"), AntiShare.instance);
+		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder() + File.separator + "region_configurations", region.getName() + ".yml"), AntiShare.getInstance());
 		regionConfig.load();
 		for(String key : regionConfig.getKeys(true)){
 			out.write(key + ": " + (regionConfig.getString(key).startsWith("MemorySection") ? "" : regionConfig.getString(key, "")) + "\r\n");

@@ -72,8 +72,8 @@ public class Alert {
 			if(node == null){
 				return false;
 			}
-			EnhancedConfiguration notifications = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder(), "notifications.yml"), AntiShare.instance);
-			notifications.loadDefaults(AntiShare.instance.getResource("resources/notifications.yml"));
+			EnhancedConfiguration notifications = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), "notifications.yml"), AntiShare.getInstance());
+			notifications.loadDefaults(AntiShare.getInstance().getResource("resources/notifications.yml"));
 			if(!notifications.fileExists() || !notifications.checkDefaults()){
 				notifications.saveDefaults();
 			}
@@ -149,7 +149,7 @@ public class Alert {
 		boolean sendToAdmins = true;
 
 		// Determine if we should even send the message
-		if(!send || AntiShare.instance.getPermissions().has(sender, PermissionNodes.SILENT_NOTIFICATIONS)){
+		if(!send || AntiShare.getInstance().getPermissions().has(sender, PermissionNodes.SILENT_NOTIFICATIONS)){
 			if(type != AlertType.REGION){
 				return;
 			}else{
@@ -210,7 +210,7 @@ public class Alert {
 		if(sendToAdmins && toPlayers){
 			details.admin_last_sent = System.currentTimeMillis();
 			for(Player player : Bukkit.getOnlinePlayers()){
-				if(AntiShare.instance.getPermissions().has(player, PermissionNodes.GET_NOTIFICATIONS)){
+				if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.GET_NOTIFICATIONS)){
 					if(!player.getName().equalsIgnoreCase(sender.getName())){
 						ASUtils.sendToPlayer(player, message);
 					}
@@ -224,7 +224,7 @@ public class Alert {
 		// Send to tracker
 		if(trigger.tracker(type) != null){
 			TrackerType tt = trigger.tracker(type);
-			AntiShare.instance.getTrackers().getTracker(tt).increment(1);
+			AntiShare.getInstance().getTrackers().getTracker(tt).increment(1);
 		}
 
 		// Reinsert (or insert if not found before) into the hashmap
@@ -236,8 +236,8 @@ public class Alert {
 	 */
 	public void reload(){
 		// Setup configurations
-		EnhancedConfiguration notifications = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder(), "notifications.yml"), AntiShare.instance);
-		notifications.loadDefaults(AntiShare.instance.getResource("resources/notifications.yml"));
+		EnhancedConfiguration notifications = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), "notifications.yml"), AntiShare.getInstance());
+		notifications.loadDefaults(AntiShare.getInstance().getResource("resources/notifications.yml"));
 		if(!notifications.fileExists() || !notifications.checkDefaults()){
 			notifications.saveDefaults();
 		}
@@ -259,7 +259,7 @@ public class Alert {
 	 * @throws IOException for external handling
 	 */
 	public void print(BufferedWriter out) throws IOException{
-		EnhancedConfiguration notifications = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder(), "notifications.yml"), AntiShare.instance);
+		EnhancedConfiguration notifications = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), "notifications.yml"), AntiShare.getInstance());
 		notifications.load();
 		for(String key : notifications.getKeys(true)){
 			out.write(key + ": " + (notifications.getString(key).startsWith("MemorySection") ? "" : notifications.getString(key, "")) + "\r\n");

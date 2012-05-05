@@ -92,13 +92,10 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	/**
-	 * The instance of AntiShare
-	 */
-	public static AntiShare instance;
-	/**
 	 * AntiShare tool material
 	 */
 	public static final Material ANTISHARE_TOOL = Material.BLAZE_ROD;
+	private static AntiShare instance;
 	private boolean useSQL = false;
 	private boolean sqlRetry = false;
 	private Messenger messenger;
@@ -114,6 +111,15 @@ public class AntiShare extends PluginWrapper {
 	private SQL sql;
 	private Metrics metrics;
 	private TrackerList trackers;
+
+	/**
+	 * Gets the active AntiShare instance
+	 * 
+	 * @return the instance
+	 */
+	public static AntiShare getInstance(){
+		return instance;
+	}
 
 	@Override
 	public void onEnable(){

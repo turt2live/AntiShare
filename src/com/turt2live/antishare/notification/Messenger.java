@@ -29,7 +29,7 @@ public class Messenger {
 	 * Reloads the messenger's settings
 	 */
 	public void reload(){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		debug = plugin.getConfig().getBoolean("other.debug");
 		if(!debug){
 			silent = plugin.getConfig().getBoolean("other.silent-overall");
@@ -65,25 +65,25 @@ public class Messenger {
 		switch (type){
 		case STARTUP:
 			if(!silentStartup){
-				AntiShare.instance.getLogger().log(level, message);
+				AntiShare.getInstance().getLogger().log(level, message);
 			}
 			break;
 		case SHUTDOWN:
 			if(!silentShutdown){
-				AntiShare.instance.getLogger().log(level, message);
+				AntiShare.getInstance().getLogger().log(level, message);
 			}
 			break;
 		case INFO:
 			if(!silent){
-				AntiShare.instance.getLogger().log(level, message);
+				AntiShare.getInstance().getLogger().log(level, message);
 			}
 			break;
 		case BLOCK:
 			if(!silentBlocks){
-				AntiShare.instance.getLogger().log(level, message);
+				AntiShare.getInstance().getLogger().log(level, message);
 			}
 		case BYPASS:
-			AntiShare.instance.getLogger().log(level, message);
+			AntiShare.getInstance().getLogger().log(level, message);
 			break;
 		}
 	}

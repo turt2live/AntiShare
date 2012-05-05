@@ -28,8 +28,8 @@ public class Messages {
 	 */
 	public void reload(){
 		// Setup configuration
-		messages = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder(), "messages.yml"), AntiShare.instance);
-		messages.loadDefaults(AntiShare.instance.getResource("resources/messages.yml"));
+		messages = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), "messages.yml"), AntiShare.getInstance());
+		messages.loadDefaults(AntiShare.getInstance().getResource("resources/messages.yml"));
 		if(!messages.fileExists() || !messages.checkDefaults()){
 			messages.saveDefaults();
 		}

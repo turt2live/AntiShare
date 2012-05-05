@@ -29,7 +29,7 @@ public class TrackerList {
 		}
 
 		// Setup
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		boolean skip = false;
 
 		// Check if it's an "all or nothing" list

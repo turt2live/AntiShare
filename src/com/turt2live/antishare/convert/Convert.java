@@ -47,7 +47,7 @@ public class Convert {
 	public static void end(){
 		if(inventories > 0 || regions > 0){
 			long elapsed = System.currentTimeMillis() - start;
-			AntiShare.instance.getLogger().info("Converted " + inventories + " inventories and " + regions + " regions in " + elapsed + " milliseconds.");
+			AntiShare.getInstance().getLogger().info("Converted " + inventories + " inventories and " + regions + " regions in " + elapsed + " milliseconds.");
 		}
 	}
 
@@ -55,7 +55,7 @@ public class Convert {
 	 * Converts the configuration format to 3.2.0b from 3.1.3 (or 3.2.0a)
 	 */
 	public static void convertConfig313to320b(){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 
 		// Check if we need to updated
 		plugin.getConfig().loadDefaults(plugin.getResource("resources/config.yml"));
@@ -138,7 +138,7 @@ public class Convert {
 	 * Converts the general data to 3.2.0b format (inventories and regions) from 3.2.0a or 3.1.3 format
 	 */
 	public static void convert313to320b(){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 
 		// ############## FLAT FILE
 		// Convert Inventories

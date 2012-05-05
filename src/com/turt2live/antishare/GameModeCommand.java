@@ -22,14 +22,14 @@ public class GameModeCommand {
 	public static void onPlayerCommand(PlayerCommandPreprocessEvent event){
 		if((event.getMessage().toLowerCase().startsWith("/gm")
 				|| event.getMessage().toLowerCase().startsWith("/gamemode"))
-				&& AntiShare.instance.getConfig().getBoolean("enabled-features.gamemode-command")){
+				&& AntiShare.getInstance().getConfig().getBoolean("enabled-features.gamemode-command")){
 			// Setup variables
 			GameMode to = null;
 			Player target = null;
 			CommandSender sender = event.getPlayer();
 			String message = (event.getMessage().toLowerCase().startsWith("/gm")) ? event.getMessage().toLowerCase().replace("/gm", "") : (event.getMessage().toLowerCase().startsWith("/gamemode")) ? event.getMessage().toLowerCase().replace("/gamemode", "") : event.getMessage().toLowerCase();
 			String[] args = message.trim().split(" ");
-			AntiShare plugin = AntiShare.instance;
+			AntiShare plugin = AntiShare.getInstance();
 			boolean skip = false;
 
 			// Console check

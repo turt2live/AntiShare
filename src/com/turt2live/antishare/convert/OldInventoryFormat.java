@@ -37,7 +37,7 @@ public class OldInventoryFormat {
 	 * Creates a general inventory format
 	 */
 	public OldInventoryFormat(){
-		this.plugin = AntiShare.instance;
+		this.plugin = AntiShare.getInstance();
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class OldInventoryFormat {
 	 * @param file the inventory file
 	 */
 	public OldInventoryFormat(File file){
-		this.plugin = AntiShare.instance;
+		this.plugin = AntiShare.getInstance();
 		this.saveFile = file;
 	}
 

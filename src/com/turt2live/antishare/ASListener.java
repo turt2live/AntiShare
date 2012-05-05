@@ -73,7 +73,7 @@ import com.turt2live.antishare.storage.PerWorldConfig.ListType;
  */
 public class ASListener implements Listener {
 
-	private AntiShare plugin = AntiShare.instance;
+	private AntiShare plugin = AntiShare.getInstance();
 	private ConcurrentHashMap<World, PerWorldConfig> config = new ConcurrentHashMap<World, PerWorldConfig>();
 
 	/**

@@ -56,7 +56,7 @@ public class ASRegion {
 		this.gamemode = gamemode;
 		this.world = region.getWorld();
 		id = String.valueOf(System.currentTimeMillis());
-		plugin = AntiShare.instance;
+		plugin = AntiShare.getInstance();
 		name = id;
 		config = new PerRegionConfig(this);
 	}
@@ -76,7 +76,7 @@ public class ASRegion {
 		this.gamemode = gamemode;
 		this.world = region.getWorld();
 		id = String.valueOf(System.currentTimeMillis());
-		plugin = AntiShare.instance;
+		plugin = AntiShare.getInstance();
 		name = id;
 		config = new PerRegionConfig(this);
 	}

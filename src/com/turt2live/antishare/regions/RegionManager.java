@@ -38,7 +38,7 @@ public class RegionManager {
 	 * Creates a new region manager
 	 */
 	public RegionManager(){
-		plugin = AntiShare.instance;
+		plugin = AntiShare.getInstance();
 		hasWorldEdit = plugin.getServer().getPluginManager().getPlugin("WorldEdit") != null;
 		load();
 	}

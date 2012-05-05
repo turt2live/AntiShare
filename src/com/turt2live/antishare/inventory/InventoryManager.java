@@ -241,7 +241,7 @@ public class InventoryManager {
 		}
 
 		// Loads regions
-		for(ASRegion region : AntiShare.instance.getRegionManager().getAllRegions()){
+		for(ASRegion region : AntiShare.getInstance().getRegionManager().getAllRegions()){
 			String UID = region.getUniqueID();
 			List<ASInventory> inventory = ASInventory.generateInventory(UID, InventoryType.REGION);
 			if(inventory != null){
@@ -255,7 +255,7 @@ public class InventoryManager {
 
 		// Status
 		int loaded = creative.size() + survival.size() + region.size() + playerTemp.size();
-		AntiShare.instance.getMessenger().log("Inventories loaded: " + loaded, Level.INFO, LogType.INFO);
+		AntiShare.getInstance().getMessenger().log("Inventories loaded: " + loaded, Level.INFO, LogType.INFO);
 	}
 
 	/**
@@ -278,11 +278,11 @@ public class InventoryManager {
 		}
 
 		// Clear targets
-		if(AntiShare.instance.useSQL()){
-			AntiShare.instance.getSQL().wipeTable(SQL.INVENTORIES_TABLE);
+		if(AntiShare.getInstance().useSQL()){
+			AntiShare.getInstance().getSQL().wipeTable(SQL.INVENTORIES_TABLE);
 		}else{
 			for(InventoryType type : InventoryType.values()){
-				File dir = new File(AntiShare.instance.getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
+				File dir = new File(AntiShare.getInstance().getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
 				if(dir.listFiles() != null){
 					for(File file : dir.listFiles()){
 						file.delete();

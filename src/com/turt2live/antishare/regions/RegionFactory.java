@@ -37,7 +37,7 @@ public class RegionFactory {
 		 */
 		public WorldEditHook(boolean hasWorldEdit){
 			if(hasWorldEdit){
-				plugin = (WorldEditPlugin) AntiShare.instance.getServer().getPluginManager().getPlugin("WorldEdit");
+				plugin = (WorldEditPlugin) AntiShare.getInstance().getServer().getPluginManager().getPlugin("WorldEdit");
 			}
 		}
 
@@ -72,7 +72,7 @@ public class RegionFactory {
 		 * @return true if a region is there
 		 */
 		public boolean isRegionInSelection(Selection selection){
-			for(ASRegion key : AntiShare.instance.getRegionManager().getAllRegions(selection.getWorld())){
+			for(ASRegion key : AntiShare.getInstance().getRegionManager().getAllRegions(selection.getWorld())){
 				Selection region = key.getSelection();
 				// Thanks to Sleaker for letting me use this code :D
 				// Modified from: https://github.com/MilkBowl/LocalShops/blob/master/src/net/milkbowl/localshops/ShopManager.java#L216
@@ -100,7 +100,7 @@ public class RegionFactory {
 		 * @return true if a region is there
 		 */
 		public boolean isRegionInSelectionAndNot(Selection selection, ASRegion region){
-			for(ASRegion key : AntiShare.instance.getRegionManager().getAllRegions(selection.getWorld())){
+			for(ASRegion key : AntiShare.getInstance().getRegionManager().getAllRegions(selection.getWorld())){
 				if(key.getUniqueID().equals(region.getUniqueID())){
 					continue;
 				}
@@ -132,7 +132,7 @@ public class RegionFactory {
 	 * Creates a new region factory
 	 */
 	public RegionFactory(){
-		regions = AntiShare.instance.getRegionManager();
+		regions = AntiShare.getInstance().getRegionManager();
 		hook = new WorldEditHook(regions.hasWorldEdit());
 	}
 
@@ -175,7 +175,7 @@ public class RegionFactory {
 	 * @param sender the command sender
 	 */
 	public void editRegion(ASRegion region, RegionKeyType key, String value, CommandSender sender){
-		if(!AntiShare.instance.getRegionManager().hasWorldEdit()){
+		if(!AntiShare.getInstance().getRegionManager().hasWorldEdit()){
 			ASUtils.sendToPlayer(sender, ChatColor.RED + "WorldEdit is not installed.");
 			return;
 		}
@@ -184,7 +184,7 @@ public class RegionFactory {
 		boolean changed = false;
 		switch (key){
 		case NAME:
-			if(AntiShare.instance.getRegionManager().regionNameExists(value)){
+			if(AntiShare.getInstance().getRegionManager().regionNameExists(value)){
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name '" + value + "' already exists!");
 			}else{
 				region.setName(value);
@@ -223,7 +223,7 @@ public class RegionFactory {
 			}
 			break;
 		case SELECTION_AREA:
-			if(!AntiShare.instance.getRegionManager().hasWorldEdit()){
+			if(!AntiShare.getInstance().getRegionManager().hasWorldEdit()){
 				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "WorldEdit is not installed. No region set.");
 				break;
 			}

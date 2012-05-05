@@ -33,7 +33,7 @@ public class CommandHandler implements CommandExecutor {
 	@SuppressWarnings ("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){

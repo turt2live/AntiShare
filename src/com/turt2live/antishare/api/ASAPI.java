@@ -23,7 +23,7 @@ public class ASAPI {
 	 * Creates a new AntiShare API instance
 	 */
 	public ASAPI(){
-		plugin = AntiShare.instance;
+		plugin = AntiShare.getInstance();
 	}
 
 	/**

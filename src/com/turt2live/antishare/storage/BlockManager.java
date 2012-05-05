@@ -45,7 +45,7 @@ public class BlockManager {
 	 * Creates a new block manager, also loads the block lists
 	 */
 	public BlockManager(){
-		this.plugin = AntiShare.instance;
+		this.plugin = AntiShare.getInstance();
 
 		// Load blocks
 		load();

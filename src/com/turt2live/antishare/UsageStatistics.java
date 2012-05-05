@@ -22,7 +22,7 @@ public class UsageStatistics {
 	 * Sends usage statistics
 	 */
 	public static void send(){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		if(!plugin.getConfig().getBoolean("settings.send-usage-statistics")){
 			return;
 		}

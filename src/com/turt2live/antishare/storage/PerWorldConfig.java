@@ -57,7 +57,7 @@ public class PerWorldConfig {
 	 * @param world the world
 	 */
 	public PerWorldConfig(World world){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		this.world = world;
 
 		// Setup configuration
@@ -114,7 +114,7 @@ public class PerWorldConfig {
 		// Setup
 		boolean enabled = false;
 		boolean global = false;
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 
 		// Determine if enabled
 		if(worldConfig.getString("blocked-actions." + triggerPath).equalsIgnoreCase("global")){
@@ -144,7 +144,7 @@ public class PerWorldConfig {
 	 * @throws IOException for internal handling
 	 */
 	public void print(BufferedWriter out) throws IOException{
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder(), world.getName() + "_config.yml"), AntiShare.instance);
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), world.getName() + "_config.yml"), AntiShare.getInstance());
 		worldConfig.load();
 		for(String key : worldConfig.getKeys(true)){
 			out.write(key + ": " + (worldConfig.getString(key).startsWith("MemorySection") ? "" : worldConfig.getString(key, "")) + "\r\n");
@@ -249,7 +249,7 @@ public class PerWorldConfig {
 	 * @return the raw configuration
 	 */
 	public EnhancedConfiguration getRaw(){
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.instance.getDataFolder(), world.getName() + "_config.yml"), AntiShare.instance);
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), world.getName() + "_config.yml"), AntiShare.getInstance());
 		worldConfig.load();
 		return worldConfig;
 	}

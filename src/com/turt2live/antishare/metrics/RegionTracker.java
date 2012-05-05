@@ -25,7 +25,7 @@ public class RegionTracker extends Tracker {
 	public RegionTracker(String name, TrackerType type, GameMode gamemode){
 		super(name, type);
 		this.gamemode = gamemode;
-		this.plugin = AntiShare.instance;
+		this.plugin = AntiShare.getInstance();
 	}
 
 	@Override

@@ -71,7 +71,7 @@ public class WorldSplit {
 		this.axis = axis;
 		this.creative = creative;
 		this.survival = survival;
-		this.plugin = AntiShare.instance;
+		this.plugin = AntiShare.getInstance();
 		checkValues();
 	}
 

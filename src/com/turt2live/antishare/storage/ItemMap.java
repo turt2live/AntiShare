@@ -20,7 +20,7 @@ public class ItemMap {
 	 * Creates a new Item Map
 	 */
 	public ItemMap(){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		list = new EnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
 		list.loadDefaults(plugin.getResource("resources/items.yml"));
 		if(!list.fileExists() || !list.checkDefaults()){

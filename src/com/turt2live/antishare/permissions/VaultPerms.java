@@ -22,7 +22,7 @@ public class VaultPerms {
 	 * Creates a new Vault permissions handler
 	 */
 	public VaultPerms(){
-		Plugin plugin = AntiShare.instance.getServer().getPluginManager().getPlugin("Vault");
+		Plugin plugin = AntiShare.getInstance().getServer().getPluginManager().getPlugin("Vault");
 		if(plugin != null){
 			RegisteredServiceProvider<Permission> rsp = plugin.getServer().getServicesManager().getRegistration(Permission.class);
 			perms = rsp.getProvider();

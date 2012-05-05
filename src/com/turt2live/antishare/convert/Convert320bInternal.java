@@ -51,7 +51,7 @@ public class Convert320bInternal {
 	 * @return true if everything went well
 	 */
 	public static boolean convert(ConvertType from, ConvertType to){
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 
 		// Sanity
 		if((to == ConvertType.INVALID || from == ConvertType.INVALID) || (to == from)){

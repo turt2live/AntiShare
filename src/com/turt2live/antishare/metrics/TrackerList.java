@@ -89,8 +89,8 @@ public class TrackerList extends ArrayList<Tracker> {
 		}
 
 		// Fix the SQL/Flat File graphs
-		getTracker(TrackerType.SQL).increment(AntiShare.instance.useSQL() ? 1 : 0);
-		getTracker(TrackerType.FLAT_FILE).increment(AntiShare.instance.useSQL() ? 0 : 1);
+		getTracker(TrackerType.SQL).increment(AntiShare.getInstance().useSQL() ? 1 : 0);
+		getTracker(TrackerType.FLAT_FILE).increment(AntiShare.getInstance().useSQL() ? 0 : 1);
 
 		// Fix region graphs
 		remove(TrackerType.CREATIVE_REGIONS);

@@ -35,7 +35,7 @@ public class EventList {
 		}
 
 		// Setup
-		AntiShare plugin = AntiShare.instance;
+		AntiShare plugin = AntiShare.getInstance();
 		boolean skip = false;
 
 		// Sanity
