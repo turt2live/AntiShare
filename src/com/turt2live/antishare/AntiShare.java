@@ -60,6 +60,7 @@ public class AntiShare extends PluginWrapper {
 	 * - Added World Split warnings
 	 * - Fixed world splits and regions not getting along
 	 * - Fixed /gm working in world splits
+	 * - Added per-region configurations
 	 */
 
 	/**

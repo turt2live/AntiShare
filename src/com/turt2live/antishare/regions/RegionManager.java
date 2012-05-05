@@ -401,4 +401,22 @@ public class RegionManager {
 		}
 		return regions;
 	}
+
+	/**
+	 * Gets all the regions for a Game Mode
+	 * 
+	 * @param gamemode the Game Mode
+	 * @return the list of regions
+	 */
+	public List<ASRegion> getAllRegions(GameMode gamemode){
+		List<ASRegion> regions = new ArrayList<ASRegion>();
+		for(World world : Bukkit.getWorlds()){
+			for(ASRegion region : getAllRegions(world)){
+				if(region.getGameMode() == gamemode){
+					regions.add(region);
+				}
+			}
+		}
+		return regions;
+	}
 }

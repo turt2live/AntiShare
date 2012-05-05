@@ -3,6 +3,9 @@ package com.turt2live.antishare.metrics;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.GameMode;
+
+import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.metrics.Metrics.Graph;
 
 /**
@@ -41,7 +44,11 @@ public class TrackerList extends ArrayList<Tracker> {
 		HIT_MOB_ILLEGAL("Illegal Actions", "Hit Mob"),
 		HIT_MOB_LEGAL("Legal Actions", "Hit Mob"),
 		COMMAND_ILLEGAL("Illegal Actions", "Command"),
-		COMMAND_LEGAL("Legal Actions", "Command");
+		COMMAND_LEGAL("Legal Actions", "Command"),
+		CREATIVE_REGIONS("Region Types", "Creative"),
+		SURVIVAL_REGIONS("Region Types", "Survival"),
+		FLAT_FILE("Storage System", "Flat-File (YAML)"),
+		SQL("Storage System", "SQL");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
@@ -79,6 +86,29 @@ public class TrackerList extends ArrayList<Tracker> {
 	public TrackerList(){
 		for(TrackerType type : TrackerType.values()){
 			add(new Tracker(type.getName(), type));
+		}
+
+		// Fix the SQL/Flat File graphs
+		getTracker(TrackerType.SQL).increment(AntiShare.instance.useSQL() ? 1 : 0);
+		getTracker(TrackerType.FLAT_FILE).increment(AntiShare.instance.useSQL() ? 0 : 1);
+
+		// Fix region graphs
+		remove(TrackerType.CREATIVE_REGIONS);
+		remove(TrackerType.SURVIVAL_REGIONS);
+		RegionTracker creative = new RegionTracker(TrackerType.CREATIVE_REGIONS.getName(), TrackerType.CREATIVE_REGIONS, GameMode.CREATIVE);
+		RegionTracker survival = new RegionTracker(TrackerType.SURVIVAL_REGIONS.getName(), TrackerType.SURVIVAL_REGIONS, GameMode.SURVIVAL);
+		add(creative);
+		add(survival);
+	}
+
+	// Removes a graph type, must be called before metric gets the graph
+	private void remove(TrackerType type){
+		for(int i = 0; i < size(); i++){
+			Tracker t = get(i);
+			if(t.getType() == type){
+				remove(t);
+				break;
+			}
 		}
 	}
 
