@@ -151,11 +151,11 @@ public class ASListener implements Listener {
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
 		if(asregion != null){
-			if(!asregion.getConfig().isBlocked(block.getType(), ListType.BLOCK_BREAK)){
+			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_BREAK)){
 				type = AlertType.LEGAL;
 			}
 		}else{
-			if(!config.get(block.getWorld()).isBlocked(block.getType(), ListType.BLOCK_BREAK)){
+			if(!config.get(block.getWorld()).isBlocked(block, ListType.BLOCK_BREAK)){
 				type = AlertType.LEGAL;
 			}
 		}
@@ -164,10 +164,10 @@ public class ASListener implements Listener {
 		if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
 			GameMode blockGamemode = plugin.getBlockManager().getType(block);
 			if(blockGamemode != null){
-				special = true;
 				blockGM = blockGamemode.name().toLowerCase();
 				String oGM = blockGM.equalsIgnoreCase("creative") ? "survival" : "creative";
 				if(player.getGameMode() != blockGamemode){
+					special = true;
 					boolean deny = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + blockGM + "-blocks.deny");
 					drops = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + blockGM + "-blocks.block-drops");
 					if(deny){
@@ -228,7 +228,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check for 'attached' blocks and internal inventories
-		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
+		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
 			// Check inventories
 			if(config.get(block.getWorld()).clearBlockInventoryOnBreak()){
 				if(block.getState() instanceof Chest){
@@ -276,11 +276,11 @@ public class ASListener implements Listener {
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
 		if(asregion != null){
-			if(!asregion.getConfig().isBlocked(block.getType(), ListType.BLOCK_PLACE)){
+			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_PLACE)){
 				type = AlertType.LEGAL;
 			}
 		}else{
-			if(!config.get(block.getWorld()).isBlocked(block.getType(), ListType.BLOCK_PLACE)){
+			if(!config.get(block.getWorld()).isBlocked(block, ListType.BLOCK_PLACE)){
 				type = AlertType.LEGAL;
 			}
 		}
@@ -349,11 +349,11 @@ public class ASListener implements Listener {
 			// Check if they should be blocked
 			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
 			if(asregion != null){
-				if(asregion.getConfig().isBlocked(block.getType(), ListType.RIGHT_CLICK)){
+				if(asregion.getConfig().isBlocked(block, ListType.RIGHT_CLICK)){
 					type = AlertType.ILLEGAL;
 				}
 			}else{
-				if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.RIGHT_CLICK)){
+				if(config.get(block.getWorld()).isBlocked(block, ListType.RIGHT_CLICK)){
 					type = AlertType.ILLEGAL;
 				}
 			}
@@ -370,11 +370,11 @@ public class ASListener implements Listener {
 		if(type == AlertType.LEGAL){
 			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
 			if(asregion != null){
-				if(asregion.getConfig().isBlocked(block.getType(), ListType.USE)){
+				if(asregion.getConfig().isBlocked(block, ListType.USE)){
 					type = AlertType.ILLEGAL;
 				}
 			}else{
-				if(config.get(block.getWorld()).isBlocked(block.getType(), ListType.USE)){
+				if(config.get(block.getWorld()).isBlocked(block, ListType.USE)){
 					type = AlertType.ILLEGAL;
 				}
 			}

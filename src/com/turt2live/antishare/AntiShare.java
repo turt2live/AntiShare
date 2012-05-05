@@ -29,6 +29,7 @@ import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.RegionFactory;
 import com.turt2live.antishare.regions.RegionManager;
+import com.turt2live.antishare.signs.SignManager;
 import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.storage.ItemMap;
 import com.turt2live.antishare.storage.SQL;
@@ -111,6 +112,7 @@ public class AntiShare extends PluginWrapper {
 	private SQL sql;
 	private Metrics metrics;
 	private TrackerList trackers;
+	private SignManager signs;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -157,14 +159,15 @@ public class AntiShare extends PluginWrapper {
 		}
 		getConfig().load();
 
-		// Setup
+		// Setup (order is important!)
 		try{
 			metrics = new Metrics(this);
 		}catch(IOException e1){
 			e1.printStackTrace();
 		}
-		trackers = new TrackerList();
 		messenger = new Messenger();
+		signs = new SignManager();
+		trackers = new TrackerList();
 		permissions = new Permissions();
 		itemMap = new ItemMap();
 		listener = new ASListener();
@@ -179,7 +182,7 @@ public class AntiShare extends PluginWrapper {
 		UpdateChecker.start();
 		UsageStatistics.send(); // Handles config internally
 		trackers.addTo(metrics);
-		metrics.start();
+		metrics.start(); // Handles opt-out internally
 
 		// Start listeners
 		getServer().getPluginManager().registerEvents(permissions, this);
@@ -247,6 +250,7 @@ public class AntiShare extends PluginWrapper {
 		sql = null;
 		metrics = null;
 		trackers = null;
+		signs = null;
 	}
 
 	/**
@@ -267,6 +271,7 @@ public class AntiShare extends PluginWrapper {
 		// SQL has no reload
 		// Metrics has no reload
 		// Tracker List has no reload
+		signs.reload();
 	}
 
 	/**
@@ -406,6 +411,15 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public TrackerList getTrackers(){
 		return trackers;
+	}
+
+	/**
+	 * Gets the sign manager being used by AntiShare
+	 * 
+	 * @return the sign manager
+	 */
+	public SignManager getSignManager(){
+		return signs;
 	}
 
 	/**

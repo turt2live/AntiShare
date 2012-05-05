@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
@@ -186,6 +187,33 @@ public class PerRegionConfig {
 			return pickup.isBlocked(material);
 		case DEATH:
 			return death.isBlocked(material);
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if an item in this region is blocked
+	 * 
+	 * @param block the block
+	 * @param list the list type
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Block block, ListType list){
+		switch (list){
+		case BLOCK_BREAK:
+			return block_break.isBlocked(block);
+		case BLOCK_PLACE:
+			return block_place.isBlocked(block);
+		case RIGHT_CLICK:
+			return right_click.isBlocked(block);
+		case USE:
+			return use.isBlocked(block);
+		case DROP:
+			return drop.isBlocked(block);
+		case PICKUP:
+			return pickup.isBlocked(block);
+		case DEATH:
+			return death.isBlocked(block);
 		}
 		return false;
 	}

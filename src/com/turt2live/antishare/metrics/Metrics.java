@@ -60,6 +60,15 @@ import org.bukkit.plugin.PluginDescriptionFile;
  * void start(); <br/>
  * </code>
  */
+/* Turt2Live:
+ * Any modifications should be recorded as this is not an AntiShare file.
+ * For example, if you modify this sample line:
+ *   String lol = "lol";
+ * to be this:
+ *   String lol = "Not lol";
+ * then you should record it like this:
+ *   String lol = "Not lol"; // Turt2Live - Changed value (lol -> Not lol)
+ */
 public class Metrics {
 
 	/**
@@ -84,7 +93,8 @@ public class Metrics {
 	/**
 	 * The file where guid and opt out is stored in
 	 */
-	private static final String CONFIG_FILE = "plugins/PluginMetrics/config.yml";
+	// Turt2Live - Moved config file
+	private static final String CONFIG_FILE = "plugins/AntiShare/metrics-config.yml";
 
 	/**
 	 * The separator to use for custom data. This MUST NOT change unless you are hosting your own

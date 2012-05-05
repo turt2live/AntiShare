@@ -5,8 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.GameMode;
 
-import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.metrics.Metrics.Graph;
+import com.turt2live.antishare.metrics.SignTracker.SignType;
 
 /**
  * Tracker list
@@ -48,7 +48,12 @@ public class TrackerList extends ArrayList<Tracker> {
 		CREATIVE_REGIONS("Region Types", "Creative"),
 		SURVIVAL_REGIONS("Region Types", "Survival"),
 		FLAT_FILE("Storage System", "Flat-File (YAML)"),
-		SQL("Storage System", "SQL");
+		SQL("Storage System", "SQL"),
+		ENABLED_SIGNS("AntiShare Signs", "Enabled"),
+		DISABLED_SIGNS("AntiShare Signs", "Disabled"),
+		CASE_SENSITIVE_SIGNS("AntiShare Signs", "Case Sensitive"),
+		CASE_INSENSITIVE_SIGNS("AntiShare Signs", "Case Insensitive"),
+		SIGNS("AntiShare Signs", "All");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
@@ -89,8 +94,12 @@ public class TrackerList extends ArrayList<Tracker> {
 		}
 
 		// Fix the SQL/Flat File graphs
-		getTracker(TrackerType.SQL).increment(AntiShare.getInstance().useSQL() ? 1 : 0);
-		getTracker(TrackerType.FLAT_FILE).increment(AntiShare.getInstance().useSQL() ? 0 : 1);
+		remove(TrackerType.SQL);
+		remove(TrackerType.FLAT_FILE);
+		StorageTracker sql = new StorageTracker(TrackerType.SQL.getName(), TrackerType.SQL);
+		StorageTracker yaml = new StorageTracker(TrackerType.FLAT_FILE.getName(), TrackerType.FLAT_FILE);
+		add(sql);
+		add(yaml);
 
 		// Fix region graphs
 		remove(TrackerType.CREATIVE_REGIONS);
@@ -99,6 +108,23 @@ public class TrackerList extends ArrayList<Tracker> {
 		RegionTracker survival = new RegionTracker(TrackerType.SURVIVAL_REGIONS.getName(), TrackerType.SURVIVAL_REGIONS, GameMode.SURVIVAL);
 		add(creative);
 		add(survival);
+
+		// Fix sign graphs
+		remove(TrackerType.SIGNS);
+		remove(TrackerType.CASE_INSENSITIVE_SIGNS);
+		remove(TrackerType.CASE_SENSITIVE_SIGNS);
+		remove(TrackerType.DISABLED_SIGNS);
+		remove(TrackerType.ENABLED_SIGNS);
+		SignTracker all = new SignTracker(TrackerType.SIGNS.getName(), TrackerType.SIGNS, SignType.ALL);
+		SignTracker caseI = new SignTracker(TrackerType.CASE_INSENSITIVE_SIGNS.getName(), TrackerType.CASE_INSENSITIVE_SIGNS, SignType.CASE_INSENSITIVE);
+		SignTracker caseS = new SignTracker(TrackerType.CASE_SENSITIVE_SIGNS.getName(), TrackerType.CASE_SENSITIVE_SIGNS, SignType.CASE_SENSITIVE);
+		SignTracker disabled = new SignTracker(TrackerType.DISABLED_SIGNS.getName(), TrackerType.DISABLED_SIGNS, SignType.DISABLED);
+		SignTracker enabled = new SignTracker(TrackerType.ENABLED_SIGNS.getName(), TrackerType.ENABLED_SIGNS, SignType.ENABLED);
+		add(all);
+		add(caseI);
+		add(caseS);
+		add(disabled);
+		add(enabled);
 	}
 
 	// Removes a graph type, must be called before metric gets the graph
@@ -106,7 +132,7 @@ public class TrackerList extends ArrayList<Tracker> {
 		for(int i = 0; i < size(); i++){
 			Tracker t = get(i);
 			if(t.getType() == type){
-				remove(t);
+				remove(i);
 				break;
 			}
 		}

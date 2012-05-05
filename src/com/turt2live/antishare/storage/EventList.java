@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.signs.Sign;
 
 /**
  * Event List
@@ -21,6 +23,7 @@ public class EventList {
 	private boolean expBlocked = false;
 	private List<Integer> blocked = new ArrayList<Integer>();
 	private List<String> blocked_strings = new ArrayList<String>();
+	private List<Sign> blockedsigns = new ArrayList<Sign>();
 
 	/**
 	 * Creates a new Event List
@@ -67,6 +70,25 @@ public class EventList {
 				// Whitelist?
 				if(blocked.equalsIgnoreCase("whitelist") && index == 0){
 					whitelist = true;
+					index++;
+					continue;
+				}
+
+				// Sign?
+				if(blocked.toLowerCase().startsWith("sign:")){
+					String signname = blocked.split(":").length > 0 ? blocked.split(":")[1] : null;
+					if(signname == null){
+						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+						index++;
+						continue;
+					}
+					Sign sign = plugin.getSignManager().getSign(signname);
+					if(sign == null){
+						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+						index++;
+						continue;
+					}
+					blockedsigns.add(sign);
 					index++;
 					continue;
 				}
@@ -166,6 +188,25 @@ public class EventList {
 			}
 			index++;
 		}
+	}
+
+	/**
+	 * Checks if a block is blocked
+	 * 
+	 * @param block the block
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Block block){
+		if(block.getState() instanceof org.bukkit.block.Sign){
+			org.bukkit.block.Sign cbsign = (org.bukkit.block.Sign) block.getState();
+			for(int i = 0; i < blockedsigns.size(); i++){
+				Sign s = blockedsigns.get(i);
+				if(s.matches(cbsign)){
+					return true;
+				}
+			}
+		}
+		return isBlocked(block.getType());
 	}
 
 	/**
