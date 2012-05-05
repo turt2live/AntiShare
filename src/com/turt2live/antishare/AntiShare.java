@@ -174,9 +174,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Statistics
 		UpdateChecker.start();
-		UsageStatistics.send(); // Handles config internally
-		trackers.addTo(metrics);
-		metrics.start(); // Handles opt-out internally
+		UsageStatistics.send(); // Handles config internally, also handles Metrics
 
 		// Start listeners
 		getServer().getPluginManager().registerEvents(permissions, this);

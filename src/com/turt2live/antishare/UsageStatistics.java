@@ -26,6 +26,8 @@ public class UsageStatistics {
 		if(!plugin.getConfig().getBoolean("settings.send-usage-statistics")){
 			return;
 		}
+
+		// mc.turt2live.com/plugins
 		String pluginVersion = "UNKNOWN";
 		String bukkitVersion = "UNKNOWN";
 		try{
@@ -52,6 +54,10 @@ public class UsageStatistics {
 		}catch(Exception e){
 			plugin.getMessenger().log("Could not send usage statistics.", Level.WARNING, LogType.INFO);
 		}
+
+		// mcstats.org
+		plugin.getTrackers().addTo(plugin.getMetrics());
+		plugin.getMetrics().start(); // Handles it's own opt-out
 	}
 
 }
