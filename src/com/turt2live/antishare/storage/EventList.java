@@ -91,6 +91,22 @@ public class EventList {
 					blockedsigns.add(sign);
 					index++;
 					continue;
+				}else if(blocked.toLowerCase().startsWith("-sign:")){
+					String signname = blocked.split(":").length > 0 ? blocked.split(":")[1] : null;
+					if(signname == null){
+						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+						index++;
+						continue;
+					}
+					Sign sign = plugin.getSignManager().getSign(signname);
+					if(sign == null){
+						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+						index++;
+						continue;
+					}
+					blockedsigns.remove(sign);
+					index++;
+					continue;
 				}
 
 				// Check if experience is to be blocked
@@ -117,12 +133,22 @@ public class EventList {
 				if(blocked.startsWith("-")){
 					// Negation
 					blocked = blocked.replaceFirst("-", "");
+					if(plugin.getItemMap().getSign(blocked) != null){
+						this.blockedsigns.remove(plugin.getItemMap().getSign(blocked));
+						index++;
+						continue;
+					}
 					try{
 						this.blocked.remove(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
 					}catch(Exception e){
 						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in " + file + ")", Level.WARNING, LogType.INFO);
 					}
 				}else{
+					if(plugin.getItemMap().getSign(blocked) != null){
+						this.blockedsigns.add(plugin.getItemMap().getSign(blocked));
+						index++;
+						continue;
+					}
 					try{
 						this.blocked.add(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
 					}catch(Exception e){

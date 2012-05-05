@@ -41,13 +41,6 @@ import com.turt2live.antishare.storage.SQL;
  */
 public class AntiShare extends PluginWrapper {
 
-	/*
-	 * TODO: Fix potential bugs
-	 * - [Cannot Reproduce] Inventories wipe/merge when cleared and relog
-	 * - [Cannot Reproduce] Per-world inventories do not respect Game Mode
-	 * - [Cannot Reproduce] Per-world inventories wipe when traveling there and back
-	 */
-
 	/* Changes since 3.2.2
 	 * 
 	 * - Added negation to block lists
@@ -62,6 +55,7 @@ public class AntiShare extends PluginWrapper {
 	 * - Fixed world splits and regions not getting along
 	 * - Fixed /gm working in world splits
 	 * - Added per-region configurations
+	 * - Added a way to block/allow specific signs
 	 */
 
 	/**
@@ -260,7 +254,7 @@ public class AntiShare extends PluginWrapper {
 		reloadConfig();
 		// Permissions has no reload
 		messenger.reload();
-		itemMap.reload(); // TODO: Item Map to support signs
+		itemMap.reload();
 		signs.reload();
 		listener.reload();
 		alerts.reload();
