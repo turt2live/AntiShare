@@ -923,13 +923,26 @@ public class ASListener implements Listener {
 		}
 
 		// Check if we need to continue based on settings
+		ASRegion asregion = plugin.getRegionManager().getRegion(target.getLocation());
 		if(playerCombat){
-			if(!plugin.getConfig().getBoolean("blocked-actions.combat-against-players")){
-				return;
+			if(asregion != null){
+				if(!asregion.getConfig().combatAgainstPlayers()){
+					return;
+				}
+			}else{
+				if(!config.get(target.getWorld()).combatAgainstPlayers()){
+					return;
+				}
 			}
 		}else{
-			if(!plugin.getConfig().getBoolean("blocked-actions.combat-against-mobs")){
-				return;
+			if(asregion != null){
+				if(!asregion.getConfig().combatAgainstMobs()){
+					return;
+				}
+			}else{
+				if(!config.get(target.getWorld()).combatAgainstMobs()){
+					return;
+				}
 			}
 		}
 

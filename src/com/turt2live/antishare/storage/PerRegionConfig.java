@@ -28,6 +28,8 @@ public class PerRegionConfig {
 	private EventList commands;
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
+	private boolean combatPlayers = false;
+	private boolean combatMobs = false;
 	private World world;
 	private ASRegion region;
 
@@ -67,7 +69,12 @@ public class PerRegionConfig {
 			value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.inventories");
 		}
 		if(regionConfig.getString("enabled-features.no-drops-when-block-break.inventories").equalsIgnoreCase("world")){
-			value = plugin.getListener().getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.inventories");
+			String tvalue = plugin.getListener().getConfig(world).getRaw().getString("enabled-features.no-drops-when-block-break.inventories");
+			if(tvalue.equalsIgnoreCase("global")){
+				value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.inventories");
+			}else{
+				value = plugin.getListener().getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.inventories");
+			}
 		}
 		clearInventoriesOnBreak = value;
 		value = regionConfig.getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
@@ -75,9 +82,28 @@ public class PerRegionConfig {
 			value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
 		}
 		if(regionConfig.getString("enabled-features.no-drops-when-block-break.attached-blocks").equalsIgnoreCase("world")){
-			value = plugin.getListener().getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
+			String tvalue = plugin.getListener().getConfig(world).getRaw().getString("enabled-features.no-drops-when-block-break.attached-blocks");
+			if(tvalue.equalsIgnoreCase("global")){
+				value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
+			}else{
+				value = plugin.getListener().getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
+			}
 		}
 		removeAttachedBlocksOnBreak = value;
+		value = regionConfig.getBoolean("blocked-actions.combat-against-players");
+		if(regionConfig.getString("blocked-actions.combat-against-players").equalsIgnoreCase("global")){
+			value = plugin.getConfig().getBoolean("blocked-actions.combat-against-players");
+		}else if(regionConfig.getString("blocked-actions.combat-against-players").equalsIgnoreCase("world")){
+			value = plugin.getListener().getConfig(world).combatAgainstPlayers();
+		}
+		combatPlayers = value;
+		value = regionConfig.getBoolean("blocked-actions.combat-against-mobs");
+		if(regionConfig.getString("blocked-actions.combat-against-mobs").equalsIgnoreCase("global")){
+			value = plugin.getConfig().getBoolean("blocked-actions.combat-against-mobs");
+		}else if(regionConfig.getString("blocked-actions.combat-against-mobs").equalsIgnoreCase("world")){
+			value = plugin.getListener().getConfig(world).combatAgainstMobs();
+		}
+		combatMobs = value;
 	}
 
 	private EventList getList(String triggerPath, String listPath, EnhancedConfiguration regionConfig, boolean stringsOnly){
@@ -195,6 +221,24 @@ public class PerRegionConfig {
 	 */
 	public boolean removeAttachedBlocksOnBreak(){
 		return removeAttachedBlocksOnBreak;
+	}
+
+	/**
+	 * Determines if combat against players is allowed in this region
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean combatAgainstPlayers(){
+		return combatPlayers;
+	}
+
+	/**
+	 * Determines if combat against mobs is allowed in this region
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean combatAgainstMobs(){
+		return combatMobs;
 	}
 
 	/**

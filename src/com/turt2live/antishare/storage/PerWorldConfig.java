@@ -48,6 +48,8 @@ public class PerWorldConfig {
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
 	private boolean splitActive = false;
+	private boolean combatPlayers = false;
+	private boolean combatMobs = false;
 	private World world;
 	private WorldSplit split;
 
@@ -89,6 +91,16 @@ public class PerWorldConfig {
 			value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
 		}
 		removeAttachedBlocksOnBreak = value;
+		value = worldConfig.getBoolean("blocked-actions.combat-against-players");
+		if(worldConfig.getString("blocked-actions.combat-against-players").equalsIgnoreCase("global")){
+			value = plugin.getConfig().getBoolean("blocked-actions.combat-against-players");
+		}
+		combatPlayers = value;
+		value = worldConfig.getBoolean("blocked-actions.combat-against-mobs");
+		if(worldConfig.getString("blocked-actions.combat-against-mobs").equalsIgnoreCase("global")){
+			value = plugin.getConfig().getBoolean("blocked-actions.combat-against-mobs");
+		}
+		combatMobs = value;
 
 		// Check world split
 		splitActive = worldConfig.getString("enabled-features.world-split").equalsIgnoreCase("global") ? plugin.getConfig().getBoolean("enabled-features.world-split") : worldConfig.getBoolean("enabled-features.world-split");
@@ -241,6 +253,24 @@ public class PerWorldConfig {
 	 */
 	public GameMode getSideOfSplit(Player player){
 		return split.getSide(player);
+	}
+
+	/**
+	 * Determines if combat against players is allowed in this world
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean combatAgainstPlayers(){
+		return combatPlayers;
+	}
+
+	/**
+	 * Determines if combat against mobs is allowed in this world
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean combatAgainstMobs(){
+		return combatMobs;
 	}
 
 	/**
