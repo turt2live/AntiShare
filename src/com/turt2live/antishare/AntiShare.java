@@ -260,7 +260,8 @@ public class AntiShare extends PluginWrapper {
 		reloadConfig();
 		// Permissions has no reload
 		messenger.reload();
-		itemMap.reload();
+		itemMap.reload(); // TODO: Item Map to support signs
+		signs.reload();
 		listener.reload();
 		alerts.reload();
 		messages.reload();
@@ -271,7 +272,6 @@ public class AntiShare extends PluginWrapper {
 		// SQL has no reload
 		// Metrics has no reload
 		// Tracker List has no reload
-		signs.reload();
 	}
 
 	/**
