@@ -56,6 +56,7 @@ public class AntiShare extends PluginWrapper {
 	 * - Fixed /gm working in world splits
 	 * - Added per-region configurations
 	 * - Added a way to block/allow specific signs
+	 * - Removed /gm command
 	 */
 
 	/**

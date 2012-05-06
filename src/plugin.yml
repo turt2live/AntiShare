@@ -24,20 +24,11 @@ commands:
       /<command> help = This menu
 
 permissions:
-    AntiShare.gamemode.others:
-        description: Allows changing of other people's gamemode
-        default: op
-        children:
-            AntiShare.gamemode: true
-    AntiShare.gamemode:
-        description: allows a player to change their own gamemode
-        default: op
     AntiShare.*:
         description: All AntiShare permissions
         default: op
         children:
             AntiShare.allow.*: true
-            AntiShare.gamemode.others: true
             AntiShare.getDrops: true
             AntiShare.mirror: true
             AntiShare.getNotifications: true

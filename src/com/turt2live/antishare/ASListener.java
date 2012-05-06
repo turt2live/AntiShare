@@ -747,12 +747,6 @@ public class ASListener implements Listener {
 		String command = event.getMessage().toLowerCase();
 		AlertType type = AlertType.ILLEGAL;
 
-		// Game Mode command
-		GameModeCommand.onPlayerCommand(event);
-		if(event.isCancelled()){
-			return;
-		}
-
 		// Check if they should be blocked
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, player.getWorld())){
 			type = AlertType.LEGAL;

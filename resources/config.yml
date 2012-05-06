@@ -25,7 +25,6 @@ enabled-features:
   world-split: true
   sql: false
   no-experience-for-creative: true
-  gamemode-command: false
   no-drops-when-block-break:
     inventories: true
     attached-blocks: true
