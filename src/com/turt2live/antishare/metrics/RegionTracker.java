@@ -30,6 +30,9 @@ public class RegionTracker extends Tracker {
 
 	@Override
 	public int getValue(){
+		if(gamemode == null){
+			return plugin.getRegionManager().getAllRegions().size();
+		}
 		return plugin.getRegionManager().getAllRegions(gamemode).size();
 	}
 

@@ -53,7 +53,8 @@ public class TrackerList extends ArrayList<Tracker> {
 		DISABLED_SIGNS("AntiShare Signs", "Disabled"),
 		CASE_SENSITIVE_SIGNS("AntiShare Signs", "Case Sensitive"),
 		CASE_INSENSITIVE_SIGNS("AntiShare Signs", "Case Insensitive"),
-		SIGNS("AntiShare Signs", "All");
+		SIGNS("AntiShare Signs", "All"),
+		REGIONS("Region Types", "All");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
@@ -104,10 +105,13 @@ public class TrackerList extends ArrayList<Tracker> {
 		// Fix region graphs
 		remove(TrackerType.CREATIVE_REGIONS);
 		remove(TrackerType.SURVIVAL_REGIONS);
+		remove(TrackerType.REGIONS);
 		RegionTracker creative = new RegionTracker(TrackerType.CREATIVE_REGIONS.getName(), TrackerType.CREATIVE_REGIONS, GameMode.CREATIVE);
 		RegionTracker survival = new RegionTracker(TrackerType.SURVIVAL_REGIONS.getName(), TrackerType.SURVIVAL_REGIONS, GameMode.SURVIVAL);
+		RegionTracker allregions = new RegionTracker(TrackerType.REGIONS.getName(), TrackerType.REGIONS, null);
 		add(creative);
 		add(survival);
+		add(allregions);
 
 		// Fix sign graphs
 		remove(TrackerType.SIGNS);
