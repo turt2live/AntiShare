@@ -27,7 +27,7 @@ public class Sign {
 		/**
 		 * Array index for the line
 		 * 
-		 * @return
+		 * @return the index of the line in a standard array
 		 */
 		public int getIndex(){
 			return index;

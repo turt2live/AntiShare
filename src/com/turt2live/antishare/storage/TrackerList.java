@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
 
@@ -16,7 +18,7 @@ import com.turt2live.antishare.AntiShare.LogType;
  */
 public class TrackerList {
 
-	private List<Integer> tracked = new ArrayList<Integer>();
+	private List<String> tracked = new ArrayList<String>();
 
 	/**
 	 * Creates a new Tracker List
@@ -36,7 +38,11 @@ public class TrackerList {
 		if(configurationValue.length == 1){
 			if(configurationValue[0].startsWith("*") || configurationValue[0].toLowerCase().startsWith("all")){
 				for(Material m : Material.values()){
-					tracked.add(m.getId());
+					StringBuilder ret = new StringBuilder();
+					ret.append(m.getId());
+					ret.append(":");
+					ret.append("*");
+					tracked.add(ret.toString());
 				}
 				skip = true;
 			}else if(configurationValue[0].startsWith("none")){
@@ -56,15 +62,18 @@ public class TrackerList {
 						|| tracked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
 						|| tracked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
 						|| tracked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
-					this.tracked.add(Material.SIGN.getId());
-					this.tracked.add(Material.SIGN_POST.getId());
-					this.tracked.add(Material.WALL_SIGN.getId());
+					this.tracked.add(ASUtils.materialToString(Material.SIGN, false));
+					this.tracked.add(ASUtils.materialToString(Material.SIGN_POST, false));
+					this.tracked.add(ASUtils.materialToString(Material.WALL_SIGN, false));
 					continue;
 				}
 
 				// Try to add the item, warn otherwise
 				try{
-					this.tracked.add(plugin.getItemMap().getItem(tracked) == null ? Integer.parseInt(tracked) : plugin.getItemMap().getItem(tracked).getId());
+					if(plugin.getItemMap().getItem(tracked, false) == null){
+						throw new Exception("");
+					}
+					this.tracked.add(plugin.getItemMap().getItem(tracked, false));
 				}catch(Exception e){
 					plugin.getMessenger().log("Configuration Problem: '" + tracked + "' is not valid!", Level.WARNING, LogType.INFO);
 				}
@@ -73,16 +82,24 @@ public class TrackerList {
 	}
 
 	/**
-	 * Checks if an item is to be tracked
+	 * Determines if a block is tracked or not
 	 * 
-	 * @param item the item
-	 * @return true if the block should be tracked
+	 * @param block the block
+	 * @return true if tracked
 	 */
-	public boolean isTracked(Material item){
+	public boolean isTracked(Block block){
 		if(tracked.size() == 0){
 			return false;
 		}
-		return tracked.contains(item.getId());
+		String defaultID = ASUtils.blockToString(block, false);
+		if(tracked.contains(defaultID)){
+			return true;
+		}
+		defaultID = block.getTypeId() + ":*";
+		if(tracked.contains(defaultID)){
+			return true;
+		}
+		return false;
 	}
 
 }

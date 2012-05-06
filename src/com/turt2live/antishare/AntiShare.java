@@ -57,6 +57,7 @@ public class AntiShare extends PluginWrapper {
 	 * - Added per-region configurations
 	 * - Added a way to block/allow specific signs
 	 * - Removed /gm command
+	 * - Added block ID support (eg: wool:1) to block and track lists
 	 */
 
 	/**

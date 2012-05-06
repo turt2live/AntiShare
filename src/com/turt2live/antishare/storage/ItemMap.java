@@ -60,6 +60,44 @@ public class ItemMap {
 	}
 
 	/**
+	 * Gets an item from the map. This returns the id:data format
+	 * 
+	 * @param name the item name to lookup
+	 * @param zero if true, and the data is zero, the :0 will be removed
+	 * @return the id:data format
+	 */
+	public String getItem(String name, boolean zero){
+		if(list.getString(name) != null){
+			name = list.getString(name);
+		}
+		String[] parts = name.split(":");
+		Material m = Material.matchMaterial(parts[0]);
+		if(m == null){
+			return null;
+		}
+		StringBuilder ret = new StringBuilder();
+		ret.append(m.getId());
+		if(parts.length > 1){
+			int dval = 0;
+			try{
+				dval = Integer.parseInt(parts[1]);
+			}catch(Exception e){}
+			if(dval == 0 && !zero){
+				ret.append(":");
+				ret.append(dval);
+			}else if(dval != 0){
+				ret.append(":");
+				ret.append(dval);
+			}
+		}
+		if(ret.toString().split(":").length < 2 && !zero){
+			ret.append(":");
+			ret.append(0);
+		}
+		return ret.toString();
+	}
+
+	/**
 	 * Reloads the item map
 	 */
 	public void reload(){

@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
 /**
@@ -151,4 +152,82 @@ public class ASUtils {
 		return returnString.toString().trim();
 	}
 
+	/**
+	 * Converts an item stack to a string<br>
+	 * This returns the format 'id:data', data will be zero if no
+	 * data is found, or the data is actually zero. You can set 'zero'
+	 * in the parameters to false to just get the item ID. If 'zero' is
+	 * true and there is data, the correct format (id:data) will be returned.
+	 * 
+	 * @param item the item
+	 * @param zero true to add zero
+	 * @return the item as a string
+	 */
+	public static String stackToString(ItemStack item, boolean zero){
+		if(item == null){
+			return null;
+		}
+		String typeId = "";
+		String data = "";
+		typeId = Integer.toString(item.getTypeId());
+		if(item.getType().getMaxDurability() > 0){
+			data = "0";
+		}else if(item.getDurability() > 0){
+			data = Short.toString(item.getDurability());
+		}else if(item.getData().getData() > 0){
+			data = Byte.toString(item.getData().getData());
+		}else{
+			data = "0";
+		}
+		return typeId + (data.equals("0") && zero ? "" : ":" + data);
+	}
+
+	/**
+	 * Converts a block to a string<br>
+	 * This returns the format 'id:data', data will be zero if no
+	 * data is found, or the data is actually zero. You can set 'zero'
+	 * in the parameters to false to just get the block ID. If 'zero' is
+	 * true and there is data, the correct format (id:data) will be returned.
+	 * 
+	 * @param block the block
+	 * @param zero true to add zero
+	 * @return the block as a string
+	 */
+	public static String blockToString(Block block, boolean zero){
+		if(block == null){
+			return null;
+		}
+		String typeId = "";
+		String data = "";
+		typeId = Integer.toString(block.getTypeId());
+		if(block.getType().getMaxDurability() > 0){
+			data = "0";
+		}else if(block.getData() > 0){
+			data = Byte.toString(block.getData());
+		}else{
+			data = "0";
+		}
+		return typeId + (data.equals("0") && zero ? "" : ":" + data);
+	}
+
+	/**
+	 * Converts a material to a string<br>
+	 * This returns the format 'id:data', data will be zero if no
+	 * data is found, or the data is actually zero. You can set 'zero'
+	 * in the parameters to false to just get the material ID. If 'zero' is
+	 * true and there is data, the correct format (id:data) will be returned.
+	 * 
+	 * @param material the material
+	 * @param zero true to add zero
+	 * @return the material as a string
+	 */
+	public static String materialToString(Material material, boolean zero){
+		StringBuilder ret = new StringBuilder();
+		ret.append(material.getId());
+		if(!zero){
+			ret.append(":");
+			ret.append(0);
+		}
+		return ret.toString();
+	}
 }

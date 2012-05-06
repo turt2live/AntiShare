@@ -183,14 +183,14 @@ public class BlockManager {
 		asblock.expectedType = block.getType();
 		switch (type){
 		case CREATIVE:
-			if(!tracked_creative.isTracked(block.getType())){
+			if(!tracked_creative.isTracked(block)){
 				break;
 			}
 			creative_blocks.add(block);
 			expected_creative.put(block, asblock);
 			break;
 		case SURVIVAL:
-			if(!tracked_survival.isTracked(block.getType())){
+			if(!tracked_survival.isTracked(block)){
 				break;
 			}
 			survival_blocks.add(block);

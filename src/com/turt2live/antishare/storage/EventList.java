@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.signs.Sign;
@@ -21,7 +22,7 @@ public class EventList {
 	private boolean whitelist = false;
 	private boolean useString = false;
 	private boolean expBlocked = false;
-	private List<Integer> blocked = new ArrayList<Integer>();
+	private List<String> blocked = new ArrayList<String>();
 	private List<String> blocked_strings = new ArrayList<String>();
 	private List<Sign> blockedsigns = new ArrayList<Sign>();
 
@@ -49,7 +50,11 @@ public class EventList {
 		// Check if it's an "all or nothing" list
 		if(configurationValue[0].startsWith("*") || configurationValue[0].toLowerCase().startsWith("all")){
 			for(Material m : Material.values()){
-				blocked.add(m.getId());
+				StringBuilder ret = new StringBuilder();
+				ret.append(m.getId());
+				ret.append(":");
+				ret.append("*");
+				blocked.add(ret.toString());
 			}
 			skip = true;
 		}else if(configurationValue[0].startsWith("none")){
@@ -122,9 +127,9 @@ public class EventList {
 						|| blocked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
 						|| blocked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
 						|| blocked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
-					this.blocked.add(Material.SIGN.getId());
-					this.blocked.add(Material.SIGN_POST.getId());
-					this.blocked.add(Material.WALL_SIGN.getId());
+					this.blocked.add(ASUtils.materialToString(Material.SIGN, false));
+					this.blocked.add(ASUtils.materialToString(Material.SIGN_POST, false));
+					this.blocked.add(ASUtils.materialToString(Material.WALL_SIGN, false));
 					index++;
 					continue;
 				}
@@ -150,7 +155,10 @@ public class EventList {
 						continue;
 					}
 					try{
-						this.blocked.add(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
+						if(plugin.getItemMap().getItem(blocked, false) == null){
+							throw new Exception("");
+						}
+						this.blocked.add(plugin.getItemMap().getItem(blocked, false));
 					}catch(Exception e){
 						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
 					}
@@ -232,7 +240,18 @@ public class EventList {
 				}
 			}
 		}
-		return isBlocked(block.getType());
+		if(whitelist){
+			boolean contained = !blocked.contains(ASUtils.blockToString(block, false));
+			if(!contained){
+				contained = !blocked.contains(block.getTypeId() + ":*");
+			}
+			return contained;
+		}
+		boolean contained = blocked.contains(ASUtils.blockToString(block, false));
+		if(!contained){
+			contained = blocked.contains(block.getTypeId() + ":*");
+		}
+		return contained;
 	}
 
 	/**
@@ -246,9 +265,17 @@ public class EventList {
 			return false;
 		}
 		if(whitelist){
-			return !blocked.contains(item.getId());
+			boolean contained = !blocked.contains(ASUtils.materialToString(item, false));
+			if(!contained){
+				contained = !blocked.contains(item.getId() + ":*");
+			}
+			return contained;
 		}
-		return blocked.contains(item.getId());
+		boolean contained = blocked.contains(ASUtils.materialToString(item, false));
+		if(!contained){
+			contained = blocked.contains(item.getId() + ":*");
+		}
+		return contained;
 	}
 
 	/**
