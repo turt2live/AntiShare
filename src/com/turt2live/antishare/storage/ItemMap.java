@@ -92,7 +92,7 @@ public class ItemMap {
 		}
 		if(ret.toString().split(":").length < 2 && !zero){
 			ret.append(":");
-			ret.append(0);
+			ret.append("*");
 		}
 		return ret.toString();
 	}
