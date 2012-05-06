@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Jukebox;
@@ -239,6 +240,9 @@ public class ASListener implements Listener {
 					state.setPlaying(null);
 				}else if(block.getState() instanceof Furnace){
 					Furnace state = (Furnace) block.getState();
+					state.getInventory().clear();
+				}else if(block.getState() instanceof BrewingStand){
+					BrewingStand state = (BrewingStand) block.getState();
 					state.getInventory().clear();
 				}
 			}
