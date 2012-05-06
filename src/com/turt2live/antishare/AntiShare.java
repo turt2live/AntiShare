@@ -221,6 +221,7 @@ public class AntiShare extends PluginWrapper {
 		regions.save();
 		blocks.save();
 		inventories.save();
+		metrics.flush();
 		sql.disconnect();
 
 		// Disable

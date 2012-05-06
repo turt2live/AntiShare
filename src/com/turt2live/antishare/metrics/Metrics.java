@@ -340,6 +340,25 @@ public class Metrics {
 	}
 
 	/**
+	 * Flushes and stops Metrics
+	 */
+	// Turt2Live - Added flush()
+	public void flush(){
+		plugin.getServer().getScheduler().cancelTask(taskId);
+		try{
+			if(DEBUG){
+				Bukkit.getLogger().log(Level.INFO, "[Metrics] [Debug] Sending");
+			}
+			postPlugin(true);
+			if(DEBUG){
+				Bukkit.getLogger().log(Level.INFO, "[Metrics] [Debug] Sent");
+			}
+		}catch(IOException e){
+			Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+		}
+	}
+
+	/**
 	 * Generic method that posts a plugin to the metrics website
 	 */
 	private void postPlugin(final boolean isPing) throws IOException{
