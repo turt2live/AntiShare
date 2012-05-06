@@ -138,7 +138,7 @@ public class ASUtils {
 	}
 
 	/**
-	 * Capitalizes only the first letter of a string
+	 * Capitalizes item names. Eg: EXP_BOTTLE -> Exp Bottle
 	 * 
 	 * @param string the string
 	 * @return the string, capitalized correctly
@@ -147,6 +147,7 @@ public class ASUtils {
 		String parts[] = string.toLowerCase().replaceAll(" ", "_").split("_");
 		StringBuilder returnString = new StringBuilder();
 		for(String part : parts){
+			// No need for part.substring(1).toLowerCase(), the split handles this
 			returnString.append(part.substring(0, 1).toUpperCase() + part.substring(1) + " ");
 		}
 		return returnString.toString().trim();
@@ -226,7 +227,7 @@ public class ASUtils {
 		ret.append(material.getId());
 		if(!zero){
 			ret.append(":");
-			ret.append(0);
+			ret.append("*");
 		}
 		return ret.toString();
 	}
