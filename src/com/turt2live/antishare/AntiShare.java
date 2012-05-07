@@ -21,6 +21,7 @@ import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
+import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.notification.Messenger;
@@ -32,6 +33,7 @@ import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.signs.SignManager;
 import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.storage.ItemMap;
+import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.SQL;
 
 /**
@@ -111,6 +113,7 @@ public class AntiShare extends PluginWrapper {
 	private Metrics metrics;
 	private TrackerList trackers;
 	private SignManager signs;
+	private MoneyManager tender;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -157,6 +160,9 @@ public class AntiShare extends PluginWrapper {
 		}
 		getConfig().load();
 
+		// Migrate world configurations
+		PerWorldConfig.migrate();
+
 		// Setup (order is important!)
 		try{
 			metrics = new Metrics(this);
@@ -166,6 +172,7 @@ public class AntiShare extends PluginWrapper {
 		messenger = new Messenger();
 		signs = new SignManager();
 		trackers = new TrackerList();
+		tender = new MoneyManager();
 		permissions = new Permissions();
 		itemMap = new ItemMap();
 		listener = new ASListener();
@@ -225,6 +232,7 @@ public class AntiShare extends PluginWrapper {
 		regions.save();
 		blocks.save();
 		inventories.save();
+		tender.save();
 		metrics.flush();
 		sql.disconnect();
 
@@ -248,6 +256,7 @@ public class AntiShare extends PluginWrapper {
 		metrics = null;
 		trackers = null;
 		signs = null;
+		tender = null;
 	}
 
 	/**
@@ -269,6 +278,7 @@ public class AntiShare extends PluginWrapper {
 		// SQL has no reload
 		// Metrics has no reload
 		// Tracker List has no reload
+		tender.reload();
 	}
 
 	/**
@@ -417,6 +427,15 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public SignManager getSignManager(){
 		return signs;
+	}
+
+	/**
+	 * Gets the money manager (awards/fines) being used by AntiShare
+	 * 
+	 * @return the money manager
+	 */
+	public MoneyManager getMoneyManager(){
+		return tender;
 	}
 
 	/**

@@ -41,6 +41,7 @@ permissions:
             AntiShare.reload: true
             AntiShare.convert: true
             AntiShare.affect.*: false
+            AntiShare.money.*: true
     AntiShare.convert:
         description: Allows the target to convert the storage system for AntiShare
         default: op
@@ -73,6 +74,18 @@ permissions:
         default: op
     AntiShare.tool.use:
         description: Allows the target to use the AntiShare tool
+        default: op
+    AntiShare.money.*:
+        description: Never fine or award the player
+        default: op
+        children:
+            AntiShare.money.noaward: true
+            AntiShare.money.nofine: true
+    AntiShare.money.noaward:
+        description: Never award the player
+        default: op
+    AntiShare.money.nofine:
+        description: Never fine the player
         default: op
     AntiShare.affect.*:
         description: The target is affected by all Game Modes

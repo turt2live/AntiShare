@@ -54,7 +54,13 @@ public class TrackerList extends ArrayList<Tracker> {
 		CASE_SENSITIVE_SIGNS("AntiShare Signs", "Case Sensitive"),
 		CASE_INSENSITIVE_SIGNS("AntiShare Signs", "Case Insensitive"),
 		SIGNS("AntiShare Signs", "All"),
-		REGIONS("Region Types", "All");
+		REGIONS("Region Types", "All"),
+		FINE("Fines", "Fine"),
+		AWARD("Awards", "Award"),
+		FINE_GIVEN("Fines/Awards Given", "Fine"),
+		AWARD_GIVEN("Fines/Awards Given", "Award"),
+		FINE_AMOUNT("Fine Amount", "Fine"),
+		AWARD_AMOUNT("Award Amount", "Award");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
@@ -129,6 +135,14 @@ public class TrackerList extends ArrayList<Tracker> {
 		add(caseS);
 		add(disabled);
 		add(enabled);
+
+		// Fix tender
+		remove(TrackerType.FINE);
+		remove(TrackerType.FINE_AMOUNT);
+		remove(TrackerType.AWARD);
+		remove(TrackerType.AWARD_AMOUNT);
+		// Don't remove FINE/AWARD_GIVEN, they are just counters anyway
+		// Don't add them, the MoneyTracker will
 	}
 
 	// Removes a graph type, must be called before metric gets the graph
@@ -145,12 +159,30 @@ public class TrackerList extends ArrayList<Tracker> {
 	/**
 	 * Gets a tracker
 	 * 
+	 * @param type the type
 	 * @return the tracker
 	 */
 	public Tracker getTracker(TrackerType type){
 		for(int i = 0; i < size(); i++){
 			Tracker t = get(i);
 			if(t.getType() == type){
+				return t;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Gets a tracker
+	 * 
+	 * @param type the type
+	 * @param name the tracker name
+	 * @return the tracker
+	 */
+	public Tracker getTracker(TrackerType type, String name){
+		for(int i = 0; i < size(); i++){
+			Tracker t = get(i);
+			if(t.getType() == type && t.getColumnName().equalsIgnoreCase(name)){
 				return t;
 			}
 		}

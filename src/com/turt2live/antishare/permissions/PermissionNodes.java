@@ -54,4 +54,8 @@ public class PermissionNodes {
 	public static final String WORLD_SPLIT_NO_SPLIT_CREATIVE = "AntiShare.worldsplit.creative";
 	public static final String WORLD_SPLIT_NO_SPLIT_SURVIVAL = "AntiShare.worldsplit.survival";
 
+	// Money Nodes
+	public static final String MONEY_NO_FINE = "AntiShare.money.nofine";
+	public static final String MONEY_NO_AWARD = "AntiShare.money.noaward";
+
 }

@@ -2,6 +2,7 @@ package com.turt2live.antishare.storage;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import org.bukkit.GameMode;
@@ -21,6 +22,27 @@ import com.turt2live.antishare.regions.WorldSplit.Axis;
  * @author turt2live
  */
 public class PerWorldConfig {
+
+	/**
+	 * Migrates the world configurations to their own folder
+	 */
+	public static void migrate(){
+		File directory = AntiShare.getInstance().getDataFolder();
+		File newDir = new File(directory, "world_configurations");
+		if(directory.listFiles() != null){
+			for(File file : directory.listFiles(new FileFilter(){
+				@Override
+				public boolean accept(File arg0){
+					if(arg0.getName().endsWith("_config.yml")){
+						return true;
+					}
+					return false;
+				}
+			})){
+				file.renameTo(new File(newDir, file.getName()));
+			}
+		}
+	}
 
 	/**
 	 * An enum to determine what list to pull from
@@ -64,7 +86,7 @@ public class PerWorldConfig {
 		this.world = world;
 
 		// Setup configuration
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(plugin.getDataFolder(), world.getName() + "_config.yml"), plugin);
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(plugin.getDataFolder() + File.separator + "world_configurations", world.getName() + "_config.yml"), plugin);
 		worldConfig.loadDefaults(plugin.getResource("resources/world.yml"));
 		if(!worldConfig.fileExists() || !worldConfig.checkDefaults()){
 			worldConfig.saveDefaults();
@@ -157,7 +179,7 @@ public class PerWorldConfig {
 	 * @throws IOException for internal handling
 	 */
 	public void print(BufferedWriter out) throws IOException{
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), world.getName() + "_config.yml"), AntiShare.getInstance());
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder() + File.separator + "world_configurations", world.getName() + "_config.yml"), AntiShare.getInstance());
 		worldConfig.load();
 		for(String key : worldConfig.getKeys(true)){
 			out.write(key + ": " + (worldConfig.getString(key).startsWith("MemorySection") ? "" : worldConfig.getString(key, "")) + "\r\n");
@@ -307,7 +329,7 @@ public class PerWorldConfig {
 	 * @return the raw configuration
 	 */
 	public EnhancedConfiguration getRaw(){
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), world.getName() + "_config.yml"), AntiShare.getInstance());
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder() + File.separator + "world_configurations", world.getName() + "_config.yml"), AntiShare.getInstance());
 		worldConfig.load();
 		return worldConfig;
 	}

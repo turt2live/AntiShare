@@ -1,0 +1,83 @@
+# This allows you to specify fines for illegal events. You can also 
+# specify awards for such actions.
+# 
+# 'no-money' is the value to charge if the player has zero as a balance.
+# This can be set as 'default' if you don't want it to vary from the fine.
+# 
+# 'keep-tab' if set to true, AntiShare will track who owes what money
+# and remove it when it can. If false, AntiShare will disregard the fine
+# and pretend it never happened.
+# 
+# fines-enabled and awards-enabled overrides the individul do-fine/award
+# settings in the actions.
+# 
+# Permissions:
+# AntiShare.money.nofine = Never fine the player
+# AntiShare.money.noaward = Never award the player
+# AntiShare.money.* = Never award or fine the player (Default OP)
+# 
+# Note: player-death is applied per event, NOT per item!
+keep-tab: true
+fines-enabled: false
+awards-enabled: false
+actions:
+  block-break:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  block-place:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  item-drop:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  item-pickup:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  right-click:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  use:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  command:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  player-hit-player:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  player-hit-mob:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
+  player-death:
+    fine: 0.0
+    award: 0.0
+    no-money: default
+    do-fine: true
+    do-award: true
