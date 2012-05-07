@@ -197,11 +197,16 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insert(Block block, Player player, World world, TenderType tender, String clicked){
-		insertBlock(block);
-		insertPlayer(player);
-		insertWorld(world);
-		insertTender(tender);
-		insertClicked(clicked);
+		if(block != null)
+			insertBlock(block);
+		if(player != null)
+			insertPlayer(player);
+		if(world != null)
+			insertWorld(world);
+		if(tender != null)
+			insertTender(tender);
+		if(clicked != null)
+			insertClicked(clicked);
 		return this;
 	}
 
@@ -215,10 +220,14 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insert(Block block, Player player, World world, TenderType tender){
-		insertBlock(block);
-		insertPlayer(player);
-		insertWorld(world);
-		insertTender(tender);
+		if(block != null)
+			insertBlock(block);
+		if(player != null)
+			insertPlayer(player);
+		if(world != null)
+			insertWorld(world);
+		if(tender != null)
+			insertTender(tender);
 		return this;
 	}
 
