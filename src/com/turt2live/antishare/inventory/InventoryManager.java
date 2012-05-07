@@ -1,6 +1,5 @@
 package com.turt2live.antishare.inventory;
 
-import java.io.File;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -17,7 +16,6 @@ import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
-import com.turt2live.antishare.storage.SQL;
 
 /**
  * Manages inventories within AntiShare
@@ -277,31 +275,7 @@ public class InventoryManager {
 	public void save(){
 		// Save players
 		for(Player player : Bukkit.getOnlinePlayers()){
-			if(isInTemporary(player)){
-				removeFromTemporary(player);
-			}
-			switch (player.getGameMode()){
-			case CREATIVE:
-				saveCreativeInventory(player, player.getWorld());
-				break;
-			case SURVIVAL:
-				saveSurvivalInventory(player, player.getWorld());
-				break;
-			}
-		}
-
-		// Clear targets
-		if(AntiShare.getInstance().useSQL()){
-			AntiShare.getInstance().getSQL().wipeTable(SQL.INVENTORIES_TABLE);
-		}else{
-			for(InventoryType type : InventoryType.values()){
-				File dir = new File(AntiShare.getInstance().getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
-				if(dir.listFiles() != null){
-					for(File file : dir.listFiles()){
-						file.delete();
-					}
-				}
-			}
+			releasePlayer(player);
 		}
 
 		// Save inventories
