@@ -326,4 +326,12 @@ public class ASInventory {
 		return type;
 	}
 
+	@Override
+	public ASInventory clone(){
+		ASInventory newI = new ASInventory(this.type, this.inventoryName, this.world, this.gamemode);
+		for(int slot : this.inventory.keySet()){
+			newI.set(slot, this.inventory.get(slot));
+		}
+		return newI;
+	}
 }

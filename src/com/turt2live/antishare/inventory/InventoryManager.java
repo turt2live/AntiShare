@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.storage.SQL;
 
@@ -82,13 +83,25 @@ public class InventoryManager {
 		}
 
 		// Save
+		ASInventory premerge = ASInventory.generate(player, InventoryType.PLAYER);
 		switch (player.getGameMode()){
 		case CREATIVE:
 			saveCreativeInventory(player, player.getWorld());
+			premerge = getCreativeInventory(player, player.getWorld());
 			break;
 		case SURVIVAL:
 			saveSurvivalInventory(player, player.getWorld());
+			premerge = getSurvivalInventory(player, player.getWorld());
 			break;
+		}
+
+		// Merge all inventories if needed
+		ASInventory merge = premerge.clone();
+		if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.NO_SWAP)){
+			for(World world : Bukkit.getWorlds()){
+				creative.put(player.getName() + "." + world.getName(), merge);
+				survival.put(player.getName() + "." + world.getName(), merge);
+			}
 		}
 
 		// Cleanup
@@ -255,7 +268,7 @@ public class InventoryManager {
 
 		// Status
 		int loaded = creative.size() + survival.size() + region.size() + playerTemp.size();
-		AntiShare.getInstance().getMessenger().log("Inventories loaded: " + loaded, Level.INFO, LogType.INFO);
+		AntiShare.getInstance().getMessenger().log("Inventories Loaded: " + loaded, Level.INFO, LogType.INFO);
 	}
 
 	/**
