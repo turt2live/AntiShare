@@ -304,6 +304,28 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	/**
+	 * Determines if a player is blocked from doing something
+	 * 
+	 * @param player the player
+	 * @param allowPermission the "allow" permission
+	 * @param world the world
+	 * @param inverse invert the player's Game Mode when checking
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Player player, String allowPermission, World world, boolean inverse){
+		if(permissions.has(player, allowPermission, world)){
+			return false;
+		}
+		if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == (inverse ? GameMode.SURVIVAL : GameMode.CREATIVE)){
+			return true;
+		}
+		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == (!inverse ? GameMode.SURVIVAL : GameMode.CREATIVE)){
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Gets a message
 	 * 
 	 * @param path the path to the message

@@ -58,6 +58,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -902,6 +903,62 @@ public class ASListener implements Listener {
 			case SURVIVAL:
 				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player);
 				break;
+			}
+
+			// Check for open inventories and stuff
+			Material inventory = Material.AIR;
+			InventoryView view = player.getOpenInventory();
+			switch (view.getType()){
+			case CHEST:
+				inventory = Material.CHEST;
+				break;
+			case DISPENSER:
+				inventory = Material.DISPENSER;
+				break;
+			case FURNACE:
+				inventory = Material.FURNACE;
+				break;
+			case WORKBENCH:
+				inventory = Material.WORKBENCH;
+				break;
+			case ENCHANTING:
+				inventory = Material.ENCHANTMENT_TABLE;
+				break;
+			case BREWING:
+				inventory = Material.BREWING_STAND;
+				break;
+			}
+			System.out.println(inventory);
+			if(inventory != Material.AIR){
+				AlertType type = AlertType.LEGAL;
+				ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
+				if(asregion != null){
+					if(asregion.getConfig().isBlocked(inventory, ListType.RIGHT_CLICK)){
+						type = AlertType.ILLEGAL;
+					}
+				}else{
+					if(config.get(player.getWorld()).isBlocked(inventory, ListType.RIGHT_CLICK)){
+						type = AlertType.ILLEGAL;
+					}
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld(), true)){
+					type = AlertType.LEGAL;
+				}
+				if(asregion != null){
+					if(asregion.getConfig().isBlocked(inventory, ListType.USE)){
+						type = AlertType.ILLEGAL;
+					}
+				}else{
+					if(config.get(player.getWorld()).isBlocked(inventory, ListType.USE)){
+						type = AlertType.ILLEGAL;
+					}
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld(), true)){
+					type = AlertType.LEGAL;
+				}
+				if(type == AlertType.ILLEGAL){
+					player.closeInventory();
+				}
 			}
 
 			// For alerts
