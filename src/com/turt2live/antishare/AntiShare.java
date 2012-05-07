@@ -62,6 +62,7 @@ public class AntiShare extends PluginWrapper {
 	 * - Added block ID support (eg: wool:1) to block and track lists
 	 * - Fixed logging in as a different Game Mode from what you logged off as with the no swap permission giving you the wrong inventory
 	 * - Fixed logging off before a server restarts/AS reloaded giving you a 'null' or no inventory
+	 * - Added an optional 'fines and rewards' system to induce incentive to not share on a server
 	 */
 
 	/**

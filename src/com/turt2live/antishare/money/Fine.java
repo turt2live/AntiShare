@@ -11,7 +11,7 @@ import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
 /**
- * Reward for doing something
+ * Fine for doing something
  * 
  * @author turt2live
  */
