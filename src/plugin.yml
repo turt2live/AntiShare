@@ -21,6 +21,8 @@ commands:
       /<command> mirror <player> - Mirror <player>'s inventory
       /<command> convert <sql/yaml> <sql/yaml> - Convert save format
       /<command> tool - Get the AntiShare tool (Blaze Rod)
+      /<command> money <on/off> - Turns on/off fine/reward messages
+      /<command> money status - Tells you if you get fine/reward messages
       /<command> help = This menu
 
 permissions:
@@ -76,13 +78,13 @@ permissions:
         description: Allows the target to use the AntiShare tool
         default: op
     AntiShare.money.*:
-        description: Never fine or award the player
+        description: Never fine or reward the player
         default: op
         children:
-            AntiShare.money.noaward: true
+            AntiShare.money.noreward: true
             AntiShare.money.nofine: true
-    AntiShare.money.noaward:
-        description: Never award the player
+    AntiShare.money.noreward:
+        description: Never reward the player
         default: op
     AntiShare.money.nofine:
         description: Never fine the player

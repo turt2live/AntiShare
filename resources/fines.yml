@@ -1,5 +1,5 @@
 # This allows you to specify fines for illegal events. You can also 
-# specify awards for such actions.
+# specify rewards for such actions.
 # 
 # 'no-money' is the value to charge if the player has zero as a balance.
 # This can be set as 'default' if you don't want it to vary from the fine.
@@ -8,76 +8,92 @@
 # and remove it when it can. If false, AntiShare will disregard the fine
 # and pretend it never happened.
 # 
-# fines-enabled and awards-enabled overrides the individul do-fine/award
+# fines-enabled and rewards-enabled overrides the individul do-fine/reward
 # settings in the actions.
+# 
+# 'show-status-on-login' - If true, and the player has chosen to silence
+# the fine/reward messages, they will be told about this upon logging in.
 # 
 # Permissions:
 # AntiShare.money.nofine = Never fine the player
-# AntiShare.money.noaward = Never award the player
-# AntiShare.money.* = Never award or fine the player (Default OP)
+# AntiShare.money.noreward = Never reward the player
+# AntiShare.money.* = Never reward or fine the player (Default OP)
 # 
 # Note: player-death is applied per event, NOT per item!
+show-status-on-login: true
 keep-tab: true
 fines-enabled: false
-awards-enabled: false
+rewards-enabled: false
 actions:
   block-break:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   block-place:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   item-drop:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   item-pickup:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   right-click:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   use:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   command:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   player-hit-player:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   player-hit-mob:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
   player-death:
     fine: 0.0
-    award: 0.0
+    reward: 0.0
     no-money: default
-    do-fine: true
-    do-award: true
+    do-fine: false
+    do-reward: false
+  creative-block-break:
+    fine: 0.0
+    reward: 0.0
+    no-money: default
+    do-fine: false
+    do-reward: false
+  survival-block-break:
+    fine: 0.0
+    reward: 0.0
+    no-money: default
+    do-fine: false
+    do-reward: false

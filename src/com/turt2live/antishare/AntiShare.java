@@ -430,7 +430,7 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	/**
-	 * Gets the money manager (awards/fines) being used by AntiShare
+	 * Gets the money manager (rewards/fines) being used by AntiShare
 	 * 
 	 * @return the money manager
 	 */

@@ -55,12 +55,14 @@ public class TrackerList extends ArrayList<Tracker> {
 		CASE_INSENSITIVE_SIGNS("AntiShare Signs", "Case Insensitive"),
 		SIGNS("AntiShare Signs", "All"),
 		REGIONS("Region Types", "All"),
+		// 'Fine' and 'Reward' (the column names) are overwritten by the TenderTypes 
+		// enum in everything except FINE/REWARD_GIVEN.
 		FINE("Fines", "Fine"),
-		AWARD("Awards", "Award"),
-		FINE_GIVEN("Fines/Awards Given", "Fine"),
-		AWARD_GIVEN("Fines/Awards Given", "Award"),
+		REWARD("Rewards", "Reward"),
+		FINE_GIVEN("Fines/Rewards Given", "Fine"),
+		REWARD_GIVEN("Fines/Rewards Given", "Reward"),
 		FINE_AMOUNT("Fine Amount", "Fine"),
-		AWARD_AMOUNT("Award Amount", "Award");
+		REWARD_AMOUNT("Reward Amount", "Reward");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
@@ -139,9 +141,9 @@ public class TrackerList extends ArrayList<Tracker> {
 		// Fix tender
 		remove(TrackerType.FINE);
 		remove(TrackerType.FINE_AMOUNT);
-		remove(TrackerType.AWARD);
-		remove(TrackerType.AWARD_AMOUNT);
-		// Don't remove FINE/AWARD_GIVEN, they are just counters anyway
+		remove(TrackerType.REWARD);
+		remove(TrackerType.REWARD_AMOUNT);
+		// Don't remove FINE/REWARD_GIVEN, they are just counters anyway
 		// Don't add them, the MoneyTracker will
 	}
 

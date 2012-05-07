@@ -116,6 +116,9 @@ public class CommandHandler implements CommandExecutor {
 							for(ASRegion region : plugin.getRegionManager().getAllRegions()){
 								region.getConfig().print(out);
 							}
+							out.write("----------------------------\r\n");
+							out.write("Rewards/Fines: \r\n");
+							plugin.getMoneyManager().print(out);
 							out.close();
 							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath());
 						}catch(Exception e){
@@ -333,6 +336,30 @@ public class CommandHandler implements CommandExecutor {
 						}
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("money")){
+					if(args.length < 2){
+						ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax Error, try /as money on/off/status");
+					}else{
+						if(args[1].equalsIgnoreCase("status") || args[1].equalsIgnoreCase("state")){
+							String state = !plugin.getMoneyManager().isSilent(sender.getName()) ? ChatColor.GREEN + "getting" : ChatColor.RED + "not getting";
+							state = state + ChatColor.WHITE;
+							ASUtils.sendToPlayer(sender, "You are " + state + " fine/reward messages");
+							return true;
+						}
+						if(ASUtils.getBoolean(args[1]) == null){
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax Error, try /as money on/off/status");
+							return true;
+						}
+						boolean silent = !ASUtils.getBoolean(args[1]);
+						if(silent){
+							plugin.getMoneyManager().addToSilentList(sender.getName());
+						}else{
+							plugin.getMoneyManager().removeFromSilentList(sender.getName());
+						}
+						String message = "You are now " + (silent ? ChatColor.RED + "not getting" : ChatColor.GREEN + "getting") + ChatColor.WHITE + " fine/reward messages";
+						ASUtils.sendToPlayer(sender, message);
 					}
 					return true;
 				}else{

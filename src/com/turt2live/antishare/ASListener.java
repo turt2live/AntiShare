@@ -774,7 +774,7 @@ public class ASListener implements Listener {
 		// Alert (with sanity check)
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use the command " : " used the command ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + command;
 		String playerMessage = plugin.getMessage("blocked-action.command");
-		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.COMMAND);
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.COMMAND, !(event.getMessage().toLowerCase().startsWith("/as money")));
 	}
 
 	// ################# Player Move
@@ -1055,6 +1055,9 @@ public class ASListener implements Listener {
 			// This must be done because when the inventory manager releases
 			// a player it resets the inventory to "non-temp"
 		}
+
+		// Money (fines/rewards) status
+		plugin.getMoneyManager().showStatusOnLogin(player);
 	}
 
 	// ################# Player Quit

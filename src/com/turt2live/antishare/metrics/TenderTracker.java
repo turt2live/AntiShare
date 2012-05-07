@@ -4,7 +4,7 @@ import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Tender;
 
 /**
- * Specific tracker for tender (fines/awards)
+ * Specific tracker for tender (fines/rewards)
  * 
  * @author turt2live
  */

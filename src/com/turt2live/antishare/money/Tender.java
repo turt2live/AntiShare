@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import com.turt2live.antishare.AntiShare;
 
 /**
- * A class for money (Award or Fine)
+ * A class for money (Reward or Fine)
  * 
  * @author turt2live
  */
@@ -21,13 +21,15 @@ public abstract class Tender {
 		BLOCK_BREAK("actions.block-break", "Block Break"),
 		BLOCK_PLACE("actions.block-place", "Block Place"),
 		ITEM_DROP("actions.item-drop", "Item Drop"),
-		ITME_PICKUP("actions.item-pickup", "Item Pickup"),
+		ITEM_PICKUP("actions.item-pickup", "Item Pickup"),
 		DEATH("actions.player-death", "Player Death"),
 		RIGHT_CLICK("actions.right-click", "Right Click"),
 		USE("actions.use", "Use"),
 		COMMAND("actions.command", "Command"),
 		HIT_PLAYER("actions.player-hit-player", "Player Hit Player"),
-		HIT_MOB("actions.player-hit-mob", "Player Hit Mob");
+		HIT_MOB("actions.player-hit-mob", "Player Hit Mob"),
+		CREATIVE_BLOCK("actions.creative-block-break", "Creative Block Break"),
+		SURVIVAL_BLOCK("actions.survival-block-break", "Survival Block Break");
 
 		private String key, name;
 

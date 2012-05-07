@@ -130,7 +130,21 @@ public class Alert {
 	 * @param trigger the Alert Trigger
 	 */
 	public void alert(String message, CommandSender sender, String playerMessage, AlertType type, AlertTrigger trigger){
-		alert(message, sender, playerMessage, type, trigger, 1000);
+		alert(message, sender, playerMessage, type, trigger, 1000, true);
+	}
+
+	/**
+	 * Sends an alert
+	 * 
+	 * @param message the message
+	 * @param sender the sender
+	 * @param playerMessage the player message
+	 * @param type the Alert Type
+	 * @param trigger the Alert Trigger
+	 * @param reward true to send rewards/fines, false to disable them
+	 */
+	public void alert(String message, CommandSender sender, String playerMessage, AlertType type, AlertTrigger trigger, boolean reward){
+		alert(message, sender, playerMessage, type, trigger, 1000, reward);
 	}
 
 	/**
@@ -144,6 +158,21 @@ public class Alert {
 	 * @param time the time between alerts
 	 */
 	public void alert(String message, CommandSender sender, String playerMessage, AlertType type, AlertTrigger trigger, long time){
+		alert(message, sender, playerMessage, type, trigger, time, true);
+	}
+
+	/**
+	 * Sends an alert
+	 * 
+	 * @param message the message
+	 * @param sender the sender
+	 * @param playerMessage the player message
+	 * @param type the Alert Type
+	 * @param trigger the Alert Trigger
+	 * @param time the time between alerts
+	 * @param reward true to send rewards/fines, false to disable them
+	 */
+	public void alert(String message, CommandSender sender, String playerMessage, AlertType type, AlertTrigger trigger, long time, boolean reward){
 		String hashmapKey = type.name() + message + playerMessage + sender.hashCode();
 		boolean sendToPlayer = true;
 		boolean sendToAdmins = true;
@@ -225,6 +254,12 @@ public class Alert {
 		if(trigger.tracker(type) != null){
 			TrackerType tt = trigger.tracker(type);
 			AntiShare.getInstance().getTrackers().getTracker(tt).increment(1);
+		}
+
+		// Send fine/reward
+		if(sender instanceof Player && reward){
+			Player player = (Player) sender;
+			AntiShare.getInstance().getMoneyManager().fire(trigger, type, player);
 		}
 
 		// Reinsert (or insert if not found before) into the hashmap

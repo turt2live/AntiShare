@@ -56,6 +56,6 @@ public class PermissionNodes {
 
 	// Money Nodes
 	public static final String MONEY_NO_FINE = "AntiShare.money.nofine";
-	public static final String MONEY_NO_AWARD = "AntiShare.money.noaward";
+	public static final String MONEY_NO_REWARD = "AntiShare.money.noreward";
 
 }
