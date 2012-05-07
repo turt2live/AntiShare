@@ -95,6 +95,9 @@ public abstract class Tender {
 	 * @return the amount
 	 */
 	public double getAmount(){
+		if(!enabled){
+			return 0;
+		}
 		return amount;
 	}
 

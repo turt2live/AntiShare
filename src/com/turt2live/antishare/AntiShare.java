@@ -272,6 +272,7 @@ public class AntiShare extends PluginWrapper {
 		listener.reload();
 		alerts.reload();
 		messages.reload();
+		tender.reload();
 		regions.reload();
 		// Region Factory has no reload
 		blocks.reload();
@@ -279,7 +280,6 @@ public class AntiShare extends PluginWrapper {
 		// SQL has no reload
 		// Metrics has no reload
 		// Tracker List has no reload
-		tender.reload();
 	}
 
 	/**
