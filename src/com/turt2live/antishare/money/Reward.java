@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.api.ASGameMode;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
@@ -23,14 +24,15 @@ public class Reward extends Tender {
 	 * @param type the type
 	 * @param amount the amount (positive to add to account)
 	 * @param enabled true to enable
+	 * @param affect the Game Mode(s) to affect
 	 */
-	public Reward(TenderType type, double amount, boolean enabled){
-		super(type, amount, enabled);
+	public Reward(TenderType type, double amount, boolean enabled, ASGameMode affect){
+		super(type, amount, enabled, affect);
 	}
 
 	@Override
 	public void apply(Player player){
-		if(!isEnabled() || plugin.getPermissions().has(player, PermissionNodes.MONEY_NO_REWARD)){
+		if(!isEnabled() || plugin.getPermissions().has(player, PermissionNodes.MONEY_NO_REWARD) || !super.affect(player.getGameMode())){
 			return;
 		}
 

@@ -14,6 +14,8 @@
 # 'show-status-on-login' - If true, and the player has chosen to silence
 # the fine/reward messages, they will be told about this upon logging in.
 # 
+# 'give-to' - Valid options: creative, survival, both, none
+# 
 # Permissions:
 # AntiShare.money.nofine = Never fine the player
 # AntiShare.money.noreward = Never reward the player
@@ -31,69 +33,81 @@ actions:
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   block-place:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   item-drop:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   item-pickup:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   right-click:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   use:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   command:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   player-hit-player:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   player-hit-mob:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   player-death:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   creative-block-break:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative
   survival-block-break:
     fine: 0.0
     reward: 0.0
     no-money: default
     do-fine: false
     do-reward: false
+    give-to: creative

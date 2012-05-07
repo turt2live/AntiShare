@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.api.ASGameMode;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
@@ -26,9 +27,10 @@ public class Fine extends Tender {
 	 * @param amount the amount (positive to remove from account)
 	 * @param enabled true to enable
 	 * @param overcharge the amount to charge if the account has less than or equal to zero
+	 * @param affect the Game Mode(s) to affect
 	 */
-	public Fine(TenderType type, double amount, boolean enabled, double overcharge){
-		super(type, amount, enabled);
+	public Fine(TenderType type, double amount, boolean enabled, double overcharge, ASGameMode affect){
+		super(type, amount, enabled, affect);
 		this.overcharge = overcharge;
 	}
 
@@ -43,7 +45,7 @@ public class Fine extends Tender {
 
 	@Override
 	public void apply(Player player){
-		if(!isEnabled() || plugin.getPermissions().has(player, PermissionNodes.MONEY_NO_FINE)){
+		if(!isEnabled() || plugin.getPermissions().has(player, PermissionNodes.MONEY_NO_FINE) || !super.affect(player.getGameMode())){
 			return;
 		}
 

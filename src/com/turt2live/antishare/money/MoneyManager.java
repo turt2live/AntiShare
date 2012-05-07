@@ -16,6 +16,7 @@ import org.bukkit.plugin.Plugin;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.api.ASGameMode;
 import com.turt2live.antishare.metrics.TenderAmountTracker;
 import com.turt2live.antishare.metrics.TenderTracker;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
@@ -90,6 +91,14 @@ public class MoneyManager {
 			double fine = money.getDouble(path + ".fine");
 			double reward = money.getDouble(path + ".reward");
 			double noMoney = money.getString(path + ".no-money").equalsIgnoreCase("default") ? fine : money.getDouble(path + ".no-money");
+			ASGameMode affect = ASGameMode.match(money.getString(path + ".give-to"));
+
+			// Sanity
+			if(affect == null){
+				plugin.getMessenger().log("Configuration Problem: '" + money.getString(path + ".give-to") + "' is not valid! (See '" + (path + ".give-to") + "' in your fines.yml)", Level.WARNING, LogType.INFO);
+				plugin.getMessenger().log("Assuming '" + money.getString(path + ".give-to") + "' means 'NONE'", Level.WARNING, LogType.INFO);
+				affect = ASGameMode.NONE;
+			}
 
 			// Check enabled state
 			if(!doRewards && doReward){
@@ -98,10 +107,14 @@ public class MoneyManager {
 			if(!doFines && doFine){
 				doFine = false;
 			}
+			if(affect == ASGameMode.NONE){
+				doFine = false;
+				doReward = false;
+			}
 
 			// Add fine/reward
-			Reward a = new Reward(type, reward, doReward);
-			Fine f = new Fine(type, fine, doFine, noMoney);
+			Reward a = new Reward(type, reward, doReward, affect);
+			Fine f = new Fine(type, fine, doFine, noMoney, affect);
 			rewards.add(a);
 			fines.add(f);
 
