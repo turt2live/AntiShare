@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.signs.Sign;
 
 /**
  * Used similar to an Event List, but handles block-tracking instead
@@ -19,64 +20,134 @@ import com.turt2live.antishare.AntiShare.LogType;
 public class TrackerList {
 
 	private List<String> tracked = new ArrayList<String>();
+	private List<Sign> trackedsigns = new ArrayList<Sign>();
 
 	/**
 	 * Creates a new Tracker List
 	 * 
+	 * @param file the configuration file name
+	 * @param node the configuration node
 	 * @param configurationValue the values
 	 */
-	public TrackerList(String... configurationValue){
-		if(configurationValue.length == 0){
+	public TrackerList(String file, String node, String... configurationValue){
+		if(configurationValue.length <= 0){
 			return;
 		}
 
 		// Setup
 		AntiShare plugin = AntiShare.getInstance();
-		boolean skip = false;
 
-		// Check if it's an "all or nothing" list
-		if(configurationValue.length == 1){
-			if(configurationValue[0].startsWith("*") || configurationValue[0].toLowerCase().startsWith("all")){
-				for(Material m : Material.values()){
-					StringBuilder ret = new StringBuilder();
-					ret.append(m.getId());
-					ret.append(":");
-					ret.append("*");
-					tracked.add(ret.toString());
-				}
-				skip = true;
-			}else if(configurationValue[0].startsWith("none")){
-				skip = true;
+		// Loop
+		for(String tracked : configurationValue){
+			tracked = tracked.trim();
+			boolean negate = false;
+			if(tracked.startsWith("-")){
+				negate = true;
+				tracked = tracked.replaceFirst("-", "");
 			}
-		}
 
-		// If it's not an "all or nothing", loop it
-		if(!skip){
-			for(String tracked : configurationValue){
-				tracked = tracked.trim();
+			// Check for "all"/"none"
+			if(configurationValue.length == 1){
+				if(tracked.equalsIgnoreCase("*") || tracked.equalsIgnoreCase("all")){
+					// Add materials
+					for(Material m : Material.values()){
+						if(!negate){
+							this.tracked.add(ASUtils.materialToString(m, false));
+						}else{
+							this.tracked.remove(ASUtils.materialToString(m, false));
+						}
+					}
 
-				// Special cases
-				if(tracked.equalsIgnoreCase("sign")
-						|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign")
-						|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("signpost")
-						|| tracked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
-						|| tracked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
-						|| tracked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
+					// Add signs
+					for(Sign s : plugin.getSignManager().getAllSigns()){
+						if(!negate){
+							trackedsigns.add(s);
+						}else{
+							trackedsigns.remove(s);
+						}
+					}
+					continue;
+				}else if(tracked.equalsIgnoreCase("none")){
+					trackedsigns.clear();
+					this.tracked.clear();
+					continue; // For sanity sake
+				}
+			}
+
+			// Sign?
+			if(tracked.toLowerCase().startsWith("sign:")){
+				String signname = tracked.split(":").length > 0 ? tracked.split(":")[1] : null;
+				if(signname == null){
+					plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+					continue;
+				}
+				Sign sign = plugin.getSignManager().getSign(signname);
+				if(sign == null){
+					plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+					continue;
+				}
+				if(!negate){
+					trackedsigns.add(sign);
+				}else{
+					trackedsigns.remove(sign);
+				}
+				continue;
+			}
+
+			// Special case: Sign
+			if(tracked.equalsIgnoreCase("sign")
+					|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign")
+					|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("signpost")
+					|| tracked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
+					|| tracked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
+					|| tracked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
+				if(!negate){
 					this.tracked.add(ASUtils.materialToString(Material.SIGN, false));
 					this.tracked.add(ASUtils.materialToString(Material.SIGN_POST, false));
 					this.tracked.add(ASUtils.materialToString(Material.WALL_SIGN, false));
-					continue;
+				}else{
+					this.tracked.remove(ASUtils.materialToString(Material.SIGN, false));
+					this.tracked.remove(ASUtils.materialToString(Material.SIGN_POST, false));
+					this.tracked.remove(ASUtils.materialToString(Material.WALL_SIGN, false));
 				}
+				continue;
+			}
 
-				// Try to add the item, warn otherwise
-				try{
-					if(plugin.getItemMap().getItem(tracked, false) == null){
-						throw new Exception("");
-					}
-					this.tracked.add(plugin.getItemMap().getItem(tracked, false));
-				}catch(Exception e){
-					plugin.getMessenger().log("Configuration Problem: '" + tracked + "' is not valid!", Level.WARNING, LogType.INFO);
+			// Special case: Brewing Stand
+			if(tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstand")
+					|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstanditem")
+					|| tracked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND.getId()))
+					|| tracked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))){
+				if(!negate){
+					this.tracked.add(ASUtils.materialToString(Material.BREWING_STAND, false));
+					this.tracked.add(ASUtils.materialToString(Material.BREWING_STAND_ITEM, false));
+				}else{
+					this.tracked.remove(ASUtils.materialToString(Material.BREWING_STAND, false));
+					this.tracked.remove(ASUtils.materialToString(Material.BREWING_STAND_ITEM, false));
 				}
+				continue;
+			}
+
+			// Try to add the item, warn otherwise
+			if(plugin.getItemMap().getSign(tracked) != null){
+				if(!negate){
+					this.trackedsigns.add(plugin.getItemMap().getSign(tracked));
+				}else{
+					this.trackedsigns.remove(plugin.getItemMap().getSign(tracked));
+				}
+				continue;
+			}
+			try{
+				if(plugin.getItemMap().getItem(tracked, false) == null){
+					throw new Exception("");
+				}
+				if(!negate){
+					this.tracked.add(plugin.getItemMap().getItem(tracked, false));
+				}else{
+					this.tracked.remove(plugin.getItemMap().getItem(tracked, false));
+				}
+			}catch(Exception e){
+				plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
 			}
 		}
 	}

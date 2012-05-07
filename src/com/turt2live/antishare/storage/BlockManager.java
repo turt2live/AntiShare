@@ -138,8 +138,8 @@ public class BlockManager {
 	 */
 	public void load(){
 		// Setup lists
-		tracked_creative = new TrackerList(plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
-		tracked_survival = new TrackerList(plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
+		tracked_creative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
+		tracked_survival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
 
 		// Setup cache
 		File dir = new File(plugin.getDataFolder(), "data");

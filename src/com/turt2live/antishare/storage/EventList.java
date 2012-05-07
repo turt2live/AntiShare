@@ -34,136 +34,148 @@ public class EventList {
 	 * @param configurationValue the values
 	 */
 	public EventList(String file, String node, String... configurationValue){
-		if(configurationValue.length == 0){
-			return;
-		}
-
 		// Setup
 		AntiShare plugin = AntiShare.getInstance();
-		boolean skip = false;
 
 		// Sanity
 		if(configurationValue.length <= 0){
 			return;
 		}
 
-		// Check if it's an "all or nothing" list
-		if(configurationValue[0].startsWith("*") || configurationValue[0].toLowerCase().startsWith("all")){
-			for(Material m : Material.values()){
-				StringBuilder ret = new StringBuilder();
-				ret.append(m.getId());
-				ret.append(":");
-				ret.append("*");
-				blocked.add(ret.toString());
+		// Loop
+		for(int index = 0; index < configurationValue.length; index++){
+			String blocked = configurationValue[index].trim();
+
+			// Sanity
+			if(blocked.length() <= 0){
+				continue;
 			}
-			skip = true;
-		}else if(configurationValue[0].startsWith("none")){
-			skip = true;
-		}
 
-		// If it's not an "all or nothing", loop it
-		if(!skip){
-			int index = 0;
-			for(String blocked : configurationValue){
-				blocked = blocked.trim();
+			// Check negation
+			boolean negate = false;
+			if(blocked.startsWith("-")){
+				negate = true;
+				blocked = blocked.replaceFirst("-", "");
+			}
 
-				// Sanity
-				if(blocked.length() <= 0){
-					continue;
+			// Check for "all"/"none"
+			if(blocked.equalsIgnoreCase("*") || blocked.equalsIgnoreCase("all")){
+				// Add materials
+				for(Material m : Material.values()){
+					if(!negate){
+						this.blocked.add(ASUtils.materialToString(m, false));
+					}else{
+						this.blocked.remove(ASUtils.materialToString(m, false));
+					}
 				}
 
-				// Whitelist?
-				if(blocked.equalsIgnoreCase("whitelist") && index == 0){
-					whitelist = true;
-					index++;
+				// Add signs
+				for(Sign s : plugin.getSignManager().getAllSigns()){
+					if(!negate){
+						blockedsigns.add(s);
+					}else{
+						blockedsigns.remove(s);
+					}
+				}
+				continue;
+			}else if(blocked.equalsIgnoreCase("none")){
+				blockedsigns.clear();
+				this.blocked.clear();
+				continue; // For sanity sake
+			}
+
+			// Whitelist?
+			if(blocked.equalsIgnoreCase("whitelist") && index == 0){
+				whitelist = true;
+				if(negate){
+					whitelist = false;
+				}
+				continue;
+			}
+
+			// Sign?
+			if(blocked.toLowerCase().startsWith("sign:")){
+				String signname = blocked.split(":").length > 0 ? blocked.split(":")[1] : null;
+				if(signname == null){
+					plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
 					continue;
 				}
-
-				// Sign?
-				if(blocked.toLowerCase().startsWith("sign:")){
-					String signname = blocked.split(":").length > 0 ? blocked.split(":")[1] : null;
-					if(signname == null){
-						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
-						index++;
-						continue;
-					}
-					Sign sign = plugin.getSignManager().getSign(signname);
-					if(sign == null){
-						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
-						index++;
-						continue;
-					}
+				Sign sign = plugin.getSignManager().getSign(signname);
+				if(sign == null){
+					plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+					continue;
+				}
+				if(!negate){
 					blockedsigns.add(sign);
-					index++;
-					continue;
-				}else if(blocked.toLowerCase().startsWith("-sign:")){
-					String signname = blocked.split(":").length > 0 ? blocked.split(":")[1] : null;
-					if(signname == null){
-						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
-						index++;
-						continue;
-					}
-					Sign sign = plugin.getSignManager().getSign(signname);
-					if(sign == null){
-						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
-						index++;
-						continue;
-					}
+				}else{
 					blockedsigns.remove(sign);
-					index++;
-					continue;
 				}
+				continue;
+			}
 
-				// Check if experience is to be blocked
-				if(blocked.equalsIgnoreCase("exp") || blocked.equalsIgnoreCase("experience") || blocked.equalsIgnoreCase("xp")){
-					expBlocked = true;
-					continue;
+			// Check if experience is to be blocked
+			if(blocked.equalsIgnoreCase("exp") || blocked.equalsIgnoreCase("experience") || blocked.equalsIgnoreCase("xp")){
+				expBlocked = true;
+				if(negate){
+					expBlocked = false;
 				}
+				continue;
+			}
 
-				// Special cases
-				if(blocked.equalsIgnoreCase("sign")
-						|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign")
-						|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("signpost")
-						|| blocked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
-						|| blocked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
-						|| blocked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
+			// Special case: Signs
+			if(blocked.equalsIgnoreCase("sign")
+					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign")
+					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("signpost")
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
+				if(!negate){
 					this.blocked.add(ASUtils.materialToString(Material.SIGN, false));
 					this.blocked.add(ASUtils.materialToString(Material.SIGN_POST, false));
 					this.blocked.add(ASUtils.materialToString(Material.WALL_SIGN, false));
-					index++;
-					continue;
-				}
-
-				// Try to add the item, warn otherwise
-				if(blocked.startsWith("-")){
-					// Negation
-					blocked = blocked.replaceFirst("-", "");
-					if(plugin.getItemMap().getSign(blocked) != null){
-						this.blockedsigns.remove(plugin.getItemMap().getSign(blocked));
-						index++;
-						continue;
-					}
-					try{
-						this.blocked.remove(plugin.getItemMap().getItem(blocked) == null ? Integer.parseInt(blocked) : plugin.getItemMap().getItem(blocked).getId());
-					}catch(Exception e){
-						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in " + file + ")", Level.WARNING, LogType.INFO);
-					}
 				}else{
-					if(plugin.getItemMap().getSign(blocked) != null){
-						this.blockedsigns.add(plugin.getItemMap().getSign(blocked));
-						index++;
-						continue;
-					}
-					try{
-						if(plugin.getItemMap().getItem(blocked, false) == null){
-							throw new Exception("");
-						}
-						this.blocked.add(plugin.getItemMap().getItem(blocked, false));
-					}catch(Exception e){
-						plugin.getMessenger().log("Configuration Problem: '" + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
-					}
+					this.blocked.remove(ASUtils.materialToString(Material.SIGN, false));
+					this.blocked.remove(ASUtils.materialToString(Material.SIGN_POST, false));
+					this.blocked.remove(ASUtils.materialToString(Material.WALL_SIGN, false));
 				}
-				index++;
+				continue;
+			}
+
+			// Special case: Brewing Stand
+			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstand")
+					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstanditem")
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND.getId()))
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))){
+				if(!negate){
+					this.blocked.add(ASUtils.materialToString(Material.BREWING_STAND, false));
+					this.blocked.add(ASUtils.materialToString(Material.BREWING_STAND_ITEM, false));
+				}else{
+					this.blocked.remove(ASUtils.materialToString(Material.BREWING_STAND, false));
+					this.blocked.remove(ASUtils.materialToString(Material.BREWING_STAND_ITEM, false));
+				}
+				continue;
+			}
+
+			// Try to add the item, warn otherwise
+			if(plugin.getItemMap().getSign(blocked) != null){
+				if(!negate){
+					this.blockedsigns.add(plugin.getItemMap().getSign(blocked));
+				}else{
+					this.blockedsigns.remove(plugin.getItemMap().getSign(blocked));
+				}
+				continue;
+			}
+			try{
+				if(plugin.getItemMap().getItem(blocked, false) == null){
+					throw new Exception("");
+				}
+				if(!negate){
+					this.blocked.add(plugin.getItemMap().getItem(blocked, false));
+				}else{
+					this.blocked.remove(plugin.getItemMap().getItem(blocked, false));
+				}
+			}catch(Exception e){
+				plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
 			}
 		}
 	}
@@ -175,9 +187,6 @@ public class EventList {
 	 * @param configurationValue the values
 	 */
 	public EventList(boolean stringsOnly, String... configurationValue){
-		if(configurationValue.length == 0){
-			return;
-		}
 		this.useString = stringsOnly;
 		int index = 0;
 

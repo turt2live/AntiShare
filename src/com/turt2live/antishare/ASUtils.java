@@ -216,7 +216,9 @@ public class ASUtils {
 	 * This returns the format 'id:data', data will be zero if no
 	 * data is found, or the data is actually zero. You can set 'zero'
 	 * in the parameters to false to just get the material ID. If 'zero' is
-	 * true and there is data, the correct format (id:data) will be returned.
+	 * true and there is data, the correct format (id:data) will be returned.<br>
+	 * <b>Worth Noting:</b> this (if zero is false) will return a :* id, such as
+	 * 1:* if you pass it Material.STONE.
 	 * 
 	 * @param material the material
 	 * @param zero true to add zero
