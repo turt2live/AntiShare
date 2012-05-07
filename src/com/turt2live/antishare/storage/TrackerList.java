@@ -128,6 +128,16 @@ public class TrackerList {
 				continue;
 			}
 
+			// Special case: Wool
+			if(ASUtils.getWool(tracked) != null){
+				if(!negate){
+					this.tracked.add(ASUtils.getWool(tracked));
+				}else{
+					this.tracked.remove(ASUtils.getWool(tracked));
+				}
+				continue;
+			}
+
 			// Try to add the item, warn otherwise
 			if(plugin.getItemMap().getSign(tracked) != null){
 				if(!negate){
@@ -145,6 +155,7 @@ public class TrackerList {
 					this.tracked.add(plugin.getItemMap().getItem(tracked, false));
 				}else{
 					this.tracked.remove(plugin.getItemMap().getItem(tracked, false));
+					// TODO: all, -wool:1 does not work
 				}
 			}catch(Exception e){
 				plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);

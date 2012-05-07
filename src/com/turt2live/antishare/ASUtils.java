@@ -233,4 +233,37 @@ public class ASUtils {
 		}
 		return ret.toString();
 	}
+
+	/**
+	 * Converts words to ID. Eg: "light blue wool" -> "wool:3"
+	 * 
+	 * @param input the raw input
+	 * @return the wool ID (with data value) or null if not wool
+	 */
+	public static String getWool(String input){
+		if(!input.toLowerCase().contains("wool")){
+			return null;
+		}
+
+		String color = input.replace("wool", "").trim().toLowerCase();
+		color = color.replaceAll(" ", "_");
+		color = color.replace("orange", "1");
+		color = color.replace("white", "0");
+		color = color.replace("magenta", "2");
+		color = color.replace("light_blue", "3");
+		color = color.replace("yellow", "4");
+		color = color.replace("lime", "5");
+		color = color.replace("pink", "6");
+		color = color.replace("gray", "7");
+		color = color.replace("light_gray", "8");
+		color = color.replace("cyan", "9");
+		color = color.replace("purple", "10");
+		color = color.replace("blue", "11");
+		color = color.replace("brown", "12");
+		color = color.replace("green", "13");
+		color = color.replace("red", "14");
+		color = color.replace("black", "15");
+
+		return Material.WOOL.getId() + ":" + color;
+	}
 }

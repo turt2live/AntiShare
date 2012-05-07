@@ -156,6 +156,16 @@ public class EventList {
 				continue;
 			}
 
+			// Special case: Wool
+			if(ASUtils.getWool(blocked) != null){
+				if(!negate){
+					this.blocked.add(ASUtils.getWool(blocked));
+				}else{
+					this.blocked.remove(ASUtils.getWool(blocked));
+				}
+				continue;
+			}
+
 			// Try to add the item, warn otherwise
 			if(plugin.getItemMap().getSign(blocked) != null){
 				if(!negate){
@@ -173,6 +183,7 @@ public class EventList {
 					this.blocked.add(plugin.getItemMap().getItem(blocked, false));
 				}else{
 					this.blocked.remove(plugin.getItemMap().getItem(blocked, false));
+					// TODO: all, -wool:1 does not work
 				}
 			}catch(Exception e){
 				plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
@@ -204,18 +215,26 @@ public class EventList {
 				continue;
 			}
 
-			// Whitelist?
-			if(blocked.equalsIgnoreCase("whitelist") && index == 0){
-				whitelist = true;
-				index++;
-				continue;
-			}
-
 			// Check negation
 			boolean negate = false;
 			if(blocked.startsWith("-")){
 				negate = true;
 				blocked = blocked.replaceFirst("-", "");
+			}
+
+			// Check list for 'none'
+			if(blocked.equalsIgnoreCase("none")){
+				continue;
+			}
+
+			// Whitelist?
+			if(blocked.equalsIgnoreCase("whitelist") && index == 0){
+				whitelist = true;
+				if(negate){
+					whitelist = false;
+				}
+				index++;
+				continue;
 			}
 
 			// Add a '/' to all strings
