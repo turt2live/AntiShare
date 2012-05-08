@@ -928,7 +928,6 @@ public class ASListener implements Listener {
 				inventory = Material.BREWING_STAND;
 				break;
 			}
-			System.out.println(inventory);
 			if(inventory != Material.AIR){
 				AlertType type = AlertType.LEGAL;
 				ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());

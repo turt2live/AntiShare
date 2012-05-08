@@ -36,7 +36,6 @@ public class Messenger {
 			silentStartup = plugin.getConfig().getBoolean("other.silent-startup");
 			silentShutdown = plugin.getConfig().getBoolean("other.silent-shutdown");
 			silentBlocks = plugin.getConfig().getBoolean("other.silent-blocks");
-			;
 		}else{
 			silent = false;
 			silentStartup = false;
@@ -82,6 +81,7 @@ public class Messenger {
 			if(!silentBlocks){
 				AntiShare.getInstance().getLogger().log(level, message);
 			}
+			break;
 		case BYPASS:
 			AntiShare.getInstance().getLogger().log(level, message);
 			break;
