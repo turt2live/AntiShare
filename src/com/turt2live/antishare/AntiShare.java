@@ -43,28 +43,6 @@ import com.turt2live.antishare.storage.SQL;
  */
 public class AntiShare extends PluginWrapper {
 
-	/* Changes since 3.2.2
-	 * 
-	 * - Added negation to block lists
-	 * - Added options to drop blocks when a player breaks a block of the opposite Game Mode
-	 * - Bug Fix: Actually remove blocks when broken from the registry
-	 * - Fixed "X is not Y (found Z)" messages spamming (toggle option)
-	 * - Auto-Update blocks in the registry
-	 * - Cleanup registry blocks by removing AIR
-	 * - Fixed concurrent exceptions
-	 * - Added Metrics
-	 * - Added World Split warnings
-	 * - Fixed world splits and regions not getting along
-	 * - Fixed /gm working in world splits
-	 * - Added per-region configurations
-	 * - Added a way to block/allow specific signs
-	 * - Removed /gm command
-	 * - Added block ID support (eg: wool:1) to block and track lists
-	 * - Fixed logging in as a different Game Mode from what you logged off as with the no swap permission giving you the wrong inventory
-	 * - Fixed logging off before a server restarts/AS reloaded giving you a 'null' or no inventory
-	 * - Added an optional 'fines and rewards' system to induce incentive to not share on a server
-	 */
-
 	/**
 	 * Represents a Log Entry Type
 	 * 
