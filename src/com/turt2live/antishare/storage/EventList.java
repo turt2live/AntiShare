@@ -183,7 +183,6 @@ public class EventList {
 					this.blocked.add(plugin.getItemMap().getItem(blocked, false));
 				}else{
 					this.blocked.remove(plugin.getItemMap().getItem(blocked, false));
-					// TODO: all, -wool:1 does not work
 				}
 			}catch(Exception e){
 				plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);

@@ -155,7 +155,6 @@ public class TrackerList {
 					this.tracked.add(plugin.getItemMap().getItem(tracked, false));
 				}else{
 					this.tracked.remove(plugin.getItemMap().getItem(tracked, false));
-					// TODO: all, -wool:1 does not work
 				}
 			}catch(Exception e){
 				plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
