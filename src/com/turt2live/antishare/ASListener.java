@@ -199,19 +199,6 @@ public class ASListener implements Listener {
 			plugin.getBlockManager().removeBlock(block);
 		}
 
-		// Handle drops
-		if(drops != null){
-			if(drops){
-				if(event.isCancelled()){
-					plugin.getBlockManager().removeBlock(block);
-					block.breakNaturally();
-				}
-			}else{
-				plugin.getBlockManager().removeBlock(block);
-				block.setType(Material.AIR);
-			}
-		}
-
 		// Alert
 		if(special){
 			if(region){
@@ -235,6 +222,16 @@ public class ASListener implements Listener {
 			factory.insert(block, player, block.getWorld(), TenderType.BLOCK_BREAK);
 			playerMessage = factory.toString();
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_BREAK);
+		}
+
+		// Handle drops
+		if(drops != null){
+			if(drops){
+				if(event.isCancelled()){
+					plugin.getBlockManager().removeBlock(block);
+					block.breakNaturally();
+				}
+			}
 		}
 
 		// Check for 'attached' blocks and internal inventories

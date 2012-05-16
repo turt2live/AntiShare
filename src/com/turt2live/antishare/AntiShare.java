@@ -43,6 +43,19 @@ import com.turt2live.antishare.storage.SQL;
  */
 public class AntiShare extends PluginWrapper {
 
+	/*
+	 * POTENTIAL BUGS:
+	 * - /as editregion create a new config but maintain the old file
+	 * - PEX not working when using Vault
+	 * - http://dev.bukkit.org/server-mods/antishare/tickets/1-can-throw-items-out-of-a-region-and-pick-them-up/
+	 * 
+	 * Configs (PEX):
+	 * - http://pastebin.com/gQxsvw9t
+	 * - (similar) http://pastebin.com/tXkz2kpj
+	 * - Skype Conversations
+	 * - http://pastebin.com/dGCws9xB (Ticket)
+	 */
+
 	/**
 	 * Represents a Log Entry Type
 	 * 
