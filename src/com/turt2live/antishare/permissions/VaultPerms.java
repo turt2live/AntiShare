@@ -41,6 +41,9 @@ public class VaultPerms {
 		if(perms == null){
 			return false;
 		}
+		if(perms.hasSuperPermsCompat()){
+			return player.hasPermission(node);
+		}
 		try{
 			return perms.playerHas(world, player.getName(), node);
 		}catch(UnsupportedOperationException e){
