@@ -451,7 +451,7 @@ public class ASRegion {
 		// Reset the player
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
 			plugin.getInventoryManager().removeFromTemporary(player);
-			player.setGameMode(previousGameModes.get(player.getName()));
+			player.setGameMode(previousGameModes.get(player.getName()) == null ? player.getGameMode() : previousGameModes.get(player.getName()));
 		}
 	}
 
