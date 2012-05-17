@@ -2,8 +2,8 @@ package com.turt2live.antishare.permissions;
 
 import net.milkbowl.vault.permission.Permission;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -37,7 +37,7 @@ public class VaultPerms {
 	 * @param world the world
 	 * @return true if they have it
 	 */
-	public boolean has(OfflinePlayer player, String node, World world){
+	public boolean has(Player player, String node, World world){
 		if(perms == null){
 			return false;
 		}

@@ -55,7 +55,6 @@ public class AntiShare extends PluginWrapper {
 	 *  - Fixed creative/survival blocks being able to be broken
 	 *  - Fixed potential null Game Mode on leaving a region
 	 *  - Fixed region configurations (not saving, not using correct names)
-	 * 
 	 */
 
 	/**
