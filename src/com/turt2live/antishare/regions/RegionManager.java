@@ -96,6 +96,7 @@ public class RegionManager {
 						region.setExitMessage(results.getString("exitMessage"));
 						region.setName(name);
 						region.setMessageOptions(enterMessage, exitMessage);
+						region.buildConfiguration(); // REQUIRED
 
 						// Inventory is set when the inventory manager loads
 
@@ -136,6 +137,7 @@ public class RegionManager {
 					region.setMessageOptions(rfile.getBoolean("showEnter"), rfile.getBoolean("showExit"));
 					region.setName(rfile.getString("name"));
 					region.loadPlayerInformation();
+					region.buildConfiguration(); // REQUIRED
 
 					// Inventory is set when the inventory manager loads
 
@@ -340,6 +342,7 @@ public class RegionManager {
 		Set<ASRegion> regions = this.regions.get(location.getWorld()) == null ? new HashSet<ASRegion>() : this.regions.get(location.getWorld());
 		for(ASRegion region : regions){
 			if(region.has(location)){
+				region.delete();
 				regions.remove(region);
 				break;
 			}
@@ -355,6 +358,7 @@ public class RegionManager {
 		for(World world : regions.keySet()){
 			for(ASRegion region : regions.get(world) == null ? new HashSet<ASRegion>() : regions.get(world)){
 				if(region.getName().equalsIgnoreCase(name)){
+					region.delete();
 					regions.get(world).remove(region);
 					return;
 				}

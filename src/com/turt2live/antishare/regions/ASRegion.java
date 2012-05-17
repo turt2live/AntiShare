@@ -58,7 +58,6 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = AntiShare.getInstance();
 		name = id;
-		config = new PerRegionConfig(this);
 	}
 
 	/**
@@ -78,6 +77,20 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = AntiShare.getInstance();
 		name = id;
+	}
+
+	/**
+	 * Delete any hidden data (such as configurations) for this region
+	 */
+	public void delete(){
+		File path = new File(plugin.getDataFolder(), "region_configurations");
+		new File(path, getName() + ".yml").delete();
+	}
+
+	/**
+	 * Build the configuration
+	 */
+	public void buildConfiguration(){
 		config = new PerRegionConfig(this);
 	}
 

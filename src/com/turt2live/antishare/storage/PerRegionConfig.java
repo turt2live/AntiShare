@@ -19,6 +19,7 @@ import com.turt2live.antishare.storage.PerWorldConfig.ListType;
  * @author turt2live
  */
 public class PerRegionConfig {
+
 	private EventList block_break;
 	private EventList block_place;
 	private EventList right_click;
