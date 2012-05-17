@@ -47,7 +47,6 @@ public class AntiShare extends PluginWrapper {
 	 * POTENTIAL BUGS:
 	 * - /as editregion create a new config but maintain the old file
 	 * - [Being Fixed] PEX not working when using Vault
-	 * - http://dev.bukkit.org/server-mods/antishare/tickets/1-can-throw-items-out-of-a-region-and-pick-them-up/
 	 */
 
 	/*
