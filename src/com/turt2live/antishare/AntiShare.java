@@ -43,16 +43,6 @@ import com.turt2live.antishare.storage.SQL;
  */
 public class AntiShare extends PluginWrapper {
 
-	/*
-	 * CHANGES SINCE 3.3.0:
-	 * 
-	 *  - Fixed 'X broke AIR' messages
-	 *  - Fixed creative/survival blocks being able to be broken
-	 *  - Fixed potential null Game Mode on leaving a region
-	 *  - Fixed region configurations (not saving, not using correct names)
-	 *  - Fixed SuperPerms compatible plugins being derpy
-	 */
-
 	/**
 	 * Represents a Log Entry Type
 	 * 
