@@ -44,24 +44,32 @@ public class InventoryManager {
 	public void loadPlayer(Player player){
 		// Standard inventories
 		List<ASInventory> list = ASInventory.generateInventory(player.getName(), InventoryType.PLAYER);
-		for(ASInventory inventory : list){
-			World world = inventory.getWorld();
-			GameMode gamemode = inventory.getGameMode();
-			switch (gamemode){
-			case CREATIVE:
-				creative.put(player.getName() + "." + world.getName(), inventory);
-				break;
-			case SURVIVAL:
-				survival.put(player.getName() + "." + world.getName(), inventory);
-				break;
+
+		// Null check
+		if(list != null){
+			for(ASInventory inventory : list){
+				World world = inventory.getWorld();
+				GameMode gamemode = inventory.getGameMode();
+				switch (gamemode){
+				case CREATIVE:
+					creative.put(player.getName() + "." + world.getName(), inventory);
+					break;
+				case SURVIVAL:
+					survival.put(player.getName() + "." + world.getName(), inventory);
+					break;
+				}
 			}
 		}
 
 		// Temporary inventories
 		list = ASInventory.generateInventory(player.getName(), InventoryType.TEMPORARY);
-		for(ASInventory inventory : list){
-			TemporaryASInventory spec = new TemporaryASInventory(ASInventory.generate(player, InventoryType.PLAYER), inventory);
-			playerTemp.put(player.getName(), spec);
+
+		// Null check
+		if(list != null){
+			for(ASInventory inventory : list){
+				TemporaryASInventory spec = new TemporaryASInventory(ASInventory.generate(player, InventoryType.PLAYER), inventory);
+				playerTemp.put(player.getName(), spec);
+			}
 		}
 	}
 

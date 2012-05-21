@@ -208,12 +208,18 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
-		regions.save();
-		blocks.save();
-		inventories.save();
-		tender.save();
-		metrics.flush();
-		sql.disconnect();
+		if(regions != null)
+			regions.save();
+		if(blocks != null)
+			blocks.save();
+		if(inventories != null)
+			inventories.save();
+		if(tender != null)
+			tender.save();
+		if(metrics != null)
+			metrics.flush();
+		if(sql != null)
+			sql.disconnect();
 
 		// Disable
 		getServer().getScheduler().cancelTasks(this);
