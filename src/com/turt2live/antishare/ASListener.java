@@ -18,6 +18,7 @@ import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Jukebox;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -79,6 +80,7 @@ public class ASListener implements Listener {
 
 	private AntiShare plugin = AntiShare.getInstance();
 	private ConcurrentHashMap<World, PerWorldConfig> config = new ConcurrentHashMap<World, PerWorldConfig>();
+	private boolean hasMobCatcher = false;
 
 	/**
 	 * Creates a new Listener
@@ -95,6 +97,7 @@ public class ASListener implements Listener {
 		for(World world : Bukkit.getWorlds()){
 			config.put(world, new PerWorldConfig(world));
 		}
+		hasMobCatcher = plugin.getServer().getPluginManager().getPlugin("MobCatcher") != null;
 	}
 
 	/**
@@ -436,6 +439,12 @@ public class ASListener implements Listener {
 		// Handle event
 		if(type == AlertType.ILLEGAL){
 			event.setCancelled(true);
+			if(hasMobCatcher && player.getItemInHand() != null){
+				ItemStack item = player.getItemInHand();
+				if(item.getType() == Material.EGG || item.getType() == Material.MONSTER_EGG){
+					item.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
+				}
+			}
 		}
 
 		// Alert (with sanity check)

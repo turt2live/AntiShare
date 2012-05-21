@@ -71,6 +71,12 @@ public class AntiShare extends PluginWrapper {
 		BYPASS;
 	}
 
+	/*
+	 * Changes since 3.4.0:
+	 * 
+	 * - MobCatcher Support
+	 */
+
 	/**
 	 * AntiShare tool material
 	 */
