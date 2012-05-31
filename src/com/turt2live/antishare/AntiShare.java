@@ -77,6 +77,8 @@ public class AntiShare extends PluginWrapper {
 	 * - MobCatcher Support
 	 */
 
+	// TODO: Fix ender pearls
+
 	/**
 	 * AntiShare tool material
 	 */
@@ -209,6 +211,15 @@ public class AntiShare extends PluginWrapper {
 			}
 		}, interval, interval);
 
+		// Scan for players
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+			@Override
+			public void run(){
+				for(Player player : Bukkit.getOnlinePlayers()){
+					inventories.loadPlayer(player);
+				}
+			}
+		});
 	}
 
 	@Override

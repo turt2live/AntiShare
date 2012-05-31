@@ -39,7 +39,7 @@ public class VaultPerms {
 	 */
 	public boolean has(Player player, String node, World world){
 		if(perms == null){
-			return false;
+			return player.hasPermission(node);
 		}
 		if(perms.hasSuperPermsCompat()){
 			return player.hasPermission(node);
@@ -47,7 +47,7 @@ public class VaultPerms {
 		try{
 			return perms.playerHas(world, player.getName(), node);
 		}catch(UnsupportedOperationException e){
-			return player.isOp();
+			return player.hasPermission(node);
 		}
 	}
 

@@ -135,14 +135,18 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void onWorldUnload(WorldUnloadEvent event){
+		if(event.isCancelled())
+			return;
 		World world = event.getWorld();
 		config.remove(world);
 	}
 
 	// ################# Block Break
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		AlertType type = AlertType.ILLEGAL;
@@ -271,8 +275,10 @@ public class ASListener implements Listener {
 
 	// ################# Block Place
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		AlertType type = AlertType.ILLEGAL;
@@ -336,8 +342,10 @@ public class ASListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onInteract(PlayerInteractEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
 		Action action = event.getAction();
@@ -455,8 +463,10 @@ public class ASListener implements Listener {
 
 	// ################# Player Interact Entity
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onInteractEntity(PlayerInteractEntityEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		AlertType type = AlertType.ILLEGAL;
 
@@ -510,8 +520,10 @@ public class ASListener implements Listener {
 
 	// ################# Cart Death Check
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onCartDeath(VehicleDestroyEvent event){
+		if(event.isCancelled())
+			return;
 		Entity attacker = event.getAttacker();
 		Vehicle potentialCart = event.getVehicle();
 
@@ -545,7 +557,7 @@ public class ASListener implements Listener {
 
 	// ################# Egg Check
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onEggThrow(PlayerEggThrowEvent event){
 		Player player = event.getPlayer();
 		AlertType type = AlertType.ILLEGAL;
@@ -582,8 +594,11 @@ public class ASListener implements Listener {
 
 	// ################# Experience Bottle Check
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onExpBottle(ExpBottleEvent event){
+		if(event.getExperience() == 0)
+			return;
+
 		ThrownExpBottle bottle = event.getEntity();
 		LivingEntity shooter = bottle.getShooter();
 		AlertType type = AlertType.ILLEGAL;
@@ -631,8 +646,10 @@ public class ASListener implements Listener {
 
 	// ################# Drop Item
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onDrop(PlayerDropItemEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		Item item = event.getItemDrop();
 		ItemStack itemStack = item.getItemStack();
@@ -682,8 +699,10 @@ public class ASListener implements Listener {
 
 	// ################# Pickup Item
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPickup(PlayerPickupItemEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		Item item = event.getItem();
 		ItemStack itemStack = item.getItemStack();
@@ -733,7 +752,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Death
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onDeath(PlayerDeathEvent event){
 		Player player = event.getEntity();
 		List<ItemStack> drops = event.getDrops();
@@ -791,8 +810,10 @@ public class ASListener implements Listener {
 
 	// ################# Player Command
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onCommand(PlayerCommandPreprocessEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		String command = event.getMessage().toLowerCase();
 		AlertType type = AlertType.ILLEGAL;
@@ -829,8 +850,10 @@ public class ASListener implements Listener {
 
 	// ################# Player Move
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler
 	public void onMove(PlayerMoveEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
 		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
@@ -856,8 +879,10 @@ public class ASListener implements Listener {
 
 	// ################# Player Game Mode Change
 
-	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onGameModeChange(PlayerGameModeChangeEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 		GameMode from = player.getGameMode();
 		GameMode to = event.getNewGameMode();
@@ -978,8 +1003,10 @@ public class ASListener implements Listener {
 
 	// ################# Player Combat
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onCombat(EntityDamageByEntityEvent event){
+		if(event.isCancelled())
+			return;
 		DamageCause cause = event.getCause();
 		Entity attacker = event.getDamager();
 		Entity target = event.getEntity();
@@ -1086,8 +1113,10 @@ public class ASListener implements Listener {
 
 	// ################# Entity Target
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onEntityTarget(EntityTargetEvent event){
+		if(event.isCancelled())
+			return;
 		Entity target = event.getTarget();
 		Player playerTarget = null;
 		AlertType type = AlertType.ILLEGAL;
@@ -1112,8 +1141,10 @@ public class ASListener implements Listener {
 
 	// ################# Piston Move (Extend)
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPistonExtend(BlockPistonExtendEvent event){
+		if(event.isCancelled())
+			return;
 		for(Block block : event.getBlocks()){
 			// Check for block type
 			GameMode type = plugin.getBlockManager().getType(block);
@@ -1134,8 +1165,10 @@ public class ASListener implements Listener {
 
 	// ################# Piston Move (Retract)
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPistonRetract(BlockPistonRetractEvent event){
+		if(event.isCancelled())
+			return;
 		if(!event.isSticky()){ // Only handle moving blocks
 			return;
 		}
@@ -1159,10 +1192,9 @@ public class ASListener implements Listener {
 
 	// ################# Player Join
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler
 	public void onJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
-
 		// Tell the inventory manager to prepare this player
 		plugin.getInventoryManager().loadPlayer(player);
 
@@ -1180,7 +1212,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Quit
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
 
@@ -1190,8 +1222,10 @@ public class ASListener implements Listener {
 
 	// ################# Player Kicked
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler
 	public void onKick(PlayerKickEvent event){
+		if(event.isCancelled())
+			return;
 		Player player = event.getPlayer();
 
 		// Tell the inventory manager to release this player
@@ -1200,7 +1234,7 @@ public class ASListener implements Listener {
 
 	// ################# Player World Change
 
-	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onWorldChange(PlayerChangedWorldEvent event){
 		Player player = event.getPlayer();
 		World to = player.getWorld();

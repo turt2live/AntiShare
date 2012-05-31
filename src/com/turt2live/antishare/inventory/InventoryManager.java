@@ -254,11 +254,6 @@ public class InventoryManager {
 	 * Loads the inventory manager
 	 */
 	public void load(){
-		// Load players
-		for(Player player : Bukkit.getOnlinePlayers()){
-			loadPlayer(player);
-		}
-
 		// Loads regions
 		for(ASRegion region : AntiShare.getInstance().getRegionManager().getAllRegions()){
 			String UID = region.getUniqueID();
