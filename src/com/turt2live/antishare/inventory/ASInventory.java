@@ -153,7 +153,12 @@ public class ASInventory {
 			// Structure: yml:world.gamemode.slot.properties
 			for(String world : file.getKeys(false)){
 				for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
-					ASInventory inventory = new ASInventory(type, name, Bukkit.getWorld(world), GameMode.valueOf(gamemode));
+					World worldV = Bukkit.getWorld(world);
+					if(worldV == null){
+						AntiShare.getInstance().getLogger().severe("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml! AntiShare is ignoring this world.");
+						continue;
+					}
+					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
 					for(String strSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
 						Integer slot = Integer.valueOf(strSlot);
 						inventory.set(slot, file.getItemStack(world + "." + gamemode + "." + strSlot));
