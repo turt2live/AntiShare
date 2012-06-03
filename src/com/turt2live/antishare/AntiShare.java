@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
+import com.turt2live.antishare.client.SimpleNotice;
 import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
@@ -101,6 +102,7 @@ public class AntiShare extends PluginWrapper {
 	private TrackerList trackers;
 	private SignManager signs;
 	private MoneyManager tender;
+	private SimpleNotice sn;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -156,6 +158,8 @@ public class AntiShare extends PluginWrapper {
 		}catch(IOException e1){
 			e1.printStackTrace();
 		}
+		sn = new SimpleNotice();
+		sn.onEnable();
 		messenger = new Messenger();
 		signs = new SignManager();
 		trackers = new TrackerList();
@@ -259,6 +263,7 @@ public class AntiShare extends PluginWrapper {
 		trackers = null;
 		signs = null;
 		tender = null;
+		sn = null;
 	}
 
 	/**
@@ -281,6 +286,7 @@ public class AntiShare extends PluginWrapper {
 		// SQL has no reload
 		// Metrics has no reload
 		// Tracker List has no reload
+		// Simple Notice has no reload
 	}
 
 	/**
@@ -463,6 +469,15 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	/**
+	 * Gets the Simple Notice hook
+	 * 
+	 * @return the Simple Notice hook
+	 */
+	public SimpleNotice getSimpleNoticeHook(){
+		return sn;
+	}
+
+	/**
 	 * Gets the SQL manager for AntiShare
 	 * 
 	 * @return the SQL manager
@@ -536,9 +551,18 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the public release version of AntiShare
 	 */
+	public static String getNewVersion(){
+		return getNewVersionString().replaceFirst("\\.", "");
+	}
+
+	/**
+	 * Gets the public release version of AntiShare
+	 * 
+	 * @return the public release version or AntiShare
+	 */
 	// Borrowed from Vault, thanks Sleaker!
 	// https://github.com/MilkBowl/Vault/blob/master/src/net/milkbowl/vault/Vault.java#L520
-	public static String getNewVersion(){
+	public static String getNewVersionString(){
 		String pluginUrlString = "http://dev.bukkit.org/server-mods/antishare/files.rss";
 		try{
 			URL url = new URL(pluginUrlString);
@@ -551,7 +575,7 @@ public class AntiShare extends PluginWrapper {
 				NodeList firstElementTagName = firstElement.getElementsByTagName("title");
 				Element firstNameElement = (Element) firstElementTagName.item(0);
 				NodeList firstNodes = firstNameElement.getChildNodes();
-				return firstNodes.item(0).getNodeValue().replace("v", "").replaceFirst("\\.", "").trim();
+				return firstNodes.item(0).getNodeValue().replace("v", "").trim();
 			}
 		}catch(Exception localException){} // Do not handle
 		return getVersion();

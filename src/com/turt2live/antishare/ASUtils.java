@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
@@ -43,7 +44,13 @@ public class ASUtils {
 			if(!ChatColor.stripColor(message).startsWith("[AntiShare]")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.WHITE + message;
 			}
-			target.sendMessage(message);
+			if(target instanceof Player){
+				if(!AntiShare.getInstance().getSimpleNoticeHook().sendPluginMessage((Player) target, message)){
+					target.sendMessage(message);
+				}
+			}else{
+				target.sendMessage(message);
+			}
 		}
 	}
 

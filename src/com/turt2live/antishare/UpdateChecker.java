@@ -23,7 +23,7 @@ public class UpdateChecker {
 			public void run(){
 				try{
 					if(AntiShare.isOutdated()){
-						String newVersion = AntiShare.getNewVersion();
+						String newVersion = AntiShare.getNewVersionString();
 						String currentVersion = AntiShare.getVersion();
 						plugin.getLogger().warning("AntiShare " + newVersion + " is out! You are running AntiShare " + currentVersion);
 						plugin.getLogger().warning("Update AntiShare at: http://dev.bukkit.org/server-mods/antishare");
