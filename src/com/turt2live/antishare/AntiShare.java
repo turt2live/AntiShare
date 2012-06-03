@@ -301,10 +301,10 @@ public class AntiShare extends PluginWrapper {
 		if(permissions.has(player, allowPermission, world)){
 			return false;
 		}
-		if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
+		if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE, world) && player.getGameMode() == GameMode.CREATIVE){
 			return true;
 		}
-		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
+		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL, world) && player.getGameMode() == GameMode.SURVIVAL){
 			return true;
 		}
 		return false;
@@ -323,10 +323,10 @@ public class AntiShare extends PluginWrapper {
 		if(permissions.has(player, allowPermission, world)){
 			return false;
 		}
-		if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == (inverse ? GameMode.SURVIVAL : GameMode.CREATIVE)){
+		if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE, world) && player.getGameMode() == (inverse ? GameMode.SURVIVAL : GameMode.CREATIVE)){
 			return true;
 		}
-		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == (!inverse ? GameMode.SURVIVAL : GameMode.CREATIVE)){
+		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL, world) && player.getGameMode() == (!inverse ? GameMode.SURVIVAL : GameMode.CREATIVE)){
 			return true;
 		}
 		return false;
