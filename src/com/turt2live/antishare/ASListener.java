@@ -56,6 +56,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -1283,4 +1284,32 @@ public class ASListener implements Listener {
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
 	}
 
+	// ################# Player Teleport
+
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onPlayerTeleport(PlayerTeleportEvent event){
+		if(event.isCancelled())
+			return;
+		Player player = event.getPlayer();
+		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
+		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
+
+		if(currentRegion == null){
+			// Determine alert for World Split
+			config.get(player.getWorld()).warnSplit(player);
+
+			// Check world split
+			config.get(player.getWorld()).checkSplit(player);
+		}
+
+		// Check regions
+		if(currentRegion != toRegion){
+			if(currentRegion != null){
+				currentRegion.alertExit(player);
+			}
+			if(toRegion != null){
+				toRegion.alertEntry(player);
+			}
+		}
+	}
 }
