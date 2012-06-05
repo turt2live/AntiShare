@@ -76,9 +76,9 @@ public class AntiShare extends PluginWrapper {
 	 * Changes since 3.4.0:
 	 * 
 	 * - MobCatcher Support
+	 * - SimpleNotice Support
+	 * - Handle player teleports
 	 */
-
-	// TODO: Fix ender pearls
 
 	/**
 	 * AntiShare tool material
@@ -195,25 +195,6 @@ public class AntiShare extends PluginWrapper {
 
 		// Enabled
 		log("Enabled!", Level.INFO, LogType.STARTUP);
-
-		// Start periodic save
-		Integer saveInterval = 0;
-		String strSaveInterval = getConfig().getString("settings.auto-save-interval");
-		try{
-			saveInterval = Integer.parseInt(strSaveInterval);
-		}catch(Exception e){
-			saveInterval = 30;
-			messenger.log("Save interval " + strSaveInterval + " is not an integer. Defaulting to " + saveInterval, Level.WARNING, LogType.BYPASS);
-		}
-		int interval = 20 * 60 * saveInterval;
-		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-			@Override
-			public void run(){
-				messenger.log("Reloading AntiShare...", Level.INFO, LogType.BYPASS);
-				reload();
-				messenger.log("Reloaded", Level.INFO, LogType.BYPASS);
-			}
-		}, interval, interval);
 
 		// Scan for players
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
