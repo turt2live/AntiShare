@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.api.ASGameMode;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
 /**
@@ -50,9 +49,6 @@ public class Reward extends Tender {
 				ASUtils.sendToPlayer(player, "Your new balance is " + ChatColor.YELLOW + balance);
 			}
 		}
-
-		// Increment statistic
-		plugin.getTrackers().getTracker(TrackerType.REWARD_GIVEN).increment(1); // Does not have a name!
 	}
 
 }

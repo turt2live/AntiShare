@@ -17,9 +17,6 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.api.ASGameMode;
-import com.turt2live.antishare.metrics.TenderAmountTracker;
-import com.turt2live.antishare.metrics.TenderTracker;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -124,36 +121,6 @@ public class MoneyManager {
 			}
 			if(doReward){
 				rewardsLoaded++;
-			}
-
-			// Configure trackers
-			// Reward tracker
-			if(plugin.getTrackers().getTracker(TrackerType.REWARD, type.getName()) == null){
-				TenderTracker tracker = new TenderTracker(type.getName(), TrackerType.REWARD, a);
-				plugin.getTrackers().add(tracker);
-			}else{
-				((TenderTracker) plugin.getTrackers().getTracker(TrackerType.REWARD, type.getName())).updateTender(a);
-			}
-			// Reward Amount tracker
-			if(plugin.getTrackers().getTracker(TrackerType.REWARD_AMOUNT, type.getName()) == null){
-				TenderAmountTracker tracker = new TenderAmountTracker(type.getName(), TrackerType.REWARD_AMOUNT, a);
-				plugin.getTrackers().add(tracker);
-			}else{
-				((TenderAmountTracker) plugin.getTrackers().getTracker(TrackerType.REWARD_AMOUNT, type.getName())).updateTender(a);
-			}
-			// Fine tracker
-			if(plugin.getTrackers().getTracker(TrackerType.FINE, type.getName()) == null){
-				TenderTracker tracker = new TenderTracker(type.getName(), TrackerType.FINE, f);
-				plugin.getTrackers().add(tracker);
-			}else{
-				((TenderTracker) plugin.getTrackers().getTracker(TrackerType.FINE, type.getName())).updateTender(f);
-			}
-			// Fine Amount tracker
-			if(plugin.getTrackers().getTracker(TrackerType.FINE_AMOUNT, type.getName()) == null){
-				TenderAmountTracker tracker = new TenderAmountTracker(type.getName(), TrackerType.FINE_AMOUNT, f);
-				plugin.getTrackers().add(tracker);
-			}else{
-				((TenderAmountTracker) plugin.getTrackers().getTracker(TrackerType.FINE_AMOUNT, type.getName())).updateTender(f);
 			}
 		}
 

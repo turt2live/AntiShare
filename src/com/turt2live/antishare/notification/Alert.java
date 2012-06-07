@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
 /**
@@ -40,27 +39,25 @@ public class Alert {
 	 * @author turt2live
 	 */
 	public static enum AlertTrigger{
-		BLOCK_BREAK("types.block-break", "BLOCK_BREAK"),
-		BLOCK_PLACE("types.block-place", "BLOCK_PLACE"),
-		PLAYER_DEATH("types.player-death", "DEATH"),
-		ITEM_DROP("types.item-drop", "DROP"),
-		ITEM_PICKUP("types.item-pickup", "PICKUP"),
-		RIGHT_CLICK("types.right-click", "RIGHT_CLICK"),
-		USE_ITEM("types.use-item", "USE"),
-		CREATIVE_BLOCK("types.creative-block-break", "CREATIVE_BLOCK"),
-		SURVIVAL_BLOCK("types.survival-block-break", "SURVIVAL_BLOCK"),
-		HIT_PLAYER("types.hit-player", "HIT_PLAYER"),
-		HIT_MOB("types.hit-mob", "HIT_MOB"),
-		COMMAND("types.command", "COMMAND"),
-		GENERAL("send-general-notifications", null),
-		CLOSE_TO_WORLD_SPLIT(null, null);
+		BLOCK_BREAK("types.block-break"),
+		BLOCK_PLACE("types.block-place"),
+		PLAYER_DEATH("types.player-death"),
+		ITEM_DROP("types.item-drop"),
+		ITEM_PICKUP("types.item-pickup"),
+		RIGHT_CLICK("types.right-click"),
+		USE_ITEM("types.use-item"),
+		CREATIVE_BLOCK("types.creative-block-break"),
+		SURVIVAL_BLOCK("types.survival-block-break"),
+		HIT_PLAYER("types.hit-player"),
+		HIT_MOB("types.hit-mob"),
+		COMMAND("types.command"),
+		GENERAL("send-general-notifications"),
+		CLOSE_TO_WORLD_SPLIT(null);
 
 		private String node;
-		private String tracker;
 
-		private AlertTrigger(String node, String tracker){
+		private AlertTrigger(String node){
 			this.node = node;
-			this.tracker = tracker;
 		}
 
 		/**
@@ -79,19 +76,6 @@ public class Alert {
 			}
 			notifications.load();
 			return notifications.getBoolean(node);
-		}
-
-		/**
-		 * Gets the tracker for this alert
-		 * 
-		 * @param type the alert type
-		 * @return the tracker
-		 */
-		public TrackerType tracker(AlertType type){
-			if(tracker == null){
-				return null;
-			}
-			return TrackerType.valueOf(tracker + "_" + type.name());
 		}
 	}
 
@@ -248,12 +232,6 @@ public class Alert {
 		}
 		if(sendToAdmins && toConsole){
 			ASUtils.sendToPlayer(Bukkit.getConsoleSender(), "[" + type.name() + "] " + message);
-		}
-
-		// Send to tracker
-		if(trigger.tracker(type) != null){
-			TrackerType tt = trigger.tracker(type);
-			AntiShare.getInstance().getTrackers().getTracker(tt).increment(1);
 		}
 
 		// Send fine/reward
