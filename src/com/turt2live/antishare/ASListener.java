@@ -57,6 +57,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -1293,6 +1294,40 @@ public class ASListener implements Listener {
 		Player player = event.getPlayer();
 		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
 		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
+		AlertType type = AlertType.ILLEGAL;
+
+		// Check teleport cause for ender pearl
+		Material pearl = Material.ENDER_PEARL;
+		if(event.getCause() == TeleportCause.ENDER_PEARL){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())
+					|| !plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())){
+				type = AlertType.LEGAL;
+			}
+			if(!config.get(player.getWorld()).isBlocked(pearl, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
+			if(!config.get(player.getWorld()).isBlocked(pearl, ListType.RIGHT_CLICK)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			type = AlertType.LEGAL;
+		}
+
+		// Check type
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(true);
+
+			// Alert (with sanity check)
+			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(pearl.name());
+			String playerMessage = plugin.getMessage("blocked-action.use-item");
+			MessageFactory factory = new MessageFactory(playerMessage);
+			factory.insert(null, player, player.getWorld(), TenderType.USE, ASUtils.capitalize(pearl.name()));
+			playerMessage = factory.toString();
+			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.USE_ITEM);
+
+			// Kill off before region check
+			return;
+		}
 
 		if(currentRegion == null){
 			// Determine alert for World Split

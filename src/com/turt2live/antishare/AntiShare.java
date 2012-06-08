@@ -78,6 +78,7 @@ public class AntiShare extends PluginWrapper {
 	 * - MobCatcher Support
 	 * - SimpleNotice Support
 	 * - Handle player teleports
+	 * - Fixed ender pearls
 	 */
 
 	/**
