@@ -159,7 +159,7 @@ public class ASInventory {
 				for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
 					World worldV = Bukkit.getWorld(world);
 					if(worldV == null){
-						AntiShare.getInstance().getMessenger().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml! AntiShare is ignoring this world.", Level.SEVERE, LogType.ERROR);
+						AntiShare.getInstance().getMessenger().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE, LogType.ERROR);
 						continue;
 					}
 					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
