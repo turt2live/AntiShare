@@ -1,5 +1,9 @@
 package com.turt2live.antishare;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -272,5 +276,17 @@ public class ASUtils {
 		color = color.replace("black", "15");
 
 		return Material.WOOL.getId() + ":" + color;
+	}
+
+	/**
+	 * Gets the current timestamp of the system
+	 * 
+	 * @return the timestamp
+	 */
+	public static String timestamp(){
+		DateFormat dateFormat = new SimpleDateFormat("d-M-y-HH-mm-ss-SS");
+		Date date = new Date();
+		String timestamp = dateFormat.format(date);
+		return timestamp;
 	}
 }

@@ -20,6 +20,7 @@ import org.bukkit.World;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.Selection;
 import com.turt2live.antishare.storage.SQL;
 
@@ -108,7 +109,8 @@ public class RegionManager {
 					}
 				}
 			}catch(SQLException e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 		}else{
 			//Flat-File (YAML) load
@@ -192,7 +194,8 @@ public class RegionManager {
 						// Save
 						plugin.getSQL().insertQuery(statement);
 					}catch(SQLException e){
-						e.printStackTrace();
+						AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+						AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 					}
 				}
 			}

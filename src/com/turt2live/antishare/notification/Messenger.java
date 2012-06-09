@@ -16,6 +16,7 @@ public class Messenger {
 	private boolean silentStartup = false;
 	private boolean silentShutdown = false;
 	private boolean silentBlocks = false;
+	private boolean silentErrors = false;
 	private boolean debug = false;
 
 	/**
@@ -36,11 +37,13 @@ public class Messenger {
 			silentStartup = plugin.getConfig().getBoolean("other.silent-startup");
 			silentShutdown = plugin.getConfig().getBoolean("other.silent-shutdown");
 			silentBlocks = plugin.getConfig().getBoolean("other.silent-blocks");
+			silentErrors = plugin.getConfig().getBoolean("other.silent-errors");
 		}else{
 			silent = false;
 			silentStartup = false;
 			silentShutdown = false;
 			silentBlocks = false;
+			silentErrors = false;
 		}
 	}
 
@@ -82,6 +85,10 @@ public class Messenger {
 				AntiShare.getInstance().getLogger().log(level, message);
 			}
 			break;
+		case ERROR:
+			if(!silentErrors){
+				AntiShare.getInstance().getLogger().log(level, message);
+			}
 		case BYPASS:
 			AntiShare.getInstance().getLogger().log(level, message);
 			break;

@@ -68,4 +68,5 @@ other:
   silent-startup: false
   silent-shutdown: false
   silent-blocks: true
+  silent-errors: false
   silent-overall: false

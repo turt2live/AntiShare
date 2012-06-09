@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
+import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.convert.Convert320bInternal;
 import com.turt2live.antishare.convert.Convert320bInternal.ConvertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -122,7 +124,8 @@ public class CommandHandler implements CommandExecutor {
 							out.close();
 							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath());
 						}catch(Exception e){
-							e.printStackTrace();
+							AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+							AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 						}
 					}
 					return true;

@@ -1,8 +1,12 @@
 package com.turt2live.antishare.client;
 
+import java.util.logging.Level;
+
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.ErrorLog;
 
 public class SimpleNotice {
 
@@ -21,7 +25,8 @@ public class SimpleNotice {
 			player.sendPluginMessage(AntiShare.getInstance(), "SimpleNotice", message.getBytes("UTF-8"));
 			return true;
 		}catch(Exception e){
-			e.printStackTrace();
+			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			return false;
 		}
 	}

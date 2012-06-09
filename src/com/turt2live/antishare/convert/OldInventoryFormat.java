@@ -3,6 +3,7 @@ package com.turt2live.antishare.convert;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -10,6 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.ErrorLog;
 
 /**
  * Inventory format for prior to 3.2.X.<br>
@@ -120,7 +123,8 @@ public class OldInventoryFormat {
 			try{
 				saveFile.createNewFile();
 			}catch(IOException e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 		}
 		this.saveFile = saveFile;
@@ -152,7 +156,8 @@ public class OldInventoryFormat {
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 		}
 		return inventoryMap;
 	}

@@ -15,6 +15,7 @@ import org.bukkit.block.Block;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.ErrorLog;
 
 /**
  * Block Manager - Handles creative/survival blocks
@@ -258,7 +259,8 @@ public class BlockManager {
 					try{
 						Thread.sleep(delay);
 					}catch(InterruptedException e){
-						e.printStackTrace();
+						AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+						AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 					}
 				}
 

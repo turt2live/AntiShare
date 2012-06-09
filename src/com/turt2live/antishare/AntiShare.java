@@ -67,6 +67,10 @@ public class AntiShare extends PluginWrapper {
 		 */
 		BLOCK,
 		/**
+		 * Error messages
+		 */
+		ERROR,
+		/**
 		 * Bypasses all "silent" checks
 		 */
 		BYPASS;
@@ -79,6 +83,7 @@ public class AntiShare extends PluginWrapper {
 	 * - SimpleNotice Support
 	 * - Handle player teleports
 	 * - Fixed ender pearls
+	 * - Updated error logging
 	 */
 
 	/**
@@ -157,7 +162,8 @@ public class AntiShare extends PluginWrapper {
 		try{
 			metrics = new Metrics(this);
 		}catch(IOException e1){
-			e1.printStackTrace();
+			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e1) + " for the full error.", Level.SEVERE, LogType.ERROR);
 		}
 		sn = new SimpleNotice();
 		sn.onEnable();

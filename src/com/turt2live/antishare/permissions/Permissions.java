@@ -125,7 +125,7 @@ public class Permissions implements Listener {
 	public void onPluginDisable(PluginDisableEvent event){
 		if(event.getPlugin().getName().equalsIgnoreCase("Vault")){
 			handleVault(false);
-			AntiShare.getInstance().getMessenger().info("Vault disabled! AntiShare will use OP/Non-OP for permissions");
+			AntiShare.getInstance().getMessenger().info("Vault disabled! AntiShare will use SuperPerms for permissions");
 		}
 	}
 }

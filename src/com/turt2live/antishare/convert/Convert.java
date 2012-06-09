@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -19,6 +20,8 @@ import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.storage.SQL;
@@ -72,7 +75,8 @@ public class Convert {
 				out.close();
 				in.close();
 			}catch(Exception e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 
 			// Event lists
@@ -241,7 +245,8 @@ public class Convert {
 					plugin.getSQL().deleteQuery(plugin.getSQL().getConnection().prepareStatement("DROP TABLE AntiShare_Regions"));
 				}
 			}catch(SQLException e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 		}
 
@@ -269,7 +274,8 @@ public class Convert {
 					plugin.getSQL().deleteQuery(plugin.getSQL().getConnection().prepareStatement("DROP TABLE AntiShare_Inventories"));
 				}
 			}catch(SQLException e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 		}
 		if(plugin.getSQL().tableExists("AntiShare_MiscInventory")){
@@ -295,7 +301,8 @@ public class Convert {
 					plugin.getSQL().deleteQuery(plugin.getSQL().getConnection().prepareStatement("DROP TABLE AntiShare_MiscInventories"));
 				}
 			}catch(SQLException e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 		}
 
@@ -304,7 +311,8 @@ public class Convert {
 			try{
 				plugin.getSQL().deleteQuery(plugin.getSQL().getConnection().prepareStatement("DROP TABLE AntiShare_RegionInfo"));
 			}catch(SQLException e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 		}
 	}

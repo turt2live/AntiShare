@@ -2,6 +2,7 @@ package com.turt2live.antishare.regions;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -14,6 +15,8 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -480,14 +483,16 @@ public class ASRegion {
 			try{
 				saveFile.createNewFile();
 			}catch(Exception e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 		}else{
 			saveFile.delete();
 			try{
 				saveFile.createNewFile();
 			}catch(Exception e){
-				e.printStackTrace();
+				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 			}
 		}
 

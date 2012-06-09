@@ -34,7 +34,8 @@ public class UsageStatistics {
 			pluginVersion = URLEncoder.encode(plugin.getDescription().getVersion(), "UTF-8");
 			bukkitVersion = URLEncoder.encode(Bukkit.getVersion(), "UTF-8");
 		}catch(UnsupportedEncodingException e1){
-			e1.printStackTrace();
+			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e1) + " for the full error.", Level.SEVERE, LogType.ERROR);
 		}
 		try{
 			URL statsURL = new URL("http://mc.turt2live.com/plugins/plugin_stats.php?plugin=AntiShare&version=" + pluginVersion + "&cbVersion=" + bukkitVersion);

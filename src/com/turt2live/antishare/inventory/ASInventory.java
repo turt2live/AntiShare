@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -22,6 +23,8 @@ import org.bukkit.material.MaterialData;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.storage.SQL;
 
 /**
@@ -132,7 +135,8 @@ public class ASInventory {
 						// Save item to map
 						inventories.add(inventory);
 					}catch(SQLException e){
-						e.printStackTrace();
+						AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+						AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 					}
 				}
 			}
@@ -155,7 +159,7 @@ public class ASInventory {
 				for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
 					World worldV = Bukkit.getWorld(world);
 					if(worldV == null){
-						AntiShare.getInstance().getLogger().severe("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml! AntiShare is ignoring this world.");
+						AntiShare.getInstance().getMessenger().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml! AntiShare is ignoring this world.", Level.SEVERE, LogType.ERROR);
 						continue;
 					}
 					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
@@ -270,7 +274,8 @@ public class ASInventory {
 					// Save
 					plugin.getSQL().insertQuery(statement);
 				}catch(SQLException e){
-					e.printStackTrace();
+					AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+					AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
 				}
 			}
 		}else{
