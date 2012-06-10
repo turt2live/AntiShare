@@ -76,16 +76,6 @@ public class AntiShare extends PluginWrapper {
 		BYPASS;
 	}
 
-	/*
-	 * Changes since 3.4.0:
-	 * 
-	 * - MobCatcher Support
-	 * - SimpleNotice Support
-	 * - Handle player teleports
-	 * - Fixed ender pearls
-	 * - Updated error logging
-	 */
-
 	/**
 	 * AntiShare tool material
 	 */
