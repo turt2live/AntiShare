@@ -21,6 +21,8 @@ public class Permissions implements Listener {
 
 	private boolean useVault = false;
 	private VaultPerms vault;
+	private boolean usePEX = false;
+	private PEX pex;
 
 	/**
 	 * Creates a new permissions handler
@@ -28,8 +30,14 @@ public class Permissions implements Listener {
 	public Permissions(){
 		AntiShare plugin = AntiShare.getInstance();
 		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
+		Plugin pex = plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
 		if(vault != null){
-			handleVault(true);
+			handleVault(vault.isEnabled());
+			handlePEX(!vault.isEnabled() && pex != null);
+		}
+		if(pex != null){
+			handlePEX(pex.isEnabled());
+			handleVault(!pex.isEnabled() && vault != null);
 		}
 	}
 
@@ -53,7 +61,10 @@ public class Permissions implements Listener {
 	 * @return true if the permission is assigned to the player
 	 */
 	public boolean has(Player player, String permission, World world){
-		checkVault();
+		checkPlugins();
+		if(usePEX){
+			return pex.has(player, permission, world);
+		}
 		if(useVault){
 			return vault.has(player, permission, world);
 		}
@@ -68,7 +79,6 @@ public class Permissions implements Listener {
 	 * @return true if they have it
 	 */
 	public boolean has(CommandSender sender, String permission){
-		checkVault();
 		if(sender instanceof Player){
 			return has((Player) sender, permission);
 		}else if(sender instanceof ConsoleCommandSender){
@@ -86,7 +96,6 @@ public class Permissions implements Listener {
 	 * @return true if they have it
 	 */
 	public boolean has(CommandSender sender, String permission, World world){
-		checkVault();
 		if(sender instanceof Player){
 			return has((Player) sender, permission, world);
 		}else if(sender instanceof ConsoleCommandSender){
@@ -95,11 +104,21 @@ public class Permissions implements Listener {
 		return false;
 	}
 
-	private void checkVault(){
-		if(useVault){
-			if(!vault.isEnabled()){
-				handleVault(false);
-			}
+	private void checkPlugins(){
+		AntiShare plugin = AntiShare.getInstance();
+		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
+		Plugin pex = plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
+		if(vault != null){
+			handleVault(vault.isEnabled());
+			handlePEX(!vault.isEnabled() && pex != null);
+		}
+		if(pex != null){
+			handlePEX(pex.isEnabled());
+			handleVault(!pex.isEnabled() && vault != null);
+		}
+		if(pex == null && vault == null){
+			handlePEX(false);
+			handleVault(false);
 		}
 	}
 
@@ -113,19 +132,23 @@ public class Permissions implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onPluginEnable(PluginEnableEvent event){
-		if(event.getPlugin().getName().equalsIgnoreCase("Vault")){
-			handleVault(true);
-			AntiShare.getInstance().getMessenger().info("Vault enabled! AntiShare will use Vault for permissions");
+	private void handlePEX(boolean use){
+		if(use){
+			pex = new PEX();
+			usePEX = true;
+		}else{
+			pex = null;
+			usePEX = false;
 		}
 	}
 
 	@EventHandler
+	public void onPluginEnable(PluginEnableEvent event){
+		checkPlugins();
+	}
+
+	@EventHandler
 	public void onPluginDisable(PluginDisableEvent event){
-		if(event.getPlugin().getName().equalsIgnoreCase("Vault")){
-			handleVault(false);
-			AntiShare.getInstance().getMessenger().info("Vault disabled! AntiShare will use SuperPerms for permissions");
-		}
+		checkPlugins();
 	}
 }

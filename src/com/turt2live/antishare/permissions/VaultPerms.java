@@ -51,16 +51,4 @@ public class VaultPerms {
 		}
 	}
 
-	/**
-	 * Checks if the permission handler is enabled
-	 * 
-	 * @return true if enabled
-	 */
-	public boolean isEnabled(){
-		if(perms == null){
-			return false;
-		}
-		return perms.isEnabled();
-	}
-
 }
