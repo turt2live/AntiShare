@@ -76,6 +76,14 @@ public class AntiShare extends PluginWrapper {
 		BYPASS;
 	}
 
+	/*
+	 * TODO:
+	 * 	- [In Progress] Fix http://pastebin.com/raw.php?i=VUL1Z8Ls
+	 * 
+	 * Changes since 3.5.1:
+	 * 	- None yet!
+	 */
+
 	/**
 	 * AntiShare tool material
 	 */
