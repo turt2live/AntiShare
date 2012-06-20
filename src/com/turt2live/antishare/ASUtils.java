@@ -48,8 +48,14 @@ public class ASUtils {
 			if(!ChatColor.stripColor(message).startsWith("[AntiShare]")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.WHITE + message;
 			}
+			/* SimpleNotice support provided by feildmaster.
+			 * Support adapted by krinsdeath and further
+			 * modified by turt2live for AntiShare.
+			 */
 			if(target instanceof Player){
-				if(!AntiShare.getInstance().getSimpleNoticeHook().sendPluginMessage((Player) target, message)){
+				if(((Player) target).getListeningPluginChannels().contains("SimpleNotice")){
+					((Player) target).sendPluginMessage(AntiShare.getInstance(), "SimpleNotice", message.getBytes());
+				}else{
 					target.sendMessage(message);
 				}
 			}else{

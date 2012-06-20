@@ -17,7 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
-import com.turt2live.antishare.client.SimpleNotice;
 import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
@@ -107,7 +106,6 @@ public class AntiShare extends PluginWrapper {
 	private TrackerList trackers;
 	private SignManager signs;
 	private MoneyManager tender;
-	private SimpleNotice sn;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -164,8 +162,10 @@ public class AntiShare extends PluginWrapper {
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
 			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e1) + " for the full error.", Level.SEVERE, LogType.ERROR);
 		}
-		sn = new SimpleNotice();
-		sn.onEnable();
+
+		// Register SimpleNotice channel to AntiShare
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
+
 		messenger = new Messenger();
 		signs = new SignManager();
 		trackers = new TrackerList();
@@ -250,7 +250,6 @@ public class AntiShare extends PluginWrapper {
 		trackers = null;
 		signs = null;
 		tender = null;
-		sn = null;
 	}
 
 	/**
@@ -453,15 +452,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public MoneyManager getMoneyManager(){
 		return tender;
-	}
-
-	/**
-	 * Gets the Simple Notice hook
-	 * 
-	 * @return the Simple Notice hook
-	 */
-	public SimpleNotice getSimpleNoticeHook(){
-		return sn;
 	}
 
 	/**
