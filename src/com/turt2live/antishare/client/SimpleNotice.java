@@ -22,7 +22,7 @@ public class SimpleNotice {
 			return false;
 		}
 		try{
-			player.sendPluginMessage(AntiShare.getInstance(), "SimpleNotice", message.getBytes("UTF-8"));
+			player.sendPluginMessage(AntiShare.getInstance(), "SimpleNotice", message.getBytes());
 			return true;
 		}catch(Exception e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
