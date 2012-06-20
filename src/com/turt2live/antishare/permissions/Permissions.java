@@ -28,17 +28,7 @@ public class Permissions implements Listener {
 	 * Creates a new permissions handler
 	 */
 	public Permissions(){
-		AntiShare plugin = AntiShare.getInstance();
-		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
-		Plugin pex = plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
-		if(vault != null){
-			handleVault(vault.isEnabled());
-			handlePEX(!vault.isEnabled() && pex != null);
-		}
-		if(pex != null){
-			handlePEX(pex.isEnabled());
-			handleVault(!pex.isEnabled() && vault != null);
-		}
+		checkPlugins();
 	}
 
 	/**

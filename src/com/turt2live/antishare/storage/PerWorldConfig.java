@@ -296,6 +296,15 @@ public class PerWorldConfig {
 	}
 
 	/**
+	 * Checks if a world split is present on this world
+	 * 
+	 * @return true if active
+	 */
+	public boolean isSplitActive(){
+		return splitActive;
+	}
+
+	/**
 	 * Gets the side of the split this player is on, or null if not affected
 	 * 
 	 * @param player the player
