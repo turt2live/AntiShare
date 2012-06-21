@@ -79,6 +79,7 @@ public class AntiShare extends PluginWrapper {
 	 * TODO:
 	 * 	- [In Progress] Fix http://pastebin.com/raw.php?i=VUL1Z8Ls
 	 * - Walk into region, logout of server, login, leave region bug
+	 * - Region inventories "off" option
 	 * 
 	 * Changes since 3.5.1:
 	 * 	- None yet!
