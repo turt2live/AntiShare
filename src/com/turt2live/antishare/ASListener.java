@@ -63,6 +63,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
@@ -1209,6 +1210,10 @@ public class ASListener implements Listener {
 		// Check region
 		ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
 		if(region != null){
+			// Add join key
+			player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
+
+			// Alert entry
 			region.alertSilentEntry(player); // Sets inventory and Game Mode
 			// This must be done because when the inventory manager releases
 			// a player it resets the inventory to "non-temp"
@@ -1224,6 +1229,12 @@ public class ASListener implements Listener {
 	public void onQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
 
+		// Remove from regions
+		ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
+		if(region != null){
+			region.alertExit(player);
+		}
+
 		// Tell the inventory manager to release this player
 		plugin.getInventoryManager().releasePlayer(player);
 	}
@@ -1235,6 +1246,12 @@ public class ASListener implements Listener {
 		if(event.isCancelled())
 			return;
 		Player player = event.getPlayer();
+
+		// Remove from regions
+		ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
+		if(region != null){
+			region.alertExit(player);
+		}
 
 		// Tell the inventory manager to release this player
 		plugin.getInventoryManager().releasePlayer(player);

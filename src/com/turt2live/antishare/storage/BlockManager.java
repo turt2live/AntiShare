@@ -150,7 +150,7 @@ public class BlockManager {
 		for(String key : blocks.getKeys(false)){
 			String[] keyParts = key.split(";");
 			Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
-			if(location == null || location.getWorld() == null){
+			if(Bukkit.getWorld(keyParts[3]) == null || location == null || location.getWorld() == null){
 				continue;
 			}
 			Block block = location.getBlock();
