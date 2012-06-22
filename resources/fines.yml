@@ -14,7 +14,11 @@
 # 'show-status-on-login' - If true, and the player has chosen to silence
 # the fine/reward messages, they will be told about this upon logging in.
 # 
-# 'give-to' - Valid options: creative, survival, both, none
+# 'give-to' - Valid options: creative, survival, both (meaning survival and creative), all, none
+# 
+# 'send-collections-to' - Any money gatherered from fines goes to an account with this name
+# 'get-collections-from' - Any money needed for rewards comes from here
+# Both of the above can be set to "nowhere" if this feature is to be disabled
 # 
 # Permissions:
 # AntiShare.money.nofine = Never fine the player
@@ -26,6 +30,8 @@ show-status-on-login: true
 keep-tab: true
 fines-enabled: false
 rewards-enabled: false
+send-collections-to: nowhere
+get-collections-from: nowhere
 actions:
   block-break:
     fine: 0.0

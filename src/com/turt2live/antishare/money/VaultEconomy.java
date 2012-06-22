@@ -4,7 +4,6 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.turt2live.antishare.AntiShare;
@@ -36,11 +35,11 @@ public class VaultEconomy {
 	 * @param amount the amount
 	 * @return the result
 	 */
-	public TransactionResult add(Player player, double amount){
+	public TransactionResult add(String player, double amount){
 		if(amount < 0){
 			return subtract(player, Math.abs(amount));
 		}
-		EconomyResponse resp = economy.depositPlayer(player.getName(), amount);
+		EconomyResponse resp = economy.depositPlayer(player, amount);
 		if(resp.type == ResponseType.FAILURE){
 			return new TransactionResult(resp.errorMessage, false);
 		}
@@ -54,8 +53,8 @@ public class VaultEconomy {
 	 * @param amount the amount
 	 * @return the result
 	 */
-	public TransactionResult subtract(Player player, double amount){
-		EconomyResponse resp = economy.withdrawPlayer(player.getName(), amount);
+	public TransactionResult subtract(String player, double amount){
+		EconomyResponse resp = economy.withdrawPlayer(player, amount);
 		if(resp.type == ResponseType.FAILURE){
 			return new TransactionResult(resp.errorMessage, false);
 		}
@@ -68,7 +67,7 @@ public class VaultEconomy {
 	 * @param player the player
 	 * @return true if the current balance is negative
 	 */
-	public boolean isNegative(Player player){
+	public boolean isNegative(String player){
 		return getBalance(player) < 0;
 	}
 
@@ -78,7 +77,7 @@ public class VaultEconomy {
 	 * @param player the player
 	 * @return true if the tab feature will be required by the player
 	 */
-	public boolean requiresTab(Player player){
+	public boolean requiresTab(String player){
 		return getBalance(player) <= 0;
 	}
 
@@ -88,8 +87,8 @@ public class VaultEconomy {
 	 * @param player the player
 	 * @return the balance
 	 */
-	public double getBalance(Player player){
-		return economy.getBalance(player.getName());
+	public double getBalance(String player){
+		return economy.getBalance(player);
 	}
 
 	/**

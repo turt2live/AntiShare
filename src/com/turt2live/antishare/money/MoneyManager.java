@@ -35,6 +35,7 @@ public class MoneyManager {
 	private boolean doRewards = false, doFines = false, tab = false, showStatusOnLogin = false;
 	private VaultEconomy econ;
 	private List<String> silentTo = new ArrayList<String>();
+	private String finesTo = "nowhere", rewardsFrom = "nowhere";
 
 	/**
 	 * Creates a new Money Manager
@@ -74,6 +75,8 @@ public class MoneyManager {
 		doFines = money.getBoolean("fines-enabled");
 		tab = money.getBoolean("keep-tab");
 		showStatusOnLogin = money.getBoolean("show-status-on-login");
+		finesTo = money.getString("send-collections-to");
+		rewardsFrom = money.getString("get-collections-from");
 
 		// Prepare
 		rewards.clear();
@@ -189,10 +192,12 @@ public class MoneyManager {
 	 */
 	public TransactionResult addToAccount(Player player, double amount){
 		if(econ == null){
-			System.out.println("NO VAULT");
 			return TransactionResult.NO_VAULT;
 		}
-		return econ.add(player, amount);
+		if(!rewardsFrom.equalsIgnoreCase("nowhere")){
+			econ.subtract(rewardsFrom, amount);
+		}
+		return econ.add(player.getName(), amount);
 	}
 
 	/**
@@ -206,10 +211,13 @@ public class MoneyManager {
 		if(econ == null){
 			return TransactionResult.NO_VAULT;
 		}
-		if(econ.requiresTab(player) && !tab){
+		if(econ.requiresTab(player.getName()) && !tab){
 			return TransactionResult.NO_TAB;
 		}
-		return econ.subtract(player, amount);
+		if(!finesTo.equalsIgnoreCase("nowhere")){
+			econ.add(finesTo, amount);
+		}
+		return econ.subtract(player.getName(), amount);
 	}
 
 	/**
@@ -222,7 +230,7 @@ public class MoneyManager {
 		if(econ == null){
 			return 0.0;
 		}
-		return econ.getBalance(player);
+		return econ.getBalance(player.getName());
 	}
 
 	/**

@@ -50,7 +50,7 @@ public class Fine extends Tender {
 
 		// Apply to account
 		double amount = getAmount();
-		if(plugin.getMoneyManager().getRawEconomyHook().requiresTab(player)){
+		if(plugin.getMoneyManager().getRawEconomyHook().requiresTab(player.getName())){
 			amount = overcharge;
 		}
 		TransactionResult result = plugin.getMoneyManager().subtractFromAccount(player, amount);
