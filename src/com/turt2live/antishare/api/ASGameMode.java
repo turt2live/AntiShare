@@ -13,7 +13,7 @@ public enum ASGameMode{
 	SURVIVAL(0),
 	// TODO: 1.3
 	//	ADVENTURE(2),
-	//  ALL(-3),
+	ALL(-3),
 	BOTH(-1),
 	NONE(-2);
 
@@ -36,10 +36,10 @@ public enum ASGameMode{
 			return true;
 		}else if(numeric == 0 && gamemode == GameMode.SURVIVAL){
 			return true;
+		}else if(numeric == -3){
+			return true;
 		}
 		// TODO: 1.3
-		//		}else if(numeric == -3){
-		//			return true;
 		//		}else if(numeric == 2 && gamemode == GameMode.ADVENTURE){
 		//			return true;
 		//		}
