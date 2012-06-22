@@ -75,14 +75,11 @@ public class AntiShare extends PluginWrapper {
 		BYPASS;
 	}
 
-	/*
-	 * TODO:
-	 * - Region inventories "off" option
-	 * 
-	 * Changes since 3.5.1:
+	/* Changes since 3.5.1:
 	 * 	- Fix block manager null blocks
 	 *  - Fix NPEs on disable
 	 *  - Fixed game mode exploit using regions
+	 *  - Region inventories now default to "none"
 	 */
 
 	/**

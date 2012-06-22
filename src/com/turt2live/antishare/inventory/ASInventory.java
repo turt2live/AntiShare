@@ -194,6 +194,16 @@ public class ASInventory {
 		this.gamemode = gamemode;
 	}
 
+	public boolean isEmpty(){
+		for(Integer slot : inventory.keySet()){
+			ItemStack stack = inventory.get(slot);
+			if(stack != null && stack.getType() != Material.AIR){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * Sets a slot to an item
 	 * 
