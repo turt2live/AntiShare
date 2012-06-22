@@ -34,6 +34,10 @@ public class BlockManager {
 		public Material expectedType;
 	}
 
+	/* In 1.3 "Adventure" mode cannot place or break blocks, so the 
+	 * manager is not needed for Adventure mode players. 
+	 */
+
 	private AntiShare plugin;
 	private List<Block> creative_blocks = new ArrayList<Block>();
 	private List<Block> survival_blocks = new ArrayList<Block>();

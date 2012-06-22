@@ -11,6 +11,9 @@ public enum ASGameMode{
 
 	CREATIVE(1),
 	SURVIVAL(0),
+	// TODO: 1.3
+	//	ADVENTURE(2),
+	//  ALL(-3),
 	BOTH(-1),
 	NONE(-2);
 
@@ -27,13 +30,19 @@ public enum ASGameMode{
 	 * @return true if matches
 	 */
 	public boolean matches(GameMode gamemode){
-		if(numeric == -1){
+		if(numeric == -1 && (gamemode == GameMode.CREATIVE || gamemode == GameMode.SURVIVAL)){
 			return true;
 		}else if(numeric == 1 && gamemode == GameMode.CREATIVE){
 			return true;
 		}else if(numeric == 0 && gamemode == GameMode.SURVIVAL){
 			return true;
 		}
+		// TODO: 1.3
+		//		}else if(numeric == -3){
+		//			return true;
+		//		}else if(numeric == 2 && gamemode == GameMode.ADVENTURE){
+		//			return true;
+		//		}
 		return false; // Covers 'NONE'
 	}
 
@@ -49,6 +58,11 @@ public enum ASGameMode{
 			return ASGameMode.CREATIVE;
 		}else if(string.equalsIgnoreCase("survival")){
 			return ASGameMode.SURVIVAL;
+			// TODO: 1.3
+			//		}else if(string.equalsIgnoreCase("adventure")){
+			//			return ASGameMode.ADVENTURE;
+			//		}else if(string.equalsIgnoreCase("all")){
+			//			return ASGameMode.ALL;
 		}else if(string.equalsIgnoreCase("both")){
 			return ASGameMode.BOTH;
 		}else if(string.equalsIgnoreCase("none")){

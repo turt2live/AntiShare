@@ -92,6 +92,9 @@ public class ASUtils {
 			return GameMode.CREATIVE;
 		}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")){
 			return GameMode.SURVIVAL;
+			// TODO: 1.3
+			//		}else if(value.equalsIgnoreCase("adventure") || value.equalsIgnoreCase("a") || value.equalsIgnoreCase("2")){
+			//			return GameMode.ADVENTURE;
 		}
 		return null;
 	}
@@ -124,6 +127,9 @@ public class ASUtils {
 		case FENCE_GATE:
 		case ENCHANTMENT_TABLE:
 		case BREWING_STAND:
+			/* TODO: 1.3
+			 * Add interactable blocks
+			 */
 		case CAULDRON:
 			return true;
 		}

@@ -26,6 +26,8 @@ public class InventoryManager {
 
 	private ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
+	// TODO: 1.3
+	//	private ConcurrentHashMap<String, ASInventory> adventure = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> region = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
 
@@ -57,6 +59,10 @@ public class InventoryManager {
 				case SURVIVAL:
 					survival.put(player.getName() + "." + world.getName(), inventory);
 					break;
+				//TODO: 1.3
+				//				case ADVENTURE:
+				//					adventure.put(player.getName()+"."+world.getName(), inventory);
+				//					break;
 				}
 			}
 		}
@@ -99,6 +105,11 @@ public class InventoryManager {
 			saveSurvivalInventory(player, player.getWorld());
 			premerge = getSurvivalInventory(player, player.getWorld());
 			break;
+		// TODO: 1.3
+		//		case ADVENTURE:
+		//			saveAdventureInventory(player, player.getWorld());
+		//			premerge = getAdventureInventory(player, player.getWorld());
+		//			break;
 		}
 
 		// Merge all inventories if needed
@@ -107,6 +118,8 @@ public class InventoryManager {
 			for(World world : Bukkit.getWorlds()){
 				creative.put(player.getName() + "." + world.getName(), merge);
 				survival.put(player.getName() + "." + world.getName(), merge);
+				// TODO: 1.3
+				//adventure.put(player.getName()+"."+world.getName(), merge);
 			}
 		}
 
@@ -118,8 +131,14 @@ public class InventoryManager {
 			if(survival.get(player.getName() + "." + world.getName()) != null){
 				survival.get(player.getName() + "." + world.getName()).save();
 			}
+			// TODO: 1.3
+			//			if(adventure.get(player.getName()+"."+world.getName())!=null){
+			//				adventure.get(player.getName()+"."+world.getName()).save();
+			//			}
 			creative.remove(player.getName() + "." + world.getName());
 			survival.remove(player.getName() + "." + world.getName());
+			// TODO: 1.3
+			//adventure.remove(player.getName()+"."+world.getName());
 		}
 	}
 
@@ -139,6 +158,10 @@ public class InventoryManager {
 		case SURVIVAL:
 			saveSurvivalInventory(player, player.getWorld());
 			break;
+		// TODO: 1.3
+		//		case ADVENTURE:
+		//			saveAdventureInventory(player, player.getWorld());
+		//			break;
 		}
 
 		// Set to temp
@@ -205,6 +228,16 @@ public class InventoryManager {
 		survival.put(player.getName() + "." + world.getName(), ASInventory.generate(player, InventoryType.PLAYER));
 	}
 
+	// TODO: 1.3
+	//	/**
+	//	 * Saves a player's adventure inventory
+	//	 * @param player the player
+	//	 * @param world the world
+	//	 */
+	//	public void saveAdventureInventory(Player player, World world){
+	//		adventure.put(player.getName() + "." + world.getName(), ASInventory.generate(player, InventoryType.PLAYER));
+	//	}
+
 	/**
 	 * Gets a player's creative inventory
 	 * 
@@ -236,6 +269,23 @@ public class InventoryManager {
 		}
 		return inventory;
 	}
+
+	// TODO: 1.3
+	//	/**
+	//	 * Gets a player's adventure inventory
+	//	 * 
+	//	 * @param player the player
+	//	 * @return the inventory
+	//	 * @param world the world
+	//	 */
+	//	public ASInventory getAdventureInventory(Player player, World world){
+	//		ASInventory inventory = adventure.get(player.getName() + "." + world.getName());
+	//		if(inventory == null){
+	//			inventory = new ASInventory(InventoryType.PLAYER, player.getName(), world, player.getGameMode());
+	//			adventure.put(player.getName() + "." + world.getName(), inventory);
+	//		}
+	//		return inventory;
+	//	}
 
 	/**
 	 * Gets a region's inventory
@@ -288,6 +338,10 @@ public class InventoryManager {
 		for(String key : survival.keySet()){
 			survival.get(key).save();
 		}
+		// TODO: 1.3
+		//		for(String key : adventure.keySet()){
+		//			adventure.get(key).save();
+		//		}
 		for(String key : region.keySet()){
 			region.get(key).save();
 		}
@@ -300,6 +354,8 @@ public class InventoryManager {
 		save();
 		creative.clear();
 		survival.clear();
+		// TODO: 1.3
+		//		adventure.clear();
 		playerTemp.clear();
 		region.clear();
 		load();
