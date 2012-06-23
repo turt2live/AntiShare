@@ -1,5 +1,4 @@
-AntiShare
-=========
+[![xMail](http://www.local.t2ldev.com/AntiShare-BukkitDev-Logo.png)](http://dev.bukkit.org/server-mods/antishare)
 
 What is it?
 -----------
