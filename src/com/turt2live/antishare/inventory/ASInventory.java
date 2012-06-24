@@ -74,6 +74,12 @@ public class ASInventory {
 			inventory.set(slot, item);
 			slot++;
 		}
+		contents = player.getInventory().getArmorContents();
+		slot = 100;
+		for(ItemStack item : contents){
+			inventory.set(slot, item);
+			slot++;
+		}
 		return inventory;
 	}
 
@@ -226,15 +232,34 @@ public class ASInventory {
 	public void setTo(Player player){
 		PlayerInventory pInventory = player.getInventory();
 		pInventory.clear();
+		ItemStack air = new ItemStack(Material.AIR);
+		ItemStack[] armor = {air, air, air, air};
+		pInventory.setArmorContents(armor);
 		for(Integer slot : inventory.keySet()){
 			ItemStack item = inventory.get(slot);
 			if(item == null){
 				inventory.put(slot, new ItemStack(Material.AIR, 1));
 				item = new ItemStack(Material.AIR, 1);
 			}
-			pInventory.setItem(slot, item);
+			if(slot < 100){
+				pInventory.setItem(slot, item);
+			}else{
+				switch (slot){
+				case 100:
+					pInventory.setBoots(item);
+					break;
+				case 101:
+					pInventory.setLeggings(item);
+					break;
+				case 102:
+					pInventory.setChestplate(item);
+					break;
+				case 103:
+					pInventory.setHelmet(item);
+					break;
+				}
+			}
 		}
-		player.getInventory().setContents(pInventory.getContents());
 		player.updateInventory();
 	}
 
