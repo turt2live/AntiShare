@@ -11,6 +11,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,6 +36,7 @@ import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.storage.ItemMap;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.SQL;
+import com.turt2live.antishare.xmail.XMailListener;
 
 /**
  * AntiShare
@@ -97,6 +99,7 @@ public class AntiShare extends PluginWrapper {
 	private TrackerList trackers;
 	private SignManager signs;
 	private MoneyManager tender;
+	private XMailListener xmail;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -171,6 +174,15 @@ public class AntiShare extends PluginWrapper {
 		blocks = new BlockManager();
 		inventories = new InventoryManager();
 
+		// xMail integration
+		if(getConfig().getBoolean("xMail.hook-into-xMail")){
+			Plugin xmail = getServer().getPluginManager().getPlugin("xMail");
+			if(xmail != null){
+				this.xmail = new XMailListener();
+				getServer().getPluginManager().registerEvents(this.xmail, this);
+			}
+		}
+
 		// Statistics
 		UpdateChecker.start();
 		UsageStatistics.send(); // Handles config internally, also handles Metrics
@@ -240,6 +252,7 @@ public class AntiShare extends PluginWrapper {
 		trackers = null;
 		signs = null;
 		tender = null;
+		xmail = null;
 	}
 
 	/**
@@ -263,6 +276,7 @@ public class AntiShare extends PluginWrapper {
 		// Metrics has no reload
 		// Tracker List has no reload
 		// Simple Notice has no reload
+		// xMail has no reload
 	}
 
 	/**

@@ -70,3 +70,6 @@ other:
   silent-blocks: true
   silent-errors: false
   silent-overall: false
+xMail:
+  creative-can-send-items: false
+  hook-into-xMail: true
