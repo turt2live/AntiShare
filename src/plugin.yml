@@ -174,6 +174,7 @@ permissions:
             AntiShare.allow.drop_item: true
             AntiShare.allow.hit_players: true
             AntiShare.allow.hit_mobs: true
+            AntiShare.allow.death: true
     AntiShare.allow.block_place:
         description: Allows block place
         default: op
