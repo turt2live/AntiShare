@@ -273,6 +273,9 @@ public class ASInventory {
 			// Loop
 			for(Integer slot : inventory.keySet()){
 				try{
+					PreparedStatement delete = plugin.getSQL().getConnection().prepareStatement("DELETE FROM " + SQL.INVENTORIES_TABLE + " WHERE type='" + type.name() + "' AND name='" + inventoryName + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "' AND slot='" + slot + "' LIMIT 1");
+					plugin.getSQL().deleteQuery(delete);
+
 					// Setup
 					PreparedStatement statement = plugin.getSQL().getConnection().prepareStatement("INSERT INTO " + SQL.INVENTORIES_TABLE + " (type, name, gamemode, world, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 					ItemStack item = inventory.get(slot);
@@ -378,5 +381,14 @@ public class ASInventory {
 			newI.set(slot, this.inventory.get(slot));
 		}
 		return newI;
+	}
+
+	/**
+	 * Sets the gamemode of the inventory
+	 * 
+	 * @param gamemode the game mode
+	 */
+	public void setGamemode(GameMode gamemode){
+		this.gamemode = gamemode;
 	}
 }

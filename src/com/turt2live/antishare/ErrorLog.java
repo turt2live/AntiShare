@@ -17,7 +17,9 @@ public class ErrorLog {
 	 */
 	public static String print(Exception e){
 		AntiShare plugin = AntiShare.getInstance();
-		File file = new File(plugin.getDataFolder() + File.separator + "errors", "error_" + ASUtils.timestamp() + ".err");
+		File folder = new File(plugin.getDataFolder(), "errors");
+		folder.mkdirs();
+		File file = new File(folder, "error_" + ASUtils.timestamp() + ".err");
 		try{
 			if(!file.exists()){
 				file.createNewFile();

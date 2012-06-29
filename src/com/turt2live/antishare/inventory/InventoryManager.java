@@ -9,6 +9,12 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
@@ -22,7 +28,7 @@ import com.turt2live.antishare.regions.ASRegion;
  * 
  * @author turt2live
  */
-public class InventoryManager {
+public class InventoryManager implements Listener {
 
 	private ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
@@ -30,12 +36,36 @@ public class InventoryManager {
 	//	private ConcurrentHashMap<String, ASInventory> adventure = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> region = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
+	private AntiShare plugin = AntiShare.getInstance();
 
 	/**
 	 * Creates a new Inventory Manager
 	 */
 	public InventoryManager(){
 		load();
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onInventoryClick(InventoryClickEvent event){
+		if(event.isCancelled())
+			return;
+		Inventory inventory = event.getInventory();
+		InventoryHolder holder = inventory.getHolder();
+		if(holder != null && holder instanceof Player && inventory.getType() == org.bukkit.event.inventory.InventoryType.PLAYER){
+			Player player = (Player) holder;
+			// Refresh inventories
+			if(!isInTemporary(player)){
+				/* We're in monitor, so if anyone changes the cancelled
+				 * state, we can claim it on bad coding practices on the 
+				 * conflicting plugin. This also means that we can force
+				 * AntiShare to manually update a slot assuming the event
+				 * has not been cancelled thus far.
+				 */
+				refreshInventories(player);
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new InventoryWatcher(player), 5);
+			}
+		}
 	}
 
 	/**
@@ -94,34 +124,7 @@ public class InventoryManager {
 			removeFromTemporary(player);
 		}
 
-		// Save
-		ASInventory premerge = ASInventory.generate(player, InventoryType.PLAYER);
-		switch (player.getGameMode()){
-		case CREATIVE:
-			saveCreativeInventory(player, player.getWorld());
-			premerge = getCreativeInventory(player, player.getWorld());
-			break;
-		case SURVIVAL:
-			saveSurvivalInventory(player, player.getWorld());
-			premerge = getSurvivalInventory(player, player.getWorld());
-			break;
-		// TODO: 1.3
-		//		case ADVENTURE:
-		//			saveAdventureInventory(player, player.getWorld());
-		//			premerge = getAdventureInventory(player, player.getWorld());
-		//			break;
-		}
-
-		// Merge all inventories if needed
-		ASInventory merge = premerge.clone();
-		if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.NO_SWAP)){
-			for(World world : Bukkit.getWorlds()){
-				creative.put(player.getName() + "." + world.getName(), merge);
-				survival.put(player.getName() + "." + world.getName(), merge);
-				// TODO: 1.3
-				//adventure.put(player.getName()+"."+world.getName(), merge);
-			}
-		}
+		refreshInventories(player);
 
 		// Cleanup
 		for(World world : Bukkit.getWorlds()){
@@ -139,6 +142,45 @@ public class InventoryManager {
 			survival.remove(player.getName() + "." + world.getName());
 			// TODO: 1.3
 			//adventure.remove(player.getName()+"."+world.getName());
+		}
+	}
+
+	/**
+	 * Refreshes inventories of a player
+	 * 
+	 * @param player the player
+	 */
+	public void refreshInventories(Player player, Slot... customSlots){
+		// Save
+		ASInventory premerge = ASInventory.generate(player, InventoryType.PLAYER);
+		switch (player.getGameMode()){
+		case CREATIVE:
+			saveCreativeInventory(player, player.getWorld(), customSlots);
+			premerge = getCreativeInventory(player, player.getWorld());
+			break;
+		case SURVIVAL:
+			saveSurvivalInventory(player, player.getWorld(), customSlots);
+			premerge = getSurvivalInventory(player, player.getWorld());
+			break;
+		// TODO: 1.3
+		//		case ADVENTURE:
+		//			saveAdventureInventory(player, player.getWorld());
+		//			premerge = getAdventureInventory(player, player.getWorld());
+		//			break;
+		}
+
+		// Merge all inventories if needed
+		ASInventory merge = premerge.clone();
+		if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.NO_SWAP)){
+			for(World world : Bukkit.getWorlds()){
+				merge.setGamemode(GameMode.CREATIVE);
+				creative.put(player.getName() + "." + world.getName(), merge);
+				merge.setGamemode(GameMode.SURVIVAL);
+				survival.put(player.getName() + "." + world.getName(), merge);
+				// TODO: 1.3
+				//merge.setGamemode(GameMode.ADVENTURE);
+				//adventure.put(player.getName()+"."+world.getName(), merge);
+			}
 		}
 	}
 
@@ -214,8 +256,14 @@ public class InventoryManager {
 	 * @param player the player
 	 * @param world the world
 	 */
-	public void saveCreativeInventory(Player player, World world){
-		creative.put(player.getName() + "." + world.getName(), ASInventory.generate(player, InventoryType.PLAYER));
+	public void saveCreativeInventory(Player player, World world, Slot... customSlots){
+		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
+		if(customSlots != null && customSlots.length > 0){
+			for(Slot slot : customSlots){
+				inventory.set(slot.slot, slot.item);
+			}
+		}
+		creative.put(player.getName() + "." + world.getName(), inventory);
 	}
 
 	/**
@@ -224,8 +272,14 @@ public class InventoryManager {
 	 * @param player the player
 	 * @param world the world
 	 */
-	public void saveSurvivalInventory(Player player, World world){
-		survival.put(player.getName() + "." + world.getName(), ASInventory.generate(player, InventoryType.PLAYER));
+	public void saveSurvivalInventory(Player player, World world, Slot... customSlots){
+		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
+		if(customSlots != null && customSlots.length > 0){
+			for(Slot slot : customSlots){
+				inventory.set(slot.slot, slot.item);
+			}
+		}
+		survival.put(player.getName() + "." + world.getName(), inventory);
 	}
 
 	// TODO: 1.3

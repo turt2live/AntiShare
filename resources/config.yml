@@ -70,6 +70,7 @@ other:
   silent-blocks: true
   silent-errors: false
   silent-overall: false
+  send-gamemode-change-message: true
 xMail:
   creative-can-send-items: false
   hook-into-xMail: true

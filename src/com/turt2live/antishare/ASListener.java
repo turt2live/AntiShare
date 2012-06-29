@@ -1007,6 +1007,9 @@ public class ASListener implements Listener {
 		// Alerts
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to Game Mode " + ChatColor.YELLOW + to.name();
 		String playerMessage = ignore ? "no message" : "Your inventory has been changed to " + ChatColor.YELLOW + to.name();
+		if(!plugin.getConfig().getBoolean("other.send-gamemode-change-message")){
+			playerMessage = "no message";
+		}
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
 	}
 
