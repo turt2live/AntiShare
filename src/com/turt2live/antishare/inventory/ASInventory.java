@@ -276,9 +276,14 @@ public class ASInventory {
 					PreparedStatement delete = plugin.getSQL().getConnection().prepareStatement("DELETE FROM " + SQL.INVENTORIES_TABLE + " WHERE type='" + type.name() + "' AND name='" + inventoryName + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "' AND slot='" + slot + "' LIMIT 1");
 					plugin.getSQL().deleteQuery(delete);
 
+					// Don't save AIR
+					ItemStack item = inventory.get(slot);
+					if(item == null || item.getType() == Material.AIR){
+						continue;
+					}
+
 					// Setup
 					PreparedStatement statement = plugin.getSQL().getConnection().prepareStatement("INSERT INTO " + SQL.INVENTORIES_TABLE + " (type, name, gamemode, world, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-					ItemStack item = inventory.get(slot);
 					int itemID = item.getTypeId();
 					String itemName = item.getType().name();
 					int itemDurability = item.getDurability();
@@ -332,7 +337,16 @@ public class ASInventory {
 				if(inventory.get(slot) == null){
 					continue;
 				}
-				file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), inventory.get(slot));
+
+				// Don't save AIR
+				ItemStack item = inventory.get(slot);
+				if(item.getType() == Material.AIR){
+					file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), null);
+					continue;
+				}
+
+				// Save item
+				file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), item);
 			}
 			file.save();
 		}
