@@ -1271,6 +1271,8 @@ public class ASListener implements Listener {
 
 		// Check to see if we should even bother checking
 		if(!plugin.getConfig().getBoolean("handled-actions.world-transfers")){
+			// Fix up inventories
+			plugin.getInventoryManager().fixInventory(player, event.getFrom());
 			return;
 		}
 

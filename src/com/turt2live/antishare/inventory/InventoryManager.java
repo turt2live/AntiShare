@@ -414,4 +414,30 @@ public class InventoryManager implements Listener {
 		region.clear();
 		load();
 	}
+
+	/**
+	 * Fixes up world inventories by merging the specified world with the others
+	 * 
+	 * @param player the player
+	 * @param world the world
+	 */
+	public void fixInventory(Player player, World world){
+		// TODO: 1.3 - Entire method fix
+		ASInventory c, s;
+		switch (player.getGameMode()){
+		case CREATIVE:
+			saveCreativeInventory(player, world);
+			break;
+		case SURVIVAL:
+			saveSurvivalInventory(player, world);
+			break;
+		}
+		c = getCreativeInventory(player, world);
+		s = getSurvivalInventory(player, world);
+		for(World w : Bukkit.getWorlds()){
+			String p = player.getName() + "." + w.getName();
+			creative.put(p, c);
+			survival.put(p, s);
+		}
+	}
 }
