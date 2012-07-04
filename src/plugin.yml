@@ -44,6 +44,7 @@ permissions:
             AntiShare.convert: true
             AntiShare.affect.*: false
             AntiShare.money.*: true
+            AntiShare.xmail: true
     AntiShare.convert:
         description: Allows the target to convert the storage system for AntiShare
         default: op
@@ -64,6 +65,9 @@ permissions:
         default: op
     AntiShare.free_place:
         description: Allows the player to place blocks without the block ending up in the tracker. Can also break creative/survival/natural blocks regardless of restriction
+        default: op
+    AntiShare.xmail:
+        description: Allows the player to send xMail messages with items despite settings
         default: op
     AntiShare.tool.*:
         description: Allow all AntiShare tool functions

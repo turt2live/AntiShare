@@ -27,6 +27,7 @@ public class PermissionNodes {
 	public static final String FREE_PLACE = "AntiShare.free_place";
 	public static final String RELOAD = "AntiShare.reload";
 	public static final String CONVERT = "AntiShare.convert";
+	public static final String XMAIL = "AntiShare.xmail";
 
 	// General Nodes
 	public static final String AFFECT_SURVIVAL = "AntiShare.affect.survival";

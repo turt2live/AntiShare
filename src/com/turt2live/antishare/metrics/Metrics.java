@@ -94,7 +94,7 @@ public class Metrics {
 	 * The file where guid and opt out is stored in
 	 */
 	// Turt2Live - Moved config file
-	private static final String CONFIG_FILE = "plugins/AntiShare/metrics-config.yml";
+	private static final String CONFIG_FILE = "plugins/xMail/metrics-config.yml";
 
 	/**
 	 * The separator to use for custom data. This MUST NOT change unless you are hosting your own
