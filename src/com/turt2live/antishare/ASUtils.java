@@ -54,7 +54,9 @@ public class ASUtils {
 			 * modified by turt2live for AntiShare.
 			 */
 			if(target instanceof Player){
-				if(((Player) target).getListeningPluginChannels().contains("SimpleNotice") && useSimpleNotice){
+				if(((Player) target).getListeningPluginChannels().contains("SimpleNotice")
+						&& useSimpleNotice
+						&& AntiShare.getInstance().isSimpleNoticeEnabled(target.getName())){
 					((Player) target).sendPluginMessage(AntiShare.getInstance(), "SimpleNotice", message.getBytes(java.nio.charset.Charset.forName("UTF-8")));
 				}else{
 					target.sendMessage(message);
