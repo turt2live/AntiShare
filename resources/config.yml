@@ -28,6 +28,9 @@ enabled-features:
   no-drops-when-block-break:
     inventories: true
     attached-blocks: true
+gamemode-change-cooldown:
+  use: false
+  time-in-seconds: 5
 settings:
   sql:
     host: localhost

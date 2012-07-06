@@ -84,6 +84,7 @@ public class ASListener implements Listener {
 	private AntiShare plugin = AntiShare.getInstance();
 	private ConcurrentHashMap<World, PerWorldConfig> config = new ConcurrentHashMap<World, PerWorldConfig>();
 	private boolean hasMobCatcher = false;
+	private ConcurrentHashMap<String, Long> GMCD = new ConcurrentHashMap<String, Long>();
 
 	/**
 	 * Creates a new Listener
@@ -899,6 +900,39 @@ public class ASListener implements Listener {
 		GameMode to = event.getNewGameMode();
 		boolean ignore = true;
 		boolean checkRegion = true;
+
+		// Automatically close all open windows
+		InventoryView active = player.getOpenInventory();
+		if(active != null){
+			active.close();
+		}
+
+		// Implement cooldown if needed
+		if(plugin.getConfig().getBoolean("gamemode-change-cooldown.use") && !plugin.getPermissions().has(player, PermissionNodes.NO_GM_CD)){
+			long time = (long) Math.abs(plugin.getConfig().getDouble("gamemode-change-cooldown.time-in-seconds")) * 1000;
+			long now = System.currentTimeMillis();
+			if(time > 0){
+				if(GMCD.containsKey(player.getName())){
+					long lastUsed = GMCD.get(player.getName());
+					if(now - lastUsed > time){
+						// Allow
+						GMCD.put(player.getName(), now);
+					}else{
+						// Deny
+						event.setCancelled(true);
+						int seconds = (int) (time - (now - lastUsed)) / 1000;
+						String s = "";
+						if(seconds == 0 || seconds > 1){
+							s = "s";
+						}
+						ASUtils.sendToPlayer(player, ChatColor.RED + "You must wait at least " + seconds + " more second" + s + " before changing Game Modes.", true);
+						return;
+					}
+				}else{
+					GMCD.put(player.getName(), now);
+				}
+			}
+		}
 
 		// Check to see if we should even bother
 		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){

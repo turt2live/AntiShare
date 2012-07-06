@@ -46,6 +46,7 @@ permissions:
             AntiShare.affect.*: false
             AntiShare.money.*: true
             AntiShare.xmail: true
+            AntiShare.cooldownbypass: true
     AntiShare.convert:
         description: Allows the target to convert the storage system for AntiShare
         default: op
@@ -69,6 +70,9 @@ permissions:
         default: op
     AntiShare.xmail:
         description: Allows the player to send xMail messages with items despite settings
+        default: op
+    AntiShare.cooldownbypass:
+        description: Allows the player to bypass the Game Mode Cooldown
         default: op
     AntiShare.tool.*:
         description: Allow all AntiShare tool functions
