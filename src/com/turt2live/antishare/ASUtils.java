@@ -37,8 +37,9 @@ public class ASUtils {
 	 * 
 	 * @param target the player to send to
 	 * @param message the message to send
+	 * @param useSimpleNotice set to true if this method should use SimpleNotice if available
 	 */
-	public static void sendToPlayer(CommandSender target, String message){
+	public static void sendToPlayer(CommandSender target, String message, boolean useSimpleNotice){
 		if(!message.equalsIgnoreCase("nomsg")
 				&& !message.equalsIgnoreCase("no message")
 				&& !message.equalsIgnoreCase("none")
@@ -53,7 +54,7 @@ public class ASUtils {
 			 * modified by turt2live for AntiShare.
 			 */
 			if(target instanceof Player){
-				if(((Player) target).getListeningPluginChannels().contains("SimpleNotice")){
+				if(((Player) target).getListeningPluginChannels().contains("SimpleNotice") && useSimpleNotice){
 					((Player) target).sendPluginMessage(AntiShare.getInstance(), "SimpleNotice", message.getBytes(java.nio.charset.Charset.forName("UTF-8")));
 				}else{
 					target.sendMessage(message);

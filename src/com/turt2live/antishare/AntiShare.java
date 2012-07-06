@@ -1,7 +1,14 @@
 package com.turt2live.antishare;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -100,6 +107,7 @@ public class AntiShare extends PluginWrapper {
 	private SignManager signs;
 	private MoneyManager tender;
 	private XMailListener xmail;
+	private List<String> disabledSNPlayers = new ArrayList<String>();
 
 	/**
 	 * Gets the active AntiShare instance
@@ -113,6 +121,23 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onEnable(){
 		instance = this;
+
+		// Get all disabled SimpleNotice users
+		try{
+			File snFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");
+			if(snFile.exists()){
+				BufferedReader in = new BufferedReader(new FileReader(snFile));
+				String line;
+				while ((line = in.readLine()) != null){
+					disabledSNPlayers.add(line);
+				}
+				in.close();
+			}else{
+				snFile.createNewFile();
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 
 		// Convert
 		Convert.start();
@@ -253,6 +278,18 @@ public class AntiShare extends PluginWrapper {
 		signs = null;
 		tender = null;
 		xmail = null;
+
+		// Save disabled SimpleNotice users
+		try{
+			File snFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");
+			BufferedWriter out = new BufferedWriter(new FileWriter(snFile, false));
+			for(String user : disabledSNPlayers){
+				out.write(user + "\r\n");
+			}
+			out.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -277,6 +314,34 @@ public class AntiShare extends PluginWrapper {
 		// Tracker List has no reload
 		// Simple Notice has no reload
 		// xMail has no reload
+	}
+
+	/**
+	 * Determines if a player decided to turn off SimpleNotice support
+	 * 
+	 * @param name the player name
+	 * @return true if enabled (gets messages through SimpleNotice)
+	 */
+	public boolean isSimpleNoticeEnabled(String name){
+		return !disabledSNPlayers.contains(name);
+	}
+
+	/**
+	 * Enables SimpleNotice support for a user
+	 * 
+	 * @param name the user
+	 */
+	public void enableSimpleNotice(String name){
+		disabledSNPlayers.remove(name);
+	}
+
+	/**
+	 * Disables SimpleNotice support for a user
+	 * 
+	 * @param name the user
+	 */
+	public void disableSimpleNotice(String name){
+		disabledSNPlayers.add(name);
 	}
 
 	/**

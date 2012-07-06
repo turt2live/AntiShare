@@ -55,15 +55,15 @@ public class Fine extends Tender {
 		}
 		TransactionResult result = plugin.getMoneyManager().subtractFromAccount(player, amount);
 		if(!result.completed){
-			ASUtils.sendToPlayer(player, ChatColor.RED + "Fine Failed: " + ChatColor.ITALIC + result.message);
+			ASUtils.sendToPlayer(player, ChatColor.RED + "Fine Failed: " + ChatColor.ITALIC + result.message, true);
 			plugin.getMessenger().log("Fine Failed (" + player.getName() + "): " + result.message, Level.WARNING, LogType.BYPASS);
 			return;
 		}else{
 			String formatted = plugin.getMoneyManager().formatAmount(getAmount());
 			String balance = plugin.getMoneyManager().formatAmount(plugin.getMoneyManager().getBalance(player));
 			if(!plugin.getMoneyManager().isSilent(player.getName())){
-				ASUtils.sendToPlayer(player, ChatColor.RED + "You've been fined " + formatted + "!");
-				ASUtils.sendToPlayer(player, "Your new balance is " + ChatColor.YELLOW + balance);
+				ASUtils.sendToPlayer(player, ChatColor.RED + "You've been fined " + formatted + "!", true);
+				ASUtils.sendToPlayer(player, "Your new balance is " + ChatColor.YELLOW + balance, true);
 			}
 		}
 	}

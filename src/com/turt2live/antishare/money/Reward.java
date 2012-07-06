@@ -38,15 +38,15 @@ public class Reward extends Tender {
 		// Apply to account
 		TransactionResult result = plugin.getMoneyManager().addToAccount(player, getAmount());
 		if(!result.completed){
-			ASUtils.sendToPlayer(player, ChatColor.RED + "Reward Failed: " + ChatColor.ITALIC + result.message);
+			ASUtils.sendToPlayer(player, ChatColor.RED + "Reward Failed: " + ChatColor.ITALIC + result.message, true);
 			plugin.getMessenger().log("Reward Failed (" + player.getName() + "): " + result.message, Level.WARNING, LogType.BYPASS);
 			return;
 		}else{
 			String formatted = plugin.getMoneyManager().formatAmount(getAmount());
 			String balance = plugin.getMoneyManager().formatAmount(plugin.getMoneyManager().getBalance(player));
 			if(!plugin.getMoneyManager().isSilent(player.getName())){
-				ASUtils.sendToPlayer(player, ChatColor.GREEN + "You've been rewarded " + formatted + "!");
-				ASUtils.sendToPlayer(player, "Your new balance is " + ChatColor.YELLOW + balance);
+				ASUtils.sendToPlayer(player, ChatColor.GREEN + "You've been rewarded " + formatted + "!", true);
+				ASUtils.sendToPlayer(player, "Your new balance is " + ChatColor.YELLOW + balance, true);
 			}
 		}
 	}

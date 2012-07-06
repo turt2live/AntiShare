@@ -40,21 +40,21 @@ public class CommandHandler implements CommandExecutor {
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.RELOAD)){
-						ASUtils.sendToPlayer(sender, "Reloading...");
+						ASUtils.sendToPlayer(sender, "Reloading...", true);
 						plugin.reload();
-						ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.");
+						ASUtils.sendToPlayer(sender, ChatColor.GREEN + "AntiShare Reloaded.", true);
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("mirror")){
 					// Sanity Check
 					if(!(sender instanceof Player)){
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, and therefore cannot view inventories. Sorry!");
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, and therefore cannot view inventories. Sorry!", true);
 					}else{
 						if(plugin.getPermissions().has(sender, PermissionNodes.MIRROR)){
 							if(args.length < 2){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "No player name provided! Try /as mirror <player>");
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "No player name provided! Try /as mirror <player>", true);
 							}else{
 								// Setup
 								String playername = args[1];
@@ -62,23 +62,22 @@ public class CommandHandler implements CommandExecutor {
 
 								// Sanity Check
 								if(player == null){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "Player '" + playername + "' could not be found, sorry!");
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "Player '" + playername + "' could not be found, sorry!", true);
 								}else{
-									// TODO: Can't be seen by client, alternative?
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Welcome to " + player.getName() + "'s inventory.");
-									ASUtils.sendToPlayer(sender, "You are able to edit their inventory as you please.");
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Welcome to " + player.getName() + "'s inventory.", true);
+									ASUtils.sendToPlayer(sender, "You are able to edit their inventory as you please.", true);
 									((Player) sender).openInventory(player.getInventory()); // Creates the "live editing" window
 								}
 							}
 						}else{
-							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 						}
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("debug")){
 					// Sanity Check
 					if(!(sender instanceof ConsoleCommandSender)){
-						ASUtils.sendToPlayer(sender, ChatColor.RED + "Sorry! This command needs to be run from the console.");
+						ASUtils.sendToPlayer(sender, ChatColor.RED + "Sorry! This command needs to be run from the console.", true);
 					}else{
 						// Generate debug dump file
 						try{
@@ -122,7 +121,7 @@ public class CommandHandler implements CommandExecutor {
 							out.write("Rewards/Fines: \r\n");
 							plugin.getMoneyManager().print(out);
 							out.close();
-							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath());
+							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath(), true);
 						}catch(Exception e){
 							AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
 							AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
@@ -134,15 +133,15 @@ public class CommandHandler implements CommandExecutor {
 						// Sanity Check
 						if(sender instanceof Player){
 							if(args.length < 3){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "Not enough arguments! " + ChatColor.WHITE + "Try /as region <gamemode> <name>");
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "Not enough arguments! " + ChatColor.WHITE + "Try /as region <gamemode> <name>", true);
 							}else{
 								plugin.getRegionFactory().addRegion((Player) sender, args[1], args[2]);
 							}
 						}else{
-							ASUtils.sendToPlayer(sender, ChatColor.RED + "You must be a player to create regions.");
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "You must be a player to create regions.", true);
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion") || args[0].equalsIgnoreCase("removeregion")){
@@ -161,11 +160,11 @@ public class CommandHandler implements CommandExecutor {
 							if(args.length > 1){
 								plugin.getRegionFactory().removeRegionByName(sender, args[1]);
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must supply a region name when removing regions from the console. " + ChatColor.WHITE + "Try: /as rmregion <name>");
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must supply a region name when removing regions from the console. " + ChatColor.WHITE + "Try: /as rmregion <name>", true);
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("editregion")){
@@ -186,26 +185,26 @@ public class CommandHandler implements CommandExecutor {
 							// Show help
 							if(args.length >= 2){
 								if(args[1].equalsIgnoreCase("help")){
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "/as editregion <name> <key> <value>");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "name " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<any name>");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "EnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<enter message>");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<exit message>");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "'none'/'set'");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "survival/creative");
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "area " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "No Value");
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'Show____Message'" + ChatColor.WHITE + " - True to show the message");
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'____Message'" + ChatColor.WHITE + " - Use {name} to input the region name.");
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'inventory'" + ChatColor.WHITE + " - Sets the region's inventory. 'none' to not have a default inventory, 'set' to mirror yours");
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'area'" + ChatColor.WHITE + " - Sets the area based on your WorldEdit selection");
+									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "/as editregion <name> <key> <value>", false);
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "name " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<any name>", false);
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false", false);
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false", false);
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "EnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<enter message>", false);
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<exit message>", false);
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "'none'/'set'", false);
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "survival/creative", false);
+									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "area " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "No Value", false);
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'Show____Message'" + ChatColor.WHITE + " - True to show the message", false);
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'____Message'" + ChatColor.WHITE + " - Use {name} to input the region name.", false);
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'inventory'" + ChatColor.WHITE + " - Sets the region's inventory. 'none' to not have a default inventory, 'set' to mirror yours", false);
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'area'" + ChatColor.WHITE + " - Sets the area based on your WorldEdit selection", false);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>");
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help");
+									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>", true);
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
 								}
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>");
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help");
+								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>", true);
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
 							}
 						}else{
 							// Setup
@@ -223,19 +222,19 @@ public class CommandHandler implements CommandExecutor {
 
 							// Check region
 							if(plugin.getRegionManager().getRegion(name) == null){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "That region does not exist!");
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "That region does not exist!", true);
 							}else{
 								// Update region if needed
 								if(RegionKey.isKey(key)){
 									plugin.getRegionFactory().editRegion(plugin.getRegionManager().getRegion(name), RegionKey.getKey(key), value, sender);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "That is not a valid region key");
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help");
+									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "That is not a valid region key", true);
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
 								}
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("listregions")){
@@ -246,7 +245,7 @@ public class CommandHandler implements CommandExecutor {
 							try{
 								page = Integer.parseInt(args[1]);
 							}catch(Exception e){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "'" + args[1] + "' is not a number!");
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "'" + args[1] + "' is not a number!", true);
 								return true;
 							}
 						}
@@ -262,28 +261,28 @@ public class CommandHandler implements CommandExecutor {
 							maxPages = 1;
 						}
 						if(maxPages < page){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + "Page " + page + " does not exist! The last page is " + maxPages);
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "Page " + page + " does not exist! The last page is " + maxPages, true);
 							return true;
 						}
 
 						// Generate pages
 						String pagenation = ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "AntiShare Regions " + ChatColor.DARK_GREEN + "|" + ChatColor.GREEN + " Page " + page + "/" + maxPages + ChatColor.DARK_GREEN + " ]=======";
-						ASUtils.sendToPlayer(sender, pagenation);
+						ASUtils.sendToPlayer(sender, pagenation, false);
 						for(int i = ((page - 1) * resultsPerPage); i < (resultsPerPage < regions.size() ? (resultsPerPage * page) : regions.size()); i++){
 							ASUtils.sendToPlayer(sender, ChatColor.DARK_AQUA + "#" + (i + 1) + " " + ChatColor.GOLD + regions.get(i).getName()
 									+ ChatColor.YELLOW + " Creator: " + ChatColor.AQUA + regions.get(i).getWhoSet()
-									+ ChatColor.YELLOW + " World: " + ChatColor.AQUA + regions.get(i).getWorld().getName());
+									+ ChatColor.YELLOW + " World: " + ChatColor.AQUA + regions.get(i).getWorld().getName(), false);
 						}
-						ASUtils.sendToPlayer(sender, pagenation);
+						ASUtils.sendToPlayer(sender, pagenation, false);
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("tool")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_GET)){
 						// Sanity check
 						if(!(sender instanceof Player)){
-							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You must be a player to use the tool!");
+							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You must be a player to use the tool!", true);
 						}else{
 							// Setup
 							Player player = (Player) sender;
@@ -292,30 +291,30 @@ public class CommandHandler implements CommandExecutor {
 							// Check inventory
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 								if(inventory.contains(AntiShare.ANTISHARE_TOOL)){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + AntiShare.ANTISHARE_TOOL.name().toLowerCase().replace("_", " ") + ")");
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + AntiShare.ANTISHARE_TOOL.name().toLowerCase().replace("_", " ") + ")", true);
 								}else{
 									// Add the tool
 									inventory.addItem(new ItemStack(AntiShare.ANTISHARE_TOOL));
 									player.updateInventory();
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + AntiShare.ANTISHARE_TOOL.name().toLowerCase().replace("_", " ") + ")");
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + AntiShare.ANTISHARE_TOOL.name().toLowerCase().replace("_", " ") + ")", true);
 								}
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!");
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!", true);
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("convert")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.CONVERT)){
 						if(args.length < 3){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + "Incorrect syntax, Try /as convert <from> <to>");
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "Incorrect syntax, Try /as convert <from> <to>", true);
 						}else{
 							ConvertType from = ConvertType.getType(args[1]);
 							ConvertType to = ConvertType.getType(args[2]);
 							if(from == ConvertType.INVALID || to == ConvertType.INVALID || to == from){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "Incorrect syntax, Try /as convert <from> <to>");
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "Incorrect syntax, Try /as convert <from> <to>", true);
 							}else{
 								// Starts SQL if is not already
 								if(plugin.startSQL()){
@@ -328,31 +327,31 @@ public class CommandHandler implements CommandExecutor {
 
 									// Connected
 									if(Convert320bInternal.convert(from, to)){
-										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Converted!");
+										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Converted!", true);
 									}else{
-										ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wwrong while converting. Please check the server log for errors");
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wwrong while converting. Please check the server log for errors", true);
 									}
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wwrong while connecting to the SQL server. Please check your settings.");
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wwrong while connecting to the SQL server. Please check your settings.", true);
 								}
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!");
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("money")){
 					if(args.length < 2){
-						ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax Error, try /as money on/off/status");
+						ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax Error, try /as money on/off/status", true);
 					}else{
 						if(args[1].equalsIgnoreCase("status") || args[1].equalsIgnoreCase("state")){
 							String state = !plugin.getMoneyManager().isSilent(sender.getName()) ? ChatColor.GREEN + "getting" : ChatColor.RED + "not getting";
 							state = state + ChatColor.WHITE;
-							ASUtils.sendToPlayer(sender, "You are " + state + " fine/reward messages");
+							ASUtils.sendToPlayer(sender, "You are " + state + " fine/reward messages", true);
 							return true;
 						}
 						if(ASUtils.getBoolean(args[1]) == null){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax Error, try /as money on/off/status");
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax Error, try /as money on/off/status", true);
 							return true;
 						}
 						boolean silent = !ASUtils.getBoolean(args[1]);
@@ -362,7 +361,25 @@ public class CommandHandler implements CommandExecutor {
 							plugin.getMoneyManager().removeFromSilentList(sender.getName());
 						}
 						String message = "You are now " + (silent ? ChatColor.RED + "not getting" : ChatColor.GREEN + "getting") + ChatColor.WHITE + " fine/reward messages";
-						ASUtils.sendToPlayer(sender, message);
+						ASUtils.sendToPlayer(sender, message, true);
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("simplenotice") || args[0].equalsIgnoreCase("sn")){
+					if(sender instanceof Player){
+						Player player = (Player) sender;
+						if(player.getListeningPluginChannels().contains("SimpleNotice")){
+							if(plugin.isSimpleNoticeEnabled(player.getName())){
+								plugin.disableSimpleNotice(player.getName());
+								ASUtils.sendToPlayer(player, ChatColor.RED + "SimpleNotice is now NOT being used to send you messages", false);
+							}else{
+								plugin.enableSimpleNotice(player.getName());
+								ASUtils.sendToPlayer(player, ChatColor.GREEN + "SimpleNotice is now being used to send you messages", false);
+							}
+						}else{
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "You do not have SimpleNotice", false);
+						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.RED + "You are not a player and do not have SimpleNotice", true);
 					}
 					return true;
 				}else{

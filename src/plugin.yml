@@ -23,6 +23,7 @@ commands:
       /<command> tool - Get the AntiShare tool (Blaze Rod)
       /<command> money <on/off> - Turns on/off fine/reward messages
       /<command> money status - Tells you if you get fine/reward messages
+      /<command> simplenotice - Toggle SimpleNotice support
       /<command> help = This menu
 
 permissions:

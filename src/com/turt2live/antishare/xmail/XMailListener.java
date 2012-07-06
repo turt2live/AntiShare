@@ -35,7 +35,7 @@ public class XMailListener implements Listener {
 			ComplexMail mail = (ComplexMail) event.getMail();
 			if(mail.hasItems() && player != null && player.getGameMode() == GameMode.CREATIVE){
 				event.setCancelled(true);
-				ASUtils.sendToPlayer(player, ChatColor.RED + "You cannot send items in creative mode through xMail");
+				ASUtils.sendToPlayer(player, ChatColor.RED + "You cannot send items in creative mode through xMail", true);
 			}
 		}
 	}

@@ -218,20 +218,20 @@ public class Alert {
 		// Send if needed
 		if(sendToPlayer && (type == AlertType.ILLEGAL || type == AlertType.GENERAL || type == AlertType.REGION)){
 			details.player_last_sent = System.currentTimeMillis();
-			ASUtils.sendToPlayer(sender, playerMessage);
+			ASUtils.sendToPlayer(sender, playerMessage, true);
 		}
 		if(sendToAdmins && toPlayers){
 			details.admin_last_sent = System.currentTimeMillis();
 			for(Player player : Bukkit.getOnlinePlayers()){
 				if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.GET_NOTIFICATIONS)){
 					if(!player.getName().equalsIgnoreCase(sender.getName())){
-						ASUtils.sendToPlayer(player, message);
+						ASUtils.sendToPlayer(player, message, true);
 					}
 				}
 			}
 		}
 		if(sendToAdmins && toConsole){
-			ASUtils.sendToPlayer(Bukkit.getConsoleSender(), "[" + type.name() + "] " + message);
+			ASUtils.sendToPlayer(Bukkit.getConsoleSender(), "[" + type.name() + "] " + message, true);
 		}
 
 		// Send fine/reward

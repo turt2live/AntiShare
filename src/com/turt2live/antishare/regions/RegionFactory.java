@@ -144,11 +144,11 @@ public class RegionFactory {
 	 */
 	public void removeRegionByName(CommandSender sender, String name){
 		if(!regions.regionNameExists(name)){
-			ASUtils.sendToPlayer(sender, ChatColor.RED + "No region has the name " + ChatColor.DARK_RED + name);
+			ASUtils.sendToPlayer(sender, ChatColor.RED + "No region has the name " + ChatColor.DARK_RED + name, true);
 			return;
 		}
 		regions.removeRegion(name);
-		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed.");
+		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed.", true);
 	}
 
 	/**
@@ -159,11 +159,11 @@ public class RegionFactory {
 	 */
 	public void removeRegionByLocation(CommandSender sender, Location location){
 		if(!regions.isRegion(location)){
-			ASUtils.sendToPlayer(sender, ChatColor.RED + "There is no region there");
+			ASUtils.sendToPlayer(sender, ChatColor.RED + "There is no region there", true);
 			return;
 		}
 		regions.removeRegion(location);
-		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed.");
+		ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed.", true);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class RegionFactory {
 	 */
 	public void editRegion(ASRegion region, RegionKeyType key, String value, CommandSender sender){
 		if(!AntiShare.getInstance().getRegionManager().hasWorldEdit()){
-			ASUtils.sendToPlayer(sender, ChatColor.RED + "WorldEdit is not installed.");
+			ASUtils.sendToPlayer(sender, ChatColor.RED + "WorldEdit is not installed.", true);
 			return;
 		}
 
@@ -185,7 +185,7 @@ public class RegionFactory {
 		switch (key){
 		case NAME:
 			if(AntiShare.getInstance().getRegionManager().regionNameExists(value)){
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name '" + value + "' already exists!");
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name '" + value + "' already exists!", true);
 			}else{
 				region.setName(value);
 				changed = true;
@@ -196,7 +196,7 @@ public class RegionFactory {
 				region.setMessageOptions(ASUtils.getBoolean(value), region.isExitMessageActive());
 				changed = true;
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?");
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?", true);
 			}
 			break;
 		case EXIT_MESSAGE_SHOW:
@@ -204,7 +204,7 @@ public class RegionFactory {
 				region.setMessageOptions(region.isEnterMessageActive(), ASUtils.getBoolean(value));
 				changed = true;
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?");
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?", true);
 			}
 			break;
 		case INVENTORY:
@@ -216,27 +216,27 @@ public class RegionFactory {
 					region.setInventory(ASInventory.generate((Player) sender, InventoryType.REGION));
 					changed = true;
 				}else{
-					ASUtils.sendToPlayer(sender, ChatColor.RED + "You can't set an inventory from the console, only clear.");
+					ASUtils.sendToPlayer(sender, ChatColor.RED + "You can't set an inventory from the console, only clear.", true);
 				}
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown to me, did you mean 'none' or 'set'?");
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown to me, did you mean 'none' or 'set'?", true);
 			}
 			break;
 		case SELECTION_AREA:
 			if(!AntiShare.getInstance().getRegionManager().hasWorldEdit()){
-				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "WorldEdit is not installed. No region set.");
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "WorldEdit is not installed. No region set.", true);
 				break;
 			}
 			if(!(sender instanceof Player)){
-				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, sorry!");
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, sorry!", true);
 				break;
 			}
 			if(!hook.hasSelection((Player) sender)){
-				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have a selection!");
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have a selection!", true);
 				break;
 			}
 			if(hook.isRegionInSelectionAndNot(hook.getSelection((Player) sender), region)){
-				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "There is a region where you have selected!");
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "There is a region where you have selected!", true);
 				break;
 			}
 			Selection selection = hook.getSelection((Player) sender);
@@ -251,7 +251,7 @@ public class RegionFactory {
 				region.setGameMode(GameMode.SURVIVAL);
 				changed = true;
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + value + "' is!");
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + value + "' is!", true);
 			}
 			break;
 		case ENTER_MESSAGE:
@@ -264,7 +264,7 @@ public class RegionFactory {
 			break;
 		}
 		if(changed){
-			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region saved.");
+			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region saved.", true);
 		}
 	}
 
@@ -277,33 +277,33 @@ public class RegionFactory {
 	 */
 	public void addRegion(Player player, String gamemodeStr, String name){
 		if(!regions.hasWorldEdit()){
-			ASUtils.sendToPlayer(player, ChatColor.RED + "You don't have WorldEdit!");
+			ASUtils.sendToPlayer(player, ChatColor.RED + "You don't have WorldEdit!", true);
 			return;
 		}
 
 		// Check conditions
 		GameMode gamemode = ASUtils.getGameMode(gamemodeStr);
 		if(gamemode == null){
-			ASUtils.sendToPlayer(player, ChatColor.RED + "I don't know what gamemode '" + gamemodeStr + "' is, sorry!");
+			ASUtils.sendToPlayer(player, ChatColor.RED + "I don't know what gamemode '" + gamemodeStr + "' is, sorry!", true);
 			return;
 		}
 		if(!hook.hasSelection(player)){
-			ASUtils.sendToPlayer(player, ChatColor.RED + "You don't have a valid WorldEdit selection!");
+			ASUtils.sendToPlayer(player, ChatColor.RED + "You don't have a valid WorldEdit selection!", true);
 			return;
 		}
 		Selection selection = hook.getSelection(player);
 		if(hook.isRegionInSelection(selection)){
-			ASUtils.sendToPlayer(player, ChatColor.RED + "Another region intersects your selection!");
+			ASUtils.sendToPlayer(player, ChatColor.RED + "Another region intersects your selection!", true);
 			return;
 		}
 		if(regions.regionNameExists(name)){
-			ASUtils.sendToPlayer(player, ChatColor.RED + "Another region already has that name!");
+			ASUtils.sendToPlayer(player, ChatColor.RED + "Another region already has that name!", true);
 			return;
 		}
 
 		// Add the region
 		regions.addRegion(new com.turt2live.antishare.Selection(selection), player.getName(), name, gamemode);
-		ASUtils.sendToPlayer(player, ChatColor.GREEN + "Region '" + name + "' added.");
+		ASUtils.sendToPlayer(player, ChatColor.GREEN + "Region '" + name + "' added.", true);
 	}
 
 }
