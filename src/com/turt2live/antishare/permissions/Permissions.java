@@ -4,10 +4,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare;
@@ -132,13 +129,4 @@ public class Permissions implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onPluginEnable(PluginEnableEvent event){
-		checkPlugins();
-	}
-
-	@EventHandler
-	public void onPluginDisable(PluginDisableEvent event){
-		checkPlugins();
-	}
 }
