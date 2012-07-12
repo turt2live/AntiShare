@@ -61,6 +61,7 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = AntiShare.getInstance();
 		name = id;
+		buildConfiguration();
 	}
 
 	/**
@@ -80,6 +81,7 @@ public class ASRegion {
 		id = String.valueOf(System.currentTimeMillis());
 		plugin = AntiShare.getInstance();
 		name = id;
+		buildConfiguration();
 	}
 
 	/**
