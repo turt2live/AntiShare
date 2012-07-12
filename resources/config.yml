@@ -6,6 +6,10 @@
 # 
 # Permissions Help:
 # http://dev.bukkit.org/server-mods/antishare/pages/3-2-x-help/#w-permissions
+# 
+# Everything in 'blocked-actions' is a toggle for 
+# turning on and off 'block-lists'. Leave these as
+# true for full functionality.
 blocked-actions:
   block-place: true
   block-break: true
@@ -17,34 +21,65 @@ blocked-actions:
   commands: true
   combat-against-players: true
   combat-against-mobs: true
+# Extra toggles
 handled-actions:
+  # Should AntiShare deal with world inventories?
   world-transfers: false
+  # Should AntiShare deal with inventories for each Game Mode?
   gamemode-inventories: true
+# More features of AntiShare
 enabled-features:
+  # Set to false to NOT use AntiShare regions
   gamemode-regions: true
+  # Set to false to NOT use the World Split
   world-split: true
+  # Set to TRUE to USE SQL support
   sql: false
+  # Determines if creative players can gain experience
   no-experience-for-creative: true
+  # Settings for when a creative player breaks a block
   no-drops-when-block-break:
+    # Clear the block's inventory (like chests)
     inventories: true
+    # Remove "attached" blocks (like torches)
     attached-blocks: true
+# Cooldown between game mode changes
 gamemode-change-cooldown:
+  # On/Off setting
   use: false
+  # How long players have to wait (seconds)
   time-in-seconds: 5
+# Settings
 settings:
+  # SQL settings, these are pretty easy
   sql:
     host: localhost
     username: MySQLUsername
     password: MySQLPassword
     database: AntiShare
+  # Set to false if you do not want us
+  # to know that someone is using AntiShare
   send-usage-statistics: true
+  # Set to FALSE to disable "creative" and "survival"
+  # blocks.
   track-blocks: true
+  # Both are the same, only commented 
+  # "survival-breaking-creative".
   survival-breaking-creative-blocks:
+    # Should we allow block drops?
     block-drops: false
+    # Deny the break (if false, block-drops takes effect)
     deny: true
   creative-breaking-survival-blocks:
     block-drops: false
     deny: true
+# Where the magic happens.
+# Here you can define EXACTLY what you want
+# AntiShare to control (restrict). You can use
+# key words such as "all" or "none", you can
+# also use a negating character (-) to 'remove' items
+# from the list (Example: "all, -dirt" = Block everything
+# except dirt).
 blocked-lists:
   block-place: diamond block, gold block, iron block, bedrock, tnt
   block-break: none
@@ -54,18 +89,30 @@ blocked-lists:
   right-click: storage minecart, powered minecart, chest, furnace, dispenser, jukebox
   use-items: fire, flint and steel, exp bottle, 383, egg, lava bucket, water bucket, fireball
   commands: /someCommand, /anotherCommand
+# Splits your world in two, like 2 giant AntiShare regions
 worldsplit:
+  # X, Z, or None
   split: none
+  # Axis value to split on
   value: 0
+  # If 1, then the POSITIVE side will be creative
   creative: 1
+  # If 0, then the NEGATIVE side will be survival
   survival: 0
+  # Warn people of the split
   warning:
+    # Can be turned off
     enabled: false
+    # Distance to the line
     blocks: 15
+    # How many seconds should we warn each time?
     warn-every: 2
+# What blocks should AntiShare track for creative and
+# survival players?
 block-tracking:
   tracked-survival-blocks: all
   tracked-creative-blocks: all
+# Misc. stuff, generally leave this alone.
 other:
   debug: false
   silent-startup: false
@@ -74,6 +121,7 @@ other:
   silent-errors: false
   silent-overall: false
   send-gamemode-change-message: true
+# xMail hook, pretty easy to setup.
 xMail:
   creative-can-send-items: false
   hook-into-xMail: true
