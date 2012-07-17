@@ -23,6 +23,7 @@ blocked-lists:
   right-click: global
   use-items: global
   commands: global
+  mobs: global
 enabled-features:
   gamemode-regions: global
   world-split: global

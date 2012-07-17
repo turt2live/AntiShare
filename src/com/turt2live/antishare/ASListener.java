@@ -28,6 +28,7 @@ import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.PoweredMinecart;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Sheep;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.Vehicle;
@@ -488,6 +489,8 @@ public class ASListener implements Listener {
 			item = Material.MINECART;
 		}else if(event.getRightClicked() instanceof Painting){
 			item = Material.PAINTING;
+		}else if(event.getRightClicked() instanceof Sheep){
+			item = Material.SHEARS;
 		}
 
 		// If the entity is not found, ignore the event
@@ -1040,6 +1043,8 @@ public class ASListener implements Listener {
 			ignore = false;
 		}
 
+		// TODO: Experience swap
+
 		// Alerts
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to Game Mode " + ChatColor.YELLOW + to.name();
 		String playerMessage = ignore ? "no message" : "Your inventory has been changed to " + ChatColor.YELLOW + to.name();
@@ -1097,6 +1102,16 @@ public class ASListener implements Listener {
 			// target = other entity
 			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, playerAttacker.getWorld())){
 				type = AlertType.LEGAL;
+			}
+			ASRegion region = plugin.getRegionManager().getRegion(target.getLocation());
+			if(region != null){
+				if(!region.getConfig().isBlocked(target, ListType.MOBS)){
+					type = AlertType.LEGAL;
+				}
+			}else{
+				if(!config.get(target.getWorld()).isBlocked(target, ListType.MOBS)){
+					type = AlertType.LEGAL;
+				}
 			}
 		}
 
@@ -1411,4 +1426,5 @@ public class ASListener implements Listener {
 			}
 		}
 	}
+
 }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
@@ -28,6 +29,7 @@ public class PerRegionConfig {
 	private EventList pickup;
 	private EventList death;
 	private EventList commands;
+	private EntityList mobs;
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
 	private boolean combatPlayers = false;
@@ -64,6 +66,7 @@ public class PerRegionConfig {
 		right_click = getList("right-click", "right-click", regionConfig, false);
 		use = getList("use-items", "use-items", regionConfig, false);
 		commands = getList("commands", "commands", regionConfig, true);
+		mobs = getList("combat-against-mobs", "mobs", regionConfig);
 
 		// Get options
 		boolean value = regionConfig.getBoolean("enabled-features.no-drops-when-block-break.inventories");
@@ -150,6 +153,33 @@ public class PerRegionConfig {
 		return stringsOnly ? new EventList(true, list.split(",")) : new EventList(gworld ? world.getName() + ".yml" : (global ? "config.yml" : "region_configurations/" + region.getName() + ".yml"), "blocked-actions." + triggerPath, list.split(","));
 	}
 
+	private EntityList getList(String triggerPath, String listPath, EnhancedConfiguration worldConfig){
+		// Setup
+		boolean enabled = false;
+		boolean global = false;
+		AntiShare plugin = AntiShare.getInstance();
+
+		// Determine if enabled
+		if(worldConfig.getString("blocked-actions." + triggerPath).equalsIgnoreCase("global")){
+			global = true;
+			enabled = plugin.getConfig().getBoolean("blocked-actions." + triggerPath);
+		}else{
+			enabled = worldConfig.getBoolean("blocked-actions." + triggerPath);
+		}
+
+		// Get the list
+		String list = "";
+		if(enabled){
+			list = worldConfig.getString("blocked-lists." + listPath);
+			if(list.equalsIgnoreCase("global")){
+				list = plugin.getConfig().getString("blocked-lists." + listPath);
+			}
+		}
+
+		// Generate and return
+		return new EntityList(global ? "config.yml" : world.getName() + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
+	}
+
 	/**
 	 * Prints this world's configuration to the writer
 	 * 
@@ -230,6 +260,21 @@ public class PerRegionConfig {
 		switch (list){
 		case COMMAND:
 			return commands.isBlocked(string);
+		}
+		return false;
+	}
+
+	/**
+	 * Determines if an entity is blocked
+	 * 
+	 * @param entity the entity
+	 * @param list the list
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Entity entity, ListType list){
+		switch (list){
+		case MOBS:
+			return mobs.isBlocked(entity);
 		}
 		return false;
 	}

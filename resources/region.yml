@@ -26,6 +26,7 @@ blocked-lists:
   right-click: world
   use-items: world
   commands: world
+  mobs: world
 enabled-features:
   no-experience-for-creative: world
   no-drops-when-block-break:

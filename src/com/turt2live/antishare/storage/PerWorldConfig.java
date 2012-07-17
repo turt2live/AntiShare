@@ -9,6 +9,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
@@ -57,7 +58,8 @@ public class PerWorldConfig {
 		DROP,
 		PICKUP,
 		DEATH,
-		COMMAND;
+		COMMAND,
+		MOBS;
 	}
 
 	private EventList block_break;
@@ -68,6 +70,7 @@ public class PerWorldConfig {
 	private EventList pickup;
 	private EventList death;
 	private EventList commands;
+	private EntityList mobs;
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
 	private boolean splitActive = false;
@@ -102,6 +105,7 @@ public class PerWorldConfig {
 		right_click = getList("right-click", "right-click", worldConfig, false);
 		use = getList("use-items", "use-items", worldConfig, false);
 		commands = getList("commands", "commands", worldConfig, true);
+		mobs = getList("combat-against-mobs", "mobs", worldConfig);
 
 		// Get options
 		boolean value = worldConfig.getBoolean("enabled-features.no-drops-when-block-break.inventories");
@@ -170,6 +174,33 @@ public class PerWorldConfig {
 
 		// Generate and return
 		return stringsOnly ? new EventList(true, list.split(",")) : new EventList(global ? "config.yml" : world.getName() + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
+	}
+
+	private EntityList getList(String triggerPath, String listPath, EnhancedConfiguration worldConfig){
+		// Setup
+		boolean enabled = false;
+		boolean global = false;
+		AntiShare plugin = AntiShare.getInstance();
+
+		// Determine if enabled
+		if(worldConfig.getString("blocked-actions." + triggerPath).equalsIgnoreCase("global")){
+			global = true;
+			enabled = plugin.getConfig().getBoolean("blocked-actions." + triggerPath);
+		}else{
+			enabled = worldConfig.getBoolean("blocked-actions." + triggerPath);
+		}
+
+		// Get the list
+		String list = "";
+		if(enabled){
+			list = worldConfig.getString("blocked-lists." + listPath);
+			if(list.equalsIgnoreCase("global")){
+				list = plugin.getConfig().getString("blocked-lists." + listPath);
+			}
+		}
+
+		// Generate and return
+		return new EntityList(global ? "config.yml" : world.getName() + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
 	}
 
 	/**
@@ -251,6 +282,21 @@ public class PerWorldConfig {
 		switch (list){
 		case COMMAND:
 			return commands.isBlocked(string);
+		}
+		return false;
+	}
+
+	/**
+	 * Determines if an entity is blocked
+	 * 
+	 * @param entity the entity
+	 * @param list the list
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Entity entity, ListType list){
+		switch (list){
+		case MOBS:
+			return mobs.isBlocked(entity);
 		}
 		return false;
 	}

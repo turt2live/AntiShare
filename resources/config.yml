@@ -89,6 +89,7 @@ blocked-lists:
   right-click: storage minecart, powered minecart, chest, furnace, dispenser, jukebox
   use-items: fire, flint and steel, exp bottle, 383, egg, lava bucket, water bucket, fireball
   commands: /someCommand, /anotherCommand
+  mobs: all
 # Splits your world in two, like 2 giant AntiShare regions
 worldsplit:
   # X, Z, or None

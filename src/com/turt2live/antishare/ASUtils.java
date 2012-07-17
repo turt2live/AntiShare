@@ -2,7 +2,9 @@ package com.turt2live.antishare;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -10,9 +12,35 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Blaze;
+import org.bukkit.entity.CaveSpider;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.Cow;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Enderman;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Ghast;
+import org.bukkit.entity.Giant;
+import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.MagmaCube;
+import org.bukkit.entity.MushroomCow;
+import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Pig;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Silverfish;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Spider;
+import org.bukkit.entity.Squid;
+import org.bukkit.entity.Villager;
+import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+
+import com.turt2live.antishare.api.ASEntity;
 
 /**
  * Utilities
@@ -303,5 +331,147 @@ public class ASUtils {
 		Date date = new Date();
 		String timestamp = dateFormat.format(date);
 		return timestamp;
+	}
+
+	/**
+	 * Gets an entity name from an entity object
+	 * 
+	 * @param entity the entity
+	 * @return the name
+	 */
+	// TODO: Optimize
+	public static String getEntityName(Entity entity){
+		if(entity instanceof Blaze){
+			return "blaze";
+		}
+		if(entity instanceof CaveSpider){
+			return "cave spider";
+		}
+		if(entity instanceof Chicken){
+			return "chicken";
+		}
+		if(entity instanceof Cow){
+			return "cow";
+		}
+		if(entity instanceof Creeper){
+			return "creeper";
+		}
+		if(entity instanceof EnderDragon){
+			return "ender dragon";
+		}
+		if(entity instanceof Enderman){
+			return "enderman";
+		}
+		if(entity instanceof Ghast){
+			return "ghast";
+		}
+		if(entity instanceof Giant){
+			return "giant";
+		}
+		if(entity instanceof IronGolem){
+			return "iron golem";
+		}
+		if(entity instanceof MagmaCube){
+			return "magma cube";
+		}
+		if(entity instanceof MushroomCow){
+			return "mooshroom";
+		}
+		if(entity instanceof Ocelot){
+			return "ocelot";
+		}
+		if(entity instanceof Pig){
+			return "pig";
+		}
+		if(entity instanceof PigZombie){
+			return "pigman";
+		}
+		if(entity instanceof Sheep){
+			return "sheep";
+		}
+		if(entity instanceof Silverfish){
+			return "silverfish";
+		}
+		if(entity instanceof Skeleton){
+			return "skeleton";
+		}
+		if(entity instanceof Spider){
+			return "spider";
+		}
+		if(entity instanceof Squid){
+			return "squid";
+		}
+		if(entity instanceof Villager){
+			return "villager";
+		}
+		if(entity instanceof Wolf){
+			return "wolf";
+		}
+		if(entity instanceof Zombie){
+			return "zombie";
+		}
+		return null;
+	}
+
+	/**
+	 * Determines if the passed name is valid
+	 * 
+	 * @param entity the potential entity
+	 * @return the name, or null if invalid
+	 */
+	public static String getEntityName(String entity){
+		for(ASEntity asentity : allEntities()){
+			if(asentity.getProperName().equalsIgnoreCase(entity) || asentity.getGivenName().equalsIgnoreCase(entity)){
+				return asentity.getProperName();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Gets a list of all entities AntiShare can handle
+	 * 
+	 * @return a list of entities
+	 */
+	public static List<ASEntity> allEntities(){
+		List<ASEntity> names = new ArrayList<ASEntity>();
+		names.add(new ASEntity("blaze", "blaze"));
+		names.add(new ASEntity("cavespider", "cave spider"));
+		names.add(new ASEntity("cave spider", "cave spider"));
+		names.add(new ASEntity("chicken", "chicken"));
+		names.add(new ASEntity("cow", "cow"));
+		names.add(new ASEntity("creeper", "creeper"));
+		names.add(new ASEntity("enderdragon", "ender dragon"));
+		names.add(new ASEntity("ender dragon", "ender dragon"));
+		names.add(new ASEntity("enderman", "enderman"));
+		names.add(new ASEntity("ghast", "ghast"));
+		names.add(new ASEntity("giant", "giant"));
+		names.add(new ASEntity("irongolem", "iron golem"));
+		names.add(new ASEntity("iron golem", "iron golem"));
+		names.add(new ASEntity("mushroomcow", "mooshroom"));
+		names.add(new ASEntity("mushroom cow", "mooshroom"));
+		names.add(new ASEntity("mooshroom", "mooshroom"));
+		names.add(new ASEntity("ocelot", "ocelot"));
+		names.add(new ASEntity("cat", "ocelot"));
+		names.add(new ASEntity("pig", "pig"));
+		names.add(new ASEntity("pigzombie", "pigman"));
+		names.add(new ASEntity("zombiepigman", "pigman"));
+		names.add(new ASEntity("pig zombie", "pigman"));
+		names.add(new ASEntity("zombie pigman", "pigman"));
+		names.add(new ASEntity("pigman", "pigman"));
+		names.add(new ASEntity("sheep", "sheep"));
+		names.add(new ASEntity("silverfish", "silverfish"));
+		names.add(new ASEntity("skeleton", "skeleton"));
+		names.add(new ASEntity("slime", "slime"));
+		names.add(new ASEntity("magmacube", "magma cube"));
+		names.add(new ASEntity("magma cube", "magma cube"));
+		names.add(new ASEntity("spider", "spider"));
+		names.add(new ASEntity("snowman", "snowman"));
+		names.add(new ASEntity("squid", "squid"));
+		names.add(new ASEntity("villager", "villager"));
+		names.add(new ASEntity("testificate", "villager"));
+		names.add(new ASEntity("wolf", "wolf"));
+		names.add(new ASEntity("zombie", "zombie"));
+		return names;
 	}
 }
