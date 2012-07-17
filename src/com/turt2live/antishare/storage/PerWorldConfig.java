@@ -30,6 +30,7 @@ public class PerWorldConfig {
 	public static void migrate(){
 		File directory = AntiShare.getInstance().getDataFolder();
 		File newDir = new File(directory, "world_configurations");
+		int files = 0;
 		if(directory.listFiles() != null){
 			for(File file : directory.listFiles(new FileFilter(){
 				@Override
@@ -40,8 +41,12 @@ public class PerWorldConfig {
 					return false;
 				}
 			})){
+				files++;
 				file.renameTo(new File(newDir, file.getName()));
+				file.delete();
 			}
+			if(files > 0)
+				AntiShare.getInstance().getMessenger().info("World Configurations Migrated: " + files);
 		}
 	}
 

@@ -91,13 +91,11 @@ public class RegionManager {
 						String name = results.getString("regionName");
 						boolean enterMessage = results.getInt("showEnter") == 1;
 						boolean exitMessage = results.getInt("showExit") == 1;
-						ASRegion region = new ASRegion(world, minimum, maximum, setBy, gamemode);
+						ASRegion region = new ASRegion(world, minimum, maximum, setBy, gamemode, name);
 						region.setUniqueID(results.getString("uniqueID"));
 						region.setEnterMessage(results.getString("enterMessage"));
 						region.setExitMessage(results.getString("exitMessage"));
-						region.setName(name);
 						region.setMessageOptions(enterMessage, exitMessage);
-						region.buildConfiguration(); // REQUIRED
 
 						// Inventory is set when the inventory manager loads
 
@@ -132,14 +130,12 @@ public class RegionManager {
 					World world = Bukkit.getWorld(rfile.getString("worldName"));
 					Location min = new Location(world, rfile.getDouble("mi-x"), rfile.getDouble("mi-y"), rfile.getDouble("mi-z"));
 					Location max = new Location(world, rfile.getDouble("ma-x"), rfile.getDouble("ma-y"), rfile.getDouble("ma-z"));
-					ASRegion region = new ASRegion(world, min, max, rfile.getString("set-by"), GameMode.valueOf(rfile.getString("gamemode")));
+					ASRegion region = new ASRegion(world, min, max, rfile.getString("set-by"), GameMode.valueOf(rfile.getString("gamemode")), rfile.getString("name"));
 					region.setUniqueID(uid);
 					region.setEnterMessage(rfile.getString("enterMessage"));
 					region.setExitMessage(rfile.getString("exitMessage"));
 					region.setMessageOptions(rfile.getBoolean("showEnter"), rfile.getBoolean("showExit"));
-					region.setName(rfile.getString("name"));
 					region.loadPlayerInformation();
-					region.buildConfiguration(); // REQUIRED
 
 					// Inventory is set when the inventory manager loads
 
@@ -327,8 +323,7 @@ public class RegionManager {
 		}
 
 		// Create region
-		ASRegion region = new ASRegion(selection.getWorldEditSelection(), owner, gamemode);
-		region.setName(name);
+		ASRegion region = new ASRegion(selection.getWorldEditSelection(), owner, gamemode, name);
 
 		// Add to set
 		Set<ASRegion> set = regions.get(region.getWorld()) == null ? new HashSet<ASRegion>() : regions.get(region.getWorld());

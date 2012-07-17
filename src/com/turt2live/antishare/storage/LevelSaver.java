@@ -30,7 +30,7 @@ public class LevelSaver {
 
 	private static EnhancedConfiguration getFile(){
 		AntiShare plugin = AntiShare.getInstance();
-		File file = new File(plugin.getDataFolder(), "levels.yml");
+		File file = new File(plugin.getDataFolder(), "data" + File.separator + "levels.yml");
 		if(!file.exists()){
 			try{
 				file.createNewFile();

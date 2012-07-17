@@ -171,9 +171,6 @@ public class AntiShare extends PluginWrapper {
 		}
 		getConfig().load();
 
-		// Migrate world configurations
-		PerWorldConfig.migrate();
-
 		// Setup (order is important!)
 		try{
 			metrics = new Metrics(this);
@@ -198,6 +195,12 @@ public class AntiShare extends PluginWrapper {
 		factory = new RegionFactory();
 		blocks = new BlockManager();
 		inventories = new InventoryManager();
+
+		// Migrate world configurations
+		PerWorldConfig.migrate();
+
+		// Migrate region players (3.8.0-3.9.0)
+		ASRegion.migratePlayerData();
 
 		// xMail integration
 		if(getConfig().getBoolean("xMail.hook-into-xMail")){
