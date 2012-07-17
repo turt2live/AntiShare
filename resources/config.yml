@@ -7,10 +7,13 @@
 # Permissions Help:
 # http://dev.bukkit.org/server-mods/antishare/pages/3-2-x-help/#w-permissions
 # 
+# Looking for a commented version of this configuration? Try here:
+# https://github.com/turt2live/AntiShare/blob/master/resources/config.yml
+# 
+blocked-actions:
 # Everything in 'blocked-actions' is a toggle for 
 # turning on and off 'block-lists'. Leave these as
 # true for full functionality.
-blocked-actions:
   block-place: true
   block-break: true
   drop-items-on-death: true
