@@ -28,3 +28,4 @@ types:
   hit-player: true
   hit-mob: true
   command: true
+  crafting: true

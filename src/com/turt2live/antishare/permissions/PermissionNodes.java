@@ -36,6 +36,7 @@ public class PermissionNodes {
 
 	// Inventories
 	public static final String NO_SWAP = "AntiShare.inventories.no_swap";
+	public static final String MAKE_ANYTHING = "AntiShare.inventories.allowcrafting";
 
 	// Tool Nodes
 	public static final String TOOL_GET = "AntiShare.tool.get";

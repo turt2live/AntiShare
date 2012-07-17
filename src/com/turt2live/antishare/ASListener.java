@@ -21,6 +21,7 @@ import org.bukkit.block.Jukebox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Minecart;
@@ -45,6 +46,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -1432,6 +1434,35 @@ public class ASListener implements Listener {
 			}
 			if(toRegion != null){
 				toRegion.alertEntry(player);
+			}
+		}
+	}
+
+	// ################# Player Craft Item Event
+
+	@EventHandler (priority = EventPriority.HIGHEST)
+	public void onCrafting(CraftItemEvent event){
+		if(event.isCancelled())
+			return;
+
+		HumanEntity he = event.getWhoClicked();
+		// TODO: 1.3?
+		if((he instanceof Player) && !plugin.getConfig().getBoolean("enabled-features.creative-players-can-craft")){
+			Player player = (Player) he;
+			AlertType type = AlertType.ILLEGAL;
+			if(player.getGameMode() == GameMode.CREATIVE){
+				if(player.hasPermission(PermissionNodes.MAKE_ANYTHING)){
+					type = AlertType.LEGAL;
+				}
+				// TODO: Add more customization to recipes?
+			}else{
+				type = AlertType.LEGAL;
+			}
+			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to craft an item" : " crafted an item");
+			String playerMessage = plugin.getMessage("blocked-action.crafting");
+			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CRAFTING);
+			if(type == AlertType.ILLEGAL){
+				event.setCancelled(true);
 			}
 		}
 	}

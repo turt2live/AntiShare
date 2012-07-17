@@ -127,8 +127,12 @@ permissions:
         default: op
         children:
             AntiShare.inventories.no_swap: true
+            AntiShare.inventories.allowcrafting: true
     AntiShare.inventories.no_swap:
         description: Allows the target to never swap inventories on Game Mode changes
+        default: op
+    AntiShare.inventories.allowcrafting:
+        description: Allows the target to use crafting tables
         default: op
     AntiShare.regions.*:
         description: Allow all AntiShare region functions
