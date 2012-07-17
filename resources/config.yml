@@ -40,6 +40,8 @@ enabled-features:
   sql: false
   # Determines if creative players can gain experience
   no-experience-for-creative: true
+  # Determines if you want to create per-Game Mode experience values
+  change-level-on-gamemode-change: true
   # Settings for when a creative player breaks a block
   no-drops-when-block-break:
     # Clear the block's inventory (like chests)

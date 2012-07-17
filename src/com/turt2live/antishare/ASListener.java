@@ -72,6 +72,8 @@ import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
+import com.turt2live.antishare.storage.LevelSaver;
+import com.turt2live.antishare.storage.LevelSaver.Level;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.PerWorldConfig.ListType;
 
@@ -937,6 +939,14 @@ public class ASListener implements Listener {
 			}
 		}
 
+		// Change level if needed
+		Level currentLevel = new Level(player.getLevel(), player.getExp());
+		if(plugin.getConfig().getBoolean("enabled-features.change-level-on-gamemode-change") && !event.isCancelled()){
+			Level desired = LevelSaver.getLevel(player.getName(), event.getNewGameMode());
+			LevelSaver.saveLevel(player.getName(), player.getGameMode(), currentLevel);
+			desired.setTo(player);
+		}
+
 		// Check to see if we should even bother
 		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
 			return;
@@ -954,6 +964,7 @@ public class ASListener implements Listener {
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
 				event.setCancelled(true);
+				currentLevel.setTo(player); // Restore level
 				return;
 			}
 		}
@@ -1042,8 +1053,6 @@ public class ASListener implements Listener {
 			// For alerts
 			ignore = false;
 		}
-
-		// TODO: Experience swap
 
 		// Alerts
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to Game Mode " + ChatColor.YELLOW + to.name();
