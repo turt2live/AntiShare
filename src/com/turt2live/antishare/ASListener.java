@@ -943,11 +943,12 @@ public class ASListener implements Listener {
 
 		// Change level if needed
 		Level currentLevel = new Level(player.getLevel(), player.getExp());
-		if(plugin.getConfig().getBoolean("enabled-features.change-level-on-gamemode-change") && !event.isCancelled()){
+		if(plugin.getConfig().getBoolean("enabled-features.change-level-on-gamemode-change")
+				&& !event.isCancelled()
+				&& !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
 			Level desired = LevelSaver.getLevel(player.getName(), event.getNewGameMode());
 			LevelSaver.saveLevel(player.getName(), player.getGameMode(), currentLevel);
 			desired.setTo(player);
-			// TODO: Permissions override
 		}
 
 		// Check to see if we should even bother

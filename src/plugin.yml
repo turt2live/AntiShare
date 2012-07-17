@@ -129,7 +129,7 @@ permissions:
             AntiShare.inventories.no_swap: true
             AntiShare.inventories.allowcrafting: true
     AntiShare.inventories.no_swap:
-        description: Allows the target to never swap inventories on Game Mode changes
+        description: Allows the target to never swap inventories on Game Mode changes. Will also stop experience changes.
         default: op
     AntiShare.inventories.allowcrafting:
         description: Allows the target to use crafting tables
