@@ -30,6 +30,7 @@ public class PerRegionConfig {
 	private EventList death;
 	private EventList commands;
 	private EntityList mobs;
+	private EventList crafting;
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
 	private boolean combatPlayers = false;
@@ -67,6 +68,7 @@ public class PerRegionConfig {
 		use = getList("use-items", "use-items", regionConfig, false);
 		commands = getList("commands", "commands", regionConfig, true);
 		mobs = getList("combat-against-mobs", "mobs", regionConfig);
+		crafting = getList("crafting-recipes", "crafting-recipes", regionConfig, false);
 
 		// Get options
 		boolean value = regionConfig.getBoolean("enabled-features.no-drops-when-block-break.inventories");
@@ -218,6 +220,8 @@ public class PerRegionConfig {
 			return pickup.isBlocked(material);
 		case DEATH:
 			return death.isBlocked(material);
+		case CRAFTING:
+			return crafting.isBlocked(material);
 		}
 		return false;
 	}
@@ -313,6 +317,15 @@ public class PerRegionConfig {
 	 */
 	public boolean combatAgainstMobs(){
 		return combatMobs;
+	}
+
+	/**
+	 * Determines if repairing of items is allowed
+	 * 
+	 * @return true if allowed, false if not
+	 */
+	public boolean isRepairAllowed(){
+		return !crafting.isRepairBlocked();
 	}
 
 	/**

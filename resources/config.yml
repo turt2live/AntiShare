@@ -24,6 +24,7 @@ blocked-actions:
   commands: true
   combat-against-players: true
   combat-against-mobs: true
+  crafting-recipes: true
 # Extra toggles
 handled-actions:
   # Should AntiShare deal with world inventories?
@@ -42,8 +43,6 @@ enabled-features:
   no-experience-for-creative: true
   # Determines if you want to create per-Game Mode experience values
   change-level-on-gamemode-change: true
-  # Allow crafting for creative players?
-  creative-players-can-craft: false
   # Settings for when a creative player breaks a block
   no-drops-when-block-break:
     # Clear the block's inventory (like chests)
@@ -97,6 +96,8 @@ blocked-lists:
   use-items: fire, flint and steel, exp bottle, 383, egg, lava bucket, water bucket, fireball
   commands: /someCommand, /anotherCommand
   mobs: all
+  # To block a recipe, use the resulting item's name, such as "stick"
+  crafting-recipes: all
 # Splits your world in two, like 2 giant AntiShare regions
 worldsplit:
   # X, Z, or None

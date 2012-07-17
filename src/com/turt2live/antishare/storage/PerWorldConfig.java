@@ -59,7 +59,8 @@ public class PerWorldConfig {
 		PICKUP,
 		DEATH,
 		COMMAND,
-		MOBS;
+		MOBS,
+		CRAFTING;
 	}
 
 	private EventList block_break;
@@ -71,6 +72,7 @@ public class PerWorldConfig {
 	private EventList death;
 	private EventList commands;
 	private EntityList mobs;
+	private EventList crafting;
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
 	private boolean splitActive = false;
@@ -106,6 +108,7 @@ public class PerWorldConfig {
 		use = getList("use-items", "use-items", worldConfig, false);
 		commands = getList("commands", "commands", worldConfig, true);
 		mobs = getList("combat-against-mobs", "mobs", worldConfig);
+		crafting = getList("crafting-recipes", "crafting-recipes", worldConfig, false);
 
 		// Get options
 		boolean value = worldConfig.getBoolean("enabled-features.no-drops-when-block-break.inventories");
@@ -240,6 +243,8 @@ public class PerWorldConfig {
 			return pickup.isBlocked(material);
 		case DEATH:
 			return death.isBlocked(material);
+		case CRAFTING:
+			return crafting.isBlocked(material);
 		}
 		return false;
 	}
@@ -376,6 +381,15 @@ public class PerWorldConfig {
 	 */
 	public boolean combatAgainstMobs(){
 		return combatMobs;
+	}
+
+	/**
+	 * Determines if repairing of items is allowed
+	 * 
+	 * @return true if allowed, false if not
+	 */
+	public boolean isRepairAllowed(){
+		return !crafting.isRepairBlocked();
 	}
 
 	/**

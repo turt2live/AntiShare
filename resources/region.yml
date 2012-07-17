@@ -17,6 +17,7 @@ blocked-actions:
   commands: world
   combat-against-players: world
   combat-against-mobs: world
+  crafting-recipes: world
 blocked-lists:
   block-place: world
   block-break: world
@@ -27,6 +28,7 @@ blocked-lists:
   use-items: world
   commands: world
   mobs: world
+  crafting-recipes: world
 enabled-features:
   no-experience-for-creative: world
   no-drops-when-block-break:

@@ -947,6 +947,7 @@ public class ASListener implements Listener {
 			Level desired = LevelSaver.getLevel(player.getName(), event.getNewGameMode());
 			LevelSaver.saveLevel(player.getName(), player.getGameMode(), currentLevel);
 			desired.setTo(player);
+			// TODO: Permissions override
 		}
 
 		// Check to see if we should even bother
@@ -1447,14 +1448,23 @@ public class ASListener implements Listener {
 
 		HumanEntity he = event.getWhoClicked();
 		// TODO: 1.3?
-		if((he instanceof Player) && !plugin.getConfig().getBoolean("enabled-features.creative-players-can-craft")){
+		if((he instanceof Player)){
 			Player player = (Player) he;
 			AlertType type = AlertType.ILLEGAL;
 			if(player.getGameMode() == GameMode.CREATIVE){
-				if(player.hasPermission(PermissionNodes.MAKE_ANYTHING)){
+				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld())){
 					type = AlertType.LEGAL;
 				}
-				// TODO: Add more customization to recipes?
+				ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
+				if(region != null){
+					if(!region.getConfig().isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
+						type = AlertType.LEGAL;
+					}
+				}else{
+					if(config.get(player.getWorld()).isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
+						type = AlertType.LEGAL;
+					}
+				}
 			}else{
 				type = AlertType.LEGAL;
 			}
