@@ -557,8 +557,8 @@ public class ASRegion {
 					file.renameTo(new File(newSaveFolder, file.getName()));
 					file.delete();
 				}
+				plugin.getMessenger().info("Region Player Files Migrated: " + files.length);
 			}
-			plugin.getMessenger().info("Region Player Files Migrated: " + files.length);
 			oldSaveFolder.delete();
 		}
 	}

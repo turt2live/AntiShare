@@ -256,7 +256,7 @@ public class CommandHandler implements CommandExecutor {
 						List<ASRegion> regions = plugin.getRegionManager().getAllRegions();
 
 						// Math
-						int maxPages = (int) Math.ceil(regions.size() / resultsPerPage);
+						double maxPages = Math.ceil(regions.size() / resultsPerPage);
 						if(maxPages < 1){
 							maxPages = 1;
 						}

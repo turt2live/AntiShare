@@ -32,7 +32,7 @@ import com.turt2live.antishare.storage.SQL;
  * 
  * @author turt2live
  */
-public class ASInventory {
+public class ASInventory implements Cloneable {
 
 	/**
 	 * An enum to represent inventory types
