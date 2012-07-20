@@ -11,6 +11,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.CaveSpider;
@@ -158,6 +159,7 @@ public class ASUtils {
 		case FENCE_GATE:
 		case ENCHANTMENT_TABLE:
 		case BREWING_STAND:
+		case REDSTONE_WIRE:
 			/* TODO: 1.3
 			 * Add interactable blocks
 			 */
@@ -177,7 +179,11 @@ public class ASUtils {
 	 */
 	public static boolean isDroppedOnBreak(Block block, Block source){
 		boolean attached = false;
-		if(block.getState().getData() instanceof Attachable && !block.getType().equals(Material.PISTON_EXTENSION)){
+		if(block.getType() == Material.REDSTONE_WIRE){
+			Location l1 = source.getLocation();
+			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
+			attached = l1.getBlockX() == l2.getBlockX() && l1.getBlockY() == l2.getBlockY() && l1.getBlockZ() == l2.getBlockZ();
+		}else if(block.getState().getData() instanceof Attachable && !block.getType().equals(Material.PISTON_EXTENSION)){
 			if(source != null){
 				Attachable att = (Attachable) block.getState().getData();
 				// We need to use location because Java is mean like that >.<
