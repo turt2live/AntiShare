@@ -29,6 +29,7 @@ public class PermissionNodes {
 	public static final String CONVERT = "AntiShare.convert";
 	public static final String XMAIL = "AntiShare.xmail";
 	public static final String NO_GM_CD = "AntiShare.cooldownbypass";
+	public static final String CHECK = "AntiShare.check";
 
 	// General Nodes
 	public static final String AFFECT_SURVIVAL = "AntiShare.affect.survival";

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -480,4 +481,36 @@ public class ASUtils {
 		names.add(new ASEntity("zombie", "zombie"));
 		return names;
 	}
+
+	/**
+	 * Gets a list of online players with a defined Game Mode
+	 * 
+	 * @param gamemode the Game Mode
+	 * @return the player names with that Game Mode (online only)
+	 */
+	public static List<String> findGameModePlayers(GameMode gamemode){
+		List<String> affected = new ArrayList<String>();
+		for(Player player : Bukkit.getOnlinePlayers()){
+			if(player.getGameMode() == gamemode){
+				affected.add(player.getName());
+			}
+		}
+		return affected;
+	}
+
+	/**
+	 * Generates a comma-separated list from a List
+	 * 
+	 * @param list the list
+	 * @return the comma-separated String
+	 */
+	public static String commas(List<String> list){
+		StringBuilder commas = new StringBuilder();
+		for(String s : list){
+			commas.append(s).append(", ");
+		}
+		String finalComma = commas.toString().trim();
+		return finalComma.substring(0, finalComma.length() - 1);
+	}
+
 }

@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -332,7 +333,7 @@ public class CommandHandler implements CommandExecutor {
 										ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wwrong while converting. Please check the server log for errors", true);
 									}
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wwrong while connecting to the SQL server. Please check your settings.", true);
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wrong while connecting to the SQL server. Please check your settings.", true);
 								}
 							}
 						}
@@ -380,6 +381,31 @@ public class CommandHandler implements CommandExecutor {
 						}
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.RED + "You are not a player and do not have SimpleNotice", true);
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("gamemode") || args[0].equalsIgnoreCase("gm")){
+					if(plugin.getPermissions().has(sender, PermissionNodes.CHECK)){
+						GameMode gm = null;
+						if(args.length > 1){
+							gm = ASUtils.getGameMode(args[1]);
+							if(gm == null){
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "Unknown Game Mode!", true);
+								return true;
+							}
+						}
+						if(gm == null){
+							for(GameMode gamemode : GameMode.values()){
+								if(ASUtils.findGameModePlayers(gamemode).size() > 0){
+									ASUtils.sendToPlayer(sender, ChatColor.GOLD + gamemode.name() + ": " + ChatColor.YELLOW + ASUtils.commas(ASUtils.findGameModePlayers(gamemode)), false);
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.GOLD + gamemode.name() + ": " + ChatColor.YELLOW + "no one", false);
+								}
+							}
+						}else{
+							ASUtils.sendToPlayer(sender, ChatColor.GOLD + gm.name() + ": " + ChatColor.YELLOW + ASUtils.commas(ASUtils.findGameModePlayers(gm)), false);
+						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
 					return true;
 				}else{

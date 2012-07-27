@@ -24,6 +24,7 @@ commands:
       /<command> money <on/off> - Turns on/off fine/reward messages
       /<command> money status - Tells you if you get fine/reward messages
       /<command> simplenotice - Toggle SimpleNotice support
+      /<command> check [creative/survival/adventure] - Find Game Mode users
       /<command> help = This menu
 
 permissions:
@@ -47,6 +48,10 @@ permissions:
             AntiShare.money.*: true
             AntiShare.xmail: true
             AntiShare.cooldownbypass: true
+            AntiShare.check: true
+    AntiShare.check:
+        description: Allows the target to see who is in a defined Game Mode
+        default: op
     AntiShare.convert:
         description: Allows the target to convert the storage system for AntiShare
         default: op
