@@ -1,0 +1,12 @@
+Since 3.8.0:
+- Added /as check [gamemode]
+- Fixed the checking of Redstone on blocks for creative breaking
+- Updated code sanity (internal minor mistakes)
+- Fixed infinite region configurations
+- Added ability to store and change player level on Game Mode change
+- Added ability to block specific outcomes of a Crafting Table for Creative players
+- Updated mob-blocking to allow blocking of specific mobs
+
+Bugs:
+- [Cannot Reproduce] Heavy lag
+- [Cannot Reproduce] Breaking of signs in a WorldGuard area (LWC?)
