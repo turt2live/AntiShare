@@ -6,7 +6,8 @@ Since 3.8.0:
 - Added ability to store and change player level on Game Mode change
 - Added ability to block specific outcomes of a Crafting Table for Creative players
 - Updated mob-blocking to allow blocking of specific mobs
+- Theoretical fix of "protected blocks" (LWC/ChestShop/Lockette) being break-able
 
 Bugs:
 - [Cannot Reproduce] Heavy lag
-- [Cannot Reproduce] Breaking of signs in a WorldGuard area (LWC?)
+- [Potentially Fixed] Breaking of signs in a WorldGuard area (LWC?)

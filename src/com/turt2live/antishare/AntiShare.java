@@ -25,6 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
+import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
@@ -108,6 +109,7 @@ public class AntiShare extends PluginWrapper {
 	private MoneyManager tender;
 	private XMailListener xmail;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
+	private HookManager hooks;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -182,6 +184,7 @@ public class AntiShare extends PluginWrapper {
 		// Register SimpleNotice channel to AntiShare
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
+		hooks = new HookManager();
 		messenger = new Messenger();
 		signs = new SignManager();
 		trackers = new TrackerList();
@@ -281,6 +284,7 @@ public class AntiShare extends PluginWrapper {
 		signs = null;
 		tender = null;
 		xmail = null;
+		hooks = null;
 
 		// Save disabled SimpleNotice users
 		try{
@@ -572,6 +576,15 @@ public class AntiShare extends PluginWrapper {
 
 		// Failed connection
 		return false;
+	}
+
+	/**
+	 * Gets the Hook Manager in use by AntiShare
+	 * 
+	 * @return the hook manager
+	 */
+	public HookManager getHookManager(){
+		return hooks;
 	}
 
 	/**

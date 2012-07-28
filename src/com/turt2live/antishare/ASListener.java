@@ -181,6 +181,11 @@ public class ASListener implements Listener {
 			}
 		}
 
+		// Check hooks
+		if(plugin.getHookManager().checkSourceBlockForProtection(block)){
+			return; // Don't handle any further, let the other plugin handle it
+		}
+
 		// Check creative/survival blocks
 		if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
 			GameMode blockGamemode = plugin.getBlockManager().getType(block);
