@@ -36,8 +36,8 @@ enabled-features:
 worldsplit:
   split: none
   value: 0
-  creative: 1
-  survival: 0
+  positive: CREATIVE
+  negative: SURVIVAL
   warning:
     enabled: false
     blocks: 15

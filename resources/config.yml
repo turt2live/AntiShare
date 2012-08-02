@@ -104,10 +104,10 @@ worldsplit:
   split: none
   # Axis value to split on
   value: 0
-  # If 1, then the POSITIVE side will be creative
-  creative: 1
-  # If 0, then the NEGATIVE side will be survival
-  survival: 0
+  # This is for any value GREATER THAN the 'value'
+  positive: CREATIVE
+  # This is for any value LESS THAN the 'value'
+  negative: SURVIVAL
   # Warn people of the split
   warning:
     # Can be turned off

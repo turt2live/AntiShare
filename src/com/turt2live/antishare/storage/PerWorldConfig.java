@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
@@ -23,6 +23,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.regions.WorldSplit;
 import com.turt2live.antishare.regions.WorldSplit.Axis;
@@ -156,9 +157,9 @@ public class PerWorldConfig {
 			}
 			Axis axis = Axis.getAxis(axisStr);
 			double split = worldConfig.getString("worldsplit.value").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.value") : worldConfig.getDouble("worldsplit.value");
-			double creative = worldConfig.getString("worldsplit.creative").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.creative") : worldConfig.getDouble("worldsplit.creative");
-			double survival = worldConfig.getString("worldsplit.survival").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.survival") : worldConfig.getDouble("worldsplit.survival");
-			this.split = new WorldSplit(world, split, axis, creative, survival);
+			GameMode positive = ASUtils.getGameMode(worldConfig.getString("worldsplit.positive").equalsIgnoreCase("global") ? plugin.getConfig().getString("worldsplit.positive") : worldConfig.getString("worldsplit.positive"));
+			GameMode negative = ASUtils.getGameMode(worldConfig.getString("worldsplit.negative").equalsIgnoreCase("global") ? plugin.getConfig().getString("worldsplit.negative") : worldConfig.getString("worldsplit.negative"));
+			this.split = new WorldSplit(world, split, axis, positive, negative);
 			boolean warn = worldConfig.getString("worldsplit.warning.enabled").equalsIgnoreCase("global") ? plugin.getConfig().getBoolean("worldsplit.warning.enabled") : worldConfig.getBoolean("worldsplit.warning.enabled");
 			double before = worldConfig.getString("worldsplit.warning.blocks").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.warning.blocks") : worldConfig.getDouble("worldsplit.warning.blocks");
 			long warnEvery = worldConfig.getString("worldsplit.warning.warn-every").equalsIgnoreCase("global") ? plugin.getConfig().getLong("worldsplit.warning.warn-every") : worldConfig.getLong("worldsplit.warning.warn-every");

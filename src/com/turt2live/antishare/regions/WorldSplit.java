@@ -30,8 +30,6 @@ import com.turt2live.antishare.permissions.PermissionNodes;
  */
 public class WorldSplit {
 
-	// TODO: Re-work world split logic to allow stuff like C/A, C/S, S/A
-
 	/**
 	 * An enum to represent a World Split Axis
 	 * 
@@ -61,8 +59,7 @@ public class WorldSplit {
 	private World world;
 	private double split;
 	private Axis axis;
-	private double creative;
-	private double survival;
+	private GameMode positive, negative;
 	private double blockWarn = 15;
 	private boolean warn = false;
 	private long warnEvery = 2;
@@ -77,12 +74,12 @@ public class WorldSplit {
 	 * @param creative the creative side
 	 * @param survival the survival side
 	 */
-	public WorldSplit(World world, double split, Axis axis, double creative, double survival){
+	public WorldSplit(World world, double split, Axis axis, GameMode positive, GameMode negative){
 		this.world = world;
 		this.split = split;
 		this.axis = axis;
-		this.creative = creative;
-		this.survival = survival;
+		this.positive = positive;
+		this.negative = negative;
 		this.plugin = AntiShare.getInstance();
 		checkValues();
 	}
@@ -163,29 +160,19 @@ public class WorldSplit {
 	// Gets the gamemode, or returns default if something is wrong
 	private GameMode getGameMode(double point, GameMode defaultMode){
 		if(point > split){
-			if(creative > survival){
-				return GameMode.CREATIVE;
-			}else if(survival > creative){
-				return GameMode.SURVIVAL;
-			}
+			// Positive
+			return positive;
 		}else if(point < split){
-			if(creative < survival){
-				return GameMode.CREATIVE;
-			}else if(survival < creative){
-				return GameMode.SURVIVAL;
-			}
+			// Negative
+			return negative;
 		}
 		return defaultMode;
 	}
 
 	// Checks to ensure the values are correct
 	private void checkValues(){
-		if(creative > survival){
-			creative = 1;
-			survival = 0;
-		}else if(survival > creative){
-			survival = 1;
-			creative = 0;
+		if(positive != negative && positive != null && negative != null){
+			// Valid
 		}else{
 			axis = Axis.NONE;
 			plugin.getMessenger().log("Invalid world split for world " + world.getName(), Level.WARNING, LogType.BYPASS);
