@@ -146,4 +146,6 @@ other:
 # xMail hook, pretty easy to setup.
 xMail:
   creative-can-send-items: false
+  adventure-can-send-items: true
+  survival-can-send-items: true
   hook-into-xMail: true

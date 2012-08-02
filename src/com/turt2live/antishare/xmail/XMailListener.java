@@ -6,13 +6,12 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.xmail;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,13 +38,15 @@ public class XMailListener implements Listener {
 			block = !plugin.getPermissions().has(player, PermissionNodes.XMAIL);
 		}
 
-		if((event.getMail() instanceof ComplexMail)
-				&& !plugin.getConfig().getBoolean("xMail.creative-can-send-items")
-				&& block){
+		if((event.getMail() instanceof ComplexMail) && block){
 			ComplexMail mail = (ComplexMail) event.getMail();
-			if(mail.hasItems() && player != null && player.getGameMode() == GameMode.CREATIVE){
+			if(!mail.hasItems() || player == null){
+				return;
+			}
+			String gm = player.getGameMode().name().toLowerCase();
+			if(!plugin.getConfig().getBoolean("xmail." + gm + "-can-send-items")){
 				event.setCancelled(true);
-				ASUtils.sendToPlayer(player, ChatColor.RED + "You cannot send items in creative mode through xMail", true);
+				ASUtils.sendToPlayer(player, ChatColor.RED + "You cannot send items in " + gm + " mode through xMail", true);
 			}
 		}
 	}
