@@ -109,11 +109,15 @@ permissions:
         children:
             AntiShare.affect.creative: true
             AntiShare.affect.survival: true
+            AntiShare.affect.adventure: true
     AntiShare.affect.creative:
         description: The target is affected when in Creative
         default: true
     AntiShare.affect.survival:
         description: The target is affected when in Survival
+        default: false
+    AntiShare.affect.adventure:
+        description: The target is affected when in Adventure
         default: false
     AntiShare.worldsplit.*:
         description: The target will not be affected by either side of a world split

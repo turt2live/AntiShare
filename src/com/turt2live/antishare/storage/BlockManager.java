@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
@@ -46,6 +46,8 @@ public class BlockManager {
 
 	/* In 1.3 "Adventure" mode cannot place or break blocks, so the 
 	 * manager is not needed for Adventure mode players. 
+	 * 
+	 * TODO: Maybe implement support anyways? For the few servers who allow it...
 	 */
 
 	private AntiShare plugin;

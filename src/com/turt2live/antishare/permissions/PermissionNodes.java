@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.permissions;
 
@@ -44,6 +44,7 @@ public class PermissionNodes {
 	// General Nodes
 	public static final String AFFECT_SURVIVAL = "AntiShare.affect.survival";
 	public static final String AFFECT_CREATIVE = "AntiShare.affect.creative";
+	public static final String AFFECT_ADVENTURE = "AntiShare.affect.survival";
 
 	// Inventories
 	public static final String NO_SWAP = "AntiShare.inventories.no_swap";

@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.regions;
 
@@ -29,6 +29,8 @@ import com.turt2live.antishare.permissions.PermissionNodes;
  * @author turt2live
  */
 public class WorldSplit {
+
+	// TODO: Re-work world split logic to allow stuff like C/A, C/S, S/A
 
 	/**
 	 * An enum to represent a World Split Axis
