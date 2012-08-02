@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.api;
 
@@ -21,8 +21,7 @@ public enum ASGameMode{
 
 	CREATIVE(1),
 	SURVIVAL(0),
-	// TODO: 1.3
-	//	ADVENTURE(2),
+	ADVENTURE(2),
 	ALL(-3),
 	BOTH(-1),
 	NONE(-2);
@@ -48,11 +47,9 @@ public enum ASGameMode{
 			return true;
 		}else if(numeric == -3){
 			return true;
+		}else if(numeric == 2 && gamemode == GameMode.ADVENTURE){
+			return true;
 		}
-		// TODO: 1.3
-		//		}else if(numeric == 2 && gamemode == GameMode.ADVENTURE){
-		//			return true;
-		//		}
 		return false; // Covers 'NONE'
 	}
 
@@ -68,11 +65,10 @@ public enum ASGameMode{
 			return ASGameMode.CREATIVE;
 		}else if(string.equalsIgnoreCase("survival")){
 			return ASGameMode.SURVIVAL;
-			// TODO: 1.3
-			//		}else if(string.equalsIgnoreCase("adventure")){
-			//			return ASGameMode.ADVENTURE;
-			//		}else if(string.equalsIgnoreCase("all")){
-			//			return ASGameMode.ALL;
+		}else if(string.equalsIgnoreCase("adventure")){
+			return ASGameMode.ADVENTURE;
+		}else if(string.equalsIgnoreCase("all")){
+			return ASGameMode.ALL;
 		}else if(string.equalsIgnoreCase("both")){
 			return ASGameMode.BOTH;
 		}else if(string.equalsIgnoreCase("none")){
