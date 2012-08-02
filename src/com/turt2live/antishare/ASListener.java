@@ -201,7 +201,7 @@ public class ASListener implements Listener {
 			GameMode blockGamemode = plugin.getBlockManager().getType(block);
 			if(blockGamemode != null){
 				blockGM = blockGamemode.name().toLowerCase();
-				String oGM = blockGM.equalsIgnoreCase("creative") ? "survival" : "creative";
+				String oGM = player.getGameMode().name().toLowerCase();
 				if(player.getGameMode() != blockGamemode){
 					special = true;
 					deny = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + blockGM + "-blocks.deny");
@@ -243,9 +243,9 @@ public class ASListener implements Listener {
 				String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
 				String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
 				MessageFactory factory = new MessageFactory(specialPlayerMessage);
-				factory.insert(block, player, block.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : TenderType.SURVIVAL_BLOCK);
+				factory.insert(block, player, block.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
 				specialPlayerMessage = factory.toString();
-				plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, (blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : AlertTrigger.SURVIVAL_BLOCK));
+				plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, (blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK)));
 			}
 		}else{
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");

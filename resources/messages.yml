@@ -16,6 +16,7 @@ blocked-action:
   use-item: "You cannot use that"
   creative-block-break: "You can't break creative player's blocks!"
   survival-block-break: "You can't break survival player's blocks!"
+  adventure-block-break: "You can't break adventure player's blocks!"
   hit-player: "You cannot hit players"
   hit-mob: "You cannot hit mobs"
   command: "You cannot use that command"

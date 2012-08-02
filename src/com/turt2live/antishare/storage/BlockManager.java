@@ -44,19 +44,16 @@ public class BlockManager {
 		public Material expectedType;
 	}
 
-	/* In 1.3 "Adventure" mode cannot place or break blocks, so the 
-	 * manager is not needed for Adventure mode players. 
-	 * 
-	 * TODO: Maybe implement support anyways? For the few servers who allow it...
-	 */
-
 	private AntiShare plugin;
 	private List<Block> creative_blocks = new ArrayList<Block>();
 	private List<Block> survival_blocks = new ArrayList<Block>();
+	private List<Block> adventure_blocks = new ArrayList<Block>();
 	private ConcurrentHashMap<Block, ASBlock> expected_creative = new ConcurrentHashMap<Block, ASBlock>();
 	private ConcurrentHashMap<Block, ASBlock> expected_survival = new ConcurrentHashMap<Block, ASBlock>();
+	private ConcurrentHashMap<Block, ASBlock> expected_adventure = new ConcurrentHashMap<Block, ASBlock>();
 	private TrackerList tracked_creative;
 	private TrackerList tracked_survival;
+	private TrackerList tracked_adventure;
 
 	/**
 	 * Creates a new block manager, also loads the block lists
@@ -92,12 +89,24 @@ public class BlockManager {
 					survival_blocks.remove(block);
 					expected_survival.remove(block);
 				}
+				remove = new ArrayList<Block>();
+				for(Block block : adventure_blocks){
+					if(block.getType() == Material.AIR){
+						remove.add(block);
+					}
+				}
+				for(Block block : remove){
+					adventure_blocks.remove(block);
+					expected_adventure.remove(block);
+				}
 
 				// Check lists
 				ConcurrentHashMap<Block, ASBlock> creative = new ConcurrentHashMap<Block, ASBlock>();
 				ConcurrentHashMap<Block, ASBlock> survival = new ConcurrentHashMap<Block, ASBlock>();
+				ConcurrentHashMap<Block, ASBlock> adventure = new ConcurrentHashMap<Block, ASBlock>();
 				creative.putAll(expected_creative);
 				survival.putAll(expected_survival);
+				adventure.putAll(expected_adventure);
 				for(ASBlock block : creative.values()){
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
@@ -114,6 +123,14 @@ public class BlockManager {
 						block.expectedType = atLocation.getType();
 					}
 				}
+				for(ASBlock block : adventure.values()){
+					Block atLocation = block.location.getBlock();
+					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
+					if(atLocation.getType() != block.expectedType){
+						plugin.getMessenger().log("Adventure block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING, LogType.BLOCK);
+						block.expectedType = atLocation.getType();
+					}
+				}
 			}
 		}, 0L, (20 * 60 * 10)); // 10 minutes
 	}
@@ -125,8 +142,10 @@ public class BlockManager {
 		// Load lists
 		List<Block> creative = new ArrayList<Block>();
 		List<Block> survival = new ArrayList<Block>();
+		List<Block> adventure = new ArrayList<Block>();
 		creative.addAll(creative_blocks);
 		survival.addAll(survival_blocks);
+		adventure.addAll(adventure_blocks);
 
 		// Load file
 		File dir = new File(plugin.getDataFolder(), "data");
@@ -147,6 +166,10 @@ public class BlockManager {
 			String path = block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName();
 			blocks.set(path, "SURVIVAL");
 		}
+		for(Block block : adventure){
+			String path = block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName();
+			blocks.set(path, "ADVENTURE");
+		}
 		blocks.save();
 	}
 
@@ -157,6 +180,7 @@ public class BlockManager {
 		// Setup lists
 		tracked_creative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
 		tracked_survival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
+		tracked_adventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
 
 		// Setup cache
 		File dir = new File(plugin.getDataFolder(), "data");
@@ -186,8 +210,10 @@ public class BlockManager {
 		save();
 		creative_blocks.clear();
 		survival_blocks.clear();
+		adventure_blocks.clear();
 		expected_creative.clear();
 		expected_survival.clear();
+		expected_adventure.clear();
 		load();
 	}
 
@@ -216,6 +242,13 @@ public class BlockManager {
 			survival_blocks.add(block);
 			expected_survival.put(block, asblock);
 			break;
+		case ADVENTURE:
+			if(!tracked_adventure.isTracked(block)){
+				break;
+			}
+			adventure_blocks.add(block);
+			expected_adventure.put(block, asblock);
+			break;
 		}
 	}
 
@@ -235,6 +268,10 @@ public class BlockManager {
 			case SURVIVAL:
 				survival_blocks.remove(block);
 				expected_survival.remove(block);
+				break;
+			case ADVENTURE:
+				adventure_blocks.remove(block);
+				expected_adventure.remove(block);
 				break;
 			}
 		}
@@ -302,6 +339,8 @@ public class BlockManager {
 			return GameMode.CREATIVE;
 		}else if(survival_blocks.contains(block)){
 			return GameMode.SURVIVAL;
+		}else if(adventure_blocks.contains(block)){
+			return GameMode.ADVENTURE;
 		}
 		return null;
 	}

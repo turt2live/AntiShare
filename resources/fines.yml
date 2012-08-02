@@ -103,6 +103,13 @@ actions:
     do-fine: false
     do-reward: false
     give-to: creative
+  adventure-block-break:
+    fine: 0.0
+    reward: 0.0
+    no-money: default
+    do-fine: false
+    do-reward: false
+    give-to: creative
   creative-block-break:
     fine: 0.0
     reward: 0.0

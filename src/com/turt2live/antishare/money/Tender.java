@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
@@ -41,7 +41,8 @@ public abstract class Tender {
 		HIT_PLAYER("actions.player-hit-player", "Player Hit Player"),
 		HIT_MOB("actions.player-hit-mob", "Player Hit Mob"),
 		CREATIVE_BLOCK("actions.creative-block-break", "Creative Block Break"),
-		SURVIVAL_BLOCK("actions.survival-block-break", "Survival Block Break");
+		SURVIVAL_BLOCK("actions.survival-block-break", "Survival Block Break"),
+		ADVENTURE_BLOCK("actions.adventure-block-break", "Adventure Block Break");
 
 		private String key, name;
 

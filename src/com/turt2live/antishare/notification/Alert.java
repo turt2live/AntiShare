@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.notification;
 
@@ -58,6 +58,7 @@ public class Alert {
 		USE_ITEM("types.use-item"),
 		CREATIVE_BLOCK("types.creative-block-break"),
 		SURVIVAL_BLOCK("types.survival-block-break"),
+		ADVENTURE_BLOCK("type.adventure-block-break"),
 		HIT_PLAYER("types.hit-player"),
 		HIT_MOB("types.hit-mob"),
 		COMMAND("types.command"),

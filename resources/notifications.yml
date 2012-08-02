@@ -25,6 +25,7 @@ types:
   use-item: true
   creative-block-break: true
   survival-block-break: true
+  adventure-block-break: true
   hit-player: true
   hit-mob: true
   command: true

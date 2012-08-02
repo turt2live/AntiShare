@@ -79,6 +79,18 @@ settings:
   creative-breaking-survival-blocks:
     block-drops: false
     deny: true
+  creative-breaking-adventure-blocks:
+    block-drops: false
+    deny: true
+  survival-breaking-adventure-blocks:
+    block-drops: false
+    deny: true
+  adventure-breaking-survival-blocks:
+    block-drops: false
+    deny: true
+  adventure-breaking-creative-blocks:
+    block-drops: false
+    deny: true
 # Where the magic happens.
 # Here you can define EXACTLY what you want
 # AntiShare to control (restrict). You can use
@@ -121,6 +133,7 @@ worldsplit:
 block-tracking:
   tracked-survival-blocks: all
   tracked-creative-blocks: all
+  tracked-adventure-blocks: all
 # Misc. stuff, generally leave this alone.
 other:
   debug: false
