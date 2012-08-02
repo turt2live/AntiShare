@@ -519,7 +519,7 @@ public class ASUtils {
 			commas.append(s).append(", ");
 		}
 		String finalComma = commas.toString().trim();
-		return finalComma.substring(0, finalComma.length() - 1);
+		return finalComma.length() > 0 ? finalComma.substring(0, finalComma.length() - 1) : "no one";
 	}
 
 }

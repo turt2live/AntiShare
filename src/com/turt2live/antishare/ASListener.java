@@ -1002,6 +1002,9 @@ public class ASListener implements Listener {
 			case SURVIVAL:
 				plugin.getInventoryManager().saveSurvivalInventory(player, player.getWorld());
 				break;
+			case ADVENTURE:
+				plugin.getInventoryManager().saveAdventureInventory(player, player.getWorld());
+				break;
 			}
 
 			// Set to
@@ -1011,6 +1014,9 @@ public class ASListener implements Listener {
 				break;
 			case SURVIVAL:
 				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player);
+				break;
+			case ADVENTURE:
+				plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player);
 				break;
 			}
 
@@ -1370,6 +1376,9 @@ public class ASListener implements Listener {
 			case SURVIVAL:
 				plugin.getInventoryManager().saveSurvivalInventory(player, from);
 				break;
+			case ADVENTURE:
+				plugin.getInventoryManager().saveAdventureInventory(player, from);
+				break;
 			}
 
 			// Set to
@@ -1379,6 +1388,9 @@ public class ASListener implements Listener {
 				break;
 			case SURVIVAL:
 				plugin.getInventoryManager().getSurvivalInventory(player, to).setTo(player);
+				break;
+			case ADVENTURE:
+				plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player);
 				break;
 			}
 
