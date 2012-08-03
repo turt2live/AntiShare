@@ -16,10 +16,11 @@ Since 3.8.0:
 	- Internal handling of new blocks, such as Ender Chest
 - Fixed potions being throwable
 - Added conflict detection and warning
+- Fixed bug: Non-standard world inventories do not save
+- Fixed bug: Sign plugin (like LWC) compatibility errors in WorldGuard regions
 
 Bugs:
-- [Cannot Reproduce] Heavy lag
-- [Potentially Fixed] Breaking of signs in a WorldGuard area (LWC?)
+ None known/confirmed
 
 Planned (if possible):
 - Per-GameMode Ender Chest

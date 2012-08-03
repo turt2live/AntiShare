@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.inventory;
 
@@ -414,5 +414,14 @@ public class ASInventory implements Cloneable {
 	 */
 	public void setGamemode(GameMode gamemode){
 		this.gamemode = gamemode;
+	}
+
+	/**
+	 * Set the world this inventory is bound to
+	 * 
+	 * @param world the world
+	 */
+	public void setWorld(World world){
+		this.world = world;
 	}
 }

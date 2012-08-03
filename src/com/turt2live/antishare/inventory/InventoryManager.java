@@ -266,7 +266,9 @@ public class InventoryManager implements Listener {
 				inventory.set(slot.slot, slot.item);
 			}
 		}
+		inventory.setWorld(world);
 		creative.put(player.getName() + "." + world.getName(), inventory);
+		inventory.save();
 	}
 
 	/**
@@ -282,7 +284,9 @@ public class InventoryManager implements Listener {
 				inventory.set(slot.slot, slot.item);
 			}
 		}
+		inventory.setWorld(world);
 		survival.put(player.getName() + "." + world.getName(), inventory);
+		inventory.save();
 	}
 
 	/**
@@ -291,8 +295,16 @@ public class InventoryManager implements Listener {
 	 * @param player the player
 	 * @param world the world
 	 */
-	public void saveAdventureInventory(Player player, World world){
-		adventure.put(player.getName() + "." + world.getName(), ASInventory.generate(player, InventoryType.PLAYER));
+	public void saveAdventureInventory(Player player, World world, Slot... customSlots){
+		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
+		if(customSlots != null && customSlots.length > 0){
+			for(Slot slot : customSlots){
+				inventory.set(slot.slot, slot.item);
+			}
+		}
+		inventory.setWorld(world);
+		adventure.put(player.getName() + "." + world.getName(), inventory);
+		inventory.save();
 	}
 
 	/**
