@@ -471,20 +471,43 @@ public class ASListener implements Listener {
 			playerMessage = factory.toString();
 		}
 
+		// Check for potion
+		if((action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
+				&& player.getItemInHand() != null
+				&& player.getItemInHand().getType() == Material.POTION){
+			boolean potion = false;
+			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
+			if(region != null){
+				if(!region.getConfig().isPotionAllowed()){
+					type = AlertType.ILLEGAL;
+					potion = true;
+				}
+			}else{
+				if(!config.get(player.getWorld()).isPotionAllowed()){
+					type = AlertType.ILLEGAL;
+					potion = true;
+				}
+			}
+			if(type == AlertType.ILLEGAL && potion){
+				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + player.getItemInHand().getType().name().replace("_", " ");
+				playerMessage = plugin.getMessage("blocked-action.use-item");
+				trigger = AlertTrigger.USE_ITEM;
+				MessageFactory factory = new MessageFactory(playerMessage);
+				factory.insert(block, player, block.getWorld(), TenderType.USE);
+				playerMessage = factory.toString();
+			}
+		}
+
 		// Handle event
 		if(type == AlertType.ILLEGAL){
 			event.setCancelled(true);
+			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 			if(hasMobCatcher && player.getItemInHand() != null){
 				ItemStack item = player.getItemInHand();
 				if(item.getType() == Material.EGG || item.getType() == Material.MONSTER_EGG){
 					item.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
 				}
 			}
-		}
-
-		// Alert (with sanity check)
-		if(type != AlertType.LEGAL){
-			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
 

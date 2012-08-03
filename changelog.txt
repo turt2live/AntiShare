@@ -14,13 +14,13 @@ Since 3.8.0:
 	- Regions support Adventure mode
 	- Fines/Rewards support Adventure mode
 	- Internal handling of new blocks, such as Ender Chest
-- Fixed potions being throwable
+- Fixed potions being throwable and edible
 - Added conflict detection and warning
 - Fixed bug: Non-standard world inventories do not save
 - Fixed bug: Sign plugin (like LWC) compatibility errors in WorldGuard regions
 
 Bugs:
- None known/confirmed
+- [Not AntiShare] Interact events are not fired for AIR (right clicking in the air)
 
 Planned (if possible):
 - Per-GameMode Ender Chest
