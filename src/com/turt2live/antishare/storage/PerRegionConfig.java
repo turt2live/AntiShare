@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
@@ -355,4 +355,23 @@ public class PerRegionConfig {
 	public World getWorld(){
 		return world;
 	}
+
+	/**
+	 * Determines if thrown potions are allowed in this region
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean isThrownPotionAllowed(){
+		return use.isThrownPotionAllowed();
+	}
+
+	/**
+	 * Determines if potions are allowed in this region
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean isPotionAllowed(){
+		return use.isPotionAllowed();
+	}
+
 }

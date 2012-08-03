@@ -255,6 +255,9 @@ public class AntiShare extends PluginWrapper {
 				}
 			}
 		});
+
+		// Conflict messages
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new ConflictThread());
 	}
 
 	@Override

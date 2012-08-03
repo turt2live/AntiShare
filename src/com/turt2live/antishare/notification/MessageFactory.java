@@ -6,10 +6,11 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.notification;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -102,6 +103,17 @@ public class MessageFactory {
 	 */
 	public MessageFactory insertBlock(Block block){
 		message = message.replaceAll(BLOCK, ASUtils.capitalize(block.getType().name()));
+		return this;
+	}
+
+	/**
+	 * Inserts a block into the message where needed
+	 * 
+	 * @param block the block
+	 * @return the active message factory
+	 */
+	public MessageFactory insertBlock(Material block){
+		message = message.replaceAll(BLOCK, ASUtils.capitalize(block.name()));
 		return this;
 	}
 

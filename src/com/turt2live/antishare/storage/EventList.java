@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
@@ -33,6 +33,8 @@ public class EventList {
 	private boolean useString = false;
 	private boolean expBlocked = false;
 	private boolean canRepair = true;
+	private boolean potions = true;
+	private boolean thrownPotions = true;
 	private List<String> blocked = new ArrayList<String>();
 	private List<String> blocked_strings = new ArrayList<String>();
 	private List<Sign> blockedsigns = new ArrayList<Sign>();
@@ -138,6 +140,24 @@ public class EventList {
 				canRepair = false;
 				if(negate){
 					canRepair = true;
+				}
+				continue;
+			}
+
+			// Check if potion
+			if(blocked.equalsIgnoreCase("potion") || blocked.equalsIgnoreCase("potions")){
+				potions = false;
+				if(negate){
+					potions = true;
+				}
+				continue;
+			}
+
+			// Check if thrown potion
+			if(blocked.equalsIgnoreCase("thrown potion") || blocked.equalsIgnoreCase("thrown potions")){
+				thrownPotions = false;
+				if(negate){
+					thrownPotions = true;
 				}
 				continue;
 			}
@@ -380,4 +400,23 @@ public class EventList {
 	public boolean isRepairBlocked(){
 		return !canRepair;
 	}
+
+	/**
+	 * Checks if potions (non-throwable) can be used
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean isPotionAllowed(){
+		return potions;
+	}
+
+	/**
+	 * Checks if potions (throwable) can be used
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean isThrownPotionAllowed(){
+		return thrownPotions;
+	}
+
 }

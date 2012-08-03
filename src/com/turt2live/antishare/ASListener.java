@@ -56,6 +56,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -1501,6 +1502,51 @@ public class ASListener implements Listener {
 			if(type == AlertType.ILLEGAL){
 				event.setCancelled(true);
 			}
+		}
+	}
+
+	// ################# Potion Splash Event
+
+	@EventHandler (priority = EventPriority.HIGHEST)
+	public void onPotionSplash(PotionSplashEvent event){
+		if(event.isCancelled() || !(event.getPotion().getShooter() instanceof Player))
+			return;
+
+		Player player = (Player) event.getPotion().getShooter();
+		AlertType type = AlertType.LEGAL;
+		String message = "no message";
+		String playerMessage = "no message";
+		AlertTrigger trigger = AlertTrigger.USE_ITEM;
+
+		// Right click list
+		// Check if they should be blocked
+		ASRegion asregion = plugin.getRegionManager().getRegion(event.getPotion().getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isThrownPotionAllowed()){
+				type = AlertType.ILLEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isThrownPotionAllowed()){
+				type = AlertType.ILLEGAL;
+			}
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())
+				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+			type = AlertType.LEGAL;
+		}
+
+		// Set messages
+		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(Material.POTION.name());
+		playerMessage = plugin.getMessage("blocked-action.use-item");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(null, player, player.getWorld(), TenderType.USE);
+		factory.insertBlock(Material.POTION);
+		playerMessage = factory.toString();
+
+		// Handle event
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(true);
+			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
 

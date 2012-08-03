@@ -14,6 +14,8 @@ Since 3.8.0:
 	- Regions support Adventure mode
 	- Fines/Rewards support Adventure mode
 	- Internal handling of new blocks, such as Ender Chest
+- Fixed potions being throwable
+- Added conflict detection and warning
 
 Bugs:
 - [Cannot Reproduce] Heavy lag

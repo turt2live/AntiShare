@@ -419,4 +419,22 @@ public class PerWorldConfig {
 		return worldConfig;
 	}
 
+	/**
+	 * Determines if thrown potions are allowed in this world
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean isThrownPotionAllowed(){
+		return use.isThrownPotionAllowed();
+	}
+
+	/**
+	 * Determines if potions are allowed in this world
+	 * 
+	 * @return true if allowed
+	 */
+	public boolean isPotionAllowed(){
+		return use.isPotionAllowed();
+	}
+
 }
