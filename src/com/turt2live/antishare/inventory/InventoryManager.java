@@ -10,7 +10,10 @@
  ******************************************************************************/
 package com.turt2live.antishare.inventory;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -27,6 +30,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
@@ -45,12 +50,21 @@ public class InventoryManager implements Listener {
 	private ConcurrentHashMap<String, ASInventory> adventure = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> region = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
+	private List<LinkedInventory> links = new ArrayList<LinkedInventory>();
 	private AntiShare plugin = AntiShare.getInstance();
 
 	/**
 	 * Creates a new Inventory Manager
 	 */
 	public InventoryManager(){
+		// Prepare linked inventories
+		EnhancedConfiguration links = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
+		links.loadDefaults(plugin.getResource("resources/linked-inventories.yml"));
+		if(!links.fileExists() || !links.checkDefaults()){
+			links.saveDefaults();
+		}
+		links.load();
+
 		load();
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -385,9 +399,36 @@ public class InventoryManager implements Listener {
 			}
 		}
 
+		// Load all links
+		EnhancedConfiguration links = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
+		links.load();
+		Set<String> worlds = links.getKeys(false);
+		this.links.clear();
+		if(worlds != null){
+			for(String w : worlds){
+				List<String> affectedWorlds = new ArrayList<String>();
+				affectedWorlds.add(w);
+				String otherWorlds = links.getString(w + ".linked");
+				String[] otherWorldsArray = otherWorlds.split(",");
+				for(String ow : otherWorldsArray){
+					affectedWorlds.add(ow.trim());
+				}
+				GameMode gamemode = ASUtils.getGameMode(links.getString(w + ".gamemode"));
+				if(gamemode != null && affectedWorlds.size() > 0){
+					String[] allWorlds;
+					allWorlds = affectedWorlds.toArray(new String[affectedWorlds.size()]);
+					LinkedInventory link = new LinkedInventory(gamemode, allWorlds);
+					this.links.add(link);
+				}else{
+					AntiShare.getInstance().getMessenger().log("Invalid linked inventory. Please check the linked-inventories.yml file", Level.WARNING, LogType.BYPASS);
+				}
+			}
+		}
+
 		// Status
 		int loaded = creative.size() + survival.size() + region.size() + playerTemp.size();
 		AntiShare.getInstance().getMessenger().log("Inventories Loaded: " + loaded, Level.INFO, LogType.INFO);
+		AntiShare.getInstance().getMessenger().log("Linked Inventories: " + this.links.size(), Level.INFO, LogType.INFO);
 	}
 
 	/**
@@ -454,6 +495,53 @@ public class InventoryManager implements Listener {
 			creative.put(p, c);
 			survival.put(p, s);
 			adventure.put(p, a);
+		}
+	}
+
+	/**
+	 * Checks the player for linked worlds. This must be called AFTER saving
+	 * 
+	 * @param player the player
+	 * @param to the 'going to' world
+	 * @param from the 'coming from' world
+	 */
+	public void checkLinks(Player player, World to, World from){
+		GameMode gamemode = player.getGameMode();
+		for(LinkedInventory link : links){
+			if(link.isGameModeAffected(gamemode)){
+				if(link.isWorldAffected(from)){
+					String[] allWorlds = link.getAffectedWorlds();
+					ASInventory inventory = null;
+					switch (gamemode){
+					case SURVIVAL:
+						inventory = getSurvivalInventory(player, from);
+						break;
+					case CREATIVE:
+						inventory = getCreativeInventory(player, from);
+						break;
+					case ADVENTURE:
+						inventory = getAdventureInventory(player, from);
+						break;
+					}
+					for(String world : allWorlds){
+						String p = player.getName() + "." + world;
+						if(world.equalsIgnoreCase(from.getName())){
+							continue;
+						}
+						switch (gamemode){
+						case CREATIVE:
+							creative.put(p, inventory);
+							break;
+						case SURVIVAL:
+							survival.put(p, inventory);
+							break;
+						case ADVENTURE:
+							adventure.put(p, inventory);
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 }

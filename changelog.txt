@@ -18,6 +18,7 @@ Since 3.8.0:
 - Added conflict detection and warning
 - Fixed bug: Non-standard world inventories do not save
 - Fixed bug: Sign plugin (like LWC) compatibility errors in WorldGuard regions
+- Added 'linked inventories'
 
 Bugs:
 - [Not AntiShare] Interact events are not fired for AIR (right clicking in the air)

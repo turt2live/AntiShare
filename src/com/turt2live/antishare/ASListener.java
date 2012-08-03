@@ -1422,6 +1422,9 @@ public class ASListener implements Listener {
 			ignore = false;
 		}
 
+		// Check for linked inventories
+		plugin.getInventoryManager().checkLinks(player, to, from);
+
 		// Alerts
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to world " + ChatColor.YELLOW + to.getName();
 		String playerMessage = ignore ? "no message" : "Your inventory has been changed to " + ChatColor.YELLOW + to.getName();
