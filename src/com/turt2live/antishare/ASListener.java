@@ -1405,6 +1405,9 @@ public class ASListener implements Listener {
 				break;
 			}
 
+			// Check for linked inventories
+			plugin.getInventoryManager().checkLinks(player, to, from);
+
 			// Set to
 			switch (player.getGameMode()){
 			case CREATIVE:
@@ -1421,9 +1424,6 @@ public class ASListener implements Listener {
 			// For alerts
 			ignore = false;
 		}
-
-		// Check for linked inventories
-		plugin.getInventoryManager().checkLinks(player, to, from);
 
 		// Alerts
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to world " + ChatColor.YELLOW + to.getName();
