@@ -522,4 +522,14 @@ public class ASUtils {
 		return finalComma.length() > 0 ? finalComma.substring(0, finalComma.length() - 1) : "no one";
 	}
 
+	/**
+	 * Determines if a material is affected by gravity (moves down when the block below it breaks)
+	 * 
+	 * @param material the material
+	 * @return true if gravity applies
+	 */
+	public static boolean isAffectedByGravity(Material material){
+		return material == Material.GRAVEL || material == Material.SAND;
+	}
+
 }

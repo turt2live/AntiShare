@@ -296,6 +296,52 @@ public class ASListener implements Listener {
 						rel.setType(Material.AIR);
 					}
 				}
+
+				/* We need to check the blocks above for falling blocks, as the following can happen:
+				 * [SAND][TORCH]
+				 * [SAND]
+				 * [DIRT][DIRT]
+				 * 
+				 * Break the bottom SAND block and the torch falls
+				 */
+				boolean moreBlocks = true;
+				Block active = block;
+				do{
+					Block above = active.getRelative(BlockFace.UP);
+					if(ASUtils.isAffectedByGravity(above.getType())){
+						for(BlockFace face : BlockFace.values()){
+							Block rel = above.getRelative(face);
+							if(ASUtils.isDroppedOnBreak(rel, above)){
+								rel.setType(Material.AIR);
+								plugin.getBlockManager().removeBlock(rel);
+							}
+						}
+					}else{
+						moreBlocks = false;
+					}
+					active = above;
+				}while (moreBlocks);
+
+				// Cacti check
+				active = block;
+				if(block.getType() == Material.CACTUS){
+					moreBlocks = true;
+					List<Location> breakBlocks = new ArrayList<Location>();
+					do{
+						Block above = active.getRelative(BlockFace.UP);
+						if(above.getType() == Material.CACTUS){
+							plugin.getBlockManager().removeBlock(above);
+							breakBlocks.add(above.getLocation());
+						}else{
+							moreBlocks = false;
+						}
+						active = above;
+					}while (moreBlocks);
+					for(int i = breakBlocks.size() - 1; i > -1; i--){
+						Location location = breakBlocks.get(i);
+						location.getBlock().setType(Material.AIR);
+					}
+				}
 			}
 		}
 	}

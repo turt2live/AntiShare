@@ -287,12 +287,16 @@ public class BlockManager {
 		final GameMode type = getType(oldLocation.getBlock());
 		Block oldBlock = oldLocation.getBlock();
 
+		if(type == null){
+			return;
+		}
+
 		// Remove old block
 		removeBlock(oldBlock);
 
 		// Start a thread to wait until the block changes
 		final Material oldType = oldBlock.getType();
-		new Thread(new Runnable(){
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				// Setup vars
@@ -325,7 +329,7 @@ public class BlockManager {
 					plugin.getMessenger().log("Move block took longer than " + (delay * maxRuns) + " milliseconds.", Level.SEVERE, LogType.BYPASS);
 				}
 			}
-		}).start();
+		});
 	}
 
 	/**
@@ -344,4 +348,5 @@ public class BlockManager {
 		}
 		return null;
 	}
+
 }
