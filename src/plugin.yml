@@ -1,6 +1,6 @@
 name: AntiShare
 main: com.turt2live.antishare.AntiShare
-version: 3.9.0-DEV
+version: 4.0.0
 description: Create social awkwardness for creative-mode players
 authors: [Turt2Live, Sayshal]
 website: http://dev.bukkit.org/server-mods/antishare
