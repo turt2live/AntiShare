@@ -536,9 +536,32 @@ public class ASListener implements Listener {
 			item = Material.SHEARS;
 		}
 
-		// If the entity is not found, ignore the event
+		// If the entity is not found, check for interacted entities
 		if(item == Material.AIR){
-			return;
+			ASRegion region = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
+			if(region != null){
+				if(!region.getConfig().isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
+					type = AlertType.LEGAL;
+				}
+			}else{
+				if(!config.get(player.getWorld()).isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
+					type = AlertType.LEGAL;
+				}
+			}
+
+			// Handle event
+			if(type == AlertType.ILLEGAL){
+				event.setCancelled(true);
+			}
+
+			// Alert (with sanity check)
+			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(item.name());
+			String playerMessage = plugin.getMessage("blocked-action.right-click");
+			MessageFactory factory = new MessageFactory(playerMessage);
+			factory.insert(null, player, player.getWorld(), TenderType.RIGHT_CLICK, ASUtils.capitalize(item.name()));
+			playerMessage = factory.toString();
+			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.RIGHT_CLICK);
+			return; // Nothing was found in the right click check (item), so stop here
 		}
 
 		// Check if they should be blocked

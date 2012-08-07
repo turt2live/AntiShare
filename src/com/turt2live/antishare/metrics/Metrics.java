@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.metrics;
 
@@ -258,9 +258,7 @@ public class Metrics {
 						}
 
 						// Turt2Live - Added debug
-						if(DEBUG){
-							Bukkit.getLogger().log(Level.INFO, "[Metrics] [Debug] Sending");
-						}
+						Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] [Debug] Sending");
 
 						// We use the inverse of firstPost because if it is the first time we are posting,
 						// it is not a interval ping, so it evaluates to FALSE
@@ -268,9 +266,7 @@ public class Metrics {
 						postPlugin(!firstPost);
 
 						// Turt2Live - Added debug
-						if(DEBUG){
-							Bukkit.getLogger().log(Level.INFO, "[Metrics] [Debug] Sent");
-						}
+						Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] [Debug] Sent");
 
 						// After the first post we set firstPost to false
 						// Each post thereafter will be a ping

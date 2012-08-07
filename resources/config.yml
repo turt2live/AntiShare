@@ -25,6 +25,7 @@ blocked-actions:
   combat-against-players: true
   combat-against-mobs: true
   crafting-recipes: true
+  right-click-mobs: true
 # Extra toggles
 handled-actions:
   # Should AntiShare deal with world inventories?
@@ -108,6 +109,7 @@ blocked-lists:
   use-items: fire, flint and steel, exp bottle, 383, egg, lava bucket, water bucket, fireball
   commands: /someCommand, /anotherCommand
   mobs: all
+  right-click-mobs: all
   # To block a recipe, use the resulting item's name, such as "stick"
   crafting-recipes: all
 # Splits your world in two, like 2 giant AntiShare regions

@@ -40,6 +40,7 @@ public class PerRegionConfig {
 	private EventList death;
 	private EventList commands;
 	private EntityList mobs;
+	private EntityList rmobs;
 	private EventList crafting;
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
@@ -78,6 +79,7 @@ public class PerRegionConfig {
 		use = getList("use-items", "use-items", regionConfig, false);
 		commands = getList("commands", "commands", regionConfig, true);
 		mobs = getList("combat-against-mobs", "mobs", regionConfig);
+		rmobs = getList("right-click-mobs", "right-click-mobs", regionConfig);
 		crafting = getList("crafting-recipes", "crafting-recipes", regionConfig, false);
 
 		// Get options
@@ -289,6 +291,8 @@ public class PerRegionConfig {
 		switch (list){
 		case MOBS:
 			return mobs.isBlocked(entity);
+		case RIGHT_CLICK_MOBS:
+			return rmobs.isBlocked(entity);
 		}
 		return false;
 	}

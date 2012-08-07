@@ -76,7 +76,8 @@ public class PerWorldConfig {
 		DEATH,
 		COMMAND,
 		MOBS,
-		CRAFTING;
+		CRAFTING,
+		RIGHT_CLICK_MOBS;
 	}
 
 	private EventList block_break;
@@ -88,6 +89,7 @@ public class PerWorldConfig {
 	private EventList death;
 	private EventList commands;
 	private EntityList mobs;
+	private EntityList rmobs;
 	private EventList crafting;
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
@@ -124,6 +126,7 @@ public class PerWorldConfig {
 		use = getList("use-items", "use-items", worldConfig, false);
 		commands = getList("commands", "commands", worldConfig, true);
 		mobs = getList("combat-against-mobs", "mobs", worldConfig);
+		rmobs = getList("right-click-mobs", "right-click-mobs", worldConfig);
 		crafting = getList("crafting-recipes", "crafting-recipes", worldConfig, false);
 
 		// Get options
@@ -318,6 +321,8 @@ public class PerWorldConfig {
 		switch (list){
 		case MOBS:
 			return mobs.isBlocked(entity);
+		case RIGHT_CLICK_MOBS:
+			return rmobs.isBlocked(entity);
 		}
 		return false;
 	}

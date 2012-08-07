@@ -15,6 +15,7 @@ blocked-actions:
   combat-against-players: global
   combat-against-mobs: global
   crafting-recipes: global
+  right-click-mobs: global
 blocked-lists:
   block-place: global
   block-break: global
@@ -26,6 +27,7 @@ blocked-lists:
   commands: global
   mobs: global
   crafting-recipes: global
+  right-click-mobs: global
 enabled-features:
   gamemode-regions: global
   world-split: global
