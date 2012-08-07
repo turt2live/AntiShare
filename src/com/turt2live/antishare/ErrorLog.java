@@ -6,12 +6,16 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare;
 
 import java.io.File;
 import java.io.PrintStream;
+
+import org.bukkit.Bukkit;
+
+import com.turt2live.antishare.api.ErrorFile;
 
 /**
  * Logs errors
@@ -37,6 +41,9 @@ public class ErrorLog {
 			PrintStream ps = new PrintStream(file);
 			e.printStackTrace(ps);
 			ps.close();
+			ErrorFile err = new ErrorFile(file);
+			err.save(Bukkit.getConsoleSender());
+			err.alert();
 			return file.getAbsolutePath();
 		}catch(Exception e1){
 			plugin.getLogger().severe("Exception occured in Error Log. Please report to turt2live.");

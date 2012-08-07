@@ -30,6 +30,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.api.DebugFile;
 import com.turt2live.antishare.convert.Convert320bInternal;
 import com.turt2live.antishare.convert.Convert320bInternal.ConvertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -45,7 +46,7 @@ public class CommandHandler implements CommandExecutor {
 
 	@SuppressWarnings ("deprecation")
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
+	public boolean onCommand(final CommandSender sender, Command command, String label, String[] args){
 		AntiShare plugin = AntiShare.getInstance();
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
@@ -92,11 +93,12 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						// Generate debug dump file
 						try{
-							File file = new File(plugin.getDataFolder(), "debug.txt");
+							final File file = new File(plugin.getDataFolder(), "debug.txt");
 							BufferedWriter out = new BufferedWriter(new FileWriter(file, false));
 							out.write("[v" + plugin.getDescription().getVersion() + "] AntiShare Debug Information:\r\n");
 							out.write("CraftBukkit: " + Bukkit.getBukkitVersion() + "\r\n");
 							out.write("Version: " + Bukkit.getVersion() + "\r\n");
+							out.write("Online Mode: " + Bukkit.getOnlineMode() + "\r\n");
 							out.write("----------------------------\r\n");
 							out.write("Plugins: \r\n");
 							for(Plugin p : Bukkit.getPluginManager().getPlugins()){
@@ -132,6 +134,14 @@ public class CommandHandler implements CommandExecutor {
 							out.write("Rewards/Fines: \r\n");
 							plugin.getMoneyManager().print(out);
 							out.close();
+							plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
+								@Override
+								public void run(){
+									DebugFile debug = new DebugFile(file);
+									debug.save(sender);
+									debug.alert();
+								}
+							});
 							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath(), true);
 						}catch(Exception e){
 							AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);

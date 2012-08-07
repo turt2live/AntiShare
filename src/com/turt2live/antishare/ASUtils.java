@@ -10,6 +10,11 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -530,6 +535,27 @@ public class ASUtils {
 	 */
 	public static boolean isAffectedByGravity(Material material){
 		return material == Material.GRAVEL || material == Material.SAND;
+	}
+
+	/**
+	 * Gets the IP of the server, this is only used by the DebugFile class
+	 * 
+	 * @return the server IP
+	 */
+	public static String getIp(){
+		StringBuilder result = new StringBuilder();
+		try{
+			URLConnection conn = new URL("http://xmail.turt2live.com/mail/ip.php").openConnection();
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line;
+			while ((line = in.readLine()) != null){
+				result.append(line);
+			}
+			in.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		return result.toString();
 	}
 
 }

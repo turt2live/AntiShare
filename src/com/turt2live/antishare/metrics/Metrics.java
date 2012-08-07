@@ -258,7 +258,9 @@ public class Metrics {
 						}
 
 						// Turt2Live - Added debug
-						Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] [Debug] Sending");
+						if(DEBUG){
+							Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] [Debug] Sending");
+						}
 
 						// We use the inverse of firstPost because if it is the first time we are posting,
 						// it is not a interval ping, so it evaluates to FALSE
@@ -266,7 +268,9 @@ public class Metrics {
 						postPlugin(!firstPost);
 
 						// Turt2Live - Added debug
-						Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] [Debug] Sent");
+						if(DEBUG){
+							Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] [Debug] Sent");
+						}
 
 						// After the first post we set firstPost to false
 						// Each post thereafter will be a ping
@@ -352,13 +356,9 @@ public class Metrics {
 	public void flush(){
 		plugin.getServer().getScheduler().cancelTask(taskId);
 		try{
-			if(DEBUG){
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] [Debug] Sending");
-			}
+			Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sending");
 			postPlugin(true);
-			if(DEBUG){
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] [Debug] Sent");
-			}
+			Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sent");
 		}catch(IOException e){
 			Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
 		}

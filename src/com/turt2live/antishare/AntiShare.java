@@ -183,6 +183,17 @@ public class AntiShare extends PluginWrapper {
 		}
 		getConfig().load();
 
+		// Check for online mode
+		if(!getServer().getOnlineMode()){
+			if(!getConfig().getBoolean("other.quiet-offline-mode-warning")){
+				getLogger().severe("**********************");
+				getLogger().severe("Your server is in Offline Mode. AntiShare does not support offline mode servers.");
+				getLogger().severe("AntiShare will still run, but you will not get help from turt2live!!");
+				getLogger().severe("You can turn this message off in the configuration.");
+				getLogger().severe("**********************");
+			}
+		}
+
 		// Setup (order is important!)
 		try{
 			metrics = new Metrics(this);
