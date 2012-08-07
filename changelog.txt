@@ -1,26 +1,4 @@
-Since 3.8.0:
-- Added /as check [gamemode]
-- Fixed the checking of Redstone on blocks for creative breaking
-- Updated code sanity (internal minor mistakes)
-- Fixed infinite region configurations
-- Added ability to store and change player level on Game Mode change
-- Added ability to block specific outcomes of a Crafting Table for Creative players
-- Updated mob-blocking to allow blocking of specific mobs
-- Theoretical fix of "protected blocks" (LWC/ChestShop/Lockette) being break-able
-- 1.3.1 Support
-	- Block tracking supports (uselessly) Adventure blocks 
-	- GameMode Inventories supports Adventure mode 
-	- WorldSplits are now able to be creative, survival, or adventure
-	- Regions support Adventure mode
-	- Fines/Rewards support Adventure mode
-	- Internal handling of new blocks, such as Ender Chest
-- Fixed potions being throwable and edible
-- Added conflict detection and warning
-- Fixed bug: Non-standard world inventories do not save
-- Fixed bug: Sign plugin (like LWC) compatibility errors in WorldGuard regions
-- Added 'linked inventories'
-- Added blocking of right clicking on mobs (like villagers)
-- Fixed sand/gravel/cacti glitches
+Since 4.0.0:
 
 Bugs:
 - [Not AntiShare] Interact events are not fired for AIR (right clicking in the air)
