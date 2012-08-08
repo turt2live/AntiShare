@@ -30,6 +30,7 @@ import org.bukkit.block.Furnace;
 import org.bukkit.block.Jukebox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
+import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
@@ -57,6 +58,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -441,57 +443,9 @@ public class ASListener implements Listener {
 			}
 		}
 
-		// Check potions
-		if(player.getItemInHand() != null && player.getItemInHand().getType() == Material.POTION && (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)){
-			// Right click list
-			// Check if they should be blocked
-			ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
-			if(player.getItemInHand().getDurability() > 32000){
-				// Splash
-				if(asregion != null){
-					if(!asregion.getConfig().isThrownPotionAllowed()){
-						type = AlertType.ILLEGAL;
-					}
-				}else{
-					if(!config.get(player.getWorld()).isThrownPotionAllowed()){
-						type = AlertType.ILLEGAL;
-					}
-				}
-				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())
-						|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
-					type = AlertType.LEGAL;
-				}
-			}else{
-				// Edible
-				if(asregion != null){
-					if(!asregion.getConfig().isPotionAllowed()){
-						type = AlertType.ILLEGAL;
-					}
-				}else{
-					if(!config.get(player.getWorld()).isPotionAllowed()){
-						type = AlertType.ILLEGAL;
-					}
-				}
-				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())
-						|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
-					type = AlertType.LEGAL;
-				}
-			}
-
-			// Set messages
-			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(Material.POTION.name());
-			playerMessage = plugin.getMessage("blocked-action.use-item");
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert(null, player, player.getWorld(), TenderType.USE);
-			factory.insertBlock(Material.POTION);
-			playerMessage = factory.toString();
-
-			// Handle event
-			if(type == AlertType.ILLEGAL){
-				event.setCancelled(true);
-				plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
-			}
-			return; // Kill off from the rest of the world
+		// For use from here on in
+		if(block == null){
+			block = player.getWorld().getBlockAt(player.getLocation());
 		}
 
 		// Right click list
@@ -570,21 +524,63 @@ public class ASListener implements Listener {
 			playerMessage = factory.toString();
 		}
 
+		// Check for eye of ender / ender pearl
+		if((action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
+				&& player.getItemInHand() != null
+				&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
+				|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
+			boolean potion = false;
+			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
+			if(region != null){
+				if(!region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+					potion = true;
+				}
+			}else{
+				if(!config.get(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+					potion = true;
+				}
+			}
+			if(type == AlertType.ILLEGAL && potion){
+				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + player.getItemInHand().getType().name().replace("_", " ");
+				playerMessage = plugin.getMessage("blocked-action.use-item");
+				trigger = AlertTrigger.USE_ITEM;
+				MessageFactory factory = new MessageFactory(playerMessage);
+				factory.insert(block, player, block.getWorld(), TenderType.USE);
+				playerMessage = factory.toString();
+			}
+		}
+
 		// Check for potion
 		if((action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
 				&& player.getItemInHand() != null
 				&& player.getItemInHand().getType() == Material.POTION){
 			boolean potion = false;
 			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
-			if(region != null){
-				if(!region.getConfig().isPotionAllowed()){
-					type = AlertType.ILLEGAL;
-					potion = true;
+			if(player.getItemInHand().getDurability() > 32000){
+				if(region != null){
+					if(!region.getConfig().isThrownPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
+				}else{
+					if(!config.get(player.getWorld()).isThrownPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
 				}
 			}else{
-				if(!config.get(player.getWorld()).isPotionAllowed()){
-					type = AlertType.ILLEGAL;
-					potion = true;
+				if(region != null){
+					if(!region.getConfig().isPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
+				}else{
+					if(!config.get(player.getWorld()).isPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
 				}
 			}
 			if(type == AlertType.ILLEGAL && potion){
@@ -1689,6 +1685,62 @@ public class ASListener implements Listener {
 		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert(null, player, player.getWorld(), TenderType.USE);
 		factory.insertBlock(Material.POTION);
+		playerMessage = factory.toString();
+
+		// Handle event
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(true);
+			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
+		}
+	}
+
+	// ################# Projectile Launch Event
+
+	@EventHandler (priority = EventPriority.HIGHEST)
+	public void onProjectileLaunch(ProjectileLaunchEvent event){
+		System.out.println(event.getEntity());
+		if(event.isCancelled() || !(event.getEntity().getShooter() instanceof Player))
+			return;
+
+		Player player = (Player) event.getEntity().getShooter();
+		AlertType type = AlertType.LEGAL;
+		String message = "no message";
+		String playerMessage = "no message";
+		AlertTrigger trigger = AlertTrigger.USE_ITEM;
+		Material item = Material.AIR;
+
+		// Check for entity
+		if(event.getEntity() instanceof EnderPearl){
+			item = Material.ENDER_PEARL;
+		}
+
+		if(item == Material.AIR){
+			return;
+		}
+
+		// Right click list
+		// Check if they should be blocked
+		ASRegion asregion = plugin.getRegionManager().getRegion(event.getEntity().getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
+				type = AlertType.ILLEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
+				type = AlertType.ILLEGAL;
+			}
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())
+				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+			type = AlertType.LEGAL;
+		}
+
+		// Set messages
+		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(item.name());
+		playerMessage = plugin.getMessage("blocked-action.use-item");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(null, player, player.getWorld(), TenderType.USE);
+		factory.insertBlock(item);
 		playerMessage = factory.toString();
 
 		// Handle event
