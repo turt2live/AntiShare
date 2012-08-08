@@ -417,7 +417,7 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onInteract(PlayerInteractEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled() && event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_AIR)
 			return;
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
@@ -439,6 +439,59 @@ public class ASListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
+		}
+
+		// Check potions
+		if(player.getItemInHand() != null && player.getItemInHand().getType() == Material.POTION && (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)){
+			// Right click list
+			// Check if they should be blocked
+			ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
+			if(player.getItemInHand().getDurability() > 32000){
+				// Splash
+				if(asregion != null){
+					if(!asregion.getConfig().isThrownPotionAllowed()){
+						type = AlertType.ILLEGAL;
+					}
+				}else{
+					if(!config.get(player.getWorld()).isThrownPotionAllowed()){
+						type = AlertType.ILLEGAL;
+					}
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())
+						|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+					type = AlertType.LEGAL;
+				}
+			}else{
+				// Edible
+				if(asregion != null){
+					if(!asregion.getConfig().isPotionAllowed()){
+						type = AlertType.ILLEGAL;
+					}
+				}else{
+					if(!config.get(player.getWorld()).isPotionAllowed()){
+						type = AlertType.ILLEGAL;
+					}
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())
+						|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+					type = AlertType.LEGAL;
+				}
+			}
+
+			// Set messages
+			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(Material.POTION.name());
+			playerMessage = plugin.getMessage("blocked-action.use-item");
+			MessageFactory factory = new MessageFactory(playerMessage);
+			factory.insert(null, player, player.getWorld(), TenderType.USE);
+			factory.insertBlock(Material.POTION);
+			playerMessage = factory.toString();
+
+			// Handle event
+			if(type == AlertType.ILLEGAL){
+				event.setCancelled(true);
+				plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
+			}
+			return; // Kill off from the rest of the world
 		}
 
 		// Right click list

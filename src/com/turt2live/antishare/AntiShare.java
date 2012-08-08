@@ -224,7 +224,7 @@ public class AntiShare extends PluginWrapper {
 		PerWorldConfig.migrate();
 
 		// Migrate region players (3.8.0-3.9.0)
-		ASRegion.migratePlayerData();
+		migratePlayerData();
 
 		// xMail integration
 		if(getConfig().getBoolean("xMail.hook-into-xMail")){
@@ -680,4 +680,26 @@ public class AntiShare extends PluginWrapper {
 	public static void log(String message, Level level, LogType type){
 		instance.messenger.log(message, level, type);
 	}
+
+	/**
+	 * Migrates player data from region_players to data/region_players
+	 */
+	public static void migratePlayerData(){
+		AntiShare plugin = AntiShare.getInstance();
+		File newSaveFolder = new File(plugin.getDataFolder(), "data" + File.separator + "region_players");
+		File oldSaveFolder = new File(plugin.getDataFolder(), "region_players");
+		newSaveFolder.mkdirs();
+		if(oldSaveFolder.exists()){
+			File[] files = oldSaveFolder.listFiles();
+			if(files != null && files.length > 0){
+				for(File file : files){
+					file.renameTo(new File(newSaveFolder, file.getName()));
+					file.delete();
+				}
+				plugin.getMessenger().info("Region Player Files Migrated: " + files.length);
+			}
+			oldSaveFolder.delete();
+		}
+	}
+
 }

@@ -1,8 +1,8 @@
 Since 4.0.0:
+- Fixed potions (again)
 
 Bugs:
-- [Not AntiShare] Interact events are not fired for AIR (right clicking in the air)
-- [Not AntiShare] Food (meat, potions, etc) can be eaten
+- None reported
 
 Planned (if possible):
 - Per-GameMode Ender Chest
