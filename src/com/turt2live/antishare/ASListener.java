@@ -542,6 +542,9 @@ public class ASListener implements Listener {
 					potion = true;
 				}
 			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())){
+				type = AlertType.LEGAL;
+			}
 			if(type == AlertType.ILLEGAL && potion){
 				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + player.getItemInHand().getType().name().replace("_", " ");
 				playerMessage = plugin.getMessage("blocked-action.use-item");
@@ -582,6 +585,9 @@ public class ASListener implements Listener {
 						potion = true;
 					}
 				}
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())){
+				type = AlertType.LEGAL;
 			}
 			if(type == AlertType.ILLEGAL && potion){
 				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + player.getItemInHand().getType().name().replace("_", " ");
@@ -642,6 +648,9 @@ public class ASListener implements Listener {
 				if(!config.get(player.getWorld()).isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
 					type = AlertType.LEGAL;
 				}
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, player.getWorld())){
+				type = AlertType.LEGAL;
 			}
 
 			// Handle event
@@ -1698,7 +1707,6 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onProjectileLaunch(ProjectileLaunchEvent event){
-		System.out.println(event.getEntity());
 		if(event.isCancelled() || !(event.getEntity().getShooter() instanceof Player))
 			return;
 
