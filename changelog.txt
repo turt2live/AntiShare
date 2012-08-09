@@ -1,5 +1,7 @@
 Since 4.0.0:
 - Fixed potions (again)
+- Fixed ender pearls not being blockable
+- Fixed villagers (and other mobs) not being usable in Survival/Adventure
 
 Bugs:
 - None reported
