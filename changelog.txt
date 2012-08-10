@@ -4,7 +4,7 @@ Since 4.0.0:
 - Fixed villagers (and other mobs) not being usable in Survival/Adventure
 
 Bugs:
-- None reported
+- [Possible] Multiple blocks pushed on pistons may not work
 
 Planned (if possible):
 - Per-GameMode Ender Chest
