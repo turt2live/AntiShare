@@ -16,9 +16,11 @@ public class ErrorFile extends DebugFile {
 
 	@Override
 	public void save(CommandSender sender){
-		super.save(null);
-		if(sender != null){
-			ASUtils.sendToPlayer(sender, "Error file is located online at: " + url, true);
+		if(AntiShare.getInstance().getConfig().getBoolean("other.error-reporting")){
+			super.save(null);
+			if(sender != null){
+				ASUtils.sendToPlayer(sender, "Error file is located online at: " + url, true);
+			}
 		}
 	}
 

@@ -146,6 +146,7 @@ other:
   silent-overall: false
   send-gamemode-change-message: true
   quiet-offline-mode-warning: false
+  error-reporting: true
 # xMail hook, pretty easy to setup.
 xMail:
   creative-can-send-items: false

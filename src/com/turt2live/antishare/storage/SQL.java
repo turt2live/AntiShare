@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
@@ -40,6 +40,7 @@ public class SQL {
 	private Connection connection;
 	private boolean connected = false;
 	private String database = "";
+	private String sU, sP, sD, sH; // SQL connection details for reconnect
 
 	/**
 	 * Creates a new SQL Manager
@@ -58,6 +59,10 @@ public class SQL {
 	 * @return true if connected
 	 */
 	public boolean connect(String host, String username, String password, String database){
+		sU = username;
+		sP = password;
+		sH = host;
+		sD = database;
 		try{
 			String driverName = "org.gjt.mm.mysql.Driver";
 			Class.forName(driverName);
@@ -113,6 +118,13 @@ public class SQL {
 	}
 
 	/**
+	 * Reconnects to the SQL server
+	 */
+	public void reconnect(){
+		connect(sH, sU, sP, sD);
+	}
+
+	/**
 	 * Gets the SQL database in use
 	 * 
 	 * @return the database name
@@ -126,7 +138,7 @@ public class SQL {
 	 */
 	public void setup(){
 		if(!isConnected()){
-			return;
+			reconnect();
 		}
 		try{
 			createQuery(connection.prepareStatement("CREATE TABLE IF NOT EXISTS `" + INVENTORIES_TABLE + "` (" +
@@ -173,6 +185,9 @@ public class SQL {
 	 * For wiping
 	 */
 	public void dropTables(){
+		if(!isConnected()){
+			reconnect();
+		}
 		try{
 			updateQuery(connection.prepareStatement("DROP TABLE " + INVENTORIES_TABLE));
 			updateQuery(connection.prepareStatement("DROP TABLE " + REGIONS_TABLE));
@@ -188,6 +203,9 @@ public class SQL {
 	 * @param tablename the table name
 	 */
 	public void wipeTable(String tablename){
+		if(!isConnected()){
+			reconnect();
+		}
 		try{
 			updateQuery(connection.prepareStatement("DELETE FROM " + tablename));
 		}catch(SQLException e){
@@ -203,6 +221,9 @@ public class SQL {
 	 * @return true if the table exists
 	 */
 	public boolean tableExists(String tablename){
+		if(!isConnected()){
+			reconnect();
+		}
 		try{
 			Statement statement = connection.createStatement();
 			statement.executeQuery("SELECT * FROM " + tablename);
@@ -238,6 +259,9 @@ public class SQL {
 	 * @return the results
 	 */
 	public ResultSet getQuery(PreparedStatement statement){
+		if(!isConnected()){
+			reconnect();
+		}
 		try{
 			return statement.executeQuery();
 		}catch(SQLException e){
@@ -253,6 +277,9 @@ public class SQL {
 	 * @param statement the statement
 	 */
 	public void insertQuery(PreparedStatement statement){
+		if(!isConnected()){
+			reconnect();
+		}
 		try{
 			statement.executeUpdate();
 		}catch(SQLException e){
@@ -268,6 +295,9 @@ public class SQL {
 	 * @return the number of rows affected
 	 */
 	public int updateQuery(PreparedStatement statement){
+		if(!isConnected()){
+			reconnect();
+		}
 		try{
 			return statement.executeUpdate();
 		}catch(SQLException e){
