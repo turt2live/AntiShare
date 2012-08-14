@@ -8,7 +8,6 @@ Since 4.0.0:
 - Fixed "lit furnace" exploit
 
 Bugs:
-- [Possible] Multiple blocks pushed on pistons may not work
 - [Confirmed] String on top of a block can be "dropped"
 - [Confirmed] Repeaters on top a of a block can be "dropped"
 - [Confirmed] Rails on top of a block can be "dropped"
