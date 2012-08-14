@@ -9,6 +9,18 @@ Since 4.0.0:
 
 Bugs:
 - [Possible] Multiple blocks pushed on pistons may not work
+- [Confirmed] String on top of a block can be "dropped"
+- [Confirmed] Repeaters on top a of a block can be "dropped"
+- [Confirmed] Rails on top of a block can be "dropped"
+- [Confirmed] Flowers on top of a block can be "dropped"
+- [Confirmed] Saplings on top of a block can be "dropped"
+- [Confirmed] Mushrooms on top of a block can be "dropped"
+- [Confirmed] Tripwire Hooks on a block can be "dropped"
+- [Confirmed] Pressure Plates on top of a block can be "dropped"
+- [Confirmed] Seeds (wheat) on top of a block can be "dropped"
+- [Confirmed] Doors on top of a block can be "dropped"
+- [Confirmed] Paintings on a block can (eventually) be "dropped"
+- [Confirmed] Stacked reeds (sugar cane) can be broken and "dropped"
 
 Planned (if possible):
 - Per-GameMode Ender Chest
