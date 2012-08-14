@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
@@ -100,6 +100,22 @@ public class TrackerList {
 					trackedsigns.add(sign);
 				}else{
 					trackedsigns.remove(sign);
+				}
+				continue;
+			}
+
+			// Special case: Furnaces
+			if(tracked.equalsIgnoreCase("furnace")
+					|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("litfurnace")
+					|| tracked.equalsIgnoreCase("oven")
+					|| tracked.equalsIgnoreCase(String.valueOf(Material.FURNACE.getId()))
+					|| tracked.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))){
+				if(!negate){
+					this.tracked.add(ASUtils.materialToString(Material.FURNACE, false));
+					this.tracked.add(ASUtils.materialToString(Material.BURNING_FURNACE, false));
+				}else{
+					this.tracked.remove(ASUtils.materialToString(Material.FURNACE, false));
+					this.tracked.remove(ASUtils.materialToString(Material.BURNING_FURNACE, false));
 				}
 				continue;
 			}
