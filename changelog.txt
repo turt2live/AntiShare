@@ -24,5 +24,5 @@ Bugs:
 - [Patched - Needs Fix - BUKKIT-2278] Tripwire Hooks on a block can be "dropped"
 - [Confirmed] Paintings on a block can (eventually) be "dropped"
 
-Planned (if possible):
-- Per-GameMode Ender Chest
+Planned:
+- [Waiting on Bukkit API - Code ready] Per-GameMode Ender Chest
