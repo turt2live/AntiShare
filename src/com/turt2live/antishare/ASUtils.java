@@ -56,6 +56,7 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.Directional;
 
 import com.turt2live.antishare.api.ASEntity;
 
@@ -194,9 +195,34 @@ public class ASUtils {
 	 */
 	public static boolean isDroppedOnBreak(Block block, Block source){
 		boolean attached = false;
-		if(block.getType() == Material.REDSTONE_WIRE){
+		if(block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.STRING
+				|| block.getType() == Material.DIODE_BLOCK_OFF || block.getType() == Material.DIODE_BLOCK_ON
+				|| block.getType() == Material.DETECTOR_RAIL || block.getType() == Material.POWERED_RAIL
+				|| block.getType() == Material.RAILS || block.getType() == Material.RED_MUSHROOM
+				|| block.getType() == Material.RED_ROSE || block.getType() == Material.BROWN_MUSHROOM
+				|| block.getType() == Material.YELLOW_FLOWER || block.getType() == Material.STONE_PLATE
+				|| block.getType() == Material.WOOD_PLATE || block.getType() == Material.SEEDS
+				|| block.getType() == Material.WHEAT || block.getType() == Material.WOODEN_DOOR
+				|| block.getType() == Material.IRON_DOOR || block.getType() == Material.IRON_DOOR_BLOCK
+				|| block.getType() == Material.CROPS || block.getType() == Material.LONG_GRASS
+				|| block.getType() == Material.SAPLING){
+			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
 			Location l1 = source.getLocation();
 			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
+			attached = l1.getBlockX() == l2.getBlockX() && l1.getBlockY() == l2.getBlockY() && l1.getBlockZ() == l2.getBlockZ();
+		}else if(block.getType() == Material.TRIPWIRE_HOOK){
+			// Ideally this would be fixed with Bukkit PR 661 (https://github.com/Bukkit/Bukkit/pull/661)
+			// But, since it is only a PR, we have to do the check
+			BlockFace face = ((Directional) block.getState().getData()).getFacing();
+			BlockFace opp = face;//face.getOppositeFace(); // It should be getOppositeFace(), but testing proved otherwise
+			Block attachedBlock = block.getRelative(opp);
+			Location l1 = source.getLocation();
+			Location l2 = attachedBlock.getLocation();
+			Bukkit.broadcastMessage("S: " + l1);
+			Bukkit.broadcastMessage("A: " + l2);
+			Bukkit.broadcastMessage("B: " + block.getLocation());
+			Bukkit.broadcastMessage("F: " + face);
+			Bukkit.broadcastMessage("O: " + opp);
 			attached = l1.getBlockX() == l2.getBlockX() && l1.getBlockY() == l2.getBlockY() && l1.getBlockZ() == l2.getBlockZ();
 		}else if(block.getState().getData() instanceof Attachable && !block.getType().equals(Material.PISTON_EXTENSION)){
 			if(source != null){

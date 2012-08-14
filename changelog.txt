@@ -6,18 +6,21 @@ Since 4.0.0:
 - Added reconnect to SQL
 - Fixed a rare startup error
 - Fixed "lit furnace" exploit
+- Fixed certain blocks being "droppable" if broken under specific conditions
+	Affected Blocks:
+		- String/Tripwire
+		- Repeaters (Diodes)
+		- Rails (Powered, Detector, and Normal)
+		- Flowers (Red and Yellow)
+		- Mushrooms (Red and Brown)
+		- Pressure Plates (Stone and Wood)
+		- Seeds (on farmland/field)
+		- Doors (Wood and Iron)
+		- Saplings (Oak, Spruce, Birch, and Jungle)
+		- Tripwire Hooks
 
 Bugs:
-- [Confirmed] String on top of a block can be "dropped"
-- [Confirmed] Repeaters on top a of a block can be "dropped"
-- [Confirmed] Rails on top of a block can be "dropped"
-- [Confirmed] Flowers on top of a block can be "dropped"
-- [Confirmed] Saplings on top of a block can be "dropped"
-- [Confirmed] Mushrooms on top of a block can be "dropped"
-- [Confirmed] Tripwire Hooks on a block can be "dropped"
-- [Confirmed] Pressure Plates on top of a block can be "dropped"
-- [Confirmed] Seeds (wheat) on top of a block can be "dropped"
-- [Confirmed] Doors on top of a block can be "dropped"
+- [Patched - Needs Fix - BUKKIT-2278] Tripwire Hooks on a block can be "dropped"
 - [Confirmed] Paintings on a block can (eventually) be "dropped"
 - [Confirmed] Stacked reeds (sugar cane) can be broken and "dropped"
 
