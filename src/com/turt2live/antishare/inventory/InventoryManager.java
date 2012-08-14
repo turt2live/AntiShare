@@ -252,6 +252,64 @@ public class InventoryManager implements Listener {
 	}
 
 	/**
+	 * Updates ender chest inventories for the player's current world
+	 * 
+	 * @param player the player
+	 * @param to the game mode (to)
+	 * @param from the game mode (from)
+	 */
+	public void updateEnderChest(Player player, GameMode to, GameMode from){
+		switch (to){
+		case CREATIVE:
+			saveEnderCreativeInventory(player, player.getWorld());
+			break;
+		case SURVIVAL:
+			saveEnderSurvivalInventory(player, player.getWorld());
+			break;
+		case ADVENTURE:
+			saveEnderAdventureInventory(player, player.getWorld());
+			break;
+		}
+		// TODO: Implement when an API is available
+		switch (from){
+		case CREATIVE:
+			//getEnderCreativeInventory(player, player.getWorld());
+			break;
+		case SURVIVAL:
+			//getEnderSurvivalInventory(player, player.getWorld());
+			break;
+		case ADVENTURE:
+			//getEnderAdventureInventory(player, player.getWorld());
+			break;
+		}
+	}
+
+	/**
+	 * Updates ender chest inventories for the player's current game mode
+	 * 
+	 * @param player the player
+	 * @param to the world (to)
+	 * @param from the world (from)
+	 */
+	public void updateEnderChest(Player player, World to, World from){
+		// TODO: Implement when an API is available
+		switch (player.getGameMode()){
+		case CREATIVE:
+			saveEnderCreativeInventory(player, from);
+			//getEnderCreativeInventory(player, to);
+			break;
+		case SURVIVAL:
+			saveEnderSurvivalInventory(player, from);
+			//getEnderSurvivalInventory(player, to);
+			break;
+		case ADVENTURE:
+			saveEnderAdventureInventory(player, from);
+			//getEnderAdventureInventory(player, to);
+			break;
+		}
+	}
+
+	/**
 	 * Sets a player to a temporary inventory, such as a region inventory
 	 * 
 	 * @param player the player

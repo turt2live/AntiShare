@@ -78,21 +78,22 @@ public class ASInventory implements Cloneable {
 	 * @return the inventory
 	 */
 	public static ASInventory generate(Player player, InventoryType type){
-		// TODO: Generate based on ENDER or other.
-		// ENDER = Generate current ender chest
-		// other = Mirror player's inventory (as below)
 		ASInventory inventory = new ASInventory(type, player.getName(), player.getWorld(), player.getGameMode());
-		ItemStack[] contents = player.getInventory().getContents();
-		int slot = 0;
-		for(ItemStack item : contents){
-			inventory.set(slot, item);
-			slot++;
-		}
-		contents = player.getInventory().getArmorContents();
-		slot = 100;
-		for(ItemStack item : contents){
-			inventory.set(slot, item);
-			slot++;
+		if(type == InventoryType.ENDER){
+			// TODO: Implement when an API is available
+		}else{
+			ItemStack[] contents = player.getInventory().getContents();
+			int slot = 0;
+			for(ItemStack item : contents){
+				inventory.set(slot, item);
+				slot++;
+			}
+			contents = player.getInventory().getArmorContents();
+			slot = 100;
+			for(ItemStack item : contents){
+				inventory.set(slot, item);
+				slot++;
+			}
 		}
 		return inventory;
 	}

@@ -1192,6 +1192,9 @@ public class ASListener implements Listener {
 				break;
 			}
 
+			// Ender Chest (saving and loading handled internally)
+			plugin.getInventoryManager().updateEnderChest(player, to, from);
+
 			// Check for open inventories and stuff
 			Material inventory = Material.AIR;
 			InventoryView view = player.getOpenInventory();
@@ -1568,6 +1571,9 @@ public class ASListener implements Listener {
 				plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player);
 				break;
 			}
+
+			// Ender Chest (saving and loading handled internally)
+			plugin.getInventoryManager().updateEnderChest(player, to, from);
 
 			// For alerts
 			ignore = false;
