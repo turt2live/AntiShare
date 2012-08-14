@@ -52,7 +52,6 @@ public class PasteBin {
 
 	public String encodeData(String data, String title){
 		try{
-			// TODO
 			String encData = URLEncoder.encode("api_dev_key", "UTF-8") + "=" + URLEncoder.encode("c26bcc280fb09c0d9f2dd0d0c5acb584", "UTF-8");
 			encData += "&" + URLEncoder.encode("api_option", "UTF-8") + "=" + URLEncoder.encode("paste", "UTF-8");
 			encData += "&" + URLEncoder.encode("api_paste_code", "UTF-8") + "=" + URLEncoder.encode(data, "UTF-8");

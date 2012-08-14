@@ -582,19 +582,6 @@ public class InventoryManager implements Listener {
 	}
 
 	/**
-	 * Gets a region's inventory
-	 * 
-	 * @param region the region
-	 * @return the inventory
-	 */
-	public ASInventory getRegionInventory(ASRegion region){
-		ASInventory inventory = new ASInventory(InventoryType.REGION, region.getUniqueID(), region.getWorld(), region.getGameMode());
-		return inventory;
-		//return this.region.get(region.getUniqueID());
-		// TODO: Determine if this is a bug
-	}
-
-	/**
 	 * Loads the inventory manager
 	 */
 	public void load(){
