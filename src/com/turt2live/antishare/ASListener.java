@@ -299,6 +299,36 @@ public class ASListener implements Listener {
 					}
 				}
 
+				// Check for falling sand/gravel exploit
+				boolean moreBlocks = true;
+				Block active = block;
+				if(block.getType() == Material.SAND || block.getType() == Material.GRAVEL ||
+						block.getRelative(BlockFace.UP).getType() == Material.SAND || block.getRelative(BlockFace.UP).getType() == Material.GRAVEL){
+					do{
+						Block below = active.getRelative(BlockFace.DOWN);
+						active = below;
+						if(below.getType() == Material.AIR){
+							continue;
+						}
+						if(ASUtils.canBreakFallingBlock(below.getType())){
+							// Remove all sand/gravel above this block
+							boolean checkMoreBlocks = true;
+							Block above = block.getRelative(BlockFace.UP);
+							do{
+								if(above.getType() == Material.SAND || above.getType() == Material.GRAVEL){
+									above.setType(Material.AIR);
+									above = above.getRelative(BlockFace.UP);
+								}else{
+									checkMoreBlocks = false;
+								}
+							}while (checkMoreBlocks);
+							moreBlocks = false;
+						}else{
+							moreBlocks = false;
+						}
+					}while (moreBlocks);
+				}
+
 				/* We need to check the blocks above for falling blocks, as the following can happen:
 				 * [SAND][TORCH]
 				 * [SAND]
@@ -306,8 +336,6 @@ public class ASListener implements Listener {
 				 * 
 				 * Break the bottom SAND block and the torch falls
 				 */
-				boolean moreBlocks = true;
-				Block active = block;
 				do{
 					Block above = active.getRelative(BlockFace.UP);
 					if(ASUtils.isAffectedByGravity(above.getType())){

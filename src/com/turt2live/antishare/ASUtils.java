@@ -186,6 +186,47 @@ public class ASUtils {
 	}
 
 	/**
+	 * Determines if a material can break a falling block (like sand)
+	 * 
+	 * @param material the material
+	 * @return true if it can break it
+	 */
+	public static boolean canBreakFallingBlock(Material material){
+		switch (material){
+		case RAILS:
+		case POWERED_RAIL:
+		case DETECTOR_RAIL:
+		case SAPLING:
+		case RED_ROSE:
+		case YELLOW_FLOWER:
+		case RED_MUSHROOM:
+		case BROWN_MUSHROOM:
+		case STONE_PLATE:
+		case WOOD_PLATE:
+		case LEVER:
+		case STONE_BUTTON:
+		case STRING:
+		case TRIPWIRE:
+		case SIGN:
+		case WALL_SIGN:
+		case SIGN_POST:
+		case REDSTONE_WIRE:
+		case DIODE:
+		case TORCH:
+		case REDSTONE_TORCH_OFF:
+		case REDSTONE_TORCH_ON:
+		case TRIPWIRE_HOOK:
+		case CAKE_BLOCK:
+		case DIODE_BLOCK_OFF:
+		case DIODE_BLOCK_ON:
+		case STEP:
+		case WATER_LILY:
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Determines if a block would be dropped if an attached block were to break.<br>
 	 * This also checks if the block is attached to a source.
 	 * 

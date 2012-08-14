@@ -19,10 +19,12 @@ Since 4.0.0:
 		- Saplings (Oak, Spruce, Birch, and Jungle)
 		- Tripwire Hooks
 - Fixed sugar cane gathering exploit (similar to cacti)
+- Fixed falling sad/gravel exploit
 
 Bugs:
 - [Patched - Needs Fix - BUKKIT-2278] Tripwire Hooks on a block can be "dropped"
 - [Confirmed] Paintings on a block can (eventually) be "dropped"
+- [Confirmed] Potential exploit with new falling block API
 
 Planned:
 - [Waiting on Bukkit API - Code ready] Per-GameMode Ender Chest
