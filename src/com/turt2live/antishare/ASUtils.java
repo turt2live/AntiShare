@@ -218,11 +218,6 @@ public class ASUtils {
 			Block attachedBlock = block.getRelative(opp);
 			Location l1 = source.getLocation();
 			Location l2 = attachedBlock.getLocation();
-			Bukkit.broadcastMessage("S: " + l1);
-			Bukkit.broadcastMessage("A: " + l2);
-			Bukkit.broadcastMessage("B: " + block.getLocation());
-			Bukkit.broadcastMessage("F: " + face);
-			Bukkit.broadcastMessage("O: " + opp);
 			attached = l1.getBlockX() == l2.getBlockX() && l1.getBlockY() == l2.getBlockY() && l1.getBlockZ() == l2.getBlockZ();
 		}else if(block.getState().getData() instanceof Attachable && !block.getType().equals(Material.PISTON_EXTENSION)){
 			if(source != null){

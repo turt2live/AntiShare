@@ -344,6 +344,27 @@ public class ASListener implements Listener {
 						location.getBlock().setType(Material.AIR);
 					}
 				}
+
+				// Reed (Sugar Cane) check
+				active = block;
+				if(block.getType() == Material.SUGAR_CANE_BLOCK){
+					moreBlocks = true;
+					List<Location> breakBlocks = new ArrayList<Location>();
+					do{
+						Block above = active.getRelative(BlockFace.UP);
+						if(above.getType() == Material.SUGAR_CANE_BLOCK){
+							plugin.getBlockManager().removeBlock(above);
+							breakBlocks.add(above.getLocation());
+						}else{
+							moreBlocks = false;
+						}
+						active = above;
+					}while (moreBlocks);
+					for(int i = breakBlocks.size() - 1; i > -1; i--){
+						Location location = breakBlocks.get(i);
+						location.getBlock().setType(Material.AIR);
+					}
+				}
 			}
 		}
 	}
