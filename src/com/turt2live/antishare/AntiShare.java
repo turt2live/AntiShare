@@ -134,6 +134,11 @@ public class AntiShare extends PluginWrapper {
 	public void onEnable(){
 		instance = this;
 
+		// File check
+		if(!getDataFolder().exists()){
+			getDataFolder().mkdirs();
+		}
+
 		// Get all disabled SimpleNotice users
 		try{
 			File snFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");

@@ -162,6 +162,22 @@ public class EventList {
 				continue;
 			}
 
+			// Special case: Furnaces
+			if(blocked.equalsIgnoreCase("furnace")
+					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("litfurnace")
+					|| blocked.equalsIgnoreCase("oven")
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.FURNACE.getId()))
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))){
+				if(!negate){
+					this.blocked.add(ASUtils.materialToString(Material.FURNACE, false));
+					this.blocked.add(ASUtils.materialToString(Material.BURNING_FURNACE, false));
+				}else{
+					this.blocked.remove(ASUtils.materialToString(Material.FURNACE, false));
+					this.blocked.remove(ASUtils.materialToString(Material.BURNING_FURNACE, false));
+				}
+				continue;
+			}
+
 			// Special case: Signs
 			if(blocked.equalsIgnoreCase("sign")
 					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign")

@@ -4,6 +4,8 @@ Since 4.0.0:
 - Fixed villagers (and other mobs) not being usable in Survival/Adventure
 - Added error reporting option
 - Added reconnect to SQL
+- Fixed a rare startup error
+- Fixed "lit furnace" exploit
 
 Bugs:
 - [Possible] Multiple blocks pushed on pistons may not work
