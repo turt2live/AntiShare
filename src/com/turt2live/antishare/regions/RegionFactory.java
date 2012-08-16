@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.regions;
 
@@ -271,6 +271,8 @@ public class RegionFactory {
 		case EXIT_MESSAGE:
 			region.setExitMessage(value);
 			changed = true;
+			break;
+		default:
 			break;
 		}
 		if(changed){

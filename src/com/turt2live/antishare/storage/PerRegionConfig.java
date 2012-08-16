@@ -234,8 +234,9 @@ public class PerRegionConfig {
 			return death.isBlocked(material);
 		case CRAFTING:
 			return crafting.isBlocked(material);
+		default:
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -261,8 +262,9 @@ public class PerRegionConfig {
 			return pickup.isBlocked(block);
 		case DEATH:
 			return death.isBlocked(block);
+		default:
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -276,8 +278,9 @@ public class PerRegionConfig {
 		switch (list){
 		case COMMAND:
 			return commands.isBlocked(string);
+		default:
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -293,8 +296,9 @@ public class PerRegionConfig {
 			return mobs.isBlocked(entity);
 		case RIGHT_CLICK_MOBS:
 			return rmobs.isBlocked(entity);
+		default:
+			return false;
 		}
-		return false;
 	}
 
 	/**

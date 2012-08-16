@@ -181,8 +181,9 @@ public class ASUtils {
 		case TRIPWIRE:
 		case CAULDRON:
 			return true;
+		default:
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -222,8 +223,9 @@ public class ASUtils {
 		case STEP:
 		case WATER_LILY:
 			return true;
+		default:
+			return false;
 		}
-		return false;
 	}
 
 	/**

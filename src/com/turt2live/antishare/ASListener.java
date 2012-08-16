@@ -1247,6 +1247,8 @@ public class ASListener implements Listener {
 			case BREWING:
 				inventory = Material.BREWING_STAND;
 				break;
+			default:
+				break;
 			}
 			if(inventory != Material.AIR){
 				AlertType type = AlertType.LEGAL;
