@@ -60,6 +60,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.painting.PaintingBreakEvent;
+import org.bukkit.event.painting.PaintingBreakEvent.RemoveCause;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -1810,6 +1812,25 @@ public class ASListener implements Listener {
 		if(type == AlertType.ILLEGAL){
 			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
+		}
+	}
+
+	// ################# Painting Break Event
+
+	@EventHandler (priority = EventPriority.HIGHEST)
+	public void onPaintingBreak(PaintingBreakEvent event){
+		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
+			return;
+		}
+		if(event.getCause() == RemoveCause.PHYSICS){
+			// Removed by something
+			Painting painting = event.getPainting();
+			Location block = painting.getLocation().getBlock().getRelative(painting.getAttachedFace()).getLocation();
+			GameMode gamemode = plugin.getBlockManager().getRecentBreak(block);
+			if(gamemode != null && gamemode == GameMode.CREATIVE){
+				event.setCancelled(true);
+				painting.remove();
+			}
 		}
 	}
 

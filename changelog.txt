@@ -18,12 +18,12 @@ Since 4.0.0:
 		- Doors (Wood and Iron)
 		- Saplings (Oak, Spruce, Birch, and Jungle)
 		- Tripwire Hooks
+		- Paintings (limited support - creative blocks only)
 - Fixed sugar cane gathering exploit (similar to cacti)
 - Fixed falling sand/gravel exploit
 
 Bugs:
 - [Patched - Needs Fix - BUKKIT-2278] Tripwire Hooks on a block can be "dropped"
-- [Confirmed] Paintings on a block can (eventually) be "dropped"
 - [Confirmed] Potential exploit with new falling block API
 
 Planned:

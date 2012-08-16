@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -44,16 +45,27 @@ public class BlockManager {
 		public Material expectedType;
 	}
 
+	/**
+	 * AntiShare material - used for simplicity
+	 * 
+	 * @author turt2live
+	 */
+	private class ASMaterial {
+		public Location location;
+		public GameMode gamemode;
+	}
+
 	private AntiShare plugin;
-	private List<Block> creative_blocks = new ArrayList<Block>();
-	private List<Block> survival_blocks = new ArrayList<Block>();
-	private List<Block> adventure_blocks = new ArrayList<Block>();
+	private CopyOnWriteArrayList<Block> creative_blocks = new CopyOnWriteArrayList<Block>();
+	private CopyOnWriteArrayList<Block> survival_blocks = new CopyOnWriteArrayList<Block>();
+	private CopyOnWriteArrayList<Block> adventure_blocks = new CopyOnWriteArrayList<Block>();
 	private ConcurrentHashMap<Block, ASBlock> expected_creative = new ConcurrentHashMap<Block, ASBlock>();
 	private ConcurrentHashMap<Block, ASBlock> expected_survival = new ConcurrentHashMap<Block, ASBlock>();
 	private ConcurrentHashMap<Block, ASBlock> expected_adventure = new ConcurrentHashMap<Block, ASBlock>();
 	private TrackerList tracked_creative;
 	private TrackerList tracked_survival;
 	private TrackerList tracked_adventure;
+	private CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
 
 	/**
 	 * Creates a new block manager, also loads the block lists
@@ -260,6 +272,10 @@ public class BlockManager {
 	public void removeBlock(Block block){
 		GameMode type = getType(block);
 		if(type != null){
+			ASMaterial material = new ASMaterial();
+			material.gamemode = type;
+			material.location = block.getLocation();
+			recentlyRemoved.add(material);
 			switch (type){
 			case CREATIVE:
 				creative_blocks.remove(block);
@@ -345,6 +361,25 @@ public class BlockManager {
 			return GameMode.SURVIVAL;
 		}else if(adventure_blocks.contains(block)){
 			return GameMode.ADVENTURE;
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the Game Mode of a recently broken block at a location
+	 * 
+	 * @param location the location
+	 * @return the Game Mode (or null if not applicable)
+	 */
+	public GameMode getRecentBreak(Location location){
+		for(ASMaterial material : recentlyRemoved){
+			Location l = material.location;
+			if(Math.floor(l.getX()) == Math.floor(location.getX())
+					&& Math.floor(l.getY()) == Math.floor(location.getY())
+					&& Math.floor(l.getZ()) == Math.floor(location.getZ())
+					&& l.getWorld().getName().equalsIgnoreCase(location.getWorld().getName())){
+				return material.gamemode;
+			}
 		}
 		return null;
 	}

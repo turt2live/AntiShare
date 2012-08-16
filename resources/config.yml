@@ -50,6 +50,8 @@ enabled-features:
     inventories: true
     # Remove "attached" blocks (like torches)
     attached-blocks: true
+    # Consider 'paintings' as 'attached blocks'?
+    paintings-are-attached: true
 # Cooldown between game mode changes
 gamemode-change-cooldown:
   # On/Off setting
