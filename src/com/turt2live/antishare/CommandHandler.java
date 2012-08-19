@@ -136,7 +136,6 @@ public class CommandHandler implements CommandExecutor {
 							out.write("----------------------------\r\n");
 							out.write("Rewards/Fines: \r\n");
 							plugin.getMoneyManager().print(out);
-							out.close();
 							out.write("----------------------------\r\n");
 							out.write("TIMERS: \r\n");
 							plugin.getTimer().debug(out);

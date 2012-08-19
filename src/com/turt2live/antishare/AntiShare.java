@@ -121,6 +121,7 @@ public class AntiShare extends PluginWrapper {
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private HookManager hooks;
 	private ASTimer timer;
+	private String timerUID;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -135,6 +136,7 @@ public class AntiShare extends PluginWrapper {
 	public void onEnable(){
 		instance = this;
 		timer = new ASTimer();
+		timerUID = timer.addListener(new Timer());
 		long timerId = timer.start(this.getClass(), "STARTUP");
 
 		// File check
@@ -332,6 +334,7 @@ public class AntiShare extends PluginWrapper {
 			e.printStackTrace();
 		}
 		timer.stop(this.getClass(), "SHUTDOWN", timerId);
+		timer.removeListener(timerUID);
 	}
 
 	/**
