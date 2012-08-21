@@ -13,6 +13,8 @@ package com.turt2live.antishare.notification;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
@@ -22,6 +24,9 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.metrics.ActionsTracker;
+import com.turt2live.antishare.metrics.Tracker;
+import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
 /**
@@ -108,12 +113,28 @@ public class Alert {
 	private boolean sendIllegal = true;
 	private boolean sendLegal = false;
 	private boolean sendGeneral = false;
+	private Map<AlertTrigger, Tracker> legal = new HashMap<AlertTrigger, Tracker>();
+	private Map<AlertTrigger, Tracker> illegal = new HashMap<AlertTrigger, Tracker>();
 
 	/**
 	 * Creates a new Alerter
 	 */
 	public Alert(){
 		reload();
+		for(AlertTrigger trigger : AlertTrigger.values()){
+			switch (trigger){
+			case GENERAL:
+			case CLOSE_TO_WORLD_SPLIT:
+				break;
+			default:
+				ActionsTracker legal = new ActionsTracker(ASUtils.capitalize(trigger.name()), TrackerType.SPECIAL, "Legal Actions");
+				ActionsTracker illegal = new ActionsTracker(ASUtils.capitalize(trigger.name()), TrackerType.SPECIAL, "Illegal Actions");
+				this.legal.put(trigger, legal);
+				this.illegal.put(trigger, illegal);
+				AntiShare.getInstance().getTrackers().add(illegal);
+				AntiShare.getInstance().getTrackers().add(legal);
+			}
+		}
 	}
 
 	/**
@@ -172,6 +193,17 @@ public class Alert {
 		String hashmapKey = type.name() + message + playerMessage + sender.hashCode();
 		boolean sendToPlayer = true;
 		boolean sendToAdmins = true;
+
+		// Add to Metrics
+		if(type == AlertType.ILLEGAL){
+			if(illegal.containsKey(trigger)){
+				illegal.get(trigger).increment(1);
+			}
+		}else if(type == AlertType.LEGAL){
+			if(legal.containsKey(trigger)){
+				legal.get(trigger).increment(1);
+			}
+		}//else ignore
 
 		// Determine if we should even send the message
 		if(!send || AntiShare.getInstance().getPermissions().has(sender, PermissionNodes.SILENT_NOTIFICATIONS)){

@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.metrics;
 
@@ -66,6 +66,10 @@ public class Tracker extends Plotter {
 	@Override
 	public int getValue(){
 		return value;
+	}
+
+	public String getGraphName(){
+		return type.getGraphName();
 	}
 
 }

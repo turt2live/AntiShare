@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.metrics;
 
@@ -29,7 +29,8 @@ public class TrackerList extends ArrayList<Tracker> {
 	 */
 	public static enum TrackerType{
 		FLAT_FILE("Storage System", "Flat-File (YAML)"),
-		SQL("Storage System", "SQL");
+		SQL("Storage System", "SQL"),
+		SPECIAL("Unknown", "Unkown");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
@@ -68,6 +69,7 @@ public class TrackerList extends ArrayList<Tracker> {
 		for(TrackerType type : TrackerType.values()){
 			add(new Tracker(type.getName(), type));
 		}
+		remove(TrackerType.SPECIAL);
 
 		// Fix the SQL/Flat File graphs
 		remove(TrackerType.SQL);
@@ -129,10 +131,10 @@ public class TrackerList extends ArrayList<Tracker> {
 	 */
 	public void addTo(Metrics metrics){
 		for(int i = 0; i < size(); i++){
-			Graph graph = graphs.get(get(i).getType().getGraphName());
+			Graph graph = graphs.get(get(i).getGraphName());
 			if(graph == null){
-				graph = metrics.createGraph(get(i).getType().getGraphName());
-				graphs.put(get(i).getType().getGraphName(), graph);
+				graph = metrics.createGraph(get(i).getGraphName());
+				graphs.put(get(i).getGraphName(), graph);
 			}
 			graph.addPlotter(get(i));
 		}
