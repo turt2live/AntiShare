@@ -276,7 +276,8 @@ public class Metrics {
 						// Each post thereafter will be a ping
 						firstPost = false;
 					}catch(IOException e){
-						Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+						// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
+						Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + e.getMessage());
 					}
 				}
 			}, 0, PING_INTERVAL * 1200);
@@ -296,10 +297,12 @@ public class Metrics {
 				// Reload the metrics file
 				configuration.load(CONFIG_FILE);
 			}catch(IOException ex){
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
+				Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + ex.getMessage());
 				return true;
 			}catch(InvalidConfigurationException ex){
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
+				Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + ex.getMessage());
 				return true;
 			}
 			return configuration.getBoolean("opt-out", false);
@@ -360,7 +363,8 @@ public class Metrics {
 			postPlugin(true);
 			Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sent");
 		}catch(IOException e){
-			Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+			// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
+			Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + e.getMessage());
 		}
 	}
 
