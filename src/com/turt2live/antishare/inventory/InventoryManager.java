@@ -270,16 +270,15 @@ public class InventoryManager implements Listener {
 			saveEnderAdventureInventory(player, player.getWorld());
 			break;
 		}
-		// TODO: Implement when an API is available
 		switch (from){
 		case CREATIVE:
-			//getEnderCreativeInventory(player, player.getWorld());
+			getEnderCreativeInventory(player, player.getWorld()).setTo(player);
 			break;
 		case SURVIVAL:
-			//getEnderSurvivalInventory(player, player.getWorld());
+			getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
 			break;
 		case ADVENTURE:
-			//getEnderAdventureInventory(player, player.getWorld());
+			getEnderAdventureInventory(player, player.getWorld()).setTo(player);
 			break;
 		}
 	}
@@ -292,19 +291,18 @@ public class InventoryManager implements Listener {
 	 * @param from the world (from)
 	 */
 	public void updateEnderChest(Player player, World to, World from){
-		// TODO: Implement when an API is available
 		switch (player.getGameMode()){
 		case CREATIVE:
 			saveEnderCreativeInventory(player, from);
-			//getEnderCreativeInventory(player, to);
+			getEnderCreativeInventory(player, to).setTo(player);
 			break;
 		case SURVIVAL:
 			saveEnderSurvivalInventory(player, from);
-			//getEnderSurvivalInventory(player, to);
+			getEnderSurvivalInventory(player, to).setTo(player);
 			break;
 		case ADVENTURE:
 			saveEnderAdventureInventory(player, from);
-			//getEnderAdventureInventory(player, to);
+			getEnderAdventureInventory(player, to).setTo(player);
 			break;
 		}
 	}

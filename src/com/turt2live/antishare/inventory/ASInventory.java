@@ -27,6 +27,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.material.MaterialData;
@@ -80,7 +81,12 @@ public class ASInventory implements Cloneable {
 	public static ASInventory generate(Player player, InventoryType type){
 		ASInventory inventory = new ASInventory(type, player.getName(), player.getWorld(), player.getGameMode());
 		if(type == InventoryType.ENDER){
-			// TODO: Implement when an API is available
+			ItemStack[] contents = player.getEnderChest().getContents();
+			int slot = 0;
+			for(ItemStack item : contents){
+				inventory.set(slot, item);
+				slot++;
+			}
 		}else{
 			ItemStack[] contents = player.getInventory().getContents();
 			int slot = 0;
@@ -245,11 +251,16 @@ public class ASInventory implements Cloneable {
 	 */
 	@SuppressWarnings ("deprecation")
 	public void setTo(Player player){
-		PlayerInventory pInventory = player.getInventory();
+		Inventory pInventory;
+		if(type == InventoryType.ENDER){
+			pInventory = player.getEnderChest();
+		}else{
+			pInventory = player.getInventory();
+			ItemStack air = new ItemStack(Material.AIR);
+			ItemStack[] armor = {air, air, air, air};
+			((PlayerInventory) pInventory).setArmorContents(armor);
+		}
 		pInventory.clear();
-		ItemStack air = new ItemStack(Material.AIR);
-		ItemStack[] armor = {air, air, air, air};
-		pInventory.setArmorContents(armor);
 		for(Integer slot : inventory.keySet()){
 			ItemStack item = inventory.get(slot);
 			if(item == null){
@@ -259,19 +270,21 @@ public class ASInventory implements Cloneable {
 			if(slot < 100){
 				pInventory.setItem(slot, item);
 			}else{
-				switch (slot){
-				case 100:
-					pInventory.setBoots(item);
-					break;
-				case 101:
-					pInventory.setLeggings(item);
-					break;
-				case 102:
-					pInventory.setChestplate(item);
-					break;
-				case 103:
-					pInventory.setHelmet(item);
-					break;
+				if(pInventory instanceof PlayerInventory){
+					switch (slot){
+					case 100:
+						((PlayerInventory) pInventory).setBoots(item);
+						break;
+					case 101:
+						((PlayerInventory) pInventory).setLeggings(item);
+						break;
+					case 102:
+						((PlayerInventory) pInventory).setChestplate(item);
+						break;
+					case 103:
+						((PlayerInventory) pInventory).setHelmet(item);
+						break;
+					}
 				}
 			}
 		}
