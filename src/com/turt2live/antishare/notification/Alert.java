@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.api.AntiShareAlertEvent;
 import com.turt2live.antishare.metrics.ActionsTracker;
 import com.turt2live.antishare.metrics.Tracker;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
@@ -258,6 +259,10 @@ public class Alert {
 		if(sendToAdmins){
 			sendToAdmins = trigger.show();
 		}
+
+		// Fire event
+		AntiShareAlertEvent event = new AntiShareAlertEvent(message, playerMessage, sender.getName(), type, trigger, reward, sendToPlayer);
+		AntiShare.getInstance().getServer().getPluginManager().callEvent(event);
 
 		// Send if needed
 		if(sendToPlayer && (type == AlertType.ILLEGAL || type == AlertType.GENERAL || type == AlertType.REGION)){
