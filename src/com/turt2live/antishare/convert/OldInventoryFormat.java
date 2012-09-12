@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.convert;
 
@@ -22,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
-import com.turt2live.antishare.ErrorLog;
 
 /**
  * Inventory format for prior to 3.2.X.<br>
@@ -134,7 +133,7 @@ public class OldInventoryFormat {
 				saveFile.createNewFile();
 			}catch(IOException e){
 				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+				e.printStackTrace();
 			}
 		}
 		this.saveFile = saveFile;
@@ -167,11 +166,10 @@ public class OldInventoryFormat {
 			}
 		}catch(Exception e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 		return inventoryMap;
 	}
-
 	// There is no save method for a reason: We want to use the new format.
 
 }

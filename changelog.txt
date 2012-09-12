@@ -1,4 +1,9 @@
 Since 4.2.0:
 
+Features Stripped:
+- Error logging
+- Debug -> Pastebin
+- Removed old statistics tracker
+
 Bugs:
 - [Patched - Needs Fix - BUKKIT-2278] Tripwire Hooks on a block can be "dropped"

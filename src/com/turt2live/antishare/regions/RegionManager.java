@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.regions;
 
@@ -30,7 +30,6 @@ import org.bukkit.World;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
-import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.Selection;
 import com.turt2live.antishare.storage.SQL;
 
@@ -118,7 +117,7 @@ public class RegionManager {
 				}
 			}catch(SQLException e){
 				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+				e.printStackTrace();
 			}
 		}else{
 			//Flat-File (YAML) load
@@ -201,7 +200,7 @@ public class RegionManager {
 						plugin.getSQL().insertQuery(statement);
 					}catch(SQLException e){
 						AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-						AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+						e.printStackTrace();
 					}
 				}
 			}

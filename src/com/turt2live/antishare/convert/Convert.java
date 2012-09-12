@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.convert;
 
@@ -31,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
-import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.storage.SQL;
@@ -86,7 +85,7 @@ public class Convert {
 				in.close();
 			}catch(Exception e){
 				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+				e.printStackTrace();
 			}
 
 			// Event lists
@@ -256,7 +255,7 @@ public class Convert {
 				}
 			}catch(SQLException e){
 				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+				e.printStackTrace();
 			}
 		}
 
@@ -285,7 +284,7 @@ public class Convert {
 				}
 			}catch(SQLException e){
 				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+				e.printStackTrace();
 			}
 		}
 		if(plugin.getSQL().tableExists("AntiShare_MiscInventory")){
@@ -312,7 +311,7 @@ public class Convert {
 				}
 			}catch(SQLException e){
 				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+				e.printStackTrace();
 			}
 		}
 
@@ -322,9 +321,8 @@ public class Convert {
 				plugin.getSQL().deleteQuery(plugin.getSQL().getConnection().prepareStatement("DROP TABLE AntiShare_RegionInfo"));
 			}catch(SQLException e){
 				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+				e.printStackTrace();
 			}
 		}
 	}
-
 }

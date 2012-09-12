@@ -35,7 +35,6 @@ import org.bukkit.material.MaterialData;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
-import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.storage.SQL;
 
 /**
@@ -163,7 +162,7 @@ public class ASInventory implements Cloneable {
 						inventories.add(inventory);
 					}catch(SQLException e){
 						AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-						AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+						e.printStackTrace();
 					}
 				}
 			}
@@ -346,7 +345,7 @@ public class ASInventory implements Cloneable {
 					plugin.getSQL().insertQuery(statement);
 				}catch(SQLException e){
 					AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-					AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+					e.printStackTrace();
 				}
 			}
 		}else{

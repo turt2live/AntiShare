@@ -26,7 +26,6 @@ import org.bukkit.plugin.Plugin;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
-import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.api.ASGameMode;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -159,7 +158,7 @@ public class MoneyManager {
 			out.close();
 		}catch(Exception e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 	}
 
@@ -180,7 +179,7 @@ public class MoneyManager {
 			}
 		}catch(Exception e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 	}
 

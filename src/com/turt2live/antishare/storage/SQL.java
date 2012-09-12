@@ -20,7 +20,6 @@ import java.util.logging.Level;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
-import com.turt2live.antishare.ErrorLog;
 
 /*
  * Thanks go to Example Depot for teaching me everything in this class.
@@ -94,7 +93,7 @@ public class SQL {
 				}
 			}catch(SQLException e){
 				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-				AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -177,7 +176,7 @@ public class SQL {
 					")"));
 		}catch(SQLException e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 	}
 
@@ -193,7 +192,7 @@ public class SQL {
 			updateQuery(connection.prepareStatement("DROP TABLE " + REGIONS_TABLE));
 		}catch(SQLException e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 	}
 
@@ -210,7 +209,7 @@ public class SQL {
 			updateQuery(connection.prepareStatement("DELETE FROM " + tablename));
 		}catch(SQLException e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 	}
 
@@ -266,7 +265,7 @@ public class SQL {
 			return statement.executeQuery();
 		}catch(SQLException e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -284,7 +283,7 @@ public class SQL {
 			statement.executeUpdate();
 		}catch(SQLException e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 	}
 
@@ -302,7 +301,7 @@ public class SQL {
 			return statement.executeUpdate();
 		}catch(SQLException e){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e.printStackTrace();
 		}
 		return 0;
 	}

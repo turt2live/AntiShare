@@ -210,7 +210,7 @@ public class AntiShare extends PluginWrapper {
 			metrics = new Metrics(this);
 		}catch(IOException e1){
 			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-			AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e1) + " for the full error.", Level.SEVERE, LogType.ERROR);
+			e1.printStackTrace();
 		}
 
 		// Register SimpleNotice channel to AntiShare
@@ -249,7 +249,9 @@ public class AntiShare extends PluginWrapper {
 
 		// Statistics
 		UpdateChecker.start();
-		UsageStatistics.send(); // Handles config internally, also handles Metrics
+		// mcstats.org
+		trackers.addTo(metrics);
+		metrics.start(); // Handles it's own opt-out
 
 		// Start listeners
 		getServer().getPluginManager().registerEvents(permissions, this);

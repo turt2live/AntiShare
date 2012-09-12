@@ -30,7 +30,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare.LogType;
-import com.turt2live.antishare.api.DebugFile;
 import com.turt2live.antishare.convert.Convert320bInternal;
 import com.turt2live.antishare.convert.Convert320bInternal.ConvertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -140,18 +139,10 @@ public class CommandHandler implements CommandExecutor {
 							out.write("TIMERS: \r\n");
 							plugin.getTimer().debug(out);
 							out.close();
-							plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
-								@Override
-								public void run(){
-									DebugFile debug = new DebugFile(file);
-									debug.save(sender);
-									debug.alert();
-								}
-							});
 							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath(), true);
 						}catch(Exception e){
 							AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
-							AntiShare.getInstance().getMessenger().log("Please see " + ErrorLog.print(e) + " for the full error.", Level.SEVERE, LogType.ERROR);
+							e.printStackTrace();
 						}
 					}
 					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
