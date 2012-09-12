@@ -16,12 +16,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -29,10 +26,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.compatibility.HookManager;
@@ -641,62 +634,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public ASTimer getTimer(){
 		return timer;
-	}
-
-	/**
-	 * Determines if AntiShare is outdated
-	 * 
-	 * @return true if outdated
-	 */
-	public static boolean isOutdated(){
-		double current = Double.valueOf(getVersion().split("-")[0].replaceFirst("\\.", ""));
-		;
-		double release = Double.valueOf(getNewVersion());
-		return release > current;
-	}
-
-	/**
-	 * Gets the active version of AntiShare
-	 * 
-	 * @return the active version of AntiShare
-	 */
-	public static String getVersion(){
-		return instance.getDescription().getVersion();
-	}
-
-	/**
-	 * Gets the public release version of AntiShare
-	 * 
-	 * @return the public release version of AntiShare
-	 */
-	public static String getNewVersion(){
-		return getNewVersionString().replaceFirst("\\.", "");
-	}
-
-	/**
-	 * Gets the public release version of AntiShare
-	 * 
-	 * @return the public release version or AntiShare
-	 */
-	// Borrowed from Vault, thanks Sleaker!
-	// https://github.com/MilkBowl/Vault/blob/master/src/net/milkbowl/vault/Vault.java#L520
-	public static String getNewVersionString(){
-		String pluginUrlString = "http://dev.bukkit.org/server-mods/antishare/files.rss";
-		try{
-			URL url = new URL(pluginUrlString);
-			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
-			doc.getDocumentElement().normalize();
-			NodeList nodes = doc.getElementsByTagName("item");
-			Node firstNode = nodes.item(0);
-			if(firstNode.getNodeType() == 1){
-				Element firstElement = (Element) firstNode;
-				NodeList firstElementTagName = firstElement.getElementsByTagName("title");
-				Element firstNameElement = (Element) firstElementTagName.item(0);
-				NodeList firstNodes = firstNameElement.getChildNodes();
-				return firstNodes.item(0).getNodeValue().replace("v", "").trim();
-			}
-		}catch(Exception localException){} // Do not handle
-		return getVersion();
 	}
 
 	/**
