@@ -20,7 +20,7 @@ import com.turt2live.antishare.AntiShare.LogType;
  * 
  * @author turt2live
  */
-public class Messenger {
+public class ConsoleMessenger {
 
 	private boolean silent = false;
 	private boolean silentStartup = false;
@@ -32,7 +32,7 @@ public class Messenger {
 	/**
 	 * Creates a new Messenger
 	 */
-	public Messenger(){
+	public ConsoleMessenger(){
 		reload();
 	}
 

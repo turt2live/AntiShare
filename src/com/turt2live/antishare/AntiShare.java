@@ -37,7 +37,7 @@ import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
-import com.turt2live.antishare.notification.Messenger;
+import com.turt2live.antishare.notification.ConsoleMessenger;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.ASRegion;
@@ -96,7 +96,7 @@ public class AntiShare extends PluginWrapper {
 	private static AntiShare instance;
 	private boolean useSQL = false;
 	private boolean sqlRetry = false;
-	private Messenger messenger;
+	private ConsoleMessenger messenger;
 	private Permissions permissions;
 	private ItemMap itemMap;
 	private ASListener listener;
@@ -210,7 +210,7 @@ public class AntiShare extends PluginWrapper {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
 		hooks = new HookManager();
-		messenger = new Messenger();
+		messenger = new ConsoleMessenger();
 		signs = new SignManager();
 		trackers = new TrackerList();
 		tender = new MoneyManager();
@@ -467,7 +467,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the messenger
 	 */
-	public Messenger getMessenger(){
+	public ConsoleMessenger getMessenger(){
 		return messenger;
 	}
 
