@@ -30,7 +30,10 @@ public class TrackerList extends ArrayList<Tracker> {
 	public static enum TrackerType{
 		FLAT_FILE("Storage System", "Flat-File (YAML)"),
 		SQL("Storage System", "SQL"),
-		SPECIAL("Unknown", "Unkown");
+		SPECIAL("Unknown", "Unkown"),
+		FEATURE_FINES("Features Used", "Fines/Rewards"),
+		FEATURE_SIGNS("Features Used", "Signs"),
+		FEATURE_XMAIL("Features Used", "xMail");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";

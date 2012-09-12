@@ -40,6 +40,7 @@ import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
+import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
@@ -238,6 +239,7 @@ public class AntiShare extends PluginWrapper {
 
 		// xMail integration
 		if(getConfig().getBoolean("xMail.hook-into-xMail")){
+			trackers.getTracker(TrackerType.FEATURE_XMAIL).increment(1);
 			Plugin xmail = getServer().getPluginManager().getPlugin("xMail");
 			if(xmail != null){
 				this.xmail = new XMailListener();

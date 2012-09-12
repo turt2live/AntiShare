@@ -12,6 +12,7 @@ package com.turt2live.antishare;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 
@@ -30,6 +31,10 @@ public class ErrorLog {
 	 * @param e the error
 	 */
 	public static String print(Exception e){
+		if(e instanceof SQLException){
+			e.printStackTrace();
+			return "<SQL Error not saved>";
+		}
 		AntiShare plugin = AntiShare.getInstance();
 		File folder = new File(plugin.getDataFolder(), "errors");
 		folder.mkdirs();

@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
@@ -28,6 +28,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.ErrorLog;
 import com.turt2live.antishare.api.ASGameMode;
+import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -55,6 +56,7 @@ public class MoneyManager {
 		load();
 		reload();
 		if(doRewards || doFines){
+			plugin.getTrackers().getTracker(TrackerType.FEATURE_FINES).increment(1);
 			Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
 			if(vault != null){
 				econ = new VaultEconomy();

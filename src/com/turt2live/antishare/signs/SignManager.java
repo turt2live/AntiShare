@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.signs;
 
@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.AntiShare.LogType;
+import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 
 /**
  * Manages signs
@@ -45,6 +46,9 @@ public class SignManager extends ArrayList<Sign> {
 
 		// Load
 		reload();
+		if(size() > 0){
+			plugin.getTrackers().getTracker(TrackerType.FEATURE_SIGNS).increment(1);
+		}
 	}
 
 	/**
