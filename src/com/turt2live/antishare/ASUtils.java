@@ -10,10 +10,7 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -49,7 +46,6 @@ import org.bukkit.entity.Squid;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Directional;
 
@@ -130,45 +126,6 @@ public class ASUtils {
 			return GameMode.ADVENTURE;
 		}
 		return null;
-	}
-
-	/**
-	 * Determines if a Material is interactable (to AntiShare's standards)
-	 * 
-	 * @param material the material
-	 * @return true if interactable
-	 */
-	public static boolean isInteractable(Material material){
-		switch (material){
-		case DISPENSER:
-		case NOTE_BLOCK:
-		case BED_BLOCK:
-		case CHEST:
-		case WORKBENCH:
-		case FURNACE:
-		case BURNING_FURNACE:
-		case WOODEN_DOOR:
-		case LEVER:
-		case STONE_PLATE:
-		case IRON_DOOR_BLOCK:
-		case WOOD_PLATE:
-		case STONE_BUTTON:
-		case JUKEBOX:
-		case LOCKED_CHEST:
-		case TRAP_DOOR:
-		case MONSTER_EGGS:
-		case FENCE_GATE:
-		case ENCHANTMENT_TABLE:
-		case BREWING_STAND:
-		case REDSTONE_WIRE:
-		case ENDER_CHEST:
-		case TRIPWIRE_HOOK:
-		case TRIPWIRE:
-		case CAULDRON:
-			return true;
-		default:
-			return false;
-		}
 	}
 
 	/**
@@ -278,36 +235,6 @@ public class ASUtils {
 	}
 
 	/**
-	 * Converts an item stack to a string<br>
-	 * This returns the format 'id:data', data will be zero if no
-	 * data is found, or the data is actually zero. You can set 'zero'
-	 * in the parameters to false to just get the item ID. If 'zero' is
-	 * true and there is data, the correct format (id:data) will be returned.
-	 * 
-	 * @param item the item
-	 * @param zero true to add zero
-	 * @return the item as a string
-	 */
-	public static String stackToString(ItemStack item, boolean zero){
-		if(item == null){
-			return null;
-		}
-		String typeId = "";
-		String data = "";
-		typeId = Integer.toString(item.getTypeId());
-		if(item.getType().getMaxDurability() > 0){
-			data = "0";
-		}else if(item.getDurability() > 0){
-			data = Short.toString(item.getDurability());
-		}else if(item.getData().getData() > 0){
-			data = Byte.toString(item.getData().getData());
-		}else{
-			data = "0";
-		}
-		return typeId + (data.equals("0") && zero ? "" : ":" + data);
-	}
-
-	/**
 	 * Converts a block to a string<br>
 	 * This returns the format 'id:data', data will be zero if no
 	 * data is found, or the data is actually zero. You can set 'zero'
@@ -389,18 +316,6 @@ public class ASUtils {
 		color = color.replace("black", "15");
 
 		return Material.WOOL.getId() + ":" + color;
-	}
-
-	/**
-	 * Gets the current timestamp of the system
-	 * 
-	 * @return the timestamp
-	 */
-	public static String timestamp(){
-		DateFormat dateFormat = new SimpleDateFormat("d-M-y-HH-mm-ss-SS");
-		Date date = new Date();
-		String timestamp = dateFormat.format(date);
-		return timestamp;
 	}
 
 	/**
