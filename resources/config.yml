@@ -66,9 +66,6 @@ settings:
     username: MySQLUsername
     password: MySQLPassword
     database: AntiShare
-  # Set to false if you do not want us
-  # to know that someone is using AntiShare
-  send-usage-statistics: true
   # Set to FALSE to disable "creative" and "survival"
   # blocks.
   track-blocks: true
@@ -143,7 +140,6 @@ other:
   debug: false
   send-gamemode-change-message: true
   quiet-offline-mode-warning: false
-  error-reporting: true
   timers: false
 # xMail hook, pretty easy to setup.
 xMail:
