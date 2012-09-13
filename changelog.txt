@@ -1,5 +1,6 @@
 Since 4.2.0:
 - Cleaned up code quality
+- Fixed bug in block-break logic
 
 Features Stripped:
 - Error logging
