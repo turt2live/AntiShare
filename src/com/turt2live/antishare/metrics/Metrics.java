@@ -474,7 +474,7 @@ public class Metrics {
 		try{
 			Class.forName("mineshafter.MineServer");
 			return true;
-		}catch(Exception e){
+		}catch(ClassNotFoundException e){
 			return false;
 		}
 	}

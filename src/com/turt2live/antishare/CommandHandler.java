@@ -13,6 +13,7 @@ package com.turt2live.antishare;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -137,7 +138,7 @@ public class CommandHandler implements CommandExecutor {
 							plugin.getTimer().debug(out);
 							out.close();
 							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath(), true);
-						}catch(Exception e){
+						}catch(IOException e){
 							AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 							e.printStackTrace();
 						}
@@ -263,7 +264,7 @@ public class CommandHandler implements CommandExecutor {
 						if(args.length >= 2){
 							try{
 								page = Integer.parseInt(args[1]);
-							}catch(Exception e){
+							}catch(NumberFormatException e){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "'" + args[1] + "' is not a number!", true);
 								plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 								return true;

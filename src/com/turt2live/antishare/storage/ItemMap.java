@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
@@ -91,7 +91,7 @@ public class ItemMap {
 			int dval = 0;
 			try{
 				dval = Integer.parseInt(parts[1]);
-			}catch(Exception e){}
+			}catch(NumberFormatException e){}
 			if(dval == 0 && !zero){
 				ret.append(":");
 				ret.append(dval);

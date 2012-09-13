@@ -155,7 +155,7 @@ public class MoneyManager {
 				out.write(player + "\r\n");
 			}
 			out.close();
-		}catch(Exception e){
+		}catch(IOException e){
 			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
 		}
@@ -176,7 +176,7 @@ public class MoneyManager {
 				}
 				in.close();
 			}
-		}catch(Exception e){
+		}catch(IOException e){
 			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
 		}

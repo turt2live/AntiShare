@@ -63,16 +63,6 @@ import com.turt2live.antishare.api.ASEntity;
 public class ASUtils {
 
 	/**
-	 * Adds color to a message
-	 * 
-	 * @param message the message
-	 * @return the colored message
-	 */
-	public static String addColor(String message){
-		return ChatColor.translateAlternateColorCodes('&', message);
-	}
-
-	/**
 	 * Sends a message to a player.<br>
 	 * This will prefix "[AntiShare]" to the message and not send if the message is simply "no message".
 	 * 
@@ -86,7 +76,7 @@ public class ASUtils {
 				&& !message.equalsIgnoreCase("none")
 				&& !message.equalsIgnoreCase("noshow")
 				&& !message.equalsIgnoreCase("no show")){
-			message = addColor(message);
+			message = ChatColor.translateAlternateColorCodes('&', message);
 			if(!ChatColor.stripColor(message).startsWith("[AntiShare]")){
 				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.WHITE + message;
 			}

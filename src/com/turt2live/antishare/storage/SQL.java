@@ -226,7 +226,7 @@ public class SQL {
 			Statement statement = connection.createStatement();
 			statement.executeQuery("SELECT * FROM " + tablename);
 			return true;
-		}catch(Exception e){
+		}catch(SQLException e){
 			return false;
 		}
 	}

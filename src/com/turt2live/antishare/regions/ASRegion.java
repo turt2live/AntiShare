@@ -11,6 +11,7 @@
 package com.turt2live.antishare.regions;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -498,7 +499,7 @@ public class ASRegion {
 		if(!saveFile.exists()){
 			try{
 				saveFile.createNewFile();
-			}catch(Exception e){
+			}catch(IOException e){
 				AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 				e.printStackTrace();
 			}
@@ -506,7 +507,7 @@ public class ASRegion {
 			saveFile.delete();
 			try{
 				saveFile.createNewFile();
-			}catch(Exception e){
+			}catch(IOException e){
 				AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 				e.printStackTrace();
 			}

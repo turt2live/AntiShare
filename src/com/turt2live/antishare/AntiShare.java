@@ -604,7 +604,6 @@ public class AntiShare extends PluginWrapper {
 			if(files != null && files.length > 0){
 				for(File file : files){
 					file.renameTo(new File(newSaveFolder, file.getName()));
-					file.delete();
 				}
 				plugin.getLogger().info("Region Player Files Migrated: " + files.length);
 			}

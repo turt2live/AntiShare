@@ -10,14 +10,17 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
+import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Update Checker
@@ -47,7 +50,7 @@ public class UpdateChecker {
 						plugin.getLogger().warning("AntiShare " + newVersion + " is out! You are running AntiShare " + currentVersion);
 						plugin.getLogger().warning("Update AntiShare at: http://dev.bukkit.org/server-mods/antishare");
 					}
-				}catch(Exception e){} // Don't handle
+				}catch(NumberFormatException e){} // Don't handle
 			}
 		}, 0, 36000); // 30 minutes
 	}
@@ -57,9 +60,8 @@ public class UpdateChecker {
 	 * 
 	 * @return true if outdated
 	 */
-	public static boolean isOutdated(){
+	public static boolean isOutdated() throws NumberFormatException{
 		double current = Double.valueOf(getVersion().split("-")[0].replaceFirst("\\.", ""));
-		;
 		double release = Double.valueOf(getNewVersion());
 		return release > current;
 	}
@@ -104,7 +106,9 @@ public class UpdateChecker {
 				NodeList firstNodes = firstNameElement.getChildNodes();
 				return firstNodes.item(0).getNodeValue().replace("v", "").trim();
 			}
-		}catch(Exception localException){} // Do not handle
+		}catch(IOException e){} // Do not handle
+		catch(SAXException e){} // Do not handle
+		catch(ParserConfigurationException e){} // Do not handle
 		return getVersion();
 	}
 }

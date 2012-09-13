@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.turt2live.antishare.notification;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -267,6 +268,6 @@ public class MessageFactory {
 	 */
 	@Override
 	public String toString(){
-		return ASUtils.addColor(message);
+		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 }
