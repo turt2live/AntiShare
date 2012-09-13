@@ -269,10 +269,10 @@ public class ASListener implements Listener {
 
 		// Handle drops
 		if(drops != null && !deny && special){
-			if(drops && !deny){
+			if(drops){
 				plugin.getBlockManager().removeBlock(block);
 				block.breakNaturally();
-			}else if(deny){
+			}else{
 				plugin.getBlockManager().removeBlock(block);
 				block.setType(Material.AIR);
 			}
