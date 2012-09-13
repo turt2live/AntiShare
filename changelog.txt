@@ -1,4 +1,5 @@
 Since 4.2.0:
+- Cleaned up code quality
 
 Features Stripped:
 - Error logging
