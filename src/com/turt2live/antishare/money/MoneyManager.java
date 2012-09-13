@@ -25,7 +25,6 @@ import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.api.ASGameMode;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -60,7 +59,7 @@ public class MoneyManager {
 			if(vault != null){
 				econ = new VaultEconomy();
 			}else{
-				plugin.getMessenger().log("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work", Level.SEVERE, LogType.BYPASS);
+				plugin.log("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work", Level.SEVERE);
 			}
 		}
 	}
@@ -107,8 +106,8 @@ public class MoneyManager {
 
 			// Sanity
 			if(affect == null){
-				plugin.getMessenger().log("Configuration Problem: '" + money.getString(path + ".give-to") + "' is not valid! (See '" + (path + ".give-to") + "' in your fines.yml)", Level.WARNING, LogType.INFO);
-				plugin.getMessenger().log("Assuming '" + money.getString(path + ".give-to") + "' means 'NONE'", Level.WARNING, LogType.INFO);
+				plugin.log("Configuration Problem: '" + money.getString(path + ".give-to") + "' is not valid! (See '" + (path + ".give-to") + "' in your fines.yml)", Level.WARNING);
+				plugin.log("Assuming '" + money.getString(path + ".give-to") + "' means 'NONE'", Level.WARNING);
 				affect = ASGameMode.NONE;
 			}
 
@@ -140,8 +139,8 @@ public class MoneyManager {
 		}
 
 		// Spam console
-		plugin.getMessenger().log("Fines Loaded: " + finesLoaded, Level.INFO, LogType.INFO);
-		plugin.getMessenger().log("Rewards Loaded: " + rewardsLoaded, Level.INFO, LogType.INFO);
+		plugin.log("Fines Loaded: " + finesLoaded, Level.INFO);
+		plugin.log("Rewards Loaded: " + rewardsLoaded, Level.INFO);
 	}
 
 	/**
@@ -157,7 +156,7 @@ public class MoneyManager {
 			}
 			out.close();
 		}catch(Exception e){
-			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
 		}
 	}
@@ -178,7 +177,7 @@ public class MoneyManager {
 				in.close();
 			}
 		}catch(Exception e){
-			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
 		}
 	}

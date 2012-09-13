@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import com.turt2live.antishare.AntiShare.LogType;
-
 public class ASTimer {
 
 	public interface ASTimerListener {
@@ -43,7 +41,7 @@ public class ASTimer {
 		String id = UUID.randomUUID().toString();
 		listeners.put(id, listener);
 		if(AntiShare.getInstance().getConfig().getBoolean("other.debug")){
-			AntiShare.getInstance().getMessenger().log("[AS TIMER] Listener added: " + id, Level.INFO, LogType.BYPASS);
+			AntiShare.getInstance().log("[AS TIMER] Listener added: " + id, Level.INFO);
 		}
 		return id;
 	}
@@ -51,7 +49,7 @@ public class ASTimer {
 	public void removeListener(String id){
 		listeners.remove(id);
 		if(AntiShare.getInstance().getConfig().getBoolean("other.debug")){
-			AntiShare.getInstance().getMessenger().log("[AS TIMER] Listener removed: " + id, Level.INFO, LogType.BYPASS);
+			AntiShare.getInstance().log("[AS TIMER] Listener removed: " + id, Level.INFO);
 		}
 	}
 
@@ -65,7 +63,7 @@ public class ASTimer {
 			listener.timerStart(clazz, extraInformation, this.id);
 		}
 		if(AntiShare.getInstance().getConfig().getBoolean("other.debug")){
-			AntiShare.getInstance().getMessenger().log("[AS TIMER] Timer Started (" + this.id + "): " + clazz.getSimpleName(), Level.INFO, LogType.BYPASS);
+			AntiShare.getInstance().log("[AS TIMER] Timer Started (" + this.id + "): " + clazz.getSimpleName(), Level.INFO);
 		}
 		return this.id;
 	}
@@ -81,7 +79,7 @@ public class ASTimer {
 			debug.add(report);
 		}
 		if(AntiShare.getInstance().getConfig().getBoolean("other.debug")){
-			AntiShare.getInstance().getMessenger().log("[AS TIMER] Timer Stopped (" + id + "): " + clazz.getSimpleName(), Level.INFO, LogType.BYPASS);
+			AntiShare.getInstance().log("[AS TIMER] Timer Stopped (" + id + "): " + clazz.getSimpleName(), Level.INFO);
 		}
 	}
 

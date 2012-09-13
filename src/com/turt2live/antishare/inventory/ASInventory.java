@@ -34,7 +34,6 @@ import org.bukkit.material.MaterialData;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.storage.SQL;
 
 /**
@@ -161,7 +160,7 @@ public class ASInventory implements Cloneable {
 						// Save item to map
 						inventories.add(inventory);
 					}catch(SQLException e){
-						AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+						AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 						e.printStackTrace();
 					}
 				}
@@ -185,7 +184,7 @@ public class ASInventory implements Cloneable {
 				for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
 					World worldV = Bukkit.getWorld(world);
 					if(worldV == null){
-						AntiShare.getInstance().getMessenger().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE, LogType.ERROR);
+						AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE);
 						continue;
 					}
 					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
@@ -344,7 +343,7 @@ public class ASInventory implements Cloneable {
 					// Save
 					plugin.getSQL().insertQuery(statement);
 				}catch(SQLException e){
-					AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+					AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 					e.printStackTrace();
 				}
 			}

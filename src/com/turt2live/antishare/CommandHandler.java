@@ -29,9 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
-import com.turt2live.antishare.AntiShare.LogType;
-import com.turt2live.antishare.convert.Convert320bInternal;
-import com.turt2live.antishare.convert.Convert320bInternal.ConvertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.RegionKey;
@@ -141,7 +138,7 @@ public class CommandHandler implements CommandExecutor {
 							out.close();
 							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath(), true);
 						}catch(Exception e){
-							AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+							AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 							e.printStackTrace();
 						}
 					}
@@ -325,41 +322,6 @@ public class CommandHandler implements CommandExecutor {
 								}
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!", true);
-							}
-						}
-					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
-					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
-					return true;
-				}else if(args[0].equalsIgnoreCase("convert")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.CONVERT)){
-						if(args.length < 3){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + "Incorrect syntax, Try /as convert <from> <to>", true);
-						}else{
-							ConvertType from = ConvertType.getType(args[1]);
-							ConvertType to = ConvertType.getType(args[2]);
-							if(from == ConvertType.INVALID || to == ConvertType.INVALID || to == from){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "Incorrect syntax, Try /as convert <from> <to>", true);
-							}else{
-								// Starts SQL if is not already
-								if(plugin.startSQL()){
-									// Setup sql
-									if(to == ConvertType.SQL){
-										plugin.getConfig().set("enabled-features.sql", true);
-									}else{
-										plugin.getConfig().set("enabled-features.sql", false);
-									}
-
-									// Connected
-									if(Convert320bInternal.convert(from, to)){
-										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Converted!", true);
-									}else{
-										ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wwrong while converting. Please check the server log for errors", true);
-									}
-								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "Something went wrong while connecting to the SQL server. Please check your settings.", true);
-								}
 							}
 						}
 					}else{

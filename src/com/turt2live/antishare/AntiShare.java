@@ -29,7 +29,6 @@ import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.compatibility.HookManager;
-import com.turt2live.antishare.convert.Convert;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
@@ -37,7 +36,6 @@ import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
-import com.turt2live.antishare.notification.ConsoleMessenger;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.ASRegion;
@@ -58,45 +56,12 @@ import com.turt2live.antishare.xmail.XMailListener;
 public class AntiShare extends PluginWrapper {
 
 	/**
-	 * Represents a Log Entry Type
-	 * 
-	 * @author turt2live
-	 */
-	public static enum LogType{
-		/**
-		 * Startup Message
-		 */
-		STARTUP,
-		/**
-		 * Shutdown Message
-		 */
-		SHUTDOWN,
-		/**
-		 * General/Info message
-		 */
-		INFO,
-		/**
-		 * Invalid block message
-		 */
-		BLOCK,
-		/**
-		 * Error messages
-		 */
-		ERROR,
-		/**
-		 * Bypasses all "silent" checks
-		 */
-		BYPASS;
-	}
-
-	/**
 	 * AntiShare tool material
 	 */
 	public static final Material ANTISHARE_TOOL = Material.BLAZE_ROD;
 	private static AntiShare instance;
 	private boolean useSQL = false;
 	private boolean sqlRetry = false;
-	private ConsoleMessenger messenger;
 	private Permissions permissions;
 	private ItemMap itemMap;
 	private ASListener listener;
@@ -155,10 +120,6 @@ public class AntiShare extends PluginWrapper {
 			e.printStackTrace();
 		}
 
-		// Convert
-		Convert.start();
-		Convert.convertConfig313to320b(); // Fixes configuration file
-
 		// We need to initiate an SQL connection now
 		sql = new SQL();
 		if(getConfig().getBoolean("enabled-features.sql")){
@@ -175,10 +136,6 @@ public class AntiShare extends PluginWrapper {
 				useSQL = true;
 			}
 		}
-
-		// Continue conversion
-		Convert.convert313to320b(); // Changes data (inventories and regions)
-		Convert.end();
 
 		// Check configuration
 		getConfig().loadDefaults(getResource("resources/config.yml"));
@@ -202,7 +159,7 @@ public class AntiShare extends PluginWrapper {
 		try{
 			metrics = new Metrics(this);
 		}catch(IOException e1){
-			AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+			getLogger().severe("AntiShare encountered and error. Please report this to turt2live.");
 			e1.printStackTrace();
 		}
 
@@ -210,7 +167,6 @@ public class AntiShare extends PluginWrapper {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
 		hooks = new HookManager();
-		messenger = new ConsoleMessenger();
 		signs = new SignManager();
 		trackers = new TrackerList();
 		tender = new MoneyManager();
@@ -262,7 +218,7 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Enabled
-		log("Enabled!", Level.INFO, LogType.STARTUP);
+		getLogger().info("Enabled!");
 
 		// Scan for players
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
@@ -298,11 +254,10 @@ public class AntiShare extends PluginWrapper {
 
 		// Disable
 		getServer().getScheduler().cancelTasks(this);
-		log("Disabled!", Level.INFO, LogType.SHUTDOWN);
+		getLogger().info("Disabled!");
 
 		// Prepare as though it's a reload
 		permissions = null;
-		messenger = null;
 		itemMap = null;
 		listener = null;
 		alerts = null;
@@ -341,7 +296,6 @@ public class AntiShare extends PluginWrapper {
 		long timerId = timer.start(this.getClass(), "RELOAD");
 		reloadConfig();
 		// Permissions has no reload
-		messenger.reload();
 		itemMap.reload();
 		signs.reload();
 		listener.reload();
@@ -460,15 +414,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public Permissions getPermissions(){
 		return permissions;
-	}
-
-	/**
-	 * Gets the messenger for AntiShare
-	 * 
-	 * @return the messenger
-	 */
-	public ConsoleMessenger getMessenger(){
-		return messenger;
 	}
 
 	/**
@@ -637,14 +582,13 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	/**
-	 * Logs a message
+	 * Log a message
 	 * 
-	 * @param message the message
-	 * @param level the log level
-	 * @param type the log entry type
+	 * @param string the message
+	 * @param level the level
 	 */
-	public static void log(String message, Level level, LogType type){
-		instance.messenger.log(message, level, type);
+	public void log(String string, Level level){
+		getLogger().log(level, string);
 	}
 
 	/**
@@ -662,7 +606,7 @@ public class AntiShare extends PluginWrapper {
 					file.renameTo(new File(newSaveFolder, file.getName()));
 					file.delete();
 				}
-				plugin.getMessenger().info("Region Player Files Migrated: " + files.length);
+				plugin.getLogger().info("Region Player Files Migrated: " + files.length);
 			}
 			oldSaveFolder.delete();
 		}

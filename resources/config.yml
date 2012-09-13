@@ -141,11 +141,6 @@ block-tracking:
 # Misc. stuff, generally leave this alone.
 other:
   debug: false
-  silent-startup: false
-  silent-shutdown: false
-  silent-blocks: true
-  silent-errors: false
-  silent-overall: false
   send-gamemode-change-message: true
   quiet-offline-mode-warning: false
   error-reporting: true

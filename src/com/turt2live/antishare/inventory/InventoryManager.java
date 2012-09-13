@@ -31,7 +31,6 @@ import org.bukkit.inventory.InventoryHolder;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
@@ -617,15 +616,15 @@ public class InventoryManager implements Listener {
 					LinkedInventory link = new LinkedInventory(gamemode, allWorlds);
 					this.links.add(link);
 				}else{
-					AntiShare.getInstance().getMessenger().log("Invalid linked inventory. Please check the linked-inventories.yml file", Level.WARNING, LogType.BYPASS);
+					AntiShare.getInstance().log("Invalid linked inventory. Please check the linked-inventories.yml file", Level.WARNING);
 				}
 			}
 		}
 
 		// Status
 		int loaded = creative.size() + survival.size() + region.size() + playerTemp.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
-		AntiShare.getInstance().getMessenger().log("Inventories Loaded: " + loaded, Level.INFO, LogType.INFO);
-		AntiShare.getInstance().getMessenger().log("Linked Inventories: " + this.links.size(), Level.INFO, LogType.INFO);
+		AntiShare.getInstance().log("Inventories Loaded: " + loaded, Level.INFO);
+		AntiShare.getInstance().log("Linked Inventories: " + this.links.size(), Level.INFO);
 	}
 
 	/**

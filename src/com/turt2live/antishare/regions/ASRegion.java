@@ -25,7 +25,6 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -500,7 +499,7 @@ public class ASRegion {
 			try{
 				saveFile.createNewFile();
 			}catch(Exception e){
-				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 				e.printStackTrace();
 			}
 		}else{
@@ -508,7 +507,7 @@ public class ASRegion {
 			try{
 				saveFile.createNewFile();
 			}catch(Exception e){
-				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 				e.printStackTrace();
 			}
 		}

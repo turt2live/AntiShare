@@ -25,7 +25,6 @@ import org.bukkit.block.Block;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 
 /**
  * Block Manager - Handles creative/survival blocks
@@ -122,7 +121,8 @@ public class BlockManager {
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
 					if(atLocation.getType() != block.expectedType){
-						plugin.getMessenger().log("Creative block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING, LogType.BLOCK);
+						if(plugin.getConfig().getBoolean("other.debug"))
+							plugin.log("Creative block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
 						block.expectedType = atLocation.getType();
 					}
 				}
@@ -130,7 +130,8 @@ public class BlockManager {
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
 					if(atLocation.getType() != block.expectedType){
-						plugin.getMessenger().log("Survival block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING, LogType.BLOCK);
+						if(plugin.getConfig().getBoolean("other.debug"))
+							plugin.log("Survival block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
 						block.expectedType = atLocation.getType();
 					}
 				}
@@ -138,7 +139,8 @@ public class BlockManager {
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
 					if(atLocation.getType() != block.expectedType){
-						plugin.getMessenger().log("Adventure block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING, LogType.BLOCK);
+						if(plugin.getConfig().getBoolean("other.debug"))
+							plugin.log("Adventure block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
 						block.expectedType = atLocation.getType();
 					}
 				}
@@ -334,14 +336,14 @@ public class BlockManager {
 					try{
 						Thread.sleep(delay);
 					}catch(InterruptedException e){
-						AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+						AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 						e.printStackTrace();
 					}
 				}
 
 				// Warn if not updated
 				if(!updated){
-					plugin.getMessenger().log("Move block took longer than " + (delay * maxRuns) + " milliseconds.", Level.SEVERE, LogType.BYPASS);
+					plugin.log("Move block took longer than " + (delay * maxRuns) + " milliseconds.", Level.SEVERE);
 				}
 			}
 		});

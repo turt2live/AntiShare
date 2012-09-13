@@ -14,6 +14,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -57,7 +58,7 @@ public class PerWorldConfig {
 				file.delete();
 			}
 			if(files > 0)
-				AntiShare.getInstance().getMessenger().info("World Configurations Migrated: " + files);
+				AntiShare.getInstance().log("World Configurations Migrated: " + files, Level.INFO);
 		}
 	}
 

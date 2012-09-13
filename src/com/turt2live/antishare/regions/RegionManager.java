@@ -29,7 +29,6 @@ import org.bukkit.World;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.Selection;
 import com.turt2live.antishare.storage.SQL;
 
@@ -116,7 +115,7 @@ public class RegionManager {
 					}
 				}
 			}catch(SQLException e){
-				AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+				AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 				e.printStackTrace();
 			}
 		}else{
@@ -156,7 +155,7 @@ public class RegionManager {
 				}
 			}
 		}
-		plugin.getMessenger().log("Regions Loaded: " + loadedRegions, Level.INFO, LogType.INFO);
+		plugin.log("Regions Loaded: " + loadedRegions, Level.INFO);
 	}
 
 	/**
@@ -199,7 +198,7 @@ public class RegionManager {
 						// Save
 						plugin.getSQL().insertQuery(statement);
 					}catch(SQLException e){
-						AntiShare.getInstance().getMessenger().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE, LogType.ERROR);
+						AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 						e.printStackTrace();
 					}
 				}

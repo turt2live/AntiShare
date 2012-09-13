@@ -18,7 +18,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -175,7 +174,7 @@ public class WorldSplit {
 			// Valid
 		}else{
 			axis = Axis.NONE;
-			plugin.getMessenger().log("Invalid world split for world " + world.getName(), Level.WARNING, LogType.BYPASS);
+			plugin.log("Invalid world split for world " + world.getName(), Level.WARNING);
 		}
 	}
 }

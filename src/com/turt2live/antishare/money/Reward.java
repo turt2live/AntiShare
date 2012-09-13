@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
@@ -16,7 +16,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.ASUtils;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.api.ASGameMode;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
@@ -49,7 +48,7 @@ public class Reward extends Tender {
 		TransactionResult result = plugin.getMoneyManager().addToAccount(player, getAmount());
 		if(!result.completed){
 			ASUtils.sendToPlayer(player, ChatColor.RED + "Reward Failed: " + ChatColor.ITALIC + result.message, true);
-			plugin.getMessenger().log("Reward Failed (" + player.getName() + "): " + result.message, Level.WARNING, LogType.BYPASS);
+			plugin.log("Reward Failed (" + player.getName() + "): " + result.message, Level.WARNING);
 			return;
 		}else{
 			String formatted = plugin.getMoneyManager().formatAmount(getAmount());

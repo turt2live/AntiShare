@@ -19,7 +19,6 @@ import org.bukkit.block.Block;
 
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.signs.Sign;
 
 /**
@@ -88,12 +87,12 @@ public class TrackerList {
 			if(tracked.toLowerCase().startsWith("sign:")){
 				String signname = tracked.split(":").length > 0 ? tracked.split(":")[1] : null;
 				if(signname == null){
-					plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;
 				}
 				Sign sign = plugin.getSignManager().getSign(signname);
 				if(sign == null){
-					plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;
 				}
 				if(!negate){
@@ -183,7 +182,7 @@ public class TrackerList {
 					this.tracked.remove(plugin.getItemMap().getItem(tracked, false));
 				}
 			}catch(Exception e){
-				plugin.getMessenger().log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING, LogType.INFO);
+				plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 			}
 		}
 	}

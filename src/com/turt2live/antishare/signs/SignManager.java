@@ -17,7 +17,6 @@ import java.util.logging.Level;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.AntiShare.LogType;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 
 /**
@@ -77,12 +76,12 @@ public class SignManager extends ArrayList<Sign> {
 				}
 			}
 			if(invalid){
-				plugin.getMessenger().log("Invalid sign: " + name + " (property '" + invalidProp + "' is null)", Level.WARNING, LogType.BYPASS);
+				plugin.log("Invalid sign: " + name + " (property '" + invalidProp + "' is null)", Level.WARNING);
 			}
 			Sign assign = new Sign(name, lines, enabled, caseSensitive);
 			add(assign);
 		}
-		plugin.getMessenger().log("Signs Loaded: " + size(), Level.INFO, LogType.INFO);
+		plugin.log("Signs Loaded: " + size(), Level.INFO);
 	}
 
 	/**
