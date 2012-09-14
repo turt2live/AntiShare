@@ -84,23 +84,6 @@ public class Permissions implements Listener {
 		return false;
 	}
 
-	/**
-	 * Determines if a command sender has a permission
-	 * 
-	 * @param sender the sender
-	 * @param permission the permission
-	 * @param world the world to check in
-	 * @return true if they have it
-	 */
-	public boolean has(CommandSender sender, String permission, World world){
-		if(sender instanceof Player){
-			return has((Player) sender, permission, world);
-		}else if(sender instanceof ConsoleCommandSender){
-			return true;
-		}
-		return false;
-	}
-
 	private void checkPlugins(){
 		AntiShare plugin = AntiShare.getInstance();
 		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");

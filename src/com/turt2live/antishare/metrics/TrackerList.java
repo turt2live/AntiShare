@@ -111,23 +111,6 @@ public class TrackerList extends ArrayList<Tracker> {
 	}
 
 	/**
-	 * Gets a tracker
-	 * 
-	 * @param type the type
-	 * @param name the tracker name
-	 * @return the tracker
-	 */
-	public Tracker getTracker(TrackerType type, String name){
-		for(int i = 0; i < size(); i++){
-			Tracker t = get(i);
-			if(t.getType() == type && t.getColumnName().equalsIgnoreCase(name)){
-				return t;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Adds all the trackers to the metrics
 	 * 
 	 * @param metrics the metrics

@@ -25,7 +25,8 @@ public class PermissionNodes {
 	public static final String ALLOW_DROP = "AntiShare.allow.drop_item";
 	public static final String ALLOW_RIGHT_CLICK = "AntiShare.allow.right_click";
 	public static final String ALLOW_USE = "AntiShare.allow.use_item";
-	public static final String ALLOW_COMMANDS = "AntiShare.allow.commands";
+	// TODO from UCDetector: Constant "PermissionNodes.ALLOW_COMMANDS" has 0 references
+	public static final String ALLOW_COMMANDS = "AntiShare.allow.commands"; // NO_UCD (unused code)
 	public static final String ALLOW_COMBAT_PLAYERS = "AntiShare.allow.hit_players";
 	public static final String ALLOW_COMBAT_MOBS = "AntiShare.allow.hit_mobs";
 
@@ -36,7 +37,8 @@ public class PermissionNodes {
 	public static final String MIRROR = "AntiShare.mirror";
 	public static final String FREE_PLACE = "AntiShare.free_place";
 	public static final String RELOAD = "AntiShare.reload";
-	public static final String CONVERT = "AntiShare.convert";
+	// TODO from UCDetector: Constant "PermissionNodes.CONVERT" has 0 references
+	public static final String CONVERT = "AntiShare.convert"; // NO_UCD (unused code)
 	public static final String XMAIL = "AntiShare.xmail";
 	public static final String NO_GM_CD = "AntiShare.cooldownbypass";
 	public static final String CHECK = "AntiShare.check";

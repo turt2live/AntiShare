@@ -15,7 +15,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 
 import com.turt2live.antishare.AntiShare;
@@ -180,22 +179,6 @@ public class SQL {
 	}
 
 	/**
-	 * For wiping
-	 */
-	public void dropTables(){
-		if(!isConnected()){
-			reconnect();
-		}
-		try{
-			updateQuery(connection.prepareStatement("DROP TABLE " + INVENTORIES_TABLE));
-			updateQuery(connection.prepareStatement("DROP TABLE " + REGIONS_TABLE));
-		}catch(SQLException e){
-			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Wipes a table
 	 * 
 	 * @param tablename the table name
@@ -209,25 +192,6 @@ public class SQL {
 		}catch(SQLException e){
 			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Checks if a table exists
-	 * 
-	 * @param tablename the table name
-	 * @return true if the table exists
-	 */
-	public boolean tableExists(String tablename){
-		if(!isConnected()){
-			reconnect();
-		}
-		try{
-			Statement statement = connection.createStatement();
-			statement.executeQuery("SELECT * FROM " + tablename);
-			return true;
-		}catch(SQLException e){
-			return false;
 		}
 	}
 

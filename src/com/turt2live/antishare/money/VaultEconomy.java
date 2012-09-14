@@ -72,16 +72,6 @@ public class VaultEconomy {
 	}
 
 	/**
-	 * Determines if a player's account is negative
-	 * 
-	 * @param player the player
-	 * @return true if the current balance is negative
-	 */
-	public boolean isNegative(String player){
-		return getBalance(player) < 0;
-	}
-
-	/**
 	 * Determines if this player will require use of the 'tab' feature
 	 * 
 	 * @param player the player

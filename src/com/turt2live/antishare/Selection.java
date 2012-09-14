@@ -26,19 +26,6 @@ public class Selection {
 	private Location minimum, maximum;
 
 	/**
-	 * Creates a new Selection
-	 * 
-	 * @param world the world
-	 * @param minimum the minimum
-	 * @param maximum the maximum
-	 */
-	public Selection(World world, Location minimum, Location maximum){
-		this.world = world;
-		this.maximum = maximum;
-		this.minimum = minimum;
-	}
-
-	/**
 	 * Compatibility for WorldEdit and AntiShare
 	 * 
 	 * @param selection the WorldEdit selection

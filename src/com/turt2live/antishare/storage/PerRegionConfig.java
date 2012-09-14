@@ -43,7 +43,6 @@ public class PerRegionConfig {
 	private EntityList rmobs;
 	private EventList crafting;
 	private boolean clearInventoriesOnBreak = true;
-	private boolean removeAttachedBlocksOnBreak = true;
 	private boolean combatPlayers = false;
 	private boolean combatMobs = false;
 	private World world;
@@ -108,7 +107,6 @@ public class PerRegionConfig {
 				value = plugin.getListener().getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
 			}
 		}
-		removeAttachedBlocksOnBreak = value;
 		value = regionConfig.getBoolean("blocked-actions.combat-against-players");
 		if(regionConfig.getString("blocked-actions.combat-against-players").equalsIgnoreCase("global")){
 			value = plugin.getConfig().getBoolean("blocked-actions.combat-against-players");
@@ -308,15 +306,6 @@ public class PerRegionConfig {
 	 */
 	public boolean clearBlockInventoryOnBreak(){
 		return clearInventoriesOnBreak;
-	}
-
-	/**
-	 * Determines if any attached blocks should be removed upon it being broken
-	 * 
-	 * @return true if attached blocks are to be removed
-	 */
-	public boolean removeAttachedBlocksOnBreak(){
-		return removeAttachedBlocksOnBreak;
 	}
 
 	/**

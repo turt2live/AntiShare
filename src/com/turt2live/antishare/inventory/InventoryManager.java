@@ -365,16 +365,6 @@ public class InventoryManager implements Listener {
 	}
 
 	/**
-	 * Gets the temporary inventory handler for a player
-	 * 
-	 * @param player the player
-	 * @return the temporary inventory handler, this can be null if the player doesn't have one
-	 */
-	public TemporaryASInventory getTemporaryInventoryHandler(Player player){
-		return playerTemp.get(player.getName());
-	}
-
-	/**
 	 * Saves a player's creative inventory
 	 * 
 	 * @param player the player
