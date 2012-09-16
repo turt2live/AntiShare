@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -106,7 +105,7 @@ public class Alert {
 		public long player_last_sent = 0L;
 	}
 
-	private ConcurrentHashMap<String, AlertDetails> alerts = new ConcurrentHashMap<String, AlertDetails>();
+	private HashMap<String, AlertDetails> alerts = new HashMap<String, AlertDetails>();
 	private boolean send = true;
 	private boolean toConsole = true;
 	private boolean toPlayers = true;

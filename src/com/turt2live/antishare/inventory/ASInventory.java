@@ -15,10 +15,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -201,7 +201,7 @@ public class ASInventory implements Cloneable {
 		return inventories;
 	}
 
-	private ConcurrentHashMap<Integer, ItemStack> inventory = new ConcurrentHashMap<Integer, ItemStack>();
+	private HashMap<Integer, ItemStack> inventory = new HashMap<Integer, ItemStack>();
 	private AntiShare plugin;
 	private InventoryType type = InventoryType.PLAYER;
 	private String inventoryName = "UNKNOWN";

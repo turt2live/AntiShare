@@ -12,8 +12,8 @@ package com.turt2live.antishare.storage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
@@ -57,9 +57,9 @@ public class BlockManager {
 	private CopyOnWriteArrayList<Block> creative_blocks = new CopyOnWriteArrayList<Block>();
 	private CopyOnWriteArrayList<Block> survival_blocks = new CopyOnWriteArrayList<Block>();
 	private CopyOnWriteArrayList<Block> adventure_blocks = new CopyOnWriteArrayList<Block>();
-	private ConcurrentHashMap<Block, ASBlock> expected_creative = new ConcurrentHashMap<Block, ASBlock>();
-	private ConcurrentHashMap<Block, ASBlock> expected_survival = new ConcurrentHashMap<Block, ASBlock>();
-	private ConcurrentHashMap<Block, ASBlock> expected_adventure = new ConcurrentHashMap<Block, ASBlock>();
+	private HashMap<Block, ASBlock> expected_creative = new HashMap<Block, ASBlock>();
+	private HashMap<Block, ASBlock> expected_survival = new HashMap<Block, ASBlock>();
+	private HashMap<Block, ASBlock> expected_adventure = new HashMap<Block, ASBlock>();
 	private TrackerList tracked_creative;
 	private TrackerList tracked_survival;
 	private TrackerList tracked_adventure;
@@ -111,9 +111,9 @@ public class BlockManager {
 				}
 
 				// Check lists
-				ConcurrentHashMap<Block, ASBlock> creative = new ConcurrentHashMap<Block, ASBlock>();
-				ConcurrentHashMap<Block, ASBlock> survival = new ConcurrentHashMap<Block, ASBlock>();
-				ConcurrentHashMap<Block, ASBlock> adventure = new ConcurrentHashMap<Block, ASBlock>();
+				HashMap<Block, ASBlock> creative = new HashMap<Block, ASBlock>();
+				HashMap<Block, ASBlock> survival = new HashMap<Block, ASBlock>();
+				HashMap<Block, ASBlock> adventure = new HashMap<Block, ASBlock>();
 				creative.putAll(expected_creative);
 				survival.putAll(expected_survival);
 				adventure.putAll(expected_adventure);

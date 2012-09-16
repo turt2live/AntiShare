@@ -11,7 +11,7 @@
 package com.turt2live.antishare.metrics;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 import com.turt2live.antishare.metrics.Metrics.Graph;
 
@@ -63,7 +63,7 @@ public class TrackerList extends ArrayList<Tracker> {
 	}
 
 	private static final long serialVersionUID = 8386186678486064850L;
-	private ConcurrentHashMap<String, Graph> graphs = new ConcurrentHashMap<String, Graph>();
+	private HashMap<String, Graph> graphs = new HashMap<String, Graph>();
 
 	/**
 	 * Creates a new Tracker List

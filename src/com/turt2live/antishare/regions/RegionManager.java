@@ -16,10 +16,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -40,7 +40,7 @@ import com.turt2live.antishare.storage.SQL;
 public class RegionManager {
 
 	private AntiShare plugin;
-	private ConcurrentHashMap<World, Set<ASRegion>> regions = new ConcurrentHashMap<World, Set<ASRegion>>();
+	private HashMap<World, Set<ASRegion>> regions = new HashMap<World, Set<ASRegion>>();
 	private boolean hasWorldEdit = false;
 
 	/**

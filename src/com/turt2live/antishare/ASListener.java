@@ -13,8 +13,8 @@ package com.turt2live.antishare;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -102,9 +102,9 @@ import com.turt2live.antishare.storage.PerWorldConfig.ListType;
 public class ASListener implements Listener {
 
 	private AntiShare plugin = AntiShare.getInstance();
-	private ConcurrentHashMap<World, PerWorldConfig> config = new ConcurrentHashMap<World, PerWorldConfig>();
+	private HashMap<World, PerWorldConfig> config = new HashMap<World, PerWorldConfig>();
 	private boolean hasMobCatcher = false;
-	private ConcurrentHashMap<String, Long> GMCD = new ConcurrentHashMap<String, Long>();
+	private HashMap<String, Long> GMCD = new HashMap<String, Long>();
 
 	/**
 	 * Creates a new Listener

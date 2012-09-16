@@ -12,7 +12,7 @@ package com.turt2live.antishare.regions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -52,7 +52,7 @@ public class ASRegion {
 	private ASInventory inventory;
 	private String enterMessage = "You entered '{name}'!";
 	private String exitMessage = "You left '{name}'!";
-	private ConcurrentHashMap<String, GameMode> previousGameModes = new ConcurrentHashMap<String, GameMode>();
+	private HashMap<String, GameMode> previousGameModes = new HashMap<String, GameMode>();
 	private PerRegionConfig config;
 
 	/**
