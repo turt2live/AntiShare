@@ -1,5 +1,6 @@
 Since 4.2.0:
 - Cleaned up code quality
+- Sped up laggy methods (like player quit)
 
 Features Stripped:
 - Error logging
@@ -7,6 +8,7 @@ Features Stripped:
 - Removed old statistics tracker
 - Removed old console filter
 - Removed converter, I will do it if needed
+- Removed old timer, removing excess bulk
 
 Bugs:
 - [Patched - Needs Fix - BUKKIT-2278] Tripwire Hooks on a block can be "dropped"
