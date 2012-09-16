@@ -158,45 +158,55 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 */
-	public void releasePlayer(Player player){
+	public void releasePlayer(final Player player){
 		if(player == null){
 			return;
 		}
 
-		// Release
-		if(isInTemporary(player)){
-			removeFromTemporary(player);
+		final String name = player.getName();
+		final List<String> worlds = new ArrayList<String>();
+		for(World w : Bukkit.getWorlds()){
+			worlds.add(w.getName());
 		}
 
-		refreshInventories(player);
+		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
+			@Override
+			public void run(){
+				// Release
+				if(isInTemporary(player)){
+					removeFromTemporary(player);
+				}
 
-		// Cleanup
-		for(World world : Bukkit.getWorlds()){
-			if(creative.get(player.getName() + "." + world.getName()) != null){
-				creative.get(player.getName() + "." + world.getName()).save();
+				refreshInventories(player);
+				// Cleanup
+				for(String world : worlds){
+					if(creative.get(name + "." + world) != null){
+						creative.get(name + "." + world).save();
+					}
+					if(survival.get(name + "." + world) != null){
+						survival.get(name + "." + world).save();
+					}
+					if(adventure.get(name + "." + world) != null){
+						adventure.get(name + "." + world).save();
+					}
+					if(enderCreative.get(name + "." + world) != null){
+						enderCreative.get(name + "." + world).save();
+					}
+					if(enderSurvival.get(name + "." + world) != null){
+						enderSurvival.get(name + "." + world).save();
+					}
+					if(enderAdventure.get(name + "." + world) != null){
+						enderAdventure.get(name + "." + world).save();
+					}
+					creative.remove(name + "." + world);
+					survival.remove(name + "." + world);
+					adventure.remove(name + "." + world);
+					enderCreative.remove(name + "." + world);
+					enderSurvival.remove(name + "." + world);
+					enderAdventure.remove(name + "." + world);
+				}
 			}
-			if(survival.get(player.getName() + "." + world.getName()) != null){
-				survival.get(player.getName() + "." + world.getName()).save();
-			}
-			if(adventure.get(player.getName() + "." + world.getName()) != null){
-				adventure.get(player.getName() + "." + world.getName()).save();
-			}
-			if(enderCreative.get(player.getName() + "." + world.getName()) != null){
-				enderCreative.get(player.getName() + "." + world.getName()).save();
-			}
-			if(enderSurvival.get(player.getName() + "." + world.getName()) != null){
-				enderSurvival.get(player.getName() + "." + world.getName()).save();
-			}
-			if(enderAdventure.get(player.getName() + "." + world.getName()) != null){
-				enderAdventure.get(player.getName() + "." + world.getName()).save();
-			}
-			creative.remove(player.getName() + "." + world.getName());
-			survival.remove(player.getName() + "." + world.getName());
-			adventure.remove(player.getName() + "." + world.getName());
-			enderCreative.remove(player.getName() + "." + world.getName());
-			enderSurvival.remove(player.getName() + "." + world.getName());
-			enderAdventure.remove(player.getName() + "." + world.getName());
-		}
+		});
 	}
 
 	/**
