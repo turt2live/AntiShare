@@ -12,9 +12,9 @@ package com.turt2live.antishare.inventory;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -42,14 +42,14 @@ import com.turt2live.antishare.regions.ASRegion;
  */
 public class InventoryManager implements Listener {
 
-	private HashMap<String, ASInventory> creative = new HashMap<String, ASInventory>();
-	private HashMap<String, ASInventory> survival = new HashMap<String, ASInventory>();
-	private HashMap<String, ASInventory> adventure = new HashMap<String, ASInventory>();
-	private HashMap<String, ASInventory> enderCreative = new HashMap<String, ASInventory>();
-	private HashMap<String, ASInventory> enderSurvival = new HashMap<String, ASInventory>();
-	private HashMap<String, ASInventory> enderAdventure = new HashMap<String, ASInventory>();
-	private HashMap<String, ASInventory> region = new HashMap<String, ASInventory>();
-	private HashMap<String, TemporaryASInventory> playerTemp = new HashMap<String, TemporaryASInventory>();
+	private ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
+	private ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
+	private ConcurrentHashMap<String, ASInventory> adventure = new ConcurrentHashMap<String, ASInventory>();
+	private ConcurrentHashMap<String, ASInventory> enderCreative = new ConcurrentHashMap<String, ASInventory>();
+	private ConcurrentHashMap<String, ASInventory> enderSurvival = new ConcurrentHashMap<String, ASInventory>();
+	private ConcurrentHashMap<String, ASInventory> enderAdventure = new ConcurrentHashMap<String, ASInventory>();
+	private ConcurrentHashMap<String, ASInventory> region = new ConcurrentHashMap<String, ASInventory>();
+	private ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
 	private List<LinkedInventory> links = new ArrayList<LinkedInventory>();
 	private AntiShare plugin = AntiShare.getInstance();
 
