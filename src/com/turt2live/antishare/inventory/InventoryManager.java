@@ -162,7 +162,7 @@ public class InventoryManager implements Listener {
 		if(player == null){
 			return;
 		}
-
+		
 		final String name = player.getName();
 		final List<String> worlds = new ArrayList<String>();
 		for(World w : Bukkit.getWorlds()){

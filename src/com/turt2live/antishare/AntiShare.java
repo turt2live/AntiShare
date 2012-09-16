@@ -79,8 +79,6 @@ public class AntiShare extends PluginWrapper {
 	private XMailListener xmail;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private HookManager hooks;
-	private ASTimer timer;
-	private String timerUID;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -94,9 +92,6 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onEnable(){
 		instance = this;
-		timer = new ASTimer();
-		timerUID = timer.addListener(new Timer());
-		long timerId = timer.start(this.getClass(), "STARTUP");
 
 		// File check
 		if(!getDataFolder().exists()){
@@ -232,12 +227,10 @@ public class AntiShare extends PluginWrapper {
 
 		// Conflict messages
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new ConflictThread());
-		timer.stop(this.getClass(), "STARTUP", timerId);
 	}
 
 	@Override
 	public void onDisable(){
-		long timerId = timer.start(this.getClass(), "SHUTDOWN");
 		// Save
 		if(regions != null)
 			regions.save();
@@ -285,15 +278,12 @@ public class AntiShare extends PluginWrapper {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		timer.stop(this.getClass(), "SHUTDOWN", timerId);
-		timer.removeListener(timerUID);
 	}
 
 	/**
 	 * Reloads AntiShare
 	 */
 	public void reload(){
-		long timerId = timer.start(this.getClass(), "RELOAD");
 		reloadConfig();
 		// Permissions has no reload
 		itemMap.reload();
@@ -311,7 +301,6 @@ public class AntiShare extends PluginWrapper {
 		// Tracker List has no reload
 		// Simple Notice has no reload
 		// xMail has no reload
-		timer.stop(this.getClass(), "RELOAD", timerId);
 	}
 
 	/**
@@ -570,15 +559,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public HookManager getHookManager(){
 		return hooks;
-	}
-
-	/**
-	 * Gets the AntiShare debug timer
-	 * 
-	 * @return the AntiShare debug timer
-	 */
-	public ASTimer getTimer(){
-		return timer;
 	}
 
 	/**

@@ -45,7 +45,6 @@ public class CommandHandler implements CommandExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, Command command, String label, String[] args){
 		AntiShare plugin = AntiShare.getInstance();
-		long timerId = plugin.getTimer().start(getClass(), "CMD: " + command.getName() + ", args: " + args.toString());
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
@@ -56,7 +55,6 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("mirror")){
 					// Sanity Check
@@ -84,7 +82,6 @@ public class CommandHandler implements CommandExecutor {
 							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 						}
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("debug")){
 					// Sanity Check
@@ -133,9 +130,6 @@ public class CommandHandler implements CommandExecutor {
 							out.write("----------------------------\r\n");
 							out.write("Rewards/Fines: \r\n");
 							plugin.getMoneyManager().print(out);
-							out.write("----------------------------\r\n");
-							out.write("TIMERS: \r\n");
-							plugin.getTimer().debug(out);
 							out.close();
 							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath(), true);
 						}catch(IOException e){
@@ -143,7 +137,6 @@ public class CommandHandler implements CommandExecutor {
 							e.printStackTrace();
 						}
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("region")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_CREATE)){
@@ -160,7 +153,6 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion") || args[0].equalsIgnoreCase("removeregion")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_DELETE)){
@@ -184,7 +176,6 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("editregion")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_EDIT)){
@@ -255,7 +246,6 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("listregions")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_LIST)){
@@ -266,7 +256,6 @@ public class CommandHandler implements CommandExecutor {
 								page = Integer.parseInt(args[1]);
 							}catch(NumberFormatException e){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "'" + args[1] + "' is not a number!", true);
-								plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 								return true;
 							}
 						}
@@ -283,7 +272,6 @@ public class CommandHandler implements CommandExecutor {
 						}
 						if(maxPages < page){
 							ASUtils.sendToPlayer(sender, ChatColor.RED + "Page " + page + " does not exist! The last page is " + maxPages, true);
-							plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 							return true;
 						}
 
@@ -299,7 +287,6 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("tool")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_GET)){
@@ -328,7 +315,6 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("money")){
 					if(args.length < 2){
@@ -338,12 +324,10 @@ public class CommandHandler implements CommandExecutor {
 							String state = !plugin.getMoneyManager().isSilent(sender.getName()) ? ChatColor.GREEN + "getting" : ChatColor.RED + "not getting";
 							state = state + ChatColor.WHITE;
 							ASUtils.sendToPlayer(sender, "You are " + state + " fine/reward messages", true);
-							plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 							return true;
 						}
 						if(ASUtils.getBoolean(args[1]) == null){
 							ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax Error, try /as money on/off/status", true);
-							plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 							return true;
 						}
 						boolean silent = !ASUtils.getBoolean(args[1]);
@@ -355,7 +339,6 @@ public class CommandHandler implements CommandExecutor {
 						String message = "You are now " + (silent ? ChatColor.RED + "not getting" : ChatColor.GREEN + "getting") + ChatColor.WHITE + " fine/reward messages";
 						ASUtils.sendToPlayer(sender, message, true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("simplenotice") || args[0].equalsIgnoreCase("sn")){
 					if(sender instanceof Player){
@@ -374,7 +357,6 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.RED + "You are not a player and do not have SimpleNotice", true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else if(args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("gamemode") || args[0].equalsIgnoreCase("gm")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.CHECK)){
@@ -383,7 +365,6 @@ public class CommandHandler implements CommandExecutor {
 							gm = ASUtils.getGameMode(args[1]);
 							if(gm == null){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "Unknown Game Mode!", true);
-								plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 								return true;
 							}
 						}
@@ -401,17 +382,14 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
 					}
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return true;
 				}else{
 					// This is for all extra commands, like /as help.
 					// This is also for all "non-commands", like /as sakjdha
-					plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 					return false; //Shows usage in plugin.yml
 				}
 			}
 		}
-		plugin.getTimer().stop(getClass(), "CMD: " + command.getName() + ", args: " + args.toString(), timerId);
 		return false; //Shows usage in plugin.yml
 	}
 
