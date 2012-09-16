@@ -1226,61 +1226,7 @@ public class ASListener implements Listener {
 			plugin.getInventoryManager().updateEnderChest(player, to, from);
 
 			// Check for open inventories and stuff
-			Material inventory = Material.AIR;
-			InventoryView view = player.getOpenInventory();
-			switch (view.getType()){
-			case CHEST:
-				inventory = Material.CHEST;
-				break;
-			case DISPENSER:
-				inventory = Material.DISPENSER;
-				break;
-			case FURNACE:
-				inventory = Material.FURNACE;
-				break;
-			case WORKBENCH:
-				inventory = Material.WORKBENCH;
-				break;
-			case ENCHANTING:
-				inventory = Material.ENCHANTMENT_TABLE;
-				break;
-			case BREWING:
-				inventory = Material.BREWING_STAND;
-				break;
-			default:
-				break;
-			}
-			if(inventory != Material.AIR){
-				AlertType type = AlertType.LEGAL;
-				ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
-				if(asregion != null){
-					if(asregion.getConfig().isBlocked(inventory, ListType.RIGHT_CLICK)){
-						type = AlertType.ILLEGAL;
-					}
-				}else{
-					if(config.get(player.getWorld()).isBlocked(inventory, ListType.RIGHT_CLICK)){
-						type = AlertType.ILLEGAL;
-					}
-				}
-				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld(), true)){
-					type = AlertType.LEGAL;
-				}
-				if(asregion != null){
-					if(asregion.getConfig().isBlocked(inventory, ListType.USE)){
-						type = AlertType.ILLEGAL;
-					}
-				}else{
-					if(config.get(player.getWorld()).isBlocked(inventory, ListType.USE)){
-						type = AlertType.ILLEGAL;
-					}
-				}
-				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld(), true)){
-					type = AlertType.LEGAL;
-				}
-				if(type == AlertType.ILLEGAL){
-					player.closeInventory();
-				}
-			}
+			player.closeInventory();
 
 			// For alerts
 			ignore = false;
