@@ -268,6 +268,9 @@ public class InventoryManager implements Listener {
 	 * @param from the game mode (from)
 	 */
 	public void updateEnderChest(Player player, GameMode to, GameMode from){
+		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-ender-chests")){
+			return;
+		}
 		switch (to){
 		case CREATIVE:
 			saveEnderCreativeInventory(player, player.getWorld());

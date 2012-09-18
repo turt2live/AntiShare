@@ -32,6 +32,8 @@ handled-actions:
   world-transfers: false
   # Should AntiShare deal with inventories for each Game Mode?
   gamemode-inventories: true
+  # Ender chest support
+  gamemode-ender-chests: true
 # More features of AntiShare
 enabled-features:
   # Set to false to NOT use AntiShare regions
