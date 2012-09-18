@@ -2,6 +2,7 @@ Since 4.2.0:
 - Cleaned up code quality
 - Sped up laggy methods (like player quit)
 - Added Ender chest toggle
+- Make player move checks check for significant movement 
 
 Features Stripped:
 - Error logging
