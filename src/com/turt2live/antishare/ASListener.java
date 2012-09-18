@@ -1084,6 +1084,11 @@ public class ASListener implements Listener {
 	public void onMove(PlayerMoveEvent event){
 		if(event.isCancelled())
 			return;
+
+		// Significant move check
+		if(event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ())
+			return;
+
 		Player player = event.getPlayer();
 		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
 		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
