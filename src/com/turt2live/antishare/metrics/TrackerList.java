@@ -32,8 +32,7 @@ public class TrackerList extends ArrayList<Tracker> {
 		SQL("Storage System", "SQL"),
 		SPECIAL("Unknown", "Unkown"),
 		FEATURE_FINES("Features Used", "Fines/Rewards"),
-		FEATURE_SIGNS("Features Used", "Signs"),
-		FEATURE_XMAIL("Features Used", "xMail");
+		FEATURE_SIGNS("Features Used", "Signs");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";

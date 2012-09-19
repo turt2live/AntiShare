@@ -143,9 +143,3 @@ other:
   send-gamemode-change-message: true
   quiet-offline-mode-warning: false
   timers: false
-# xMail hook, pretty easy to setup.
-xMail:
-  creative-can-send-items: false
-  adventure-can-send-items: true
-  survival-can-send-items: true
-  hook-into-xMail: true

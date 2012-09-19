@@ -25,14 +25,12 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
@@ -46,7 +44,6 @@ import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.storage.ItemMap;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.SQL;
-import com.turt2live.antishare.xmail.XMailListener;
 
 /**
  * AntiShare
@@ -76,7 +73,6 @@ public class AntiShare extends PluginWrapper {
 	private TrackerList trackers;
 	private SignManager signs;
 	private MoneyManager tender;
-	private XMailListener xmail;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private HookManager hooks;
 
@@ -181,16 +177,6 @@ public class AntiShare extends PluginWrapper {
 		// Migrate region players (3.8.0-3.9.0)
 		migratePlayerData();
 
-		// xMail integration
-		if(getConfig().getBoolean("xMail.hook-into-xMail")){
-			trackers.getTracker(TrackerType.FEATURE_XMAIL).increment(1);
-			Plugin xmail = getServer().getPluginManager().getPlugin("xMail");
-			if(xmail != null){
-				this.xmail = new XMailListener();
-				getServer().getPluginManager().registerEvents(this.xmail, this);
-			}
-		}
-
 		// Statistics
 		UpdateChecker.start();
 		// mcstats.org
@@ -264,7 +250,6 @@ public class AntiShare extends PluginWrapper {
 		trackers = null;
 		signs = null;
 		tender = null;
-		xmail = null;
 		hooks = null;
 
 		// Save disabled SimpleNotice users
