@@ -57,6 +57,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import com.turt2live.antishare.AntiShare;
+
 /**
  * <p>
  * The metrics class obtains data about a plugin and submits statistics about it to the metrics backend.
@@ -84,7 +86,8 @@ public class Metrics {
 	/**
 	 * Debug mode
 	 */
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = AntiShare.getInstance().getConfig().getBoolean("other.debug", false);
+
 	/**
 	 * The current revision number
 	 */
@@ -103,7 +106,7 @@ public class Metrics {
 	/**
 	 * The file where guid and opt out is stored in
 	 */
-	private static final String CONFIG_FILE = "plugins/PluginMetrics/metrics-config.yml";
+	private static final String CONFIG_FILE = "plugins/PluginMetrics/config.yml";
 
 	/**
 	 * The separator to use for custom data. This MUST NOT change unless you are hosting your own
@@ -276,7 +279,8 @@ public class Metrics {
 						firstPost = false;
 					}catch(IOException e){
 						// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
-						Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + e.getMessage());
+						if(DEBUG)
+							Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + e.getMessage());
 					}
 				}
 			}, 0, PING_INTERVAL * 1200);
@@ -297,11 +301,13 @@ public class Metrics {
 				configuration.load(CONFIG_FILE);
 			}catch(IOException ex){
 				// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
-				Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + ex.getMessage());
+				if(DEBUG)
+					Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + ex.getMessage());
 				return true;
 			}catch(InvalidConfigurationException ex){
 				// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
-				Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + ex.getMessage());
+				if(DEBUG)
+					Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + ex.getMessage());
 				return true;
 			}
 			return configuration.getBoolean("opt-out", false);
@@ -358,12 +364,15 @@ public class Metrics {
 	public void flush(){
 		plugin.getServer().getScheduler().cancelTask(taskId);
 		try{
-			Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sending");
+			if(DEBUG)
+				Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sending");
 			postPlugin(true);
-			Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sent");
+			if(DEBUG)
+				Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sent");
 		}catch(IOException e){
 			// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
-			Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + e.getMessage());
+			if(DEBUG)
+				Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + e.getMessage());
 		}
 	}
 

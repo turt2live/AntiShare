@@ -142,4 +142,3 @@ other:
   debug: false
   send-gamemode-change-message: true
   quiet-offline-mode-warning: false
-  timers: false
