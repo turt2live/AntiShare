@@ -1,16 +1,1 @@
-Since 4.2.0:
-- Cleaned up code quality
-- Sped up laggy methods (like player quit)
-- Added Ender chest toggle
-- Make player move checks check for significant movement 
-- Fixed Metrics (potential) spam
-- Removed hackish code for tripwires
-
-Features Stripped:
-- Error logging
-- Debug -> Pastebin
-- Removed old statistics tracker
-- Removed old console filter
-- Removed converter, I will do it if needed
-- Removed old timer, removing excess bulk
-- Removed xMail hook - Will be handled in xMail itself in a later version
+Since 4.3.0:
