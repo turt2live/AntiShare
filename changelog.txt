@@ -4,6 +4,7 @@ Since 4.2.0:
 - Added Ender chest toggle
 - Make player move checks check for significant movement 
 - Fixed Metrics (potential) spam
+- Removed hackish code for tripwires
 
 Features Stripped:
 - Error logging
@@ -13,6 +14,3 @@ Features Stripped:
 - Removed converter, I will do it if needed
 - Removed old timer, removing excess bulk
 - Removed xMail hook - Will be handled in xMail itself in a later version
-
-Bugs:
-- [Patched - Needs Fix - BUKKIT-2278] Tripwire Hooks on a block can be "dropped"

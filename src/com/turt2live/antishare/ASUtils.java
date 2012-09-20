@@ -47,7 +47,6 @@ import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.material.Attachable;
-import org.bukkit.material.Directional;
 
 import com.turt2live.antishare.api.ASEntity;
 
@@ -194,15 +193,6 @@ public class ASUtils {
 			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
 			Location l1 = source.getLocation();
 			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
-			attached = l1.getBlockX() == l2.getBlockX() && l1.getBlockY() == l2.getBlockY() && l1.getBlockZ() == l2.getBlockZ();
-		}else if(block.getType() == Material.TRIPWIRE_HOOK){
-			// Ideally this would be fixed with Bukkit PR 661 (https://github.com/Bukkit/Bukkit/pull/661)
-			// But, since it is only a PR, we have to do the check
-			BlockFace face = ((Directional) block.getState().getData()).getFacing();
-			BlockFace opp = face;//face.getOppositeFace(); // It should be getOppositeFace(), but testing proved otherwise
-			Block attachedBlock = block.getRelative(opp);
-			Location l1 = source.getLocation();
-			Location l2 = attachedBlock.getLocation();
 			attached = l1.getBlockX() == l2.getBlockX() && l1.getBlockY() == l2.getBlockY() && l1.getBlockZ() == l2.getBlockZ();
 		}else if(block.getState().getData() instanceof Attachable && !block.getType().equals(Material.PISTON_EXTENSION)){
 			if(source != null){
