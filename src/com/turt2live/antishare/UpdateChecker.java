@@ -62,6 +62,7 @@ public class UpdateChecker {
 	 * Determines if AntiShare is outdated
 	 * 
 	 * @return true if outdated
+	 * @throws NumberFormatException if the version of AntiShare is abnormal
 	 */
 	public static boolean isOutdated() throws NumberFormatException{
 		double current = Double.valueOf(getVersion().split("-")[0].replaceFirst("\\.", ""));

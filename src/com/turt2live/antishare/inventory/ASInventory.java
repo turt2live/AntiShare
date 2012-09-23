@@ -74,6 +74,7 @@ public class ASInventory implements Cloneable {
 	 * Generates an AntiShare Inventory from a player
 	 * 
 	 * @param player the player
+	 * @param type the inventory type to generate
 	 * @return the inventory
 	 */
 	public static ASInventory generate(Player player, InventoryType type){
@@ -210,6 +211,11 @@ public class ASInventory implements Cloneable {
 
 	/**
 	 * Creates a new AntiShare Inventory
+	 * 
+	 * @param type the type
+	 * @param inventoryName the name
+	 * @param world the world
+	 * @param gamemode the gamemode
 	 */
 	public ASInventory(InventoryType type, String inventoryName, World world, GameMode gamemode){
 		plugin = AntiShare.getInstance();

@@ -70,8 +70,8 @@ public class WorldSplit {
 	 * @param world the world
 	 * @param split the axis value
 	 * @param axis the axis
-	 * @param creative the creative side
-	 * @param survival the survival side
+	 * @param positive the side for values >split
+	 * @param negative the side for values <split
 	 */
 	public WorldSplit(World world, double split, Axis axis, GameMode positive, GameMode negative){
 		this.world = world;
@@ -88,6 +88,7 @@ public class WorldSplit {
 	 * 
 	 * @param warn true to warn, false otherwise
 	 * @param before the number of blocks to warn the user at
+	 * @param warnEvery the number of milliseconds to warn the user (eg 2000 = 2seconds)
 	 */
 	public void warning(boolean warn, double before, long warnEvery){
 		this.warn = warn;

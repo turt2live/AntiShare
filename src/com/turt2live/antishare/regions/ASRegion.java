@@ -61,6 +61,7 @@ public class ASRegion {
 	 * @param region the selection (area)
 	 * @param setBy the player who made this
 	 * @param gamemode the gamemode of the region
+	 * @param name the region name
 	 */
 	public ASRegion(Selection region, String setBy, GameMode gamemode, String name){
 		this.region = new CuboidSelection(region.getWorld(), region.getMaximumPoint(), region.getMinimumPoint());
@@ -81,6 +82,7 @@ public class ASRegion {
 	 * @param maximum the maximum point
 	 * @param setBy the player who made this
 	 * @param gamemode the gamemode of the region
+	 * @param name the region name
 	 */
 	public ASRegion(World world, Location minimum, Location maximum, String setBy, GameMode gamemode, String name){
 		this.region = new CuboidSelection(world, minimum, maximum);

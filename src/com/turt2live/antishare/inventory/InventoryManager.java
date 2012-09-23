@@ -213,6 +213,7 @@ public class InventoryManager implements Listener {
 	 * Refreshes inventories of a player
 	 * 
 	 * @param player the player
+	 * @param customSlots the slots to force items upon
 	 */
 	public void refreshInventories(Player player, Slot... customSlots){
 		// Save
@@ -382,6 +383,7 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
+	 * @param customSlots the slots to force items upon
 	 */
 	public void saveCreativeInventory(Player player, World world, Slot... customSlots){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
@@ -400,6 +402,7 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
+	 * @param customSlots the slots to force items upon
 	 */
 	public void saveEnderCreativeInventory(Player player, World world, Slot... customSlots){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
@@ -418,6 +421,7 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
+	 * @param customSlots the slots to force items upon
 	 */
 	public void saveSurvivalInventory(Player player, World world, Slot... customSlots){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
@@ -436,6 +440,7 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
+	 * @param customSlots the slots to force items upon
 	 */
 	public void saveEnderSurvivalInventory(Player player, World world, Slot... customSlots){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
@@ -454,6 +459,7 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
+	 * @param customSlots the slots to force items upon
 	 */
 	public void saveAdventureInventory(Player player, World world, Slot... customSlots){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
@@ -472,6 +478,7 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
+	 * @param customSlots the slots to force items upon
 	 */
 	public void saveEnderAdventureInventory(Player player, World world, Slot... customSlots){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
