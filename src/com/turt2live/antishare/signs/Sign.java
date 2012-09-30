@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.turt2live.antishare.signs;
 
+import org.bukkit.ChatColor;
+
 /**
  * An AntiShare blocked/whitelisted sign
  * 
@@ -165,12 +167,12 @@ public class Sign {
 			if(cblines[i] == null){
 				cblines[i] = "";
 			}
-			cblines[i] = cblines[i].trim();
+			cblines[i] = ChatColor.stripColor(cblines[i].trim());
 		}
 
 		// Check the match
 		for(int i = 0; i < lines.length; i++){
-			String line = lines[i].trim();
+			String line = ChatColor.stripColor(lines[i].trim());
 			if(line.equalsIgnoreCase("*")){
 				match[i] = true;
 			}else if(line.equalsIgnoreCase("*blank")){
