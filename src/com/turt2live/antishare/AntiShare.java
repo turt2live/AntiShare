@@ -157,9 +157,9 @@ public class AntiShare extends PluginWrapper {
 		// Register SimpleNotice channel to AntiShare
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
+		trackers = new TrackerList();
 		hooks = new HookManager();
 		signs = new SignManager();
-		trackers = new TrackerList();
 		tender = new MoneyManager();
 		permissions = new Permissions();
 		itemMap = new ItemMap();
