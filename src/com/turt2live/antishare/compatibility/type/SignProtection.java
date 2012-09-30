@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.compatibility;
+package com.turt2live.antishare.compatibility.type;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

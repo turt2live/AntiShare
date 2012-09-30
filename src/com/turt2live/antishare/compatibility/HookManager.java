@@ -17,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.compatibility.type.SignProtection;
 
 public class HookManager {
 

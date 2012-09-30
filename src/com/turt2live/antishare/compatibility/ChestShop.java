@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
+import com.turt2live.antishare.compatibility.type.SignProtection;
 
 public class ChestShop extends SignProtection {
 
