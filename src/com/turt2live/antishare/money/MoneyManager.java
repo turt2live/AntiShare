@@ -388,25 +388,4 @@ public class MoneyManager {
 		}
 	}
 
-	/**
-	 * Prints the fines/rewards to the writer
-	 * 
-	 * @param out the writer
-	 * @throws IOException thrown if something goes wrong
-	 */
-	public void print(BufferedWriter out) throws IOException{
-		out.write("Properties: \r\n\tUse Tab: " + tab + "\r\n");
-		out.write("\tDo Fines: " + doFines + "\r\n");
-		out.write("\tDo Rewards: " + doRewards + "\r\n");
-		out.write("\tEcon Found: " + (econ != null) + "\r\n");
-		out.write("\tFines Loaded: " + fines.size() + "\r\n");
-		out.write("\tRewards Loaded: " + rewards.size() + "\r\n");
-		out.write("\tSilent Players: " + silentTo.size() + "\r\n");
-		for(Fine fine : fines){
-			out.write("FINE: " + fine.getType().name() + " [Enabled: " + fine.isEnabled() + ", Amount: " + fine.getAmount() + ", Over Charge: " + fine.getOverCharge() + "]\r\n");
-		}
-		for(Reward reward : rewards){
-			out.write("REWARD: " + reward.getType().name() + " [Enabled: " + reward.isEnabled() + ", Amount: " + reward.getAmount() + "]\r\n");
-		}
-	}
 }

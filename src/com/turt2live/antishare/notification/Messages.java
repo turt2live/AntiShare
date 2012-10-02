@@ -10,9 +10,7 @@
  ******************************************************************************/
 package com.turt2live.antishare.notification;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
@@ -60,15 +58,4 @@ public class Messages {
 		return message;
 	}
 
-	/**
-	 * Prints the entire contents of the messages.yml to the writer
-	 * 
-	 * @param out the writer
-	 * @throws IOException for external handling
-	 */
-	public void print(BufferedWriter out) throws IOException{
-		for(String key : messages.getKeys(true)){
-			out.write(key + ": " + (messages.getString(key).startsWith("MemorySection") ? "" : messages.getString(key, "")) + "\r\n");
-		}
-	}
 }

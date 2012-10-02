@@ -10,10 +10,8 @@
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.util.logging.Level;
 
 import org.bukkit.GameMode;
@@ -224,20 +222,6 @@ public class PerWorldConfig {
 
 		// Generate and return
 		return new EntityList(global ? "config.yml" : world.getName() + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
-	}
-
-	/**
-	 * Prints this world's configuration to the writer
-	 * 
-	 * @param out the writer
-	 * @throws IOException for internal handling
-	 */
-	public void print(BufferedWriter out) throws IOException{
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder() + File.separator + "world_configurations", world.getName() + "_config.yml"), AntiShare.getInstance());
-		worldConfig.load();
-		for(String key : worldConfig.getKeys(true)){
-			out.write(key + ": " + (worldConfig.getString(key).startsWith("MemorySection") ? "" : worldConfig.getString(key, "")) + "\r\n");
-		}
 	}
 
 	/**

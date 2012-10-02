@@ -10,9 +10,7 @@
  ******************************************************************************/
 package com.turt2live.antishare.notification;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -306,20 +304,6 @@ public class Alert {
 		sendIllegal = notifications.getBoolean("send-illegal-notifications");
 		sendLegal = notifications.getBoolean("send-legal-notifications");
 		sendGeneral = notifications.getBoolean("send-general-notifications");
-	}
-
-	/**
-	 * Prints the entire contents of the notifications.yml to the writer
-	 * 
-	 * @param out the writer
-	 * @throws IOException for external handling
-	 */
-	public void print(BufferedWriter out) throws IOException{
-		EnhancedConfiguration notifications = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder(), "notifications.yml"), AntiShare.getInstance());
-		notifications.load();
-		for(String key : notifications.getKeys(true)){
-			out.write(key + ": " + (notifications.getString(key).startsWith("MemorySection") ? "" : notifications.getString(key, "")) + "\r\n");
-		}
 	}
 
 }

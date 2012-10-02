@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,19 +120,6 @@ public class ASListener implements Listener {
 			config.put(world, new PerWorldConfig(world));
 		}
 		hasMobCatcher = plugin.getServer().getPluginManager().getPlugin("MobCatcher") != null;
-	}
-
-	/**
-	 * Prints out each world to the writer
-	 * 
-	 * @param out the writer
-	 * @throws IOException for internal handling
-	 */
-	public void print(BufferedWriter out) throws IOException{
-		for(World world : config.keySet()){
-			out.write("## WORLD: " + world.getName() + " \r\n");
-			config.get(world).print(out);
-		}
 	}
 
 	/**

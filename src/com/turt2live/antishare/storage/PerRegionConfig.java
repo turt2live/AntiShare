@@ -10,9 +10,7 @@
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -190,21 +188,6 @@ public class PerRegionConfig {
 
 		// Generate and return
 		return new EntityList(global ? "config.yml" : world.getName() + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
-	}
-
-	/**
-	 * Prints this world's configuration to the writer
-	 * 
-	 * @param out the writer
-	 * @throws IOException for internal handling
-	 */
-	public void print(BufferedWriter out) throws IOException{
-		out.write("## REGION: " + region.getName() + ": \r\n");
-		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder() + File.separator + "region_configurations", region.getName() + ".yml"), AntiShare.getInstance());
-		regionConfig.load();
-		for(String key : regionConfig.getKeys(true)){
-			out.write(key + ": " + (regionConfig.getString(key).startsWith("MemorySection") ? "" : regionConfig.getString(key, "")) + "\r\n");
-		}
 	}
 
 	/**

@@ -10,12 +10,7 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,11 +19,9 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
@@ -80,61 +73,6 @@ public class CommandHandler implements CommandExecutor {
 							}
 						}else{
 							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
-						}
-					}
-					return true;
-				}else if(args[0].equalsIgnoreCase("debug")){
-					// Sanity Check
-					if(!(sender instanceof ConsoleCommandSender)){
-						ASUtils.sendToPlayer(sender, ChatColor.RED + "Sorry! This command needs to be run from the console.", true);
-					}else{
-						// Generate debug dump file
-						try{
-							final File file = new File(plugin.getDataFolder(), "debug.txt");
-							BufferedWriter out = new BufferedWriter(new FileWriter(file, false));
-							out.write("[v" + plugin.getDescription().getVersion() + "] AntiShare Debug Information:\r\n");
-							out.write("CraftBukkit: " + Bukkit.getBukkitVersion() + "\r\n");
-							out.write("Version: " + Bukkit.getVersion() + "\r\n");
-							out.write("Online Mode: " + Bukkit.getOnlineMode() + "\r\n");
-							out.write("----------------------------\r\n");
-							out.write("Plugins: \r\n");
-							for(Plugin p : Bukkit.getPluginManager().getPlugins()){
-								out.write("[" + (p.isEnabled() ? "E" : "D") + "] " + p.getDescription().getFullName() + "\r\n");
-							}
-							out.write("----------------------------\r\n");
-							out.write("Configuration Keys: \r\n");
-							for(String key : plugin.getConfig().getKeys(true)){
-								String value = plugin.getConfig().getString(key, "");
-								if(value.startsWith("MemorySection")){
-									value = "";
-								}
-								if(key.startsWith("settings.sql")){
-									value = "CENSORED FOR SECURITY";
-								}
-								out.write(key + ": " + value + "\r\n");
-							}
-							out.write("----------------------------\r\n");
-							out.write("Message Keys: \r\n");
-							plugin.getMessages().print(out);
-							out.write("----------------------------\r\n");
-							out.write("Notification Keys: \r\n");
-							plugin.getAlerts().print(out);
-							out.write("----------------------------\r\n");
-							out.write("World Configurations: \r\n");
-							plugin.getListener().print(out);
-							out.write("----------------------------\r\n");
-							out.write("Region Configurations: \r\n");
-							for(ASRegion region : plugin.getRegionManager().getAllRegions()){
-								region.getConfig().print(out);
-							}
-							out.write("----------------------------\r\n");
-							out.write("Rewards/Fines: \r\n");
-							plugin.getMoneyManager().print(out);
-							out.close();
-							ASUtils.sendToPlayer(sender, "Debug file is saved at: " + file.getAbsolutePath(), true);
-						}catch(IOException e){
-							AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-							e.printStackTrace();
 						}
 					}
 					return true;

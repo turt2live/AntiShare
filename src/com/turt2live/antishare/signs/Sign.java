@@ -19,33 +19,6 @@ import org.bukkit.ChatColor;
  */
 public class Sign {
 
-	/**
-	 * An enum to represent a line in a sign
-	 * 
-	 * @author turt2live
-	 */
-	public static enum Line{
-		LINE1(0),
-		LINE2(1),
-		LINE3(2),
-		LINE4(3);
-
-		private int index = 0;
-
-		private Line(int index){
-			this.index = index;
-		}
-
-		/**
-		 * Array index for the line
-		 * 
-		 * @return the index of the line in a standard array
-		 */
-		public int getIndex(){
-			return index;
-		}
-	}
-
 	private String[] lines;
 	private boolean enabled = false;
 	private boolean caseSensitive = false;
@@ -132,16 +105,6 @@ public class Sign {
 	 */
 	public void setCaseSensitive(boolean caseSensitive){
 		this.caseSensitive = caseSensitive;
-	}
-
-	/**
-	 * Gets a specific line of this sign
-	 * 
-	 * @param line the line number
-	 * @return the line
-	 */
-	public String getLine(Line line){
-		return lines[line.getIndex()];
 	}
 
 	/**
