@@ -1,3 +1,4 @@
 Since 4.3.0:
 - Fixed colors in signs not working (Bug Report: http://home.turt2live.com/bugs/reports/fixed/bug-4f71ea3a05a17f85926361da89b505a3.txt)
 - Fixed NPE in sign trackers
+- Fixed permission error in player commands
