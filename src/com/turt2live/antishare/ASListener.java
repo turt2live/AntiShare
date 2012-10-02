@@ -1034,7 +1034,7 @@ public class ASListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, player.getWorld())){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
