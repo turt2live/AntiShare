@@ -307,13 +307,14 @@ public class BlockManager {
 		if(type == null){
 			return;
 		}
+		System.out.println(type);
 
 		// Remove old block
 		removeBlock(oldBlock);
 
 		// Start a thread to wait until the block changes
 		final Material oldType = oldBlock.getType();
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				// Setup vars
