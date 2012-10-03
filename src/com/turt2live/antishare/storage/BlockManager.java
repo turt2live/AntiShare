@@ -307,7 +307,6 @@ public class BlockManager {
 		if(type == null){
 			return;
 		}
-		System.out.println(type);
 
 		// Remove old block
 		removeBlock(oldBlock);
