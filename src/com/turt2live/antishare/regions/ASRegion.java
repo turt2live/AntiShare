@@ -438,7 +438,7 @@ public class ASRegion {
 			if(player.getGameMode() != gamemode){
 				player.setGameMode(gamemode);
 			}
-			if(inventory != null && !inventory.isEmpty()){
+			if(inventory != null){
 				plugin.getInventoryManager().setToTemporary(player, inventory);
 			}
 		}
@@ -457,7 +457,7 @@ public class ASRegion {
 			if(player.getGameMode() != gamemode){
 				player.setGameMode(gamemode);
 			}
-			if(inventory != null && !inventory.isEmpty()){
+			if(inventory != null){
 				plugin.getInventoryManager().setToTemporary(player, inventory);
 			}
 		}
@@ -483,7 +483,7 @@ public class ASRegion {
 
 		// Reset the player
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
-			if(inventory != null && !inventory.isEmpty()){
+			if(inventory != null){
 				plugin.getInventoryManager().removeFromTemporary(player);
 			}
 			player.setGameMode(previousGameModes.get(player.getName()) == null ? player.getGameMode() : previousGameModes.get(player.getName()));

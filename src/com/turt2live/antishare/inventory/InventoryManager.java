@@ -48,7 +48,6 @@ public class InventoryManager implements Listener {
 	private ConcurrentHashMap<String, ASInventory> enderCreative = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> enderSurvival = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> enderAdventure = new ConcurrentHashMap<String, ASInventory>();
-	private ConcurrentHashMap<String, ASInventory> region = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
 	private List<LinkedInventory> links = new ArrayList<LinkedInventory>();
 	private AntiShare plugin = AntiShare.getInstance();
@@ -632,7 +631,7 @@ public class InventoryManager implements Listener {
 		}
 
 		// Status
-		int loaded = creative.size() + survival.size() + region.size() + playerTemp.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
+		int loaded = creative.size() + survival.size() + playerTemp.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
 		AntiShare.getInstance().log("Inventories Loaded: " + loaded, Level.INFO);
 		AntiShare.getInstance().log("Linked Inventories: " + this.links.size(), Level.INFO);
 	}
@@ -665,8 +664,10 @@ public class InventoryManager implements Listener {
 		for(String key : enderAdventure.keySet()){
 			enderAdventure.get(key).save();
 		}
-		for(String key : region.keySet()){
-			region.get(key).save();
+		for(ASRegion region : plugin.getRegionManager().getAllRegions()){
+			if(region.getInventory() != null){
+				region.getInventory().save();
+			}
 		}
 	}
 
@@ -682,7 +683,6 @@ public class InventoryManager implements Listener {
 		enderSurvival.clear();
 		enderAdventure.clear();
 		playerTemp.clear();
-		region.clear();
 		load();
 	}
 

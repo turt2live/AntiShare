@@ -241,10 +241,10 @@ public class AntiShare extends PluginWrapper {
 		listener = null;
 		alerts = null;
 		messages = null;
-		regions = null;
 		factory = null;
 		blocks = null;
 		inventories = null;
+		regions = null;
 		sql = null;
 		metrics = null;
 		trackers = null;
