@@ -182,7 +182,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check hooks
-		if(plugin.getHookManager().checkSourceBlockForProtection(block)){
+		if(plugin.getHookManager().checkForSignProtection(block)){
 			return; // Don't handle any further, let the other plugin handle it
 		}
 
