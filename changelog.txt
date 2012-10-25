@@ -3,3 +3,9 @@ Since 4.3.0:
 - Fixed NPE in sign trackers
 - Fixed permission error in player commands
 - Fix pistons not working
+
+1.4 Changes That May Affect AntiShare:
+- Beacon powers (creative can make a beacon, giving survival powers)
+- Wither boss, zombie villagers, witch, bat (need to add to utils)
+- NBT Custom Tags? (May effect controlling, will need to test)
+- Anvils?
