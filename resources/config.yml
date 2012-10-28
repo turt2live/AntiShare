@@ -101,13 +101,13 @@ settings:
 # from the list (Example: "all, -dirt" = Block everything
 # except dirt).
 blocked-lists:
-  block-place: diamond block, gold block, iron block, bedrock, tnt
+  block-place: diamond block, gold block, iron block, bedrock, tnt, emerald block
   block-break: none
   dropped-items-on-death: all
   picked-up-items: all
   dropped-items: all
-  right-click: storage minecart, powered minecart, chest, furnace, dispenser, jukebox
-  use-items: fire, flint and steel, exp bottle, 383, egg, lava bucket, water bucket, fireball
+  right-click: storage minecart, powered minecart, chest, furnace, dispenser, jukebox, anvil
+  use-items: fire, flint and steel, exp bottle, 383, egg, lava bucket, water bucket, fireball, item frame
   commands: /someCommand, /anotherCommand
   mobs: all
   right-click-mobs: all
