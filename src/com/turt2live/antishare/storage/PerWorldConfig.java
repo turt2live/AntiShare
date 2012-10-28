@@ -394,15 +394,6 @@ public class PerWorldConfig {
 	}
 
 	/**
-	 * Determines if repairing of items is allowed
-	 * 
-	 * @return true if allowed, false if not
-	 */
-	public boolean isRepairAllowed(){
-		return !crafting.isRepairBlocked();
-	}
-
-	/**
 	 * Gets the raw configuration
 	 * 
 	 * @return the raw configuration

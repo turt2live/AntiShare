@@ -310,15 +310,6 @@ public class PerRegionConfig {
 	}
 
 	/**
-	 * Determines if repairing of items is allowed
-	 * 
-	 * @return true if allowed, false if not
-	 */
-	public boolean isRepairAllowed(){
-		return !crafting.isRepairBlocked();
-	}
-
-	/**
 	 * Gets the region that uses this configuration
 	 * 
 	 * @return the region

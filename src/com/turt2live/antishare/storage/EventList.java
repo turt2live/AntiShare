@@ -31,7 +31,6 @@ public class EventList {
 	private boolean whitelist = false;
 	private boolean useString = false;
 	private boolean expBlocked = false;
-	private boolean canRepair = true;
 	private boolean potions = true;
 	private boolean thrownPotions = true;
 	private List<String> blocked = new ArrayList<String>();
@@ -130,15 +129,6 @@ public class EventList {
 				expBlocked = true;
 				if(negate){
 					expBlocked = false;
-				}
-				continue;
-			}
-
-			// Check if repair
-			if(blocked.equalsIgnoreCase("repair") || blocked.equalsIgnoreCase("repair items") || blocked.equalsIgnoreCase("repair tools")){
-				canRepair = false;
-				if(negate){
-					canRepair = true;
 				}
 				continue;
 			}
@@ -421,15 +411,6 @@ public class EventList {
 	 */
 	public boolean isExperienceBlocked(){
 		return expBlocked;
-	}
-
-	/**
-	 * Checks if repairing of items is blocked
-	 * 
-	 * @return true if blocked
-	 */
-	public boolean isRepairBlocked(){
-		return !canRepair;
 	}
 
 	/**
