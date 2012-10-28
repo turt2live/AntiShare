@@ -21,6 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Bat;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Chicken;
@@ -44,6 +45,8 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Squid;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Witch;
+import org.bukkit.entity.Wither;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.material.Attachable;
@@ -163,9 +166,8 @@ public class ASUtils {
 		case DIODE_BLOCK_ON:
 		case STEP:
 		case WATER_LILY:
-			// TODO: 1.4 - Potential enum names
-			// case ITEM_FRAME:
-			// case FLOWER_POT:
+		case ITEM_FRAME:
+		case FLOWER_POT:
 			return true;
 		default:
 			return false;
@@ -192,9 +194,8 @@ public class ASUtils {
 				|| block.getType() == Material.WHEAT || block.getType() == Material.WOODEN_DOOR
 				|| block.getType() == Material.IRON_DOOR || block.getType() == Material.IRON_DOOR_BLOCK
 				|| block.getType() == Material.CROPS || block.getType() == Material.LONG_GRASS
-				// TODO 1.4
-				|| block.getType() == Material.SAPLING/* || block.getType()==Material.ITEM_FRAME
-														|| block.getType() == Material.FLOWER_POT */){
+				|| block.getType() == Material.SAPLING || block.getType() == Material.ITEM_FRAME
+				|| block.getType() == Material.FLOWER_POT){
 			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
 			Location l1 = source.getLocation();
 			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
@@ -390,21 +391,15 @@ public class ASUtils {
 		if(entity instanceof Zombie){
 			return "zombie";
 		}
-		// TODO: 1.4
-		/*
-		 if(entity instanceof Witch){
-		 	return "witch";
-		 }
-		 if(entity instanceof WitherBoss){
-		 	return "wither boss";
-		 }
-		 if(entity instanceof Bat){
-		 	return "bat";
-		 }
-		 if(entity instanceof InfectedVilager){
-		 	return "zombie villager";
-		 }
-		 */
+		if(entity instanceof Witch){
+			return "witch";
+		}
+		if(entity instanceof Wither){
+			return "wither boss";
+		}
+		if(entity instanceof Bat){
+			return "bat";
+		}
 		return null;
 	}
 
@@ -472,10 +467,6 @@ public class ASUtils {
 		names.add(new ASEntity("witherboss", "wither boss"));
 		names.add(new ASEntity("wither boss", "wither boss"));
 		names.add(new ASEntity("bat", "bat"));
-		names.add(new ASEntity("zombievillager", "zombie villager"));
-		names.add(new ASEntity("zombie villager", "zombie villager"));
-		names.add(new ASEntity("infectedvillager", "zombie villager"));
-		names.add(new ASEntity("infected villager", "zombie villager"));
 		return names;
 	}
 
