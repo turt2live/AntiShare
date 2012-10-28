@@ -153,7 +153,8 @@ public class EventList {
 			}
 
 			// Check if thrown potion
-			if(blocked.equalsIgnoreCase("thrown potion") || blocked.equalsIgnoreCase("thrown potions")){
+			if(blocked.equalsIgnoreCase("thrown potion") || blocked.equalsIgnoreCase("thrown potions")
+					|| blocked.equalsIgnoreCase("splash potion") || blocked.equalsIgnoreCase("splash potions")){
 				thrownPotions = false;
 				if(negate){
 					thrownPotions = true;
