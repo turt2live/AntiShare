@@ -163,6 +163,9 @@ public class ASUtils {
 		case DIODE_BLOCK_ON:
 		case STEP:
 		case WATER_LILY:
+			// TODO: 1.4 - Potential enum names
+			// case ITEM_FRAME:
+			// case FLOWER_POT:
 			return true;
 		default:
 			return false;
@@ -189,7 +192,9 @@ public class ASUtils {
 				|| block.getType() == Material.WHEAT || block.getType() == Material.WOODEN_DOOR
 				|| block.getType() == Material.IRON_DOOR || block.getType() == Material.IRON_DOOR_BLOCK
 				|| block.getType() == Material.CROPS || block.getType() == Material.LONG_GRASS
-				|| block.getType() == Material.SAPLING){
+				// TODO 1.4
+				|| block.getType() == Material.SAPLING/* || block.getType()==Material.ITEM_FRAME
+														|| block.getType() == Material.FLOWER_POT */){
 			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
 			Location l1 = source.getLocation();
 			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
@@ -385,6 +390,21 @@ public class ASUtils {
 		if(entity instanceof Zombie){
 			return "zombie";
 		}
+		// TODO: 1.4
+		/*
+		 if(entity instanceof Witch){
+		 	return "witch";
+		 }
+		 if(entity instanceof WitherBoss){
+		 	return "wither boss";
+		 }
+		 if(entity instanceof Bat){
+		 	return "bat";
+		 }
+		 if(entity instanceof InfectedVilager){
+		 	return "zombie villager";
+		 }
+		 */
 		return null;
 	}
 
@@ -447,6 +467,15 @@ public class ASUtils {
 		names.add(new ASEntity("testificate", "villager"));
 		names.add(new ASEntity("wolf", "wolf"));
 		names.add(new ASEntity("zombie", "zombie"));
+		names.add(new ASEntity("witch", "witch"));
+		names.add(new ASEntity("wither", "wither boss"));
+		names.add(new ASEntity("witherboss", "wither boss"));
+		names.add(new ASEntity("wither boss", "wither boss"));
+		names.add(new ASEntity("bat", "bat"));
+		names.add(new ASEntity("zombievillager", "zombie villager"));
+		names.add(new ASEntity("zombie villager", "zombie villager"));
+		names.add(new ASEntity("infectedvillager", "zombie villager"));
+		names.add(new ASEntity("infected villager", "zombie villager"));
 		return names;
 	}
 
