@@ -212,6 +212,21 @@ public class EventList {
 				continue;
 			}
 
+			// Special case: Ender portal
+			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("enderportal")
+					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("enderportalframe")
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL.getId()))
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL_FRAME.getId()))){
+				if(!negate){
+					this.blocked.add(ASUtils.materialToString(Material.ENDER_PORTAL, false));
+					this.blocked.add(ASUtils.materialToString(Material.ENDER_PORTAL_FRAME, false));
+				}else{
+					this.blocked.remove(ASUtils.materialToString(Material.ENDER_PORTAL, false));
+					this.blocked.remove(ASUtils.materialToString(Material.ENDER_PORTAL_FRAME, false));
+				}
+				continue;
+			}
+
 			// Special case: Skull
 			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull")
 					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull")
