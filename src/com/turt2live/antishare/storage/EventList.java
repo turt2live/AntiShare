@@ -221,6 +221,21 @@ public class EventList {
 				continue;
 			}
 
+			// Special case: Skull
+			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull")
+					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull")
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
+				if(!negate){
+					this.blocked.add(ASUtils.materialToString(Material.SKULL, false));
+					this.blocked.add(ASUtils.materialToString(Material.SKULL_ITEM, false));
+				}else{
+					this.blocked.remove(ASUtils.materialToString(Material.SKULL, false));
+					this.blocked.remove(ASUtils.materialToString(Material.SKULL_ITEM, false));
+				}
+				continue;
+			}
+
 			// Try to add the item, warn otherwise
 			if(plugin.getItemMap().getSign(blocked) != null){
 				if(!negate){
