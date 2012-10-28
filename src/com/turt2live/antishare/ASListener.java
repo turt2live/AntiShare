@@ -11,6 +11,7 @@
 package com.turt2live.antishare;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Painting;
@@ -283,6 +285,15 @@ public class ASListener implements Listener {
 					if(ASUtils.isDroppedOnBreak(rel, block)){
 						plugin.getBlockManager().removeBlock(rel);
 						rel.setType(Material.AIR);
+					}
+				}
+
+				// TODO: Remove 1.4 'hack'
+				Collection<ItemFrame> itemframes = block.getWorld().getEntitiesByClass(ItemFrame.class);
+				for(ItemFrame frame : itemframes){
+					double distance = frame.getLocation().distanceSquared(block.getLocation());
+					if(distance >= 0 && distance <= 1){
+						frame.remove();
 					}
 				}
 
