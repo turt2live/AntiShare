@@ -4,9 +4,8 @@ Since 4.3.0:
 - Fixed permission error in player commands
 - Fix pistons not working
 - Fixed a rare bug that causes server crashing
-- Added (commented) predicted code for 1.4 updates.
+- Added internal support for 1.4 items and entities
+	- Anvils can be protected against by adding them to the 'right click' list
 
 1.4 changes that need to be protected:
-- Anvils, creative players should not get free access (configurable: can use anvils)
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected)
-- Verify code works (commented 1.4 code)
