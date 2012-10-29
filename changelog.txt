@@ -7,10 +7,11 @@ Since 4.3.0:
 - Added internal support for 1.4 items and entities
 	- Anvils can be protected against by adding them to the 'right click' list
 	- Skulls 
+	- Item frames can be protected from being placed and used (setting the image)
+	- Item frames can also be setup to not drop when the block they are attached to is broken
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected)
 
 Known 1.4 bugs relating to AntiShare:
 - Skulls drop an item when cancelled (ticket: https://bukkit.atlassian.net/browse/BUKKIT-2685)
-- Item frames are dropped on attached block break (and drop their image)
