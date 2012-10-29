@@ -289,11 +289,14 @@ public class ASListener implements Listener {
 				}
 
 				// TODO: Remove 1.4 'hack'
-				Collection<ItemFrame> itemframes = block.getWorld().getEntitiesByClass(ItemFrame.class);
-				for(ItemFrame frame : itemframes){
-					double distance = frame.getLocation().distanceSquared(block.getLocation());
-					if(distance >= 0 && distance <= 1){
-						frame.remove();
+				if(plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
+					Collection<ItemFrame> itemframes = block.getWorld().getEntitiesByClass(ItemFrame.class);
+					for(ItemFrame frame : itemframes){
+						double distance = frame.getLocation().distanceSquared(block.getLocation());
+						if(distance >= 0 && distance <= 2){
+							frame.remove();
+						}
+						System.out.println(distance);
 					}
 				}
 
