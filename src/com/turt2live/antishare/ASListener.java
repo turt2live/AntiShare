@@ -296,7 +296,6 @@ public class ASListener implements Listener {
 						if(distance >= 0 && distance <= 2){
 							frame.remove();
 						}
-						System.out.println(distance);
 					}
 				}
 
