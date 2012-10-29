@@ -111,15 +111,15 @@ public class AntiShare extends PluginWrapper {
 			e.printStackTrace();
 		}
 
-		// We need to initiate an SQL connection now
-		startSQL();
-
 		// Check configuration
 		getConfig().loadDefaults(getResource("resources/config.yml"));
 		if(!getConfig().fileExists() || !getConfig().checkDefaults()){
 			getConfig().saveDefaults();
 		}
 		getConfig().load();
+
+		// We need to initiate an SQL connection now
+		startSQL();
 
 		// Check for online mode
 		if(!getServer().getOnlineMode()){
@@ -267,7 +267,8 @@ public class AntiShare extends PluginWrapper {
 		// Region Factory has no reload
 		blocks.reload();
 		inventories.reload();
-		// SQL has no reload
+		if(sql != null)
+			sql.reconnect();
 		// Metrics has no reload
 		// Tracker List has no reload
 		// Simple Notice has no reload
@@ -485,7 +486,7 @@ public class AntiShare extends PluginWrapper {
 			return false;
 		}
 		sql = new SQL();
-		if(getConfig().getBoolean("settings.sql.sqllite.use-instead")){
+		if(getConfig().getBoolean("settings.sql.sqlite.use-instead")){
 			// Setup properties
 			String location = getConfig().getString("settings.sql.sqlite.location");
 			String name = getConfig().getString("settings.sql.sqlite.name");

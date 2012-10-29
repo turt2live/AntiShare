@@ -105,8 +105,10 @@ public abstract class Database {
 	 * <br>
 	 * &nbsp;&nbsp;Used to check whether the class for the SQL engine is installed. <br>
 	 * <br>
+	 * 
+	 * @return true if started
 	 */
-	abstract boolean initialize();
+	public abstract boolean initialize();
 
 	/**
 	 * <b>open</b><br>
@@ -115,8 +117,9 @@ public abstract class Database {
 	 * <br>
 	 * 
 	 * @return the success of the method.
+	 * @throws SQLException thrown if there is a problem
 	 */
-	abstract Connection open() throws SQLException;
+	public abstract Connection open() throws SQLException;
 
 	/**
 	 * <b>close</b><br>

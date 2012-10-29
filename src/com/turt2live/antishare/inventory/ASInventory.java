@@ -120,7 +120,7 @@ public class ASInventory implements Cloneable {
 			for(World world : Bukkit.getWorlds()){
 				for(GameMode gamemode : GameMode.values()){
 					try{
-						ResultSet items = AntiShare.getInstance().getSQL().get("SELECT * FROM " + SQL.INVENTORIES_TABLE + " WHERE name='" + name + "' AND type='" + type.name() + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "'");
+						ResultSet items = AntiShare.getInstance().getSQL().get("SELECT * FROM `" + SQL.INVENTORIES_TABLE + "` WHERE `name`='" + name + "' AND `type`='" + type.name() + "' AND `gamemode`='" + gamemode.name() + "' AND `world`='" + world.getName() + "'");
 						ASInventory inventory = new ASInventory(type, name, world, gamemode);
 
 						// Get items
@@ -303,7 +303,7 @@ public class ASInventory implements Cloneable {
 
 			// Loop
 			for(Integer slot : inventory.keySet()){
-				plugin.getSQL().update("DELETE FROM " + SQL.INVENTORIES_TABLE + " WHERE type='" + type.name() + "' AND name='" + inventoryName + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "' AND slot='" + slot + "' LIMIT 1");
+				plugin.getSQL().update("DELETE FROM `" + SQL.INVENTORIES_TABLE + "` WHERE `type`='" + type.name() + "' AND `name`='" + inventoryName + "' AND `gamemode`='" + gamemode.name() + "' AND `world`='" + world.getName() + "' AND `slot`='" + slot + "' LIMIT 1");
 
 				// Don't save AIR
 				ItemStack item = inventory.get(slot);
@@ -330,7 +330,7 @@ public class ASInventory implements Cloneable {
 				}
 
 				// Save
-				plugin.getSQL().update("INSERT INTO " + SQL.INVENTORIES_TABLE + " (type, name, gamemode, world, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant) VALUES ('" + type.name() + "', '" + inventoryName + "', '" + gamemode.name() + "', '" + world.getName() + "', '" + slot + "', '" + itemID + "', '" + itemName + "', '" + itemDurability + "', '" + itemAmount + "', '" + itemData + "', '" + enchant + "')");
+				plugin.getSQL().update("INSERT INTO `" + SQL.INVENTORIES_TABLE + "` (`type`, `name`, `gamemode`, `world`, `slot`, `itemID`, `itemName`, `itemDurability`, `itemAmount`, `itemData`, `itemEnchant`) VALUES ('" + type.name() + "', '" + inventoryName + "', '" + gamemode.name() + "', '" + world.getName() + "', '" + slot + "', '" + itemID + "', '" + itemName + "', '" + itemDurability + "', '" + itemAmount + "', '" + itemData + "', '" + enchant + "')");
 			}
 		}else{
 			// Flat-File (YAML) save

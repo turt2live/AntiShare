@@ -81,7 +81,7 @@ public class RegionManager {
 
 			// Load
 			try{
-				ResultSet results = plugin.getSQL().get("SELECT * FROM " + SQL.REGIONS_TABLE);
+				ResultSet results = plugin.getSQL().get("SELECT * FROM `" + SQL.REGIONS_TABLE + "`");
 				if(results != null){
 					while (results.next()){
 						World world = plugin.getServer().getWorld(results.getString("world"));
@@ -175,7 +175,7 @@ public class RegionManager {
 			// Save
 			for(World world : Bukkit.getWorlds()){
 				for(ASRegion region : getAllRegions(world)){
-					plugin.getSQL().update("INSERT INTO " + SQL.REGIONS_TABLE + " (regionName, mix, miy, miz, max, may, maz, creator, gamemode, showEnter, showExit, world, uniqueID, enterMessage, exitMessage) VALUES ('" + region.getName() + "', '" + region.getSelection().getMinimumPoint().getBlockX() + "', '" + region.getSelection().getMinimumPoint().getBlockY() + "', '" + region.getSelection().getMinimumPoint().getBlockZ() + "', '" + region.getSelection().getMaximumPoint().getBlockX() + "', '" + region.getSelection().getMaximumPoint().getBlockY() + "', '" + region.getSelection().getMaximumPoint().getBlockZ() + "', '" + region.getWhoSet() + "', '" + region.getGameMode().name() + "', '" + (region.isEnterMessageActive() ? 1 : 0) + "', '" + (region.isExitMessageActive() ? 1 : 0) + "', '" + region.getWorld().getName() + "', '" + region.getUniqueID() + "', '" + region.getEnterMessage() + "', '" + region.getExitMessage() + "')");
+					plugin.getSQL().update("INSERT INTO `" + SQL.REGIONS_TABLE + "` (`regionName`, `mix`, `miy`, `miz`, `max`, `may`, `maz`, `creator`, `gamemode`, `showEnter`, `showExit`, `world`, `uniqueID`, `enterMessage`, `exitMessage`) VALUES ('" + region.getName() + "', '" + region.getSelection().getMinimumPoint().getBlockX() + "', '" + region.getSelection().getMinimumPoint().getBlockY() + "', '" + region.getSelection().getMinimumPoint().getBlockZ() + "', '" + region.getSelection().getMaximumPoint().getBlockX() + "', '" + region.getSelection().getMaximumPoint().getBlockY() + "', '" + region.getSelection().getMaximumPoint().getBlockZ() + "', '" + region.getWhoSet() + "', '" + region.getGameMode().name() + "', '" + (region.isEnterMessageActive() ? 1 : 0) + "', '" + (region.isExitMessageActive() ? 1 : 0) + "', '" + region.getWorld().getName() + "', '" + region.getUniqueID() + "', '" + region.getEnterMessage() + "', '" + region.getExitMessage() + "')");
 				}
 			}
 		}else{
