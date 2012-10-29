@@ -481,21 +481,37 @@ public class AntiShare extends PluginWrapper {
 	 * @return true if connected
 	 */
 	public boolean startSQL(){
+		if(!getConfig().getBoolean("enabled-features.sql")){
+			return false;
+		}
 		sql = new SQL();
+		if(getConfig().getBoolean("settings.sql.sqllite.use-instead")){
+			// Setup properties
+			String location = getConfig().getString("settings.sql.sqlite.location");
+			String name = getConfig().getString("settings.sql.sqlite.name");
 
-		// Setup properties
-		String hostname = getConfig().getString("settings.sql.host");
-		String username = getConfig().getString("settings.sql.username");
-		String password = getConfig().getString("settings.sql.password");
-		String database = getConfig().getString("settings.sql.database");
-		String port = getConfig().getString("settings.sql.port");
+			// Try connection
+			boolean connected = sql.connect(location, name);
+			if(connected){
+				sql.setup();
+				useSQL = true;
+				return true;
+			}
+		}else{
+			// Setup properties
+			String hostname = getConfig().getString("settings.sql.host");
+			String username = getConfig().getString("settings.sql.username");
+			String password = getConfig().getString("settings.sql.password");
+			String database = getConfig().getString("settings.sql.database");
+			String port = getConfig().getString("settings.sql.port");
 
-		// Try connection
-		boolean connected = sql.connect(hostname, username, password, database, port);
-		if(connected){
-			sql.setup();
-			useSQL = true;
-			return true;
+			// Try connection
+			boolean connected = sql.connect(hostname, username, password, database, port);
+			if(connected){
+				sql.setup();
+				useSQL = true;
+				return true;
+			}
 		}
 
 		// Failed connection

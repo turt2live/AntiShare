@@ -69,6 +69,10 @@ settings:
     password: MySQLPassword
     database: AntiShare
     port: 3306
+    sqlite:
+      use-instead: false
+      location: '/plugins/AntiShare/Database.db'
+      name: MyDatabase
   # Set to FALSE to disable "creative" and "survival"
   # blocks.
   track-blocks: true

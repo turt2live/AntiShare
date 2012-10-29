@@ -58,12 +58,44 @@ public class SQL {
 		// Setup configuration
 		config = new DatabaseConfig();
 		config.setType(DatabaseType.MYSQL);
+		this.database = database;
 		try{
 			config.setParameter(Parameter.HOSTNAME, host);
 			config.setParameter(Parameter.PORT_NUMBER, port);
 			config.setParameter(Parameter.DATABASE, database);
 			config.setParameter(Parameter.USER, username);
 			config.setParameter(Parameter.PASSWORD, password);
+		}catch(InvalidConfiguration e){
+			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
+			return false;
+		}
+
+		// Connect
+		try{
+			sql = DatabaseFactory.createDatabase(config);
+		}catch(InvalidConfiguration e){
+			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
+			return false;
+		}
+
+		return true; // All went well, we hope
+	}
+
+	/**
+	 * Attempts a connection
+	 * 
+	 * @param location file location
+	 * @param name database name
+	 * @return true if connected
+	 */
+	public boolean connect(String location, String name){
+		// Setup configuration
+		config = new DatabaseConfig();
+		config.setType(DatabaseType.SQLITE);
+		this.database = location;
+		try{
+			config.setParameter(Parameter.DB_NAME, name);
+			config.setParameter(Parameter.DB_LOCATION, location);
 		}catch(InvalidConfiguration e){
 			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 			return false;
