@@ -68,7 +68,6 @@ public class SQL {
 			config.setParameter(Parameter.PASSWORD, password);
 			config.setParameter(Parameter.DB_PREFIX, "");
 		}catch(InvalidConfiguration e){
-			e.printStackTrace(); // TODO: Remove
 			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 			return false;
 		}
@@ -77,14 +76,12 @@ public class SQL {
 		try{
 			sql = DatabaseFactory.createDatabase(config);
 		}catch(InvalidConfiguration e){
-			e.printStackTrace();// TODO: Remove
 			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 			return false;
 		}
 		try{
 			sql.open();
 		}catch(SQLException e){
-			e.printStackTrace();// TODO: Remove
 			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 			return false;
 		}
@@ -110,7 +107,6 @@ public class SQL {
 			config.setParameter(Parameter.DB_LOCATION, location);
 			config.setParameter(Parameter.DB_PREFIX, "");
 		}catch(InvalidConfiguration e){
-			e.printStackTrace();// TODO: Remove
 			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 			return false;
 		}
@@ -119,14 +115,12 @@ public class SQL {
 		try{
 			sql = DatabaseFactory.createDatabase(config);
 		}catch(InvalidConfiguration e){
-			e.printStackTrace();// TODO: Remove
 			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 			return false;
 		}
 		try{
 			sql.open();
 		}catch(SQLException e){
-			e.printStackTrace();// TODO: Remove
 			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 			return false;
 		}
