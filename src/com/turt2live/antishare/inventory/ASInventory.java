@@ -303,7 +303,7 @@ public class ASInventory implements Cloneable {
 
 			// Loop
 			for(Integer slot : inventory.keySet()){
-				plugin.getSQL().update("DELETE FROM `" + SQL.INVENTORIES_TABLE + "` WHERE `type`='" + type.name() + "' AND `name`='" + inventoryName + "' AND `gamemode`='" + gamemode.name() + "' AND `world`='" + world.getName() + "' AND `slot`='" + slot + "' LIMIT 1");
+				plugin.getSQL().update("DELETE FROM `" + SQL.INVENTORIES_TABLE + "` WHERE `type`='" + type.name() + "' AND `name`='" + inventoryName + "' AND `gamemode`='" + gamemode.name() + "' AND `world`='" + world.getName() + "' AND `slot`='" + slot + "'");
 
 				// Don't save AIR
 				ItemStack item = inventory.get(slot);
