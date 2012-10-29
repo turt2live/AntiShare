@@ -174,6 +174,12 @@ public class SQL {
 		update("DELETE FROM " + tablename);
 	}
 
+	/**
+	 * Runs an update query on the database
+	 * 
+	 * @param query the query
+	 * @return the number of rows affected
+	 */
 	public int update(String query){
 		try{
 			return sql.prepare(query).executeUpdate();
@@ -184,6 +190,12 @@ public class SQL {
 		return 0;
 	}
 
+	/**
+	 * Gets data from the database
+	 * 
+	 * @param query the query
+	 * @return the data, null if none or invalid
+	 */
 	public ResultSet get(String query){
 		try{
 			return sql.prepare(query).executeQuery();
