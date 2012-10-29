@@ -682,6 +682,8 @@ public class ASListener implements Listener {
 			item = Material.PAINTING;
 		}else if(event.getRightClicked() instanceof Sheep){
 			item = Material.SHEARS;
+		}else if(event.getRightClicked() instanceof ItemFrame){
+			item = Material.ITEM_FRAME;
 		}
 
 		// If the entity is not found, check for interacted entities
