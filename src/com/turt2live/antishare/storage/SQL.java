@@ -10,19 +10,18 @@
  ******************************************************************************/
 package com.turt2live.antishare.storage;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lib.patpeter.sqllibrary.Database;
+import com.turt2live.antishare.lib.patpeter.sqllibrary.DatabaseConfig;
+import com.turt2live.antishare.lib.patpeter.sqllibrary.DatabaseConfig.DatabaseType;
+import com.turt2live.antishare.lib.patpeter.sqllibrary.DatabaseConfig.Parameter;
+import com.turt2live.antishare.lib.patpeter.sqllibrary.DatabaseFactory;
+import com.turt2live.antishare.lib.patpeter.sqllibrary.InvalidConfiguration;
 
-/*
- * Thanks go to Example Depot for teaching me everything in this class.
- * http://www.exampledepot.com/egs/java.sql/pkg.html
- */
 /**
  * SQL Manager
  * 
@@ -34,10 +33,9 @@ public class SQL {
 	public static final String INVENTORIES_TABLE = "AS_Inventories";
 
 	private AntiShare plugin;
-	private Connection connection;
-	private boolean connected = false;
 	private String database = "";
-	private String sU, sP, sD, sH; // SQL connection details for reconnect
+	private DatabaseConfig config;
+	private Database sql;
 
 	/**
 	 * Creates a new SQL Manager
@@ -53,46 +51,53 @@ public class SQL {
 	 * @param username the username
 	 * @param password the password
 	 * @param database the database
+	 * @param port the port number (default is 3306 for MySQL)
 	 * @return true if connected
 	 */
-	public boolean connect(String host, String username, String password, String database){
-		sU = username;
-		sP = password;
-		sH = host;
-		sD = database;
+	public boolean connect(String host, String username, String password, String database, String port){
+		// Setup configuration
+		config = new DatabaseConfig();
+		config.setType(DatabaseType.MYSQL);
 		try{
-			String driverName = "org.gjt.mm.mysql.Driver";
-			Class.forName(driverName);
-			String url = "jdbc:mysql://" + host + "/" + database;
-			connection = DriverManager.getConnection(url, username, password);
-			if(connection != null){
-				connected = !connection.isClosed();
-			}else{
-				connected = false;
-			}
-			this.database = database;
-			return true;
-		}catch(ClassNotFoundException e){
-			plugin.getLogger().warning("You do not have a MySQL driver, please install one. AntiShare will use Flat-File for now");
-		}catch(SQLException e){
+			config.setParameter(Parameter.HOSTNAME, host);
+			config.setParameter(Parameter.PORT_NUMBER, port);
+			config.setParameter(Parameter.DATABASE, database);
+			config.setParameter(Parameter.USER, username);
+			config.setParameter(Parameter.PASSWORD, password);
+		}catch(InvalidConfiguration e){
 			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
+			return false;
 		}
-		return false;
+
+		// Connect
+		try{
+			sql = DatabaseFactory.createDatabase(config);
+		}catch(InvalidConfiguration e){
+			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
+			return false;
+		}
+
+		return true; // All went well, we hope
 	}
 
 	/**
 	 * Disconnects from the SQL server
 	 */
 	public void disconnect(){
-		if(connection != null){
-			try{
-				if(!connection.isClosed()){
-					connection.close();
-				}
-			}catch(SQLException e){
-				AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-				e.printStackTrace();
-			}
+		if(sql != null){
+			sql.close();
+		}
+	}
+
+	/**
+	 * Reconnects to the SQL server
+	 */
+	public void reconnect(){
+		disconnect();
+		try{
+			sql = DatabaseFactory.createDatabase(config);
+		}catch(InvalidConfiguration e){
+			plugin.getLogger().warning("Cannot connect to SQL! Check your settings. AntiShare will use Flat-File for now");
 		}
 	}
 
@@ -102,23 +107,7 @@ public class SQL {
 	 * @return true if connected
 	 */
 	public boolean isConnected(){
-		return connection != null && connected;
-	}
-
-	/**
-	 * Gets the SQL connection
-	 * 
-	 * @return the connection
-	 */
-	public Connection getConnection(){
-		return connection;
-	}
-
-	/**
-	 * Reconnects to the SQL server
-	 */
-	public void reconnect(){
-		connect(sH, sU, sP, sD);
+		return sql != null && sql.checkConnection();
 	}
 
 	/**
@@ -137,45 +126,40 @@ public class SQL {
 		if(!isConnected()){
 			reconnect();
 		}
-		try{
-			createQuery(connection.prepareStatement("CREATE TABLE IF NOT EXISTS `" + INVENTORIES_TABLE + "` (" +
-					"  `id` int(11) NOT NULL AUTO_INCREMENT," +
-					"  `type` varchar(25) NOT NULL, " +
-					"  `name` varchar(50) NOT NULL," +
-					"  `gamemode` varchar(25) NOT NULL," +
-					"  `world` varchar(100) NOT NULL," +
-					"  `slot` int(11) NOT NULL," +
-					"  `itemID` int(11) NOT NULL," +
-					"  `itemName` varchar(25) NOT NULL," +
-					"  `itemDurability` int(11) NOT NULL," +
-					"  `itemAmount` int(11) NOT NULL," +
-					"  `itemData` int(11) NOT NULL," +
-					"  `itemEnchant` text NOT NULL," +
-					"  PRIMARY KEY (`id`)" +
-					")"));
-			createQuery(connection.prepareStatement("CREATE TABLE IF NOT EXISTS `" + REGIONS_TABLE + "` (" +
-					"  `id` int(11) NOT NULL AUTO_INCREMENT," +
-					"  `regionName` varchar(255) NOT NULL," +
-					"  `mix` decimal(25,4) NOT NULL," +
-					"  `miy` decimal(25,4) NOT NULL," +
-					"  `miz` decimal(25,4) NOT NULL," +
-					"  `max` decimal(25,4) NOT NULL," +
-					"  `may` decimal(25,4) NOT NULL," +
-					"  `maz` decimal(25,4) NOT NULL," +
-					"  `creator` varchar(25) NOT NULL," +
-					"  `gamemode` varchar(25) NOT NULL," +
-					"  `showEnter` int(11) NOT NULL," +
-					"  `showExit` int(11) NOT NULL," +
-					"  `world` varchar(100) NOT NULL," +
-					"  `uniqueID` varchar(100) NOT NULL," +
-					"  `enterMessage` varchar(300) NOT NULL," +
-					"  `exitMessage` varchar(300) NOT NULL," +
-					"  PRIMARY KEY (`id`)" +
-					")"));
-		}catch(SQLException e){
-			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-			e.printStackTrace();
-		}
+		update("CREATE TABLE IF NOT EXISTS `" + INVENTORIES_TABLE + "` (" +
+				"  `id` int(11) NOT NULL AUTO_INCREMENT," +
+				"  `type` varchar(25) NOT NULL, " +
+				"  `name` varchar(50) NOT NULL," +
+				"  `gamemode` varchar(25) NOT NULL," +
+				"  `world` varchar(100) NOT NULL," +
+				"  `slot` int(11) NOT NULL," +
+				"  `itemID` int(11) NOT NULL," +
+				"  `itemName` varchar(25) NOT NULL," +
+				"  `itemDurability` int(11) NOT NULL," +
+				"  `itemAmount` int(11) NOT NULL," +
+				"  `itemData` int(11) NOT NULL," +
+				"  `itemEnchant` text NOT NULL," +
+				"  PRIMARY KEY (`id`)" +
+				")");
+		update("CREATE TABLE IF NOT EXISTS `" + REGIONS_TABLE + "` (" +
+				"  `id` int(11) NOT NULL AUTO_INCREMENT," +
+				"  `regionName` varchar(255) NOT NULL," +
+				"  `mix` decimal(25,4) NOT NULL," +
+				"  `miy` decimal(25,4) NOT NULL," +
+				"  `miz` decimal(25,4) NOT NULL," +
+				"  `max` decimal(25,4) NOT NULL," +
+				"  `may` decimal(25,4) NOT NULL," +
+				"  `maz` decimal(25,4) NOT NULL," +
+				"  `creator` varchar(25) NOT NULL," +
+				"  `gamemode` varchar(25) NOT NULL," +
+				"  `showEnter` int(11) NOT NULL," +
+				"  `showExit` int(11) NOT NULL," +
+				"  `world` varchar(100) NOT NULL," +
+				"  `uniqueID` varchar(100) NOT NULL," +
+				"  `enterMessage` varchar(300) NOT NULL," +
+				"  `exitMessage` varchar(300) NOT NULL," +
+				"  PRIMARY KEY (`id`)" +
+				")");
 	}
 
 	/**
@@ -187,45 +171,22 @@ public class SQL {
 		if(!isConnected()){
 			reconnect();
 		}
+		update("DELETE FROM " + tablename);
+	}
+
+	public int update(String query){
 		try{
-			updateQuery(connection.prepareStatement("DELETE FROM " + tablename));
+			return sql.prepare(query).executeUpdate();
 		}catch(SQLException e){
 			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
 		}
+		return 0;
 	}
 
-	/**
-	 * Executes a "create" query
-	 * 
-	 * @param statement the statement
-	 */
-	public void createQuery(PreparedStatement statement){
-		updateQuery(statement);
-	}
-
-	/**
-	 * Executes a "delete" query
-	 * 
-	 * @param statement the statement
-	 * @return the number of rows affected
-	 */
-	public int deleteQuery(PreparedStatement statement){
-		return updateQuery(statement);
-	}
-
-	/**
-	 * Executes a "get" or "select" query
-	 * 
-	 * @param statement the statement
-	 * @return the results
-	 */
-	public ResultSet getQuery(PreparedStatement statement){
-		if(!isConnected()){
-			reconnect();
-		}
+	public ResultSet get(String query){
 		try{
-			return statement.executeQuery();
+			return sql.prepare(query).executeQuery();
 		}catch(SQLException e){
 			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
@@ -233,39 +194,4 @@ public class SQL {
 		return null;
 	}
 
-	/**
-	 * Executes an "insert" query
-	 * 
-	 * @param statement the statement
-	 */
-	public void insertQuery(PreparedStatement statement){
-		if(!isConnected()){
-			reconnect();
-		}
-		try{
-			statement.executeUpdate();
-		}catch(SQLException e){
-			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Executes an "update" query
-	 * 
-	 * @param statement the statement
-	 * @return the number of rows affected
-	 */
-	public int updateQuery(PreparedStatement statement){
-		if(!isConnected()){
-			reconnect();
-		}
-		try{
-			return statement.executeUpdate();
-		}catch(SQLException e){
-			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-			e.printStackTrace();
-		}
-		return 0;
-	}
 }

@@ -68,6 +68,7 @@ settings:
     username: MySQLUsername
     password: MySQLPassword
     database: AntiShare
+    port: 3306
   # Set to FALSE to disable "creative" and "survival"
   # blocks.
   track-blocks: true

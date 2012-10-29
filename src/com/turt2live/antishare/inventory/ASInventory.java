@@ -11,7 +11,6 @@
 package com.turt2live.antishare.inventory;
 
 import java.io.File;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -121,7 +120,7 @@ public class ASInventory implements Cloneable {
 			for(World world : Bukkit.getWorlds()){
 				for(GameMode gamemode : GameMode.values()){
 					try{
-						ResultSet items = AntiShare.getInstance().getSQL().getQuery(AntiShare.getInstance().getSQL().getConnection().prepareStatement("SELECT * FROM " + SQL.INVENTORIES_TABLE + " WHERE name='" + name + "' AND type='" + type.name() + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "'"));
+						ResultSet items = AntiShare.getInstance().getSQL().get("SELECT * FROM " + SQL.INVENTORIES_TABLE + " WHERE name='" + name + "' AND type='" + type.name() + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "'");
 						ASInventory inventory = new ASInventory(type, name, world, gamemode);
 
 						// Get items
@@ -304,54 +303,34 @@ public class ASInventory implements Cloneable {
 
 			// Loop
 			for(Integer slot : inventory.keySet()){
-				try{
-					PreparedStatement delete = plugin.getSQL().getConnection().prepareStatement("DELETE FROM " + SQL.INVENTORIES_TABLE + " WHERE type='" + type.name() + "' AND name='" + inventoryName + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "' AND slot='" + slot + "' LIMIT 1");
-					plugin.getSQL().deleteQuery(delete);
+				plugin.getSQL().update("DELETE FROM " + SQL.INVENTORIES_TABLE + " WHERE type='" + type.name() + "' AND name='" + inventoryName + "' AND gamemode='" + gamemode.name() + "' AND world='" + world.getName() + "' AND slot='" + slot + "' LIMIT 1");
 
-					// Don't save AIR
-					ItemStack item = inventory.get(slot);
-					if(item == null || item.getType() == Material.AIR){
-						continue;
-					}
-
-					// Setup
-					PreparedStatement statement = plugin.getSQL().getConnection().prepareStatement("INSERT INTO " + SQL.INVENTORIES_TABLE + " (type, name, gamemode, world, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-					int itemID = item.getTypeId();
-					String itemName = item.getType().name();
-					int itemDurability = item.getDurability();
-					int itemAmount = item.getAmount();
-					int itemData = item.getData().getData();
-
-					// Setup enchants
-					String enchant = "";
-					Set<Enchantment> enchantsSet = item.getEnchantments().keySet();
-					Map<Enchantment, Integer> enchantsMap = item.getEnchantments();
-					for(Enchantment e : enchantsSet){
-						enchant = enchant + e.getId() + "|" + enchantsMap.get(e) + " ";
-					}
-					if(enchant.length() > 0){
-						enchant = enchant.substring(0, enchant.length() - 1);
-					}
-
-					// Insert into query
-					statement.setString(1, type.name());
-					statement.setString(2, inventoryName);
-					statement.setString(3, gamemode.name());
-					statement.setString(4, world.getName());
-					statement.setInt(5, slot);
-					statement.setInt(6, itemID);
-					statement.setString(7, itemName);
-					statement.setInt(8, itemDurability);
-					statement.setInt(9, itemAmount);
-					statement.setInt(10, itemData);
-					statement.setString(11, enchant);
-
-					// Save
-					plugin.getSQL().insertQuery(statement);
-				}catch(SQLException e){
-					AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-					e.printStackTrace();
+				// Don't save AIR
+				ItemStack item = inventory.get(slot);
+				if(item == null || item.getType() == Material.AIR){
+					continue;
 				}
+
+				// Setup
+				int itemID = item.getTypeId();
+				String itemName = item.getType().name();
+				int itemDurability = item.getDurability();
+				int itemAmount = item.getAmount();
+				int itemData = item.getData().getData();
+
+				// Setup enchants
+				String enchant = "";
+				Set<Enchantment> enchantsSet = item.getEnchantments().keySet();
+				Map<Enchantment, Integer> enchantsMap = item.getEnchantments();
+				for(Enchantment e : enchantsSet){
+					enchant = enchant + e.getId() + "|" + enchantsMap.get(e) + " ";
+				}
+				if(enchant.length() > 0){
+					enchant = enchant.substring(0, enchant.length() - 1);
+				}
+
+				// Save
+				plugin.getSQL().update("INSERT INTO " + SQL.INVENTORIES_TABLE + " (type, name, gamemode, world, slot, itemID, itemName, itemDurability, itemAmount, itemData, itemEnchant) VALUES ('" + type.name() + "', '" + inventoryName + "', '" + gamemode.name() + "', '" + world.getName() + "', '" + slot + "', '" + itemID + "', '" + itemName + "', '" + itemDurability + "', '" + itemAmount + "', '" + itemData + "', '" + enchant + "')");
 			}
 		}else{
 			// Flat-File (YAML) save

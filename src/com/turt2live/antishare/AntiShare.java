@@ -112,21 +112,7 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// We need to initiate an SQL connection now
-		sql = new SQL();
-		if(getConfig().getBoolean("enabled-features.sql")){
-			// Setup properties
-			String hostname = getConfig().getString("settings.sql.host");
-			String username = getConfig().getString("settings.sql.username");
-			String password = getConfig().getString("settings.sql.password");
-			String database = getConfig().getString("settings.sql.database");
-
-			// Try connection
-			boolean connected = sql.connect(hostname, username, password, database);
-			if(connected){
-				sql.setup();
-				useSQL = true;
-			}
-		}
+		startSQL();
 
 		// Check configuration
 		getConfig().loadDefaults(getResource("resources/config.yml"));
@@ -502,9 +488,10 @@ public class AntiShare extends PluginWrapper {
 		String username = getConfig().getString("settings.sql.username");
 		String password = getConfig().getString("settings.sql.password");
 		String database = getConfig().getString("settings.sql.database");
+		String port = getConfig().getString("settings.sql.port");
 
 		// Try connection
-		boolean connected = sql.connect(hostname, username, password, database);
+		boolean connected = sql.connect(hostname, username, password, database, port);
 		if(connected){
 			sql.setup();
 			useSQL = true;

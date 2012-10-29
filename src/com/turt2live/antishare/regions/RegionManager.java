@@ -12,7 +12,6 @@ package com.turt2live.antishare.regions;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class RegionManager {
 
 			// Load
 			try{
-				ResultSet results = plugin.getSQL().getQuery(plugin.getSQL().getConnection().prepareStatement("SELECT * FROM " + SQL.REGIONS_TABLE));
+				ResultSet results = plugin.getSQL().get("SELECT * FROM " + SQL.REGIONS_TABLE);
 				if(results != null){
 					while (results.next()){
 						World world = plugin.getServer().getWorld(results.getString("world"));
@@ -176,31 +175,7 @@ public class RegionManager {
 			// Save
 			for(World world : Bukkit.getWorlds()){
 				for(ASRegion region : getAllRegions(world)){
-					try{
-						// Create
-						PreparedStatement statement = plugin.getSQL().getConnection().prepareStatement("INSERT INTO " + SQL.REGIONS_TABLE + " (regionName, mix, miy, miz, max, may, maz, creator, gamemode, showEnter, showExit, world, uniqueID, enterMessage, exitMessage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-						statement.setString(1, region.getName());
-						statement.setDouble(2, region.getSelection().getMinimumPoint().getBlockX());
-						statement.setDouble(3, region.getSelection().getMinimumPoint().getBlockY());
-						statement.setDouble(4, region.getSelection().getMinimumPoint().getBlockZ());
-						statement.setDouble(5, region.getSelection().getMaximumPoint().getBlockX());
-						statement.setDouble(6, region.getSelection().getMaximumPoint().getBlockY());
-						statement.setDouble(7, region.getSelection().getMaximumPoint().getBlockZ());
-						statement.setString(8, region.getWhoSet());
-						statement.setString(9, region.getGameMode().name());
-						statement.setInt(10, region.isEnterMessageActive() ? 1 : 0);
-						statement.setInt(11, region.isExitMessageActive() ? 1 : 0);
-						statement.setString(12, region.getWorld().getName());
-						statement.setString(13, region.getUniqueID());
-						statement.setString(14, region.getEnterMessage());
-						statement.setString(15, region.getExitMessage());
-
-						// Save
-						plugin.getSQL().insertQuery(statement);
-					}catch(SQLException e){
-						AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-						e.printStackTrace();
-					}
+					plugin.getSQL().update("INSERT INTO " + SQL.REGIONS_TABLE + " (regionName, mix, miy, miz, max, may, maz, creator, gamemode, showEnter, showExit, world, uniqueID, enterMessage, exitMessage) VALUES ('" + region.getName() + "', '" + region.getSelection().getMinimumPoint().getBlockX() + "', '" + region.getSelection().getMinimumPoint().getBlockY() + "', '" + region.getSelection().getMinimumPoint().getBlockZ() + "', '" + region.getSelection().getMaximumPoint().getBlockX() + "', '" + region.getSelection().getMaximumPoint().getBlockY() + "', '" + region.getSelection().getMaximumPoint().getBlockZ() + "', '" + region.getWhoSet() + "', '" + region.getGameMode().name() + "', '" + (region.isEnterMessageActive() ? 1 : 0) + "', '" + (region.isExitMessageActive() ? 1 : 0) + "', '" + region.getWorld().getName() + "', '" + region.getUniqueID() + "', '" + region.getEnterMessage() + "', '" + region.getExitMessage() + "')");
 				}
 			}
 		}else{
