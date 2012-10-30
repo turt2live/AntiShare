@@ -16,8 +16,36 @@
               </includes>
           </resource>
       </resources>
+      <plugins>
+	      <plugin>
+	          <groupId>com.google.code.maven-replacer-plugin</groupId>
+	          <artifactId>maven-replacer-plugin</artifactId>
+	          <version>1.3.8</version>
+	          <executions>
+	              <execution>
+	                  <phase>prepare-package</phase>
+	                  <goals>
+	                      <goal>replace</goal>
+	                  </goals>
+	              </execution>
+	          </executions>
+	          <configuration>
+	              <file>target/classes/plugin.yml</file>
+	              <replacements>
+	                  <replacement>
+	                      <token>maven-version-number</token>
+	                      <value>${project.version}-b${project.build.number}</value>
+	                  </replacement>
+	              </replacements>
+	          </configuration>
+	      </plugin>
+      </plugins>
   </build>
   <repositories>
+  	<repository>
+        <id>vault</id>
+        <url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
+    </repository>
     <repository>
       <id>sk89q-repo</id>
       <url>http://maven.sk89q.com/repo/</url>
@@ -28,10 +56,22 @@
     </repository>
   </repositories>
   <dependencies>
+    <dependency>
+        <groupId>net.milkbowl.vault</groupId>
+        <artifactId>Vault</artifactId>
+        <version>1.2.19-SNAPSHOT</version>
+        <type>jar</type>
+        <scope>compile</scope>
+    </dependency>
   	<dependency>
   		<groupId>org.bukkit</groupId>
   		<artifactId>bukkit</artifactId>
   		<version>1.4.2-R0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.sk89q</groupId>
+  		<artifactId>worldedit</artifactId>
+  		<version>5.4</version>
   	</dependency>
   </dependencies>
 </project>
