@@ -3,6 +3,20 @@
   <groupId>AntiShare</groupId>
   <artifactId>AntiShare</artifactId>
   <version>4.4.0</version>
+  <build>
+        <finalName>AntiShare</finalName>
+        <sourceDirectory>${basedir}/src/</sourceDirectory>
+        <resources>
+            <resource>
+                <targetPath>resources</targetPath>
+                <filtering>false</filtering>
+                <directory>${basedir}/resources</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
   <repositories>
     <repository>
       <id>sk89q-repo</id>
