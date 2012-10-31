@@ -19,12 +19,12 @@
   	<dependency>
   		<groupId>com.sk89q</groupId>
   		<artifactId>worldedit</artifactId>
-  		<version>5.4</version>
+  		<version>5.5-SNAPSHOT</version>
   	</dependency>
   	<dependency>
 		<groupId>ru.tehkode</groupId>
 		<artifactId>PermissionsEx</artifactId>
-		<version>1.19.3</version>
+		<version>1.19.4</version>
 		<scope>system</scope>
 		<systemPath>${basedir}/lib/PermissionsEx.jar</systemPath>
 	</dependency>
