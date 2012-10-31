@@ -4,6 +4,7 @@
   <artifactId>AntiShare</artifactId>
   <version>4.4.0</version>
   <build>
+      <defaultGoal>clean package</defaultGoal>
       <finalName>AntiShare</finalName>
       <sourceDirectory>${basedir}/src/</sourceDirectory>
       <resources>
@@ -17,6 +18,17 @@
           </resource>
       </resources>
       <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>2.3.1</version>
+              <configuration>
+                  <archive>
+                      <manifestEntries>
+                      </manifestEntries>
+                  </archive>
+              </configuration>
+          </plugin>
 	      <plugin>
 	          <groupId>com.google.code.maven-replacer-plugin</groupId>
 	          <artifactId>maven-replacer-plugin</artifactId>
@@ -34,11 +46,64 @@
 	              <replacements>
 	                  <replacement>
 	                      <token>maven-version-number</token>
-	                      <value>${project.version}-b${project.build.number}</value>
+	                      <value>${project.version}</value>
 	                  </replacement>
 	              </replacements>
 	          </configuration>
 	      </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-source-plugin</artifactId>
+              <version>2.1.2</version>
+              <executions>
+                  <execution>
+                      <id>attach-sources</id>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>jar-no-fork</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>
+          <plugin>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>2.8.1</version>
+              <executions>
+                  <execution>
+                      <id>javadoc-jar</id>
+                      <phase>verify</phase>
+                      <goals>
+                          <goal>jar</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin> 
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-shade-plugin</artifactId>
+              <version>1.5</version>
+              <executions>
+                  <execution>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>shade</goal>
+                      </goals>
+                      <configuration>
+                          <artifactSet>
+                              <includes>
+                                  <include>com.feildmaster.lib:EnhancedConfiguration</include>
+                              </includes>
+                          </artifactSet>
+                          <relocations>
+                              <relocation>
+                                  <pattern>com.feildmaster.lib.configuration</pattern>
+                                  <shadedPattern>com.turt2live.antishare.config</shadedPattern>
+                              </relocation>
+                          </relocations>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
       </plugins>
   </build>
   <repositories>
@@ -54,7 +119,24 @@
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/groups/public</url>
     </repository>
+    <repository>
+        <id>onarandombox</id>
+        <url>http://repo.onarandombox.com/content/groups/public</url>
+    </repository>
   </repositories>
+  <profiles>
+      <profile>
+          <id>jenkins</id>
+          <activation>
+              <property>
+                  <name>env.BUILD_NUMBER</name>
+              </property>
+          </activation>
+          <properties>
+              <project.build.number>${env.BUILD_NUMBER}</project.build.number>
+          </properties>
+      </profile>
+  </profiles>
   <dependencies>
     <dependency>
         <groupId>net.milkbowl.vault</groupId>
@@ -73,5 +155,40 @@
   		<artifactId>worldedit</artifactId>
   		<version>5.4</version>
   	</dependency>
+  	<dependency>
+		<groupId>ru.tehkode</groupId>
+		<artifactId>PermissionsEx</artifactId>
+		<version>1.19.3</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/lib/PermissionsEx.jar</systemPath>
+	</dependency>
+  	<dependency>
+		<groupId>com.Acrobot</groupId>
+		<artifactId>ChestShop</artifactId>
+		<version>3.46</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/lib/ChestShop.jar</systemPath>
+	</dependency>
+  	<dependency>
+		<groupId>org.yi.acru</groupId>
+		<artifactId>Lockette</artifactId>
+		<version>1.7.4</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/lib/Lockette.jar</systemPath>
+	</dependency>
+  	<dependency>
+		<groupId>com.griefcraft.lwc</groupId>
+		<artifactId>LWC</artifactId>
+		<version>4.3.0</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/lib/LWC.jar</systemPath>
+	</dependency>
+    <dependency>
+        <groupId>com.onarandombox.multiversecore</groupId>
+        <artifactId>Multiverse-Core</artifactId>
+        <version>2.5</version>
+        <type>jar</type>
+        <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>
