@@ -137,28 +137,28 @@
 		<artifactId>PermissionsEx</artifactId>
 		<version>1.19.3</version>
 		<scope>system</scope>
-		<systemPath>${project.basedir}/lib/PermissionsEx.jar</systemPath>
+		<systemPath>${basedir}/lib/PermissionsEx.jar</systemPath>
 	</dependency>
   	<dependency>
 		<groupId>com.Acrobot</groupId>
 		<artifactId>ChestShop</artifactId>
 		<version>3.46</version>
 		<scope>system</scope>
-		<systemPath>${project.basedir}/lib/ChestShop.jar</systemPath>
+		<systemPath>${basedir}/lib/ChestShop.jar</systemPath>
 	</dependency>
   	<dependency>
 		<groupId>org.yi.acru</groupId>
 		<artifactId>Lockette</artifactId>
 		<version>1.7.4</version>
 		<scope>system</scope>
-		<systemPath>${project.basedir}/lib/Lockette.jar</systemPath>
+		<systemPath>${basedir}/lib/Lockette.jar</systemPath>
 	</dependency>
   	<dependency>
 		<groupId>com.griefcraft.lwc</groupId>
 		<artifactId>LWC</artifactId>
 		<version>4.3.0</version>
 		<scope>system</scope>
-		<systemPath>${project.basedir}/lib/LWC.jar</systemPath>
+		<systemPath>${basedir}/lib/LWC.jar</systemPath>
 	</dependency>
     <dependency>
         <groupId>com.onarandombox.multiversecore</groupId>
