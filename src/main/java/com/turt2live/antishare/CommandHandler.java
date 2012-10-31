@@ -38,6 +38,9 @@ public class CommandHandler implements CommandExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, Command command, String label, String[] args){
 		AntiShare plugin = AntiShare.getInstance();
+		if(sender instanceof BlockCommandSender){
+			return false;
+		}
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
