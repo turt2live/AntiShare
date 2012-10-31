@@ -21,9 +21,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.regions.WorldSplit;
 import com.turt2live.antishare.regions.WorldSplit.Axis;
 
@@ -55,8 +55,9 @@ public class PerWorldConfig {
 				file.renameTo(new File(newDir, file.getName()));
 				file.delete();
 			}
-			if(files > 0)
+			if(files > 0){
 				AntiShare.getInstance().log("World Configurations Migrated: " + files, Level.INFO);
+			}
 		}
 	}
 

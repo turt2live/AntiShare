@@ -200,10 +200,11 @@ public class SQLite extends Database {
 			//dbm = this.open().getMetaData();
 			md = this.connection.getMetaData();
 			ResultSet tables = md.getTables(null, null, table, null);
-			if(tables.next())
+			if(tables.next()){
 				return true;
-			else
+			}else{
 				return false;
+			}
 		}catch(SQLException e){
 			writeError("Could not check if table \"" + table + "\" exists, SQLException: " + e.getMessage(), true);
 			return false;
@@ -225,8 +226,9 @@ public class SQLite extends Database {
 			return true;
 		}catch(SQLException e){
 			if(!(e.getMessage().toLowerCase().contains("locking") || e.getMessage().toLowerCase().contains("locked")) &&
-					!e.toString().contains("not return ResultSet"))
+					!e.toString().contains("not return ResultSet")){
 				writeError("Error in wipeTable() query: " + e, false);
+			}
 			return false;
 		}
 	}

@@ -185,10 +185,11 @@ public class MySQL extends Database {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM " + table);
 
-			if(result != null)
+			if(result != null){
 				return true;
-			else
+			}else{
 				return false;
+			}
 		}catch(SQLException e){
 			writeError("Could not check if table \"" + table + "\" exists, SQLException: " + e.getMessage(), true);
 			return false;

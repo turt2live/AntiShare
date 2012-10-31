@@ -23,8 +23,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
 
 /**
  * Block Manager - Handles creative/survival blocks
@@ -121,8 +121,9 @@ public class BlockManager {
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
 					if(atLocation.getType() != block.expectedType){
-						if(plugin.getConfig().getBoolean("other.debug"))
+						if(plugin.getConfig().getBoolean("other.debug")){
 							plugin.log("Creative block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
+						}
 						block.expectedType = atLocation.getType();
 					}
 				}
@@ -130,8 +131,9 @@ public class BlockManager {
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
 					if(atLocation.getType() != block.expectedType){
-						if(plugin.getConfig().getBoolean("other.debug"))
+						if(plugin.getConfig().getBoolean("other.debug")){
 							plugin.log("Survival block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
+						}
 						block.expectedType = atLocation.getType();
 					}
 				}
@@ -139,8 +141,9 @@ public class BlockManager {
 					Block atLocation = block.location.getBlock();
 					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
 					if(atLocation.getType() != block.expectedType){
-						if(plugin.getConfig().getBoolean("other.debug"))
+						if(plugin.getConfig().getBoolean("other.debug")){
 							plugin.log("Adventure block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
+						}
 						block.expectedType = atLocation.getType();
 					}
 				}

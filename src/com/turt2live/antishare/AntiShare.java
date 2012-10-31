@@ -26,9 +26,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.inventory.InventoryManager;
+import com.turt2live.antishare.lib.feildmaster.configuration.PluginWrapper;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
 import com.turt2live.antishare.money.MoneyManager;
@@ -204,18 +204,24 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
-		if(regions != null)
+		if(regions != null){
 			regions.save();
-		if(blocks != null)
+		}
+		if(blocks != null){
 			blocks.save();
-		if(inventories != null)
+		}
+		if(inventories != null){
 			inventories.save();
-		if(tender != null)
+		}
+		if(tender != null){
 			tender.save();
-		if(metrics != null)
+		}
+		if(metrics != null){
 			metrics.flush();
-		if(sql != null)
+		}
+		if(sql != null){
 			sql.disconnect();
+		}
 
 		// Disable
 		getServer().getScheduler().cancelTasks(this);
@@ -268,11 +274,13 @@ public class AntiShare extends PluginWrapper {
 		blocks.reload();
 		inventories.reload();
 		if(sql != null)
+		{
 			sql.reconnect();
-		// Metrics has no reload
-		// Tracker List has no reload
-		// Simple Notice has no reload
-		// xMail has no reload
+			// Metrics has no reload
+			// Tracker List has no reload
+			// Simple Notice has no reload
+			// xMail has no reload
+		}
 	}
 
 	/**

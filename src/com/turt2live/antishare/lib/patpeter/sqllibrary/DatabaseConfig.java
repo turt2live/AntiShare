@@ -65,22 +65,26 @@ public class DatabaseConfig {
 		}
 
 		public boolean validParam(DatabaseType toCheck){
-			if(dbTypes.contains(DatabaseType.ALL))
+			if(dbTypes.contains(DatabaseType.ALL)){
 				return true;
-			if(dbTypes.contains(toCheck))
+			}
+			if(dbTypes.contains(toCheck)){
 				return true;
+			}
 			return false;
 
 		}
 
 		private static void updateCount(DatabaseType type){
-			if(count == null)
+			if(count == null){
 				count = new EnumMap<DatabaseType, Integer>(DatabaseType.class);
+			}
 			Integer nb = count.get(type);
-			if(nb == null)
+			if(nb == null){
 				nb = 1;
-			else
+			}else{
 				nb++;
+			}
 			count.put(type, nb);
 		}
 
@@ -96,8 +100,9 @@ public class DatabaseConfig {
 	 * @throws IllegalArgumentException thrown if the database type is "ALL"
 	 */
 	public void setType(DatabaseType type) throws IllegalArgumentException{
-		if(type == DatabaseType.ALL)
+		if(type == DatabaseType.ALL){
 			throw new IllegalArgumentException("You can't set your database type to ALL");
+		}
 		this.type = type;
 	}
 
@@ -125,11 +130,13 @@ public class DatabaseConfig {
 
 	public DatabaseConfig setParameter(Parameter param, String value) throws NullPointerException,
 			InvalidConfiguration{
-		if(this.type == null)
+		if(this.type == null){
 			throw new NullPointerException("You must set the type of the database first");
-		if(!param.validParam(type))
+		}
+		if(!param.validParam(type)){
 			throw new InvalidConfiguration(param.toString()
 					+ " is invalid for a database type of : " + type.toString());
+		}
 		config.put(param, value);
 		return this;
 
@@ -140,8 +147,9 @@ public class DatabaseConfig {
 	}
 
 	public boolean isValid() throws InvalidConfiguration{
-		if(log == null)
+		if(log == null){
 			throw new InvalidConfiguration("You need to set the logger.");
+		}
 		return config.size() == Parameter.getCount(type);
 	}
 }

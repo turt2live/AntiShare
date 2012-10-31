@@ -12,8 +12,8 @@ package com.turt2live.antishare.notification;
 
 import java.io.File;
 
-import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
 
 /**
  * Represents messages in AntiShare

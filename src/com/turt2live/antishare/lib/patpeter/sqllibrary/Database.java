@@ -168,8 +168,9 @@ public abstract class Database {
 	 */
 	//abstract boolean checkConnection();
 	public boolean checkConnection(){
-		if(connection != null)
+		if(connection != null){
 			return true;
+		}
 		return false;
 	}
 
@@ -209,91 +210,93 @@ public abstract class Database {
 			throw new SQLException("Queries must be at least 10 characters long.");*/
 
 		//try {
-		if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("SELECT"))
+		if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("SELECT")){
 			return Statements.SELECT;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("INSERT"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("INSERT")){
 			return Statements.INSERT;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("UPDATE"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("UPDATE")){
 			return Statements.UPDATE;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("DELETE"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("DELETE")){
 			return Statements.DELETE;
-		else if(query.length() > 1 && query.substring(0, 2).equalsIgnoreCase("DO"))
+		}else if(query.length() > 1 && query.substring(0, 2).equalsIgnoreCase("DO")){
 			return Statements.DO;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("REPLACE"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("REPLACE")){
 			return Statements.REPLACE;
-		else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("LOAD"))
+		}else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("LOAD")){
 			return Statements.LOAD;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("HANDLER"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("HANDLER")){
 			return Statements.HANDLER;
-		else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("CALL"))
+		}else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("CALL")){
 			return Statements.CALL;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("CREATE"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("CREATE")){
 			return Statements.CREATE;
-		else if(query.length() > 4 && query.substring(0, 5).equalsIgnoreCase("ALTER"))
+		}else if(query.length() > 4 && query.substring(0, 5).equalsIgnoreCase("ALTER")){
 			return Statements.ALTER;
-		else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("DROP"))
+		}else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("DROP")){
 			return Statements.DROP;
-		else if(query.length() > 7 && query.substring(0, 8).equalsIgnoreCase("TRUNCATE"))
+		}else if(query.length() > 7 && query.substring(0, 8).equalsIgnoreCase("TRUNCATE")){
 			return Statements.TRUNCATE;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("RENAME"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("RENAME")){
 			return Statements.RENAME;
-		else if(query.length() > 4 && query.substring(0, 5).equalsIgnoreCase("START"))
+		}else if(query.length() > 4 && query.substring(0, 5).equalsIgnoreCase("START")){
 			return Statements.START;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("COMMIT"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("COMMIT")){
 			return Statements.COMMIT;
-		else if(query.length() > 7 && query.substring(0, 8).equalsIgnoreCase("ROLLBACK"))
+		}else if(query.length() > 7 && query.substring(0, 8).equalsIgnoreCase("ROLLBACK")){
 			return Statements.ROLLBACK;
-		else if(query.length() > 8 && query.substring(0, 9).equalsIgnoreCase("SAVEPOINT"))
+		}else if(query.length() > 8 && query.substring(0, 9).equalsIgnoreCase("SAVEPOINT")){
 			return Statements.SAVEPOINT;
-		else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("LOCK"))
+		}else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("LOCK")){
 			return Statements.LOCK;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("UNLOCK"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("UNLOCK")){
 			return Statements.UNLOCK;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("PREPARE"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("PREPARE")){
 			return Statements.PREPARE;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("EXECUTE"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("EXECUTE")){
 			return Statements.EXECUTE;
-		else if(query.length() > 9 && query.substring(0, 10).equalsIgnoreCase("DEALLOCATE"))
+		}else if(query.length() > 9 && query.substring(0, 10).equalsIgnoreCase("DEALLOCATE")){
 			return Statements.DEALLOCATE;
-		else if(query.length() > 2 && query.substring(0, 3).equalsIgnoreCase("SET"))
+		}else if(query.length() > 2 && query.substring(0, 3).equalsIgnoreCase("SET")){
 			return Statements.SET;
-		else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("SHOW"))
+		}else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("SHOW")){
 			return Statements.SHOW;
-		else if(query.length() > 7 && query.substring(0, 8).equalsIgnoreCase("DESCRIBE"))
+		}else if(query.length() > 7 && query.substring(0, 8).equalsIgnoreCase("DESCRIBE")){
 			return Statements.DESCRIBE;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("EXPLAIN"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("EXPLAIN")){
 			return Statements.EXPLAIN;
-		else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("HELP"))
+		}else if(query.length() > 3 && query.substring(0, 4).equalsIgnoreCase("HELP")){
 			return Statements.HELP;
-		else if(query.length() > 2 && query.substring(0, 3).equalsIgnoreCase("USE"))
+		}else if(query.length() > 2 && query.substring(0, 3).equalsIgnoreCase("USE")){
 			return Statements.USE;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("ANALYSE"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("ANALYSE")){
 			return Statements.ANALYZE;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("ATTACH"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("ATTACH")){
 			return Statements.ATTACH;
-		else if(query.length() > 4 && query.substring(0, 5).equalsIgnoreCase("BEGIN"))
+		}else if(query.length() > 4 && query.substring(0, 5).equalsIgnoreCase("BEGIN")){
 			return Statements.BEGIN;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("DETACH"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("DETACH")){
 			return Statements.DETACH;
-		else if(query.length() > 2 && query.substring(0, 3).equalsIgnoreCase("END"))
+		}else if(query.length() > 2 && query.substring(0, 3).equalsIgnoreCase("END")){
 			return Statements.END;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("INDEXED"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("INDEXED")){
 			return Statements.INDEXED;
-		else if(query.length() > 1 && query.substring(0, 2).equalsIgnoreCase("ON"))
+		}else if(query.length() > 1 && query.substring(0, 2).equalsIgnoreCase("ON")){
 			return Statements.ON;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("PRAGMA"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("PRAGMA")){
 			return Statements.PRAGMA;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("REINDEX"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("REINDEX")){
 			return Statements.REINDEX;
-		else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("RELEASE"))
+		}else if(query.length() > 6 && query.substring(0, 7).equalsIgnoreCase("RELEASE")){
 			return Statements.RELEASE;
-		else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("VACUUM"))
+		}else if(query.length() > 5 && query.substring(0, 6).equalsIgnoreCase("VACUUM")){
 			return Statements.VACUUM;
-		else
+		}
+		else{
 			throw new SQLException("Unknown statement \"" + query + "\".");
-		//} catch (IndexOutOfBoundsException e) {
-		//	throw new SQLException("Query not long enough: \"" + query + "\".");
-		//}
+			//} catch (IndexOutOfBoundsException e) {
+			//	throw new SQLException("Query not long enough: \"" + query + "\".");
+			//}
+		}
 	}
 
 	/**

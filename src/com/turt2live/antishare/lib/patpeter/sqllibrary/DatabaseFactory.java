@@ -23,10 +23,11 @@ import com.turt2live.antishare.lib.patpeter.sqllibrary.DatabaseConfig.Parameter;
  */
 public class DatabaseFactory {
 	public static Database createDatabase(DatabaseConfig config) throws InvalidConfiguration{
-		if(!config.isValid())
+		if(!config.isValid()){
 			throw new InvalidConfiguration(
 					"The configuration is invalid, you don't have enought parameter for that DB : "
 							+ config.getType());
+		}
 		switch (config.getType()){
 		case MYSQL:
 			return new MySQL(config.getLog(), config.getParameter(Parameter.DB_PREFIX),

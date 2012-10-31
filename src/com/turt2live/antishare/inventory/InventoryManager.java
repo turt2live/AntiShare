@@ -28,10 +28,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
 
@@ -70,8 +70,9 @@ public class InventoryManager implements Listener {
 
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onInventoryClick(InventoryClickEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Inventory inventory = event.getInventory();
 		InventoryHolder holder = inventory.getHolder();
 		if(holder != null && holder instanceof Player && inventory.getType() == org.bukkit.event.inventory.InventoryType.PLAYER){
