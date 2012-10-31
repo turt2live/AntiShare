@@ -11,7 +11,6 @@
 package com.turt2live.antishare;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +30,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
@@ -59,9 +59,9 @@ import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.painting.PaintingBreakEvent;
-import org.bukkit.event.painting.PaintingBreakEvent.RemoveCause;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -146,8 +146,9 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void onWorldUnload(WorldUnloadEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		World world = event.getWorld();
 		config.remove(world);
 	}
@@ -156,8 +157,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		AlertType type = AlertType.ILLEGAL;
@@ -288,17 +290,6 @@ public class ASListener implements Listener {
 					}
 				}
 
-				// TODO: Remove 1.4 'hack'
-				if(plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
-					Collection<ItemFrame> itemframes = block.getWorld().getEntitiesByClass(ItemFrame.class);
-					for(ItemFrame frame : itemframes){
-						double distance = frame.getLocation().distanceSquared(block.getLocation());
-						if(distance >= 0 && distance <= 2){
-							frame.remove();
-						}
-					}
-				}
-
 				// Check for falling sand/gravel exploit
 				boolean moreBlocks = true;
 				Block active = block;
@@ -401,8 +392,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		AlertType type = AlertType.ILLEGAL;
@@ -468,8 +460,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onInteract(PlayerInteractEvent event){
-		if(event.isCancelled() && event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_AIR)
+		if(event.isCancelled() && event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_AIR){
 			return;
+		}
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
 		Action action = event.getAction();
@@ -665,8 +658,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onInteractEntity(PlayerInteractEntityEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 		AlertType type = AlertType.ILLEGAL;
 
@@ -752,8 +746,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onCartDeath(VehicleDestroyEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Entity attacker = event.getAttacker();
 		Vehicle potentialCart = event.getVehicle();
 
@@ -826,8 +821,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onExpBottle(ExpBottleEvent event){
-		if(event.getExperience() == 0)
+		if(event.getExperience() == 0){
 			return;
+		}
 
 		ThrownExpBottle bottle = event.getEntity();
 		LivingEntity shooter = bottle.getShooter();
@@ -878,8 +874,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onDrop(PlayerDropItemEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 		Item item = event.getItemDrop();
 		ItemStack itemStack = item.getItemStack();
@@ -931,8 +928,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPickup(PlayerPickupItemEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 		Item item = event.getItem();
 		ItemStack itemStack = item.getItemStack();
@@ -1042,8 +1040,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onCommand(PlayerCommandPreprocessEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 		String command = event.getMessage().toLowerCase();
 		AlertType type = AlertType.ILLEGAL;
@@ -1082,12 +1081,14 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void onMove(PlayerMoveEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 
 		// Significant move check
-		if(event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ())
+		if(event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()){
 			return;
+		}
 
 		Player player = event.getPlayer();
 		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
@@ -1122,8 +1123,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onGameModeChange(PlayerGameModeChangeEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 		GameMode from = player.getGameMode();
 		GameMode to = event.getNewGameMode();
@@ -1250,8 +1252,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onCombat(EntityDamageByEntityEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		DamageCause cause = event.getCause();
 		Entity attacker = event.getDamager();
 		Entity target = event.getEntity();
@@ -1370,8 +1373,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onEntityTarget(EntityTargetEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Entity target = event.getTarget();
 		Player playerTarget = null;
 		AlertType type = AlertType.ILLEGAL;
@@ -1398,8 +1402,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPistonExtend(BlockPistonExtendEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		for(Block block : event.getBlocks()){
 			// Check for block type
 			GameMode type = plugin.getBlockManager().getType(block);
@@ -1422,8 +1427,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPistonRetract(BlockPistonRetractEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		if(!event.isSticky()){ // Only handle moving blocks
 			return;
 		}
@@ -1489,8 +1495,9 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void onKick(PlayerKickEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 
 		// Remove from regions
@@ -1572,8 +1579,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 		Player player = event.getPlayer();
 		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
 		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
@@ -1635,8 +1643,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onCrafting(CraftItemEvent event){
-		if(event.isCancelled())
+		if(event.isCancelled()){
 			return;
+		}
 
 		HumanEntity he = event.getWhoClicked();
 		if((he instanceof Player)){
@@ -1672,8 +1681,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPotionSplash(PotionSplashEvent event){
-		if(event.isCancelled() || !(event.getPotion().getShooter() instanceof Player))
+		if(event.isCancelled() || !(event.getPotion().getShooter() instanceof Player)){
 			return;
+		}
 
 		Player player = (Player) event.getPotion().getShooter();
 		AlertType type = AlertType.LEGAL;
@@ -1717,8 +1727,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onProjectileLaunch(ProjectileLaunchEvent event){
-		if(event.isCancelled() || !(event.getEntity().getShooter() instanceof Player))
+		if(event.isCancelled() || !(event.getEntity().getShooter() instanceof Player)){
 			return;
+		}
 
 		Player player = (Player) event.getEntity().getShooter();
 		AlertType type = AlertType.LEGAL;
@@ -1768,21 +1779,21 @@ public class ASListener implements Listener {
 		}
 	}
 
-	// ################# Painting Break Event
+	// ################# Hanging Break Event
 
 	@EventHandler (priority = EventPriority.HIGHEST)
-	public void onPaintingBreak(PaintingBreakEvent event){
+	public void onPaintingBreak(HangingBreakEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
 			return;
 		}
 		if(event.getCause() == RemoveCause.PHYSICS){
 			// Removed by something
-			Painting painting = event.getPainting();
-			Location block = painting.getLocation().getBlock().getRelative(painting.getAttachedFace()).getLocation();
+			Hanging hanging = event.getEntity();
+			Location block = hanging.getLocation().getBlock().getRelative(hanging.getAttachedFace()).getLocation();
 			GameMode gamemode = plugin.getBlockManager().getRecentBreak(block);
 			if(gamemode != null && gamemode == GameMode.CREATIVE){
 				event.setCancelled(true);
-				painting.remove();
+				hanging.remove();
 			}
 		}
 	}
