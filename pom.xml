@@ -59,7 +59,7 @@
   <distributionManagement>
     <repository>
       <id>turt2live-ftp</id>
-      <url>ftp://ftp.turt2live.com/home/turt2l5/public_html/maven2</url>
+      <url>ftp://ftp.turt2live.com/public_html/maven2</url>
     </repository>
   </distributionManagement>
   <repositories>
