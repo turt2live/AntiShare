@@ -1,24 +1,24 @@
 /************************************************************************
- * This file is part of SQLibrary.									
- *																		
+ * This file is part of SQLibrary.
+ * 
  * SQLibrary is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * SQLibrary is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * SQLibrary is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
  * You should have received a copy of the GNU General Public License
- * along with SQLibrary.  If not, see <http://www.gnu.org/licenses/>.
+ * along with SQLibrary. If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
 package com.turt2live.antishare.lib.patpeter.sqllibrary;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class InvalidConfiguration extends Exception {
 
@@ -30,14 +30,14 @@ public class InvalidConfiguration extends Exception {
 	/**
 	 * 
 	 */
-	public InvalidConfiguration() {
+	public InvalidConfiguration(){
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param message
 	 */
-	public InvalidConfiguration(String message) {
+	public InvalidConfiguration(String message){
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -45,7 +45,7 @@ public class InvalidConfiguration extends Exception {
 	/**
 	 * @param cause
 	 */
-	public InvalidConfiguration(Throwable cause) {
+	public InvalidConfiguration(Throwable cause){
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -54,7 +54,7 @@ public class InvalidConfiguration extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public InvalidConfiguration(String message, Throwable cause) {
+	public InvalidConfiguration(String message, Throwable cause){
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -66,8 +66,8 @@ public class InvalidConfiguration extends Exception {
 	 * @param writableStackTrace
 	 */
 	public InvalidConfiguration(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message,cause);
+			boolean writableStackTrace){
+		super(message, cause);
 		//super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
