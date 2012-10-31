@@ -10,9 +10,7 @@ Since 4.3.0:
 	- Item frames can be protected from being placed and used (setting the image)
 	- Item frames can also be setup to not drop when the block they are attached to is broken
 - Updated SQL to support MySQL and SQLite better
+- (AntiShare API users) AntiShare now runs off maven (repo coming soon?)
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected)
-
-Known 1.4 bugs relating to AntiShare:
-- Skulls drop an item when cancelled (ticket: https://bukkit.atlassian.net/browse/BUKKIT-2685)
