@@ -1,4 +1,4 @@
-package com.feildmaster.lib.configuration;
+package com.turt2live.antishare.lib.feildmaster.configuration;
 
 import java.io.File;
 import java.io.InputStream;
