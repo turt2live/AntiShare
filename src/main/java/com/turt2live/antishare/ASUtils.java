@@ -508,7 +508,7 @@ public class ASUtils {
 	 * @return true if gravity applies
 	 */
 	public static boolean isAffectedByGravity(Material material){
-		return material == Material.GRAVEL || material == Material.SAND;
+		return material == Material.GRAVEL || material == Material.SAND || material == Material.ANVIL;
 	}
 
 }
