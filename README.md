@@ -18,6 +18,18 @@ ASAPI api = new ASAPI();
 
 From there you can access the sub-APIs for AntiShare! Looking for JavaDocs? [Click here!](http://jd.t2ldev.com/AntiShare)
 
+Maven
+-----
+
+POM Information:
+
+```xml
+<repository>
+	<id>antishare-repo</id>
+	<url>http://repo.turt2live.com</url>
+</repository>
+```
+
 Other Information
 -----------------
 
