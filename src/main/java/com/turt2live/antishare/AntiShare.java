@@ -41,9 +41,11 @@ import com.turt2live.antishare.regions.RegionFactory;
 import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.signs.SignManager;
 import com.turt2live.antishare.storage.BlockManager;
-import com.turt2live.antishare.storage.ItemMap;
 import com.turt2live.antishare.storage.PerWorldConfig;
-import com.turt2live.antishare.storage.SQL;
+import com.turt2live.antishare.util.SQL;
+import com.turt2live.antishare.util.generic.ConflictThread;
+import com.turt2live.antishare.util.generic.ItemMap;
+import com.turt2live.antishare.util.generic.UpdateChecker;
 
 /**
  * AntiShare

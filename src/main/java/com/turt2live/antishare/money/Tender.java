@@ -14,7 +14,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.api.ASGameMode;
+import com.turt2live.antishare.util.generic.ASGameMode;
 
 /**
  * A class for money (Reward or Fine)

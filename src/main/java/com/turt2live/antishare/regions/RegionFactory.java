@@ -18,11 +18,11 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.selections.Selection;
-import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
+import com.turt2live.antishare.util.ASUtils;
 
 /**
  * Creates, edits, and removes regions
@@ -314,7 +314,7 @@ public class RegionFactory {
 		}
 
 		// Add the region
-		regions.addRegion(new com.turt2live.antishare.Selection(selection), player.getName(), name, gamemode);
+		regions.addRegion(new com.turt2live.antishare.util.generic.Selection(selection), player.getName(), name, gamemode);
 		ASUtils.sendToPlayer(player, ChatColor.GREEN + "Region '" + name + "' added.", true);
 	}
 

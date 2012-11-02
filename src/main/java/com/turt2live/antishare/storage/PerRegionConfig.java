@@ -21,6 +21,8 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.storage.PerWorldConfig.ListType;
+import com.turt2live.antishare.util.events.EntityList;
+import com.turt2live.antishare.util.events.EventList;
 
 /**
  * Region configuration

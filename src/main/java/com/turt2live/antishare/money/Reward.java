@@ -15,9 +15,9 @@ import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.ASUtils;
-import com.turt2live.antishare.api.ASGameMode;
 import com.turt2live.antishare.permissions.PermissionNodes;
+import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.generic.ASGameMode;
 
 /**
  * Reward for doing something

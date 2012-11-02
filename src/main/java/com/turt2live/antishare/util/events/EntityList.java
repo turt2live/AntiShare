@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.storage;
+package com.turt2live.antishare.util.events;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import java.util.logging.Level;
 
 import org.bukkit.entity.Entity;
 
-import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.api.ASEntity;
+import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.generic.ASEntity;
 
 /**
  * Entity List

@@ -16,10 +16,10 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.api.MVWorlds;
 import com.turt2live.antishare.money.Tender.TenderType;
+import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.generic.MVWorlds;
 
 /**
  * Creates messages to send to the client

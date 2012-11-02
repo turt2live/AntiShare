@@ -18,13 +18,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.metrics.ActionsTracker;
 import com.turt2live.antishare.metrics.Tracker;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
+import com.turt2live.antishare.util.ASUtils;
 
 /**
  * Alerts people

@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare;
+package com.turt2live.antishare.util.generic;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,6 +21,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import com.turt2live.antishare.AntiShare;
 
 /**
  * Update Checker

@@ -27,9 +27,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.Selection;
 import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.storage.SQL;
+import com.turt2live.antishare.util.SQL;
+import com.turt2live.antishare.util.generic.Selection;
 
 /**
  * Handles and managed ASRegions

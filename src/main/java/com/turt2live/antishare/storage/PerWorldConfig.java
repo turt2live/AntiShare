@@ -21,11 +21,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.regions.WorldSplit;
 import com.turt2live.antishare.regions.WorldSplit.Axis;
+import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.events.EntityList;
+import com.turt2live.antishare.util.events.EventList;
 
 /**
  * Represents a per-world configuration

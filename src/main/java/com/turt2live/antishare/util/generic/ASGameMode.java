@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.api;
+package com.turt2live.antishare.util.generic;
 
 import org.bukkit.GameMode;
 

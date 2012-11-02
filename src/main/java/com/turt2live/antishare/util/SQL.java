@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.storage;
+package com.turt2live.antishare.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -24,12 +24,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.api.ASGameMode;
 import com.turt2live.antishare.lib.feildmaster.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
+import com.turt2live.antishare.util.generic.ASGameMode;
 
 /**
  * Manages rewards and fines

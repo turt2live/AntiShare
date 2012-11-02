@@ -1,8 +1,10 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.util.generic;
 
 import java.util.logging.Level;
 
 import org.bukkit.plugin.Plugin;
+
+import com.turt2live.antishare.AntiShare;
 
 public class ConflictThread implements Runnable {
 
