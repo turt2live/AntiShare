@@ -19,7 +19,6 @@ commands:
       /<command> listregions = List all regions
       /<command> listregions # = List regions found on page #
       /<command> mirror <player> - Mirror <player>'s inventory
-      /<command> convert <sql/yaml> <sql/yaml> - Convert save format
       /<command> tool - Get the AntiShare tool (Blaze Rod)
       /<command> money <on/off> - Turns on/off fine/reward messages
       /<command> money status - Tells you if you get fine/reward messages
