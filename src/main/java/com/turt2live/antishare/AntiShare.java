@@ -26,9 +26,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.inventory.InventoryManager;
-import com.turt2live.antishare.lib.feildmaster.configuration.PluginWrapper;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
 import com.turt2live.antishare.money.MoneyManager;

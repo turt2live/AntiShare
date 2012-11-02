@@ -1,4 +1,4 @@
-package com.turt2live.antishare.lib.feildmaster.configuration;
+package com.feildmaster.lib.configuration;
 
 public class PluginWrapper extends org.bukkit.plugin.java.JavaPlugin {
 	private EnhancedConfiguration config;
