@@ -1799,4 +1799,21 @@ public class ASListener implements Listener {
 		}
 	}
 
+	// ################# Potion Effect Change Event
+
+	//	@EventHandler (priority = EventPriority.HIGHEST)
+	//	public void onPotionEffectChange(EntityPotionEffectChangeEvent event){
+	//		if(event.isCancelled() || !(event.getEntity() instanceof Player)){
+	//			return;
+	//		}
+	//		if(event.getCause() == PotionChangeCause.BEACON){
+	//			Block beacon = event.getLocation();
+	//			GameMode beaconGM = plugin.getBlockManager().getType(beacon);
+	//			Player player = (Player) event.getEntity();
+	//			if(player.getGameMode() != beaconGM){
+	//				event.setCancelled(true);
+	//			}
+	//		}
+	//	}
+
 }
