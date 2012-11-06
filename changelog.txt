@@ -14,4 +14,7 @@ Since 4.3.0:
 - Fix incompatibilities with other plugins
 
 1.4 changes that need to be protected:
-- Beacon powers need to be blocked (eg: if made by creative player, only creative is affected)
+- Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
+
+TODO:
+- Tab complete methods
