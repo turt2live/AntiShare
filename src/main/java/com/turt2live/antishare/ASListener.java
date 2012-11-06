@@ -156,7 +156,7 @@ public class ASListener implements Listener {
 
 	// ################# Block Break
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event){
 		if(event.isCancelled()){
 			return;
@@ -391,7 +391,7 @@ public class ASListener implements Listener {
 
 	// ################# Block Place
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onBlockPlace(BlockPlaceEvent event){
 		if(event.isCancelled()){
 			return;
@@ -459,7 +459,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onInteract(PlayerInteractEvent event){
 		if(event.isCancelled() && event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_AIR){
 			return;
@@ -657,7 +657,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Interact Entity
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onInteractEntity(PlayerInteractEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -745,7 +745,7 @@ public class ASListener implements Listener {
 
 	// ################# Cart Death Check
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onCartDeath(VehicleDestroyEvent event){
 		if(event.isCancelled()){
 			return;
@@ -783,7 +783,7 @@ public class ASListener implements Listener {
 
 	// ################# Egg Check
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onEggThrow(PlayerEggThrowEvent event){
 		Player player = event.getPlayer();
 		AlertType type = AlertType.ILLEGAL;
@@ -820,7 +820,7 @@ public class ASListener implements Listener {
 
 	// ################# Experience Bottle Check
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onExpBottle(ExpBottleEvent event){
 		if(event.getExperience() == 0){
 			return;
@@ -873,7 +873,7 @@ public class ASListener implements Listener {
 
 	// ################# Drop Item
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onDrop(PlayerDropItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -927,7 +927,7 @@ public class ASListener implements Listener {
 
 	// ################# Pickup Item
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPickup(PlayerPickupItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -981,7 +981,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Death
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onDeath(PlayerDeathEvent event){
 		Player player = event.getEntity();
 		List<ItemStack> drops = event.getDrops();
@@ -1039,7 +1039,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Command
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onCommand(PlayerCommandPreprocessEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1251,7 +1251,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Combat
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onCombat(EntityDamageByEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1372,7 +1372,7 @@ public class ASListener implements Listener {
 
 	// ################# Entity Target
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onEntityTarget(EntityTargetEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1401,7 +1401,7 @@ public class ASListener implements Listener {
 
 	// ################# Piston Move (Extend)
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPistonExtend(BlockPistonExtendEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1426,7 +1426,7 @@ public class ASListener implements Listener {
 
 	// ################# Piston Move (Retract)
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPistonRetract(BlockPistonRetractEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1513,7 +1513,7 @@ public class ASListener implements Listener {
 
 	// ################# Player World Change
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onWorldChange(PlayerChangedWorldEvent event){
 		Player player = event.getPlayer();
 		World to = player.getWorld();
@@ -1578,7 +1578,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Teleport
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
 		if(event.isCancelled()){
 			return;
