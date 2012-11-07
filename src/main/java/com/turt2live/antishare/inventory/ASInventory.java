@@ -180,11 +180,17 @@ public class ASInventory implements Cloneable {
 
 			// Load data
 			// Structure: yml:world.gamemode.slot.properties
+			List<String> removeWorlds = new ArrayList<String>();
 			for(String world : file.getKeys(false)){
 				for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
 					World worldV = Bukkit.getWorld(world);
 					if(worldV == null){
 						AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE);
+						if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
+							AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is REMOVING this world from the player.", Level.SEVERE);
+							AntiShare.getInstance().log("This cannot be reversed. Check your settings if you don't like this.", Level.SEVERE);
+							removeWorlds.add(world);
+						}
 						continue;
 					}
 					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
@@ -194,6 +200,13 @@ public class ASInventory implements Cloneable {
 					}
 					inventories.add(inventory);
 				}
+			}
+			// Remove old worlds
+			if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){ // Safe-guard check
+				for(String world : removeWorlds){
+					file.set(world, null);
+				}
+				file.save();
 			}
 		}
 

@@ -98,6 +98,15 @@ settings:
   adventure-breaking-creative-blocks:
     block-drops: false
     deny: true
+  # Leave as false to avoid inventory cleanup
+  # WARNING: This will delete old world inventories from
+  # players. If this is TRUE and your plan on using an
+  # old world again, SET THIS TO FALSE.
+  # If you refuse to listen to this, at least make a backup.
+  # AntiShare will do as it's told, and it's developers
+  # will not sympathize if you lost all your player
+  # information because you were careless.
+  remove-old-inventories: false
 # Where the magic happens.
 # Here you can define EXACTLY what you want
 # AntiShare to control (restrict). You can use

@@ -13,6 +13,8 @@ Since 4.3.0:
 - (AntiShare API users) AntiShare now runs off maven (repo coming soon?)
 - Fix incompatibilities with other plugins
 - Added tab complete commands
+- Added a way to remove old worlds from players
+    == WARNING == This is set to OFF by default because it causes destruction. Only turn it on if you know what it does.
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
