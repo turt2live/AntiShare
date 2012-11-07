@@ -304,7 +304,7 @@ public class CommandHandler implements CommandExecutor {
 				}else if(args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("gamemode") || args[0].equalsIgnoreCase("gm")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.CHECK)){
 						GameMode gm = null;
-						if(args.length > 1){
+						if(args.length > 1 && !args[1].equalsIgnoreCase("all")){
 							gm = ASUtils.getGameMode(args[1]);
 							if(gm == null){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "Unknown Game Mode!", true);

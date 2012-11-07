@@ -12,9 +12,7 @@ Since 4.3.0:
 - Updated SQL to support MySQL and SQLite better
 - (AntiShare API users) AntiShare now runs off maven (repo coming soon?)
 - Fix incompatibilities with other plugins
+- Added tab complete commands
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
-
-TODO:
-- Tab complete methods

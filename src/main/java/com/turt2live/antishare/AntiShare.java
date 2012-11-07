@@ -177,6 +177,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Command handlers
 		getCommand("antishare").setExecutor(new CommandHandler());
+		getCommand("antishare").setTabCompleter(new TabHandler());
 
 		// Check players
 		for(Player player : Bukkit.getOnlinePlayers()){
@@ -275,14 +276,13 @@ public class AntiShare extends PluginWrapper {
 		// Region Factory has no reload
 		blocks.reload();
 		inventories.reload();
-		if(sql != null)
-		{
+		if(sql != null){
 			sql.reconnect();
-			// Metrics has no reload
-			// Tracker List has no reload
-			// Simple Notice has no reload
-			// xMail has no reload
 		}
+		// Metrics has no reload
+		// Tracker List has no reload
+		// Simple Notice has no reload
+		// xMail has no reload
 	}
 
 	/**
