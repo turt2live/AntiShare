@@ -10,7 +10,7 @@ Since 4.3.0:
 	- Item frames can be protected from being placed and used (setting the image)
 	- Item frames can also be setup to not drop when the block they are attached to is broken
 - Updated SQL to support MySQL and SQLite better
-- (AntiShare API users) AntiShare now runs off maven (repo coming soon?)
+- (AntiShare API users) AntiShare now runs off maven (repo.turt2live.com)
 - Fix incompatibilities with other plugins
 - Added tab complete commands
 - Added a way to remove old worlds from players
