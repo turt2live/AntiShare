@@ -187,7 +187,7 @@ public class ASInventory implements Cloneable {
 					if(worldV == null){
 						AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE);
 						if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
-							AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is REMOVING this world from the player.", Level.SEVERE);
+							AntiShare.getInstance().log("=== AntiShare is REMOVING this world from the player ===", Level.SEVERE);
 							AntiShare.getInstance().log("This cannot be reversed. Check your settings if you don't like this.", Level.SEVERE);
 							removeWorlds.add(world);
 						}
