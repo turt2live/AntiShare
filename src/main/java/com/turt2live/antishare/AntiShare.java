@@ -25,9 +25,13 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.compatibility.HookManager;
+import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
@@ -164,6 +168,9 @@ public class AntiShare extends PluginWrapper {
 
 		// Migrate region players (3.8.0-3.9.0)
 		migratePlayerData();
+
+		// Convert inventories (3.1.3-3.2.0/Current)
+		convert313Inventories();
 
 		// Statistics
 		UpdateChecker.start();
@@ -565,6 +572,55 @@ public class AntiShare extends PluginWrapper {
 				plugin.getLogger().info("Region Player Files Migrated: " + files.length);
 			}
 			oldSaveFolder.delete();
+		}
+	}
+
+	/**
+	 * Converts 3.1.3 inventories to 3.2.0+ style
+	 */
+	public static void convert313Inventories(){
+		AntiShare plugin = AntiShare.getInstance();
+		File[] files = new File(plugin.getDataFolder(), "inventories").listFiles();
+		if(files != null){
+			for(File file : files){
+				EnhancedConfiguration inventory = new EnhancedConfiguration(file, plugin);
+				inventory.load();
+				String[] nameparts = file.getName().split("\\.")[0].split("_");
+				if(nameparts.length < 3){
+					continue;
+				}
+				String playerName = nameparts[0];
+				GameMode gamemode = GameMode.valueOf(nameparts[1]);
+				World world = plugin.getServer().getWorld(nameparts[2]);
+				if(world == null){
+					continue;
+				}
+				List<ASInventory> list = ASInventory.generateInventory(playerName, InventoryType.PLAYER);
+				if(list.size() > 0){
+					continue;
+				}
+				ASInventory newi = new ASInventory(InventoryType.PLAYER, playerName, world, gamemode);
+				for(String key : inventory.getKeys(false)){
+					ItemStack item = inventory.getItemStack(key);
+					int slot = -1;
+					try{
+						slot = Integer.parseInt(key);
+					}catch(NumberFormatException e){
+						continue;
+					}
+					if(slot < 0){
+						continue;
+					}
+					if(item != null && item.getType() != Material.AIR){
+						newi.set(slot, item);
+					}
+				}
+				newi.save();
+			}
+			for(File file : files){
+				file.delete();
+			}
+			plugin.getLogger().info("Player Inventories Converted: " + files.length);
 		}
 	}
 
