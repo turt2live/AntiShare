@@ -598,8 +598,8 @@ public class AntiShare extends PluginWrapper {
 				}else{
 					continue;
 				}
-				fname = fname.replace("_" + gamemode.name() + "_", "-==-"); // Unique character
-				String[] nameparts = fname.split("\\.")[0].split("-==-");
+				fname = fname.replace("_" + gamemode.name() + "_", "ANTI=SHARE"); // Unique character
+				String[] nameparts = fname.split("\\.")[0].split("ANTI=SHARE");
 				if(nameparts.length < 2){
 					continue;
 				}
