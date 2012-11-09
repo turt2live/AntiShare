@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -171,6 +172,9 @@ public class AntiShare extends PluginWrapper {
 
 		// Convert inventories (3.1.3-3.2.0/Current)
 		convert313Inventories();
+
+		// Cleanup old files
+		cleanupOldInventories(); // Handles on/off in config internally
 
 		// Statistics
 		UpdateChecker.start();
@@ -621,6 +625,40 @@ public class AntiShare extends PluginWrapper {
 				file.delete();
 			}
 			plugin.getLogger().info("Player Inventories Converted: " + files.length);
+		}
+	}
+
+	/**
+	 * Removes/Archives old inventories
+	 */
+	public static void cleanupOldInventories(){
+		AntiShare plugin = AntiShare.getInstance();
+		if(plugin.getConfig().getBoolean("settings.cleanup.use")){
+			long time = plugin.getConfig().getLong("settings.cleanup.after");
+			boolean delete = plugin.getConfig().getString("settings.cleanup.method").equalsIgnoreCase("delete");
+			File archiveLocation = new File(plugin.getDataFolder(), "archive" + File.separator + "inventories" + File.separator + "players");
+			if(!delete && !archiveLocation.exists()){
+				archiveLocation.mkdirs();
+			}
+			File[] files = new File(plugin.getDataFolder(), "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName()).listFiles();
+			int cleaned = 0;
+			if(files != null){
+				for(File file : files){
+					String player = file.getName().split("\\.")[0];
+					OfflinePlayer p = plugin.getServer().getOfflinePlayer(player);
+					long diff = System.currentTimeMillis() - p.getLastPlayed();
+					long days = diff / (24 * 60 * 60 * 1000);
+					if(days >= time){
+						if(delete){
+							file.delete();
+						}else{
+							file.renameTo(new File(archiveLocation, file.getName()));
+						}
+						cleaned++;
+					}
+				}
+			}
+			plugin.getLogger().info("Player Inventories Archived/Deleted: " + cleaned);
 		}
 	}
 

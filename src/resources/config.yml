@@ -106,7 +106,16 @@ settings:
   # AntiShare will do as it's told, and it's developers
   # will not sympathize if you lost all your player
   # information because you were careless.
+  # NOTE: This option ONLY removes the old WORLDS.
+  # See the other settings to remove the old FILES
   remove-old-inventories: false
+  # These settings are used to cleanup inactive players
+  cleanup:
+    use: true
+    # Archive or delete
+    method: archive
+    # Days
+    after: 120
 # Where the magic happens.
 # Here you can define EXACTLY what you want
 # AntiShare to control (restrict). You can use

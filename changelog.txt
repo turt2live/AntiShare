@@ -15,6 +15,9 @@ Since 4.3.0:
 - Added tab complete commands
 - Added a way to remove old worlds from players
     == WARNING == This is set to OFF by default because it causes destruction. Only turn it on if you know what it does.
+- Added an inventory cleanup/archive
+    == WARNING == If configured, AntiShare will DELETE player inventories. It is STRONGLY suggested you use ARCHIVE mode.
+- Added inventory convert (cleans up 3.1.3 inventory files. This is "smart" and will only convert players who have not already)
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
