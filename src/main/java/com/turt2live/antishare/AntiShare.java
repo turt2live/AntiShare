@@ -589,13 +589,22 @@ public class AntiShare extends PluginWrapper {
 			for(File file : files){
 				EnhancedConfiguration inventory = new EnhancedConfiguration(file, plugin);
 				inventory.load();
-				String[] nameparts = file.getName().split("\\.")[0].split("_");
-				if(nameparts.length < 3){
+				String fname = file.getName();
+				GameMode gamemode;
+				if(fname.replace("_CREATIVE_", "").length() != fname.length()){
+					gamemode = GameMode.CREATIVE;
+				}else if(fname.replace("_SURVIVAL_", "").length() != fname.length()){
+					gamemode = GameMode.SURVIVAL;
+				}else{
+					continue;
+				}
+				fname = fname.replace("_" + gamemode.name() + "_", "-==-"); // Unique character
+				String[] nameparts = fname.split("\\.")[0].split("-==-");
+				if(nameparts.length < 2){
 					continue;
 				}
 				String playerName = nameparts[0];
-				GameMode gamemode = GameMode.valueOf(nameparts[1]);
-				World world = plugin.getServer().getWorld(nameparts[2]);
+				World world = plugin.getServer().getWorld(nameparts[1]);
 				if(world == null){
 					continue;
 				}
