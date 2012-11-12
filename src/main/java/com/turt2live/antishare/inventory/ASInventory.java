@@ -113,6 +113,11 @@ public class ASInventory implements Cloneable {
 		// Setup
 		List<ASInventory> inventories = new ArrayList<ASInventory>();
 
+		// Configuration check
+		if(!AntiShare.getInstance().getConfig().getBoolean("handled-actions.gamemode-inventories")){
+			return inventories;
+		}
+
 		if(AntiShare.getInstance().useSQL()){
 			// SQL load
 
@@ -311,6 +316,12 @@ public class ASInventory implements Cloneable {
 	 * Saves the inventory to disk
 	 */
 	public void save(){
+		// Configuration check
+		if(!AntiShare.getInstance().getConfig().getBoolean("handled-actions.gamemode-inventories")){
+			return;
+		}
+
+		// Save
 		if(plugin.useSQL()){
 			// SQL save
 
