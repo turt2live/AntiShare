@@ -70,7 +70,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -1480,25 +1479,6 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
-		Player player = event.getPlayer();
-
-		// Remove from regions
-		ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
-		if(region != null){
-			region.alertExit(player);
-		}
-
-		// Tell the inventory manager to release this player
-		plugin.getInventoryManager().releasePlayer(player);
-	}
-
-	// ################# Player Kicked
-
-	@EventHandler
-	public void onKick(PlayerKickEvent event){
-		if(event.isCancelled()){
-			return;
-		}
 		Player player = event.getPlayer();
 
 		// Remove from regions
