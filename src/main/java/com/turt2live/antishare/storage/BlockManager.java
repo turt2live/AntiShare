@@ -23,8 +23,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.util.events.TrackerList;
 
 /**

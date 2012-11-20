@@ -18,8 +18,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.metrics.ActionsTracker;
 import com.turt2live.antishare.metrics.Tracker;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
