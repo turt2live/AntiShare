@@ -643,6 +643,24 @@ public class AntiShare extends PluginWrapper {
 	public static void cleanupOldInventories(){
 		AntiShare plugin = AntiShare.getInstance();
 		if(plugin.getConfig().getBoolean("settings.cleanup.use")){
+			File timeFile = new File(plugin.getDataFolder(), "lastCleanup");
+			if(timeFile.exists()){
+				try{
+					BufferedReader in = new BufferedReader(new FileReader(timeFile));
+					String line = in.readLine();
+					int lastMS = Integer.parseInt(line);
+					int hours = 3600000 * 6;
+					if(System.currentTimeMillis() - lastMS < hours){
+						return; // Don't clean
+					}
+					in.close();
+				}catch(IOException e){}catch(NumberFormatException e){}
+			}
+			try{
+				BufferedWriter out = new BufferedWriter(new FileWriter(timeFile, false));
+				out.write(String.valueOf(System.currentTimeMillis()));
+				out.close();
+			}catch(IOException e){}
 			long time = plugin.getConfig().getLong("settings.cleanup.after");
 			boolean delete = plugin.getConfig().getString("settings.cleanup.method").equalsIgnoreCase("delete");
 			File archiveLocation = new File(plugin.getDataFolder(), "archive" + File.separator + "inventories" + File.separator + "players");
