@@ -653,9 +653,10 @@ public class InventoryManager implements Listener {
 	 */
 	public void save(){
 		// Save players
-		for(Player player : Bukkit.getOnlinePlayers()){
-			releasePlayer(player);
-		}
+		if(Bukkit.getOnlinePlayers() != null)
+			for(Player player : Bukkit.getOnlinePlayers()){
+				releasePlayer(player);
+			}
 
 		// Save inventories
 		for(String key : creative.keySet()){
