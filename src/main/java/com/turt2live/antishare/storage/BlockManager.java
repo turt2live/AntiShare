@@ -75,44 +75,50 @@ public class BlockManager {
 		adventure.addAll(adventure_blocks);
 
 		// Load file
-		File dir = new File(plugin.getDataFolder(), "data");
-		dir.mkdirs();
-		File file = new File(dir, "blocks.yml");
-		if(file.exists()){
-			file.delete();
+		File dir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
+		if(dir.exists()){
+			dir.delete(); // To remove old blocks
 		}
-		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
-		blocks.load();
+		dir.mkdirs();
 
 		// Loops and save
 		for(Block block : creative){
-			String path = block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName();
-			blocks.set(path, "CREATIVE");
+			saveBlock(dir, block, "CREATIVE");
 		}
 		for(Block block : survival){
-			String path = block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName();
-			blocks.set(path, "SURVIVAL");
+			saveBlock(dir, block, "SURVIVAL");
 		}
 		for(Block block : adventure){
-			String path = block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName();
-			blocks.set(path, "ADVENTURE");
+			saveBlock(dir, block, "ADVENTURE");
 		}
+	}
+
+	private static void saveBlock(File dir, Block block, String gamemode){
+		File file = new File(dir, block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml");
+		if(file.exists()){
+			file.delete();
+		}
+		EnhancedConfiguration blocks = new EnhancedConfiguration(file, AntiShare.getInstance());
+		blocks.load();
+		blocks.set(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName(), gamemode);
 		blocks.save();
 	}
 
 	/**
-	 * Loads from disk
+	 * Convert 4.4.0 to 4.4.1+ system
 	 */
-	public void load(){
-		// Setup lists
-		tracked_creative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
-		tracked_survival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
-		tracked_adventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
-
-		// Setup cache
+	public static void convertBlocks(){
+		int converted = 0;
+		AntiShare plugin = AntiShare.getInstance();
 		File dir = new File(plugin.getDataFolder(), "data");
 		dir.mkdirs();
-		EnhancedConfiguration blocks = new EnhancedConfiguration(new File(dir, "blocks.yml"), plugin);
+		File nDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
+		nDir.mkdirs();
+		File oldBlockFile = new File(dir, "blocks.yml");
+		if(!oldBlockFile.exists()){
+			return;
+		}
+		EnhancedConfiguration blocks = new EnhancedConfiguration(oldBlockFile, plugin);
 		blocks.load();
 		for(String key : blocks.getKeys(false)){
 			String[] keyParts = key.split(";");
@@ -126,7 +132,49 @@ public class BlockManager {
 				block = location.getBlock();
 			}
 			GameMode gm = GameMode.valueOf(blocks.getString(key));
-			addBlock(gm, block);
+			saveBlock(nDir, block, gm.name());
+			converted++;
+		}
+		oldBlockFile.delete();
+		if(converted > 0){
+			plugin.getLogger().info("Blocks Converted: " + converted);
+		}
+	}
+
+	/**
+	 * Loads from disk
+	 */
+	public void load(){
+		// Setup lists
+		tracked_creative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
+		tracked_survival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
+		tracked_adventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
+
+		// Setup cache
+		File dir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
+		dir.mkdirs();
+		if(dir.listFiles() != null){
+			for(File file : dir.listFiles()){
+				if(!file.getName().endsWith(".yml")){
+					continue;
+				}
+				EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
+				blocks.load();
+				for(String key : blocks.getKeys(false)){
+					String[] keyParts = key.split(";");
+					Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
+					if(Bukkit.getWorld(keyParts[3]) == null || location == null || location.getWorld() == null){
+						continue;
+					}
+					Block block = location.getBlock();
+					if(block == null){
+						location.getChunk().load();
+						block = location.getBlock();
+					}
+					GameMode gm = GameMode.valueOf(blocks.getString(key));
+					addBlock(gm, block);
+				}
+			}
 		}
 	}
 
