@@ -12,7 +12,6 @@ package com.turt2live.antishare.storage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -35,16 +34,6 @@ import com.turt2live.antishare.util.events.TrackerList;
 public class BlockManager {
 
 	/**
-	 * AntiShare block - used for simplicity
-	 * 
-	 * @author turt2live
-	 */
-	private class ASBlock {
-		public Location location;
-		public Material expectedType;
-	}
-
-	/**
 	 * AntiShare material - used for simplicity
 	 * 
 	 * @author turt2live
@@ -58,9 +47,6 @@ public class BlockManager {
 	private CopyOnWriteArrayList<Block> creative_blocks = new CopyOnWriteArrayList<Block>();
 	private CopyOnWriteArrayList<Block> survival_blocks = new CopyOnWriteArrayList<Block>();
 	private CopyOnWriteArrayList<Block> adventure_blocks = new CopyOnWriteArrayList<Block>();
-	private HashMap<Block, ASBlock> expected_creative = new HashMap<Block, ASBlock>();
-	private HashMap<Block, ASBlock> expected_survival = new HashMap<Block, ASBlock>();
-	private HashMap<Block, ASBlock> expected_adventure = new HashMap<Block, ASBlock>();
 	private TrackerList tracked_creative;
 	private TrackerList tracked_survival;
 	private TrackerList tracked_adventure;
@@ -74,82 +60,6 @@ public class BlockManager {
 
 		// Load blocks
 		load();
-
-		// Schedule a sanity check
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
-			@Override
-			public void run(){
-				// Remove air blocks
-				List<Block> remove = new ArrayList<Block>();
-				for(Block block : creative_blocks){
-					if(block.getType() == Material.AIR){
-						remove.add(block);
-					}
-				}
-				for(Block block : remove){
-					creative_blocks.remove(block);
-					expected_creative.remove(block);
-				}
-				remove = new ArrayList<Block>();
-				for(Block block : survival_blocks){
-					if(block.getType() == Material.AIR){
-						remove.add(block);
-					}
-				}
-				for(Block block : remove){
-					survival_blocks.remove(block);
-					expected_survival.remove(block);
-				}
-				remove = new ArrayList<Block>();
-				for(Block block : adventure_blocks){
-					if(block.getType() == Material.AIR){
-						remove.add(block);
-					}
-				}
-				for(Block block : remove){
-					adventure_blocks.remove(block);
-					expected_adventure.remove(block);
-				}
-
-				// Check lists
-				HashMap<Block, ASBlock> creative = new HashMap<Block, ASBlock>();
-				HashMap<Block, ASBlock> survival = new HashMap<Block, ASBlock>();
-				HashMap<Block, ASBlock> adventure = new HashMap<Block, ASBlock>();
-				creative.putAll(expected_creative);
-				survival.putAll(expected_survival);
-				adventure.putAll(expected_adventure);
-				for(ASBlock block : creative.values()){
-					Block atLocation = block.location.getBlock();
-					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
-					if(atLocation.getType() != block.expectedType){
-						if(plugin.getConfig().getBoolean("other.debug")){
-							plugin.log("Creative block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
-						}
-						block.expectedType = atLocation.getType();
-					}
-				}
-				for(ASBlock block : survival.values()){
-					Block atLocation = block.location.getBlock();
-					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
-					if(atLocation.getType() != block.expectedType){
-						if(plugin.getConfig().getBoolean("other.debug")){
-							plugin.log("Survival block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
-						}
-						block.expectedType = atLocation.getType();
-					}
-				}
-				for(ASBlock block : adventure.values()){
-					Block atLocation = block.location.getBlock();
-					String location = "(" + block.location.getBlockX() + ", " + block.location.getBlockY() + ", " + block.location.getBlockZ() + ", " + block.location.getWorld().getName() + ")";
-					if(atLocation.getType() != block.expectedType){
-						if(plugin.getConfig().getBoolean("other.debug")){
-							plugin.log("Adventure block at location " + location + " is not " + block.expectedType.name() + " (found " + atLocation.getType().name() + ")", Level.WARNING);
-						}
-						block.expectedType = atLocation.getType();
-					}
-				}
-			}
-		}, 0L, (20 * 60 * 10)); // 10 minutes
 	}
 
 	/**
@@ -228,9 +138,6 @@ public class BlockManager {
 		creative_blocks.clear();
 		survival_blocks.clear();
 		adventure_blocks.clear();
-		expected_creative.clear();
-		expected_survival.clear();
-		expected_adventure.clear();
 		load();
 	}
 
@@ -241,30 +148,24 @@ public class BlockManager {
 	 * @param block the block
 	 */
 	public void addBlock(GameMode type, Block block){
-		ASBlock asblock = new ASBlock();
-		asblock.location = block.getLocation();
-		asblock.expectedType = block.getType();
 		switch (type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(block)){
 				break;
 			}
 			creative_blocks.add(block);
-			expected_creative.put(block, asblock);
 			break;
 		case SURVIVAL:
 			if(!tracked_survival.isTracked(block)){
 				break;
 			}
 			survival_blocks.add(block);
-			expected_survival.put(block, asblock);
 			break;
 		case ADVENTURE:
 			if(!tracked_adventure.isTracked(block)){
 				break;
 			}
 			adventure_blocks.add(block);
-			expected_adventure.put(block, asblock);
 			break;
 		}
 	}
@@ -284,15 +185,12 @@ public class BlockManager {
 			switch (type){
 			case CREATIVE:
 				creative_blocks.remove(block);
-				expected_creative.remove(block);
 				break;
 			case SURVIVAL:
 				survival_blocks.remove(block);
-				expected_survival.remove(block);
 				break;
 			case ADVENTURE:
 				adventure_blocks.remove(block);
-				expected_adventure.remove(block);
 				break;
 			}
 		}
