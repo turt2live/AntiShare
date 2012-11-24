@@ -105,43 +105,6 @@ public class BlockManager {
 	}
 
 	/**
-	 * Convert 4.4.0 to 4.4.1+ system
-	 */
-	public static void convertBlocks(){
-		int converted = 0;
-		AntiShare plugin = AntiShare.getInstance();
-		File dir = new File(plugin.getDataFolder(), "data");
-		dir.mkdirs();
-		File nDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
-		nDir.mkdirs();
-		File oldBlockFile = new File(dir, "blocks.yml");
-		if(!oldBlockFile.exists()){
-			return;
-		}
-		EnhancedConfiguration blocks = new EnhancedConfiguration(oldBlockFile, plugin);
-		blocks.load();
-		for(String key : blocks.getKeys(false)){
-			String[] keyParts = key.split(";");
-			Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
-			if(Bukkit.getWorld(keyParts[3]) == null || location == null || location.getWorld() == null){
-				continue;
-			}
-			Block block = location.getBlock();
-			if(block == null){
-				location.getChunk().load();
-				block = location.getBlock();
-			}
-			GameMode gm = GameMode.valueOf(blocks.getString(key));
-			saveBlock(nDir, block, gm.name());
-			converted++;
-		}
-		oldBlockFile.delete();
-		if(converted > 0){
-			plugin.getLogger().info("Blocks Converted: " + converted);
-		}
-	}
-
-	/**
 	 * Loads from disk
 	 */
 	public void load(){

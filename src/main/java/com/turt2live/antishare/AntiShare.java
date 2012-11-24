@@ -23,16 +23,11 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.compatibility.HookManager;
-import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.feildmaster.lib.configuration.PluginWrapper;
-import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
@@ -48,6 +43,7 @@ import com.turt2live.antishare.signs.SignManager;
 import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.util.SQL;
+import com.turt2live.antishare.util.generic.SelfCompatibility;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
 import com.turt2live.antishare.util.generic.UpdateChecker;
@@ -151,7 +147,7 @@ public class AntiShare extends PluginWrapper {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
 		// Convert blocks
-		BlockManager.convertBlocks();
+		SelfCompatibility.convertBlocks();
 
 		// Setup everything
 		trackers = new TrackerList();
@@ -172,13 +168,13 @@ public class AntiShare extends PluginWrapper {
 		PerWorldConfig.migrate();
 
 		// Migrate region players (3.8.0-3.9.0)
-		migratePlayerData();
+		SelfCompatibility.migratePlayerData();
 
 		// Convert inventories (3.1.3-3.2.0/Current)
-		convert313Inventories();
+		SelfCompatibility.convert313Inventories();
 
 		// Cleanup old files
-		cleanupOldInventories(); // Handles on/off in config internally
+		SelfCompatibility.cleanupOldInventories(); // Handles on/off in config internally
 
 		// Statistics
 		UpdateChecker.start();
@@ -561,136 +557,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public void log(String string, Level level){
 		getLogger().log(level, string);
-	}
-
-	/**
-	 * Migrates player data from region_players to data/region_players
-	 */
-	public static void migratePlayerData(){
-		AntiShare plugin = AntiShare.getInstance();
-		File newSaveFolder = new File(plugin.getDataFolder(), "data" + File.separator + "region_players");
-		File oldSaveFolder = new File(plugin.getDataFolder(), "region_players");
-		newSaveFolder.mkdirs();
-		if(oldSaveFolder.exists()){
-			File[] files = oldSaveFolder.listFiles();
-			if(files != null && files.length > 0){
-				for(File file : files){
-					file.renameTo(new File(newSaveFolder, file.getName()));
-				}
-				plugin.getLogger().info("Region Player Files Migrated: " + files.length);
-			}
-			oldSaveFolder.delete();
-		}
-	}
-
-	/**
-	 * Converts 3.1.3 inventories to 3.2.0+ style
-	 */
-	public static void convert313Inventories(){
-		AntiShare plugin = AntiShare.getInstance();
-		File[] files = new File(plugin.getDataFolder(), "inventories").listFiles();
-		if(files != null){
-			for(File file : files){
-				EnhancedConfiguration inventory = new EnhancedConfiguration(file, plugin);
-				inventory.load();
-				String fname = file.getName();
-				GameMode gamemode;
-				if(fname.replace("_CREATIVE_", "").length() != fname.length()){
-					gamemode = GameMode.CREATIVE;
-				}else if(fname.replace("_SURVIVAL_", "").length() != fname.length()){
-					gamemode = GameMode.SURVIVAL;
-				}else{
-					continue;
-				}
-				fname = fname.replace("_" + gamemode.name() + "_", "ANTI=SHARE"); // Unique character
-				String[] nameparts = fname.split("\\.")[0].split("ANTI=SHARE");
-				if(nameparts.length < 2){
-					continue;
-				}
-				String playerName = nameparts[0];
-				World world = plugin.getServer().getWorld(nameparts[1]);
-				if(world == null){
-					continue;
-				}
-				List<ASInventory> list = ASInventory.generateInventory(playerName, InventoryType.PLAYER);
-				if(list.size() > 0){
-					continue;
-				}
-				ASInventory newi = new ASInventory(InventoryType.PLAYER, playerName, world, gamemode);
-				for(String key : inventory.getKeys(false)){
-					ItemStack item = inventory.getItemStack(key);
-					int slot = -1;
-					try{
-						slot = Integer.parseInt(key);
-					}catch(NumberFormatException e){
-						continue;
-					}
-					if(slot < 0){
-						continue;
-					}
-					if(item != null && item.getType() != Material.AIR){
-						newi.set(slot, item);
-					}
-				}
-				newi.save();
-			}
-			for(File file : files){
-				file.delete();
-			}
-			plugin.getLogger().info("Player Inventories Converted: " + files.length);
-		}
-	}
-
-	/**
-	 * Removes/Archives old inventories
-	 */
-	public static void cleanupOldInventories(){
-		AntiShare plugin = AntiShare.getInstance();
-		if(plugin.getConfig().getBoolean("settings.cleanup.use")){
-			File timeFile = new File(plugin.getDataFolder(), "lastCleanup");
-			if(timeFile.exists()){
-				try{
-					BufferedReader in = new BufferedReader(new FileReader(timeFile));
-					String line = in.readLine();
-					int lastMS = Integer.parseInt(line);
-					int hours = 3600000 * 6;
-					if(System.currentTimeMillis() - lastMS < hours){
-						return; // Don't clean
-					}
-					in.close();
-				}catch(IOException e){}catch(NumberFormatException e){}
-			}
-			try{
-				BufferedWriter out = new BufferedWriter(new FileWriter(timeFile, false));
-				out.write(String.valueOf(System.currentTimeMillis()));
-				out.close();
-			}catch(IOException e){}
-			long time = plugin.getConfig().getLong("settings.cleanup.after");
-			boolean delete = plugin.getConfig().getString("settings.cleanup.method").equalsIgnoreCase("delete");
-			File archiveLocation = new File(plugin.getDataFolder(), "archive" + File.separator + "inventories" + File.separator + "players");
-			if(!delete && !archiveLocation.exists()){
-				archiveLocation.mkdirs();
-			}
-			File[] files = new File(plugin.getDataFolder(), "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName()).listFiles();
-			int cleaned = 0;
-			if(files != null){
-				for(File file : files){
-					String player = file.getName().split("\\.")[0];
-					OfflinePlayer p = plugin.getServer().getOfflinePlayer(player);
-					long diff = System.currentTimeMillis() - p.getLastPlayed();
-					long days = diff / (24 * 60 * 60 * 1000);
-					if(days >= time){
-						if(delete){
-							file.delete();
-						}else{
-							file.renameTo(new File(archiveLocation, file.getName()));
-						}
-						cleaned++;
-					}
-				}
-			}
-			plugin.getLogger().info("Player Inventories Archived/Deleted: " + cleaned);
-		}
 	}
 
 }
