@@ -21,12 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
@@ -40,7 +34,7 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
-public class InventoryManager implements Listener {
+public class InventoryManager {
 
 	private ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
@@ -65,30 +59,6 @@ public class InventoryManager implements Listener {
 		links.load();
 
 		load();
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	}
-
-	@EventHandler (priority = EventPriority.MONITOR)
-	public void onInventoryClick(InventoryClickEvent event){
-		if(event.isCancelled()){
-			return;
-		}
-		Inventory inventory = event.getInventory();
-		InventoryHolder holder = inventory.getHolder();
-		if(holder != null && holder instanceof Player && inventory.getType() == org.bukkit.event.inventory.InventoryType.PLAYER){
-			Player player = (Player) holder;
-			// Refresh inventories
-			if(!isInTemporary(player)){
-				/* We're in monitor, so if anyone changes the cancelled
-				 * state, we can claim it on bad coding practices on the 
-				 * conflicting plugin. This also means that we can force
-				 * AntiShare to manually update a slot assuming the event
-				 * has not been cancelled thus far.
-				 */
-				refreshInventories(player);
-				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new InventoryWatcher(player), 5);
-			}
-		}
 	}
 
 	/**
@@ -174,6 +144,8 @@ public class InventoryManager implements Listener {
 			return;
 		}
 
+		refreshInventories(player, false);
+
 		final String name = player.getName();
 		final List<String> worlds = new ArrayList<String>();
 		for(World w : Bukkit.getWorlds()){
@@ -188,7 +160,7 @@ public class InventoryManager implements Listener {
 					removeFromTemporary(player);
 				}
 
-				refreshInventories(player);
+				refreshInventories(player, false);
 				// Cleanup
 				for(String world : worlds){
 					if(creative.get(name + "." + world) != null){
@@ -224,29 +196,39 @@ public class InventoryManager implements Listener {
 	 * Refreshes inventories of a player
 	 * 
 	 * @param player the player
-	 * @param customSlots the slots to force items upon
+	 * @param alreadySaved set to true to bypass saving
 	 */
-	public void refreshInventories(Player player, Slot... customSlots){
+	public void refreshInventories(Player player, boolean alreadySaved){
+		// TODO: This is slow
+		if(!plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
+			return;
+		}
 		// Save
 		ASInventory premerge = ASInventory.generate(player, InventoryType.PLAYER);
 		ASInventory enderPremerge = ASInventory.generate(player, InventoryType.ENDER);
 		switch (player.getGameMode()){
 		case CREATIVE:
-			saveCreativeInventory(player, player.getWorld(), customSlots);
+			if(!alreadySaved)
+				saveCreativeInventory(player, player.getWorld());
 			premerge = getCreativeInventory(player, player.getWorld());
-			saveEnderCreativeInventory(player, player.getWorld(), customSlots);
+			if(!alreadySaved)
+				saveEnderCreativeInventory(player, player.getWorld());
 			enderPremerge = getEnderCreativeInventory(player, player.getWorld());
 			break;
 		case SURVIVAL:
-			saveSurvivalInventory(player, player.getWorld(), customSlots);
+			if(!alreadySaved)
+				saveSurvivalInventory(player, player.getWorld());
 			premerge = getSurvivalInventory(player, player.getWorld());
-			saveEnderSurvivalInventory(player, player.getWorld(), customSlots);
+			if(!alreadySaved)
+				saveEnderSurvivalInventory(player, player.getWorld());
 			enderPremerge = getEnderSurvivalInventory(player, player.getWorld());
 			break;
 		case ADVENTURE:
-			saveAdventureInventory(player, player.getWorld());
+			if(!alreadySaved)
+				saveAdventureInventory(player, player.getWorld());
 			premerge = getAdventureInventory(player, player.getWorld());
-			saveEnderAdventureInventory(player, player.getWorld(), customSlots);
+			if(!alreadySaved)
+				saveEnderAdventureInventory(player, player.getWorld());
 			enderPremerge = getEnderAdventureInventory(player, player.getWorld());
 			break;
 		}
@@ -254,80 +236,19 @@ public class InventoryManager implements Listener {
 		// Merge all inventories if needed
 		ASInventory merge = premerge.clone();
 		ASInventory enderMerge = enderPremerge.clone();
-		if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.NO_SWAP)){
-			for(World world : Bukkit.getWorlds()){
-				merge.setGamemode(GameMode.CREATIVE);
-				enderMerge.setGamemode(GameMode.CREATIVE);
-				creative.put(player.getName() + "." + world.getName(), merge);
-				enderCreative.put(player.getName() + "." + world.getName(), enderMerge);
-				merge.setGamemode(GameMode.SURVIVAL);
-				enderMerge.setGamemode(GameMode.SURVIVAL);
-				survival.put(player.getName() + "." + world.getName(), merge);
-				enderSurvival.put(player.getName() + "." + world.getName(), enderMerge);
-				merge.setGamemode(GameMode.ADVENTURE);
-				enderMerge.setGamemode(GameMode.ADVENTURE);
-				adventure.put(player.getName() + "." + world.getName(), merge);
-				enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
-			}
-		}
-	}
-
-	/**
-	 * Updates ender chest inventories for the player's current world
-	 * 
-	 * @param player the player
-	 * @param to the game mode (to)
-	 * @param from the game mode (from)
-	 */
-	public void updateEnderChest(Player player, GameMode to, GameMode from){
-		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-ender-chests")){
-			return;
-		}
-		switch (to){
-		case CREATIVE:
-			saveEnderCreativeInventory(player, player.getWorld());
-			break;
-		case SURVIVAL:
-			saveEnderSurvivalInventory(player, player.getWorld());
-			break;
-		case ADVENTURE:
-			saveEnderAdventureInventory(player, player.getWorld());
-			break;
-		}
-		switch (from){
-		case CREATIVE:
-			getEnderCreativeInventory(player, player.getWorld()).setTo(player);
-			break;
-		case SURVIVAL:
-			getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
-			break;
-		case ADVENTURE:
-			getEnderAdventureInventory(player, player.getWorld()).setTo(player);
-			break;
-		}
-	}
-
-	/**
-	 * Updates ender chest inventories for the player's current game mode
-	 * 
-	 * @param player the player
-	 * @param to the world (to)
-	 * @param from the world (from)
-	 */
-	public void updateEnderChest(Player player, World to, World from){
-		switch (player.getGameMode()){
-		case CREATIVE:
-			saveEnderCreativeInventory(player, from);
-			getEnderCreativeInventory(player, to).setTo(player);
-			break;
-		case SURVIVAL:
-			saveEnderSurvivalInventory(player, from);
-			getEnderSurvivalInventory(player, to).setTo(player);
-			break;
-		case ADVENTURE:
-			saveEnderAdventureInventory(player, from);
-			getEnderAdventureInventory(player, to).setTo(player);
-			break;
+		for(World world : Bukkit.getWorlds()){
+			merge.setGamemode(GameMode.CREATIVE);
+			enderMerge.setGamemode(GameMode.CREATIVE);
+			creative.put(player.getName() + "." + world.getName(), merge);
+			enderCreative.put(player.getName() + "." + world.getName(), enderMerge);
+			merge.setGamemode(GameMode.SURVIVAL);
+			enderMerge.setGamemode(GameMode.SURVIVAL);
+			survival.put(player.getName() + "." + world.getName(), merge);
+			enderSurvival.put(player.getName() + "." + world.getName(), enderMerge);
+			merge.setGamemode(GameMode.ADVENTURE);
+			enderMerge.setGamemode(GameMode.ADVENTURE);
+			adventure.put(player.getName() + "." + world.getName(), merge);
+			enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
 		}
 	}
 
@@ -394,15 +315,9 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
-	 * @param customSlots the slots to force items upon
 	 */
-	public void saveCreativeInventory(Player player, World world, Slot... customSlots){
+	public void saveCreativeInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
-		if(customSlots != null && customSlots.length > 0){
-			for(Slot slot : customSlots){
-				inventory.set(slot.slot, slot.item);
-			}
-		}
 		inventory.setWorld(world);
 		creative.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -413,15 +328,9 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
-	 * @param customSlots the slots to force items upon
 	 */
-	public void saveEnderCreativeInventory(Player player, World world, Slot... customSlots){
+	public void saveEnderCreativeInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
-		if(customSlots != null && customSlots.length > 0){
-			for(Slot slot : customSlots){
-				inventory.set(slot.slot, slot.item);
-			}
-		}
 		inventory.setWorld(world);
 		enderCreative.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -432,15 +341,9 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
-	 * @param customSlots the slots to force items upon
 	 */
-	public void saveSurvivalInventory(Player player, World world, Slot... customSlots){
+	public void saveSurvivalInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
-		if(customSlots != null && customSlots.length > 0){
-			for(Slot slot : customSlots){
-				inventory.set(slot.slot, slot.item);
-			}
-		}
 		inventory.setWorld(world);
 		survival.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -451,15 +354,9 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
-	 * @param customSlots the slots to force items upon
 	 */
-	public void saveEnderSurvivalInventory(Player player, World world, Slot... customSlots){
+	public void saveEnderSurvivalInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
-		if(customSlots != null && customSlots.length > 0){
-			for(Slot slot : customSlots){
-				inventory.set(slot.slot, slot.item);
-			}
-		}
 		inventory.setWorld(world);
 		enderSurvival.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -470,15 +367,9 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
-	 * @param customSlots the slots to force items upon
 	 */
-	public void saveAdventureInventory(Player player, World world, Slot... customSlots){
+	public void saveAdventureInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
-		if(customSlots != null && customSlots.length > 0){
-			for(Slot slot : customSlots){
-				inventory.set(slot.slot, slot.item);
-			}
-		}
 		inventory.setWorld(world);
 		adventure.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -489,15 +380,9 @@ public class InventoryManager implements Listener {
 	 * 
 	 * @param player the player
 	 * @param world the world
-	 * @param customSlots the slots to force items upon
 	 */
-	public void saveEnderAdventureInventory(Player player, World world, Slot... customSlots){
+	public void saveEnderAdventureInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
-		if(customSlots != null && customSlots.length > 0){
-			for(Slot slot : customSlots){
-				inventory.set(slot.slot, slot.item);
-			}
-		}
 		inventory.setWorld(world);
 		enderAdventure.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();

@@ -1207,30 +1207,36 @@ public class ASListener implements Listener {
 			switch (from){
 			case CREATIVE:
 				plugin.getInventoryManager().saveCreativeInventory(player, player.getWorld());
+				plugin.getInventoryManager().saveEnderCreativeInventory(player, player.getWorld());
 				break;
 			case SURVIVAL:
 				plugin.getInventoryManager().saveSurvivalInventory(player, player.getWorld());
+				plugin.getInventoryManager().saveEnderSurvivalInventory(player, player.getWorld());
 				break;
 			case ADVENTURE:
 				plugin.getInventoryManager().saveAdventureInventory(player, player.getWorld());
+				plugin.getInventoryManager().saveEnderAdventureInventory(player, player.getWorld());
 				break;
 			}
+
+			// Update inventories
+			plugin.getInventoryManager().refreshInventories(player, true);
 
 			// Set to
 			switch (to){
 			case CREATIVE:
 				plugin.getInventoryManager().getCreativeInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getEnderCreativeInventory(player, player.getWorld()).setTo(player);
 				break;
 			case SURVIVAL:
 				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
 				break;
 			case ADVENTURE:
 				plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getEnderAdventureInventory(player, player.getWorld()).setTo(player);
 				break;
 			}
-
-			// Ender Chest (saving and loading handled internally)
-			plugin.getInventoryManager().updateEnderChest(player, to, from);
 
 			// Check for open inventories and stuff
 			player.closeInventory();
@@ -1518,33 +1524,39 @@ public class ASListener implements Listener {
 			switch (player.getGameMode()){
 			case CREATIVE:
 				plugin.getInventoryManager().saveCreativeInventory(player, from);
+				plugin.getInventoryManager().saveEnderCreativeInventory(player, from);
 				break;
 			case SURVIVAL:
 				plugin.getInventoryManager().saveSurvivalInventory(player, from);
+				plugin.getInventoryManager().saveEnderSurvivalInventory(player, from);
 				break;
 			case ADVENTURE:
 				plugin.getInventoryManager().saveAdventureInventory(player, from);
+				plugin.getInventoryManager().saveEnderAdventureInventory(player, from);
 				break;
 			}
 
 			// Check for linked inventories
 			plugin.getInventoryManager().checkLinks(player, to, from);
 
+			// Update the inventories (check for merges)
+			plugin.getInventoryManager().refreshInventories(player, true);
+
 			// Set to
 			switch (player.getGameMode()){
 			case CREATIVE:
 				plugin.getInventoryManager().getCreativeInventory(player, to).setTo(player);
+				plugin.getInventoryManager().getEnderCreativeInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
 			case SURVIVAL:
 				plugin.getInventoryManager().getSurvivalInventory(player, to).setTo(player);
+				plugin.getInventoryManager().getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
 			case ADVENTURE:
 				plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player);
+				plugin.getInventoryManager().getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
 			}
-
-			// Ender Chest (saving and loading handled internally)
-			plugin.getInventoryManager().updateEnderChest(player, to, from);
 
 			// For alerts
 			ignore = false;
