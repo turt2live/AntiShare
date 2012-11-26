@@ -460,7 +460,7 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onInteract(PlayerInteractEvent event){
-		if(event.isCancelled() && event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_AIR){
+		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
 			return;
 		}
 		Player player = event.getPlayer();
