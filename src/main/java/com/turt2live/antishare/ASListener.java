@@ -155,7 +155,7 @@ public class ASListener implements Listener {
 
 	// ################# Block Break
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onBlockBreak(BlockBreakEvent event){
 		if(event.isCancelled()){
 			return;
@@ -390,7 +390,7 @@ public class ASListener implements Listener {
 
 	// ################# Block Place
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onBlockPlace(BlockPlaceEvent event){
 		if(event.isCancelled()){
 			return;
@@ -458,7 +458,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onInteract(PlayerInteractEvent event){
 		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
 			return;
@@ -491,7 +491,7 @@ public class ASListener implements Listener {
 		}
 
 		// Right click list
-		if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK){
+		if(action == Action.RIGHT_CLICK_BLOCK){
 			// Check if they should be blocked
 			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
 			if(asregion != null){
@@ -567,7 +567,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check for eye of ender / ender pearl
-		if((action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
+		if(action == Action.RIGHT_CLICK_BLOCK
 				&& player.getItemInHand() != null
 				&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
 				|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
@@ -598,7 +598,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check for potion
-		if((action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
+		if(action == Action.RIGHT_CLICK_BLOCK
 				&& player.getItemInHand() != null
 				&& player.getItemInHand().getType() == Material.POTION){
 			boolean potion = false;
@@ -656,7 +656,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Interact Entity
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onInteractEntity(PlayerInteractEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -744,7 +744,7 @@ public class ASListener implements Listener {
 
 	// ################# Cart Death Check
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onCartDeath(VehicleDestroyEvent event){
 		if(event.isCancelled()){
 			return;
@@ -782,7 +782,7 @@ public class ASListener implements Listener {
 
 	// ################# Egg Check
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onEggThrow(PlayerEggThrowEvent event){
 		Player player = event.getPlayer();
 		AlertType type = AlertType.ILLEGAL;
@@ -819,7 +819,7 @@ public class ASListener implements Listener {
 
 	// ################# Experience Bottle Check
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.NORMAL)
 	public void onExpBottle(ExpBottleEvent event){
 		if(event.getExperience() == 0){
 			return;
@@ -872,7 +872,7 @@ public class ASListener implements Listener {
 
 	// ################# Drop Item
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onDrop(PlayerDropItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -926,7 +926,7 @@ public class ASListener implements Listener {
 
 	// ################# Pickup Item
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPickup(PlayerPickupItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -980,7 +980,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Death
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onDeath(PlayerDeathEvent event){
 		Player player = event.getEntity();
 		List<ItemStack> drops = event.getDrops();
@@ -1038,7 +1038,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Command
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onCommand(PlayerCommandPreprocessEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1079,7 +1079,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Move
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onMove(PlayerMoveEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1121,7 +1121,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Game Mode Change
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onGameModeChange(PlayerGameModeChangeEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1256,7 +1256,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Combat
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onCombat(EntityDamageByEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1377,7 +1377,7 @@ public class ASListener implements Listener {
 
 	// ################# Entity Target
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onEntityTarget(EntityTargetEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1406,7 +1406,7 @@ public class ASListener implements Listener {
 
 	// ################# Piston Move (Extend)
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPistonExtend(BlockPistonExtendEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1431,7 +1431,7 @@ public class ASListener implements Listener {
 
 	// ################# Piston Move (Retract)
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPistonRetract(BlockPistonRetractEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1459,7 +1459,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Join
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
 		// Tell the inventory manager to prepare this player
@@ -1483,7 +1483,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Quit
 
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
 
@@ -1499,7 +1499,7 @@ public class ASListener implements Listener {
 
 	// ################# Player World Change
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onWorldChange(PlayerChangedWorldEvent event){
 		Player player = event.getPlayer();
 		World to = player.getWorld();
@@ -1570,7 +1570,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Teleport
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1634,7 +1634,7 @@ public class ASListener implements Listener {
 
 	// ################# Player Craft Item Event
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onCrafting(CraftItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1672,7 +1672,7 @@ public class ASListener implements Listener {
 
 	// ################# Potion Splash Event
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPotionSplash(PotionSplashEvent event){
 		if(event.isCancelled() || !(event.getPotion().getShooter() instanceof Player)){
 			return;
@@ -1718,7 +1718,7 @@ public class ASListener implements Listener {
 
 	// ################# Projectile Launch Event
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onProjectileLaunch(ProjectileLaunchEvent event){
 		if(event.isCancelled() || !(event.getEntity().getShooter() instanceof Player)){
 			return;
@@ -1774,7 +1774,7 @@ public class ASListener implements Listener {
 
 	// ################# Hanging Break Event
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingBreakEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
 			return;
