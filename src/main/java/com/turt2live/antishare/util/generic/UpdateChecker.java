@@ -45,7 +45,7 @@ public class UpdateChecker {
 		if(plugin.getConfig().getBoolean("other.dont-look-for-updates")){
 			return;
 		}
-		plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable(){
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable(){
 			@Override
 			public void run(){
 				try{

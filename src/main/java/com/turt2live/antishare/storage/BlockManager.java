@@ -226,7 +226,7 @@ public class BlockManager {
 
 		// Start a thread to wait until the block changes
 		final Material oldType = oldBlock.getType();
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
 			@Override
 			public void run(){
 				// Setup vars

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2012 turt2live (Travis Ralston).
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v2.1
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * 
+ * Contributors:
+ * turt2live (Travis Ralston) - initial API and implementation
+ ******************************************************************************/
 package com.turt2live.antishare.metrics;
 
 /*
@@ -41,11 +51,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.turt2live.antishare.AntiShare;
 
@@ -77,7 +87,6 @@ public class Metrics {
 	 * Debug mode
 	 */
 	private static final boolean DEBUG = AntiShare.getInstance().getConfig().getBoolean("other.debug", false);
-
 	/**
 	 * The current revision number
 	 */
@@ -147,7 +156,7 @@ public class Metrics {
 	/**
 	 * Id of the scheduled task
 	 */
-	private volatile int taskId = -1;
+	private volatile BukkitTask taskId = null; // Turt2live - Changed to BukkitTask & null
 
 	public Metrics(final Plugin plugin) throws IOException{
 		if(plugin == null){
@@ -228,12 +237,12 @@ public class Metrics {
 			}
 
 			// Is metrics already running?
-			if(taskId >= 0){
+			if(taskId != null){ // turt2live - >=0 is now != null
 				return true;
 			}
 
 			// Begin hitting the server with glorious data
-			taskId = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable(){
+			taskId = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable(){
 
 				private boolean firstPost = true;
 
@@ -243,15 +252,16 @@ public class Metrics {
 						// This has to be synchronized or it can collide with the disable method.
 						synchronized (optOutLock){
 							// Disable Task, if it is running and the server owner decided to opt-out
-							if(isOptOut() && taskId > 0){
-								plugin.getServer().getScheduler().cancelTask(taskId);
-								taskId = -1;
+							if(isOptOut() && taskId != null){ // turt2live - taskId > 0 is now taskId != null
+								//plugin.getServer().getScheduler().cancelTask(taskId); // Turt2live - Commented for below line
+								taskId.cancel();
+								taskId = null; // turt2live - Changed from -1 to null
 							}
 						}
 
 						// Turt2Live - Added debug
 						if(DEBUG){
-							Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] [Debug] Sending");
+							plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] [Debug] Sending");
 						}
 
 						// We use the inverse of firstPost because if it is the first time we are posting,
@@ -261,17 +271,14 @@ public class Metrics {
 
 						// Turt2Live - Added debug
 						if(DEBUG){
-							Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] [Debug] Sent");
+							plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] [Debug] Sent");
 						}
 
 						// After the first post we set firstPost to false
 						// Each post thereafter will be a ping
 						firstPost = false;
 					}catch(IOException e){
-						// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
-						if(DEBUG){
-							Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + e.getMessage());
-						}
+						plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + e.getMessage());
 					}
 				}
 			}, 0, PING_INTERVAL * 1200);
@@ -291,15 +298,13 @@ public class Metrics {
 				// Reload the metrics file
 				configuration.load(CONFIG_FILE);
 			}catch(IOException ex){
-				// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
 				if(DEBUG){
-					Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + ex.getMessage());
+					plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + ex.getMessage());
 				}
 				return true;
 			}catch(InvalidConfigurationException ex){
-				// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
 				if(DEBUG){
-					Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + ex.getMessage());
+					plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + ex.getMessage());
 				}
 				return true;
 			}
@@ -322,7 +327,7 @@ public class Metrics {
 			}
 
 			// Enable Task, if it is not running
-			if(taskId < 0){
+			if(taskId == null){ // Turt2live - Change from < 0 to == null
 				start();
 			}
 		}
@@ -343,9 +348,10 @@ public class Metrics {
 			}
 
 			// Disable Task, if it is running
-			if(taskId > 0){
-				this.plugin.getServer().getScheduler().cancelTask(taskId);
-				taskId = -1;
+			if(taskId != null){ // Turt2live - > 0 is now != null
+				//this.plugin.getServer().getScheduler().cancelTask(taskId); // Turt2live - comment for below line
+				taskId.cancel();
+				taskId = null; // turt2live - -1 is now null
 			}
 		}
 	}
@@ -355,19 +361,18 @@ public class Metrics {
 	 */
 	// Turt2Live - Added flush()
 	public void flush(){
-		plugin.getServer().getScheduler().cancelTask(taskId);
+		taskId.cancel();
 		try{
 			if(DEBUG){
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sending");
+				plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] [Debug] Sending");
 			}
 			postPlugin(true);
 			if(DEBUG){
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] [AntiShare] Sent");
+				plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] [Debug] Sent");
 			}
 		}catch(IOException e){
-			// Turt2Live - Changed [Metrics] to [Metrics-AntiShare]
 			if(DEBUG){
-				Bukkit.getLogger().log(Level.INFO, "[Metrics-AntiShare] " + e.getMessage());
+				plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + e.getMessage());
 			}
 		}
 	}
@@ -376,15 +381,15 @@ public class Metrics {
 	 * Generic method that posts a plugin to the metrics website
 	 */
 	private void postPlugin(final boolean isPing) throws IOException{
-		// The plugin's description file containg all of the plugin data such as name, version, author, etc
+		// The plugin's description file containing all of the plugin data such as name, version, author, etc
 		final PluginDescriptionFile description = plugin.getDescription();
 
 		// Construct the post data
 		final StringBuilder data = new StringBuilder();
 		data.append(encode("guid")).append('=').append(encode(guid));
 		encodeDataPair(data, "version", description.getVersion());
-		encodeDataPair(data, "server", Bukkit.getVersion());
-		encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
+		encodeDataPair(data, "server", plugin.getServer().getVersion());
+		encodeDataPair(data, "players", Integer.toString(plugin.getServer().getOnlinePlayers().length));
 		encodeDataPair(data, "revision", String.valueOf(REVISION));
 
 		// If we're pinging, append it
@@ -479,7 +484,7 @@ public class Metrics {
 		try{
 			Class.forName("mineshafter.MineServer");
 			return true;
-		}catch(ClassNotFoundException e){
+		}catch(Exception e){
 			return false;
 		}
 	}

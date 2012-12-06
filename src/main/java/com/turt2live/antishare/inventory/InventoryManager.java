@@ -152,7 +152,7 @@ public class InventoryManager {
 			worlds.add(w.getName());
 		}
 
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
 			@Override
 			public void run(){
 				// Release
