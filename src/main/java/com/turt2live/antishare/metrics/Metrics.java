@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2012 turt2live (Travis Ralston).
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v2.1
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * 
- * Contributors:
- * turt2live (Travis Ralston) - initial API and implementation
- ******************************************************************************/
-package com.turt2live.antishare.metrics;
-
 /*
  * Copyright 2011 Tyler Blair. All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification, are
@@ -33,6 +21,8 @@ package com.turt2live.antishare.metrics;
  * either expressed or implied, of anybody else.
  */
 
+package com.turt2live.antishare.metrics;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -51,13 +41,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitTask;
-
-import com.turt2live.antishare.AntiShare;
 
 /**
  * <p>
@@ -72,25 +61,12 @@ import com.turt2live.antishare.AntiShare;
  * void start(); <br/>
  * </code>
  */
-/* Turt2Live:
- * Any modifications should be recorded as this is not an AntiShare file.
- * For example, if you modify this sample line:
- *   String lol = "lol";
- * to be this:
- *   String lol = "Not lol";
- * then you should record it like this:
- *   String lol = "Not lol"; // Turt2Live - Changed value (lol -> Not lol)
- */
 public class Metrics {
 
 	/**
-	 * Debug mode
-	 */
-	private static final boolean DEBUG = AntiShare.getInstance().getConfig().getBoolean("other.debug", false);
-	/**
 	 * The current revision number
 	 */
-	private final static int REVISION = 5;
+	private final static int REVISION = 6;
 
 	/**
 	 * The base url of the metrics domain
@@ -101,11 +77,6 @@ public class Metrics {
 	 * The url used to report a server's status
 	 */
 	private static final String REPORT_URL = "/report/%s";
-
-	/**
-	 * The file where guid and opt out is stored in
-	 */
-	private static final String CONFIG_FILE = "plugins/PluginMetrics/config.yml";
 
 	/**
 	 * The separator to use for custom data. This MUST NOT change unless you are hosting your own
@@ -149,14 +120,19 @@ public class Metrics {
 	private final String guid;
 
 	/**
+	 * Debug mode
+	 */
+	private final boolean debug;
+
+	/**
 	 * Lock for synchronization
 	 */
 	private final Object optOutLock = new Object();
 
 	/**
-	 * Id of the scheduled task
+	 * The scheduled task
 	 */
-	private volatile BukkitTask taskId = null; // Turt2live - Changed to BukkitTask & null
+	private volatile BukkitTask task = null;
 
 	public Metrics(final Plugin plugin) throws IOException{
 		if(plugin == null){
@@ -166,12 +142,13 @@ public class Metrics {
 		this.plugin = plugin;
 
 		// load the config
-		configurationFile = new File(CONFIG_FILE);
+		configurationFile = getConfigFile();
 		configuration = YamlConfiguration.loadConfiguration(configurationFile);
 
 		// add some defaults
 		configuration.addDefault("opt-out", false);
 		configuration.addDefault("guid", UUID.randomUUID().toString());
+		configuration.addDefault("debug", false);
 
 		// Do we need to create the file?
 		if(configuration.get("guid", null) == null){
@@ -181,13 +158,14 @@ public class Metrics {
 
 		// Load the guid then
 		guid = configuration.getString("guid");
+		debug = configuration.getBoolean("debug", false);
 	}
 
 	/**
 	 * Construct and create a Graph that can be used to separate specific plotters to their own graphs
 	 * on the metrics website. Plotters can be added to the graph object returned.
 	 * 
-	 * @param name the graph name
+	 * @param name The name of the graph
 	 * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
 	 */
 	public Graph createGraph(final String name){
@@ -206,9 +184,22 @@ public class Metrics {
 	}
 
 	/**
+	 * Add a Graph object to Metrics that represents data for the plugin that should be sent to the backend
+	 * 
+	 * @param graph The name of the graph
+	 */
+	public void addGraph(final Graph graph){
+		if(graph == null){
+			throw new IllegalArgumentException("Graph cannot be null");
+		}
+
+		graphs.add(graph);
+	}
+
+	/**
 	 * Adds a custom data plotter to the default graph
 	 * 
-	 * @param plotter the plotter
+	 * @param plotter The plotter to use to plot custom data
 	 */
 	public void addCustomData(final Plotter plotter){
 		if(plotter == null){
@@ -237,12 +228,12 @@ public class Metrics {
 			}
 
 			// Is metrics already running?
-			if(taskId != null){ // turt2live - >=0 is now != null
+			if(task != null){
 				return true;
 			}
 
 			// Begin hitting the server with glorious data
-			taskId = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable(){
+			task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable(){
 
 				private boolean firstPost = true;
 
@@ -252,16 +243,14 @@ public class Metrics {
 						// This has to be synchronized or it can collide with the disable method.
 						synchronized (optOutLock){
 							// Disable Task, if it is running and the server owner decided to opt-out
-							if(isOptOut() && taskId != null){ // turt2live - taskId > 0 is now taskId != null
-								//plugin.getServer().getScheduler().cancelTask(taskId); // Turt2live - Commented for below line
-								taskId.cancel();
-								taskId = null; // turt2live - Changed from -1 to null
+							if(isOptOut() && task != null){
+								task.cancel();
+								task = null;
+								// Tell all plotters to stop gathering information.
+								for(Graph graph : graphs){
+									graph.onOptOut();
+								}
 							}
-						}
-
-						// Turt2Live - Added debug
-						if(DEBUG){
-							plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] [Debug] Sending");
 						}
 
 						// We use the inverse of firstPost because if it is the first time we are posting,
@@ -269,16 +258,13 @@ public class Metrics {
 						// Each time thereafter it will evaluate to TRUE, i.e PING!
 						postPlugin(!firstPost);
 
-						// Turt2Live - Added debug
-						if(DEBUG){
-							plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] [Debug] Sent");
-						}
-
 						// After the first post we set firstPost to false
 						// Each post thereafter will be a ping
 						firstPost = false;
 					}catch(IOException e){
-						plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + e.getMessage());
+						if(debug){
+							Bukkit.getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + e.getMessage());
+						}
 					}
 				}
 			}, 0, PING_INTERVAL * 1200);
@@ -290,21 +276,21 @@ public class Metrics {
 	/**
 	 * Has the server owner denied plugin metrics?
 	 * 
-	 * @return true if opt-out
+	 * @return true if metrics should be opted out of it
 	 */
 	public boolean isOptOut(){
 		synchronized (optOutLock){
 			try{
 				// Reload the metrics file
-				configuration.load(CONFIG_FILE);
+				configuration.load(getConfigFile());
 			}catch(IOException ex){
-				if(DEBUG){
-					plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + ex.getMessage());
+				if(debug){
+					Bukkit.getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + ex.getMessage());
 				}
 				return true;
 			}catch(InvalidConfigurationException ex){
-				if(DEBUG){
-					plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + ex.getMessage());
+				if(debug){
+					Bukkit.getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + ex.getMessage());
 				}
 				return true;
 			}
@@ -315,7 +301,7 @@ public class Metrics {
 	/**
 	 * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
 	 * 
-	 * @throws IOException if something went wrong
+	 * @throws IOException
 	 */
 	public void enable() throws IOException{
 		// This has to be synchronized or it can collide with the check in the task.
@@ -327,7 +313,7 @@ public class Metrics {
 			}
 
 			// Enable Task, if it is not running
-			if(taskId == null){ // Turt2live - Change from < 0 to == null
+			if(task == null){
 				start();
 			}
 		}
@@ -336,7 +322,7 @@ public class Metrics {
 	/**
 	 * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
 	 * 
-	 * @throws IOException if something went wrong
+	 * @throws IOException
 	 */
 	public void disable() throws IOException{
 		// This has to be synchronized or it can collide with the check in the task.
@@ -348,49 +334,72 @@ public class Metrics {
 			}
 
 			// Disable Task, if it is running
-			if(taskId != null){ // Turt2live - > 0 is now != null
-				//this.plugin.getServer().getScheduler().cancelTask(taskId); // Turt2live - comment for below line
-				taskId.cancel();
-				taskId = null; // turt2live - -1 is now null
+			if(task != null){
+				task.cancel();
+				task = null;
 			}
 		}
 	}
 
 	/**
-	 * Flushes and stops Metrics
+	 * Gets the File object of the config file that should be used to store data such as the GUID and opt-out status
+	 * 
+	 * @return the File object for the config file
 	 */
-	// Turt2Live - Added flush()
-	public void flush(){
-		taskId.cancel();
-		try{
-			if(DEBUG){
-				plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] [Debug] Sending");
-			}
-			postPlugin(true);
-			if(DEBUG){
-				plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] [Debug] Sent");
-			}
-		}catch(IOException e){
-			if(DEBUG){
-				plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + e.getMessage());
-			}
-		}
+	public File getConfigFile(){
+		// I believe the easiest way to get the base folder (e.g craftbukkit set via -P) for plugins to use
+		// is to abuse the plugin object we already have
+		// plugin.getDataFolder() => base/plugins/PluginA/
+		// pluginsFolder => base/plugins/
+		// The base is not necessarily relative to the startup directory.
+		File pluginsFolder = plugin.getDataFolder().getParentFile();
+
+		// return => base/plugins/PluginMetrics/config.yml
+		return new File(new File(pluginsFolder, "PluginMetrics"), "config.yml");
 	}
 
 	/**
 	 * Generic method that posts a plugin to the metrics website
 	 */
 	private void postPlugin(final boolean isPing) throws IOException{
-		// The plugin's description file containing all of the plugin data such as name, version, author, etc
-		final PluginDescriptionFile description = plugin.getDescription();
+		// Server software specific section
+		PluginDescriptionFile description = plugin.getDescription();
+		String pluginName = description.getName();
+		boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
+		String pluginVersion = description.getVersion();
+		String serverVersion = Bukkit.getVersion();
+		int playersOnline = Bukkit.getServer().getOnlinePlayers().length;
+
+		// END server software specific section -- all code below does not use any code outside of this class / Java
 
 		// Construct the post data
 		final StringBuilder data = new StringBuilder();
+
+		// The plugin's description file containg all of the plugin data such as name, version, author, etc
 		data.append(encode("guid")).append('=').append(encode(guid));
-		encodeDataPair(data, "version", description.getVersion());
-		encodeDataPair(data, "server", plugin.getServer().getVersion());
-		encodeDataPair(data, "players", Integer.toString(plugin.getServer().getOnlinePlayers().length));
+		encodeDataPair(data, "version", pluginVersion);
+		encodeDataPair(data, "server", serverVersion);
+		encodeDataPair(data, "players", Integer.toString(playersOnline));
 		encodeDataPair(data, "revision", String.valueOf(REVISION));
+
+		// New data as of R6
+		String osname = System.getProperty("os.name");
+		String osarch = System.getProperty("os.arch");
+		String osversion = System.getProperty("os.version");
+		String java_version = System.getProperty("java.version");
+		int coreCount = Runtime.getRuntime().availableProcessors();
+
+		// normalize os arch .. amd64 -> x86_64
+		if(osarch.equals("amd64")){
+			osarch = "x86_64";
+		}
+
+		encodeDataPair(data, "osname", osname);
+		encodeDataPair(data, "osarch", osarch);
+		encodeDataPair(data, "osversion", osversion);
+		encodeDataPair(data, "cores", Integer.toString(coreCount));
+		encodeDataPair(data, "online-mode", Boolean.toString(onlineMode));
+		encodeDataPair(data, "java_version", java_version);
 
 		// If we're pinging, append it
 		if(isPing){
@@ -405,10 +414,6 @@ public class Metrics {
 			while (iter.hasNext()){
 				final Graph graph = iter.next();
 
-				// Because we have a lock on the graphs set already, it is reasonable to assume
-				// that our lock transcends down to the individual plotters in the graphs also.
-				// Because our methods are private, no one but us can reasonably access this list
-				// without reflection so this is a safe assumption without adding more code.
 				for(Plotter plotter : graph.getPlotters()){
 					// The key name to send to the metrics server
 					// The format is C-GRAPHNAME-PLOTTERNAME where separator - is defined at the top
@@ -426,7 +431,7 @@ public class Metrics {
 		}
 
 		// Create the url
-		URL url = new URL(BASE_URL + String.format(REPORT_URL, encode(plugin.getDescription().getName())));
+		URL url = new URL(BASE_URL + String.format(REPORT_URL, encode(pluginName)));
 
 		// Connect to the website
 		URLConnection connection;
@@ -472,13 +477,23 @@ public class Metrics {
 				}
 			}
 		}
-		//if (response.startsWith("OK")) - We should get "OK" followed by an optional description if everything goes right
+	}
+
+	public void flush(){
+		task.cancel();
+		try{
+			postPlugin(true);
+		}catch(IOException e){
+			if(debug){
+				plugin.getServer().getLogger().log(Level.INFO, "[" + plugin.getName() + "] [Metrics] " + e.getMessage());
+			}
+		}
 	}
 
 	/**
 	 * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
 	 * 
-	 * @return true if Mineshafter is present
+	 * @return true if mineshafter is installed on the server
 	 */
 	private boolean isMineshafterPresent(){
 		try{
@@ -499,8 +514,8 @@ public class Metrics {
 	 * encodeDataPair(data, "version", description.getVersion());
 	 * </code>
 	 * 
-	 * @param buffer the buffer
-	 * @param key the key
+	 * @param buffer the stringbuilder to append the data pair onto
+	 * @param key the key value
 	 * @param value the value
 	 */
 	private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException{
@@ -510,8 +525,8 @@ public class Metrics {
 	/**
 	 * Encode text as UTF-8
 	 * 
-	 * @param text the text
-	 * @return the encoded text
+	 * @param text the text to encode
+	 * @return the encoded text, as UTF-8
 	 */
 	private static String encode(final String text) throws UnsupportedEncodingException{
 		return URLEncoder.encode(text, "UTF-8");
@@ -540,7 +555,7 @@ public class Metrics {
 		/**
 		 * Gets the graph's name
 		 * 
-		 * @return the name
+		 * @return the Graph's name
 		 */
 		public String getName(){
 			return name;
@@ -549,7 +564,7 @@ public class Metrics {
 		/**
 		 * Add a plotter to the graph, which will be used to plot entries
 		 * 
-		 * @param plotter the plotter
+		 * @param plotter the plotter to add to the graph
 		 */
 		public void addPlotter(final Plotter plotter){
 			plotters.add(plotter);
@@ -558,7 +573,7 @@ public class Metrics {
 		/**
 		 * Remove a plotter from the graph
 		 * 
-		 * @param plotter the plotter
+		 * @param plotter the plotter to remove from the graph
 		 */
 		public void removePlotter(final Plotter plotter){
 			plotters.remove(plotter);
@@ -567,7 +582,7 @@ public class Metrics {
 		/**
 		 * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
 		 * 
-		 * @return the plotters
+		 * @return an unmodifiable {@link Set} of the plotter objects
 		 */
 		public Set<Plotter> getPlotters(){
 			return Collections.unmodifiableSet(plotters);
@@ -587,6 +602,11 @@ public class Metrics {
 			final Graph graph = (Graph) object;
 			return graph.name.equals(name);
 		}
+
+		/**
+		 * Called when the server owner decides to opt-out of Metrics while the server is running.
+		 */
+		protected void onOptOut(){}
 
 	}
 
@@ -610,16 +630,19 @@ public class Metrics {
 		/**
 		 * Construct a plotter with a specific plot name
 		 * 
-		 * @param name the name
+		 * @param name the name of the plotter to use, which will show up on the website
 		 */
 		public Plotter(final String name){
 			this.name = name;
 		}
 
 		/**
-		 * Get the current value for the plotted point
+		 * Get the current value for the plotted point. Since this function defers to an external function
+		 * it may or may not return immediately thus cannot be guaranteed to be thread friendly or safe.
+		 * This function can be called from any thread so care should be taken when accessing resources
+		 * that need to be synchronized.
 		 * 
-		 * @return the value
+		 * @return the current value for the point to be plotted.
 		 */
 		public abstract int getValue();
 
@@ -639,7 +662,7 @@ public class Metrics {
 
 		@Override
 		public int hashCode(){
-			return getColumnName().hashCode() + getValue();
+			return getColumnName().hashCode();
 		}
 
 		@Override
