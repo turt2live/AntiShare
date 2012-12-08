@@ -188,7 +188,9 @@ public class AntiShare extends PluginWrapper {
 
 		// Command handlers
 		getCommand("antishare").setExecutor(new CommandHandler());
-		getCommand("antishare").setTabCompleter(new TabHandler());
+		if(isTabCompleteImplemented()){
+			TabRegister.register(getCommand("antishare"));
+		}
 
 		// Check players
 		for(Player player : Bukkit.getOnlinePlayers()){
@@ -557,6 +559,18 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public void log(String string, Level level){
 		getLogger().log(level, string);
+	}
+
+	/**
+	 * Determines if Tab Complete is implemented in the server version
+	 * 
+	 * @return true if implemented
+	 */
+	public static boolean isTabCompleteImplemented(){
+		try{
+			return Class.forName("org.bukkit.command.TabCompleter") != null;
+		}catch(ClassNotFoundException e){}
+		return false;
 	}
 
 }
