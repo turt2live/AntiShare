@@ -46,7 +46,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.scheduler.BukkitTask;
+
+import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
+import com.turt2live.antishare.tekkitcompat.task.AntiShareTask;
 
 /**
  * <p>
@@ -132,7 +134,7 @@ public class Metrics {
 	/**
 	 * The scheduled task
 	 */
-	private volatile BukkitTask task = null;
+	private volatile AntiShareTask task = null;
 
 	public Metrics(final Plugin plugin) throws IOException{
 		if(plugin == null){
@@ -233,7 +235,7 @@ public class Metrics {
 			}
 
 			// Begin hitting the server with glorious data
-			task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable(){
+			task = ScheduleLayer.runTaskTimerAsynchronously(plugin, new Runnable(){
 
 				private boolean firstPost = true;
 

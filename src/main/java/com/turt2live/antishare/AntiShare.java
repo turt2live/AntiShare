@@ -42,6 +42,8 @@ import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.signs.SignManager;
 import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.storage.PerWorldConfig;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.SQL;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
@@ -188,7 +190,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Command handlers
 		getCommand("antishare").setExecutor(new CommandHandler());
-		if(isTabCompleteImplemented()){
+		if(ServerHas.tabComplete()){
 			TabRegister.register(getCommand("antishare"));
 		}
 
@@ -344,8 +346,10 @@ public class AntiShare extends PluginWrapper {
 		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL, world) && player.getGameMode() == GameMode.SURVIVAL){
 			return true;
 		}
-		if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
-			return true;
+		if(ServerHas.adventureMode()){
+			if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -559,18 +563,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public void log(String string, Level level){
 		getLogger().log(level, string);
-	}
-
-	/**
-	 * Determines if Tab Complete is implemented in the server version
-	 * 
-	 * @return true if implemented
-	 */
-	public static boolean isTabCompleteImplemented(){
-		try{
-			return Class.forName("org.bukkit.command.TabCompleter") != null;
-		}catch(ClassNotFoundException e){}
-		return false;
 	}
 
 }

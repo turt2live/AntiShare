@@ -24,6 +24,8 @@ import org.bukkit.block.Block;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.events.TrackerList;
 
 /**
@@ -172,11 +174,13 @@ public class BlockManager {
 			}
 			survival_blocks.add(block);
 			break;
-		case ADVENTURE:
-			if(!tracked_adventure.isTracked(block)){
-				break;
+		default:
+			if(ServerHas.adventureMode()){
+				if(!tracked_adventure.isTracked(block)){
+					break;
+				}
+				adventure_blocks.add(block);
 			}
-			adventure_blocks.add(block);
 			break;
 		}
 	}
@@ -200,8 +204,10 @@ public class BlockManager {
 			case SURVIVAL:
 				survival_blocks.remove(block);
 				break;
-			case ADVENTURE:
-				adventure_blocks.remove(block);
+			default:
+				if(ServerHas.adventureMode()){
+					adventure_blocks.remove(block);
+				}
 				break;
 			}
 		}
@@ -226,7 +232,7 @@ public class BlockManager {
 
 		// Start a thread to wait until the block changes
 		final Material oldType = oldBlock.getType();
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+		ScheduleLayer.runTaskAsynchronously(plugin, new Runnable(){
 			@Override
 			public void run(){
 				// Setup vars
@@ -274,7 +280,9 @@ public class BlockManager {
 		}else if(survival_blocks.contains(block)){
 			return GameMode.SURVIVAL;
 		}else if(adventure_blocks.contains(block)){
-			return GameMode.ADVENTURE;
+			if(ServerHas.adventureMode()){
+				return GameMode.ADVENTURE;
+			}
 		}
 		return null;
 	}

@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
 
 /**
  * Update Checker
@@ -45,7 +46,7 @@ public class UpdateChecker {
 		if(plugin.getConfig().getBoolean("other.dont-look-for-updates")){
 			return;
 		}
-		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable(){
+		ScheduleLayer.runTaskTimerAsynchronously(plugin, new Runnable(){
 			@Override
 			public void run(){
 				try{

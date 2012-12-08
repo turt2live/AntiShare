@@ -33,6 +33,7 @@ import org.bukkit.material.MaterialData;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.SQL;
 
 /**
@@ -78,7 +79,7 @@ public class ASInventory implements Cloneable {
 	 */
 	public static ASInventory generate(Player player, InventoryType type){
 		ASInventory inventory = new ASInventory(type, player.getName(), player.getWorld(), player.getGameMode());
-		if(type == InventoryType.ENDER){
+		if(type == InventoryType.ENDER && ServerHas.enderChests()){
 			ItemStack[] contents = player.getEnderChest().getContents();
 			int slot = 0;
 			for(ItemStack item : contents){
@@ -273,7 +274,7 @@ public class ASInventory implements Cloneable {
 	@SuppressWarnings ("deprecation")
 	public void setTo(Player player){
 		Inventory pInventory;
-		if(type == InventoryType.ENDER){
+		if(type == InventoryType.ENDER && ServerHas.enderChests()){
 			pInventory = player.getEnderChest();
 		}else{
 			pInventory = player.getInventory();
