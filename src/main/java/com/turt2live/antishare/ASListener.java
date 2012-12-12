@@ -41,6 +41,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.PoweredMinecart;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Snowball;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.Vehicle;
@@ -1734,6 +1735,8 @@ public class ASListener implements Listener {
 		// Check for entity
 		if(event.getEntity() instanceof EnderPearl){
 			item = Material.ENDER_PEARL;
+		}else if(event.getEntity() instanceof Snowball){
+			item = Material.SNOW_BALL;
 		}
 
 		if(item == Material.AIR){
