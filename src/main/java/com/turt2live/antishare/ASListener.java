@@ -39,6 +39,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.PoweredMinecart;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Snowball;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.Vehicle;
@@ -86,10 +87,6 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.PerWorldConfig.ListType;
-import com.turt2live.antishare.tekkitcompat.HangingListener;
-import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
-import com.turt2live.antishare.tekkitcompat.PaintingListener;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.LevelSaver;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
@@ -1759,6 +1756,8 @@ public class ASListener implements Listener {
 		// Check for entity
 		if(event.getEntity() instanceof EnderPearl){
 			item = Material.ENDER_PEARL;
+		}else if(event.getEntity() instanceof Snowball){
+			item = Material.SNOW_BALL;
 		}
 
 		if(item == Material.AIR){
