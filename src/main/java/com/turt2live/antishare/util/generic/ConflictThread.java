@@ -22,6 +22,25 @@ public class ConflictThread implements Runnable {
 
 	@Override
 	public void run(){
+		Plugin mv = plugin.getServer().getPluginManager().getPlugin("Multiverse");
+		if(mv != null){
+			if(plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
+				AntiShare.getInstance().log("*************************************************************************************", Level.WARNING);
+				AntiShare.getInstance().log("* You have Multiverse installed and GameMode Inventories enabled!                   *", Level.WARNING);
+				AntiShare.getInstance().log("* Although bugs are not expected to occur, they are still possible. If unexpected   *", Level.WARNING);
+				AntiShare.getInstance().log("* inventory bugs occur, or world bugs, check your configurations in both plugins.   *", Level.WARNING);
+				AntiShare.getInstance().log("* Inventory loss bugs have been reported and can be solved with correct configs.    *", Level.WARNING);
+				AntiShare.getInstance().log("*************************************************************************************", Level.WARNING);
+			}
+			if(plugin.getConfig().getBoolean("handled-actions.world-transfers")){
+				AntiShare.getInstance().log("*************************************************************************************", Level.WARNING);
+				AntiShare.getInstance().log("* You have Multiverse installed and World Transfers enabled!                        *", Level.WARNING);
+				AntiShare.getInstance().log("* Although bugs are not expected to occur, they are still possible. If unexpected   *", Level.WARNING);
+				AntiShare.getInstance().log("* inventory bugs occur, or world bugs, check your configurations in both plugins.   *", Level.WARNING);
+				AntiShare.getInstance().log("* Inventory loss bugs have been reported and can be solved with correct configs.    *", Level.WARNING);
+				AntiShare.getInstance().log("*************************************************************************************", Level.WARNING);
+			}
+		}
 		Plugin mvinv = plugin.getServer().getPluginManager().getPlugin("Multiverse-Inventories");
 		if(mvinv != null){
 			if(plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
