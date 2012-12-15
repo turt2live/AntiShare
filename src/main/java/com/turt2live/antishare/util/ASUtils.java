@@ -21,7 +21,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Bat;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Chicken;
@@ -45,13 +44,13 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Squid;
 import org.bukkit.entity.Villager;
-import org.bukkit.entity.Witch;
-import org.bukkit.entity.Wither;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.material.Attachable;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.tekkitcompat.EntityLayer;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.generic.ASEntity;
 
 /**
@@ -125,7 +124,7 @@ public class ASUtils {
 			return GameMode.CREATIVE;
 		}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")){
 			return GameMode.SURVIVAL;
-		}else if(value.equalsIgnoreCase("adventure") || value.equalsIgnoreCase("a") || value.equalsIgnoreCase("2")){
+		}else if(ServerHas.adventureMode() && value.equalsIgnoreCase("adventure") || value.equalsIgnoreCase("a") || value.equalsIgnoreCase("2")){
 			return GameMode.ADVENTURE;
 		}
 		return null;
@@ -152,7 +151,6 @@ public class ASUtils {
 		case LEVER:
 		case STONE_BUTTON:
 		case STRING:
-		case TRIPWIRE:
 		case SIGN:
 		case WALL_SIGN:
 		case SIGN_POST:
@@ -161,16 +159,24 @@ public class ASUtils {
 		case TORCH:
 		case REDSTONE_TORCH_OFF:
 		case REDSTONE_TORCH_ON:
-		case TRIPWIRE_HOOK:
 		case CAKE_BLOCK:
 		case DIODE_BLOCK_OFF:
 		case DIODE_BLOCK_ON:
 		case STEP:
 		case WATER_LILY:
-		case ITEM_FRAME:
-		case FLOWER_POT:
 			return true;
 		default:
+			if(ServerHas.mc14xItems()){
+				switch (material){
+				case ITEM_FRAME:
+				case FLOWER_POT:
+				case TRIPWIRE_HOOK:
+				case TRIPWIRE:
+					return true;
+				default:
+					return false;
+				}
+			}
 			return false;
 		}
 	}
@@ -195,8 +201,8 @@ public class ASUtils {
 				|| block.getType() == Material.WHEAT || block.getType() == Material.WOODEN_DOOR
 				|| block.getType() == Material.IRON_DOOR || block.getType() == Material.IRON_DOOR_BLOCK
 				|| block.getType() == Material.CROPS || block.getType() == Material.LONG_GRASS
-				|| block.getType() == Material.SAPLING || block.getType() == Material.ITEM_FRAME
-				|| block.getType() == Material.FLOWER_POT){
+				|| block.getType() == Material.SAPLING || (ServerHas.mc14xItems() && (block.getType() == Material.ITEM_FRAME
+				|| block.getType() == Material.FLOWER_POT))){
 			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
 			Location l1 = source.getLocation();
 			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
@@ -392,14 +398,16 @@ public class ASUtils {
 		if(entity instanceof Zombie){
 			return "zombie";
 		}
-		if(entity instanceof Witch){
-			return "witch";
-		}
-		if(entity instanceof Wither){
-			return "wither boss";
-		}
-		if(entity instanceof Bat){
-			return "bat";
+		if(ServerHas.mc14xEntities()){
+			if(EntityLayer.isEntity(entity, "Witch")){
+				return "witch";
+			}
+			if(EntityLayer.isEntity(entity, "Wither")){
+				return "wither boss";
+			}
+			if(EntityLayer.isEntity(entity, "Bat")){
+				return "bat";
+			}
 		}
 		return null;
 	}
@@ -509,7 +517,7 @@ public class ASUtils {
 	 * @return true if gravity applies
 	 */
 	public static boolean isAffectedByGravity(Material material){
-		return material == Material.GRAVEL || material == Material.SAND || material == Material.ANVIL;
+		return material == Material.GRAVEL || material == Material.SAND || (ServerHas.mc14xItems() && material == Material.ANVIL);
 	}
 
 }

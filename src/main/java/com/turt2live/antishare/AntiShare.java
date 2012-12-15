@@ -42,6 +42,8 @@ import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.signs.SignManager;
 import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.storage.PerWorldConfig;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.SQL;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
@@ -188,7 +190,9 @@ public class AntiShare extends PluginWrapper {
 
 		// Command handlers
 		getCommand("antishare").setExecutor(new CommandHandler());
-		getCommand("antishare").setTabCompleter(new TabHandler());
+		if(ServerHas.tabComplete()){
+			TabRegister.register(getCommand("antishare"));
+		}
 
 		// Check players
 		for(Player player : Bukkit.getOnlinePlayers()){
@@ -342,8 +346,10 @@ public class AntiShare extends PluginWrapper {
 		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL, world) && player.getGameMode() == GameMode.SURVIVAL){
 			return true;
 		}
-		if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
-			return true;
+		if(ServerHas.adventureMode()){
+			if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
+				return true;
+			}
 		}
 		return false;
 	}

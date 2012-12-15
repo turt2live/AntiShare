@@ -30,10 +30,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hanging;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Painting;
@@ -60,8 +58,6 @@ import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.hanging.HangingBreakEvent;
-import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -91,6 +87,10 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.PerWorldConfig.ListType;
+import com.turt2live.antishare.tekkitcompat.HangingListener;
+import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
+import com.turt2live.antishare.tekkitcompat.PaintingListener;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.LevelSaver;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
@@ -112,6 +112,11 @@ public class ASListener implements Listener {
 	 */
 	public ASListener(){
 		reload();
+		if(ServerHas.hangingEvents()){
+			plugin.getServer().getPluginManager().registerEvents(new HangingListener(), plugin);
+		}else{
+			plugin.getServer().getPluginManager().registerEvents(new PaintingListener(), plugin);
+		}
 	}
 
 	/**
@@ -679,8 +684,12 @@ public class ASListener implements Listener {
 			item = Material.PAINTING;
 		}else if(event.getRightClicked() instanceof Sheep){
 			item = Material.SHEARS;
-		}else if(event.getRightClicked() instanceof ItemFrame){
-			item = Material.ITEM_FRAME;
+		}else{
+			if(ServerHas.mc14xItems()){
+				if(ItemFrameLayer.isItemFrame(event.getRightClicked())){
+					item = ItemFrameLayer.getItemFrame();
+				}
+			}
 		}
 
 		// If the entity is not found, check for interacted entities
@@ -1214,9 +1223,13 @@ public class ASListener implements Listener {
 				plugin.getInventoryManager().saveSurvivalInventory(player, player.getWorld());
 				plugin.getInventoryManager().saveEnderSurvivalInventory(player, player.getWorld());
 				break;
-			case ADVENTURE:
-				plugin.getInventoryManager().saveAdventureInventory(player, player.getWorld());
-				plugin.getInventoryManager().saveEnderAdventureInventory(player, player.getWorld());
+			default:
+				if(ServerHas.adventureMode()){
+					if(from == GameMode.ADVENTURE){
+						plugin.getInventoryManager().saveAdventureInventory(player, player.getWorld());
+						plugin.getInventoryManager().saveEnderAdventureInventory(player, player.getWorld());
+					}
+				}
 				break;
 			}
 
@@ -1233,9 +1246,13 @@ public class ASListener implements Listener {
 				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player);
 				plugin.getInventoryManager().getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
 				break;
-			case ADVENTURE:
-				plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player);
-				plugin.getInventoryManager().getEnderAdventureInventory(player, player.getWorld()).setTo(player);
+			default:
+				if(ServerHas.adventureMode()){
+					if(from == GameMode.ADVENTURE){
+						plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player);
+						plugin.getInventoryManager().getEnderAdventureInventory(player, player.getWorld()).setTo(player);
+					}
+				}
 				break;
 			}
 
@@ -1531,9 +1548,13 @@ public class ASListener implements Listener {
 				plugin.getInventoryManager().saveSurvivalInventory(player, from);
 				plugin.getInventoryManager().saveEnderSurvivalInventory(player, from);
 				break;
-			case ADVENTURE:
-				plugin.getInventoryManager().saveAdventureInventory(player, from);
-				plugin.getInventoryManager().saveEnderAdventureInventory(player, from);
+			default:
+				if(ServerHas.adventureMode()){
+					if(player.getGameMode() == GameMode.ADVENTURE){
+						plugin.getInventoryManager().saveAdventureInventory(player, from);
+						plugin.getInventoryManager().saveEnderAdventureInventory(player, from);
+					}
+				}
 				break;
 			}
 
@@ -1553,9 +1574,13 @@ public class ASListener implements Listener {
 				plugin.getInventoryManager().getSurvivalInventory(player, to).setTo(player);
 				plugin.getInventoryManager().getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
-			case ADVENTURE:
-				plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player);
-				plugin.getInventoryManager().getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+			default:
+				if(ServerHas.adventureMode()){
+					if(player.getGameMode() == GameMode.ADVENTURE){
+						plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player);
+						plugin.getInventoryManager().getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+					}
+				}
 				break;
 			}
 
@@ -1772,25 +1797,6 @@ public class ASListener implements Listener {
 		if(type == AlertType.ILLEGAL){
 			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
-		}
-	}
-
-	// ################# Hanging Break Event
-
-	@EventHandler (priority = EventPriority.LOW)
-	public void onPaintingBreak(HangingBreakEvent event){
-		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
-			return;
-		}
-		if(event.getCause() == RemoveCause.PHYSICS){
-			// Removed by something
-			Hanging hanging = event.getEntity();
-			Location block = hanging.getLocation().getBlock().getRelative(hanging.getAttachedFace()).getLocation();
-			GameMode gamemode = plugin.getBlockManager().getRecentBreak(block);
-			if(gamemode != null && gamemode == GameMode.CREATIVE){
-				event.setCancelled(true);
-				hanging.remove();
-			}
 		}
 	}
 

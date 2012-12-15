@@ -19,6 +19,7 @@ import org.bukkit.block.Block;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.signs.Sign;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
 /**
@@ -228,18 +229,20 @@ public class EventList {
 			}
 
 			// Special case: Skull
-			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull")
-					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull")
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
-				if(!negate){
-					this.blocked.add(ASUtils.materialToString(Material.SKULL, false));
-					this.blocked.add(ASUtils.materialToString(Material.SKULL_ITEM, false));
-				}else{
-					this.blocked.remove(ASUtils.materialToString(Material.SKULL, false));
-					this.blocked.remove(ASUtils.materialToString(Material.SKULL_ITEM, false));
+			if(ServerHas.mc14xItems()){
+				if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull")
+						|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull")
+						|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
+						|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
+					if(!negate){
+						this.blocked.add(ASUtils.materialToString(Material.SKULL, false));
+						this.blocked.add(ASUtils.materialToString(Material.SKULL_ITEM, false));
+					}else{
+						this.blocked.remove(ASUtils.materialToString(Material.SKULL, false));
+						this.blocked.remove(ASUtils.materialToString(Material.SKULL_ITEM, false));
+					}
+					continue;
 				}
-				continue;
 			}
 
 			// Try to add the item, warn otherwise

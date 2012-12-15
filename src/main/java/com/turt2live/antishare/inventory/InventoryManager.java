@@ -27,6 +27,8 @@ import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfigurati
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
+import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
 /**
@@ -93,8 +95,10 @@ public class InventoryManager {
 				case SURVIVAL:
 					survival.put(player.getName() + "." + world.getName(), inventory);
 					break;
-				case ADVENTURE:
-					adventure.put(player.getName() + "." + world.getName(), inventory);
+				default:
+					if(ServerHas.adventureMode()){
+						adventure.put(player.getName() + "." + world.getName(), inventory);
+					}
 					break;
 				}
 			}
@@ -115,8 +119,10 @@ public class InventoryManager {
 				case SURVIVAL:
 					enderSurvival.put(player.getName() + "." + world.getName(), inventory);
 					break;
-				case ADVENTURE:
-					enderAdventure.put(player.getName() + "." + world.getName(), inventory);
+				default:
+					if(ServerHas.adventureMode()){
+						enderAdventure.put(player.getName() + "." + world.getName(), inventory);
+					}
 					break;
 				}
 			}
@@ -152,7 +158,7 @@ public class InventoryManager {
 			worlds.add(w.getName());
 		}
 
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+		ScheduleLayer.runTaskAsynchronously(plugin, new Runnable(){
 			@Override
 			public void run(){
 				// Release
@@ -223,13 +229,15 @@ public class InventoryManager {
 				saveEnderSurvivalInventory(player, player.getWorld());
 			enderPremerge = getEnderSurvivalInventory(player, player.getWorld());
 			break;
-		case ADVENTURE:
-			if(!alreadySaved)
-				saveAdventureInventory(player, player.getWorld());
-			premerge = getAdventureInventory(player, player.getWorld());
-			if(!alreadySaved)
-				saveEnderAdventureInventory(player, player.getWorld());
-			enderPremerge = getEnderAdventureInventory(player, player.getWorld());
+		default:
+			if(ServerHas.adventureMode()){
+				if(!alreadySaved)
+					saveAdventureInventory(player, player.getWorld());
+				premerge = getAdventureInventory(player, player.getWorld());
+				if(!alreadySaved)
+					saveEnderAdventureInventory(player, player.getWorld());
+				enderPremerge = getEnderAdventureInventory(player, player.getWorld());
+			}
 			break;
 		}
 
@@ -245,10 +253,12 @@ public class InventoryManager {
 			enderMerge.setGamemode(GameMode.SURVIVAL);
 			survival.put(player.getName() + "." + world.getName(), merge);
 			enderSurvival.put(player.getName() + "." + world.getName(), enderMerge);
-			merge.setGamemode(GameMode.ADVENTURE);
-			enderMerge.setGamemode(GameMode.ADVENTURE);
-			adventure.put(player.getName() + "." + world.getName(), merge);
-			enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
+			if(ServerHas.adventureMode()){
+				merge.setGamemode(GameMode.ADVENTURE);
+				enderMerge.setGamemode(GameMode.ADVENTURE);
+				adventure.put(player.getName() + "." + world.getName(), merge);
+				enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
+			}
 		}
 	}
 
@@ -270,9 +280,11 @@ public class InventoryManager {
 			saveSurvivalInventory(player, player.getWorld());
 			saveEnderSurvivalInventory(player, player.getWorld());
 			break;
-		case ADVENTURE:
-			saveAdventureInventory(player, player.getWorld());
-			saveEnderAdventureInventory(player, player.getWorld());
+		default:
+			if(ServerHas.adventureMode()){
+				saveAdventureInventory(player, player.getWorld());
+				saveEnderAdventureInventory(player, player.getWorld());
+			}
 			break;
 		}
 
@@ -601,9 +613,11 @@ public class InventoryManager {
 			saveSurvivalInventory(player, world);
 			saveEnderSurvivalInventory(player, world);
 			break;
-		case ADVENTURE:
-			saveAdventureInventory(player, world);
-			saveEnderAdventureInventory(player, world);
+		default:
+			if(ServerHas.adventureMode()){
+				saveAdventureInventory(player, world);
+				saveEnderAdventureInventory(player, world);
+			}
 			break;
 		}
 		c = getCreativeInventory(player, world);
@@ -647,9 +661,11 @@ public class InventoryManager {
 						inventory = getCreativeInventory(player, from);
 						enderInventory = getEnderCreativeInventory(player, from);
 						break;
-					case ADVENTURE:
-						inventory = getAdventureInventory(player, from);
-						enderInventory = getEnderAdventureInventory(player, from);
+					default:
+						if(ServerHas.adventureMode()){
+							inventory = getAdventureInventory(player, from);
+							enderInventory = getEnderAdventureInventory(player, from);
+						}
 						break;
 					}
 					for(String world : allWorlds){
@@ -666,9 +682,11 @@ public class InventoryManager {
 							survival.put(p, inventory);
 							enderSurvival.put(p, enderInventory);
 							break;
-						case ADVENTURE:
-							adventure.put(p, inventory);
-							enderAdventure.put(p, enderInventory);
+						default:
+							if(ServerHas.adventureMode()){
+								adventure.put(p, inventory);
+								enderAdventure.put(p, enderInventory);
+							}
 							break;
 						}
 					}

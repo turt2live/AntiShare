@@ -16,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,6 +26,8 @@ import org.bukkit.inventory.PlayerInventory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.RegionKey;
+import com.turt2live.antishare.tekkitcompat.CommandBlockLayer;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
 /**
@@ -40,8 +41,10 @@ public class CommandHandler implements CommandExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, Command command, String label, String[] args){
 		AntiShare plugin = AntiShare.getInstance();
-		if(sender instanceof BlockCommandSender){
-			return false;
+		if(ServerHas.commandBlock()){
+			if(CommandBlockLayer.isCommandBlock(sender)){
+				return false;
+			}
 		}
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
