@@ -3,9 +3,11 @@ package com.turt2live.antishare.util.generic;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -24,6 +26,56 @@ import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 
 public class SelfCompatibility {
 
+	private static enum Compat{
+		BLOCKS(0),
+		PLAYER_DATA(5),
+		INV_313(10);
+
+		public final int BYTE_POS;
+
+		private Compat(int byt){
+			BYTE_POS = byt;
+		}
+	}
+
+	private static final String COMPAT_NAME = "compat.antishare";
+
+	private static void noLongerNeedsUpdate(Compat compat){
+		RandomAccessFile file = getFile();
+		if(file != null){
+			try{
+				file.seek(compat.BYTE_POS);
+				file.writeBoolean(false);
+			}catch(IOException e){}
+		}
+	}
+
+	private static boolean needsUpdate(Compat compat){
+		RandomAccessFile file = getFile();
+		if(file != null){
+			try{
+				file.seek(compat.BYTE_POS);
+				return file.readBoolean();
+			}catch(IOException e){}
+			return true;
+		}
+		return true;
+	}
+
+	private static RandomAccessFile getFile(){
+		File rfile = new File(AntiShare.getInstance().getDataFolder(), "data" + File.separator + COMPAT_NAME);
+		if(!rfile.exists()){
+			try{
+				rfile.createNewFile();
+			}catch(IOException e){}
+		}
+		try{
+			RandomAccessFile file = new RandomAccessFile(rfile, "rw");
+			return file;
+		}catch(FileNotFoundException e){}
+		return null;
+	}
+
 	private static void saveBlock(File dir, Block block, String gamemode){
 		File file = new File(dir, block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml");
 		if(file.exists()){
@@ -39,6 +91,9 @@ public class SelfCompatibility {
 	 * Convert 4.4.0 to 4.4.1+ system
 	 */
 	public static void convertBlocks(){
+		if(!needsUpdate(Compat.BLOCKS)){
+			return;
+		}
 		int converted = 0;
 		AntiShare plugin = AntiShare.getInstance();
 		File dir = new File(plugin.getDataFolder(), "data");
@@ -70,12 +125,16 @@ public class SelfCompatibility {
 		if(converted > 0){
 			plugin.getLogger().info("Blocks Converted: " + converted);
 		}
+		noLongerNeedsUpdate(Compat.BLOCKS);
 	}
 
 	/**
 	 * Migrates player data from region_players to data/region_players
 	 */
 	public static void migratePlayerData(){
+		if(!needsUpdate(Compat.PLAYER_DATA)){
+			return;
+		}
 		AntiShare plugin = AntiShare.getInstance();
 		File newSaveFolder = new File(plugin.getDataFolder(), "data" + File.separator + "region_players");
 		File oldSaveFolder = new File(plugin.getDataFolder(), "region_players");
@@ -90,12 +149,16 @@ public class SelfCompatibility {
 			}
 			oldSaveFolder.delete();
 		}
+		noLongerNeedsUpdate(Compat.PLAYER_DATA);
 	}
 
 	/**
 	 * Converts 3.1.3 inventories to 3.2.0+ style
 	 */
 	public static void convert313Inventories(){
+		if(!needsUpdate(Compat.INV_313)){
+			return;
+		}
 		AntiShare plugin = AntiShare.getInstance();
 		File[] files = new File(plugin.getDataFolder(), "inventories").listFiles();
 		if(files != null){
@@ -147,6 +210,7 @@ public class SelfCompatibility {
 				file.delete();
 			}
 			plugin.getLogger().info("Player Inventories Converted: " + files.length);
+			noLongerNeedsUpdate(Compat.INV_313);
 		}
 	}
 
