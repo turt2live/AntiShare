@@ -1,7 +1,8 @@
 Since 4.4.0:
 - Updated block manager (creative/survival/adventure blocks) to save in a chunk-like format rather than one big file
 - Internal code updates and revisions
-- Updated inventory handling (in testing)
+- Updated inventory handling 
+- Added official Tekkit support
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
