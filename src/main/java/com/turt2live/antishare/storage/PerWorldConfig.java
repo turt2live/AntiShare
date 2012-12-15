@@ -11,8 +11,6 @@
 package com.turt2live.antishare.storage;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.logging.Level;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -35,33 +33,6 @@ import com.turt2live.antishare.util.events.EventList;
  * @author turt2live
  */
 public class PerWorldConfig {
-
-	/**
-	 * Migrates the world configurations to their own folder
-	 */
-	public static void migrate(){
-		File directory = AntiShare.getInstance().getDataFolder();
-		File newDir = new File(directory, "world_configurations");
-		int files = 0;
-		if(directory.listFiles() != null){
-			for(File file : directory.listFiles(new FileFilter(){
-				@Override
-				public boolean accept(File arg0){
-					if(arg0.getName().endsWith("_config.yml")){
-						return true;
-					}
-					return false;
-				}
-			})){
-				files++;
-				file.renameTo(new File(newDir, file.getName()));
-				file.delete();
-			}
-			if(files > 0){
-				AntiShare.getInstance().log("World Configurations Migrated: " + files, Level.INFO);
-			}
-		}
-	}
 
 	/**
 	 * An enum to determine what list to pull from

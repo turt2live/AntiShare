@@ -3,12 +3,14 @@ package com.turt2live.antishare.util.generic;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -29,7 +31,8 @@ public class SelfCompatibility {
 	private static enum Compat{
 		BLOCKS(0),
 		PLAYER_DATA(5),
-		INV_313(10);
+		INV_313(10),
+		WORLD_CONF(15);
 
 		public final int BYTE_POS;
 
@@ -85,6 +88,37 @@ public class SelfCompatibility {
 		blocks.load();
 		blocks.set(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName(), gamemode);
 		blocks.save();
+	}
+
+	/**
+	 * Migrates the world configurations to their own folder
+	 */
+	public static void migrateWorldConfigurations(){
+		if(!needsUpdate(Compat.WORLD_CONF)){
+			return;
+		}
+		File directory = AntiShare.getInstance().getDataFolder();
+		File newDir = new File(directory, "world_configurations");
+		int files = 0;
+		if(directory.listFiles() != null){
+			for(File file : directory.listFiles(new FileFilter(){
+				@Override
+				public boolean accept(File arg0){
+					if(arg0.getName().endsWith("_config.yml")){
+						return true;
+					}
+					return false;
+				}
+			})){
+				files++;
+				file.renameTo(new File(newDir, file.getName()));
+				file.delete();
+			}
+			if(files > 0){
+				AntiShare.getInstance().log("World Configurations Migrated: " + files, Level.INFO);
+			}
+		}
+		noLongerNeedsUpdate(Compat.WORLD_CONF);
 	}
 
 	/**

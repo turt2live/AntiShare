@@ -41,7 +41,6 @@ import com.turt2live.antishare.regions.RegionFactory;
 import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.signs.SignManager;
 import com.turt2live.antishare.storage.BlockManager;
-import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.SQL;
@@ -167,7 +166,7 @@ public class AntiShare extends PluginWrapper {
 		inventories = new InventoryManager();
 
 		// Migrate world configurations
-		PerWorldConfig.migrate();
+		SelfCompatibility.migrateWorldConfigurations();
 
 		// Migrate region players (3.8.0-3.9.0)
 		SelfCompatibility.migratePlayerData();
