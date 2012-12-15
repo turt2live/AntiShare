@@ -3,6 +3,8 @@ Since 4.4.0:
 - Internal code updates and revisions
 - Updated inventory handling 
 - Added official Tekkit support
+- Added additional warnings for Multiverse
+- Added a way to silence 'conflict' spam
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

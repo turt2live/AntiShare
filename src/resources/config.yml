@@ -166,3 +166,4 @@ other:
   send-gamemode-change-message: true
   quiet-offline-mode-warning: false
   dont-look-for-updates: false
+  stop-spam-for-conflicts: false
