@@ -254,7 +254,7 @@ public class SelfCompatibility {
 	public static void cleanupOldInventories(){
 		AntiShare plugin = AntiShare.getInstance();
 		if(plugin.getConfig().getBoolean("settings.cleanup.use")){
-			File timeFile = new File(plugin.getDataFolder(), "lastCleanup");
+			File timeFile = new File(plugin.getDataFolder(), "data" + File.separator + "lastCleanup");
 			if(timeFile.exists()){
 				try{
 					BufferedReader in = new BufferedReader(new FileReader(timeFile));

@@ -98,9 +98,15 @@ public class AntiShare extends PluginWrapper {
 			getDataFolder().mkdirs();
 		}
 
+		// Move SimpleNotice file
+		File oldSNFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");
+		if(oldSNFile.exists()){
+			oldSNFile.renameTo(new File(getDataFolder(), "data" + File.separator + "disabled-simplenotice-users.txt"));
+		}
+
 		// Get all disabled SimpleNotice users
 		try{
-			File snFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");
+			File snFile = new File(getDataFolder(), "data" + File.separator + "disabled-simplenotice-users.txt");
 			if(snFile.exists()){
 				BufferedReader in = new BufferedReader(new FileReader(snFile));
 				String line;
@@ -263,7 +269,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Save disabled SimpleNotice users
 		try{
-			File snFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");
+			File snFile = new File(getDataFolder(), "data" + File.separator + "disabled-simplenotice-users.txt");
 			BufferedWriter out = new BufferedWriter(new FileWriter(snFile, false));
 			for(String user : disabledSNPlayers){
 				out.write(user + "\r\n");
