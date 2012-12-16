@@ -58,4 +58,8 @@ public class Messages {
 		return message;
 	}
 
+	public String getPrefix(){
+		return messages.getString("prefix");
+	}
+
 }

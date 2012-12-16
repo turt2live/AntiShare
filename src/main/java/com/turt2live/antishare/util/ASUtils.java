@@ -75,8 +75,9 @@ public class ASUtils {
 				&& !message.equalsIgnoreCase("noshow")
 				&& !message.equalsIgnoreCase("no show")){
 			message = ChatColor.translateAlternateColorCodes('&', message);
-			if(!ChatColor.stripColor(message).startsWith("[AntiShare]")){
-				message = ChatColor.GRAY + "[AntiShare] " + ChatColor.WHITE + message;
+			String prefix = ChatColor.translateAlternateColorCodes('&', AntiShare.getInstance().getPrefix());
+			if(!ChatColor.stripColor(message).startsWith(ChatColor.stripColor(prefix))){
+				message = ChatColor.GRAY + prefix + " " + ChatColor.WHITE + message;
 			}
 			/* SimpleNotice support provided by feildmaster.
 			 * Support adapted by krinsdeath and further

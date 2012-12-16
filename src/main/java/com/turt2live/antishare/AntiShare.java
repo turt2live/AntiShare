@@ -570,4 +570,13 @@ public class AntiShare extends PluginWrapper {
 		getLogger().log(level, string);
 	}
 
+	/**
+	 * Gets the message prefix
+	 * 
+	 * @return the message prefix
+	 */
+	public String getPrefix(){
+		return messages.getPrefix();
+	}
+
 }

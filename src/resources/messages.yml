@@ -6,6 +6,7 @@
 # 
 # If you don't want a message to show, set the message to "no message". AntiShare 
 # will know what you mean!
+prefix: '&7[AntiShare]'
 blocked-action:
   break-block: "You cannot break that"
   place-block: "You cannot place that"
