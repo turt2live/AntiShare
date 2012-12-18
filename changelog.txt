@@ -8,6 +8,7 @@ Since 4.4.0:
 - Reduced convert procedures to "one time only"
 - Moved specific files to the 'data' folder in the plugin folder
 - Can change message prefix
+- Fixed tracked blocks 'disappearing' 
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
