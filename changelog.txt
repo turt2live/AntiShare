@@ -1,14 +1,5 @@
-Since 4.4.0:
-- Updated block manager (creative/survival/adventure blocks) to save in a chunk-like format rather than one big file
-- Internal code updates and revisions
-- Updated inventory handling 
-- Added official Tekkit support
-- Added additional warnings for Multiverse
-- Added a way to silence 'conflict' spam
-- Reduced convert procedures to "one time only"
-- Moved specific files to the 'data' folder in the plugin folder
-- Can change message prefix
-- Fixed tracked blocks 'disappearing' 
+Since 5.0.0:
+No Changes
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
