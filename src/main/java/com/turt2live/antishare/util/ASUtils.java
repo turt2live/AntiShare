@@ -60,6 +60,8 @@ import com.turt2live.antishare.util.generic.ASEntity;
  */
 public class ASUtils {
 
+	public static final BlockFace[] realFaces = {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP};
+
 	/**
 	 * Sends a message to a player.<br>
 	 * This will prefix "[AntiShare]" to the message and not send if the message is simply "no message".

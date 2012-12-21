@@ -87,6 +87,7 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.PerWorldConfig.ListType;
+import com.turt2live.antishare.tekkitcompat.EntityLayer;
 import com.turt2live.antishare.tekkitcompat.HangingListener;
 import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
 import com.turt2live.antishare.tekkitcompat.PaintingListener;
@@ -288,7 +289,18 @@ public class ASListener implements Listener {
 
 			// Check for attached blocks
 			if(config.get(block.getWorld()).removeAttachedBlocksOnBreak()){
-				for(BlockFace face : BlockFace.values()){
+				if(ServerHas.mc14xItems()){
+					for(Entity e : block.getChunk().getEntities()){
+						if(EntityLayer.isEntity(e, "ItemFrame")){
+							double d2 = e.getLocation().distanceSquared(block.getLocation());
+							if((d2 < 1.65 && d2 > 1.6) || (d2 > 0.5 && d2 < 0.51)){
+								e.remove();
+							}
+						}
+					}
+
+				}
+				for(BlockFace face : ASUtils.realFaces){
 					Block rel = block.getRelative(face);
 					if(ASUtils.isDroppedOnBreak(rel, block)){
 						plugin.getBlockManager().removeBlock(rel);
