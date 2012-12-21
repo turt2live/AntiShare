@@ -48,11 +48,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -288,7 +290,7 @@ public class ASListener implements Listener {
 			}
 
 			// Check for attached blocks
-			if(config.get(block.getWorld()).removeAttachedBlocksOnBreak()){
+			if(config.get(block.getWorld()).removeAttachedBlocksOnBreak() && plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
 				if(ServerHas.mc14xItems()){
 					for(Entity e : block.getChunk().getEntities()){
 						if(EntityLayer.isEntity(e, "ItemFrame")){
@@ -1809,6 +1811,49 @@ public class ASListener implements Listener {
 		if(type == AlertType.ILLEGAL){
 			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
+		}
+	}
+
+	// ################# Block Flow Event
+
+	@EventHandler (priority = EventPriority.HIGH)
+	public void onBlockFlow(BlockFromToEvent event){
+		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection")){
+			return;
+		}
+		boolean deny = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.deny");
+		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
+		Block to = event.getToBlock();
+		if(to.getType() != Material.AIR){
+			if(plugin.getBlockManager().getType(to) == GameMode.CREATIVE){
+				if(deny){
+					event.setCancelled(true);
+				}else if(!drops){
+					to.setType(Material.AIR);
+				}
+			}
+		}
+	}
+
+	// ################# Entity Explode Event
+
+	@EventHandler (priority = EventPriority.HIGH)
+	public void onExplode(EntityExplodeEvent event){
+		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection")){
+			return;
+		}
+		boolean deny = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.deny");
+		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
+		for(int i = 0; i < event.blockList().size(); i++){
+			Block block = event.blockList().get(i);
+			if(plugin.getBlockManager().getType(block) == GameMode.CREATIVE){
+				if(deny){
+					event.blockList().remove(i);
+				}else if(!drops){
+					block.setType(Material.AIR);
+					event.blockList().remove(i);
+				}
+			}
 		}
 	}
 
