@@ -523,4 +523,46 @@ public class ASUtils {
 		return material == Material.GRAVEL || material == Material.SAND || (ServerHas.mc14xItems() && material == Material.ANVIL);
 	}
 
+	/**
+	 * Returns true if the supplied material is breakable through water flow
+	 * 
+	 * @param type the material
+	 * @return true if it would be broken
+	 */
+	// TODO: Test to make sure this list is complete
+	public static boolean canBeBrokenByWater(Material type){
+		switch (type){
+		case SAPLING:
+		case LONG_GRASS:
+		case DEAD_BUSH:
+		case YELLOW_FLOWER:
+		case RED_ROSE:
+		case BROWN_MUSHROOM:
+		case RED_MUSHROOM:
+		case TORCH:
+		case REDSTONE_WIRE:
+		case CROPS:
+		case STONE_PLATE:
+		case LEVER:
+		case WOOD_PLATE:
+		case STONE_BUTTON:
+		case WOOD_BUTTON:
+		case REDSTONE_TORCH_ON:
+		case REDSTONE_TORCH_OFF:
+		case SNOW:
+		case SUGAR_CANE_BLOCK:
+		case DIODE_BLOCK_ON:
+		case DIODE_BLOCK_OFF:
+		case PUMPKIN_STEM:
+		case MELON_STEM:
+		case VINE:
+		case COCOA:
+		case TRIPWIRE:
+		case TRIPWIRE_HOOK:
+			return true;
+		default:
+			return false;
+		}
+	}
+
 }

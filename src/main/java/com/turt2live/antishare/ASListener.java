@@ -1824,13 +1824,14 @@ public class ASListener implements Listener {
 		boolean deny = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.deny");
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		Block to = event.getToBlock();
-		if(to.getType() != Material.AIR){
+		if(ASUtils.canBeBrokenByWater(to.getType())){
 			if(plugin.getBlockManager().getType(to) == GameMode.CREATIVE){
 				if(deny){
 					event.setCancelled(true);
 				}else if(!drops){
 					to.setType(Material.AIR);
 				}
+				plugin.getBlockManager().removeBlock(to);
 			}
 		}
 	}
@@ -1853,6 +1854,7 @@ public class ASListener implements Listener {
 					block.setType(Material.AIR);
 					event.blockList().remove(i);
 				}
+				plugin.getBlockManager().removeBlock(block);
 			}
 		}
 	}
