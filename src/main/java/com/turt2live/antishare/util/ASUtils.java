@@ -529,7 +529,6 @@ public class ASUtils {
 	 * @param type the material
 	 * @return true if it would be broken
 	 */
-	// TODO: Test to make sure this list is complete
 	public static boolean canBeBrokenByWater(Material type){
 		switch (type){
 		case SAPLING:

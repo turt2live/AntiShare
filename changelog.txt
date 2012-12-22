@@ -1,6 +1,5 @@
-Since 5.0.0:
-- Fix item frames being weird
-- Protect against water and TNT breaking
+Since 5.0.1:
+- Fix water disolving creative blocks
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
