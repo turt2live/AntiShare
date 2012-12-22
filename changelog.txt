@@ -1,5 +1,10 @@
-Since 5.0.1:
-- Fix water disolving creative blocks
+Since 5.0.2:
+None Recorded
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
+
+Potential Features:
+- Entities (like minecarts) should be blocked from breaking if in the block-break (or new?) list
+- Item Frames placed by "gm1" and put an item into it with "gm2" should be protected?
+- Determine if "hs pid errors" are at source of AntiShare (unlikely)
