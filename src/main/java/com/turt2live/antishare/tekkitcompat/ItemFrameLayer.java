@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 public class ItemFrameLayer {
 
 	public static boolean isItemFrame(Entity entity){
-		return entity.getClass().getName().equals("org.bukkit.entity.ItemFrame");
+		return EntityLayer.isEntity(entity, "ItemFrame");
 	}
 
 	public static Material getItemFrame(){
