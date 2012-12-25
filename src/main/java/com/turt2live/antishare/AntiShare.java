@@ -21,9 +21,11 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.compatibility.HookManager;
@@ -43,6 +45,7 @@ import com.turt2live.antishare.signs.SignManager;
 import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;
+import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.SQL;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
@@ -577,6 +580,19 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public String getPrefix(){
 		return messages.getPrefix();
+	}
+
+	/**
+	 * Determines if the plugin should cancel an event. This method assumes that the event would be cancelled normally, but needs a debug check.
+	 * 
+	 * @param target the target to alert to (null to not send the message). Alert the user why the event was not cancelled
+	 * @return true if the event should be cancelled, false if the server is in debug mode
+	 */
+	public boolean shouldCancel(CommandSender target){
+		if(target != null){
+			ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event not cancelled. Debug Mode", true);
+		}
+		return getConfig().getBoolean("other.debug");
 	}
 
 }

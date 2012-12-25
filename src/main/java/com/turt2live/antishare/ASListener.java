@@ -229,7 +229,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 		}else{
 			plugin.getBlockManager().removeBlock(block);
 		}
@@ -451,7 +451,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 		}else{
 			// Handle block place for tracker
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
@@ -500,7 +500,7 @@ public class ASListener implements Listener {
 				ASUtils.sendToPlayer(player, "That " + ChatColor.YELLOW + blockname + ChatColor.WHITE + " is a " + ChatColor.YELLOW + gamemode + ChatColor.WHITE + " block.", true);
 
 				// Cancel and stop the check
-				event.setCancelled(true);
+				event.setCancelled(plugin.shouldCancel(player));
 				return;
 			}
 		}
@@ -663,7 +663,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 			if(hasMobCatcher && player.getItemInHand() != null){
 				ItemStack item = player.getItemInHand();
@@ -724,7 +724,7 @@ public class ASListener implements Listener {
 
 			// Handle event
 			if(type == AlertType.ILLEGAL){
-				event.setCancelled(true);
+				event.setCancelled(plugin.shouldCancel(player));
 			}
 
 			// Alert (with sanity check)
@@ -754,7 +754,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 		}
 
 		// Alert (with sanity check)
@@ -932,7 +932,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 		}
 
 		// Alert (with sanity check)
@@ -986,7 +986,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 		}
 
 		// Alert (with sanity check)
@@ -1088,7 +1088,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 		}
 
 		// Alert (with sanity check)
@@ -1174,7 +1174,7 @@ public class ASListener implements Listener {
 						GMCD.put(player.getName(), now);
 					}else{
 						// Deny
-						event.setCancelled(true);
+						event.setCancelled(plugin.shouldCancel(player));
 						int seconds = (int) (time - (now - lastUsed)) / 1000;
 						String s = "";
 						if(seconds == 0 || seconds > 1){
@@ -1215,7 +1215,7 @@ public class ASListener implements Listener {
 			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
-				event.setCancelled(true);
+				event.setCancelled(plugin.shouldCancel(player));
 				currentLevel.setTo(player); // Restore level
 				return;
 			}
@@ -1374,7 +1374,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(playerAttacker));
 		}
 
 		// Alert
@@ -1432,7 +1432,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(playerTarget));
 		}
 	}
 
@@ -1639,7 +1639,7 @@ public class ASListener implements Listener {
 
 		// Check type
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 
 			// Alert (with sanity check)
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(pearl.name());
@@ -1705,7 +1705,7 @@ public class ASListener implements Listener {
 			String playerMessage = plugin.getMessage("blocked-action.crafting");
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CRAFTING);
 			if(type == AlertType.ILLEGAL){
-				event.setCancelled(true);
+				event.setCancelled(plugin.shouldCancel(player));
 			}
 		}
 	}
@@ -1751,7 +1751,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
@@ -1809,7 +1809,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(true);
+			event.setCancelled(plugin.shouldCancel(player));
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
@@ -1827,7 +1827,7 @@ public class ASListener implements Listener {
 		if(ASUtils.canBeBrokenByWater(to.getType())){
 			if(plugin.getBlockManager().getType(to) == GameMode.CREATIVE){
 				if(deny){
-					event.setCancelled(true);
+					event.setCancelled(plugin.shouldCancel(null));
 				}else if(!drops){
 					to.setType(Material.AIR);
 				}
@@ -1871,7 +1871,7 @@ public class ASListener implements Listener {
 	//			GameMode beaconGM = plugin.getBlockManager().getType(beacon);
 	//			Player player = (Player) event.getEntity();
 	//			if(player.getGameMode() != beaconGM){
-	//				event.setCancelled(true);
+	//				event.setCancelled(plugin.shouldCancel(player));
 	//			}
 	//		}
 	//	}
