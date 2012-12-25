@@ -55,4 +55,8 @@ public class ServerHas {
 		return isClass("org.bukkit.entity.Witch");
 	}
 
+	public static boolean skulls(){
+		return isClass("org.bukkit.block.Skull");
+	}
+
 }
