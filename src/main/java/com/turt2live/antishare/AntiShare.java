@@ -606,7 +606,7 @@ public class AntiShare extends PluginWrapper {
 			}
 			ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event not cancelled. Debug Mode Settings: TOOL: " + getConfig().getBoolean("other.debug-settings.force-use-tool") + " IGNORE: " + ignoreTool, true);
 		}
-		return getConfig().getBoolean("other.debug");
+		return !getConfig().getBoolean("other.debug");
 	}
 
 }
