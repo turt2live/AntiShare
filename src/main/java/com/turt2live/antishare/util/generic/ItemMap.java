@@ -74,9 +74,10 @@ public class ItemMap {
 	 * 
 	 * @param name the item name to lookup
 	 * @param zero if true, and the data is zero, the :0 will be removed
+	 * @param isDataNumber set to true to force the method to do a number check
 	 * @return the id:data format
 	 */
-	public String getItem(String name, boolean zero){
+	public String getItem(String name, boolean zero, boolean isDataNumber){
 		if(list.getString(name) != null){
 			name = list.getString(name);
 		}
@@ -88,16 +89,21 @@ public class ItemMap {
 		StringBuilder ret = new StringBuilder();
 		ret.append(m.getId());
 		if(parts.length > 1){
-			int dval = 0;
-			try{
-				dval = Integer.parseInt(parts[1]);
-			}catch(NumberFormatException e){}
-			if(dval == 0 && !zero){
+			if(isDataNumber){
+				int dval = 0;
+				try{
+					dval = Integer.parseInt(parts[1]);
+				}catch(NumberFormatException e){}
+				if(dval == 0 && !zero){
+					ret.append(":");
+					ret.append(dval);
+				}else if(dval != 0){
+					ret.append(":");
+					ret.append(dval);
+				}
+			}else{
 				ret.append(":");
-				ret.append(dval);
-			}else if(dval != 0){
-				ret.append(":");
-				ret.append(dval);
+				ret.append(parts[1]);
 			}
 		}
 		if(ret.toString().split(":").length < 2 && !zero){

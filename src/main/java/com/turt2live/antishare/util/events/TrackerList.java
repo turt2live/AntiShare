@@ -173,13 +173,13 @@ public class TrackerList {
 				continue;
 			}
 			try{
-				if(plugin.getItemMap().getItem(tracked, false) == null){
+				if(plugin.getItemMap().getItem(tracked, false, false) == null){
 					throw new Exception("");
 				}
 				if(!negate){
-					this.tracked.add(plugin.getItemMap().getItem(tracked, false));
+					this.tracked.add(plugin.getItemMap().getItem(tracked, false, false));
 				}else{
-					this.tracked.remove(plugin.getItemMap().getItem(tracked, false));
+					this.tracked.remove(plugin.getItemMap().getItem(tracked, false, false));
 				}
 			}catch(Exception e){
 				plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
