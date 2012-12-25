@@ -20,6 +20,7 @@ import org.bukkit.block.Block;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.signs.Sign;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.antishare.tekkitcompat.SkullCompat;
 import com.turt2live.antishare.util.ASUtils;
 
 /**
@@ -62,6 +63,8 @@ public class EventList {
 			if(blocked.length() <= 0){
 				continue;
 			}
+
+			blocked = blocked.trim(); // Just in case
 
 			// Check negation
 			boolean negate = false;
@@ -255,13 +258,32 @@ public class EventList {
 				continue;
 			}
 			try{
-				if(plugin.getItemMap().getItem(blocked, false) == null){
-					throw new Exception("");
+				boolean noSkull = true;
+				if(ServerHas.skulls()){
+					if(blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("skull")
+							|| blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("mobskull")
+							|| blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL.getId()))
+							|| blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL_ITEM.getId()))){
+						if(plugin.getItemMap().getItem(blocked, false, false) == null){
+							throw new Exception("");
+						}
+						if(!negate){
+							this.blocked.add(plugin.getItemMap().getItem(blocked, false, false));
+						}else{
+							this.blocked.remove(plugin.getItemMap().getItem(blocked, false, false));
+						}
+						noSkull = false;
+					}
 				}
-				if(!negate){
-					this.blocked.add(plugin.getItemMap().getItem(blocked, false));
-				}else{
-					this.blocked.remove(plugin.getItemMap().getItem(blocked, false));
+				if(noSkull){
+					if(plugin.getItemMap().getItem(blocked, false, true) == null){
+						throw new Exception("");
+					}
+					if(!negate){
+						this.blocked.add(plugin.getItemMap().getItem(blocked, false, true));
+					}else{
+						this.blocked.remove(plugin.getItemMap().getItem(blocked, false, true));
+					}
 				}
 			}catch(Exception e){
 				plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
@@ -351,11 +373,31 @@ public class EventList {
 			if(!contained){
 				contained = !blocked.contains(block.getTypeId() + ":*");
 			}
+			if(ServerHas.skulls()){
+				if(!contained && SkullCompat.isSkull(block.getState())){
+					String owner = SkullCompat.getOwner(block.getState());
+					if(owner == null){
+						contained = true;
+					}else{
+						contained = !blocked.contains(block.getTypeId() + ":" + owner);
+					}
+				}
+			}
 			return contained;
 		}
 		boolean contained = blocked.contains(ASUtils.blockToString(block, false));
 		if(!contained){
 			contained = blocked.contains(block.getTypeId() + ":*");
+		}
+		if(ServerHas.skulls()){
+			if(!contained && SkullCompat.isSkull(block.getState())){
+				String owner = SkullCompat.getOwner(block.getState());
+				if(owner == null){
+					contained = false;
+				}else{
+					contained = blocked.contains(block.getTypeId() + ":" + owner);
+				}
+			}
 		}
 		return contained;
 	}
