@@ -600,7 +600,7 @@ public class AntiShare extends PluginWrapper {
 				if(player.getItemInHand() != null){
 					if(player.getItemInHand().getType() != ANTISHARE_DEBUG_TOOL){
 						ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event cancelled. Debug mode tool not in hand.", true);
-						return false;
+						return true;
 					}
 				}
 			}
