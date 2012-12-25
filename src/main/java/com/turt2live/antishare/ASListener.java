@@ -229,7 +229,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, false));
 		}else{
 			plugin.getBlockManager().removeBlock(block);
 		}
@@ -451,7 +451,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, true));
 		}else{
 			// Handle block place for tracker
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
@@ -500,7 +500,7 @@ public class ASListener implements Listener {
 				ASUtils.sendToPlayer(player, "That " + ChatColor.YELLOW + blockname + ChatColor.WHITE + " is a " + ChatColor.YELLOW + gamemode + ChatColor.WHITE + " block.", true);
 
 				// Cancel and stop the check
-				event.setCancelled(plugin.shouldCancel(player));
+				event.setCancelled(plugin.shouldCancel(player, true));
 				return;
 			}
 		}
@@ -663,7 +663,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, true));
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 			if(hasMobCatcher && player.getItemInHand() != null){
 				ItemStack item = player.getItemInHand();
@@ -724,7 +724,7 @@ public class ASListener implements Listener {
 
 			// Handle event
 			if(type == AlertType.ILLEGAL){
-				event.setCancelled(plugin.shouldCancel(player));
+				event.setCancelled(plugin.shouldCancel(player, false));
 			}
 
 			// Alert (with sanity check)
@@ -754,7 +754,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, false));
 		}
 
 		// Alert (with sanity check)
@@ -932,7 +932,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, true));
 		}
 
 		// Alert (with sanity check)
@@ -986,7 +986,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, false));
 		}
 
 		// Alert (with sanity check)
@@ -1088,7 +1088,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, false));
 		}
 
 		// Alert (with sanity check)
@@ -1174,7 +1174,7 @@ public class ASListener implements Listener {
 						GMCD.put(player.getName(), now);
 					}else{
 						// Deny
-						event.setCancelled(plugin.shouldCancel(player));
+						event.setCancelled(plugin.shouldCancel(player, false));
 						int seconds = (int) (time - (now - lastUsed)) / 1000;
 						String s = "";
 						if(seconds == 0 || seconds > 1){
@@ -1215,7 +1215,7 @@ public class ASListener implements Listener {
 			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
-				event.setCancelled(plugin.shouldCancel(player));
+				event.setCancelled(plugin.shouldCancel(player, false));
 				currentLevel.setTo(player); // Restore level
 				return;
 			}
@@ -1374,7 +1374,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(playerAttacker));
+			event.setCancelled(plugin.shouldCancel(playerAttacker, false));
 		}
 
 		// Alert
@@ -1432,7 +1432,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(playerTarget));
+			event.setCancelled(plugin.shouldCancel(playerTarget, false));
 		}
 	}
 
@@ -1639,7 +1639,7 @@ public class ASListener implements Listener {
 
 		// Check type
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, false));
 
 			// Alert (with sanity check)
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(pearl.name());
@@ -1705,7 +1705,7 @@ public class ASListener implements Listener {
 			String playerMessage = plugin.getMessage("blocked-action.crafting");
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CRAFTING);
 			if(type == AlertType.ILLEGAL){
-				event.setCancelled(plugin.shouldCancel(player));
+				event.setCancelled(plugin.shouldCancel(player, true));
 			}
 		}
 	}
@@ -1751,7 +1751,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, false));
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
@@ -1809,7 +1809,7 @@ public class ASListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player));
+			event.setCancelled(plugin.shouldCancel(player, false));
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
@@ -1827,7 +1827,7 @@ public class ASListener implements Listener {
 		if(ASUtils.canBeBrokenByWater(to.getType())){
 			if(plugin.getBlockManager().getType(to) == GameMode.CREATIVE){
 				if(deny){
-					event.setCancelled(plugin.shouldCancel(null));
+					event.setCancelled(plugin.shouldCancel(null, true));
 				}else if(!drops){
 					to.setType(Material.AIR);
 				}

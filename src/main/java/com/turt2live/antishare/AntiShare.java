@@ -63,6 +63,10 @@ public class AntiShare extends PluginWrapper {
 	 * AntiShare tool material
 	 */
 	public static final Material ANTISHARE_TOOL = Material.BLAZE_ROD;
+	/**
+	 * Used for debug stuff
+	 */
+	public static final Material ANTISHARE_DEBUG_TOOL = Material.BONE;
 	private static AntiShare instance;
 	private boolean useSQL = false;
 	private boolean sqlRetry = false;
@@ -586,11 +590,21 @@ public class AntiShare extends PluginWrapper {
 	 * Determines if the plugin should cancel an event. This method assumes that the event would be cancelled normally, but needs a debug check.
 	 * 
 	 * @param target the target to alert to (null to not send the message). Alert the user why the event was not cancelled
+	 * @param ignoreTool set to true to ignore the force use tool setting
 	 * @return true if the event should be cancelled, false if the server is in debug mode
 	 */
-	public boolean shouldCancel(CommandSender target){
+	public boolean shouldCancel(CommandSender target, boolean ignoreTool){
 		if(target != null){
-			ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event not cancelled. Debug Mode", true);
+			if(getConfig().getBoolean("other.debug-settings.force-use-tool") && target instanceof Player && !ignoreTool){
+				Player player = (Player) target;
+				if(player.getItemInHand() != null){
+					if(player.getItemInHand().getType() != ANTISHARE_DEBUG_TOOL){
+						ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event cancelled. Debug mode tool not in hand.", true);
+						return false;
+					}
+				}
+			}
+			ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event not cancelled. Debug Mode Settings: TOOL: " + getConfig().getBoolean("other.debug-settings.force-use-tool") + " IGNORE: " + ignoreTool, true);
 		}
 		return getConfig().getBoolean("other.debug");
 	}
