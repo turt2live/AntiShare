@@ -13,6 +13,8 @@ package com.turt2live.antishare.storage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
@@ -53,6 +55,7 @@ public class BlockManager {
 	private TrackerList tracked_survival;
 	private TrackerList tracked_adventure;
 	private CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
+	private ConcurrentMap<String, EnhancedConfiguration> saveFiles = new ConcurrentHashMap<String, EnhancedConfiguration>();
 
 	/**
 	 * Creates a new block manager, also loads the block lists
@@ -93,14 +96,22 @@ public class BlockManager {
 		for(Block block : adventure){
 			saveBlock(dir, block, "ADVENTURE");
 		}
+		for(String key : saveFiles.keySet()){
+			saveFiles.get(key).save();
+		}
+		saveFiles.clear();
 	}
 
-	private static void saveBlock(File dir, Block block, String gamemode){
-		File file = new File(dir, block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml");
-		EnhancedConfiguration blocks = new EnhancedConfiguration(file, AntiShare.getInstance());
-		blocks.load();
+	private void saveBlock(File dir, Block block, String gamemode){
+		String fname = block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml";
+		EnhancedConfiguration blocks = null;
+		if(!saveFiles.containsKey(fname)){
+			File file = new File(dir, fname);
+			blocks = new EnhancedConfiguration(file, AntiShare.getInstance());
+		}else{
+			blocks = saveFiles.get(fname);
+		}
 		blocks.set(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName(), gamemode);
-		blocks.save();
 	}
 
 	/**
