@@ -227,6 +227,17 @@ public class BlockManager {
 				}
 			}
 		}
+
+		// Tell console what we loaded
+		if(creative_blocks.size() > 0){
+			plugin.getLogger().info("Creative Blocks Loaded: " + creative_blocks.size());
+		}
+		if(survival_blocks.size() > 0){
+			plugin.getLogger().info("Survival Blocks Loaded: " + creative_blocks.size());
+		}
+		if(adventure_blocks.size() > 0){
+			plugin.getLogger().info("Adventure Blocks Loaded: " + adventure_blocks.size());
+		}
 	}
 
 	/**

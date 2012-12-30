@@ -81,7 +81,9 @@ public class SignManager extends ArrayList<Sign> {
 			Sign assign = new Sign(name, lines, enabled, caseSensitive);
 			add(assign);
 		}
-		plugin.log("Signs Loaded: " + size(), Level.INFO);
+		if(size() > 0){
+			plugin.log("Signs Loaded: " + size(), Level.INFO);
+		}
 	}
 
 	/**

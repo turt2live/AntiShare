@@ -154,7 +154,9 @@ public class RegionManager {
 				}
 			}
 		}
-		plugin.log("Regions Loaded: " + loadedRegions, Level.INFO);
+		if(loadedRegions > 0){
+			plugin.log("Regions Loaded: " + loadedRegions, Level.INFO);
+		}
 	}
 
 	/**

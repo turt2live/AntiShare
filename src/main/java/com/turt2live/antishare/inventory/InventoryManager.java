@@ -543,8 +543,12 @@ public class InventoryManager {
 
 		// Status
 		int loaded = creative.size() + survival.size() + playerTemp.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
-		AntiShare.getInstance().log("Inventories Loaded: " + loaded, Level.INFO);
-		AntiShare.getInstance().log("Linked Inventories: " + this.links.size(), Level.INFO);
+		if(loaded > 0){
+			AntiShare.getInstance().log("Inventories Loaded: " + loaded, Level.INFO);
+		}
+		if(this.links.size() > 0){
+			AntiShare.getInstance().log("Linked Inventories: " + this.links.size(), Level.INFO);
+		}
 	}
 
 	/**

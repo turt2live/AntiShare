@@ -243,7 +243,9 @@ public class SelfCompatibility {
 			for(File file : files){
 				file.delete();
 			}
-			plugin.getLogger().info("Player Inventories Converted: " + files.length);
+			if(files.length > 0){
+				plugin.getLogger().info("Player Inventories Converted: " + files.length);
+			}
 			noLongerNeedsUpdate(Compat.INV_313);
 		}
 	}
@@ -296,7 +298,9 @@ public class SelfCompatibility {
 					}
 				}
 			}
-			plugin.getLogger().info("Player Inventories Archived/Deleted: " + cleaned);
+			if(cleaned > 0){
+				plugin.getLogger().info("Player Inventories Archived/Deleted: " + cleaned);
+			}
 		}
 	}
 

@@ -139,8 +139,12 @@ public class MoneyManager {
 		}
 
 		// Spam console
-		plugin.log("Fines Loaded: " + finesLoaded, Level.INFO);
-		plugin.log("Rewards Loaded: " + rewardsLoaded, Level.INFO);
+		if(finesLoaded > 0){
+			plugin.log("Fines Loaded: " + finesLoaded, Level.INFO);
+		}
+		if(rewardsLoaded > 0){
+			plugin.log("Rewards Loaded: " + rewardsLoaded, Level.INFO);
+		}
 	}
 
 	/**
