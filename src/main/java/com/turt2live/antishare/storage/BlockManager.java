@@ -110,6 +110,15 @@ public class BlockManager {
 		saveSurvival.setLoad(load);
 		saveAdventure.setLoad(load);
 
+		// Treat adventure on it's own
+		if(ServerHas.adventureMode()){
+			saveAdventure = new BlockSaver(adventure_blocks, GameMode.ADVENTURE, dir, ListComplete.ADVENTURE);
+			saveAdventure.setClear(clear);
+			saveAdventure.setLoad(load);
+		}else{
+			saveAdventure = null;
+		}
+
 		// Schedule saves
 
 		/*
@@ -118,17 +127,21 @@ public class BlockManager {
 
 		Thread creative = new Thread(saveCreative);
 		Thread survival = new Thread(saveSurvival);
-		Thread adventure = new Thread(saveAdventure);
 
 		// Set names, in case there is a bug
 		creative.setName("ANTISHARE-Save Creative");
 		survival.setName("ANTISHARE-Save Survival");
-		adventure.setName("ANTISHARE-Save Adventure");
 
 		// Run
 		creative.start();
 		survival.start();
-		adventure.start();
+
+		// Treat adventure on it's own
+		if(saveAdventure != null){
+			Thread adventure = new Thread(saveAdventure);
+			adventure.setName("ANTISHARE-Save Adventure");
+			adventure.start();
+		}
 
 		// BlockSaver handles telling BlockManager that it is done
 	}
