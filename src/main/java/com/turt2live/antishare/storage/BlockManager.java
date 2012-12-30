@@ -101,14 +101,11 @@ public class BlockManager {
 		// Create savers
 		saveCreative = new BlockSaver(creative_blocks, GameMode.CREATIVE, dir, ListComplete.CREATIVE);
 		saveSurvival = new BlockSaver(survival_blocks, GameMode.SURVIVAL, dir, ListComplete.SURVIVAL);
-		saveAdventure = new BlockSaver(adventure_blocks, GameMode.ADVENTURE, dir, ListComplete.ADVENTURE);
 
 		saveCreative.setClear(clear);
 		saveSurvival.setClear(clear);
-		saveAdventure.setClear(clear);
 		saveCreative.setLoad(load);
 		saveSurvival.setLoad(load);
-		saveAdventure.setLoad(load);
 
 		// Treat adventure on it's own
 		if(ServerHas.adventureMode()){
