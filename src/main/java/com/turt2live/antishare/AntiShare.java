@@ -235,27 +235,39 @@ public class AntiShare extends PluginWrapper {
 	public void onDisable(){
 		// Save
 		if(regions != null){
-			getLogger().info("Saving regions...");
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Saving regions...");
+			}
 			regions.save();
 		}
 		if(blocks != null){
-			getLogger().info("Saving blocks...");
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Saving blocks...");
+			}
 			blocks.save();
 		}
 		if(inventories != null){
-			getLogger().info("Saving inventories...");
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Saving inventories...");
+			}
 			inventories.save();
 		}
 		if(tender != null){
-			getLogger().info("Saving tender functions...");
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Saving tender functions...");
+			}
 			tender.save();
 		}
 		if(metrics != null){
-			getLogger().info("Flushing Metrics...");
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Flushing Metrics...");
+			}
 			metrics.flush();
 		}
 		if(sql != null){
-			getLogger().info("Disconnecting from SQL...");
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Disconnecting from SQL...");
+			}
 			sql.disconnect();
 		}
 

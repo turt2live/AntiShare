@@ -1,6 +1,7 @@
 Since 5.0.2:
 - Change events to use debug mode
 - Allow blocking of specific skulls (by name)
+- Added disable debug tool
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

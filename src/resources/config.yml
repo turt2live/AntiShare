@@ -168,6 +168,7 @@ block-tracking:
 # Misc. stuff, generally leave this alone.
 other:
   debug: false
+  more-quiet-shutdown: false
   debug-settings:
     force-use-tool: false
   send-gamemode-change-message: true
