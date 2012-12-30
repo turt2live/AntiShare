@@ -11,8 +11,6 @@
 package com.turt2live.antishare.storage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -47,6 +45,16 @@ public class BlockManager {
 		public GameMode gamemode;
 	}
 
+	enum ListComplete{
+		CREATIVE(0), ADVENTURE(1), SURVIVAL(2);
+
+		public final int arrayIndex;
+
+		private ListComplete(int arrayIndex){
+			this.arrayIndex = arrayIndex;
+		}
+	}
+
 	private AntiShare plugin;
 	private CopyOnWriteArrayList<Block> creative_blocks = new CopyOnWriteArrayList<Block>();
 	private CopyOnWriteArrayList<Block> survival_blocks = new CopyOnWriteArrayList<Block>();
@@ -56,6 +64,10 @@ public class BlockManager {
 	private TrackerList tracked_adventure;
 	private CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
 	private ConcurrentMap<String, EnhancedConfiguration> saveFiles = new ConcurrentHashMap<String, EnhancedConfiguration>();
+	private boolean[] completedSaves;
+	private final int maxLists = ListComplete.values().length;
+	private boolean doneLastSave = false;
+	private BlockSaver saveCreative, saveSurvival, saveAdventure;
 
 	/**
 	 * Creates a new block manager, also loads the block lists
@@ -69,49 +81,113 @@ public class BlockManager {
 
 	/**
 	 * Saves everything to disk
+	 * 
+	 * @param clear set to true to prepare for a reload
+	 * @param load set to true to load everything after saving (reload)
 	 */
-	public void save(){
-		// Load lists
-		List<Block> creative = new ArrayList<Block>();
-		List<Block> survival = new ArrayList<Block>();
-		List<Block> adventure = new ArrayList<Block>();
-		creative.addAll(creative_blocks);
-		survival.addAll(survival_blocks);
-		adventure.addAll(adventure_blocks);
-
+	public void save(boolean clear, boolean load){
 		// Load file
 		File dir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
 		if(dir.exists()){
 			dir.delete(); // To remove old blocks
 		}
 		dir.mkdirs();
+		completedSaves = new boolean[maxLists];
+		for(int i = 0; i < maxLists; i++){
+			completedSaves[i] = false;
+		}
+		doneLastSave = false;
 
-		// Loops and save
-		for(Block block : creative){
-			saveBlock(dir, block, "CREATIVE");
+		// Create savers
+		saveCreative = new BlockSaver(creative_blocks, GameMode.CREATIVE, dir, ListComplete.CREATIVE);
+		saveSurvival = new BlockSaver(survival_blocks, GameMode.SURVIVAL, dir, ListComplete.SURVIVAL);
+		saveAdventure = new BlockSaver(adventure_blocks, GameMode.ADVENTURE, dir, ListComplete.ADVENTURE);
+
+		saveCreative.setClear(clear);
+		saveSurvival.setClear(clear);
+		saveAdventure.setClear(clear);
+		saveCreative.setLoad(load);
+		saveSurvival.setLoad(load);
+		saveAdventure.setLoad(load);
+
+		// Schedule saves
+		//plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, saveCreative);
+		//plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, saveSurvival);
+		//plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, saveAdventure);
+		Thread creative = new Thread(saveCreative);
+		Thread survival = new Thread(saveSurvival);
+		Thread adventure = new Thread(saveAdventure);
+		creative.setName("ANTISHARE-Save Creative");
+		survival.setName("ANTISHARE-Save Survival");
+		adventure.setName("ANTISHARE-Save Adventure");
+		creative.start();
+		survival.start();
+		adventure.start();
+
+		/*
+		 * Because of how the scheduler works, we have to use the java Thread class.
+		 */
+
+		// BlockSaver handles telling BlockManager that it is done
+	}
+
+	EnhancedConfiguration getFile(File dir, String fname){
+		EnhancedConfiguration blocks = null;
+		if(!saveFiles.containsKey(fname)){
+			File file = new File(dir, fname);
+			blocks = new EnhancedConfiguration(file, AntiShare.getInstance());
+			saveFiles.put(fname, blocks);
+		}else{
+			blocks = saveFiles.get(fname);
 		}
-		for(Block block : survival){
-			saveBlock(dir, block, "SURVIVAL");
+		return blocks;
+	}
+
+	void markSaveAsDone(ListComplete list, BlockSaver save){
+		completedSaves[list.arrayIndex] = true;
+		for(int i = 0; i < maxLists; i++){
+			if(!completedSaves[i]){
+				return;
+			}
 		}
-		for(Block block : adventure){
-			saveBlock(dir, block, "ADVENTURE");
+		if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+			plugin.getLogger().info("[Block Manager] Saving files...");
 		}
 		for(String key : saveFiles.keySet()){
 			saveFiles.get(key).save();
 		}
 		saveFiles.clear();
+		if(save.getClear()){
+			creative_blocks.clear();
+			survival_blocks.clear();
+			adventure_blocks.clear();
+		}
+		if(save.getLoad()){
+			load();
+		}
+		doneLastSave = true;
 	}
 
-	private void saveBlock(File dir, Block block, String gamemode){
-		String fname = block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml";
-		EnhancedConfiguration blocks = null;
-		if(!saveFiles.containsKey(fname)){
-			File file = new File(dir, fname);
-			blocks = new EnhancedConfiguration(file, AntiShare.getInstance());
-		}else{
-			blocks = saveFiles.get(fname);
-		}
-		blocks.set(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName(), gamemode);
+	/**
+	 * Determines if the last save is done
+	 * 
+	 * @return true if done
+	 */
+	public boolean isSaveDone(){
+		return doneLastSave;
+	}
+
+	/**
+	 * Gets the percentage of the save completed
+	 * 
+	 * @return the percent of the save completed (as a whole number, eg: 10)
+	 */
+	public int percentSaveDone(){
+		double percentCreative = saveCreative.getPercent();
+		double percentAdventure = saveAdventure.getPercent();
+		double percentSurvival = saveSurvival.getPercent();
+		Double avg = (percentCreative + percentAdventure + percentSurvival) / 3;
+		return avg.intValue();
 	}
 
 	/**
@@ -155,11 +231,7 @@ public class BlockManager {
 	 * Reloads the manager
 	 */
 	public void reload(){
-		save();
-		creative_blocks.clear();
-		survival_blocks.clear();
-		adventure_blocks.clear();
-		load();
+		save(true, true);
 	}
 
 	/**

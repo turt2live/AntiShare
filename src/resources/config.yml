@@ -175,3 +175,4 @@ other:
   quiet-offline-mode-warning: false
   dont-look-for-updates: false
   stop-spam-for-conflicts: false
+  use-sleep: true

@@ -10,12 +10,17 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -48,6 +53,79 @@ public class CommandHandler implements CommandExecutor {
 		}
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
+				if(args[0].equalsIgnoreCase("inject") && plugin.getConfig().getBoolean("other.debug") && sender instanceof Player){
+					Player player = (Player) sender;
+					int loadDir = 4; // We'll load 4 chunks in either direction
+					int layer = 5; // Layer 5
+
+					int startx = player.getLocation().getChunk().getX();
+					int startz = player.getLocation().getChunk().getZ();
+
+					List<Chunk> chunks = new ArrayList<Chunk>();
+					for(int x = startx; x <= startx + loadDir; x++){
+						for(int z = startz; z <= startz + loadDir; z++){
+							chunks.add(player.getWorld().getChunkAt(x, z));
+							player.sendMessage("Loading chunk " + x + ", " + z);
+						}
+					}
+					for(int x = startx - loadDir; x <= startx; x++){
+						for(int z = startz - loadDir; z <= startz; z++){
+							chunks.add(player.getWorld().getChunkAt(x, z));
+							player.sendMessage("Loading chunk " + x + ", " + z);
+						}
+					}
+
+					List<Block> c = new ArrayList<Block>();
+					List<Block> s = new ArrayList<Block>();
+					List<Block> a = new ArrayList<Block>();
+
+					Random random = new Random(System.currentTimeMillis());
+
+					for(Chunk chunk : chunks){
+						for(int cx = 0; cx < 16; cx++){
+							for(int cz = 0; cz < 16; cz++){
+								Block block = chunk.getBlock(cx, layer, cz);
+								if(block.getType() == Material.AIR){
+									continue;
+								}
+								switch (random.nextInt(3)){
+								case 0:
+									c.add(block);
+									player.sendMessage("Loading block " + cx + ", " + layer + ", " + cz + " as " + block.getType().name() + " || C");
+									break;
+								case 1:
+									s.add(block);
+									player.sendMessage("Loading block " + cx + ", " + layer + ", " + cz + " as " + block.getType().name() + " || S");
+									break;
+								case 2:
+									a.add(block);
+									player.sendMessage("Loading block " + cx + ", " + layer + ", " + cz + " as " + block.getType().name() + " || A");
+									break;
+								default:
+									c.add(block);
+									player.sendMessage("Loading block " + cx + ", " + layer + ", " + cz + " as " + block.getType().name() + " || D - C");
+									break;
+								}
+							}
+						}
+					}
+
+					for(Block block : c){
+						plugin.getBlockManager().addBlock(GameMode.CREATIVE, block);
+						player.sendMessage("Saving block " + block.getLocation().getBlockX() + ", " + layer + ", " + block.getLocation().getBlockZ());
+					}
+					for(Block block : s){
+						plugin.getBlockManager().addBlock(GameMode.SURVIVAL, block);
+						player.sendMessage("Saving block " + block.getLocation().getBlockX() + ", " + layer + ", " + block.getLocation().getBlockZ());
+					}
+					for(Block block : a){
+						plugin.getBlockManager().addBlock(GameMode.ADVENTURE, block);
+						player.sendMessage("Saving block " + block.getLocation().getBlockX() + ", " + layer + ", " + block.getLocation().getBlockZ());
+					}
+
+					player.sendMessage("done");
+					return true;
+				}
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.RELOAD)){
 						ASUtils.sendToPlayer(sender, "Reloading...", true);

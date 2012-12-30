@@ -244,7 +244,35 @@ public class AntiShare extends PluginWrapper {
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
 				getLogger().info("Saving blocks...");
 			}
-			blocks.save();
+			blocks.save(true, false);
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Waiting for block manager to be done...");
+			}
+			int lastPercent = 0, goal = 10;
+			boolean hit100 = false;
+			while (!blocks.isSaveDone()){
+				if(getConfig().getBoolean("other.use-sleep")){
+					try{
+						Thread.sleep(50); // To avoid a higher CPU use
+					}catch(InterruptedException e){
+						e.printStackTrace();
+					}
+				}
+				if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+					int percent = blocks.percentSaveDone();
+					goal = lastPercent + 10;
+					if(goal > 100){
+						goal = 100;
+					}
+					if(goal <= percent && !hit100 && percent <= 100){
+						getLogger().info("[Block Manager] Percent Done: " + percent + "%");
+						lastPercent = percent;
+						if(percent >= 100){
+							hit100 = true;
+						}
+					}
+				}
+			}
 		}
 		if(inventories != null){
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
