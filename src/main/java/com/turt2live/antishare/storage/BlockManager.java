@@ -111,22 +111,24 @@ public class BlockManager {
 		saveAdventure.setLoad(load);
 
 		// Schedule saves
-		//plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, saveCreative);
-		//plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, saveSurvival);
-		//plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, saveAdventure);
-		Thread creative = new Thread(saveCreative);
-		Thread survival = new Thread(saveSurvival);
-		Thread adventure = new Thread(saveAdventure);
-		creative.setName("ANTISHARE-Save Creative");
-		survival.setName("ANTISHARE-Save Survival");
-		adventure.setName("ANTISHARE-Save Adventure");
-		creative.start();
-		survival.start();
-		adventure.start();
 
 		/*
 		 * Because of how the scheduler works, we have to use the java Thread class.
 		 */
+
+		Thread creative = new Thread(saveCreative);
+		Thread survival = new Thread(saveSurvival);
+		Thread adventure = new Thread(saveAdventure);
+
+		// Set names, in case there is a bug
+		creative.setName("ANTISHARE-Save Creative");
+		survival.setName("ANTISHARE-Save Survival");
+		adventure.setName("ANTISHARE-Save Adventure");
+
+		// Run
+		creative.start();
+		survival.start();
+		adventure.start();
 
 		// BlockSaver handles telling BlockManager that it is done
 	}
