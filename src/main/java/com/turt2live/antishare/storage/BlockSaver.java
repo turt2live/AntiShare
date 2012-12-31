@@ -1,6 +1,10 @@
 package com.turt2live.antishare.storage;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.GameMode;
@@ -12,7 +16,7 @@ import com.turt2live.antishare.storage.BlockManager.ListComplete;
 
 class BlockSaver implements Runnable {
 
-	private final CopyOnWriteArrayList<Block> list;
+	private final Map<String, List<String>> list = new HashMap<String, List<String>>();
 	private final AntiShare plugin = AntiShare.getInstance();
 	private final BlockManager blockman = plugin.getBlockManager();
 	private final File dir;
@@ -20,27 +24,39 @@ class BlockSaver implements Runnable {
 	private final ListComplete listType;
 	private boolean clear = false, load = false;
 	private double completed = 0;
+	private final int listSize;
 
 	public BlockSaver(CopyOnWriteArrayList<Block> list, GameMode gm, File saveDir, ListComplete type){
-		this.list = list;
 		this.dir = saveDir;
 		this.gamemode = gm.name();
 		this.listType = type;
+		for(Block block : list){
+			String fname = block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml";
+			List<String> blocks = new ArrayList<String>();
+			if(this.list.containsKey(fname)){
+				blocks = this.list.get(fname);
+			}
+			blocks.add(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName());
+			this.list.put(fname, blocks);
+		}
+		this.listSize = this.list.keySet().size();
 	}
 
 	@Override
 	public void run(){
-		for(Block block : list){
-			saveBlock(dir, block, gamemode);
-			completed++;
+		for(String chunk : list.keySet()){
+			List<String> blocks = list.get(chunk);
+			for(String block : blocks){
+				saveBlock(dir, chunk, block);
+				completed++;
+			}
 		}
 		blockman.markSaveAsDone(listType, this);
 	}
 
-	void saveBlock(File dir, Block block, String gamemode){
-		String fname = block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml";
+	void saveBlock(File dir, String fname, String key){
 		EnhancedConfiguration blocks = blockman.getFile(dir, fname);
-		blocks.set(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName(), gamemode);
+		blocks.set(key, gamemode);
 	}
 
 	boolean getClear(){
@@ -60,7 +76,7 @@ class BlockSaver implements Runnable {
 	}
 
 	double getPercent(){
-		return (completed / list.size()) * 100;
+		return (completed / listSize) * 100;
 	}
 
 }
