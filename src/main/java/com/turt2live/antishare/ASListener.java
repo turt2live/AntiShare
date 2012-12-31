@@ -55,7 +55,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -1410,11 +1410,11 @@ public class ASListener implements Listener {
 	// ################# Entity Target
 
 	@EventHandler (priority = EventPriority.LOW)
-	public void onEntityTarget(EntityTargetEvent event){
+	public void onEntityTarget(EntityTargetLivingEntityEvent event){
 		if(event.isCancelled()){
 			return;
 		}
-		Entity target = event.getTarget();
+		LivingEntity target = event.getTarget();
 		Player playerTarget = null;
 		AlertType type = AlertType.ILLEGAL;
 
