@@ -199,12 +199,15 @@ public class ASInventory implements Cloneable {
 						}
 						continue;
 					}
-					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
-					for(String strSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
-						Integer slot = Integer.valueOf(strSlot);
-						inventory.set(slot, file.getItemStack(world + "." + gamemode + "." + strSlot));
+					if((gamemode.equalsIgnoreCase("adventure") && ServerHas.adventureMode()) ||
+							(gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival"))){
+						ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
+						for(String strSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
+							Integer slot = Integer.valueOf(strSlot);
+							inventory.set(slot, file.getItemStack(world + "." + gamemode + "." + strSlot));
+						}
+						inventories.add(inventory);
 					}
-					inventories.add(inventory);
 				}
 			}
 			// Remove old worlds

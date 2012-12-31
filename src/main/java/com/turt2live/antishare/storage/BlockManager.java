@@ -196,9 +196,9 @@ public class BlockManager {
 	 */
 	public int percentSaveDone(){
 		double percentCreative = saveCreative.getPercent();
-		double percentAdventure = saveAdventure.getPercent();
+		double percentAdventure = saveAdventure != null ? saveAdventure.getPercent() : 0;
 		double percentSurvival = saveSurvival.getPercent();
-		Double avg = (percentCreative + percentAdventure + percentSurvival) / 3;
+		Double avg = (percentCreative + percentAdventure + percentSurvival) / (saveAdventure != null ? 3 : 2);
 		return avg.intValue();
 	}
 
