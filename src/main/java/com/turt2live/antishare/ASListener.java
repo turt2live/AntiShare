@@ -1110,7 +1110,7 @@ public class ASListener implements Listener {
 		}
 
 		// Significant move check
-		if(event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()){
+		if(event.getTo().getBlock().equals(event.getPlayer().getLocation().getBlock())){
 			return;
 		}
 
