@@ -203,6 +203,60 @@ public class BlockManager {
 	}
 
 	/**
+	 * Loads blocks for a specific world
+	 * 
+	 * @param world the world to load
+	 */
+	public void loadWorld(String world){
+		int pc = creative_blocks.size(), ps = survival_blocks.size(), pa = adventure_blocks.size();
+		File dir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
+		dir.mkdirs();
+		if(dir.listFiles() != null){
+			for(File file : dir.listFiles()){
+				if(!file.getName().endsWith(".yml")){
+					continue;
+				}
+				String[] fparts = file.getName().split("\\.");
+				if(fparts.length < 3){
+					plugin.getLogger().warning("INVALID BLOCK FILE: " + file.getName());
+					continue;
+				}
+				String w = fparts[2];
+				if(Bukkit.getWorld(w) == null || !w.equalsIgnoreCase(world)){
+					continue;
+				}
+				EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
+				blocks.load();
+				for(String key : blocks.getKeys(false)){
+					String[] keyParts = key.split(";");
+					Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
+					if(Bukkit.getWorld(keyParts[3]) == null || location == null || location.getWorld() == null){
+						continue;
+					}
+					Block block = location.getBlock();
+					if(block == null){
+						location.getChunk().load();
+						block = location.getBlock();
+					}
+					GameMode gm = GameMode.valueOf(blocks.getString(key));
+					addBlock(gm, block);
+				}
+			}
+		}
+
+		// Tell console what we loaded
+		if(creative_blocks.size() - pc > 0){
+			plugin.getLogger().info("Extra Creative Blocks Loaded: " + (creative_blocks.size() - pc));
+		}
+		if(survival_blocks.size() - ps > 0){
+			plugin.getLogger().info("Extra Survival Blocks Loaded: " + (survival_blocks.size() - ps));
+		}
+		if(adventure_blocks.size() - pa > 0){
+			plugin.getLogger().info("Extra Adventure Blocks Loaded: " + (adventure_blocks.size() - pa));
+		}
+	}
+
+	/**
 	 * Loads from disk
 	 */
 	public void load(){
@@ -217,6 +271,15 @@ public class BlockManager {
 		if(dir.listFiles() != null){
 			for(File file : dir.listFiles()){
 				if(!file.getName().endsWith(".yml")){
+					continue;
+				}
+				String[] fparts = file.getName().split("\\.");
+				if(fparts.length < 3){
+					plugin.getLogger().warning("INVALID BLOCK FILE: " + file.getName());
+					continue;
+				}
+				String w = fparts[2];
+				if(Bukkit.getWorld(w) == null){
 					continue;
 				}
 				EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);

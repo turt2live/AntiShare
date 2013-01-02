@@ -149,6 +149,7 @@ public class ASListener implements Listener {
 	public void onWorldLoad(WorldLoadEvent event){
 		World world = event.getWorld();
 		config.put(world, new PerWorldConfig(world));
+		plugin.getBlockManager().loadWorld(world.getName());
 	}
 
 	// ################# World Unload
