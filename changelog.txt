@@ -3,6 +3,8 @@ Since 5.0.2:
 - Allow blocking of specific skulls (by name)
 - Added disable debug tool
 - Fixed block manager being a meanie
+- Added enable debug tool
+- Block manager now only loads blocks for loaded worlds
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
