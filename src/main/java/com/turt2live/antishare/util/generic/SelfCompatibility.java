@@ -79,17 +79,6 @@ public class SelfCompatibility {
 		return null;
 	}
 
-	private static void saveBlock(File dir, Block block, String gamemode){
-		File file = new File(dir, block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml");
-		if(file.exists()){
-			file.delete();
-		}
-		EnhancedConfiguration blocks = new EnhancedConfiguration(file, AntiShare.getInstance());
-		blocks.load();
-		blocks.set(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName(), gamemode);
-		blocks.save();
-	}
-
 	/**
 	 * Migrates the world configurations to their own folder
 	 */
@@ -152,7 +141,7 @@ public class SelfCompatibility {
 				block = location.getBlock();
 			}
 			GameMode gm = GameMode.valueOf(blocks.getString(key));
-			saveBlock(nDir, block, gm.name());
+			AntiShare.getInstance().getBlockManager().addBlock(gm, block);
 			converted++;
 		}
 		oldBlockFile.delete();
