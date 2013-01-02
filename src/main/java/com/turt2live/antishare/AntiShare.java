@@ -67,6 +67,7 @@ public class AntiShare extends PluginWrapper {
 	 * Used for debug stuff
 	 */
 	public static final Material ANTISHARE_DEBUG_TOOL = Material.BONE;
+
 	private static AntiShare instance;
 	private boolean useSQL = false;
 	private boolean sqlRetry = false;

@@ -242,24 +242,22 @@ public class InventoryManager {
 		}
 
 		// Merge all inventories if needed
-		if(plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
-			ASInventory merge = premerge.clone();
-			ASInventory enderMerge = enderPremerge.clone();
-			for(World world : Bukkit.getWorlds()){
-				merge.setGamemode(GameMode.CREATIVE);
-				enderMerge.setGamemode(GameMode.CREATIVE);
-				creative.put(player.getName() + "." + world.getName(), merge);
-				enderCreative.put(player.getName() + "." + world.getName(), enderMerge);
-				merge.setGamemode(GameMode.SURVIVAL);
-				enderMerge.setGamemode(GameMode.SURVIVAL);
-				survival.put(player.getName() + "." + world.getName(), merge);
-				enderSurvival.put(player.getName() + "." + world.getName(), enderMerge);
-				if(ServerHas.adventureMode()){
-					merge.setGamemode(GameMode.ADVENTURE);
-					enderMerge.setGamemode(GameMode.ADVENTURE);
-					adventure.put(player.getName() + "." + world.getName(), merge);
-					enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
-				}
+		ASInventory merge = premerge.clone();
+		ASInventory enderMerge = enderPremerge.clone();
+		for(World world : Bukkit.getWorlds()){
+			merge.setGamemode(GameMode.CREATIVE);
+			enderMerge.setGamemode(GameMode.CREATIVE);
+			creative.put(player.getName() + "." + world.getName(), merge);
+			enderCreative.put(player.getName() + "." + world.getName(), enderMerge);
+			merge.setGamemode(GameMode.SURVIVAL);
+			enderMerge.setGamemode(GameMode.SURVIVAL);
+			survival.put(player.getName() + "." + world.getName(), merge);
+			enderSurvival.put(player.getName() + "." + world.getName(), enderMerge);
+			if(ServerHas.adventureMode()){
+				merge.setGamemode(GameMode.ADVENTURE);
+				enderMerge.setGamemode(GameMode.ADVENTURE);
+				adventure.put(player.getName() + "." + world.getName(), merge);
+				enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
 			}
 		}
 	}
