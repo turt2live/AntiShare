@@ -409,8 +409,8 @@ public class BlockManager {
 		return null;
 	}
 
-	private String blockToString(Block block){
-		return block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml";
+	String blockToString(Block block){
+		return block.getChunk().getX() + ";" + block.getChunk().getZ() + ";" + block.getWorld().getName() + ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
 	}
 
 }

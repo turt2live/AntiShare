@@ -30,12 +30,25 @@ class BlockSaver implements Runnable {
 		this.gamemode = gm.name();
 		this.listType = type;
 		for(String block : list){
-			String fname = block;
+			/*
+			 * 0 = chunkX
+			 * 1 = chunkZ
+			 * 2 = world name
+			 * 3 = block x
+			 * 4 = block y
+			 * 5 = block z
+			 */
+			String[] parts = block.split(";");
+			if(parts.length < 6 || parts.length > 6){
+				plugin.getLogger().warning("INVALID BLOCK: " + block + " (GM=" + gm.name() + "). Report this to Turt2Live.");
+				continue;
+			}
+			String fname = parts[0] + "." + parts[1] + "." + parts[2] + ".yml";
 			List<String> blocks = new ArrayList<String>();
 			if(this.list.containsKey(fname)){
 				blocks = this.list.get(fname);
 			}
-			blocks.add(fname);
+			blocks.add(parts[4] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2]);
 			this.list.put(fname, blocks);
 		}
 		this.listSize = this.list.keySet().size();
