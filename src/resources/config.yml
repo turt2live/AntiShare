@@ -169,6 +169,7 @@ block-tracking:
 other:
   debug: false
   more-quiet-shutdown: false
+  more-quiet-startup: false
   debug-settings:
     force-use-tool: false
   send-gamemode-change-message: true

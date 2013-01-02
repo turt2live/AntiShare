@@ -113,6 +113,9 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Get all disabled SimpleNotice users
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Loading disabled SimpleNotice users...");
+		}
 		try{
 			File snFile = new File(getDataFolder(), "data" + File.separator + "disabled-simplenotice-users.txt");
 			if(snFile.exists()){
@@ -130,6 +133,9 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Check configuration
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Checking configuration...");
+		}
 		getConfig().loadDefaults(getResource("resources/config.yml"));
 		if(!getConfig().fileExists() || !getConfig().checkDefaults()){
 			getConfig().saveDefaults();
@@ -137,6 +143,9 @@ public class AntiShare extends PluginWrapper {
 		getConfig().load();
 
 		// We need to initiate an SQL connection now
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting SQL if needed...");
+		}
 		startSQL();
 
 		// Check for online mode
@@ -151,6 +160,9 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Setup (order is important!)
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Setting up Metrics...");
+		}
 		try{
 			metrics = new Metrics(this);
 		}catch(IOException e1){
@@ -159,55 +171,127 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Register SimpleNotice channel to AntiShare
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Registering SimpleNotice channel...");
+		}
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
-		// Convert blocks
-		SelfCompatibility.convertBlocks();
-
 		// Setup everything
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting Metrics trackers...");
+		}
 		trackers = new TrackerList();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting hook manager...");
+		}
 		hooks = new HookManager();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting sign manager...");
+		}
 		signs = new SignManager();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting money manager...");
+		}
 		tender = new MoneyManager();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting permissions...");
+		}
 		permissions = new Permissions();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting item map...");
+		}
 		itemMap = new ItemMap();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting listener...");
+		}
 		listener = new ASListener();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting alerts...");
+		}
 		alerts = new Alert();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting messages...");
+		}
 		messages = new Messages();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting region manager...");
+		}
 		regions = new RegionManager();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting region factory...");
+		}
 		factory = new RegionFactory();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting block manager...");
+		}
 		blocks = new BlockManager();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting inventory manager...");
+		}
 		inventories = new InventoryManager();
 
+		// Convert blocks
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Converting blocks...");
+		}
+		SelfCompatibility.convertBlocks();
+
 		// Migrate world configurations
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Migrating world configurations...");
+		}
 		SelfCompatibility.migrateWorldConfigurations();
 
 		// Migrate region players (3.8.0-3.9.0)
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Migrating region player data...");
+		}
 		SelfCompatibility.migratePlayerData();
 
 		// Convert inventories (3.1.3-3.2.0/Current)
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Converting 3.1.3 inventories...");
+		}
 		SelfCompatibility.convert313Inventories();
 
 		// Cleanup old files
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Cleaning up inventories...");
+		}
 		SelfCompatibility.cleanupOldInventories(); // Handles on/off in config internally
 
 		// Statistics
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting update check...");
+		}
 		UpdateChecker.start();
 		// mcstats.org
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting Metrics...");
+		}
 		trackers.addTo(metrics);
 		metrics.start(); // Handles it's own opt-out
 
 		// Start listeners
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Registering listeners...");
+		}
 		getServer().getPluginManager().registerEvents(permissions, this);
 		getServer().getPluginManager().registerEvents(listener, this);
 
 		// Command handlers
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Setting up commands...");
+		}
 		getCommand("antishare").setExecutor(new CommandHandler());
 		if(ServerHas.tabComplete()){
 			TabRegister.register(getCommand("antishare"));
 		}
 
 		// Check players
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Checking online players for regions...");
+		}
 		for(Player player : Bukkit.getOnlinePlayers()){
 			ASRegion playerRegion = regions.getRegion(player.getLocation());
 			if(playerRegion != null){
@@ -219,6 +303,9 @@ public class AntiShare extends PluginWrapper {
 		getLogger().info("Enabled!");
 
 		// Scan for players
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Scheduling inventory updates...");
+		}
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
 			@Override
 			public void run(){
@@ -229,6 +316,9 @@ public class AntiShare extends PluginWrapper {
 		});
 
 		// Conflict messages
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Scheduling conflict messages...");
+		}
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new ConflictThread());
 	}
 
