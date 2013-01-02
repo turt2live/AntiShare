@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.GameMode;
-import org.bukkit.block.Block;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
@@ -26,17 +25,17 @@ class BlockSaver implements Runnable {
 	private double completed = 0;
 	private final int listSize;
 
-	public BlockSaver(CopyOnWriteArrayList<Block> list, GameMode gm, File saveDir, ListComplete type){
+	public BlockSaver(CopyOnWriteArrayList<String> list, GameMode gm, File saveDir, ListComplete type){
 		this.dir = saveDir;
 		this.gamemode = gm.name();
 		this.listType = type;
-		for(Block block : list){
-			String fname = block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml";
+		for(String block : list){
+			String fname = block;
 			List<String> blocks = new ArrayList<String>();
 			if(this.list.containsKey(fname)){
 				blocks = this.list.get(fname);
 			}
-			blocks.add(block.getX() + ";" + block.getY() + ";" + block.getZ() + ";" + block.getWorld().getName());
+			blocks.add(fname);
 			this.list.put(fname, blocks);
 		}
 		this.listSize = this.list.keySet().size();

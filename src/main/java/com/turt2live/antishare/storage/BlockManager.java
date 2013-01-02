@@ -56,9 +56,9 @@ public class BlockManager {
 	}
 
 	private AntiShare plugin;
-	private CopyOnWriteArrayList<Block> creative_blocks = new CopyOnWriteArrayList<Block>();
-	private CopyOnWriteArrayList<Block> survival_blocks = new CopyOnWriteArrayList<Block>();
-	private CopyOnWriteArrayList<Block> adventure_blocks = new CopyOnWriteArrayList<Block>();
+	private CopyOnWriteArrayList<String> creative_blocks = new CopyOnWriteArrayList<String>();
+	private CopyOnWriteArrayList<String> survival_blocks = new CopyOnWriteArrayList<String>();
+	private CopyOnWriteArrayList<String> adventure_blocks = new CopyOnWriteArrayList<String>();
 	private TrackerList tracked_creative;
 	private TrackerList tracked_survival;
 	private TrackerList tracked_adventure;
@@ -269,20 +269,20 @@ public class BlockManager {
 			if(!tracked_creative.isTracked(block)){
 				break;
 			}
-			creative_blocks.add(block);
+			creative_blocks.add(blockToString(block));
 			break;
 		case SURVIVAL:
 			if(!tracked_survival.isTracked(block)){
 				break;
 			}
-			survival_blocks.add(block);
+			survival_blocks.add(blockToString(block));
 			break;
 		default:
 			if(ServerHas.adventureMode()){
 				if(!tracked_adventure.isTracked(block)){
 					break;
 				}
-				adventure_blocks.add(block);
+				adventure_blocks.add(blockToString(block));
 			}
 			break;
 		}
@@ -302,14 +302,14 @@ public class BlockManager {
 			recentlyRemoved.add(material);
 			switch (type){
 			case CREATIVE:
-				creative_blocks.remove(block);
+				creative_blocks.remove(blockToString(block));
 				break;
 			case SURVIVAL:
-				survival_blocks.remove(block);
+				survival_blocks.remove(blockToString(block));
 				break;
 			default:
 				if(ServerHas.adventureMode()){
-					adventure_blocks.remove(block);
+					adventure_blocks.remove(blockToString(block));
 				}
 				break;
 			}
@@ -407,6 +407,10 @@ public class BlockManager {
 			}
 		}
 		return null;
+	}
+
+	private String blockToString(Block block){
+		return block.getChunk().getX() + "." + block.getChunk().getZ() + "." + block.getWorld().getName() + ".yml";
 	}
 
 }
