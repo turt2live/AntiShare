@@ -641,7 +641,7 @@ public class AntiShare extends PluginWrapper {
 	 * @return true if the event should be cancelled, false if the server is in debug mode
 	 */
 	public boolean shouldCancel(CommandSender target, boolean ignoreTool){
-		if(target != null){
+		if(target != null && getConfig().getBoolean("other.debug")){
 			if(getConfig().getBoolean("other.debug-settings.force-use-tool") && target instanceof Player && !ignoreTool){
 				Player player = (Player) target;
 				if(player.getItemInHand() != null){
