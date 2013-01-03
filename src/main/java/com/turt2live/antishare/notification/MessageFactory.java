@@ -264,6 +264,60 @@ public class MessageFactory {
 	}
 
 	/**
+	 * Inserts fields into the message where needed
+	 * 
+	 * @param block the block
+	 * @param player the player
+	 * @param world the world
+	 * @param tender the tender
+	 * @param clicked the thing that was clicked
+	 * @return the active message factory
+	 */
+	public MessageFactory insert(Material block, Player player, World world, TenderType tender, String clicked){
+		if(block != null){
+			insertBlock(block);
+		}
+		if(player != null){
+			insertPlayer(player);
+		}
+		if(world != null){
+			insertWorld(world);
+		}
+		if(tender != null){
+			insertTender(tender);
+		}
+		if(clicked != null){
+			insertClicked(clicked);
+		}
+		return this;
+	}
+
+	/**
+	 * Inserts fields into the message where needed
+	 * 
+	 * @param block the block
+	 * @param player the player
+	 * @param world the world
+	 * @param tender the tender
+	 * @return the active message factory
+	 */
+	public MessageFactory insert(Material block, Player player, World world, TenderType tender){
+		if(block != null){
+			insertBlock(block);
+		}
+		if(player != null){
+			insertPlayer(player);
+		}
+		if(world != null){
+			insertWorld(world);
+		}
+		if(tender != null){
+			insertTender(tender);
+		}
+		return this;
+	}
+
+	/**
 	 * Returns the raw, uncolored, message
 	 * 
 	 * @return the raw message

@@ -74,12 +74,20 @@ public class BlockManager {
 	private final int maxLists = ListComplete.values().length;
 	private boolean doneLastSave = false;
 	private ObjectSaver saveCreativeBlocks, saveSurvivalBlocks, saveAdventureBlocks, saveCreativeEntities, saveSurvivalEntities, saveAdventureEntities;
+	private final File entitiesDir;
+	private final File blocksDir;
 
 	/**
 	 * Creates a new block manager, also loads the block lists
 	 */
 	public BlockManager(){
 		this.plugin = AntiShare.getInstance();
+
+		// Setup files
+		entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
+		blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
+		blocksDir.mkdirs();
+		entitiesDir.mkdirs();
 
 		// Load blocks
 		load();
@@ -93,12 +101,10 @@ public class BlockManager {
 	 */
 	public void save(boolean clear, boolean load){
 		// Load files
-		File blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
 		if(blocksDir.exists()){
 			blocksDir.delete(); // To remove old blocks
 		}
 		blocksDir.mkdirs();
-		File entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
 		if(entitiesDir.exists()){
 			entitiesDir.delete(); // To remove old entities
 		}
@@ -157,32 +163,41 @@ public class BlockManager {
 		// Run
 		creativeBlocksThread.start();
 		survivalBlocksThread.start();
+		creativeEntitiesThread.start();
+		survivalEntitiesThread.start();
 
 		// Treat adventure on it's own
+		ObjectSaver nullSaver = new NullObjectSaver();
+		nullSaver.setClear(clear);
+		nullSaver.setLoad(load);
 		if(saveAdventureBlocks != null){
 			Thread adventureBlocksThread = new Thread(saveAdventureBlocks);
 			adventureBlocksThread.setName("ANTISHARE-Save Adventure Blocks");
 			adventureBlocksThread.start();
+		}else{
+			markSaveAsDone(ListComplete.ADVENTURE_BLOCKS, nullSaver);
 		}
 		if(saveAdventureEntities != null){
 			Thread adventureEntitiesThread = new Thread(saveAdventureEntities);
 			adventureEntitiesThread.setName("ANTISHARE-Save Adventure Entities");
 			adventureEntitiesThread.start();
+		}else{
+			markSaveAsDone(ListComplete.ADVENTURE_ENTITIES, nullSaver);
 		}
 
 		// BlockSaver handles telling BlockManager that it is done
 	}
 
 	EnhancedConfiguration getFile(File dir, String fname){
-		EnhancedConfiguration blocks = null;
+		EnhancedConfiguration ymlFile = null;
 		if(!saveFiles.containsKey(fname)){
 			File file = new File(dir, fname);
-			blocks = new EnhancedConfiguration(file, AntiShare.getInstance());
-			saveFiles.put(fname, blocks);
+			ymlFile = new EnhancedConfiguration(file, AntiShare.getInstance());
+			saveFiles.put(fname, ymlFile);
 		}else{
-			blocks = saveFiles.get(fname);
+			ymlFile = saveFiles.get(fname);
 		}
-		return blocks;
+		return ymlFile;
 	}
 
 	void markSaveAsDone(ListComplete list, ObjectSaver save){
@@ -191,6 +206,9 @@ public class BlockManager {
 			if(!completedSaves[i]){
 				return;
 			}
+		}
+		if(doneLastSave == true){
+			return;
 		}
 		if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
 			plugin.getLogger().info("[Block Manager] Saving files...");
@@ -219,7 +237,13 @@ public class BlockManager {
 	 * @return true if done
 	 */
 	public boolean isSaveDone(){
-		return doneLastSave;
+		return doneLastSave || (
+				creative_blocks.size() <= 0 &&
+						survival_blocks.size() <= 0 &&
+						adventure_blocks.size() <= 0 &&
+						creative_entities.size() <= 0 &&
+						survival_entities.size() <= 0 &&
+				adventure_entities.size() <= 0);
 	}
 
 	/**
@@ -228,6 +252,9 @@ public class BlockManager {
 	 * @return the percent of the save completed (as a whole number, eg: 10)
 	 */
 	public int percentSaveDone(){
+		if(isSaveDone()){
+			return 100;
+		}
 		double percentCreative = saveCreativeBlocks.getPercent() + saveCreativeEntities.getPercent();
 		double percentSurvival = saveSurvivalBlocks.getPercent() + saveSurvivalEntities.getPercent();
 		double percentAdventure = (saveAdventureBlocks != null ? saveAdventureBlocks.getPercent() : 0)
@@ -306,12 +333,6 @@ public class BlockManager {
 	public void loadWorld(String world){
 		int pc = creative_blocks.size(), ps = survival_blocks.size(), pa = adventure_blocks.size(), pce = creative_entities.size(), pse = survival_entities.size(), pae = adventure_entities.size();
 
-		// Create files
-		File blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
-		blocksDir.mkdirs();
-		File entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
-		entitiesDir.mkdirs();
-
 		// Load
 		load(blocksDir, world, true);
 		load(entitiesDir, world, false);
@@ -345,14 +366,6 @@ public class BlockManager {
 		tracked_creative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
 		tracked_survival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
 		tracked_adventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
-
-		// Setup cache
-
-		// Create files
-		File blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
-		blocksDir.mkdirs();
-		File entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
-		entitiesDir.mkdirs();
 
 		// Load
 		load(blocksDir, null, true);

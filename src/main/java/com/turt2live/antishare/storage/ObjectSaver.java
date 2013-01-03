@@ -26,6 +26,13 @@ class ObjectSaver implements Runnable {
 	private final int listSize;
 
 	public ObjectSaver(CopyOnWriteArrayList<String> list, GameMode gm, File saveDir, ListComplete type, boolean isBlock){
+		if(this instanceof NullObjectSaver){
+			dir = null;
+			gamemode = null;
+			listType = null;
+			listSize = 0;
+			return;
+		}
 		this.dir = saveDir;
 		this.gamemode = gm.name();
 		this.listType = type;
@@ -40,8 +47,8 @@ class ObjectSaver implements Runnable {
 			 * 6 = (if provided) entity type as string
 			 */
 			String[] parts = item.split(";");
-			if(parts.length < (isBlock?6:7) || parts.length > (isBlock?6:7)){
-				plugin.getLogger().warning("INVALID "+(isBlock?"BLOCK":"ENTITY")+": " + item + " (GM=" + gm.name() + "). Report this to Turt2Live.");
+			if(parts.length < (isBlock ? 6 : 7) || parts.length > (isBlock ? 6 : 7)){
+				plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + ": " + item + " (GM=" + gm.name() + "). Report this to Turt2Live.");
 				continue;
 			}
 			String fname = parts[0] + "." + parts[1] + "." + parts[2] + ".yml";
@@ -49,7 +56,7 @@ class ObjectSaver implements Runnable {
 			if(this.list.containsKey(fname)){
 				items = this.list.get(fname);
 			}
-			items.add(parts[4] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2]+(isBlock?"":parts[6]));
+			items.add(parts[4] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2] + (isBlock ? "" : parts[6]));
 			this.list.put(fname, items);
 		}
 		this.listSize = this.list.keySet().size();
@@ -89,7 +96,7 @@ class ObjectSaver implements Runnable {
 	}
 
 	double getPercent(){
-		return (completed / listSize) * 100;
+		return listSize == 0 ? 100 : ((completed / listSize) * 100);
 	}
 
 }
