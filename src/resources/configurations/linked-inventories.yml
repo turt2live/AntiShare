@@ -1,0 +1,11 @@
+# Here you can link inventories for worlds
+# 
+# For example, let's say you want the Survival inventory of 'world' to be 
+# linked to the Survival inventory of 'world2' and 'world3'. All you would 
+# have to do is use this:
+# world:
+#   gamemode: survival
+#   linked: world2, world3
+# 
+# With the above setup, changes in any of the 3 worlds while in survival
+# mode will be reflected upon all 3 inventories. 

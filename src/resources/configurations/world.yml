@@ -1,0 +1,46 @@
+# For help see the following page
+# http://dev.bukkit.org/server-mods/antishare/pages/3-2-x-help/#w-per-world-configuration
+# 
+# General Help:
+# http://dev.bukkit.org/server-mods/antishare/pages/3-2-x-help/
+blocked-actions:
+  block-place: global
+  block-break: global
+  drop-items-on-death: global
+  pickup-items: global
+  drop-items: global
+  right-click: global
+  use-items: global
+  commands: global
+  combat-against-players: global
+  combat-against-mobs: global
+  crafting-recipes: global
+  right-click-mobs: global
+blocked-lists:
+  block-place: global
+  block-break: global
+  dropped-items-on-death: global
+  picked-up-items: global
+  dropped-items: global
+  right-click: global
+  use-items: global
+  commands: global
+  mobs: global
+  crafting-recipes: global
+  right-click-mobs: global
+enabled-features:
+  gamemode-regions: global
+  world-split: global
+  no-experience-for-creative: global
+  no-drops-when-block-break:
+    inventories: global
+    attached-blocks: global
+worldsplit:
+  split: none
+  value: 0
+  positive: CREATIVE
+  negative: SURVIVAL
+  warning:
+    enabled: false
+    blocks: 15
+    warn-every: 2

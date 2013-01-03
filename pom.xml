@@ -116,7 +116,7 @@
 			<resource>
 				<targetPath>resources</targetPath>
 				<filtering>false</filtering>
-				<directory>${basedir}/src/resources</directory>
+				<directory>${basedir}/src/resources/configurations</directory>
 				<includes>
 					<include>*.yml</include>
 				</includes>
