@@ -246,13 +246,13 @@ public class BlockManager {
 
 		// Tell console what we loaded
 		if(creative_blocks.size() - pc > 0){
-			plugin.getLogger().info("Extra Creative Blocks Loaded: " + (creative_blocks.size() - pc));
+			plugin.getLogger().info("Creative Blocks Loaded (for world '" + world + "'): " + (creative_blocks.size() - pc));
 		}
 		if(survival_blocks.size() - ps > 0){
-			plugin.getLogger().info("Extra Survival Blocks Loaded: " + (survival_blocks.size() - ps));
+			plugin.getLogger().info("Survival Blocks Loaded (for world '" + world + "'): " + (survival_blocks.size() - ps));
 		}
 		if(adventure_blocks.size() - pa > 0){
-			plugin.getLogger().info("Extra Adventure Blocks Loaded: " + (adventure_blocks.size() - pa));
+			plugin.getLogger().info("Adventure Blocks Loaded (for world '" + world + "'): " + (adventure_blocks.size() - pa));
 		}
 	}
 
