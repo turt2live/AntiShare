@@ -719,7 +719,7 @@ public class ASListener implements Listener {
 					type = AlertType.LEGAL;
 				}
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, player.getWorld(), null)){ // TODO: combat perms
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, player.getWorld(), ASUtils.getEntityName(event.getRightClicked()))){
 				type = AlertType.LEGAL;
 			}
 
@@ -1019,7 +1019,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), null)){ // TODO: Death perms
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), (Material) null)){
 			type = AlertType.LEGAL;
 		}
 
@@ -1075,7 +1075,7 @@ public class ASListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), null)){ // TODO: Command Perms
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), command)){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
@@ -1331,12 +1331,12 @@ public class ASListener implements Listener {
 		if(target instanceof Player){
 			// target = Player
 			playerCombat = true;
-			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_PLAYERS, PermissionNodes.DENY_COMBAT_PLAYERS, playerAttacker.getWorld(), null)){ // TODO: Combat perms
+			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_PLAYERS, PermissionNodes.DENY_COMBAT_PLAYERS, playerAttacker.getWorld(), ((Player) target).getName())){
 				type = AlertType.LEGAL;
 			}
 		}else{
 			// target = other entity
-			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), null)){ // TODO: combat perms
+			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), ASUtils.getEntityName(target))){
 				type = AlertType.LEGAL;
 			}
 			ASRegion region = plugin.getRegionManager().getRegion(target.getLocation());
@@ -1429,7 +1429,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check permissions
-		if(!plugin.isBlocked(playerTarget, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerTarget.getWorld(), null)){ // TODO: combat perms
+		if(!plugin.isBlocked(playerTarget, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerTarget.getWorld(), ASUtils.getEntityName(target))){
 			type = AlertType.LEGAL;
 		}
 

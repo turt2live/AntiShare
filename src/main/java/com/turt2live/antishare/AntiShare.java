@@ -561,6 +561,20 @@ public class AntiShare extends PluginWrapper {
 	 * @param denyPermission the "deny" permission
 	 * @param world the world
 	 * @param target the target to apply to this permission, spaces will removed
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Player player, String allowPermission, String denyPermission, World world, String target){
+		return isBlocked(player, allowPermission, denyPermission, world, target, false);
+	}
+
+	/**
+	 * Determines if a player is blocked from doing something
+	 * 
+	 * @param player the player
+	 * @param allowPermission the "allow" permission
+	 * @param denyPermission the "deny" permission
+	 * @param world the world
+	 * @param target the target to apply to this permission, spaces will removed
 	 * @param specialOnly true to only check permission.[item] permissions
 	 * @return true if blocked
 	 */
