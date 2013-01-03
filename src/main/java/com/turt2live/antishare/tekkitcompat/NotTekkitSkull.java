@@ -1,15 +1,15 @@
 package com.turt2live.antishare.tekkitcompat;
 
-import org.bukkit.block.BlockState;
+import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 
 public class NotTekkitSkull {
 
 	private Skull skull = null;
 
-	public NotTekkitSkull(BlockState state){
-		if(state instanceof Skull){
-			skull = (Skull) state;
+	public NotTekkitSkull(Block block){
+		if(block.getState() instanceof Skull){
+			skull = (Skull) block.getState();
 		}
 	}
 

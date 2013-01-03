@@ -1,12 +1,20 @@
 package com.turt2live.antishare.tekkitcompat;
 
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 
 public class SkullCompat {
 
-	public static String getOwner(BlockState state){
-		if(isSkull(state)){
-			NotTekkitSkull skull = new NotTekkitSkull(state);
+	private Block block;
+	private NotTekkitSkull skull;
+
+	public SkullCompat(Block block){
+		this.block = block;
+		skull = new NotTekkitSkull(block);
+	}
+
+	public String getOwner(){
+		if(isSkull(block.getState())){
 			return skull.getOwner();
 		}
 		return null;

@@ -5,6 +5,7 @@ Since 5.0.2:
 - Fixed block manager being a meanie
 - Added enable debug tool
 - Block manager now only loads blocks for loaded worlds
+- Fix signs not working with whitelist
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

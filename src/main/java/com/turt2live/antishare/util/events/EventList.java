@@ -232,7 +232,7 @@ public class EventList {
 			}
 
 			// Special case: Skull
-			if(ServerHas.mc14xItems()){
+			if(ServerHas.skulls()){
 				if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull")
 						|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull")
 						|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
@@ -364,7 +364,7 @@ public class EventList {
 			for(int i = 0; i < blockedsigns.size(); i++){
 				Sign s = blockedsigns.get(i);
 				if(s.matches(cbsign)){
-					return true;
+					return whitelist ? false : true;
 				}
 			}
 		}
@@ -375,7 +375,8 @@ public class EventList {
 			}
 			if(ServerHas.skulls()){
 				if(!contained && SkullCompat.isSkull(block.getState())){
-					String owner = SkullCompat.getOwner(block.getState());
+					SkullCompat compat = new SkullCompat(block);
+					String owner = compat.getOwner();
 					if(owner == null){
 						contained = true;
 					}else{
@@ -391,7 +392,8 @@ public class EventList {
 		}
 		if(ServerHas.skulls()){
 			if(!contained && SkullCompat.isSkull(block.getState())){
-				String owner = SkullCompat.getOwner(block.getState());
+				SkullCompat compat = new SkullCompat(block);
+				String owner = compat.getOwner();
 				if(owner == null){
 					contained = false;
 				}else{
