@@ -8,12 +8,12 @@ Since 5.0.2:
 - Fix signs not working with whitelist
 - Added deny permissions
 - Added per-item permissions
+- Added ability to stop minecarts (and etc) from being broken
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 Potential Features:
-- Entities (like minecarts) should be blocked from breaking if in the block-break (or new?) list
 - Item Frames placed by "gm1" and put an item into it with "gm2" should be protected?
     - Use HangingPlaceEvent (or similar in tekkit)
 

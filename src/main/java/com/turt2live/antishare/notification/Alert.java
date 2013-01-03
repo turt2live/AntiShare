@@ -224,10 +224,6 @@ public class Alert {
 			}
 			break;
 		case GENERAL:
-			if(!sendGeneral){
-				sendToAdmins = false;
-			}
-			break;
 		case REGION:
 			if(!sendGeneral){
 				sendToAdmins = false;

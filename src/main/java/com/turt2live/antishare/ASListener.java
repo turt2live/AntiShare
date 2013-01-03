@@ -675,6 +675,61 @@ public class ASListener implements Listener {
 		}
 	}
 
+	// ################# Destroy Vehicle
+
+	@EventHandler (priority = EventPriority.LOW)
+	public void onVechicleDestroy(VehicleDestroyEvent event){
+		if(event.isCancelled() || !(event.getAttacker() instanceof Player)){
+			return;
+		}
+		Player player = (Player) event.getAttacker();
+		AlertType type = AlertType.ILLEGAL;
+
+		// Convert entity -> item ID
+		Material item = Material.AIR;
+		if(event.getVehicle() instanceof StorageMinecart){
+			item = Material.STORAGE_MINECART;
+		}else if(event.getVehicle() instanceof PoweredMinecart){
+			item = Material.POWERED_MINECART;
+		}else if(event.getVehicle() instanceof Boat){
+			item = Material.BOAT;
+		}else if(event.getVehicle() instanceof Minecart){
+			item = Material.MINECART;
+		}
+
+		if(item == Material.AIR){
+			return;
+		}
+
+		// Check permissions
+		ASRegion region = plugin.getRegionManager().getRegion(event.getVehicle().getLocation());
+		if(region != null){
+			if(!region.getConfig().isBlocked(item, ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!config.get(player.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
+			}
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, player.getWorld(), item)){
+			type = AlertType.LEGAL;
+		}
+
+		// Handle event
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(plugin.shouldCancel(player, false));
+		}
+
+		// Alert (with sanity check)
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + "a " + ASUtils.capitalize(item.name());
+		String playerMessage = plugin.getMessage("blocked-action.break-block");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(null, player, player.getWorld(), TenderType.BLOCK_BREAK, ASUtils.capitalize(item.name()));
+		playerMessage = factory.toString();
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_BREAK);
+	}
+
 	// ################# Player Interact Entity
 
 	@EventHandler (priority = EventPriority.LOW)
