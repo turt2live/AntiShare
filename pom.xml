@@ -16,23 +16,23 @@
 			<version>1.2.23-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bukkit</groupId>
+					<artifactId>bukkit</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldedit</artifactId>
 			<version>5.5-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bukkit</groupId>
+					<artifactId>bukkit</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>ru.tehkode</groupId>
@@ -68,12 +68,12 @@
 			<version>2.5</version>
 			<type>jar</type>
 			<scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bukkit</groupId>
+					<artifactId>bukkit</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -120,13 +120,21 @@
 				<includes>
 					<include>*.yml</include>
 				</includes>
+				<excludes>
+					<exclude>plugin.yml</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}/src/resources</directory>
+				<includes>
+					<include>plugin.yml</include>
+				</includes>
 			</resource>
 			<resource>
 				<filtering>false</filtering>
 				<directory>${basedir}/src/main/java</directory>
-				<includes>
-					<include>*.yml</include>
-				</includes>
 			</resource>
 		</resources>
 		<plugins>
