@@ -9,6 +9,7 @@ Since 5.0.2:
 - Added deny permissions
 - Added per-item permissions
 - Added ability to stop minecarts (and etc) from being broken
+- Added option to treat breaking vehicles as creative breaking blocks
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

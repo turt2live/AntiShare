@@ -728,6 +728,16 @@ public class ASListener implements Listener {
 		factory.insert(null, player, player.getWorld(), TenderType.BLOCK_BREAK, ASUtils.capitalize(item.name()));
 		playerMessage = factory.toString();
 		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_BREAK);
+
+		// Remove drops if required
+		if(type == AlertType.LEGAL && !event.isCancelled()){
+			if(!plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING, player.getWorld()) && player.getGameMode() == GameMode.CREATIVE){
+				if(plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.vehicles")){
+					event.setCancelled(true);
+					event.getVehicle().remove();
+				}
+			}
+		}
 	}
 
 	// ################# Player Interact Entity

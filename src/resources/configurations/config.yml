@@ -54,6 +54,8 @@ enabled-features:
     attached-blocks: true
     # Consider 'paintings' (and item frames) as 'attached blocks'?
     paintings-are-attached: true
+    # Count vehicles too?
+    vehicles: true
     # Set to false to disable water/lava/tnt/explosion protection of creative blocks
     natural-protection: true
     natural-protection-mode: 
