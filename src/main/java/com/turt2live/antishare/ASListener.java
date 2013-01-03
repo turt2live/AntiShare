@@ -30,6 +30,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -741,6 +742,46 @@ public class ASListener implements Listener {
 	}
 
 	// ################# Player Interact Entity
+
+	@EventHandler (priority = EventPriority.LOW)
+	public void onItemFrameClick(PlayerInteractEntityEvent event){
+		if(event.isCancelled()
+				|| !plugin.getConfig().getBoolean("enabled-features.disable-item-frame-cross-game-mode")
+				|| !ServerHas.mc14xEntities()
+				|| event.getRightClicked().getType() != EntityType.ITEM_FRAME){
+			return;
+		}
+
+		// Setup
+		Player player = event.getPlayer();
+		AlertType type = AlertType.LEGAL;
+		Material item = Material.ITEM_FRAME;
+		Entity entity = event.getRightClicked();
+		GameMode egm = plugin.getBlockManager().getType(entity);
+
+		// Handle
+		if(egm != player.getGameMode()){
+			type = AlertType.ILLEGAL;
+		}
+		if(plugin.getPermissions().has(player, PermissionNodes.ITEM_FRAMES, player.getWorld())){
+			type = AlertType.LEGAL;
+		}
+
+		// Cancel if needed
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(plugin.shouldCancel(player, false));
+		}
+
+		// Alert (with sanity check)
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(item.name());
+		String playerMessage = plugin.getMessage("blocked-action.right-click");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert((Material) null, player, player.getWorld(), TenderType.RIGHT_CLICK, ASUtils.capitalize(item.name()));
+		playerMessage = factory.toString();
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.RIGHT_CLICK);
+	}
+
+	// ################# Player Interact Entity (2)
 
 	@EventHandler (priority = EventPriority.LOW)
 	public void onInteractEntity(PlayerInteractEntityEvent event){

@@ -46,6 +46,9 @@ enabled-features:
   no-experience-for-creative: true
   # Determines if you want to create per-Game Mode experience values
   change-level-on-gamemode-change: true
+  # When true, AntiShare will not let players of some gamemode use
+  # and item frame placed in another gamemode.
+  disable-item-frame-cross-game-mode: true
   # Settings for when a creative player breaks a block
   no-drops-when-block-break:
     # Clear the block's inventory (like chests)

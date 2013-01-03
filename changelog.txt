@@ -11,12 +11,10 @@ Since 5.0.2:
 - Added ability to stop vehicles from being broken
 - Added option to treat breaking vehicles as creative breaking blocks
 - Added ability to block place/break of gamemode/regular Paintings and Item Frames
+- Added protection for Item Frames
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
-
-Potential Features:
-- Item Frames placed by "gm1" and put an item into it with "gm2" should be protected?
 
 HOW PERMISSIONS WORK:
 
