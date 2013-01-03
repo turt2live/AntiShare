@@ -105,6 +105,20 @@ public class AntiShare extends PluginWrapper {
 		if(!getDataFolder().exists()){
 			getDataFolder().mkdirs();
 		}
+		File data = new File(getDataFolder(), "data");
+		if(!data.exists()){
+			data.mkdirs();
+		}
+
+		// Check configuration
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Checking configuration...");
+		}
+		getConfig().loadDefaults(getResource("resources/config.yml"));
+		if(!getConfig().fileExists() || !getConfig().checkDefaults()){
+			getConfig().saveDefaults();
+		}
+		getConfig().load();
 
 		// Move SimpleNotice file
 		File oldSNFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");
@@ -131,16 +145,6 @@ public class AntiShare extends PluginWrapper {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-
-		// Check configuration
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Checking configuration...");
-		}
-		getConfig().loadDefaults(getResource("resources/config.yml"));
-		if(!getConfig().fileExists() || !getConfig().checkDefaults()){
-			getConfig().saveDefaults();
-		}
-		getConfig().load();
 
 		// We need to initiate an SQL connection now
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
