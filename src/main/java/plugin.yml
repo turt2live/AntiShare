@@ -32,6 +32,7 @@ permissions:
         default: op
         children:
             AntiShare.allow.*: true
+            AntiShare.deny.*: false
             AntiShare.getDrops: true
             AntiShare.mirror: true
             AntiShare.getNotifications: true
@@ -226,3 +227,47 @@ permissions:
     AntiShare.allow.hit_mobs:
         description: Allows combat with mobs (cows, creepers, etc)
         default: op
+    AntiShare.deny.*:
+        description: Give all AntiShare.deny permissions
+        default: false
+        children:
+            AntiShare.deny.block_place: true
+            AntiShare.deny.block_break: true
+            AntiShare.deny.right_click: true
+            AntiShare.deny.use_item: true
+            AntiShare.deny.commands: true
+            AntiShare.deny.pickup_item: true
+            AntiShare.deny.drop_item: true
+            AntiShare.deny.hit_players: true
+            AntiShare.deny.hit_mobs: true
+            AntiShare.deny.death: true
+    AntiShare.deny.block_place:
+        description: Denies block place
+        default: false
+    AntiShare.deny.block_break:
+        description: Denies block break
+        default: false
+    AntiShare.deny.right_click:
+        description: Denies right clicking
+        default: false
+    AntiShare.deny.use_item:
+        description: Denies item use
+        default: false
+    AntiShare.deny.commands:
+        description: Denies item use
+        default: false
+    AntiShare.deny.death:
+        description: Denies death with illegal items
+        default: false
+    AntiShare.deny.pickup_item:
+        description: Denies item pickup
+        default: false
+    AntiShare.deny.drop_item:
+        description: Denies item dropping
+        default: false
+    AntiShare.deny.hit_players:
+        description: Denies combat with players
+        default: false
+    AntiShare.deny.hit_mobs:
+        description: Denies combat with mobs (cows, creepers, etc)
+        default: false

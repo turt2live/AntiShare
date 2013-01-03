@@ -29,6 +29,18 @@ public class PermissionNodes {
 	public static final String ALLOW_COMBAT_PLAYERS = "AntiShare.allow.hit_players";
 	public static final String ALLOW_COMBAT_MOBS = "AntiShare.allow.hit_mobs";
 
+	// Deny Nodes
+	public static final String DENY_BLOCK_PLACE = "AntiShare.deny.block_place";
+	public static final String DENY_BLOCK_BREAK = "AntiShare.deny.block_break";
+	public static final String DENY_DEATH = "AntiShare.deny.death";
+	public static final String DENY_PICKUP = "AntiShare.deny.pickup_item";
+	public static final String DENY_DROP = "AntiShare.deny.drop_item";
+	public static final String DENY_RIGHT_CLICK = "AntiShare.deny.right_click";
+	public static final String DENY_USE = "AntiShare.deny.use_item";
+	public static final String DENY_COMMANDS = "AntiShare.deny.commands";
+	public static final String DENY_COMBAT_PLAYERS = "AntiShare.deny.hit_players";
+	public static final String DENY_COMBAT_MOBS = "AntiShare.deny.hit_mobs";
+
 	// Admin Nodes
 	public static final String GET_NOTIFICATIONS = "AntiShare.getNotifications";
 	public static final String SILENT_NOTIFICATIONS = "AntiShare.silent";

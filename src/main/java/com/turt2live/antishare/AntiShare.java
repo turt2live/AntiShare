@@ -483,11 +483,114 @@ public class AntiShare extends PluginWrapper {
 	 * @param player the player
 	 * @param allowPermission the "allow" permission
 	 * @param world the world
+	 * @param material the material applied to the permissions (or null for none)
 	 * @return true if blocked
 	 */
-	public boolean isBlocked(Player player, String allowPermission, World world){
+	public boolean isBlocked(Player player, String allowPermission, World world, Material material){
+		return isBlocked(player, allowPermission, null, world, material, false);
+	}
+
+	/**
+	 * Determines if a player is blocked from doing something
+	 * 
+	 * @param player the player
+	 * @param allowPermission the "allow" permission
+	 * @param denyPermission the "deny" permission
+	 * @param world the world
+	 * @param material the material applied to the permissions (or null for none)
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Player player, String allowPermission, String denyPermission, World world, Material material){
+		return isBlocked(player, allowPermission, denyPermission, world, material, false);
+	}
+
+	/**
+	 * Determines if a player is blocked from doing something
+	 * 
+	 * @param player the player
+	 * @param allowPermission the "allow" permission
+	 * @param denyPermission the "deny" permission
+	 * @param world the world
+	 * @param material the material applied to the permissions (or null for none)
+	 * @param specialOnly true to only check permission.[item] permissions
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Player player, String allowPermission, String denyPermission, World world, Material material, boolean specialOnly){
+		if(material != null){
+			if(permissions.has(player, allowPermission + "." + material.getId(), world)){
+				return false;
+			}
+			if(permissions.has(player, allowPermission + "." + material.name(), world)){
+				return false;
+			}
+			if(denyPermission != null && permissions.has(player, denyPermission + "." + material.getId(), world)){
+				return true;
+			}
+			if(denyPermission != null && permissions.has(player, denyPermission + "." + material.name(), world)){
+				return true;
+			}
+		}
+		if(specialOnly){
+			return false;
+		}
 		if(permissions.has(player, allowPermission, world)){
 			return false;
+		}
+		if(denyPermission != null && permissions.has(player, denyPermission, world)){
+			return true;
+		}
+		if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE, world) && player.getGameMode() == GameMode.CREATIVE){
+			return true;
+		}
+		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL, world) && player.getGameMode() == GameMode.SURVIVAL){
+			return true;
+		}
+		if(ServerHas.adventureMode()){
+			if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Determines if a player is blocked from doing something
+	 * 
+	 * @param player the player
+	 * @param allowPermission the "allow" permission
+	 * @param denyPermission the "deny" permission
+	 * @param world the world
+	 * @param target the target to apply to this permission, spaces will removed
+	 * @param specialOnly true to only check permission.[item] permissions
+	 * @return true if blocked
+	 */
+	public boolean isBlocked(Player player, String allowPermission, String denyPermission, World world, String target, boolean specialOnly){
+		if(target != null){
+			target = target.replaceAll(" ", "");
+			if(target.startsWith("/")){
+				target = target.substring(1);
+			}
+			if(permissions.has(player, allowPermission + "." + target, world)){
+				return false;
+			}
+			if(permissions.has(player, allowPermission + "." + target, world)){
+				return false;
+			}
+			if(denyPermission != null && permissions.has(player, denyPermission + "." + target, world)){
+				return true;
+			}
+			if(denyPermission != null && permissions.has(player, denyPermission + "." + target, world)){
+				return true;
+			}
+		}
+		if(specialOnly){
+			return false;
+		}
+		if(permissions.has(player, allowPermission, world)){
+			return false;
+		}
+		if(denyPermission != null && permissions.has(player, denyPermission, world)){
+			return true;
 		}
 		if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE, world) && player.getGameMode() == GameMode.CREATIVE){
 			return true;

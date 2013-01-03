@@ -181,7 +181,7 @@ public class ASListener implements Listener {
 		String blockGM = "Unknown";
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, block.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
@@ -427,7 +427,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, block.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
@@ -524,7 +524,7 @@ public class ASListener implements Listener {
 					type = AlertType.ILLEGAL;
 				}
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, block.getWorld())){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, block.getWorld(), block.getType())){
 				type = AlertType.LEGAL;
 			}
 
@@ -549,7 +549,7 @@ public class ASListener implements Listener {
 				}
 			}
 			// Check if they should be blocked
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, block.getWorld())){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getWorld(), block.getType())){
 				type = AlertType.LEGAL;
 			}
 
@@ -574,7 +574,7 @@ public class ASListener implements Listener {
 					type = AlertType.ILLEGAL;
 				}
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
 
@@ -605,7 +605,7 @@ public class ASListener implements Listener {
 					potion = true;
 				}
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
 			if(type == AlertType.ILLEGAL && potion){
@@ -649,7 +649,7 @@ public class ASListener implements Listener {
 					}
 				}
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
 			if(type == AlertType.ILLEGAL && potion){
@@ -719,7 +719,7 @@ public class ASListener implements Listener {
 					type = AlertType.LEGAL;
 				}
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, player.getWorld())){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, player.getWorld(), null)){ // TODO: combat perms
 				type = AlertType.LEGAL;
 			}
 
@@ -739,7 +739,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
@@ -814,7 +814,7 @@ public class ASListener implements Listener {
 		Material item = Material.EGG;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(event.getEgg().getLocation());
@@ -864,7 +864,7 @@ public class ASListener implements Listener {
 		Player player = (Player) shooter;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(bottle.getLocation());
@@ -909,7 +909,7 @@ public class ASListener implements Listener {
 		boolean region = false;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(item.getLocation());
@@ -963,7 +963,7 @@ public class ASListener implements Listener {
 		boolean region = false;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(item.getLocation());
@@ -1019,7 +1019,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), null)){ // TODO: Death perms
 			type = AlertType.LEGAL;
 		}
 
@@ -1029,12 +1029,14 @@ public class ASListener implements Listener {
 			ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
 			for(ItemStack item : drops){
 				if(asregion != null){
-					if(asregion.getConfig().isBlocked(item.getType(), ListType.DEATH)){
+					if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
+							&& asregion.getConfig().isBlocked(item.getType(), ListType.DEATH)){
 						illegalItems++;
 						remove.add(item);
 					}
 				}else{
-					if(config.get(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)){
+					if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
+							&& config.get(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)){
 						illegalItems++;
 						remove.add(item);
 					}
@@ -1073,7 +1075,7 @@ public class ASListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), null)){ // TODO: Command Perms
 			type = AlertType.LEGAL;
 		}
 		ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
@@ -1329,12 +1331,12 @@ public class ASListener implements Listener {
 		if(target instanceof Player){
 			// target = Player
 			playerCombat = true;
-			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_PLAYERS, playerAttacker.getWorld())){
+			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_PLAYERS, PermissionNodes.DENY_COMBAT_PLAYERS, playerAttacker.getWorld(), null)){ // TODO: Combat perms
 				type = AlertType.LEGAL;
 			}
 		}else{
 			// target = other entity
-			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, playerAttacker.getWorld())){
+			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), null)){ // TODO: combat perms
 				type = AlertType.LEGAL;
 			}
 			ASRegion region = plugin.getRegionManager().getRegion(target.getLocation());
@@ -1427,7 +1429,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check permissions
-		if(!plugin.isBlocked(playerTarget, PermissionNodes.ALLOW_COMBAT_MOBS, playerTarget.getWorld())){
+		if(!plugin.isBlocked(playerTarget, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerTarget.getWorld(), null)){ // TODO: combat perms
 			type = AlertType.LEGAL;
 		}
 
@@ -1624,8 +1626,8 @@ public class ASListener implements Listener {
 		// Check teleport cause for ender pearl
 		Material pearl = Material.ENDER_PEARL;
 		if(event.getCause() == TeleportCause.ENDER_PEARL){
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())
-					|| !plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())){
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), pearl)
+					|| !plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), pearl)){
 				type = AlertType.LEGAL;
 			}
 			if(!config.get(player.getWorld()).isBlocked(pearl, ListType.USE)){
@@ -1686,7 +1688,7 @@ public class ASListener implements Listener {
 			Player player = (Player) he;
 			AlertType type = AlertType.ILLEGAL;
 			if(player.getGameMode() == GameMode.CREATIVE){
-				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld())){
+				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())){
 					type = AlertType.LEGAL;
 				}
 				ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
@@ -1737,8 +1739,8 @@ public class ASListener implements Listener {
 				type = AlertType.ILLEGAL;
 			}
 		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())
-				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), Material.POTION)
+				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), Material.POTION)){
 			type = AlertType.LEGAL;
 		}
 
@@ -1795,8 +1797,8 @@ public class ASListener implements Listener {
 				type = AlertType.ILLEGAL;
 			}
 		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, player.getWorld())
-				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, player.getWorld())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)
+				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
 
