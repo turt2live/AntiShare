@@ -14,7 +14,6 @@ Since 5.0.2:
 
 Potential Features:
 - Entities (like minecarts) should be blocked from breaking if in the block-break (or new?) list
-- Item Frames placed by "gm1" and put an item into it with "gm2" should be protected?
 
 HOW PERMISSIONS WORK:
 
