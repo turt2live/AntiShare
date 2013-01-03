@@ -453,10 +453,13 @@ public class ASUtils {
 		case MELON_STEM:
 		case VINE:
 		case COCOA:
-		case TRIPWIRE:
-		case TRIPWIRE_HOOK:
 			return true;
 		default:
+			if(ServerHas.mc14xItems()){
+				if(type == Material.TRIPWIRE || type == Material.TRIPWIRE_HOOK){
+					return true;
+				}
+			}
 			return false;
 		}
 	}

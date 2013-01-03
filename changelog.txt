@@ -8,7 +8,7 @@ Since 5.0.2:
 - Fix signs not working with whitelist
 - Added deny permissions
 - Added per-item permissions
-- Added ability to stop minecarts (and etc) from being broken
+- Added ability to stop vehicles from being broken
 - Added option to treat breaking vehicles as creative breaking blocks
  
 1.4 changes that need to be protected:

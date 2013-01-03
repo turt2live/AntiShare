@@ -16,9 +16,12 @@ import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.signs.Sign;
+import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
 /**
@@ -202,6 +205,49 @@ public class TrackerList {
 			return true;
 		}
 		defaultID = block.getTypeId() + ":*";
+		if(tracked.contains(defaultID)){
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Determines if an entity is tracked or not
+	 * 
+	 * @param entity the entity
+	 * @return true if tracked
+	 */
+	public boolean isTracked(Entity entity){
+		return isTracked(entity.getType());
+	}
+
+	/**
+	 * Determines if an entity is tracked or not
+	 * 
+	 * @param entityType the entity
+	 * @return true if tracked
+	 */
+	public boolean isTracked(EntityType entityType){
+		if(tracked.size() == 0){
+			return false;
+		}
+		Material mat = Material.AIR;
+		switch (entityType){
+		case PAINTING:
+			mat = Material.PAINTING;
+			break;
+		default:
+			if(ServerHas.mc14xEntities()){
+				if(entityType == EntityType.ITEM_FRAME){
+					mat = Material.ITEM_FRAME;
+				}
+			}
+			break;
+		}
+		if(mat == Material.AIR){
+			return false;
+		}
+		String defaultID = mat.getId() + ":*";
 		if(tracked.contains(defaultID)){
 			return true;
 		}
