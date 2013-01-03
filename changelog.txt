@@ -1,41 +1,5 @@
-Since 5.0.2:
-- Change events to use debug mode
-- Allow blocking of specific skulls (by name)
-- Added disable debug tool
-- Fixed block manager being a meanie
-- Added enable debug tool
-- Block manager now only loads blocks for loaded worlds
-- Fix signs not working with whitelist
-- Added deny permissions
-- Added per-item permissions
-- Added ability to stop vehicles from being broken
-- Added option to treat breaking vehicles as creative breaking blocks
-- Added ability to block place/break of gamemode/regular Paintings and Item Frames
-- Added protection for Item Frames
+Since 5.1.0:
+None
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
-
-HOW PERMISSIONS WORK:
-
-If there is an item involved, then AS checks as follows:
-
-- Allowed to use item
-- Denied item
-- Allowed to use event
-- Denied event
-- Affect creative && creative mode
-- Affect survival && survival mode
-- Affect adventure && adventure mode
-
-If no item:
-
-- Allowed to use event
-- Denied event
-- Affect creative && creative mode
-- Affect survival && survival mode
-- Affect adventure && adventure mode
-
-To apply permissions to attack a player/mob, use the entity/player name
-To apply permissions to use a command, apply the permission AntiShare.(deny/allow).commands.plugin
-    Eg: AntiShare.deny.commands.antishare denies use to /antishare (assuming creative mode & defaults)
