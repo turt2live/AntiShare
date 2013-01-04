@@ -42,19 +42,27 @@ public class PEX {
 		if(!has){
 			// Check defaults
 			Permission perm = AntiShare.getInstance().getServer().getPluginManager().getPermission(permission);
-			switch (perm.getDefault()){
-			case OP:
-				has = player.isOp();
-				break;
-			case NOT_OP:
-				has = !player.isOp();
-				break;
-			case TRUE:
-				has = true;
-				break;
-			case FALSE:
-				has = false;
-				break;
+			if(perm == null){
+				if(permission.toLowerCase().startsWith(PermissionNodes.CONFIG_ALLOW_NODE_START.toLowerCase())){
+					has = player.isOp();
+				}else if(permission.toLowerCase().startsWith(PermissionNodes.CONFIG_DENY_NODE_START.toLowerCase())){
+					has = false;
+				}
+			}else{
+				switch (perm.getDefault()){
+				case OP:
+					has = player.isOp();
+					break;
+				case NOT_OP:
+					has = !player.isOp();
+					break;
+				case TRUE:
+					has = true;
+					break;
+				case FALSE:
+					has = false;
+					break;
+				}
 			}
 		}
 		return has;

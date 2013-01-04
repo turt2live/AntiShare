@@ -17,6 +17,10 @@ package com.turt2live.antishare.permissions;
  */
 public class PermissionNodes {
 
+	// CONFIGURATION NODES
+	public static final String CONFIG_ALLOW_NODE_START = "AntiShare.allow";
+	public static final String CONFIG_DENY_NODE_START = "AntiShare.deny";
+
 	// Allow Nodes
 	public static final String ALLOW_BLOCK_PLACE = "AntiShare.allow.block_place";
 	public static final String ALLOW_BLOCK_BREAK = "AntiShare.allow.block_break";
