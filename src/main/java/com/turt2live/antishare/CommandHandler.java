@@ -212,11 +212,12 @@ public class CommandHandler implements CommandExecutor {
 						List<ASRegion> regions = plugin.getRegionManager().getAllRegions();
 
 						// Math
-						double maxPages = Math.ceil(regions.size() / resultsPerPage);
-						if(maxPages < 1){
-							maxPages = 1;
+						Double maxPagesD = Math.ceil(regions.size() / resultsPerPage);
+						if(maxPagesD < 1){
+							maxPagesD = 1.0;
 						}
-						if(maxPages < page){
+						int maxPages = maxPagesD.intValue();
+						if(maxPagesD < page){
 							ASUtils.sendToPlayer(sender, ChatColor.RED + "Page " + page + " does not exist! The last page is " + maxPages, true);
 							return true;
 						}
