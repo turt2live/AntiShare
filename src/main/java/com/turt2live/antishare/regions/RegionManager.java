@@ -48,7 +48,7 @@ public class RegionManager {
 	public RegionManager(){
 		plugin = AntiShare.getInstance();
 		hasWorldEdit = plugin.getServer().getPluginManager().getPlugin("WorldEdit") != null;
-		load();
+		load(null);
 	}
 
 	/**
@@ -60,13 +60,22 @@ public class RegionManager {
 		}
 		save();
 		regions.clear();
-		load();
+		load(null);
+	}
+
+	/**
+	 * Load regions for a world
+	 * 
+	 * @param world the world
+	 */
+	public void loadRegions(World world){
+		load(world);
 	}
 
 	/**
 	 * Loads regions
 	 */
-	private void load(){
+	private void load(World forWorld){
 		if(!hasWorldEdit()){
 			return;
 		}
@@ -84,7 +93,16 @@ public class RegionManager {
 				ResultSet results = plugin.getSQL().get("SELECT * FROM `" + SQL.REGIONS_TABLE + "`");
 				if(results != null){
 					while (results.next()){
-						World world = plugin.getServer().getWorld(results.getString("world"));
+						String name = results.getString("regionName");
+						String worldName = results.getString("world");
+						World world = plugin.getServer().getWorld(worldName);
+						if(world == null){
+							plugin.getLogger().severe("FAILED TO FIND WORLD FOR REGION: " + name + " (world=" + worldName + ")");
+							continue;
+						}
+						if(forWorld != null && !(forWorld.getName().equalsIgnoreCase(world.getName()))){
+							continue;
+						}
 						Location minimum = new Location(world,
 								results.getDouble("mix"),
 								results.getDouble("miy"),
@@ -95,7 +113,6 @@ public class RegionManager {
 								results.getDouble("maz"));
 						String setBy = results.getString("creator");
 						GameMode gamemode = GameMode.valueOf(results.getString("gamemode"));
-						String name = results.getString("regionName");
 						boolean enterMessage = results.getInt("showEnter") == 1;
 						boolean exitMessage = results.getInt("showExit") == 1;
 						ASRegion region = new ASRegion(world, minimum, maximum, setBy, gamemode, name);
@@ -135,6 +152,13 @@ public class RegionManager {
 
 					// Get objects
 					World world = Bukkit.getWorld(rfile.getString("worldName"));
+					if(world == null){
+						plugin.getLogger().severe("FAILED TO FIND WORLD FOR REGION: " + rfile.getString("name") + " (world=" + rfile.getString("worldName") + ")");
+						continue;
+					}
+					if(forWorld != null && !(forWorld.getName().equalsIgnoreCase(world.getName()))){
+						continue;
+					}
 					Location min = new Location(world, rfile.getDouble("mi-x"), rfile.getDouble("mi-y"), rfile.getDouble("mi-z"));
 					Location max = new Location(world, rfile.getDouble("ma-x"), rfile.getDouble("ma-y"), rfile.getDouble("ma-z"));
 					ASRegion region = new ASRegion(world, min, max, rfile.getString("set-by"), GameMode.valueOf(rfile.getString("gamemode")), rfile.getString("name"));

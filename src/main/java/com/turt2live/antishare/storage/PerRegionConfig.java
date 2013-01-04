@@ -135,12 +135,20 @@ public class PerRegionConfig {
 			global = true;
 			enabled = plugin.getConfig().getBoolean("blocked-actions." + triggerPath);
 		}else if(regionConfig.getString("blocked-actions." + triggerPath).equalsIgnoreCase("world")){
-			if(plugin.getListener().getConfig(world).getRaw().getString("blocked-actions." + triggerPath).equalsIgnoreCase("global")){
-				enabled = plugin.getConfig().getBoolean("blocked-actions." + triggerPath);
+			PerWorldConfig perWorld = plugin.getListener().getConfig(world);
+			if(perWorld == null){
+				enabled = true;
 				gworld = true;
+				plugin.getLogger().warning("Failed to find world configuration for " + world.getName());
 			}else{
-				enabled = plugin.getListener().getConfig(world).getRaw().getBoolean("blocked-actions." + triggerPath);
-				global = true;
+				EnhancedConfiguration raw = perWorld.getRaw();
+				if(raw.getString("blocked-actions." + triggerPath).equalsIgnoreCase("global")){
+					enabled = plugin.getConfig().getBoolean("blocked-actions." + triggerPath);
+					gworld = true;
+				}else{
+					enabled = raw.getBoolean("blocked-actions." + triggerPath);
+					global = true;
+				}
 			}
 		}else{
 			enabled = regionConfig.getBoolean("blocked-actions." + triggerPath);

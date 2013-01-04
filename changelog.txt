@@ -1,5 +1,5 @@
 Since 5.1.2:
-None
+- Fix yet ANOTHER bug (regions being mean, resulting in total failure)
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
