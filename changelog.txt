@@ -4,3 +4,9 @@ Since 5.1.2:
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
+
+CONFIRMED bugs:
+- Regions simply don't work in 90% of cases
+
+PLANNED features:
+- /as mirror for offline players and ender chests
