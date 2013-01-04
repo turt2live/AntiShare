@@ -118,8 +118,8 @@ public class BlockManager {
 		// Create savers
 		saveCreativeBlocks = new ObjectSaver(creative_blocks, GameMode.CREATIVE, blocksDir, ListComplete.CREATIVE_BLOCKS, true);
 		saveSurvivalBlocks = new ObjectSaver(survival_blocks, GameMode.SURVIVAL, blocksDir, ListComplete.SURVIVAL_BLOCKS, true);
-		saveCreativeEntities = new ObjectSaver(creative_entities, GameMode.CREATIVE, blocksDir, ListComplete.CREATIVE_ENTITIES, false);
-		saveSurvivalEntities = new ObjectSaver(survival_entities, GameMode.SURVIVAL, blocksDir, ListComplete.SURVIVAL_ENTITIES, false);
+		saveCreativeEntities = new ObjectSaver(creative_entities, GameMode.CREATIVE, entitiesDir, ListComplete.CREATIVE_ENTITIES, false);
+		saveSurvivalEntities = new ObjectSaver(survival_entities, GameMode.SURVIVAL, entitiesDir, ListComplete.SURVIVAL_ENTITIES, false);
 
 		saveCreativeBlocks.setClear(clear);
 		saveSurvivalBlocks.setClear(clear);
@@ -293,6 +293,10 @@ public class BlockManager {
 				blocks.load();
 				for(String key : blocks.getKeys(false)){
 					String[] keyParts = key.split(";");
+					if(keyParts.length < (isBlock ? 3 : 4)){
+						plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " FILE: " + file.getName());
+						continue;
+					}
 					Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
 					if(Bukkit.getWorld(keyParts[3]) == null || location == null || location.getWorld() == null){
 						continue;

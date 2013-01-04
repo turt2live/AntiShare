@@ -56,7 +56,7 @@ class ObjectSaver implements Runnable {
 			if(this.list.containsKey(fname)){
 				items = this.list.get(fname);
 			}
-			items.add(parts[4] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2] + (isBlock ? "" : parts[6]));
+			items.add(parts[3] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2] + (isBlock ? "" : ";" + parts[6]));
 			this.list.put(fname, items);
 		}
 		this.listSize = this.list.keySet().size();
