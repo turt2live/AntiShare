@@ -21,9 +21,6 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.regions.WorldSplit;
-import com.turt2live.antishare.regions.WorldSplit.Axis;
-import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.events.EntityList;
 import com.turt2live.antishare.util.events.EventList;
 
@@ -66,11 +63,14 @@ public class PerWorldConfig {
 	private EventList crafting;
 	private boolean clearInventoriesOnBreak = true;
 	private boolean removeAttachedBlocksOnBreak = true;
-	private boolean splitActive = false;
+	// TODO: Regions
+	//private boolean splitActive = false;
 	private boolean combatPlayers = false;
 	private boolean combatMobs = false;
 	private World world;
-	private WorldSplit split;
+
+	// TODO: Regions
+	//private WorldSplit split;
 
 	/**
 	 * Creates a new world configuration
@@ -124,24 +124,25 @@ public class PerWorldConfig {
 		}
 		combatMobs = value;
 
+		// TODO: Regions
 		// Check world split
-		splitActive = worldConfig.getString("enabled-features.world-split").equalsIgnoreCase("global") ? plugin.getConfig().getBoolean("enabled-features.world-split") : worldConfig.getBoolean("enabled-features.world-split");
-		if(splitActive){
-			String axisStr = worldConfig.getString("worldsplit.split");
-			if(axisStr.equalsIgnoreCase("global")){
-				axisStr = plugin.getConfig().getString("worldsplit.split");
-			}
-			Axis axis = Axis.getAxis(axisStr);
-			double split = worldConfig.getString("worldsplit.value").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.value") : worldConfig.getDouble("worldsplit.value");
-			GameMode positive = ASUtils.getGameMode(worldConfig.getString("worldsplit.positive").equalsIgnoreCase("global") ? plugin.getConfig().getString("worldsplit.positive") : worldConfig.getString("worldsplit.positive"));
-			GameMode negative = ASUtils.getGameMode(worldConfig.getString("worldsplit.negative").equalsIgnoreCase("global") ? plugin.getConfig().getString("worldsplit.negative") : worldConfig.getString("worldsplit.negative"));
-			this.split = new WorldSplit(world, split, axis, positive, negative);
-			boolean warn = worldConfig.getString("worldsplit.warning.enabled").equalsIgnoreCase("global") ? plugin.getConfig().getBoolean("worldsplit.warning.enabled") : worldConfig.getBoolean("worldsplit.warning.enabled");
-			double before = worldConfig.getString("worldsplit.warning.blocks").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.warning.blocks") : worldConfig.getDouble("worldsplit.warning.blocks");
-			long warnEvery = worldConfig.getString("worldsplit.warning.warn-every").equalsIgnoreCase("global") ? plugin.getConfig().getLong("worldsplit.warning.warn-every") : worldConfig.getLong("worldsplit.warning.warn-every");
-			warnEvery *= 1000;
-			this.split.warning(warn, before, warnEvery);
-		}
+		//		splitActive = worldConfig.getString("enabled-features.world-split").equalsIgnoreCase("global") ? plugin.getConfig().getBoolean("enabled-features.world-split") : worldConfig.getBoolean("enabled-features.world-split");
+		//		if(splitActive){
+		//			String axisStr = worldConfig.getString("worldsplit.split");
+		//			if(axisStr.equalsIgnoreCase("global")){
+		//				axisStr = plugin.getConfig().getString("worldsplit.split");
+		//			}
+		//			Axis axis = Axis.getAxis(axisStr);
+		//			double split = worldConfig.getString("worldsplit.value").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.value") : worldConfig.getDouble("worldsplit.value");
+		//			GameMode positive = ASUtils.getGameMode(worldConfig.getString("worldsplit.positive").equalsIgnoreCase("global") ? plugin.getConfig().getString("worldsplit.positive") : worldConfig.getString("worldsplit.positive"));
+		//			GameMode negative = ASUtils.getGameMode(worldConfig.getString("worldsplit.negative").equalsIgnoreCase("global") ? plugin.getConfig().getString("worldsplit.negative") : worldConfig.getString("worldsplit.negative"));
+		//			this.split = new WorldSplit(world, split, axis, positive, negative);
+		//			boolean warn = worldConfig.getString("worldsplit.warning.enabled").equalsIgnoreCase("global") ? plugin.getConfig().getBoolean("worldsplit.warning.enabled") : worldConfig.getBoolean("worldsplit.warning.enabled");
+		//			double before = worldConfig.getString("worldsplit.warning.blocks").equalsIgnoreCase("global") ? plugin.getConfig().getDouble("worldsplit.warning.blocks") : worldConfig.getDouble("worldsplit.warning.blocks");
+		//			long warnEvery = worldConfig.getString("worldsplit.warning.warn-every").equalsIgnoreCase("global") ? plugin.getConfig().getLong("worldsplit.warning.warn-every") : worldConfig.getLong("worldsplit.warning.warn-every");
+		//			warnEvery *= 1000;
+		//			this.split.warning(warn, before, warnEvery);
+		//		}
 	}
 
 	private EventList getList(String triggerPath, String listPath, EnhancedConfiguration worldConfig, boolean stringsOnly){
@@ -313,10 +314,12 @@ public class PerWorldConfig {
 	 * 
 	 * @param player the player
 	 */
+	@Deprecated
 	public void checkSplit(Player player){
-		if(splitActive){
-			split.checkPlayer(player);
-		}
+		// TODO: Regions
+		//		if(splitActive){
+		//			split.checkPlayer(player);
+		//		}
 	}
 
 	/**
@@ -324,10 +327,12 @@ public class PerWorldConfig {
 	 * 
 	 * @param player the player
 	 */
+	@Deprecated
 	public void warnSplit(Player player){
-		if(splitActive){
-			split.warn(player);
-		}
+		// TODO: Regions
+		//		if(splitActive){
+		//			split.warn(player);
+		//		}
 	}
 
 	/**
@@ -335,8 +340,11 @@ public class PerWorldConfig {
 	 * 
 	 * @return true if active
 	 */
+	@Deprecated
 	public boolean isSplitActive(){
-		return splitActive;
+		// TODO: Regions
+		//return splitActive;
+		return false;
 	}
 
 	/**
@@ -345,8 +353,11 @@ public class PerWorldConfig {
 	 * @param player the player
 	 * @return the side of the split
 	 */
+	@Deprecated
 	public GameMode getSideOfSplit(Player player){
-		return split.getSide(player);
+		// TODO: Regions
+		//return split.getSide(player);
+		return null;
 	}
 
 	/**

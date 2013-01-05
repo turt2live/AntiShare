@@ -29,6 +29,7 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
+@Deprecated
 public class RegionFactory {
 
 	/**

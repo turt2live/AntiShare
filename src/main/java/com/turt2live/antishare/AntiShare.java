@@ -38,7 +38,6 @@ import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
-import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.regions.RegionFactory;
 import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.signs.SignManager;
@@ -57,6 +56,7 @@ import com.turt2live.antishare.util.generic.UpdateChecker;
  * 
  * @author turt2live
  */
+@SuppressWarnings ("deprecation")
 public class AntiShare extends PluginWrapper {
 
 	/**
@@ -76,8 +76,9 @@ public class AntiShare extends PluginWrapper {
 	private ASListener listener;
 	private Alert alerts;
 	private Messages messages;
-	private RegionManager regions;
-	private RegionFactory factory;
+	// TODO: Regions
+	//	private RegionManager regions;
+	//	private RegionFactory factory;
 	private BlockManager blocks;
 	private InventoryManager inventories;
 	private SQL sql;
@@ -227,14 +228,15 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info("Starting messages...");
 		}
 		messages = new Messages();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting region manager...");
-		}
-		regions = new RegionManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting region factory...");
-		}
-		factory = new RegionFactory();
+		// TODO: Regions
+		//		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		//			getLogger().info("Starting region manager...");
+		//		}
+		//		regions = new RegionManager();
+		//		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		//			getLogger().info("Starting region factory...");
+		//		}
+		//		factory = new RegionFactory();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting block manager...");
 		}
@@ -303,15 +305,16 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Check players
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Checking online players for regions...");
-		}
-		for(Player player : Bukkit.getOnlinePlayers()){
-			ASRegion playerRegion = regions.getRegion(player.getLocation());
-			if(playerRegion != null){
-				playerRegion.alertSilentEntry(player);
-			}
-		}
+		// TODO: Regions
+		//		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		//			getLogger().info("Checking online players for regions...");
+		//		}
+		//		for(Player player : Bukkit.getOnlinePlayers()){
+		//			ASRegion playerRegion = regions.getRegion(player.getLocation());
+		//			if(playerRegion != null){
+		//				playerRegion.alertSilentEntry(player);
+		//			}
+		//		}
 
 		// Enabled
 		getLogger().info("Enabled!");
@@ -339,12 +342,13 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
-		if(regions != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving regions...");
-			}
-			regions.save();
-		}
+		// TODO: Regions
+		//		if(regions != null){
+		//			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+		//				getLogger().info("Saving regions...");
+		//			}
+		//			regions.save();
+		//		}
 		if(blocks != null){
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
 				getLogger().info("Saving blocks...");
@@ -414,10 +418,12 @@ public class AntiShare extends PluginWrapper {
 		listener = null;
 		alerts = null;
 		messages = null;
-		factory = null;
+		// TODO: Regions
+		//factory = null;
 		blocks = null;
 		inventories = null;
-		regions = null;
+		// TODO: Regions
+		//regions = null;
 		sql = null;
 		metrics = null;
 		trackers = null;
@@ -450,7 +456,8 @@ public class AntiShare extends PluginWrapper {
 		alerts.reload();
 		messages.reload();
 		tender.reload();
-		regions.reload();
+		// TODO: Regions
+		//regions.reload();
 		// Region Factory has no reload
 		blocks.reload();
 		inventories.reload();
@@ -694,8 +701,11 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the region manager
 	 */
+	@Deprecated
 	public RegionManager getRegionManager(){
-		return regions;
+		// TODO: Regions
+		//return regions;
+		return null;
 	}
 
 	/**
@@ -703,8 +713,11 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the region factory
 	 */
+	@Deprecated
 	public RegionFactory getRegionFactory(){
-		return factory;
+		// TODO: Regions
+		//return factory;
+		return null;
 	}
 
 	/**

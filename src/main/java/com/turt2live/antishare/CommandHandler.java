@@ -10,12 +10,9 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,8 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.antishare.regions.ASRegion;
-import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.tekkitcompat.CommandBlockLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
@@ -85,155 +80,163 @@ public class CommandHandler implements CommandExecutor {
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("region")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_CREATE)){
-						// Sanity Check
-						if(sender instanceof Player){
-							if(args.length < 3){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "Not enough arguments! " + ChatColor.WHITE + "Try /as region <gamemode> <name>", true);
-							}else{
-								plugin.getRegionFactory().addRegion((Player) sender, args[1], args[2]);
-							}
-						}else{
-							ASUtils.sendToPlayer(sender, ChatColor.RED + "You must be a player to create regions.", true);
-						}
-					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
-					}
+					// TODO: Regions
+					//					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_CREATE)){
+					//						// Sanity Check
+					//						if(sender instanceof Player){
+					//							if(args.length < 3){
+					//								ASUtils.sendToPlayer(sender, ChatColor.RED + "Not enough arguments! " + ChatColor.WHITE + "Try /as region <gamemode> <name>", true);
+					//							}else{
+					//								plugin.getRegionFactory().addRegion((Player) sender, args[1], args[2]);
+					//							}
+					//						}else{
+					//							ASUtils.sendToPlayer(sender, ChatColor.RED + "You must be a player to create regions.", true);
+					//						}
+					//					}else{
+					//						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
+					//					}
+					ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Regions disabled (turt2live)", false);
 					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion") || args[0].equalsIgnoreCase("removeregion")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_DELETE)){
-						// Sanity check
-						if(sender instanceof Player){
-							// Remove region
-							if(args.length == 1){
-								Location location = ((Player) sender).getLocation();
-								plugin.getRegionFactory().removeRegionByLocation(sender, location);
-							}else{
-								plugin.getRegionFactory().removeRegionByName(sender, args[1]);
-							}
-						}else{
-							// Remove region
-							if(args.length > 1){
-								plugin.getRegionFactory().removeRegionByName(sender, args[1]);
-							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must supply a region name when removing regions from the console. " + ChatColor.WHITE + "Try: /as rmregion <name>", true);
-							}
-						}
-					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
-					}
+					// TODO: Regions
+					//					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_DELETE)){
+					//						// Sanity check
+					//						if(sender instanceof Player){
+					//							// Remove region
+					//							if(args.length == 1){
+					//								Location location = ((Player) sender).getLocation();
+					//								plugin.getRegionFactory().removeRegionByLocation(sender, location);
+					//							}else{
+					//								plugin.getRegionFactory().removeRegionByName(sender, args[1]);
+					//							}
+					//						}else{
+					//							// Remove region
+					//							if(args.length > 1){
+					//								plugin.getRegionFactory().removeRegionByName(sender, args[1]);
+					//							}else{
+					//								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must supply a region name when removing regions from the console. " + ChatColor.WHITE + "Try: /as rmregion <name>", true);
+					//							}
+					//						}
+					//					}else{
+					//						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
+					//					}
+					ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Regions disabled (turt2live)", false);
 					return true;
 				}else if(args[0].equalsIgnoreCase("editregion")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_EDIT)){
-						// Check validity of key
-						boolean valid = false;
-						if(args.length >= 3){
-							if(RegionKey.isKey(args[2])){
-								if(!RegionKey.requiresValue(RegionKey.getKey(args[2]))){
-									valid = true; // we have at least 3 values in args[] and the key does not need a value
-								}
-							}
-						}
-						if(args.length >= 4){
-							valid = true;
-						}
-						if(!valid){
-							// Show help
-							if(args.length >= 2){
-								if(args[1].equalsIgnoreCase("help")){
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "/as editregion <name> <key> <value>", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "name " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<any name>", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "EnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<enter message>", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<exit message>", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "'none'/'set'", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "survival/creative", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "area " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "No Value", false);
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'Show____Message'" + ChatColor.WHITE + " - True to show the message", false);
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'____Message'" + ChatColor.WHITE + " - Use {name} to input the region name.", false);
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'inventory'" + ChatColor.WHITE + " - Sets the region's inventory. 'none' to not have a default inventory, 'set' to mirror yours", false);
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'area'" + ChatColor.WHITE + " - Sets the area based on your WorldEdit selection", false);
-								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>", true);
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
-								}
-							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>", true);
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
-							}
-						}else{
-							// Setup
-							String name = args[1];
-							String key = args[2];
-							String value = args.length > 3 ? args[3] : "";
-
-							// Merge message
-							if(args.length > 4){
-								for(int i = 4; i < args.length; i++){ // Starts at args[4]
-									value = value + args[i] + " ";
-								}
-								value = value.substring(0, value.length() - 1);
-							}
-
-							// Check region
-							if(plugin.getRegionManager().getRegion(name) == null){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "That region does not exist!", true);
-							}else{
-								// Update region if needed
-								if(RegionKey.isKey(key)){
-									plugin.getRegionFactory().editRegion(plugin.getRegionManager().getRegion(name), RegionKey.getKey(key), value, sender);
-								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "That is not a valid region key", true);
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
-								}
-							}
-						}
-					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
-					}
+					// TODO: Regions
+					//					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_EDIT)){
+					//						// Check validity of key
+					//						boolean valid = false;
+					//						if(args.length >= 3){
+					//							if(RegionKey.isKey(args[2])){
+					//								if(!RegionKey.requiresValue(RegionKey.getKey(args[2]))){
+					//									valid = true; // we have at least 3 values in args[] and the key does not need a value
+					//								}
+					//							}
+					//						}
+					//						if(args.length >= 4){
+					//							valid = true;
+					//						}
+					//						if(!valid){
+					//							// Show help
+					//							if(args.length >= 2){
+					//								if(args[1].equalsIgnoreCase("help")){
+					//									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "/as editregion <name> <key> <value>", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "name " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<any name>", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "true/false", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "EnterMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<enter message>", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "ExitMessage " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "<exit message>", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "'none'/'set'", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "survival/creative", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.AQUA + "Key: " + ChatColor.WHITE + "area " + ChatColor.AQUA + "Value: " + ChatColor.WHITE + "No Value", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'Show____Message'" + ChatColor.WHITE + " - True to show the message", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'____Message'" + ChatColor.WHITE + " - Use {name} to input the region name.", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'inventory'" + ChatColor.WHITE + " - Sets the region's inventory. 'none' to not have a default inventory, 'set' to mirror yours", false);
+					//									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "'area'" + ChatColor.WHITE + " - Sets the area based on your WorldEdit selection", false);
+					//								}else{
+					//									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>", true);
+					//									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
+					//								}
+					//							}else{
+					//								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Incorrect syntax, try: /as editregion <name> <key> <value>", true);
+					//								ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
+					//							}
+					//						}else{
+					//							// Setup
+					//							String name = args[1];
+					//							String key = args[2];
+					//							String value = args.length > 3 ? args[3] : "";
+					//
+					//							// Merge message
+					//							if(args.length > 4){
+					//								for(int i = 4; i < args.length; i++){ // Starts at args[4]
+					//									value = value + args[i] + " ";
+					//								}
+					//								value = value.substring(0, value.length() - 1);
+					//							}
+					//
+					//							// Check region
+					//							if(plugin.getRegionManager().getRegion(name) == null){
+					//								ASUtils.sendToPlayer(sender, ChatColor.RED + "That region does not exist!", true);
+					//							}else{
+					//								// Update region if needed
+					//								if(RegionKey.isKey(key)){
+					//									plugin.getRegionFactory().editRegion(plugin.getRegionManager().getRegion(name), RegionKey.getKey(key), value, sender);
+					//								}else{
+					//									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "That is not a valid region key", true);
+					//									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
+					//								}
+					//							}
+					//						}
+					//					}else{
+					//						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
+					//					}
+					ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Regions disabled (turt2live)", false);
 					return true;
 				}else if(args[0].equalsIgnoreCase("listregions")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_LIST)){
-						// Sanity check on page number
-						int page = 1;
-						if(args.length >= 2){
-							try{
-								page = Integer.parseInt(args[1]);
-							}catch(NumberFormatException e){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "'" + args[1] + "' is not a number!", true);
-								return true;
-							}
-						}
-
-						// Setup
-						page = Math.abs(page);
-						int resultsPerPage = 6; // Put as a variable for ease of changing
-						List<ASRegion> regions = plugin.getRegionManager().getAllRegions();
-
-						// Math
-						Double maxPagesD = Math.ceil(regions.size() / resultsPerPage);
-						if(maxPagesD < 1){
-							maxPagesD = 1.0;
-						}
-						int maxPages = maxPagesD.intValue();
-						if(maxPagesD < page){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + "Page " + page + " does not exist! The last page is " + maxPages, true);
-							return true;
-						}
-
-						// Generate pages
-						String pagenation = ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "AntiShare Regions " + ChatColor.DARK_GREEN + "|" + ChatColor.GREEN + " Page " + page + "/" + maxPages + ChatColor.DARK_GREEN + " ]=======";
-						ASUtils.sendToPlayer(sender, pagenation, false);
-						for(int i = ((page - 1) * resultsPerPage); i < (resultsPerPage < regions.size() ? (resultsPerPage * page) : regions.size()); i++){
-							ASUtils.sendToPlayer(sender, ChatColor.DARK_AQUA + "#" + (i + 1) + " " + ChatColor.GOLD + regions.get(i).getName()
-									+ ChatColor.YELLOW + " Creator: " + ChatColor.AQUA + regions.get(i).getWhoSet()
-									+ ChatColor.YELLOW + " World: " + ChatColor.AQUA + regions.get(i).getWorld().getName(), false);
-						}
-						ASUtils.sendToPlayer(sender, pagenation, false);
-					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
-					}
+					// TODO: Regions
+					//					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_LIST)){
+					//						// Sanity check on page number
+					//						int page = 1;
+					//						if(args.length >= 2){
+					//							try{
+					//								page = Integer.parseInt(args[1]);
+					//							}catch(NumberFormatException e){
+					//								ASUtils.sendToPlayer(sender, ChatColor.RED + "'" + args[1] + "' is not a number!", true);
+					//								return true;
+					//							}
+					//						}
+					//
+					//						// Setup
+					//						page = Math.abs(page);
+					//						int resultsPerPage = 6; // Put as a variable for ease of changing
+					//						List<ASRegion> regions = plugin.getRegionManager().getAllRegions();
+					//
+					//						// Math
+					//						Double maxPagesD = Math.ceil(regions.size() / resultsPerPage);
+					//						if(maxPagesD < 1){
+					//							maxPagesD = 1.0;
+					//						}
+					//						int maxPages = maxPagesD.intValue();
+					//						if(maxPagesD < page){
+					//							ASUtils.sendToPlayer(sender, ChatColor.RED + "Page " + page + " does not exist! The last page is " + maxPages, true);
+					//							return true;
+					//						}
+					//
+					//						// Generate pages
+					//						String pagenation = ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "AntiShare Regions " + ChatColor.DARK_GREEN + "|" + ChatColor.GREEN + " Page " + page + "/" + maxPages + ChatColor.DARK_GREEN + " ]=======";
+					//						ASUtils.sendToPlayer(sender, pagenation, false);
+					//						for(int i = ((page - 1) * resultsPerPage); i < (resultsPerPage < regions.size() ? (resultsPerPage * page) : regions.size()); i++){
+					//							ASUtils.sendToPlayer(sender, ChatColor.DARK_AQUA + "#" + (i + 1) + " " + ChatColor.GOLD + regions.get(i).getName()
+					//									+ ChatColor.YELLOW + " Creator: " + ChatColor.AQUA + regions.get(i).getWhoSet()
+					//									+ ChatColor.YELLOW + " World: " + ChatColor.AQUA + regions.get(i).getWorld().getName(), false);
+					//						}
+					//						ASUtils.sendToPlayer(sender, pagenation, false);
+					//					}else{
+					//						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
+					//					}
+					ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "Regions disabled (turt2live)", false);
 					return true;
 				}else if(args[0].equalsIgnoreCase("tool")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_GET)){

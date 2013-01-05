@@ -27,6 +27,7 @@ import com.turt2live.antishare.permissions.PermissionNodes;
  * 
  * @author turt2live
  */
+@Deprecated
 public class WorldSplit {
 
 	/**

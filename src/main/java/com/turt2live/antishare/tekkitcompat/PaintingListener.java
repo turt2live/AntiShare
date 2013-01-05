@@ -63,25 +63,27 @@ public class PaintingListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, hanging.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		ASRegion asregion = plugin.getRegionManager().getRegion(hanging.getLocation());
-		if(asregion != null){
-			if(!asregion.getConfig().isBlocked(item, ListType.BLOCK_PLACE)){
-				type = AlertType.LEGAL;
-			}
-		}else{
-			if(!plugin.getListener().getConfig(hanging.getWorld()).isBlocked(item, ListType.BLOCK_PLACE)){
-				type = AlertType.LEGAL;
-			}
+		// TODO: Regions
+		//		ASRegion asregion = plugin.getRegionManager().getRegion(hanging.getLocation());
+		//		if(asregion != null){
+		//			if(!asregion.getConfig().isBlocked(item, ListType.BLOCK_PLACE)){
+		//				type = AlertType.LEGAL;
+		//			}
+		//		}else{
+		if(!plugin.getListener().getConfig(hanging.getWorld()).isBlocked(item, ListType.BLOCK_PLACE)){
+			type = AlertType.LEGAL;
 		}
+		//		}
 
-		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PLACE)){
-			ASRegion playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-			ASRegion blockRegion = plugin.getRegionManager().getRegion(hanging.getLocation());
-			if(playerRegion != blockRegion){
-				type = AlertType.ILLEGAL;
-				region = true;
-			}
-		}
+		// TODO: Regions
+		//		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PLACE)){
+		//			ASRegion playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		//			ASRegion blockRegion = plugin.getRegionManager().getRegion(hanging.getLocation());
+		//			if(playerRegion != blockRegion){
+		//				type = AlertType.ILLEGAL;
+		//				region = true;
+		//			}
+		//		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){

@@ -38,6 +38,7 @@ import com.turt2live.antishare.storage.PerRegionConfig;
  * 
  * @author turt2live
  */
+@Deprecated
 public class ASRegion {
 
 	private AntiShare plugin;

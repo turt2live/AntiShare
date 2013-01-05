@@ -29,6 +29,7 @@ import com.turt2live.antishare.util.events.EventList;
  * 
  * @author turt2live
  */
+@Deprecated
 public class PerRegionConfig {
 
 	private EventList block_break;

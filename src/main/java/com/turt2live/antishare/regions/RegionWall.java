@@ -17,6 +17,7 @@ import org.bukkit.Location;
  * 
  * @author turt2live
  */
+@Deprecated
 public class RegionWall {
 
 	/**

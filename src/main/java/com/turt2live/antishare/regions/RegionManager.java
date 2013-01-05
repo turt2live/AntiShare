@@ -36,6 +36,7 @@ import com.turt2live.antishare.util.generic.Selection;
  * 
  * @author turt2live
  */
+@Deprecated
 public class RegionManager {
 
 	private AntiShare plugin;

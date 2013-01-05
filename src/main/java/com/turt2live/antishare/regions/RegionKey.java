@@ -15,6 +15,7 @@ package com.turt2live.antishare.regions;
  * 
  * @author turt2live
  */
+@Deprecated
 public class RegionKey {
 
 	/**

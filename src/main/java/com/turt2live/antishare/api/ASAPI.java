@@ -25,6 +25,7 @@ import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
  * 
  * @author turt2live
  */
+@SuppressWarnings ("deprecation")
 public class ASAPI {
 
 	private AntiShare plugin;
@@ -53,8 +54,10 @@ public class ASAPI {
 	 * @param gamemode the region's Game Mode
 	 * @param name the region name
 	 */
+	@Deprecated
 	public void createRegion(Selection selection, String owner, GameMode gamemode, String name){
-		plugin.getRegionManager().addRegion(new com.turt2live.antishare.util.generic.Selection(selection), owner, name, gamemode);
+		// TODO: Regions
+		//plugin.getRegionManager().addRegion(new com.turt2live.antishare.util.generic.Selection(selection), owner, name, gamemode);
 	}
 
 	/**
@@ -63,8 +66,11 @@ public class ASAPI {
 	 * @param name the region name
 	 * @return the region (null if none found)
 	 */
+	@Deprecated
 	public ASRegion getRegion(String name){
-		return plugin.getRegionManager().getRegion(name);
+		// TODO: Regions
+		//return plugin.getRegionManager().getRegion(name);
+		return null;
 	}
 
 	/**
@@ -73,8 +79,11 @@ public class ASAPI {
 	 * @param location the location
 	 * @return the region (null if none found)
 	 */
+	@Deprecated
 	public ASRegion getRegion(Location location){
-		return plugin.getRegionManager().getRegion(location);
+		// TODO: Regions
+		//return plugin.getRegionManager().getRegion(location);
+		return null;
 	}
 
 	/**
@@ -85,8 +94,10 @@ public class ASAPI {
 	 * @param value the value
 	 * @param target the target editing the region (cannot be null)
 	 */
+	@Deprecated
 	public void editRegion(ASRegion region, RegionKeyType key, String value, CommandSender target){
-		plugin.getRegionFactory().editRegion(region, key, value, target);
+		// TODO: Regions
+		//plugin.getRegionFactory().editRegion(region, key, value, target);
 	}
 
 }

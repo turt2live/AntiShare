@@ -26,7 +26,6 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
@@ -500,18 +499,19 @@ public class InventoryManager {
 	 * Loads the inventory manager
 	 */
 	public void load(){
+		// TODO: Regions
 		// Loads regions
-		for(ASRegion region : AntiShare.getInstance().getRegionManager().getAllRegions()){
-			String UID = region.getUniqueID();
-			List<ASInventory> inventory = ASInventory.generateInventory(UID, InventoryType.REGION);
-			if(inventory != null){
-				if(inventory.size() >= 1){
-					region.setInventory(inventory.get(0));
-				}else{
-					region.setInventory(null);
-				}
-			}
-		}
+		//		for(ASRegion region : AntiShare.getInstance().getRegionManager().getAllRegions()){
+		//			String UID = region.getUniqueID();
+		//			List<ASInventory> inventory = ASInventory.generateInventory(UID, InventoryType.REGION);
+		//			if(inventory != null){
+		//				if(inventory.size() >= 1){
+		//					region.setInventory(inventory.get(0));
+		//				}else{
+		//					region.setInventory(null);
+		//				}
+		//			}
+		//		}
 
 		// Load all links
 		EnhancedConfiguration links = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
@@ -578,11 +578,12 @@ public class InventoryManager {
 		for(String key : enderAdventure.keySet()){
 			enderAdventure.get(key).save();
 		}
-		for(ASRegion region : plugin.getRegionManager().getAllRegions()){
-			if(region.getInventory() != null){
-				region.getInventory().save();
-			}
-		}
+		// TODO: Regions
+		//		for(ASRegion region : plugin.getRegionManager().getAllRegions()){
+		//			if(region.getInventory() != null){
+		//				region.getInventory().save();
+		//			}
+		//		}
 	}
 
 	/**
