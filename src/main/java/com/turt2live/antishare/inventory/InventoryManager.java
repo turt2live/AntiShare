@@ -213,28 +213,34 @@ public class InventoryManager {
 		ASInventory enderPremerge = ASInventory.generate(player, InventoryType.ENDER);
 		switch (player.getGameMode()){
 		case CREATIVE:
-			if(!alreadySaved)
+			if(!alreadySaved){
 				saveCreativeInventory(player, player.getWorld());
+			}
 			premerge = getCreativeInventory(player, player.getWorld());
-			if(!alreadySaved)
+			if(!alreadySaved){
 				saveEnderCreativeInventory(player, player.getWorld());
+			}
 			enderPremerge = getEnderCreativeInventory(player, player.getWorld());
 			break;
 		case SURVIVAL:
-			if(!alreadySaved)
+			if(!alreadySaved){
 				saveSurvivalInventory(player, player.getWorld());
+			}
 			premerge = getSurvivalInventory(player, player.getWorld());
-			if(!alreadySaved)
+			if(!alreadySaved){
 				saveEnderSurvivalInventory(player, player.getWorld());
+			}
 			enderPremerge = getEnderSurvivalInventory(player, player.getWorld());
 			break;
 		default:
 			if(ServerHas.adventureMode()){
-				if(!alreadySaved)
+				if(!alreadySaved){
 					saveAdventureInventory(player, player.getWorld());
+				}
 				premerge = getAdventureInventory(player, player.getWorld());
-				if(!alreadySaved)
+				if(!alreadySaved){
 					saveEnderAdventureInventory(player, player.getWorld());
+				}
 				enderPremerge = getEnderAdventureInventory(player, player.getWorld());
 			}
 			break;
@@ -554,10 +560,11 @@ public class InventoryManager {
 	 */
 	public void save(){
 		// Save players
-		if(Bukkit.getOnlinePlayers() != null)
+		if(Bukkit.getOnlinePlayers() != null){
 			for(Player player : Bukkit.getOnlinePlayers()){
 				releasePlayer(player);
 			}
+		}
 
 		// Save inventories
 		for(String key : creative.keySet()){

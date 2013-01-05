@@ -482,8 +482,9 @@ public class Metrics {
 	}
 
 	public void flush(){
-		if(task != null)
+		if(task != null){
 			task.cancel();
+		}
 		try{
 			postPlugin(true);
 		}catch(IOException e){
