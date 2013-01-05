@@ -57,6 +57,12 @@ enabled-features:
     # Same as above, but for placing this time. Eg: creative player can't
     # place torch on survival dirt
     disable-placing-mixed-gamemode: true
+    # If the setting 'disabled-breaking-mixed-gamemode' is set as false, 
+    # do you want AntiShare to break the blocks as how they were placed?
+    # Example: Survival dirt with a creative torch on it, survival player
+    # breaks dirt, should the torch be dropped as an item, or be broken as
+    # if the player was in creative?
+    break-as-gamemode: true
   # Settings for when a creative player breaks a block
   no-drops-when-block-break:
     # Clear the block's inventory (like chests)

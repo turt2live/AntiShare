@@ -310,6 +310,38 @@ public class ASListener implements Listener {
 			}
 		}
 
+		// Check for 'attached' blocks
+		if(player.getGameMode() == GameMode.SURVIVAL && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
+			for(BlockFace face : ASUtils.realFaces){
+				Block rel = block.getRelative(face);
+				if(ASUtils.isDroppedOnBreak(rel, block)){
+					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
+						GameMode gm = plugin.getBlockManager().getType(rel);
+						if(gm != null){
+							switch (gm){
+							case CREATIVE:
+								rel.setType(Material.AIR);
+								break;
+							case SURVIVAL:
+								rel.breakNaturally();
+								break;
+							default:
+								if(ServerHas.adventureMode()){
+									if(gm == GameMode.ADVENTURE){
+										rel.setType(Material.AIR);
+									}
+								}
+								break;
+							}
+						}
+					}else{
+						rel.setType(Material.AIR);
+					}
+					plugin.getBlockManager().removeBlock(rel);
+				}
+			}
+		}
+
 		// Check for 'attached' blocks and internal inventories
 		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
 			// Check inventories
@@ -345,8 +377,29 @@ public class ASListener implements Listener {
 				for(BlockFace face : ASUtils.realFaces){
 					Block rel = block.getRelative(face);
 					if(ASUtils.isDroppedOnBreak(rel, block)){
+						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
+							GameMode gm = plugin.getBlockManager().getType(rel);
+							if(gm != null){
+								switch (gm){
+								case CREATIVE:
+									rel.setType(Material.AIR);
+									break;
+								case SURVIVAL:
+									rel.breakNaturally();
+									break;
+								default:
+									if(ServerHas.adventureMode()){
+										if(gm == GameMode.ADVENTURE){
+											rel.setType(Material.AIR);
+										}
+									}
+									break;
+								}
+							}
+						}else{
+							rel.setType(Material.AIR);
+						}
 						plugin.getBlockManager().removeBlock(rel);
-						rel.setType(Material.AIR);
 					}
 				}
 
