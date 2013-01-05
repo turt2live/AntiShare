@@ -49,6 +49,14 @@ enabled-features:
   # When true, AntiShare will not let players of some gamemode use
   # and item frame placed in another gamemode.
   disable-item-frame-cross-game-mode: true
+  # Settings for attached blocks
+  attached-blocks-settings:
+    # True to disallow players from breaking "type1" blocks with
+    # "type2" blocks attached. Eg: Survival dirt with a creative torch
+    disable-breaking-mixed-gamemode: true
+    # Same as above, but for placing this time. Eg: creative player can't
+    # place torch on survival dirt
+    disable-placing-mixed-gamemode: true
   # Settings for when a creative player breaks a block
   no-drops-when-block-break:
     # Clear the block's inventory (like chests)

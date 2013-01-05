@@ -222,7 +222,7 @@ public class ASListener implements Listener {
 					if(deny){
 						specialType = AlertType.ILLEGAL;
 					}
-				}else{
+				}else if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.disable-breaking-mixed-gamemode")){
 					for(BlockFace face : ASUtils.realFaces){
 						Block rel = block.getRelative(face);
 						if(ASUtils.isDroppedOnBreak(rel, block)){
