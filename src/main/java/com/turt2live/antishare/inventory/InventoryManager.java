@@ -197,6 +197,49 @@ public class InventoryManager {
 		});
 	}
 
+	void inject(ASInventory inventory){
+		// player.world = key
+		String key = inventory.getName() + "." + inventory.getWorld().getName();
+		switch (inventory.getType()){
+		case PLAYER:
+			switch (inventory.getGameMode()){
+			case CREATIVE:
+				creative.put(key, inventory);
+				break;
+			case SURVIVAL:
+				survival.put(key, inventory);
+				break;
+			default:
+				if(ServerHas.adventureMode()){
+					if(inventory.getGameMode() == GameMode.ADVENTURE){
+						adventure.put(key, inventory);
+						break;
+					}
+				}
+			}
+			break;
+		case ENDER:
+			switch (inventory.getGameMode()){
+			case CREATIVE:
+				enderCreative.put(key, inventory);
+				break;
+			case SURVIVAL:
+				enderSurvival.put(key, inventory);
+				break;
+			default:
+				if(ServerHas.adventureMode()){
+					if(inventory.getGameMode() == GameMode.ADVENTURE){
+						enderAdventure.put(key, inventory);
+						break;
+					}
+				}
+			}
+			break;
+		default:
+			return;
+		}
+	}
+
 	/**
 	 * Refreshes inventories of a player
 	 * 
@@ -204,7 +247,6 @@ public class InventoryManager {
 	 * @param alreadySaved set to true to bypass saving
 	 */
 	public void refreshInventories(Player player, boolean alreadySaved){
-		// TODO: This is slow
 		if(!plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
 			return;
 		}
@@ -703,6 +745,54 @@ public class InventoryManager {
 						}
 					}
 				}
+			}
+		}
+	}
+
+	/**
+	 * Saves all of a player's inventories
+	 * 
+	 * @param player the player to save
+	 */
+	public void savePlayer(Player player){
+		switch (player.getGameMode()){
+		case CREATIVE:
+			saveCreativeInventory(player, player.getWorld());
+			saveEnderCreativeInventory(player, player.getWorld());
+			break;
+		case SURVIVAL:
+			saveSurvivalInventory(player, player.getWorld());
+			saveEnderSurvivalInventory(player, player.getWorld());
+			break;
+		default:
+			if(ServerHas.adventureMode()){
+				if(player.getGameMode() == GameMode.ADVENTURE){
+					saveAdventureInventory(player, player.getWorld());
+					saveEnderAdventureInventory(player, player.getWorld());
+				}
+			}
+		}
+		refreshInventories(player, true);
+		for(World w : plugin.getServer().getWorlds()){
+			String name = player.getName();
+			String world = w.getName();
+			if(creative.get(name + "." + world) != null){
+				creative.get(name + "." + world).save();
+			}
+			if(survival.get(name + "." + world) != null){
+				survival.get(name + "." + world).save();
+			}
+			if(adventure.get(name + "." + world) != null){
+				adventure.get(name + "." + world).save();
+			}
+			if(enderCreative.get(name + "." + world) != null){
+				enderCreative.get(name + "." + world).save();
+			}
+			if(enderSurvival.get(name + "." + world) != null){
+				enderSurvival.get(name + "." + world).save();
+			}
+			if(enderAdventure.get(name + "." + world) != null){
+				enderAdventure.get(name + "." + world).save();
 			}
 		}
 	}

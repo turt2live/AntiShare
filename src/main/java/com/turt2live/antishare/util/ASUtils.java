@@ -460,4 +460,15 @@ public class ASUtils {
 		}
 	}
 
+	/**
+	 * Gets the abbreviation for a game mode. Eg: CREATIVE = "GM = C" (if shortVersion=false) or CREATIVE = "C" (shortVersion=true)
+	 * 
+	 * @param gamemode the gamemode
+	 * @param shortVersion true to use the single letter, false otherwise
+	 * @return the short hand version
+	 */
+	public static String gamemodeAbbreviation(GameMode gamemode, boolean shortVersion){
+		return (shortVersion ? "" : "GM = ") + gamemode.name().charAt(0);
+	}
+
 }

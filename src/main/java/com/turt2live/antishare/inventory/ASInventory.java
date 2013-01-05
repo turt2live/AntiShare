@@ -453,4 +453,50 @@ public class ASInventory implements Cloneable {
 	public void setWorld(World world){
 		this.world = world;
 	}
+
+	/**
+	 * Gets the size of this inventory
+	 * 
+	 * @return inventory size
+	 */
+	public int getSize(){
+		switch (this.type){
+		case ENDER:
+			return 27;
+		case PLAYER:
+		case REGION:
+		case TEMPORARY:
+		default:
+			return 36;
+		}
+	}
+
+	void populateOtherInventory(Inventory inventory){
+		inventory.clear();
+		for(Integer slot : this.inventory.keySet()){
+			inventory.setItem(slot, this.inventory.get(slot));
+		}
+	}
+
+	void populateSelf(Inventory inventory){
+		for(int i = 0; i < inventory.getSize(); i++){
+			ItemStack item = inventory.getItem(i);
+			if(item == null || item.getType() == Material.AIR){
+				continue;
+			}
+			set(i, item);
+			System.out.println(i + " = " + item.getType().name());
+		}
+		inventory.clear();
+	}
+
+	/**
+	 * Gets the name of this inventory
+	 * 
+	 * @return the inventory name
+	 */
+	public String getName(){
+		return inventoryName;
+	}
+
 }

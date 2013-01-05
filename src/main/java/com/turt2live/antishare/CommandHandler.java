@@ -10,17 +10,23 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.tekkitcompat.CommandBlockLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
@@ -60,12 +66,20 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						if(plugin.getPermissions().has(sender, PermissionNodes.MIRROR)){
 							if(args.length < 2){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "No player name provided! Try /as mirror <player> [enderchest/normal] [gamemode]", true);
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "No player name provided! Try /as mirror <player> [enderchest/normal] [gamemode] [world]", true);
 							}else{
 								// Setup
-								// TODO: Offline players
 								String playername = args[1];
-								Player player = Bukkit.getPlayer(playername);
+								OfflinePlayer player = plugin.getServer().getPlayer(playername);
+								// Find online player first, then we look for offline players
+								if(player == null){
+									for(OfflinePlayer player2 : plugin.getServer().getOfflinePlayers()){
+										if(player2.getName().equalsIgnoreCase(playername) || player2.getName().toLowerCase().startsWith(playername.toLowerCase())){
+											player = player2;
+											break;
+										}
+									}
+								}
 
 								// Sanity check
 								if(player == null){
@@ -87,29 +101,64 @@ public class CommandHandler implements CommandExecutor {
 								}
 
 								// Per specific game mode
-								// TODO: Implement
-								GameMode gamemode = player.getGameMode();
+								GameMode gamemode = player.isOnline() ? ((Player) player).getGameMode() : GameMode.SURVIVAL;
 								if(args.length > 3){
 									GameMode temp = ASUtils.getGameMode(args[3]);
 									if(temp != null){
 										gamemode = temp;
 									}else{
-										ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + args[3] + "' is, so I assumed the player's current Game Mode (" + gamemode.name().toLowerCase() + ")", true);
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + args[3] + "' is, so I assumed the Game Mode (" + gamemode.name().toLowerCase() + ")", true);
 									}
 								}
 
+								// World check
+								World world = player.isOnline() ? ((Player) player).getWorld() : plugin.getServer().getWorlds().get(0);
+								if(args.length > 4){
+									World temp = Bukkit.getWorld(args[4]);
+									if(temp == null){
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "Unknown world '" + args[4] + "' using " + world.getName(), true);
+									}else{
+										world = temp;
+									}
+								}
+
+								// Load all inventories
+								if(player.isOnline()){
+									Player p = (Player) player;
+									plugin.getInventoryManager().savePlayer(p);
+								}
+								ASInventory chosen = null;
+								List<ASInventory> inventories = ASInventory.generateInventory(player.getName(), isEnder ? InventoryType.ENDER : InventoryType.PLAYER);
+								if(inventories != null){
+									for(ASInventory inventory : inventories){
+										if(inventory.getGameMode() == gamemode){
+											if(inventory.getWorld().getName().equals(world.getName())){
+												chosen = inventory;
+												break;
+											}
+										}
+									}
+								}
+								if(chosen == null){
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "Inventory not found! Maybe it's not created yet?", true);
+									return true;
+								}
+
+								// Create title
+								String title = player.getName() + " | " + ASUtils.gamemodeAbbreviation(gamemode, false) + " | " + world.getName();
+
+								// Create displayable inventory
+								DisplayableInventory display = new DisplayableInventory(chosen, title);
+
 								// Show inventory
-								Inventory toShow = null;
 								if(isEnder){
 									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Welcome to " + player.getName() + "'s enderchest inventory.", true);
 									ASUtils.sendToPlayer(sender, "You are able to edit their inventory as you please.", true);
-									toShow = player.getEnderChest();
 								}else{
 									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Welcome to " + player.getName() + "'s inventory.", true);
 									ASUtils.sendToPlayer(sender, "You are able to edit their inventory as you please.", true);
-									toShow = player.getInventory();
 								}
-								((Player) sender).openInventory(toShow); // Creates the "live editing" window
+								((Player) sender).openInventory(display.getInventory()); // Creates the "live editing" window
 							}
 						}else{
 							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
