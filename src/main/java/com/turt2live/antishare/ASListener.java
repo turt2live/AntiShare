@@ -185,6 +185,9 @@ public class ASListener implements Listener {
 		boolean deny = false;
 		AlertType specialType = AlertType.LEGAL;
 		String blockGM = "Unknown";
+		boolean extraSpecial = false;
+		String attachedGM = "Unknown";
+		Material attached = Material.AIR;
 
 		// Check if they should be blocked
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){
@@ -219,6 +222,27 @@ public class ASListener implements Listener {
 					if(deny){
 						specialType = AlertType.ILLEGAL;
 					}
+				}else{
+					for(BlockFace face : ASUtils.realFaces){
+						Block rel = block.getRelative(face);
+						if(ASUtils.isDroppedOnBreak(rel, block)){
+							GameMode relGamemode = plugin.getBlockManager().getType(rel);
+							if(relGamemode != null){
+								attachedGM = relGamemode.name().toLowerCase();
+								if(relGamemode != blockGamemode){
+									special = true;
+									extraSpecial = true;
+									deny = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + attachedGM + "-blocks.deny");
+									drops = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + attachedGM + "-blocks.block-drops");
+									if(deny){
+										specialType = AlertType.ILLEGAL;
+									}
+									attached = rel.getType();
+									break;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -250,12 +274,21 @@ public class ASListener implements Listener {
 					plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, AlertTrigger.BLOCK_BREAK);
 				}
 			}else{
-				String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
-				String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
-				MessageFactory factory = new MessageFactory(specialPlayerMessage);
-				factory.insert(block, player, block.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
-				specialPlayerMessage = factory.toString();
-				plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, (blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK)));
+				if(extraSpecial){
+					String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break the attached " + attachedGM + " block " : " broke the attached " + attachedGM + " block ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + attached.name().replace("_", " ");
+					String specialPlayerMessage = plugin.getMessage("blocked-action." + attachedGM + "-attached-block-break");
+					MessageFactory factory = new MessageFactory(specialPlayerMessage);
+					factory.insert(block, player, block.getWorld(), attachedGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (attachedGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
+					specialPlayerMessage = factory.toString();
+					plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, (attachedGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : (attachedGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK)));
+				}else{
+					String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
+					String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
+					MessageFactory factory = new MessageFactory(specialPlayerMessage);
+					factory.insert(block, player, block.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
+					specialPlayerMessage = factory.toString();
+					plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, (blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK)));
+				}
 			}
 		}else{
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");

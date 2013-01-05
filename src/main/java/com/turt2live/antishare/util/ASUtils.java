@@ -186,17 +186,13 @@ public class ASUtils {
 			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
 			Location l1 = source.getLocation();
 			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
-			attached = l1.getBlockX() == l2.getBlockX() && l1.getBlockY() == l2.getBlockY() && l1.getBlockZ() == l2.getBlockZ();
+			attached = l1.distanceSquared(l2) == 0;
 		}else if(block.getState().getData() instanceof Attachable && !block.getType().equals(Material.PISTON_EXTENSION)){
-			if(source != null){
-				Attachable att = (Attachable) block.getState().getData();
-				// We need to use location because Java is mean like that >.<
-				Location l1 = source.getLocation();
-				Location l2 = block.getRelative(att.getAttachedFace()).getLocation();
-				attached = l1.getBlockX() == l2.getBlockX() && l1.getBlockY() == l2.getBlockY() && l1.getBlockZ() == l2.getBlockZ();
-			}else{
-				attached = true;
-			}
+			Attachable att = (Attachable) block.getState().getData();
+			// We need to use location because Java is mean like that >.<
+			Location l1 = source.getLocation();
+			Location l2 = block.getRelative(att.getAttachedFace()).getLocation();
+			attached = l1.distanceSquared(l2) == 0;
 		}
 		return attached;
 	}

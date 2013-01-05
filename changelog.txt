@@ -7,6 +7,7 @@ Since 5.1.3:
 
 CONFIRMED bugs:
 - Regions simply don't work in 90% of cases
+- Blocks with attached opposite gamemode blocks are able to be removed
 
 PLANNED features:
 - /as mirror for offline players and ender chests
