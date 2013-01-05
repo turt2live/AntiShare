@@ -81,7 +81,6 @@ public class DisplayableInventory implements InventoryHolder, Listener {
 				event.getInventory().clear(); // Sanitary
 				inventory = null; // Sanitary
 				useEvent = false;
-				System.out.println("Found us!");
 			}
 		}
 	}

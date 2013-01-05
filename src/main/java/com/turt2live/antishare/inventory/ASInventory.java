@@ -485,7 +485,6 @@ public class ASInventory implements Cloneable {
 				continue;
 			}
 			set(i, item);
-			System.out.println(i + " = " + item.getType().name());
 		}
 		inventory.clear();
 	}
