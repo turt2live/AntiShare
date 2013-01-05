@@ -17,6 +17,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -59,20 +60,56 @@ public class CommandHandler implements CommandExecutor {
 					}else{
 						if(plugin.getPermissions().has(sender, PermissionNodes.MIRROR)){
 							if(args.length < 2){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "No player name provided! Try /as mirror <player>", true);
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "No player name provided! Try /as mirror <player> [enderchest/normal] [gamemode]", true);
 							}else{
 								// Setup
+								// TODO: Offline players
 								String playername = args[1];
 								Player player = Bukkit.getPlayer(playername);
 
-								// Sanity Check
+								// Sanity check
 								if(player == null){
 									ASUtils.sendToPlayer(sender, ChatColor.RED + "Player '" + playername + "' could not be found, sorry!", true);
+									return true;
+								}
+
+								// Ender chest check
+								boolean isEnder = false;
+								if(args.length > 2){
+									if(args[2].equalsIgnoreCase("ender") || args[2].equalsIgnoreCase("enderchest")){
+										isEnder = true;
+									}else if(args[2].equalsIgnoreCase("normal") || args[2].equalsIgnoreCase("player")){
+										isEnder = false;
+									}else{
+										isEnder = false;
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what inventory '" + args[2] + "' is, so I assumed 'normal'.", true);
+									}
+								}
+
+								// Per specific game mode
+								// TODO: Implement
+								GameMode gamemode = player.getGameMode();
+								if(args.length > 3){
+									GameMode temp = ASUtils.getGameMode(args[3]);
+									if(temp != null){
+										gamemode = temp;
+									}else{
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + args[3] + "' is, so I assumed the player's current Game Mode (" + gamemode.name().toLowerCase() + ")", true);
+									}
+								}
+
+								// Show inventory
+								Inventory toShow = null;
+								if(isEnder){
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Welcome to " + player.getName() + "'s enderchest inventory.", true);
+									ASUtils.sendToPlayer(sender, "You are able to edit their inventory as you please.", true);
+									toShow = player.getEnderChest();
 								}else{
 									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Welcome to " + player.getName() + "'s inventory.", true);
 									ASUtils.sendToPlayer(sender, "You are able to edit their inventory as you please.", true);
-									((Player) sender).openInventory(player.getInventory()); // Creates the "live editing" window
+									toShow = player.getInventory();
 								}
+								((Player) sender).openInventory(toShow); // Creates the "live editing" window
 							}
 						}else{
 							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
