@@ -18,12 +18,12 @@ commands:
       /<command> editregion <name> <key> <value> = Edit a GameMode region
       /<command> listregions = List all regions
       /<command> listregions # = List regions found on page #
-      /<command> mirror <player> - Mirror <player>'s inventory
+      /<command> mirror <player> [ender/normal] [gamemode] [world] - Mirror <player>'s inventory
       /<command> tool - Get the AntiShare tool (Blaze Rod)
       /<command> money <on/off> - Turns on/off fine/reward messages
       /<command> money status - Tells you if you get fine/reward messages
       /<command> simplenotice - Toggle SimpleNotice support
-      /<command> check [creative/survival/adventure] - Find Game Mode users
+      /<command> check [creative/survival/adventure/playername] - Find Game Mode users
       /<command> help = This menu
 
 permissions:

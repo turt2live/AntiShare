@@ -400,7 +400,12 @@ public class CommandHandler implements CommandExecutor {
 						if(args.length > 1 && !args[1].equalsIgnoreCase("all")){
 							gm = ASUtils.getGameMode(args[1]);
 							if(gm == null){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + "Unknown Game Mode!", true);
+								Player player = plugin.getServer().getPlayer(args[1]);
+								if(player != null){
+									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " is in " + ChatColor.GOLD + player.getGameMode().name(), false);
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "Unknown Game Mode!", true);
+								}
 								return true;
 							}
 						}
