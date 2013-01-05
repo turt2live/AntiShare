@@ -152,6 +152,16 @@ public class AntiShare extends PluginWrapper {
 		}
 		startSQL();
 
+		// Spam about SQL
+		if(getConfig().getBoolean("enabled-features.sql")){
+			getLogger().warning("**************************************************");
+			getLogger().warning("| WARNING: SQL SUPPORT IS BEING REMOVED IN 5.3.0 |");
+			getLogger().warning("--------------------------------------------------");
+			getLogger().warning("| Contact turt2live (via Private Message) on     |");
+			getLogger().warning("| BukkitDev for conversion/information           |");
+			getLogger().warning("--------------------------------------------------");
+		}
+
 		// Check for online mode
 		if(!getServer().getOnlineMode()){
 			if(!getConfig().getBoolean("other.quiet-offline-mode-warning")){
