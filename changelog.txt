@@ -13,3 +13,8 @@ CONFIRMED bugs:
 
 PLANNED features:
 - /as mirror for offline players and ender chests
+
+NOTES:
+
+=== REGIONS ARE DISABLED IN CODE ===
+    Look for "TODO: Regions" for commented parts where regions used to be
