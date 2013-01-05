@@ -459,6 +459,8 @@ public class ASListener implements Listener {
 		Block block = event.getBlock();
 		AlertType type = AlertType.ILLEGAL;
 		boolean region = false;
+		boolean special = false;
+		GameMode existing = null;
 
 		// Sanity check
 		if(block.getType() == Material.AIR){
@@ -489,6 +491,24 @@ public class ASListener implements Listener {
 			}
 		}
 
+		// Check for 'attached placing'
+		if(type == AlertType.LEGAL && plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.disable-placing-mixed-gamemode")){
+			Block source = event.getBlockAgainst();
+			Block relative = event.getBlockPlaced();
+			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
+				GameMode potentialNewGM = player.getGameMode();
+				if(ASUtils.isDroppedOnBreak(relative, source)){
+					existing = plugin.getBlockManager().getType(source);
+					if(existing != null){
+						if(existing != potentialNewGM){
+							type = AlertType.ILLEGAL;
+							special = true;
+						}
+					}
+				}
+			}
+		}
+
 		// Handle event
 		if(type == AlertType.ILLEGAL){
 			event.setCancelled(plugin.shouldCancel(player, true));
@@ -507,12 +527,21 @@ public class ASListener implements Listener {
 				plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
 			}
 		}else{
-			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
-			String playerMessage = plugin.getMessage("blocked-action.place-block");
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert(block, player, block.getWorld(), TenderType.BLOCK_PLACE);
-			playerMessage = factory.toString();
-			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
+			if(special){
+				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to attach " : " attached ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ") + ChatColor.WHITE + " onto a " + existing.name().toLowerCase() + " block";
+				String playerMessage = plugin.getMessage("blocked-action.attach-block");
+				MessageFactory factory = new MessageFactory(playerMessage);
+				factory.insert(block, player, block.getWorld(), TenderType.BLOCK_PLACE);
+				playerMessage = factory.toString();
+				plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
+			}else{
+				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
+				String playerMessage = plugin.getMessage("blocked-action.place-block");
+				MessageFactory factory = new MessageFactory(playerMessage);
+				factory.insert(block, player, block.getWorld(), TenderType.BLOCK_PLACE);
+				playerMessage = factory.toString();
+				plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
+			}
 		}
 	}
 
