@@ -13,7 +13,6 @@ package com.turt2live.antishare;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -106,7 +105,7 @@ import com.turt2live.antishare.util.generic.LevelSaver.Level;
 public class ASListener implements Listener {
 
 	private AntiShare plugin = AntiShare.getInstance();
-	private HashMap<UUID, PerWorldConfig> config = new HashMap<UUID, PerWorldConfig>();
+	private HashMap<String, PerWorldConfig> config = new HashMap<String, PerWorldConfig>();
 	private boolean hasMobCatcher = false;
 	private HashMap<String, Long> GMCD = new HashMap<String, Long>();
 
@@ -128,7 +127,7 @@ public class ASListener implements Listener {
 	public void reload(){
 		config.clear();
 		for(World world : Bukkit.getWorlds()){
-			config.put(world.getUID(), new PerWorldConfig(world));
+			config.put(world.getName(), new PerWorldConfig(world));
 		}
 		hasMobCatcher = plugin.getServer().getPluginManager().getPlugin("MobCatcher") != null;
 	}
@@ -140,10 +139,10 @@ public class ASListener implements Listener {
 	 * @return the configuration
 	 */
 	public PerWorldConfig getConfig(World world){
-		if(!config.containsKey(world.getUID())){
-			config.put(world.getUID(), new PerWorldConfig(world));
+		if(!config.containsKey(world.getName())){
+			config.put(world.getName(), new PerWorldConfig(world));
 		}
-		return config.get(world.getUID());
+		return config.get(world.getName());
 	}
 
 	// ################# World Load
@@ -151,7 +150,7 @@ public class ASListener implements Listener {
 	@EventHandler
 	public void onWorldLoad(WorldLoadEvent event){
 		World world = event.getWorld();
-		config.put(world.getUID(), new PerWorldConfig(world));
+		config.put(world.getName(), new PerWorldConfig(world));
 		plugin.getBlockManager().loadWorld(world.getName());
 		// TODO: Regions
 		//plugin.getRegionManager().loadRegions(world);
@@ -165,7 +164,7 @@ public class ASListener implements Listener {
 			return;
 		}
 		World world = event.getWorld();
-		config.remove(world);
+		config.remove(world.getName());
 	}
 
 	// ################# Block Break
