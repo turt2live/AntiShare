@@ -22,7 +22,6 @@ import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.antishare.regions.ASRegion;
 import com.turt2live.antishare.storage.PerWorldConfig.ListType;
 
 @SuppressWarnings ("deprecation")
@@ -138,16 +137,17 @@ public class PaintingListener implements Listener {
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, hanging.getWorld(), item)){
 				type = AlertType.LEGAL;
 			}
-			ASRegion asregion = plugin.getRegionManager().getRegion(hanging.getLocation());
-			if(asregion != null){
-				if(!asregion.getConfig().isBlocked(item, ListType.BLOCK_BREAK)){
-					type = AlertType.LEGAL;
-				}
-			}else{
-				if(!plugin.getListener().getConfig(hanging.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
-					type = AlertType.LEGAL;
-				}
+			// TODO: Regions
+			//			ASRegion asregion = plugin.getRegionManager().getRegion(hanging.getLocation());
+			//			if(asregion != null){
+			//				if(!asregion.getConfig().isBlocked(item, ListType.BLOCK_BREAK)){
+			//					type = AlertType.LEGAL;
+			//				}
+			//			}else{
+			if(!plugin.getListener().getConfig(hanging.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
 			}
+			//			}
 
 			// Check creative/survival blocks
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
@@ -166,15 +166,16 @@ public class PaintingListener implements Listener {
 			}
 
 			// Check regions
-			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_BREAK)){
-				ASRegion playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-				ASRegion blockRegion = plugin.getRegionManager().getRegion(hanging.getLocation());
-				if(playerRegion != blockRegion){
-					special = true;
-					region = true;
-					specialType = AlertType.ILLEGAL;
-				}
-			}
+			// TODO: Regions
+			//			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_BREAK)){
+			//				ASRegion playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+			//				ASRegion blockRegion = plugin.getRegionManager().getRegion(hanging.getLocation());
+			//				if(playerRegion != blockRegion){
+			//					special = true;
+			//					region = true;
+			//					specialType = AlertType.ILLEGAL;
+			//				}
+			//			}
 
 			// Handle event
 			if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
