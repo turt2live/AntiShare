@@ -339,6 +339,12 @@ public class CommandHandler implements CommandExecutor {
 						List<Region> regions = new ArrayList<Region>();
 						regions.addAll(set);
 
+						// Check for empty list
+						if(regions.size() <= 0){
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "No regions to list!", true);
+							return true;
+						}
+
 						// Math
 						Double maxPagesD = Math.ceil(regions.size() / resultsPerPage);
 						if(maxPagesD < 1){
