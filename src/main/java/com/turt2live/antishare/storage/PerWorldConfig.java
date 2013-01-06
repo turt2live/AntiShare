@@ -14,7 +14,6 @@ import java.io.File;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -67,7 +66,7 @@ public class PerWorldConfig {
 	//private boolean splitActive = false;
 	private boolean combatPlayers = false;
 	private boolean combatMobs = false;
-	private World world;
+	private String world;
 
 	// TODO: Regions
 	//private WorldSplit split;
@@ -77,12 +76,12 @@ public class PerWorldConfig {
 	 * 
 	 * @param world the world
 	 */
-	public PerWorldConfig(World world){
+	public PerWorldConfig(String world){
 		AntiShare plugin = AntiShare.getInstance();
 		this.world = world;
 
 		// Setup configuration
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(plugin.getDataFolder() + File.separator + "world_configurations", world.getName() + "_config.yml"), plugin);
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(plugin.getDataFolder() + File.separator + "world_configurations", world + "_config.yml"), plugin);
 		worldConfig.loadDefaults(plugin.getResource("resources/world.yml"));
 		if(!worldConfig.fileExists() || !worldConfig.checkDefaults()){
 			worldConfig.saveDefaults();
@@ -169,7 +168,7 @@ public class PerWorldConfig {
 		}
 
 		// Generate and return
-		return stringsOnly ? new EventList(true, list.split(",")) : new EventList(global ? "config.yml" : world.getName() + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
+		return stringsOnly ? new EventList(true, list.split(",")) : new EventList(global ? "config.yml" : world + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
 	}
 
 	private EntityList getList(String triggerPath, String listPath, EnhancedConfiguration worldConfig){
@@ -196,7 +195,7 @@ public class PerWorldConfig {
 		}
 
 		// Generate and return
-		return new EntityList(global ? "config.yml" : world.getName() + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
+		return new EntityList(global ? "config.yml" : world + "_config.yml", "blocked-actions." + triggerPath, list.split(","));
 	}
 
 	/**
@@ -384,7 +383,7 @@ public class PerWorldConfig {
 	 * @return the raw configuration
 	 */
 	public EnhancedConfiguration getRaw(){
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder() + File.separator + "world_configurations", world.getName() + "_config.yml"), AntiShare.getInstance());
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(AntiShare.getInstance().getDataFolder() + File.separator + "world_configurations", world + "_config.yml"), AntiShare.getInstance());
 		worldConfig.load();
 		return worldConfig;
 	}

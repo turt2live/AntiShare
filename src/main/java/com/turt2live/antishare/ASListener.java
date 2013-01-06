@@ -127,7 +127,7 @@ public class ASListener implements Listener {
 	public void reload(){
 		config.clear();
 		for(World world : Bukkit.getWorlds()){
-			config.put(world.getName(), new PerWorldConfig(world));
+			config.put(world.getName(), new PerWorldConfig(world.getName()));
 		}
 		hasMobCatcher = plugin.getServer().getPluginManager().getPlugin("MobCatcher") != null;
 	}
@@ -140,9 +140,22 @@ public class ASListener implements Listener {
 	 */
 	public PerWorldConfig getConfig(World world){
 		if(!config.containsKey(world.getName())){
-			config.put(world.getName(), new PerWorldConfig(world));
+			config.put(world.getName(), new PerWorldConfig(world.getName()));
 		}
 		return config.get(world.getName());
+	}
+
+	/**
+	 * Gets the configuration for the world
+	 * 
+	 * @param world the world
+	 * @return the configuration
+	 */
+	public PerWorldConfig getConfig(String world){
+		if(!config.containsKey(world)){
+			config.put(world, new PerWorldConfig(world));
+		}
+		return config.get(world);
 	}
 
 	// ################# World Load
@@ -150,7 +163,7 @@ public class ASListener implements Listener {
 	@EventHandler
 	public void onWorldLoad(WorldLoadEvent event){
 		World world = event.getWorld();
-		config.put(world.getName(), new PerWorldConfig(world));
+		config.put(world.getName(), new PerWorldConfig(world.getName()));
 		plugin.getBlockManager().loadWorld(world.getName());
 		// TODO: Regions
 		//plugin.getRegionManager().loadRegions(world);
