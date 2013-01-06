@@ -28,6 +28,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.events.TrackerList;
 
 /**
@@ -101,13 +102,9 @@ public class BlockManager {
 	 */
 	public void save(boolean clear, boolean load){
 		// Load files
-		if(blocksDir.exists()){
-			blocksDir.delete(); // To remove old blocks
-		}
+		ASUtils.wipeFolder(blocksDir);
+		ASUtils.wipeFolder(entitiesDir);
 		blocksDir.mkdirs();
-		if(entitiesDir.exists()){
-			entitiesDir.delete(); // To remove old entities
-		}
 		entitiesDir.mkdirs();
 		completedSaves = new boolean[maxLists];
 		for(int i = 0; i < maxLists; i++){

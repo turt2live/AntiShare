@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -479,6 +480,27 @@ public class ASUtils {
 	 */
 	public static String fileSafeName(String name){
 		return name.replaceAll("[^0-9a-zA-Z]", "-");
+	}
+
+	/**
+	 * Wipes a folder
+	 * 
+	 * @param folder the folder to wipe
+	 */
+	public static void wipeFolder(File folder){
+		if(!folder.exists()){
+			return;
+		}
+		if(folder.listFiles() != null){
+			for(File file : folder.listFiles()){
+				if(file.isDirectory()){
+					wipeFolder(folder);
+				}else{
+					file.delete();
+				}
+			}
+		}
+		folder.delete();
 	}
 
 }

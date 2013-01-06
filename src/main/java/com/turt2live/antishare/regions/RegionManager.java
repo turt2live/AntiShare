@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.util.ASUtils;
 
 public class RegionManager {
 
@@ -20,6 +21,32 @@ public class RegionManager {
 
 	public RegionManager(){
 		load();
+	}
+
+	public void loadWorld(String worldname){
+		File path = Region.REGION_INFORMATION;
+		if(!path.exists()){
+			path.mkdirs();
+		}
+		File[] list = path.listFiles();
+		if(list != null){
+			for(File file : list){
+				if(file.getName().endsWith(".yml")){
+					Region region = Region.fromFile(file);
+					if(region != null && region.getWorldName().equals(worldname)){
+						Set<Region> set = new HashSet<Region>();
+						if(regions.containsKey(region.getWorldName())){
+							set.addAll(regions.get(region.getWorldName()));
+						}
+						set.add(region);
+						regions.put(region.getWorldName(), set);
+					}
+				}
+			}
+		}
+		if(regions.keySet().size() > 0){
+			plugin.getLogger().info("Regions Loaded: " + regions.keySet().size());
+		}
 	}
 
 	public void load(){
@@ -49,6 +76,8 @@ public class RegionManager {
 	}
 
 	public void save(){
+		ASUtils.wipeFolder(Region.REGION_CONFIGURATIONS);
+		ASUtils.wipeFolder(Region.REGION_INFORMATION);
 		for(String world : regions.keySet()){
 			Set<Region> regions = this.regions.get(world);
 			for(Region region : regions){
@@ -93,10 +122,12 @@ public class RegionManager {
 
 	public Region getRegion(String name){
 		for(World world : plugin.getServer().getWorlds()){
-			Set<Region> regions = this.regions.get(world.getName());
-			for(Region region : regions){
-				if(region.getName().equalsIgnoreCase(name)){
-					return region;
+			if(regions.containsKey(world.getName())){
+				Set<Region> regions = this.regions.get(world.getName());
+				for(Region region : regions){
+					if(region.getName().equalsIgnoreCase(name)){
+						return region;
+					}
 				}
 			}
 		}
@@ -115,20 +146,24 @@ public class RegionManager {
 			regions.addAll(this.regions.get(cuboid.getWorld().getName()));
 		}
 		regions.add(region);
+		region.onCreate();
 		this.regions.put(cuboid.getWorld().getName(), regions);
 	}
 
 	public void removeRegion(String name){
 		for(World world : plugin.getServer().getWorlds()){
-			Set<Region> regions = this.regions.get(world.getName());
-			Iterator<Region> iterator = regions.iterator();
-			while (iterator.hasNext()){
-				Region region = iterator.next();
-				if(region.getName().equalsIgnoreCase(name)){
-					regions.remove(region);
+			if(regions.containsKey(world.getName())){
+				Set<Region> regions = this.regions.get(world.getName());
+				Iterator<Region> iterator = regions.iterator();
+				while (iterator.hasNext()){
+					Region region = iterator.next();
+					if(region.getName().equalsIgnoreCase(name)){
+						region.onDelete();
+						regions.remove(region);
+					}
 				}
+				this.regions.put(world.getName(), regions);
 			}
-			this.regions.put(world.getName(), regions);
 		}
 	}
 
