@@ -108,6 +108,16 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		return w * d * h;
 	}
 
+	/**
+	 * Updates the cuboid with a new world
+	 * 
+	 * @param world the new world
+	 */
+	public void update(World world){
+		minimum.setWorld(world);
+		maximum.setWorld(world);
+	}
+
 	private void calculate(){
 		int mix = 0, miy = 0, miz = 0, max = 0, may = 0, maz = 0;
 		if(!minimum.getWorld().getName().equals(maximum.getWorld().getName())){

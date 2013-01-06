@@ -20,6 +20,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.PerWorldConfig.ListType;
+import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.events.EntityList;
 import com.turt2live.antishare.util.events.EventList;
 
@@ -58,9 +59,9 @@ public class RegionConfiguration {
 		this.region = region;
 
 		// Setup configuration
-		File path = new File(plugin.getDataFolder(), "region_configurations");
+		File path = Region.REGION_CONFIGURATIONS;
 		path.mkdirs();
-		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(path, region.getName() + ".yml"), plugin);
+		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(path, ASUtils.fileSafeName(region.getName()) + ".yml"), plugin);
 		regionConfig.loadDefaults(plugin.getResource("resources/region.yml"));
 		if(!regionConfig.fileExists() || !regionConfig.checkDefaults()){
 			regionConfig.saveDefaults();
