@@ -471,4 +471,14 @@ public class ASUtils {
 		return (shortVersion ? "" : "GM = ") + gamemode.name().charAt(0);
 	}
 
+	/**
+	 * Creates a file safe name from a string
+	 * 
+	 * @param name the string
+	 * @return the file safe name
+	 */
+	public static String fileSafeName(String name){
+		return name.replaceAll("[^0-9a-zA-Z]", "-");
+	}
+
 }
