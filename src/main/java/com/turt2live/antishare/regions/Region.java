@@ -180,6 +180,7 @@ public class Region {
 		region.setID(yaml.getString("id"));
 		region.setGameMode(GameMode.valueOf(yaml.getString("gamemode")));
 		region.setWorld(world);
+		region.setConfig(new RegionConfiguration(region));
 		return region;
 	}
 
