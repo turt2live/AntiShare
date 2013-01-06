@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.regions;
+package com.turt2live.antishare.deprecatedregions;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -19,9 +19,9 @@ import org.bukkit.entity.Player;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.deprecatedregions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
-import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.util.ASUtils;
 
 /**

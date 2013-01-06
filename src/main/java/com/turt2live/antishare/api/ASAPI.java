@@ -16,8 +16,8 @@ import org.bukkit.command.CommandSender;
 
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.regions.ASRegion;
-import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
+import com.turt2live.antishare.deprecatedregions.ASRegion;
+import com.turt2live.antishare.deprecatedregions.RegionKey.RegionKeyType;
 
 /**
  * The AntiShare API<br>

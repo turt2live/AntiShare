@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.regions;
+package com.turt2live.antishare.deprecatedregions;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,12 +25,12 @@ import org.bukkit.metadata.FixedMetadataValue;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.deprecatedregions.RegionWall.Wall;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.antishare.regions.RegionWall.Wall;
 import com.turt2live.antishare.storage.PerRegionConfig;
 
 /**

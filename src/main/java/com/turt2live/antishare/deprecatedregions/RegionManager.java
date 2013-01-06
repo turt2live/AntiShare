@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.regions;
+package com.turt2live.antishare.deprecatedregions;
 
 import java.io.File;
 import java.io.FileFilter;
