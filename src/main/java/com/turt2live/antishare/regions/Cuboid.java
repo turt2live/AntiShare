@@ -118,6 +118,15 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		maximum.setWorld(world);
 	}
 
+	/**
+	 * Gets the world applied to this cuboid
+	 * 
+	 * @return the world applied
+	 */
+	public World getWorld(){
+		return minimum.getWorld();
+	}
+
 	private void calculate(){
 		int mix = 0, miy = 0, miz = 0, max = 0, may = 0, maz = 0;
 		if(!minimum.getWorld().getName().equals(maximum.getWorld().getName())){

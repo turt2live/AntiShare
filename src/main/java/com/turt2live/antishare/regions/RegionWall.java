@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.deprecatedregions;
+package com.turt2live.antishare.regions;
 
 import org.bukkit.Location;
 
@@ -17,7 +17,6 @@ import org.bukkit.Location;
  * 
  * @author turt2live
  */
-@Deprecated
 public class RegionWall {
 
 	/**
