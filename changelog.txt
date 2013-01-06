@@ -23,6 +23,5 @@ NOTES:
     
 Work left with regions:
 - Add region manager
-- Re-integrate into events
 - Re-integrate into API
 - Re-integrate into commands
