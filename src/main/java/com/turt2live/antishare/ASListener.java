@@ -80,12 +80,14 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
+import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.storage.PerWorldConfig;
 import com.turt2live.antishare.storage.PerWorldConfig.ListType;
 import com.turt2live.antishare.tekkitcompat.EntityLayer;
@@ -165,8 +167,7 @@ public class ASListener implements Listener {
 		World world = event.getWorld();
 		config.put(world.getName(), new PerWorldConfig(world.getName()));
 		plugin.getBlockManager().loadWorld(world.getName());
-		// TODO: Regions
-		//plugin.getRegionManager().loadRegions(world);
+		plugin.getRegionManager().loadWorld(world.getName());
 	}
 
 	// ################# World Unload
@@ -204,17 +205,16 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_BREAK)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_BREAK)){
-			type = AlertType.LEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
 
 		// Check hooks
 		if(plugin.getHookManager().checkForSignProtection(block)){
@@ -260,16 +260,15 @@ public class ASListener implements Listener {
 		}
 
 		// Check regions
-		// TODO: Regions
-		//		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_BREAK)){
-		//			ASRegion playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		//			ASRegion blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
-		//			if(playerRegion != blockRegion){
-		//				special = true;
-		//				region = true;
-		//				specialType = AlertType.ILLEGAL;
-		//			}
-		//		}
+		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_BREAK)){
+			Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+			Region blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
+			if(playerRegion != blockRegion){
+				special = true;
+				region = true;
+				specialType = AlertType.ILLEGAL;
+			}
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
@@ -537,26 +536,25 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_PLACE)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_PLACE)){
-			type = AlertType.LEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_PLACE)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_PLACE)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
-		//
-		//		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PLACE)){
-		//			ASRegion playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		//			ASRegion blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
-		//			if(playerRegion != blockRegion){
-		//				type = AlertType.ILLEGAL;
-		//				region = true;
-		//			}
-		//		}
+
+		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PLACE)){
+			Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+			Region blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
+			if(playerRegion != blockRegion){
+				type = AlertType.ILLEGAL;
+				region = true;
+			}
+		}
 
 		// Check for 'attached placing'
 		if(type == AlertType.LEGAL && plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.disable-placing-mixed-gamemode")){
@@ -649,17 +647,16 @@ public class ASListener implements Listener {
 		// Right click list
 		if(action == Action.RIGHT_CLICK_BLOCK){
 			// Check if they should be blocked
-			// TODO: Regions
-			//			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
-			//			if(asregion != null){
-			//				if(asregion.getConfig().isBlocked(block, ListType.RIGHT_CLICK)){
-			//					type = AlertType.ILLEGAL;
-			//				}
-			//			}else{
-			if(getConfig(block.getWorld()).isBlocked(block, ListType.RIGHT_CLICK)){
-				type = AlertType.ILLEGAL;
+			Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			if(asregion != null){
+				if(asregion.getConfig().isBlocked(block, ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+				}
+			}else{
+				if(getConfig(block.getWorld()).isBlocked(block, ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+				}
 			}
-			//			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, block.getWorld(), block.getType())){
 				type = AlertType.LEGAL;
 			}
@@ -674,17 +671,16 @@ public class ASListener implements Listener {
 
 		// If this event is triggered as legal from the right click, check use lists
 		if(type == AlertType.LEGAL){
-			// TODO: Regions
-			//			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
-			//			if(asregion != null){
-			//				if(asregion.getConfig().isBlocked(block, ListType.USE)){
-			//					type = AlertType.ILLEGAL;
-			//				}
-			//			}else{
-			if(getConfig(block.getWorld()).isBlocked(block, ListType.USE)){
-				type = AlertType.ILLEGAL;
+			Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			if(asregion != null){
+				if(asregion.getConfig().isBlocked(block, ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
+			}else{
+				if(getConfig(block.getWorld()).isBlocked(block, ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
 			}
-			//			}
 			// Check if they should be blocked
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getWorld(), block.getType())){
 				type = AlertType.LEGAL;
@@ -701,17 +697,16 @@ public class ASListener implements Listener {
 		// If the event is triggered as legal from the use lists, check the player's item in hand
 		if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
 			// Check if they should be blocked
-			// TODO: Regions
-			//			ASRegion asregion = plugin.getRegionManager().getRegion(block.getLocation());
-			//			if(asregion != null){
-			//				if(asregion.getConfig().isBlocked(player.getItemInHand().getType(), ListType.USE)){
-			//					type = AlertType.ILLEGAL;
-			//				}
-			//			}else{
-			if(getConfig(block.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
-				type = AlertType.ILLEGAL;
+			Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			if(asregion != null){
+				if(asregion.getConfig().isBlocked(player.getItemInHand().getType(), ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
+			}else{
+				if(getConfig(block.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
 			}
-			//			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
@@ -731,19 +726,18 @@ public class ASListener implements Listener {
 				&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
 				|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
 			boolean potion = false;
-			// TODO: Regions
-			//			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
-			//			if(region != null){
-			//				if(!region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
-			//					type = AlertType.ILLEGAL;
-			//					potion = true;
-			//				}
-			//			}else{
-			if(!getConfig(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
-				type = AlertType.ILLEGAL;
-				potion = true;
+			Region region = plugin.getRegionManager().getRegion(player.getLocation());
+			if(region != null){
+				if(!region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+					potion = true;
+				}
+			}else{
+				if(!getConfig(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+					potion = true;
+				}
 			}
-			//			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
@@ -762,34 +756,31 @@ public class ASListener implements Listener {
 				&& player.getItemInHand() != null
 				&& player.getItemInHand().getType() == Material.POTION){
 			boolean potion = false;
-			// TODO: Regions
-			//ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
+			Region region = plugin.getRegionManager().getRegion(player.getLocation());
 			if(player.getItemInHand().getDurability() > 32000){
-				// TODO: Regions
-				//				if(region != null){
-				//					if(!region.getConfig().isThrownPotionAllowed()){
-				//						type = AlertType.ILLEGAL;
-				//						potion = true;
-				//					}
-				//				}else{
-				if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
-					type = AlertType.ILLEGAL;
-					potion = true;
+				if(region != null){
+					if(!region.getConfig().isThrownPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
+				}else{
+					if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
 				}
-				//				}
 			}else{
-				// TODO: Regions
-				//				if(region != null){
-				//					if(!region.getConfig().isPotionAllowed()){
-				//						type = AlertType.ILLEGAL;
-				//						potion = true;
-				//					}
-				//				}else{
-				if(!getConfig(player.getWorld()).isPotionAllowed()){
-					type = AlertType.ILLEGAL;
-					potion = true;
+				if(region != null){
+					if(!region.getConfig().isPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
+				}else{
+					if(!getConfig(player.getWorld()).isPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
 				}
-				//				}
 			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
@@ -844,17 +835,16 @@ public class ASListener implements Listener {
 		}
 
 		// Check permissions
-		// TODO: Regions
-		//		ASRegion region = plugin.getRegionManager().getRegion(event.getVehicle().getLocation());
-		//		if(region != null){
-		//			if(!region.getConfig().isBlocked(item, ListType.BLOCK_BREAK)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
-			type = AlertType.LEGAL;
+		Region region = plugin.getRegionManager().getRegion(event.getVehicle().getLocation());
+		if(region != null){
+			if(!region.getConfig().isBlocked(item, ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
@@ -957,17 +947,16 @@ public class ASListener implements Listener {
 
 		// If the entity is not found, check for interacted entities
 		if(item == Material.AIR){
-			// TODO: Regions
-			//			ASRegion region = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
-			//			if(region != null){
-			//				if(!region.getConfig().isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
-			//					type = AlertType.LEGAL;
-			//				}
-			//			}else{
-			if(!getConfig(player.getWorld()).isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
-				type = AlertType.LEGAL;
+			Region region = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
+			if(region != null){
+				if(!region.getConfig().isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
+					type = AlertType.LEGAL;
+				}
+			}else{
+				if(!getConfig(player.getWorld()).isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
+					type = AlertType.LEGAL;
+				}
 			}
-			//			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, player.getWorld(), ASUtils.getEntityName(event.getRightClicked()))){
 				type = AlertType.LEGAL;
 			}
@@ -991,17 +980,16 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
-			type = AlertType.LEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -1042,17 +1030,16 @@ public class ASListener implements Listener {
 		// Check internal inventories
 		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
 			// Check inventories
-			// TODO: Regions
-			//			ASRegion asregion = plugin.getRegionManager().getRegion(cart.getLocation());
-			//			if(asregion != null){
-			//				if(asregion.getConfig().clearBlockInventoryOnBreak()){
-			//					cart.getInventory().clear();
-			//				}
-			//			}else{
-			if(getConfig(player.getWorld()).clearBlockInventoryOnBreak()){
-				cart.getInventory().clear();
+			Region asregion = plugin.getRegionManager().getRegion(cart.getLocation());
+			if(asregion != null){
+				if(asregion.getConfig().clearBlockInventoryOnBreak()){
+					cart.getInventory().clear();
+				}
+				//			}else{
+				if(getConfig(player.getWorld()).clearBlockInventoryOnBreak()){
+					cart.getInventory().clear();
+				}
 			}
-			//			}
 		}
 	}
 
@@ -1068,17 +1055,16 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(event.getEgg().getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
-			type = AlertType.LEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(event.getEgg().getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -1119,17 +1105,16 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(bottle.getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
-			type = AlertType.LEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(bottle.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -1165,26 +1150,24 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(item.getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.DROP)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.DROP)){
-			type = AlertType.LEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(item.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.DROP)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.DROP)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
 
 		// Region Check
-		// TODO: Regions
-		//		if(plugin.getRegionManager().getRegion(player.getLocation()) != plugin.getRegionManager().getRegion(item.getLocation()) && type == AlertType.LEGAL){
-		//			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_THROW)){
-		//				type = AlertType.ILLEGAL;
-		//				region = true;
-		//			}
-		//		}
+		if(plugin.getRegionManager().getRegion(player.getLocation()) != plugin.getRegionManager().getRegion(item.getLocation()) && type == AlertType.LEGAL){
+			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_THROW)){
+				type = AlertType.ILLEGAL;
+				region = true;
+			}
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -1221,26 +1204,24 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(item.getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.PICKUP)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.PICKUP)){
-			type = AlertType.LEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(item.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.PICKUP)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.PICKUP)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
 
 		// Region Check
-		// TODO: Regions
-		//		if(plugin.getRegionManager().getRegion(player.getLocation()) != plugin.getRegionManager().getRegion(item.getLocation()) && type == AlertType.LEGAL){
-		//			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PICKUP)){
-		//				type = AlertType.ILLEGAL;
-		//				region = true;
-		//			}
-		//		}
+		if(plugin.getRegionManager().getRegion(player.getLocation()) != plugin.getRegionManager().getRegion(item.getLocation()) && type == AlertType.LEGAL){
+			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PICKUP)){
+				type = AlertType.ILLEGAL;
+				region = true;
+			}
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -1270,11 +1251,10 @@ public class ASListener implements Listener {
 		int illegalItems = 0;
 
 		// Remove them from a region (if applicable)
-		// TODO: Regions
-		//		ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
-		//		if(region != null){
-		//			region.alertExit(player);
-		//		}
+		Region region = plugin.getRegionManager().getRegion(player.getLocation());
+		if(region != null){
+			region.alertExit(player);
+		}
 
 		// Check if they should be blocked
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), (Material) null)){
@@ -1284,23 +1264,21 @@ public class ASListener implements Listener {
 		// Handle event
 		if(type == AlertType.ILLEGAL){
 			List<ItemStack> remove = new ArrayList<ItemStack>();
-			// TODO: Regions
-			//ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
+			Region asregion = plugin.getRegionManager().getRegion(player.getLocation());
 			for(ItemStack item : drops){
-				// TODO: Regions
-				//				if(asregion != null){
-				//					if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
-				//							&& asregion.getConfig().isBlocked(item.getType(), ListType.DEATH)){
-				//						illegalItems++;
-				//						remove.add(item);
-				//					}
-				//				}else{
-				if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
-						&& getConfig(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)){
-					illegalItems++;
-					remove.add(item);
+				if(asregion != null){
+					if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
+							&& asregion.getConfig().isBlocked(item.getType(), ListType.DEATH)){
+						illegalItems++;
+						remove.add(item);
+					}
+				}else{
+					if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
+							&& getConfig(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)){
+						illegalItems++;
+						remove.add(item);
+					}
 				}
-				//				}
 			}
 			// Remove items
 			for(ItemStack item : remove){
@@ -1338,17 +1316,16 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), command)){
 			type = AlertType.LEGAL;
 		}
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(player.getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(command, ListType.COMMAND)){
-		//				type = AlertType.LEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isBlocked(command, ListType.COMMAND)){
-			type = AlertType.LEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(player.getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(command, ListType.COMMAND)){
+				type = AlertType.LEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isBlocked(command, ListType.COMMAND)){
+				type = AlertType.LEGAL;
+			}
 		}
-		//		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -1378,37 +1355,34 @@ public class ASListener implements Listener {
 			return;
 		}
 
-		// UNUSED
-		//Player player = event.getPlayer();
-		// TODO: Regions
-		//		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
-		//		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
+		Player player = event.getPlayer();
+		Region currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
+		Region toRegion = plugin.getRegionManager().getRegion(event.getTo());
 
 		// Check split
-		// TODO: Regions
-		//		if(getConfig(player.getWorld()).isSplitActive()){
-		//			getConfig(player.getWorld()).warnSplit(player);
-		//			getConfig(player.getWorld()).checkSplit(player);
-		//		}
+		// TODO: WorldSplit
+		//				if(getConfig(player.getWorld()).isSplitActive()){
+		//					getConfig(player.getWorld()).warnSplit(player);
+		//					getConfig(player.getWorld()).checkSplit(player);
+		//				}
+		//
+		//				if(currentRegion == null){
+		//					// Determine alert for World Split
+		//					getConfig(player.getWorld()).warnSplit(player);
+		//		
+		//					// Check world split
+		//					getConfig(player.getWorld()).checkSplit(player);
+		//				}
 
-		// TODO: Regions
-		//		if(currentRegion == null){
-		//			// Determine alert for World Split
-		//			getConfig(player.getWorld()).warnSplit(player);
-		//
-		//			// Check world split
-		//			getConfig(player.getWorld()).checkSplit(player);
-		//		}
-		//
-		//		// Check regions
-		//		if(currentRegion != toRegion){
-		//			if(currentRegion != null){
-		//				currentRegion.alertExit(player);
-		//			}
-		//			if(toRegion != null){
-		//				toRegion.alertEntry(player);
-		//			}
-		//		}
+		// Check regions
+		if(currentRegion != toRegion){
+			if(currentRegion != null){
+				currentRegion.alertExit(player);
+			}
+			if(toRegion != null){
+				toRegion.alertEntry(player);
+			}
+		}
 	}
 
 	// ################# Player Game Mode Change
@@ -1422,8 +1396,7 @@ public class ASListener implements Listener {
 		GameMode from = player.getGameMode();
 		GameMode to = event.getNewGameMode();
 		boolean ignore = true;
-		// TODO: Regions
-		//boolean checkRegion = true;
+		boolean checkRegion = true;
 
 		// Automatically close all open windows
 		InventoryView active = player.getOpenInventory();
@@ -1474,23 +1447,21 @@ public class ASListener implements Listener {
 		}
 
 		// Tag check
-		// TODO: Regions
-		//		if(player.hasMetadata("antishare-regionleave")){
-		//			player.removeMetadata("antishare-regionleave", plugin);
-		//			checkRegion = false;
-		//		}
+		if(player.hasMetadata("antishare-regionleave")){
+			player.removeMetadata("antishare-regionleave", plugin);
+			checkRegion = false;
+		}
 
 		// Region Check
-		// TODO: Regions
-		//		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
-		//			ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
-		//			if(region != null){
-		//				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
-		//				event.setCancelled(plugin.shouldCancel(player, false));
-		//				currentLevel.setTo(player); // Restore level
-		//				return;
-		//			}
-		//		}
+		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
+			Region region = plugin.getRegionManager().getRegion(player.getLocation());
+			if(region != null){
+				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
+				event.setCancelled(plugin.shouldCancel(player, false));
+				currentLevel.setTo(player); // Restore level
+				return;
+			}
+		}
 
 		// Check temp
 		if(plugin.getInventoryManager().isInTemporary(player)){
@@ -1607,44 +1578,40 @@ public class ASListener implements Listener {
 			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), ASUtils.getEntityName(target))){
 				type = AlertType.LEGAL;
 			}
-			// TODO: Regions
-			//			ASRegion region = plugin.getRegionManager().getRegion(target.getLocation());
-			//			if(region != null){
-			//				if(!region.getConfig().isBlocked(target, ListType.MOBS)){
-			//					type = AlertType.LEGAL;
-			//				}
-			//			}else{
-			if(!getConfig(target.getWorld()).isBlocked(target, ListType.MOBS)){
-				type = AlertType.LEGAL;
+			Region region = plugin.getRegionManager().getRegion(target.getLocation());
+			if(region != null){
+				if(!region.getConfig().isBlocked(target, ListType.MOBS)){
+					type = AlertType.LEGAL;
+				}
+			}else{
+				if(!getConfig(target.getWorld()).isBlocked(target, ListType.MOBS)){
+					type = AlertType.LEGAL;
+				}
 			}
-			//			}
 		}
 
 		// Check if we need to continue based on settings
-		// TODO: Regions
-		//ASRegion asregion = plugin.getRegionManager().getRegion(target.getLocation());
+		Region asregion = plugin.getRegionManager().getRegion(target.getLocation());
 		if(playerCombat){
-			// TODO: Regions
-			//			if(asregion != null){
-			//				if(!asregion.getConfig().combatAgainstPlayers()){
-			//					return;
-			//				}
-			//			}else{
-			if(!getConfig(target.getWorld()).combatAgainstPlayers()){
-				return;
+			if(asregion != null){
+				if(!asregion.getConfig().combatAgainstPlayers()){
+					return;
+				}
+			}else{
+				if(!getConfig(target.getWorld()).combatAgainstPlayers()){
+					return;
+				}
 			}
-			//			}
 		}else{
-			// TODO: Regions
-			//			if(asregion != null){
-			//				if(!asregion.getConfig().combatAgainstMobs()){
-			//					return;
-			//				}
-			//			}else{
-			if(!getConfig(target.getWorld()).combatAgainstMobs()){
-				return;
+			if(asregion != null){
+				if(!asregion.getConfig().combatAgainstMobs()){
+					return;
+				}
+			}else{
+				if(!getConfig(target.getWorld()).combatAgainstMobs()){
+					return;
+				}
 			}
-			//			}
 		}
 
 		// Handle event
@@ -1773,17 +1740,16 @@ public class ASListener implements Listener {
 		plugin.getInventoryManager().loadPlayer(player);
 
 		// Check region
-		// TODO: Regions
-		//		ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
-		//		if(region != null){
-		//			// Add join key
-		//			player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
-		//
-		//			// Alert entry
-		//			region.alertSilentEntry(player); // Sets inventory and Game Mode
-		//			// This must be done because when the inventory manager releases
-		//			// a player it resets the inventory to "non-temp"
-		//		}
+		Region region = plugin.getRegionManager().getRegion(player.getLocation());
+		if(region != null){
+			// Add join key
+			player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
+
+			// Alert entry
+			region.alertSilentEntry(player); // Sets inventory and Game Mode
+			// This must be done because when the inventory manager releases
+			// a player it resets the inventory to "non-temp"
+		}
 
 		// Money (fines/rewards) status
 		plugin.getMoneyManager().showStatusOnLogin(player);
@@ -1796,11 +1762,10 @@ public class ASListener implements Listener {
 		Player player = event.getPlayer();
 
 		// Remove from regions
-		// TODO: Regions
-		//		ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
-		//		if(region != null){
-		//			region.alertExit(player);
-		//		}
+		Region region = plugin.getRegionManager().getRegion(player.getLocation());
+		if(region != null){
+			region.alertExit(player);
+		}
 
 		// Tell the inventory manager to release this player
 		plugin.getInventoryManager().releasePlayer(player);
@@ -1893,9 +1858,8 @@ public class ASListener implements Listener {
 			return;
 		}
 		Player player = event.getPlayer();
-		// TODO: Regions
-		//		ASRegion currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
-		//		ASRegion toRegion = plugin.getRegionManager().getRegion(event.getTo());
+		Region currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
+		Region toRegion = plugin.getRegionManager().getRegion(event.getTo());
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check teleport cause for ender pearl
@@ -1931,24 +1895,24 @@ public class ASListener implements Listener {
 			return;
 		}
 
-		// TODO: Regions
-		//		if(currentRegion == null){
-		//			// Determine alert for World Split
-		//			getConfig(player.getWorld()).warnSplit(player);
-		//
-		//			// Check world split
-		//			getConfig(player.getWorld()).checkSplit(player);
-		//		}
-		//
-		//		// Check regions
-		//		if(currentRegion != toRegion){
-		//			if(currentRegion != null){
-		//				currentRegion.alertExit(player);
-		//			}
-		//			if(toRegion != null){
-		//				toRegion.alertEntry(player);
-		//			}
-		//		}
+		// TODO: WorldSplit
+		//				if(currentRegion == null){
+		//					// Determine alert for World Split
+		//					getConfig(player.getWorld()).warnSplit(player);
+		//		
+		//					// Check world split
+		//					getConfig(player.getWorld()).checkSplit(player);
+		//				}
+
+		// Check regions
+		if(currentRegion != toRegion){
+			if(currentRegion != null){
+				currentRegion.alertExit(player);
+			}
+			if(toRegion != null){
+				toRegion.alertEntry(player);
+			}
+		}
 	}
 
 	// ################# Player Craft Item Event
@@ -1967,17 +1931,16 @@ public class ASListener implements Listener {
 				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())){
 					type = AlertType.LEGAL;
 				}
-				//				ASRegion region = plugin.getRegionManager().getRegion(player.getLocation());
-				//				if(region != null){
-				//					if(!region.getConfig().isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
-				//						type = AlertType.LEGAL;
-				//					}
-				//				}else{
-				// TODO: Regions
-				if(getConfig(player.getWorld()).isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
-					type = AlertType.LEGAL;
+				Region region = plugin.getRegionManager().getRegion(player.getLocation());
+				if(region != null){
+					if(!region.getConfig().isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
+						type = AlertType.LEGAL;
+					}
+				}else{
+					if(getConfig(player.getWorld()).isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
+						type = AlertType.LEGAL;
+					}
 				}
-				//				}
 			}else{
 				type = AlertType.LEGAL;
 			}
@@ -2006,17 +1969,16 @@ public class ASListener implements Listener {
 
 		// Right click list
 		// Check if they should be blocked
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(event.getPotion().getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isThrownPotionAllowed()){
-		//				type = AlertType.ILLEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
-			type = AlertType.ILLEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(event.getPotion().getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isThrownPotionAllowed()){
+				type = AlertType.ILLEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
+				type = AlertType.ILLEGAL;
+			}
 		}
-		//		}
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), Material.POTION)
 				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), Material.POTION)){
 			type = AlertType.LEGAL;
@@ -2065,17 +2027,16 @@ public class ASListener implements Listener {
 
 		// Right click list
 		// Check if they should be blocked
-		// TODO: Regions
-		//		ASRegion asregion = plugin.getRegionManager().getRegion(event.getEntity().getLocation());
-		//		if(asregion != null){
-		//			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
-		//				type = AlertType.ILLEGAL;
-		//			}
-		//		}else{
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
-			type = AlertType.ILLEGAL;
+		Region asregion = plugin.getRegionManager().getRegion(event.getEntity().getLocation());
+		if(asregion != null){
+			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
+				type = AlertType.ILLEGAL;
+			}
+		}else{
+			if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
+				type = AlertType.ILLEGAL;
+			}
 		}
-		//		}
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)
 				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
