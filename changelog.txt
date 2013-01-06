@@ -20,3 +20,9 @@ NOTES:
 
 === REGIONS ARE DISABLED IN CODE ===
     Look for "TODO: Regions" for commented parts where regions used to be
+    
+Work left with regions:
+- Add region manager
+- Re-integrate into events
+- Re-integrate into API
+- Re-integrate into commands
