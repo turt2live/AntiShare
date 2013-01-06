@@ -1,9 +1,16 @@
 package com.turt2live.antishare.regions;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-public class Cuboid {
+import com.turt2live.antishare.AntiShare;
+
+public class Cuboid implements Cloneable, ConfigurationSerializable {
 
 	private Location minimum, maximum;
 
@@ -14,8 +21,8 @@ public class Cuboid {
 	 * @param l2 the second location
 	 */
 	public Cuboid(Location l1, Location l2){
-		this.minimum = l1;
-		this.maximum = l2;
+		this.minimum = l1.clone();
+		this.maximum = l2.clone();
 		calculate();
 	}
 
@@ -65,7 +72,7 @@ public class Cuboid {
 	 * @return the smallest coordinate
 	 */
 	public Location getMinimumPoint(){
-		return minimum;
+		return minimum.clone();
 	}
 
 	/**
@@ -74,7 +81,7 @@ public class Cuboid {
 	 * @return the largest coordinate
 	 */
 	public Location getMaximumPoint(){
-		return maximum;
+		return maximum.clone();
 	}
 
 	/**
@@ -84,9 +91,21 @@ public class Cuboid {
 	 * @param l2 the second point
 	 */
 	public void setPoints(Location l1, Location l2){
-		this.minimum = l1;
-		this.maximum = l2;
+		this.minimum = l1.clone();
+		this.maximum = l2.clone();
 		calculate();
+	}
+
+	/**
+	 * Gets the volume of the region
+	 * 
+	 * @return the volume
+	 */
+	public int getVolume(){
+		int w = maximum.getBlockX() - minimum.getBlockX();
+		int d = maximum.getBlockZ() - minimum.getBlockZ();
+		int h = maximum.getBlockY() - minimum.getBlockY();
+		return w * d * h;
 	}
 
 	private void calculate(){
@@ -103,6 +122,36 @@ public class Cuboid {
 		maz = minimum.getBlockZ() > maximum.getBlockZ() ? minimum.getBlockZ() : maximum.getBlockZ();
 		minimum = new Location(world, mix, miy, miz);
 		maximum = new Location(world, max, may, maz);
+	}
+
+	public static Cuboid deserialize(Map<String, Object> map){
+		String world = (String) map.get("world");
+		int mix = (Integer) map.get("minimum X"), miy = (Integer) map.get("minimum Y"), miz = (Integer) map.get("minimum Z"), max = (Integer) map.get("maximum X"), may = (Integer) map.get("maximum Y"), maz = (Integer) map.get("maximum Z");
+		World matching = AntiShare.getInstance().getServer().getWorld(world);
+		if(matching == null){
+			throw new IllegalArgumentException("World not found: " + world);
+		}
+		Location mi = new Location(matching, mix, miy, miz);
+		Location ma = new Location(matching, max, may, maz);
+		return new Cuboid(mi, ma);
+	}
+
+	@Override
+	public Map<String, Object> serialize(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("world", maximum.getWorld().getName());
+		map.put("minimum X", minimum.getBlockX());
+		map.put("minimum Y", minimum.getBlockY());
+		map.put("minimum Z", minimum.getBlockZ());
+		map.put("maximum X", maximum.getBlockX());
+		map.put("maximum Y", maximum.getBlockY());
+		map.put("maximum Z", maximum.getBlockZ());
+		return Collections.unmodifiableMap(map);
+	}
+
+	@Override
+	public Cuboid clone(){
+		return new Cuboid(minimum.clone(), maximum.clone());
 	}
 
 }
