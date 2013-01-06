@@ -28,13 +28,13 @@ import com.turt2live.antishare.util.ASUtils;
 public class Region {
 
 	private static AntiShare plugin = AntiShare.getInstance();
-	private String worldName, owner, id, enterMessage, exitMessage, name;
-	private Cuboid size;
-	private boolean showEnterMessage, showExitMessage;
-	private ASInventory inventory;
+	private String worldName = "antishare", owner = "antishare", id = "-1", enterMessage = "You entered {name}!", exitMessage = "You left {name}!", name = "AntiShareRegion";
+	private Cuboid size = new Cuboid();
+	private boolean showEnterMessage = true, showExitMessage = true;
+	private ASInventory inventory = null;
 	private Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
-	private RegionConfiguration config;
-	private GameMode gamemode;
+	private RegionConfiguration config = new RegionConfiguration(this);
+	private GameMode gamemode = GameMode.CREATIVE;
 
 	public static final File REGION_CONFIGURATIONS = new File(plugin.getDataFolder(), "region_configurations");
 	public static final File REGION_INFORMATION = new File(plugin.getDataFolder(), "data" + File.separator + "regions");
@@ -164,7 +164,7 @@ public class Region {
 	 */
 	public void setWorld(World world){
 		this.worldName = world.getName();
-		size.update(world);
+		size.setWorld(world);
 	}
 
 	/**
@@ -454,7 +454,7 @@ public class Region {
 		yaml.load();
 		yaml.set("name", getName());
 		yaml.set("id", getID());
-		yaml.set("cuboid", getCuboid().serialize());
+		yaml.set("cuboid", getCuboid());
 		yaml.set("owner", getOwner());
 		yaml.set("gamemode", getGameMode().name());
 		yaml.set("showEnter", isEnterMessageShown());
@@ -494,9 +494,8 @@ public class Region {
 		if(yaml.getInt("version", 0) == REGION_VERSION){
 			List<String> players = yaml.getStringList("players");
 			region.populatePlayers(players);
-			@SuppressWarnings ("unchecked")
-			Map<String, Object> cuboid = (Map<String, Object>) yaml.get("cuboid");
-			Cuboid area = Cuboid.deserialize(cuboid);
+
+			Cuboid area = (Cuboid) yaml.get("cuboid");
 			region.setCuboid(area);
 		}else{
 			double mix = yaml.getDouble("mi-x"), miy = yaml.getDouble("mi-y"), miz = yaml.getDouble("mi-z");
@@ -542,6 +541,30 @@ public class Region {
 		playerInfo.load();
 		for(String key : playerInfo.getKeys(false)){
 			region.gamemodes.put(key, GameMode.valueOf(playerInfo.getString(key)));
+		}
+	}
+
+	void onCreate(){
+		World world = plugin.getServer().getWorld(getWorldName());
+		List<Player> players = world.getPlayers();
+		if(players != null){
+			for(Player player : players){
+				if(size.isContained(player.getLocation())){
+					alertEntry(player);
+				}
+			}
+		}
+	}
+
+	void onDelete(){
+		World world = plugin.getServer().getWorld(getWorldName());
+		List<Player> players = world.getPlayers();
+		if(players != null){
+			for(Player player : players){
+				if(size.isContained(player.getLocation())){
+					alertExit(player);
+				}
+			}
 		}
 	}
 

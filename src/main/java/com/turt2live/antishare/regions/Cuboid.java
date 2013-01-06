@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -13,6 +14,7 @@ import com.turt2live.antishare.AntiShare;
 public class Cuboid implements Cloneable, ConfigurationSerializable {
 
 	private Location minimum, maximum;
+	private String worldName;
 
 	/**
 	 * Creates a new cuboid
@@ -27,12 +29,20 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	}
 
 	/**
+	 * Creates a blank Cuboid
+	 */
+	public Cuboid(){}
+
+	/**
 	 * Determines if a location is inside this cuboid
 	 * 
 	 * @param l the location to test
 	 * @return true if contained
 	 */
 	public boolean isContained(Location l){
+		if(!valid()){
+			return false;
+		}
 		if(l.getWorld().getName().equals(minimum.getWorld().getName())){
 			if((l.getBlockX() >= minimum.getBlockX() && l.getBlockX() <= maximum.getBlockX())
 					&& (l.getBlockY() >= minimum.getBlockY() && l.getBlockY() <= maximum.getBlockY())
@@ -50,6 +60,9 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return true if overlapping
 	 */
 	public boolean isOverlapping(Cuboid cuboid){
+		if(!valid()){
+			return false;
+		}
 		// Thanks to Sleaker for letting me use this code :D
 		// Modified from: https://github.com/MilkBowl/LocalShops/blob/master/src/net/milkbowl/localshops/ShopManager.java#L216
 		if(cuboid.getMaximumPoint().getBlockX() < getMinimumPoint().getBlockX()
@@ -72,6 +85,9 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the smallest coordinate
 	 */
 	public Location getMinimumPoint(){
+		if(!valid()){
+			return null;
+		}
 		return minimum.clone();
 	}
 
@@ -81,6 +97,9 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the largest coordinate
 	 */
 	public Location getMaximumPoint(){
+		if(!valid()){
+			return null;
+		}
 		return maximum.clone();
 	}
 
@@ -93,6 +112,10 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	public void setPoints(Location l1, Location l2){
 		this.minimum = l1.clone();
 		this.maximum = l2.clone();
+		if(this.worldName == null){
+			worldName = l1.getWorld().getName();
+		}
+		setWorld(getWorld());
 		calculate();
 	}
 
@@ -102,6 +125,9 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the volume
 	 */
 	public int getVolume(){
+		if(!valid()){
+			return 0;
+		}
 		int w = maximum.getBlockX() - minimum.getBlockX();
 		int d = maximum.getBlockZ() - minimum.getBlockZ();
 		int h = maximum.getBlockY() - minimum.getBlockY();
@@ -113,7 +139,11 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @param world the new world
 	 */
-	public void update(World world){
+	public void setWorld(World world){
+		this.worldName = world.getName();
+		if(!valid()){
+			return;
+		}
 		minimum.setWorld(world);
 		maximum.setWorld(world);
 	}
@@ -124,7 +154,16 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the world applied
 	 */
 	public World getWorld(){
-		return minimum.getWorld();
+		return Bukkit.getWorld(worldName);
+	}
+
+	/**
+	 * Determines if this cuboid is valid
+	 * 
+	 * @return true if valid
+	 */
+	public boolean valid(){
+		return minimum != null && maximum != null && worldName != null;
 	}
 
 	private void calculate(){
@@ -132,7 +171,8 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		if(!minimum.getWorld().getName().equals(maximum.getWorld().getName())){
 			throw new IllegalArgumentException("Worlds not equal.");
 		}
-		World world = minimum.getWorld();
+		this.worldName = minimum.getWorld().getName();
+		World world = getWorld();
 		mix = minimum.getBlockX() < maximum.getBlockX() ? minimum.getBlockX() : maximum.getBlockX();
 		miy = minimum.getBlockY() < maximum.getBlockY() ? minimum.getBlockY() : maximum.getBlockY();
 		miz = minimum.getBlockZ() < maximum.getBlockZ() ? minimum.getBlockZ() : maximum.getBlockZ();
@@ -158,7 +198,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	@Override
 	public Map<String, Object> serialize(){
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("world", maximum.getWorld().getName());
+		map.put("world", worldName);
 		map.put("minimum X", minimum.getBlockX());
 		map.put("minimum Y", minimum.getBlockY());
 		map.put("minimum Z", minimum.getBlockZ());
@@ -170,6 +210,9 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 
 	@Override
 	public Cuboid clone(){
+		if(!valid()){
+			return new Cuboid();
+		}
 		return new Cuboid(minimum.clone(), maximum.clone());
 	}
 
