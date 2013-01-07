@@ -16,8 +16,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -324,71 +322,31 @@ public class ASInventory implements Cloneable {
 		if(!AntiShare.getInstance().getConfig().getBoolean("handled-actions.gamemode-inventories")){
 			return;
 		}
+		// Setup
+		File dir = new File(plugin.getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
+		dir.mkdirs();
+		File saveFile = new File(dir, inventoryName + ".yml");
+		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, plugin);
+		file.load();
 
-		// Save
-		if(plugin.useSQL()){
-			// SQL save
-
-			// Loop
-			for(Integer slot : inventory.keySet()){
-				plugin.getSQL().update("DELETE FROM `" + SQL.INVENTORIES_TABLE + "` WHERE `type`='" + type.name() + "' AND `name`='" + inventoryName + "' AND `gamemode`='" + gamemode.name() + "' AND `world`='" + world.getName() + "' AND `slot`='" + slot + "'");
-
-				// Don't save AIR
-				ItemStack item = inventory.get(slot);
-				if(item == null || item.getType() == Material.AIR){
-					continue;
-				}
-
-				// Setup
-				int itemID = item.getTypeId();
-				String itemName = item.getType().name();
-				int itemDurability = item.getDurability();
-				int itemAmount = item.getAmount();
-				int itemData = item.getData().getData();
-
-				// Setup enchants
-				String enchant = "";
-				Set<Enchantment> enchantsSet = item.getEnchantments().keySet();
-				Map<Enchantment, Integer> enchantsMap = item.getEnchantments();
-				for(Enchantment e : enchantsSet){
-					enchant = enchant + e.getId() + "|" + enchantsMap.get(e) + " ";
-				}
-				if(enchant.length() > 0){
-					enchant = enchant.substring(0, enchant.length() - 1);
-				}
-
-				// Save
-				plugin.getSQL().update("INSERT INTO `" + SQL.INVENTORIES_TABLE + "` (`type`, `name`, `gamemode`, `world`, `slot`, `itemID`, `itemName`, `itemDurability`, `itemAmount`, `itemData`, `itemEnchant`) VALUES ('" + type.name() + "', '" + inventoryName + "', '" + gamemode.name() + "', '" + world.getName() + "', '" + slot + "', '" + itemID + "', '" + itemName + "', '" + itemDurability + "', '" + itemAmount + "', '" + itemData + "', '" + enchant + "')");
+		// Save data
+		// Structure: yml:world.gamemode.slot.properties
+		for(Integer slot : inventory.keySet()){
+			if(inventory.get(slot) == null){
+				continue;
 			}
-		}else{
-			// Flat-File (YAML) save
 
-			// Setup
-			File dir = new File(plugin.getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
-			dir.mkdirs();
-			File saveFile = new File(dir, inventoryName + ".yml");
-			EnhancedConfiguration file = new EnhancedConfiguration(saveFile, plugin);
-			file.load();
-
-			// Save data
-			// Structure: yml:world.gamemode.slot.properties
-			for(Integer slot : inventory.keySet()){
-				if(inventory.get(slot) == null){
-					continue;
-				}
-
-				// Don't save AIR
-				ItemStack item = inventory.get(slot);
-				if(item.getType() == Material.AIR){
-					file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), null);
-					continue;
-				}
-
-				// Save item
-				file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), item);
+			// Don't save AIR
+			ItemStack item = inventory.get(slot);
+			if(item.getType() == Material.AIR){
+				file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), null);
+				continue;
 			}
-			file.save();
+
+			// Save item
+			file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), item);
 		}
+		file.save();
 	}
 
 	/**
