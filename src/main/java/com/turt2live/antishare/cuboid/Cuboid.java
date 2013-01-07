@@ -1,4 +1,4 @@
-package com.turt2live.antishare.regions;
+package com.turt2live.antishare.cuboid;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.cuboid.CuboidManager.CuboidPoint;
 
 public class Cuboid implements Cloneable, ConfigurationSerializable {
 
@@ -40,7 +41,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return true if contained
 	 */
 	public boolean isContained(Location l){
-		if(!valid()){
+		if(!isValid()){
 			return false;
 		}
 		if(l.getWorld().getName().equals(minimum.getWorld().getName())){
@@ -60,7 +61,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return true if overlapping
 	 */
 	public boolean isOverlapping(Cuboid cuboid){
-		if(!valid()){
+		if(!isValid()){
 			return false;
 		}
 		// Thanks to Sleaker for letting me use this code :D
@@ -85,10 +86,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the smallest coordinate
 	 */
 	public Location getMinimumPoint(){
-		if(!valid()){
-			return null;
-		}
-		return minimum.clone();
+		return minimum == null ? null : minimum.clone();
 	}
 
 	/**
@@ -97,10 +95,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the largest coordinate
 	 */
 	public Location getMaximumPoint(){
-		if(!valid()){
-			return null;
-		}
-		return maximum.clone();
+		return maximum == null ? null : maximum.clone();
 	}
 
 	/**
@@ -110,10 +105,10 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @param l2 the second point
 	 */
 	public void setPoints(Location l1, Location l2){
-		this.minimum = l1.clone();
-		this.maximum = l2.clone();
-		if(this.worldName == null){
-			worldName = l1.getWorld().getName();
+		this.minimum = l1 != null ? l1.clone() : null;
+		this.maximum = l2 != null ? l2.clone() : null;
+		if(this.worldName == null && (l1 != null || l2 != null)){
+			worldName = (l1 != null ? l1 : l2).getWorld().getName();
 		}
 		setWorld(getWorld());
 		calculate();
@@ -125,13 +120,13 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the volume
 	 */
 	public int getVolume(){
-		if(!valid()){
+		if(!isValid()){
 			return 0;
 		}
 		int w = maximum.getBlockX() - minimum.getBlockX();
 		int d = maximum.getBlockZ() - minimum.getBlockZ();
 		int h = maximum.getBlockY() - minimum.getBlockY();
-		return w * d * h;
+		return (w <= 0 ? 1 : w) * (d <= 0 ? 1 : d) * (h <= 0 ? 1 : h);
 	}
 
 	/**
@@ -141,11 +136,33 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 */
 	public void setWorld(World world){
 		this.worldName = world.getName();
-		if(!valid()){
+		if(!isValid()){
 			return;
 		}
 		minimum.setWorld(world);
 		maximum.setWorld(world);
+	}
+
+	/**
+	 * Sets a specific point in this cuboid
+	 * 
+	 * @param point the point
+	 * @param value the value
+	 */
+	public void setPoint(CuboidPoint point, Location value){
+		switch (point){
+		case POINT1:
+			this.maximum = value.clone();
+			break;
+		case POINT2:
+			this.minimum = value.clone();
+			break;
+		}
+		System.out.println(maximum + " " + minimum);
+		if(!isValid()){
+			return;
+		}
+		calculate();
 	}
 
 	/**
@@ -162,11 +179,14 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @return true if valid
 	 */
-	public boolean valid(){
+	public boolean isValid(){
 		return minimum != null && maximum != null && worldName != null;
 	}
 
 	private void calculate(){
+		if(!isValid()){
+			return;
+		}
 		int mix = 0, miy = 0, miz = 0, max = 0, may = 0, maz = 0;
 		if(!minimum.getWorld().getName().equals(maximum.getWorld().getName())){
 			throw new IllegalArgumentException("Worlds not equal.");
@@ -210,10 +230,12 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 
 	@Override
 	public Cuboid clone(){
-		if(!valid()){
-			return new Cuboid();
+		Cuboid cuboid = new Cuboid();
+		cuboid.setPoints(minimum != null ? minimum.clone() : null, maximum != null ? maximum.clone() : null);
+		if(worldName != null){
+			cuboid.setWorld(Bukkit.getWorld(worldName));
 		}
-		return new Cuboid(minimum.clone(), maximum.clone());
+		return cuboid;
 	}
 
 }

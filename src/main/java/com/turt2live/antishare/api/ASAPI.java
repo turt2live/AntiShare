@@ -15,7 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.regions.Cuboid;
+import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 

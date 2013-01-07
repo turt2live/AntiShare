@@ -24,14 +24,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.antishare.regions.Cuboid;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.tekkitcompat.CommandBlockLayer;
@@ -45,7 +44,6 @@ import com.turt2live.antishare.util.ASUtils;
  */
 public class CommandHandler implements CommandExecutor {
 
-	@SuppressWarnings ("deprecation")
 	@Override
 	public boolean onCommand(final CommandSender sender, Command command, String label, String[] args){
 		AntiShare plugin = AntiShare.getInstance();
@@ -183,14 +181,13 @@ public class CommandHandler implements CommandExecutor {
 								GameMode gamemode = ASUtils.getGameMode(args[1]);
 								if(gamemode != null){
 									if(!plugin.getRegionManager().isRegionNameTaken(regionName)){
-										// TODO: Add actual cuboid manager
-										Cuboid cuboid = new Cuboid();
-										cuboid.setWorld(player.getWorld());
-										Location add10 = player.getLocation();
-										add10 = add10.add(10, 10, 10);
-										cuboid.setPoints(player.getLocation(), add10);
-										plugin.getRegionManager().addRegion(cuboid, player.getName(), regionName, gamemode);
-										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region created", true);
+										if(plugin.getCuboidManager().isCuboidComplete(player.getName())){
+											Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
+											plugin.getRegionManager().addRegion(cuboid, player.getName(), regionName, gamemode);
+											ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region created", true);
+										}else{
+											ASUtils.sendToPlayer(sender, ChatColor.RED + "You need to use the Cuboid tool to create a cuboid.", true);
+										}
 									}else{
 										ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name already in use!", true);
 									}
@@ -381,12 +378,10 @@ public class CommandHandler implements CommandExecutor {
 							// Check inventory
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 								if(inventory.contains(AntiShare.ANTISHARE_TOOL)){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + AntiShare.ANTISHARE_TOOL.name().toLowerCase().replace("_", " ") + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
 								}else{
-									// Add the tool
-									inventory.addItem(new ItemStack(AntiShare.ANTISHARE_TOOL));
-									player.updateInventory();
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + AntiShare.ANTISHARE_TOOL.name().toLowerCase().replace("_", " ") + ")", true);
+									ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player);
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
 								}
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!", true);
@@ -466,6 +461,74 @@ public class CommandHandler implements CommandExecutor {
 						}
 					}else{
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("cuboid")){
+					if(!plugin.getPermissions().has(sender, PermissionNodes.CREATE_CUBOID)){
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
+						return true;
+					}
+					if(args.length > 1){
+						if(args[1].equalsIgnoreCase("clear")){
+							if(plugin.getCuboidManager().isCuboidComplete(sender.getName())){
+								plugin.getCuboidManager().removeCuboid(sender.getName());
+								ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Your cuboid save was removed.", true);
+							}else{
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "You have no saved cuboid!", true);
+							}
+						}else if(args[1].equalsIgnoreCase("tool")){
+							if(!(sender instanceof Player)){
+								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You must be a player to use the tool!", true);
+							}else{
+								// Setup
+								Player player = (Player) sender;
+								PlayerInventory inventory = player.getInventory();
+
+								// Check inventory
+								if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
+									if(inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the cuboid tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
+									}else{
+										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player);
+										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the cuboid tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
+									}
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!", true);
+								}
+							}
+						}else if(args[1].equalsIgnoreCase("status")){
+							Cuboid cuboid = plugin.getCuboidManager().getCuboid(sender.getName());
+							if(cuboid == null){
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "No saved cuboid", false);
+							}else{
+								Location min = cuboid.getMinimumPoint();
+								Location max = cuboid.getMaximumPoint();
+								if(min != null){
+									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "Point A: " + ChatColor.YELLOW + "("
+											+ min.getBlockX() + ", "
+											+ min.getBlockY() + ", "
+											+ min.getBlockZ() + ", "
+											+ min.getWorld().getName()
+											+ ")", false);
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "Point A: " + ChatColor.YELLOW + "Not set", false);
+								}
+								if(max != null){
+									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "Point B: " + ChatColor.YELLOW + "("
+											+ max.getBlockX() + ", "
+											+ max.getBlockY() + ", "
+											+ max.getBlockZ() + ", "
+											+ max.getWorld().getName()
+											+ ")", false);
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "Point B: " + ChatColor.YELLOW + "Not set", false);
+								}
+							}
+						}else{
+							ASUtils.sendToPlayer(sender, ChatColor.RED + "Unknown argument. Try /as cuboid <clear | tool | status>", true);
+						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.RED + "Unknown argument. Try /as cuboid <clear | tool | status>", true);
 					}
 					return true;
 				}else{

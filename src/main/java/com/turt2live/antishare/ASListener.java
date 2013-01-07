@@ -82,6 +82,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import com.turt2live.antishare.cuboid.CuboidManager.CuboidPoint;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -2097,6 +2098,46 @@ public class ASListener implements Listener {
 					event.blockList().remove(i);
 				}
 				plugin.getBlockManager().removeBlock(block);
+			}
+		}
+	}
+
+	// ################# Player Interact Event (2)
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onInteract2(PlayerInteractEvent event){
+		if(event.isCancelled()){
+			return;
+		}
+		Player player = event.getPlayer();
+		if(plugin.getPermissions().has(player, PermissionNodes.CREATE_CUBOID, player.getWorld())){
+			ItemStack item = player.getItemInHand();
+			if(item != null){
+				if(item.getType() == AntiShare.ANTISHARE_CUBOID_TOOL){
+					CuboidPoint point = null;
+					switch (event.getAction()){
+					case RIGHT_CLICK_BLOCK:
+						point = CuboidPoint.POINT2;
+						break;
+					case LEFT_CLICK_BLOCK:
+						point = CuboidPoint.POINT1;
+						break;
+					default:
+						break;
+					}
+					if(point != null){
+						Location location = event.getClickedBlock().getLocation();
+						plugin.getCuboidManager().updateCuboid(player.getName(), point, location);
+						ASUtils.sendToPlayer(player, ChatColor.GREEN + "Point " + (point == CuboidPoint.POINT1 ? "1" : "2")
+								+ " set as ("
+								+ location.getBlockX() + ", "
+								+ location.getBlockY() + ", "
+								+ location.getBlockZ() + ", "
+								+ location.getWorld().getName()
+								+ "). Volume = " + plugin.getCuboidManager().getCuboid(player.getName()).getVolume(), true);
+						event.setCancelled(plugin.shouldCancel(player, true));
+					}
+				}
 			}
 		}
 	}

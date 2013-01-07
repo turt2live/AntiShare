@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
@@ -186,10 +187,12 @@ public class RegionManager {
 	public void addRegion(Cuboid cuboid, String owner, String name, GameMode gamemode){
 		Region region = new Region();
 		region.setCuboid(cuboid);
+		region.setWorld(cuboid.getWorld());
 		region.setOwner(owner);
 		region.setName(name);
 		region.setGameMode(gamemode);
 		region.setConfig(new RegionConfiguration(region));
+		region.setID(String.valueOf(System.nanoTime()));
 		Set<Region> regions = new HashSet<Region>();
 		if(this.regions.containsKey(cuboid.getWorld().getName())){
 			regions.addAll(this.regions.get(cuboid.getWorld().getName()));
@@ -284,6 +287,7 @@ public class RegionManager {
 	 */
 	public void updateRegion(Region region, RegionKeyType key, String value, CommandSender sender){
 		boolean changed = false;
+		Cuboid last = region.getCuboid(); // Pre-cloned
 		switch (key){
 		case NAME:
 			if(AntiShare.getInstance().getRegionManager().isRegionNameTaken(value)){
@@ -330,14 +334,13 @@ public class RegionManager {
 				break;
 			}
 			Player player = (Player) sender;
-			// TODO: Add actual cuboid manager
-			Cuboid cuboid = new Cuboid();
-			cuboid.setWorld(player.getWorld());
-			Location add10 = player.getLocation();
-			add10 = add10.add(10, 10, 10);
-			cuboid.setPoints(player.getLocation(), add10);
-			region.setCuboid(cuboid);
-			changed = true;
+			if(plugin.getCuboidManager().isCuboidComplete(player.getName())){
+				Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
+				region.setCuboid(cuboid);
+				changed = true;
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "You need to use the Cuboid tool to create a cuboid.", true);
+			}
 			break;
 		case GAMEMODE:
 			if(value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")){
@@ -362,6 +365,7 @@ public class RegionManager {
 			break;
 		}
 		if(changed){
+			region.onUpdate(last);
 			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region saved.", true);
 		}
 	}

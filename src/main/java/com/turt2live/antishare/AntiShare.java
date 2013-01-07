@@ -29,6 +29,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.compatibility.HookManager;
+import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
@@ -63,6 +64,10 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public static final Material ANTISHARE_TOOL = Material.BLAZE_ROD;
 	/**
+	 * AntiShare tool for creating cuboids
+	 */
+	public static final Material ANTISHARE_CUBOID_TOOL = Material.SLIME_BALL;
+	/**
 	 * Used for debug stuff
 	 */
 	public static final Material ANTISHARE_DEBUG_TOOL = Material.BONE;
@@ -85,6 +90,7 @@ public class AntiShare extends PluginWrapper {
 	private MoneyManager tender;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private HookManager hooks;
+	private CuboidManager cuboids;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -237,6 +243,10 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info("Starting inventory manager...");
 		}
 		inventories = new InventoryManager();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting cuboid manager...");
+		}
+		cuboids = new CuboidManager();
 
 		// Convert blocks
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
@@ -397,6 +407,12 @@ public class AntiShare extends PluginWrapper {
 			}
 			sql.disconnect();
 		}
+		if(cuboids != null){
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Saving cuboid information...");
+			}
+			cuboids.save();
+		}
 
 		// Disable
 		getServer().getScheduler().cancelTasks(this);
@@ -417,6 +433,7 @@ public class AntiShare extends PluginWrapper {
 		signs = null;
 		tender = null;
 		hooks = null;
+		cuboids = null;
 
 		// Save disabled SimpleNotice users
 		try{
@@ -449,10 +466,10 @@ public class AntiShare extends PluginWrapper {
 		if(sql != null){
 			sql.reconnect();
 		}
+		cuboids.reload();
 		// Metrics has no reload
 		// Tracker List has no reload
 		// Simple Notice has no reload
-		// xMail has no reload
 	}
 
 	/**
@@ -816,6 +833,15 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public HookManager getHookManager(){
 		return hooks;
+	}
+
+	/**
+	 * Gets the cuboid manager in use by AntiShare
+	 * 
+	 * @return the cuboid manager
+	 */
+	public CuboidManager getCuboidManager(){
+		return cuboids;
 	}
 
 	/**

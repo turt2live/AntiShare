@@ -55,6 +55,7 @@ public class PermissionNodes {
 	public static final String NO_GM_CD = "AntiShare.cooldownbypass";
 	public static final String CHECK = "AntiShare.check";
 	public static final String ITEM_FRAMES = "AntiShare.itemframes";
+	public static final String CREATE_CUBOID = "AntiShare.cuboid";
 
 	// General Nodes
 	public static final String AFFECT_SURVIVAL = "AntiShare.affect.survival";

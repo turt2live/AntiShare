@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
@@ -478,6 +479,7 @@ public class Region {
 		AntiShare plugin = AntiShare.getInstance();
 		EnhancedConfiguration yaml = new EnhancedConfiguration(saveFile, plugin);
 		yaml.load();
+		region.setName(yaml.getString("name"));
 		World world = plugin.getServer().getWorld(yaml.getString("worldName"));
 		if(world == null){
 			plugin.getLogger().warning("Failed to load world for region '" + region.getName() + "' (world name='" + yaml.getString("worldName") + "')");
@@ -505,6 +507,9 @@ public class Region {
 			Cuboid cuboid = new Cuboid(l1, l2);
 			region.setCuboid(cuboid);
 			loadLegacyPlayerInformation(region);
+		}
+		if(region.getID().equalsIgnoreCase("-1")){
+			region.setID(String.valueOf(System.nanoTime()));
 		}
 		return region;
 	}
@@ -551,6 +556,20 @@ public class Region {
 			for(Player player : players){
 				if(size.isContained(player.getLocation())){
 					alertEntry(player);
+				}
+			}
+		}
+	}
+
+	void onUpdate(Cuboid last){
+		World world = plugin.getServer().getWorld(getWorldName());
+		List<Player> players = world.getPlayers();
+		if(players != null){
+			for(Player player : players){
+				if(size.isContained(player.getLocation()) && !last.isContained(player.getLocation())){
+					alertEntry(player);
+				}else if(last.isContained(player.getLocation()) && !size.isContained(player.getLocation())){
+					alertExit(player);
 				}
 			}
 		}

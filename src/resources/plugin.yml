@@ -20,6 +20,9 @@ commands:
       /<command> listregions # = List regions found on page #
       /<command> mirror <player> [ender/normal] [gamemode] [world] - Mirror <player>'s inventory
       /<command> tool - Get the AntiShare tool (Blaze Rod)
+      /<command> cuboid tool - Get the Cuboid tool (Slimeball)
+      /<command> cuboid clear - Clear current cuboid save
+      /<command> cuboid status - Show cuboid status
       /<command> money <on/off> - Turns on/off fine/reward messages
       /<command> money status - Tells you if you get fine/reward messages
       /<command> simplenotice - Toggle SimpleNotice support
@@ -50,6 +53,10 @@ permissions:
             AntiShare.cooldownbypass: true
             AntiShare.check: true
             AntiShare.itemframes: true
+            AntiShare.cuboid: true
+    AntiShare.cuboid:
+        description: Allows the target to create cuboids in AntiShare
+        default: op
     AntiShare.itemframes:
         description: Allows the target to add/use items in Item Frames not of their Game Mode
         default: op
