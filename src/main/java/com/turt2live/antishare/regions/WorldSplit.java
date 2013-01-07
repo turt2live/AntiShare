@@ -8,13 +8,12 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.deprecatedregions;
+package com.turt2live.antishare.regions;
 
 import java.util.logging.Level;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
@@ -27,7 +26,6 @@ import com.turt2live.antishare.permissions.PermissionNodes;
  * 
  * @author turt2live
  */
-@Deprecated
 public class WorldSplit {
 
 	/**
@@ -56,7 +54,7 @@ public class WorldSplit {
 		}
 	}
 
-	private World world;
+	private String world;
 	private double split;
 	private Axis axis;
 	private GameMode positive, negative;
@@ -74,7 +72,7 @@ public class WorldSplit {
 	 * @param positive the side for values >split
 	 * @param negative the side for values <split
 	 */
-	public WorldSplit(World world, double split, Axis axis, GameMode positive, GameMode negative){
+	public WorldSplit(String world, double split, Axis axis, GameMode positive, GameMode negative){
 		this.world = world;
 		this.split = split;
 		this.axis = axis;
@@ -176,7 +174,7 @@ public class WorldSplit {
 			// Valid
 		}else{
 			axis = Axis.NONE;
-			plugin.log("Invalid world split for world " + world.getName(), Level.WARNING);
+			plugin.log("Invalid world split for world " + world, Level.WARNING);
 		}
 	}
 }

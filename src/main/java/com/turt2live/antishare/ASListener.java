@@ -1360,19 +1360,18 @@ public class ASListener implements Listener {
 		Region toRegion = plugin.getRegionManager().getRegion(event.getTo());
 
 		// Check split
-		// TODO: WorldSplit
-		//				if(getConfig(player.getWorld()).isSplitActive()){
-		//					getConfig(player.getWorld()).warnSplit(player);
-		//					getConfig(player.getWorld()).checkSplit(player);
-		//				}
-		//
-		//				if(currentRegion == null){
-		//					// Determine alert for World Split
-		//					getConfig(player.getWorld()).warnSplit(player);
-		//		
-		//					// Check world split
-		//					getConfig(player.getWorld()).checkSplit(player);
-		//				}
+		if(getConfig(player.getWorld()).isSplitActive()){
+			getConfig(player.getWorld()).warnSplit(player);
+			getConfig(player.getWorld()).checkSplit(player);
+		}
+
+		if(currentRegion == null){
+			// Determine alert for World Split
+			getConfig(player.getWorld()).warnSplit(player);
+
+			// Check world split
+			getConfig(player.getWorld()).checkSplit(player);
+		}
 
 		// Check regions
 		if(currentRegion != toRegion){
@@ -1895,14 +1894,14 @@ public class ASListener implements Listener {
 			return;
 		}
 
-		// TODO: WorldSplit
-		//				if(currentRegion == null){
-		//					// Determine alert for World Split
-		//					getConfig(player.getWorld()).warnSplit(player);
-		//		
-		//					// Check world split
-		//					getConfig(player.getWorld()).checkSplit(player);
-		//				}
+		// World Split
+		if(currentRegion == null){
+			// Determine alert for World Split
+			getConfig(player.getWorld()).warnSplit(player);
+
+			// Check world split
+			getConfig(player.getWorld()).checkSplit(player);
+		}
 
 		// Check regions
 		if(currentRegion != toRegion){
