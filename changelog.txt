@@ -6,22 +6,10 @@ Since 5.1.3:
     - EXAMPLE: Survival dirt has creative torch, when dirt broken in Survival, torch is broken as if in creative (disappears, no drop)
 - Allow /as mirror to use ender chests, offline players, specific game modes, and specific worlds
 - /as check can now look up players with /as check <player>
+- Updated regions to be more reliable (complete system rewrite)
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
-CONFIRMED bugs:
-- Regions simply don't work in 90% of cases [needs rewrite]
-
 PLANNED features:
 - Update tool logic to place in first slot, move hand
-
-NOTES:
-
-=== REGIONS ARE DISABLED IN CODE ===
-    Look for "TODO: Regions" for commented parts where regions used to be
-    
-Work left with regions:
-- Add region manager
-- Re-integrate into API
-- Re-integrate into commands
