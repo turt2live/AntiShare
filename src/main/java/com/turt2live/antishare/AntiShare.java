@@ -435,6 +435,13 @@ public class AntiShare extends PluginWrapper {
 		hooks = null;
 		cuboids = null;
 
+		// Disable SQL for next time
+		if(getConfig().getBoolean("enabled-features.sql")){
+			getLogger().info("DISABLING SQL for next load. AntiShare has converted your data.");
+			getConfig().set("enabled-features.sql", false);
+			saveConfig();
+		}
+
 		// Save disabled SimpleNotice users
 		try{
 			File snFile = new File(getDataFolder(), "data" + File.separator + "disabled-simplenotice-users.txt");
