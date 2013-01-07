@@ -24,17 +24,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.sk89q</groupId>
-			<artifactId>worldedit</artifactId>
-			<version>5.5-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.bukkit</groupId>
-					<artifactId>bukkit</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
 			<version>1.19.4</version>
@@ -86,10 +75,6 @@
 		<repository>
 			<id>vault</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/project/Vault/LastSuccessful/repository/</url>
-		</repository>
-		<repository>
-			<id>sk89q-repo</id>
-			<url>http://maven.sk89q.com/repo/</url>
 		</repository>
 		<repository>
 			<id>bukkit-repo</id>
