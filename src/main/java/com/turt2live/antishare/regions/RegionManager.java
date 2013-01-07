@@ -7,11 +7,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.util.ASUtils;
 
 public class RegionManager {
@@ -195,6 +201,90 @@ public class RegionManager {
 			}
 		}
 		return returnableRegions;
+	}
+
+	public void updateRegion(Region region, RegionKeyType key, String value, CommandSender sender){
+		boolean changed = false;
+		switch (key){
+		case NAME:
+			if(AntiShare.getInstance().getRegionManager().isRegionNameTaken(value)){
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name '" + value + "' already exists!", true);
+			}else{
+				region.setName(value);
+				changed = true;
+			}
+			break;
+		case ENTER_MESSAGE_SHOW:
+			if(ASUtils.getBoolean(value) != null){
+				region.setShowEnterMessage(ASUtils.getBoolean(value));
+				changed = true;
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?", true);
+			}
+			break;
+		case EXIT_MESSAGE_SHOW:
+			if(ASUtils.getBoolean(value) != null){
+				region.setShowExitMessage(ASUtils.getBoolean(value));
+				changed = true;
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?", true);
+			}
+			break;
+		case INVENTORY:
+			if(value.equalsIgnoreCase("none")){
+				region.setInventory(null);
+				changed = true;
+			}else if(value.equalsIgnoreCase("set")){
+				if(sender instanceof Player){
+					region.setInventory(ASInventory.generate((Player) sender, InventoryType.REGION));
+					changed = true;
+				}else{
+					ASUtils.sendToPlayer(sender, ChatColor.RED + "You can't set an inventory from the console, only clear.", true);
+				}
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown to me, did you mean 'none' or 'set'?", true);
+			}
+			break;
+		case SELECTION_AREA:
+			if(!(sender instanceof Player)){
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, sorry!", true);
+				break;
+			}
+			Player player = (Player) sender;
+			// TODO: Add actual cuboid manager
+			Cuboid cuboid = new Cuboid();
+			cuboid.setWorld(player.getWorld());
+			Location add10 = player.getLocation();
+			add10 = add10.add(10, 10, 10);
+			cuboid.setPoints(player.getLocation(), add10);
+			region.setCuboid(cuboid);
+			changed = true;
+			break;
+		case GAMEMODE:
+			if(value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")){
+				region.setGameMode(GameMode.CREATIVE);
+				changed = true;
+			}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")){
+				region.setGameMode(GameMode.SURVIVAL);
+				changed = true;
+			}else{
+				ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + value + "' is!", true);
+			}
+			break;
+		case ENTER_MESSAGE:
+			region.setEnterMessage(value);
+			changed = true;
+			break;
+		case EXIT_MESSAGE:
+			region.setExitMessage(value);
+			changed = true;
+			break;
+		default:
+			break;
+		}
+		if(changed){
+			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region saved.", true);
+		}
 	}
 
 }

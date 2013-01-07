@@ -15,9 +15,9 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.deprecatedregions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.regions.Cuboid;
 import com.turt2live.antishare.regions.Region;
+import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 
 /**
  * The AntiShare API<br>
@@ -25,7 +25,6 @@ import com.turt2live.antishare.regions.Region;
  * 
  * @author turt2live
  */
-@SuppressWarnings ("deprecation")
 public class ASAPI {
 
 	private AntiShare plugin;
@@ -86,10 +85,8 @@ public class ASAPI {
 	 * @param value the value
 	 * @param target the target editing the region (cannot be null)
 	 */
-	@Deprecated
 	public void editRegion(Region region, RegionKeyType key, String value, CommandSender target){
-		// TODO: Regions
-		//plugin.getRegionFactory().editRegion(region, key, value, target);
+		plugin.getRegionManager().updateRegion(region, key, value, target);
 	}
 
 }
