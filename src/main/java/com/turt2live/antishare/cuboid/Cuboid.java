@@ -158,7 +158,6 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 			this.minimum = value.clone();
 			break;
 		}
-		System.out.println(maximum + " " + minimum);
 		if(!isValid()){
 			return;
 		}
