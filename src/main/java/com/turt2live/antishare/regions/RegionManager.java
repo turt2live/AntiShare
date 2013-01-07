@@ -25,10 +25,18 @@ public class RegionManager {
 	private AntiShare plugin = AntiShare.getInstance();
 	private Map<String, Set<Region>> regions = new HashMap<String, Set<Region>>();
 
+	/**
+	 * Creates a new Region Manager
+	 */
 	public RegionManager(){
 		load();
 	}
 
+	/**
+	 * Loads regions into memory for a specific world name
+	 * 
+	 * @param worldname the world
+	 */
 	public void loadWorld(String worldname){
 		File path = Region.REGION_INFORMATION;
 		if(!path.exists()){
@@ -55,6 +63,9 @@ public class RegionManager {
 		}
 	}
 
+	/**
+	 * Loads all reachable regions into memory
+	 */
 	public void load(){
 		File path = Region.REGION_INFORMATION;
 		if(!path.exists()){
@@ -81,6 +92,9 @@ public class RegionManager {
 		}
 	}
 
+	/**
+	 * Saves all loaded regions to disk, this overwrites (and deletes unloaded regions) any regions in the save folders
+	 */
 	public void save(){
 		ASUtils.wipeFolder(Region.REGION_CONFIGURATIONS);
 		ASUtils.wipeFolder(Region.REGION_INFORMATION);
@@ -93,11 +107,20 @@ public class RegionManager {
 		regions.clear();
 	}
 
+	/**
+	 * Performs a save and a load in sequence
+	 */
 	public void reload(){
 		save();
 		load();
 	}
 
+	/**
+	 * Determines if a location is in a region
+	 * 
+	 * @param location the location
+	 * @return true if contained in a region
+	 */
 	public boolean isRegion(Location location){
 		String worldname = location.getWorld().getName();
 		if(!regions.containsKey(worldname)){
@@ -112,6 +135,12 @@ public class RegionManager {
 		return false;
 	}
 
+	/**
+	 * Gets the region at a location
+	 * 
+	 * @param location the location
+	 * @return the region, or null if not found
+	 */
 	public Region getRegion(Location location){
 		String worldname = location.getWorld().getName();
 		if(!regions.containsKey(worldname)){
@@ -126,6 +155,12 @@ public class RegionManager {
 		return null;
 	}
 
+	/**
+	 * Gets a region by name. Case in-sensitive
+	 * 
+	 * @param name the region name
+	 * @return the region, or null if not found
+	 */
 	public Region getRegion(String name){
 		for(World world : plugin.getServer().getWorlds()){
 			if(regions.containsKey(world.getName())){
@@ -140,6 +175,14 @@ public class RegionManager {
 		return null;
 	}
 
+	/**
+	 * Adds a region to the manager
+	 * 
+	 * @param cuboid the cuboid, this should not overlap other regions (but is not checked here for that)
+	 * @param owner the region owner
+	 * @param name the region name
+	 * @param gamemode the region's Game Mode
+	 */
 	public void addRegion(Cuboid cuboid, String owner, String name, GameMode gamemode){
 		Region region = new Region();
 		region.setCuboid(cuboid);
@@ -156,6 +199,11 @@ public class RegionManager {
 		this.regions.put(cuboid.getWorld().getName(), regions);
 	}
 
+	/**
+	 * Removes a region by name. Case in-senstive
+	 * 
+	 * @param name the region name.
+	 */
 	public void removeRegion(String name){
 		for(World world : plugin.getServer().getWorlds()){
 			if(regions.containsKey(world.getName())){
@@ -173,10 +221,22 @@ public class RegionManager {
 		}
 	}
 
+	/**
+	 * Determines if a region name is in use
+	 * 
+	 * @param name the region name
+	 * @return true if in use
+	 */
 	public boolean isRegionNameTaken(String name){
 		return getRegion(name) != null;
 	}
 
+	/**
+	 * Gets all the regions for a world
+	 * 
+	 * @param world the world
+	 * @return a set of regions, this will NEVER be null
+	 */
 	public Set<Region> getAllRegions(World world){
 		Set<Region> returnableRegions = new HashSet<Region>();
 		if(regions.containsKey(world.getName())){
@@ -185,6 +245,11 @@ public class RegionManager {
 		return returnableRegions;
 	}
 
+	/**
+	 * Gets all the loaded regions
+	 * 
+	 * @return a set of regions, this will NEVER be null
+	 */
 	public Set<Region> getAllRegions(){
 		Set<Region> returnableRegions = new HashSet<Region>();
 		for(World world : plugin.getServer().getWorlds()){
@@ -193,6 +258,12 @@ public class RegionManager {
 		return returnableRegions;
 	}
 
+	/**
+	 * Gets all regions of a specific game mode
+	 * 
+	 * @param gamemode the game mode to search
+	 * @return a set of regions, this will NEVER be null
+	 */
 	public Set<Region> getAllRegions(GameMode gamemode){
 		Set<Region> returnableRegions = new HashSet<Region>();
 		for(Region region : getAllRegions()){
@@ -203,6 +274,14 @@ public class RegionManager {
 		return returnableRegions;
 	}
 
+	/**
+	 * Updates (edits) a region
+	 * 
+	 * @param region the region to edit
+	 * @param key the variable key to change
+	 * @param value the value of the change
+	 * @param sender the command sender applying the change
+	 */
 	public void updateRegion(Region region, RegionKeyType key, String value, CommandSender sender){
 		boolean changed = false;
 		switch (key){
