@@ -39,6 +39,9 @@ public class RegionManager {
 	 * @param worldname the world
 	 */
 	public void loadWorld(String worldname){
+		if(plugin.useSQL()){
+			LegacyRegionLoader.loadSQL(this, worldname);
+		}
 		File path = Region.REGION_INFORMATION;
 		if(!path.exists()){
 			path.mkdirs();
@@ -68,6 +71,9 @@ public class RegionManager {
 	 * Loads all reachable regions into memory
 	 */
 	public void load(){
+		if(plugin.useSQL()){
+			LegacyRegionLoader.loadSQL(this);
+		}
 		File path = Region.REGION_INFORMATION;
 		if(!path.exists()){
 			path.mkdirs();
@@ -200,6 +206,16 @@ public class RegionManager {
 		regions.add(region);
 		region.onCreate();
 		this.regions.put(cuboid.getWorld().getName(), regions);
+	}
+
+	void inject(Region region){
+		Set<Region> regions = new HashSet<Region>();
+		if(this.regions.containsKey(region.getWorldName())){
+			regions.addAll(this.regions.get(region.getWorldName()));
+		}
+		regions.add(region);
+		region.onCreate();
+		this.regions.put(region.getWorldName(), regions);
 	}
 
 	/**
