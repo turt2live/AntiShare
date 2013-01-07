@@ -24,6 +24,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
@@ -512,8 +513,18 @@ public class ASUtils {
 	 */
 	@SuppressWarnings ("deprecation")
 	public static void giveTool(Material tool, Player player){
-		player.getInventory().addItem(new ItemStack(tool));
-		player.updateInventory();
+		Inventory inv = player.getInventory();
+		if(inv.firstEmpty() >= 0){
+			ItemStack original = inv.getItem(0);
+			if(original != null){
+				original = original.clone();
+			}
+			inv.setItem(0, new ItemStack(tool));
+			if(original != null){
+				inv.addItem(original);
+			}
+			player.updateInventory();
+		}
 	}
 
 }
