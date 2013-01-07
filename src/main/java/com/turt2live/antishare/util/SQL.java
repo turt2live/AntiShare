@@ -29,7 +29,6 @@ import com.turt2live.antishare.lib.patpeter.sqllibrary.InvalidConfiguration;
  */
 public class SQL {
 
-	public static final String REGIONS_TABLE = "AS_Regions";
 	public static final String INVENTORIES_TABLE = "AS_Inventories";
 
 	private AntiShare plugin;
@@ -191,25 +190,6 @@ public class SQL {
 					"  `itemEnchant` text NOT NULL," +
 					"  PRIMARY KEY (`id`)" +
 					")");
-			update("CREATE TABLE IF NOT EXISTS `" + REGIONS_TABLE + "` (" +
-					"  `id` int(11) NOT NULL AUTO_INCREMENT," +
-					"  `regionName` varchar(255) NOT NULL," +
-					"  `mix` decimal(25,4) NOT NULL," +
-					"  `miy` decimal(25,4) NOT NULL," +
-					"  `miz` decimal(25,4) NOT NULL," +
-					"  `max` decimal(25,4) NOT NULL," +
-					"  `may` decimal(25,4) NOT NULL," +
-					"  `maz` decimal(25,4) NOT NULL," +
-					"  `creator` varchar(25) NOT NULL," +
-					"  `gamemode` varchar(25) NOT NULL," +
-					"  `showEnter` int(11) NOT NULL," +
-					"  `showExit` int(11) NOT NULL," +
-					"  `world` varchar(100) NOT NULL," +
-					"  `uniqueID` varchar(100) NOT NULL," +
-					"  `enterMessage` varchar(300) NOT NULL," +
-					"  `exitMessage` varchar(300) NOT NULL," +
-					"  PRIMARY KEY (`id`)" +
-					")");
 			break;
 		case SQLITE:
 			update("CREATE TABLE IF NOT EXISTS `" + INVENTORIES_TABLE + "` (" +
@@ -225,25 +205,6 @@ public class SQL {
 					"  `itemAmount` INT," +
 					"  `itemData` INT," +
 					"  `itemEnchant` TEXT," +
-					"  PRIMARY KEY (`id`)" +
-					")");
-			update("CREATE TABLE IF NOT EXISTS `" + REGIONS_TABLE + "` (" +
-					"  `id` INT," +
-					"  `regionName` TEXT," +
-					"  `mix` DECIMAL(25,4)," +
-					"  `miy` DECIMAL(25,4)," +
-					"  `miz` DECIMAL(25,4)," +
-					"  `max` DECIMAL(25,4)," +
-					"  `may` DECIMAL(25,4)," +
-					"  `maz` DECIMAL(25,4)," +
-					"  `creator` TEXT," +
-					"  `gamemode` TEXT," +
-					"  `showEnter` INT," +
-					"  `showExit` INT," +
-					"  `world` TEXT," +
-					"  `uniqueID` TEXT," +
-					"  `enterMessage` TEXT," +
-					"  `exitMessage` TEXT," +
 					"  PRIMARY KEY (`id`)" +
 					")");
 			break;
