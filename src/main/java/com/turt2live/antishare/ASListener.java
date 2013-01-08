@@ -182,6 +182,37 @@ public class ASListener implements Listener {
 		config.remove(world.getName());
 	}
 
+	@EventHandler (priority = EventPriority.LOW)
+	public void onEntityMake(BlockPlaceEvent event){
+		if(event.isCancelled()){
+			return;
+		}
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
+		if(block.getType() == Material.PUMPKIN){
+			Block body1 = block.getRelative(BlockFace.DOWN);
+			Block body2 = body1.getRelative(BlockFace.DOWN);
+			Block arm1 = body1.getRelative(BlockFace.EAST);
+			Block arm2 = body1.getRelative(BlockFace.WEST);
+			Block arm3 = body1.getRelative(BlockFace.NORTH);
+			Block arm4 = body1.getRelative(BlockFace.SOUTH);
+			// TODO: Wither boss detection
+			if(body1.getType() == Material.SNOW_BLOCK && body2.getType() == Material.SNOW_BLOCK){
+				// Is snow golem
+			}else if(body1.getType() == Material.IRON_BLOCK && body2.getType() == Material.IRON_BLOCK){
+				boolean isGolem = false;
+				if(arm1.getType() == Material.IRON_BLOCK && arm2.getType() == Material.IRON_BLOCK){
+					isGolem = true;
+				}else if(arm3.getType() == Material.IRON_BLOCK && arm4.getType() == Material.IRON_BLOCK){
+					isGolem = true;
+				}
+				if(isGolem){
+					// Is iron golem
+				}
+			}
+		}
+	}
+
 	// ################# Block Break
 
 	@EventHandler (priority = EventPriority.LOW)
