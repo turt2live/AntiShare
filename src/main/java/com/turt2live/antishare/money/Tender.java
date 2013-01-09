@@ -40,6 +40,7 @@ public abstract class Tender {
 		COMMAND("actions.command", "Command"),
 		HIT_PLAYER("actions.player-hit-player", "Player Hit Player"),
 		HIT_MOB("actions.player-hit-mob", "Player Hit Mob"),
+		MOB_MAKE("actions.create-mob", "Player Create Mob"),
 		CREATIVE_BLOCK("actions.creative-block-break", "Creative Block Break"),
 		SURVIVAL_BLOCK("actions.survival-block-break", "Survival Block Break"),
 		ADVENTURE_BLOCK("actions.adventure-block-break", "Adventure Block Break");

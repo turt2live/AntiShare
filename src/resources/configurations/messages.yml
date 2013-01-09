@@ -26,5 +26,6 @@ blocked-action:
   command: "You cannot use that command"
   crafting: "You cannot use crafting!"
   attach-block: "You cannot attach that to blocks not of your Game Mode!"
+  create-mob: "You cannot create that mob!"
 world-split:
   close-to-split: "You are near a world split! Prepare for a Game Mode change."

@@ -187,8 +187,17 @@ public class ASListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
+		AlertType type = AlertType.LEGAL;
 		Player player = event.getPlayer();
+		/*
+		 * 0 = None
+		 * 1 = Snow Golem
+		 * 2 = Iron Golem
+		 * 3 = Wither
+		 */
+		int mob = 0;
 		Block block = event.getBlock();
+		// TODO: Wither boss detection
 		if(block.getType() == Material.PUMPKIN){
 			Block body1 = block.getRelative(BlockFace.DOWN);
 			Block body2 = body1.getRelative(BlockFace.DOWN);
@@ -196,9 +205,8 @@ public class ASListener implements Listener {
 			Block arm2 = body1.getRelative(BlockFace.WEST);
 			Block arm3 = body1.getRelative(BlockFace.NORTH);
 			Block arm4 = body1.getRelative(BlockFace.SOUTH);
-			// TODO: Wither boss detection
 			if(body1.getType() == Material.SNOW_BLOCK && body2.getType() == Material.SNOW_BLOCK){
-				// Is snow golem
+				mob = 1;
 			}else if(body1.getType() == Material.IRON_BLOCK && body2.getType() == Material.IRON_BLOCK){
 				boolean isGolem = false;
 				if(arm1.getType() == Material.IRON_BLOCK && arm2.getType() == Material.IRON_BLOCK){
@@ -207,9 +215,47 @@ public class ASListener implements Listener {
 					isGolem = true;
 				}
 				if(isGolem){
-					// Is iron golem
+					mob = 2;
 				}
 			}
+		}else{
+			return; // Not a mob
+		}
+		String mobName = "Unknown";
+		switch (mob){
+		case 1:
+			mobName = "Snow Golem";
+			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-snow-golems")){
+				type = AlertType.LEGAL;
+			}
+			break;
+		case 2:
+			mobName = "Iron Golem";
+			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-iron-golems")){
+				type = AlertType.LEGAL;
+			}
+			break;
+		case 3:
+			mobName = "Wither";
+			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-wither")){
+				type = AlertType.LEGAL;
+			}
+			break;
+		default:
+			type = AlertType.LEGAL;
+			break;
+		}
+		if(plugin.isBlocked(player, PermissionNodes.ALLOW_MOB_CREATION, PermissionNodes.DENY_MOB_CREATION, player.getWorld(), (Material) null)){
+			type = AlertType.ILLEGAL;
+		}
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to create a " : " spawned a ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + mobName;
+		String playerMessage = plugin.getMessage("blocked-action.create-mob");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(block, player, block.getWorld(), TenderType.MOB_MAKE);
+		playerMessage = factory.toString();
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CREATE_MOB);
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(true);
 		}
 	}
 

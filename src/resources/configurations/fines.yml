@@ -124,3 +124,10 @@ actions:
     do-fine: false
     do-reward: false
     give-to: creative
+  create-mob:
+    fine: 0.0
+    reward: 0.0
+    no-money: default
+    do-fine: false
+    do-reward: false
+    give-to: creative

@@ -78,6 +78,11 @@ enabled-features:
     natural-protection-mode: 
         deny: false
         block-drops: false
+  # Mob creation settings for creative players.
+  mob-creation:
+    allow-snow-golems: false
+    allow-iron-golems: false
+    allow-wither: false
 # Cooldown between game mode changes
 gamemode-change-cooldown:
   # On/Off setting

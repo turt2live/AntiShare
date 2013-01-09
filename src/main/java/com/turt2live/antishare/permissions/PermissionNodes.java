@@ -32,6 +32,7 @@ public class PermissionNodes {
 	public static final String ALLOW_COMMANDS = "AntiShare.allow.commands";
 	public static final String ALLOW_COMBAT_PLAYERS = "AntiShare.allow.hit_players";
 	public static final String ALLOW_COMBAT_MOBS = "AntiShare.allow.hit_mobs";
+	public static final String ALLOW_MOB_CREATION = "AntiShare.allow.create";
 
 	// Deny Nodes
 	public static final String DENY_BLOCK_PLACE = "AntiShare.deny.block_place";
@@ -44,6 +45,7 @@ public class PermissionNodes {
 	public static final String DENY_COMMANDS = "AntiShare.deny.commands";
 	public static final String DENY_COMBAT_PLAYERS = "AntiShare.deny.hit_players";
 	public static final String DENY_COMBAT_MOBS = "AntiShare.deny.hit_mobs";
+	public static final String DENY_MOB_CREATION = "AntiShare.deny.create";
 
 	// Admin Nodes
 	public static final String GET_NOTIFICATIONS = "AntiShare.getNotifications";

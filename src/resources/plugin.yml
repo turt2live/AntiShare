@@ -208,6 +208,10 @@ permissions:
             AntiShare.allow.hit_players: true
             AntiShare.allow.hit_mobs: true
             AntiShare.allow.death: true
+            AntiShare.allow.create: true
+    AntiShare.allow.create:
+        description: Allows mob creation
+        default: op
     AntiShare.allow.block_place:
         description: Allows block place
         default: op
@@ -252,6 +256,10 @@ permissions:
             AntiShare.deny.hit_players: true
             AntiShare.deny.hit_mobs: true
             AntiShare.deny.death: true
+            AntiShare.deny.create: true
+    AntiShare.deny.create:
+        description: Denies mob creation
+        default: op
     AntiShare.deny.block_place:
         description: Denies block place
         default: false
