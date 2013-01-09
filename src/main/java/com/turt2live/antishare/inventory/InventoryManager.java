@@ -71,12 +71,16 @@ public class InventoryManager {
 	public void loadPlayer(Player player){
 		// Check archive first
 		File expected = new File(plugin.getDataFolder(), "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player.getName() + ".yml");
+		File archive = new File(plugin.getDataFolder(), "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player.getName() + ".yml");
 		if(!expected.exists()){
 			// Check archive
-			File archive = new File(plugin.getDataFolder(), "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player.getName() + ".yml");
 			if(archive.exists()){
 				// Move file
 				archive.renameTo(expected);
+			}
+		}else{
+			if(archive.exists()){
+				archive.delete(); // Delete archive as the expected exists
 			}
 		}
 

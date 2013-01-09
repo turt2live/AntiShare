@@ -9,7 +9,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -39,6 +41,10 @@ public class SelfCompatibility {
 		private Compat(int byt){
 			BYTE_POS = byt;
 		}
+	}
+
+	private static enum FileType{
+		CONFIG, NOTIFICATIONS, REGION, MESSAGES, WORLD;
 	}
 
 	private static final String COMPAT_NAME = "compat.antishare";
@@ -291,6 +297,78 @@ public class SelfCompatibility {
 				plugin.getLogger().info("Player Inventories Archived/Deleted: " + cleaned);
 			}
 		}
+	}
+
+	/**
+	 * Cleans YAML files
+	 */
+	public static void cleanupYAML(){
+		int cleaned = 0;
+		AntiShare plugin = AntiShare.getInstance();
+		Map<String, FileType> files = new HashMap<String, FileType>();
+		files.put("config.yml", FileType.CONFIG);
+		files.put("messages.yml", FileType.MESSAGES);
+		files.put("notifications.yml", FileType.NOTIFICATIONS);
+		files.put("data" + File.separator + "regions", FileType.REGION);
+		files.put("world_configurations", FileType.WORLD);
+		for(String name : files.keySet()){
+			File file = new File(plugin.getDataFolder(), name);
+			if(file.isDirectory()){
+				cleaned += cleanFolder(file, files.get(name));
+			}else{
+				cleanFile(file, files.get(name));
+				cleaned++;
+			}
+		}
+		if(cleaned > 0){
+			plugin.getLogger().info("Configuration files cleaned: " + cleaned);
+		}
+	}
+
+	private static int cleanFolder(File folder, FileType type){
+		int cleaned = 0;
+		if(folder.listFiles() != null){
+			for(File file : folder.listFiles()){
+				if(file.getName().endsWith(".yml")){
+					cleanFile(file, type);
+					cleaned++;
+				}
+			}
+		}
+		return cleaned;
+	}
+
+	private static void cleanFile(File file, FileType type){
+		AntiShare plugin = AntiShare.getInstance();
+		File temp = new File(plugin.getDataFolder(), "temp");
+		temp.mkdirs();
+		EnhancedConfiguration local = new EnhancedConfiguration(new File(temp, "temp1"), plugin);
+		switch (type){
+		case CONFIG:
+			local.loadDefaults(plugin.getResource("resources/config.yml"));
+			break;
+		case MESSAGES:
+			local.loadDefaults(plugin.getResource("resources/messages.yml"));
+			break;
+		case NOTIFICATIONS:
+			local.loadDefaults(plugin.getResource("resources/notifications.yml"));
+			break;
+		case REGION:
+			local.loadDefaults(plugin.getResource("resources/region.yml"));
+			break;
+		case WORLD:
+			local.loadDefaults(plugin.getResource("resources/world.yml"));
+			break;
+		}
+		local.save();
+		EnhancedConfiguration actual = new EnhancedConfiguration(file, plugin);
+		actual.load();
+		for(String key : actual.getKeys(true)){
+			if(local.get(key) == null){
+				actual.set(key, null);
+			}
+		}
+		actual.save();
 	}
 
 }

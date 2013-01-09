@@ -338,8 +338,7 @@ public class ASInventory implements Cloneable {
 
 			// Don't save AIR
 			ItemStack item = inventory.get(slot);
-			if(item.getType() == Material.AIR){
-				file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), null);
+			if(item == null || item.getType() == Material.AIR){
 				continue;
 			}
 

@@ -278,6 +278,12 @@ public class AntiShare extends PluginWrapper {
 		}
 		SelfCompatibility.cleanupOldInventories(); // Handles on/off in config internally
 
+		// Cleanup old files
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Cleaning up configuration files...");
+		}
+		SelfCompatibility.cleanupYAML();
+
 		// Statistics
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting update check...");
