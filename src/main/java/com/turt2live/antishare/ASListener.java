@@ -307,8 +307,7 @@ public class ASListener implements Listener {
 			}
 			break;
 		default:
-			type = AlertType.LEGAL;
-			break;
+			return;
 		}
 		if(plugin.isBlocked(player, PermissionNodes.ALLOW_MOB_CREATION, PermissionNodes.DENY_MOB_CREATION, player.getWorld(), (Material) null)){
 			type = AlertType.ILLEGAL;
@@ -1775,7 +1774,7 @@ public class ASListener implements Listener {
 			tender = TenderType.HIT_PLAYER;
 			targetFactoryName = playerName;
 		}else{
-			String targetName = target.getClass().getName().replace("Craft", "").replace("org.bukkit.craftbukkit.entity.", "").trim();
+			String targetName = ASUtils.getEntityName(target);
 			message = ChatColor.YELLOW + playerAttacker.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to hit a " + ChatColor.RED : " hit a " + ChatColor.GREEN) + targetName;
 			playerMessage = plugin.getMessage("blocked-action.hit-mob");
 			targetFactoryName = targetName;

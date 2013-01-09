@@ -65,8 +65,8 @@ public class Alert {
 		HIT_MOB("types.hit-mob"),
 		COMMAND("types.command"),
 		GENERAL("send-general-notifications"),
-		CRAFTING("crafting"),
-		CREATE_MOB("create-mob"),
+		CRAFTING("types.crafting"),
+		CREATE_MOB("types.create-mob"),
 		CLOSE_TO_WORLD_SPLIT(null);
 
 		private String node;

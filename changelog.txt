@@ -10,12 +10,12 @@ Since 5.1.3:
 - Added own code for selecting regions (Use Slimeball)
 - Update tool logic
 - SQL is no longer used to save to. Instead, SQL is used to load and ONLY load.
+- Allow protection of mob spawning (golems / wither)
+- Minor bug fixes:
+    - Crafting notification not being shown
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 Confirmed Bugs:
 - /creative, /as rl, /survival - Inv lost
-
-Planned Features:
-- Block snowman/golem creation (or tag?)
