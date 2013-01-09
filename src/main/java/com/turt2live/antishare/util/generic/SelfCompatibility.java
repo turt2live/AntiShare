@@ -34,7 +34,8 @@ public class SelfCompatibility {
 		BLOCKS(0),
 		PLAYER_DATA(5),
 		INV_313(10),
-		WORLD_CONF(15);
+		WORLD_CONF(15),
+		CONFIG_520(20);
 
 		public final int BYTE_POS;
 
@@ -303,6 +304,9 @@ public class SelfCompatibility {
 	 * Cleans YAML files
 	 */
 	public static void cleanupYAML(){
+		if(!needsUpdate(Compat.CONFIG_520)){
+			return;
+		}
 		int cleaned = 0;
 		AntiShare plugin = AntiShare.getInstance();
 		Map<String, FileType> files = new HashMap<String, FileType>();
@@ -323,6 +327,7 @@ public class SelfCompatibility {
 		if(cleaned > 0){
 			plugin.getLogger().info("Configuration files cleaned: " + cleaned);
 		}
+		noLongerNeedsUpdate(Compat.CONFIG_520);
 	}
 
 	private static int cleanFolder(File folder, FileType type){
