@@ -259,15 +259,12 @@ public class ASListener implements Listener {
 			for(Block[] body : bodies){
 				for(int i = 0; i < body.length - 2; i++){
 					Block bodyBlock = body[i];
-					System.out.println("BODY: " + bodyBlock.getType());
 					if(bodyBlock.getType() != Material.SOUL_SAND){
 						continue;
 					}
 				}
 				Block head1 = body[body.length - 2];
 				Block head2 = body[body.length - 1];
-				System.out.println(head1.getType());
-				System.out.println(head2.getType());
 				// TODO: BUKKIT-3406
 				//				if(head1.getType() != Material.SKULL || head2.getType() != Material.SKULL){
 				//					continue;
