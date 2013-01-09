@@ -197,7 +197,6 @@ public class ASListener implements Listener {
 		 */
 		int mob = 0;
 		Block block = event.getBlock();
-		// TODO: Wither boss detection
 		if(block.getType() == Material.PUMPKIN){
 			Block body1 = block.getRelative(BlockFace.DOWN);
 			Block body2 = body1.getRelative(BlockFace.DOWN);
@@ -218,6 +217,72 @@ public class ASListener implements Listener {
 					mob = 2;
 				}
 			}
+		}else if(block.getType() == Material.SKULL){
+			Block[] body1 = {block.getRelative(BlockFace.DOWN), // Center of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH), // Side of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH), // Side of T 
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN), // Base of T
+					block.getRelative(BlockFace.NORTH), // HEAD
+					block.getRelative(BlockFace.SOUTH)}; // HEAD
+			Block[] body2 = {block.getRelative(BlockFace.DOWN), // Center of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST), // Side of T 
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST), // Side of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN), // Base of T
+					block.getRelative(BlockFace.EAST), // HEAD
+					block.getRelative(BlockFace.WEST)}; // HEAD
+			Block[] body3 = {block.getRelative(BlockFace.DOWN), // Right of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST), // Center of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST).getRelative(BlockFace.WEST), // Side of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST).getRelative(BlockFace.DOWN), // Base of T
+					block.getRelative(BlockFace.WEST), // HEAD
+					block.getRelative(BlockFace.WEST).getRelative(BlockFace.WEST)}; // HEAD
+			Block[] body4 = {block.getRelative(BlockFace.DOWN), // Left of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST), // Center of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST).getRelative(BlockFace.EAST), // Side of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST).getRelative(BlockFace.DOWN), // Base of T
+					block.getRelative(BlockFace.EAST), // HEAD
+					block.getRelative(BlockFace.EAST).getRelative(BlockFace.EAST)}; // HEAD
+			Block[] body5 = {block.getRelative(BlockFace.DOWN), // Right of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH), // Center of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH).getRelative(BlockFace.NORTH), // Side of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH).getRelative(BlockFace.DOWN), // Base of T
+					block.getRelative(BlockFace.NORTH), // HEAD
+					block.getRelative(BlockFace.NORTH).getRelative(BlockFace.NORTH)}; // HEAD
+			Block[] body6 = {block.getRelative(BlockFace.DOWN), // Left of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH), // Center of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH).getRelative(BlockFace.SOUTH), // Side of T
+					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH).getRelative(BlockFace.DOWN), // Base of T
+					block.getRelative(BlockFace.SOUTH), // HEAD
+					block.getRelative(BlockFace.SOUTH).getRelative(BlockFace.SOUTH)}; // HEAD
+			Block[][] bodies = {body1, body2, body3, body4, body5, body6};
+			boolean matched = false;
+			for(Block[] body : bodies){
+				for(int i = 0; i < body.length - 2; i++){
+					Block bodyBlock = body[i];
+					System.out.println("BODY: " + bodyBlock.getType());
+					if(bodyBlock.getType() != Material.SOUL_SAND){
+						continue;
+					}
+				}
+				Block head1 = body[body.length - 2];
+				Block head2 = body[body.length - 1];
+				System.out.println(head1.getType());
+				System.out.println(head2.getType());
+				// TODO: BUKKIT-3406
+				//				if(head1.getType() != Material.SKULL || head2.getType() != Material.SKULL){
+				//					continue;
+				//				}
+				if(head1.getType() == Material.SKULL || head2.getType() == Material.SKULL){
+					matched = true;
+				}else{
+					continue;
+				}
+				break;
+			}
+			if(!matched){
+				return;
+			}
+			mob = 3;
 		}else{
 			return; // Not a mob
 		}
