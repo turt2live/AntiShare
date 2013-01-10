@@ -1016,6 +1016,16 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOW)
 	public void onItemFrameClick(PlayerInteractEntityEvent event){
+		if(!event.isCancelled()
+				&& event.getPlayer().getItemInHand() != null
+				&& event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL
+				&& plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
+			Entity entity = event.getRightClicked();
+			GameMode mode = plugin.getBlockManager().getType(entity);
+			ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.getEntityName(entity) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
+			event.setCancelled(true);
+			return;
+		}
 		if(event.isCancelled()
 				|| !plugin.getConfig().getBoolean("enabled-features.disable-item-frame-cross-game-mode")
 				|| !ServerHas.mc14xEntities()
