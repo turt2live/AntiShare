@@ -13,6 +13,7 @@ package com.turt2live.antishare.util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -488,15 +489,19 @@ public class ASUtils {
 	 * Wipes a folder
 	 * 
 	 * @param folder the folder to wipe
+	 * @param fileNames file names to wip
 	 */
-	public static void wipeFolder(File folder){
+	public static void wipeFolder(File folder, CopyOnWriteArrayList<String> fileNames){
 		if(!folder.exists()){
 			return;
 		}
 		if(folder.listFiles() != null){
 			for(File file : folder.listFiles()){
+				if(fileNames != null && !fileNames.contains(file.getName())){
+					continue;
+				}
 				if(file.isDirectory()){
-					wipeFolder(folder);
+					wipeFolder(folder, fileNames);
 				}else{
 					file.delete();
 				}

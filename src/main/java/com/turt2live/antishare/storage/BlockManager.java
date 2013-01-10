@@ -11,12 +11,15 @@
 package com.turt2live.antishare.storage;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,6 +38,11 @@ import com.turt2live.antishare.util.events.TrackerList;
  * Block Manager - Handles creative/survival blocks
  * 
  * @author turt2live
+ */
+/*
+ *  TODO:
+ *  - Implement chunk loading/saving
+ *  - Remove per-world loading
  */
 public class BlockManager {
 
@@ -60,6 +68,7 @@ public class BlockManager {
 	}
 
 	private AntiShare plugin;
+	private CopyOnWriteArrayList<String> loadedChunks = new CopyOnWriteArrayList<String>();
 	private CopyOnWriteArrayList<String> creative_blocks = new CopyOnWriteArrayList<String>();
 	private CopyOnWriteArrayList<String> survival_blocks = new CopyOnWriteArrayList<String>();
 	private CopyOnWriteArrayList<String> adventure_blocks = new CopyOnWriteArrayList<String>();
@@ -77,6 +86,7 @@ public class BlockManager {
 	private ObjectSaver saveCreativeBlocks, saveSurvivalBlocks, saveAdventureBlocks, saveCreativeEntities, saveSurvivalEntities, saveAdventureEntities;
 	private final File entitiesDir;
 	private final File blocksDir;
+	private final Map<String, Boolean> activeSaves = new HashMap<String, Boolean>();
 
 	/**
 	 * Creates a new block manager, also loads the block lists
@@ -95,6 +105,24 @@ public class BlockManager {
 	}
 
 	/**
+	 * Loads a chunk into the block manager
+	 * 
+	 * @param chunk the chunk to load
+	 */
+	public void loadChunk(Chunk chunk){
+		throw new UnsupportedOperationException("Not supported");
+	}
+
+	/**
+	 * Unloads a chunk from the block manager
+	 * 
+	 * @param chunk the chunk to unload
+	 */
+	public void unloadChunk(Chunk chunk){
+		throw new UnsupportedOperationException("Not supported");
+	}
+
+	/**
 	 * Saves everything to disk
 	 * 
 	 * @param clear set to true to prepare for a reload
@@ -102,8 +130,8 @@ public class BlockManager {
 	 */
 	public void save(boolean clear, boolean load){
 		// Load files
-		ASUtils.wipeFolder(blocksDir);
-		ASUtils.wipeFolder(entitiesDir);
+		ASUtils.wipeFolder(blocksDir, loadedChunks);
+		ASUtils.wipeFolder(entitiesDir, loadedChunks);
 		blocksDir.mkdirs();
 		entitiesDir.mkdirs();
 		completedSaves = new boolean[maxLists];
@@ -113,10 +141,10 @@ public class BlockManager {
 		doneLastSave = false;
 
 		// Create savers
-		saveCreativeBlocks = new ObjectSaver(creative_blocks, GameMode.CREATIVE, blocksDir, ListComplete.CREATIVE_BLOCKS, true);
-		saveSurvivalBlocks = new ObjectSaver(survival_blocks, GameMode.SURVIVAL, blocksDir, ListComplete.SURVIVAL_BLOCKS, true);
-		saveCreativeEntities = new ObjectSaver(creative_entities, GameMode.CREATIVE, entitiesDir, ListComplete.CREATIVE_ENTITIES, false);
-		saveSurvivalEntities = new ObjectSaver(survival_entities, GameMode.SURVIVAL, entitiesDir, ListComplete.SURVIVAL_ENTITIES, false);
+		saveCreativeBlocks = new ObjectSaver(creative_blocks, GameMode.CREATIVE, blocksDir, "global1", true);
+		saveSurvivalBlocks = new ObjectSaver(survival_blocks, GameMode.SURVIVAL, blocksDir, "global2", true);
+		saveCreativeEntities = new ObjectSaver(creative_entities, GameMode.CREATIVE, entitiesDir, "global3", false);
+		saveSurvivalEntities = new ObjectSaver(survival_entities, GameMode.SURVIVAL, entitiesDir, "global4", false);
 
 		saveCreativeBlocks.setClear(clear);
 		saveSurvivalBlocks.setClear(clear);
@@ -126,15 +154,21 @@ public class BlockManager {
 		saveSurvivalEntities.setClear(clear);
 		saveCreativeEntities.setLoad(load);
 		saveSurvivalEntities.setLoad(load);
+		activeSaves.put("global1", false);
+		activeSaves.put("global2", false);
+		activeSaves.put("global3", false);
+		activeSaves.put("global4", false);
 
 		// Treat adventure on it's own
 		if(ServerHas.adventureMode()){
-			saveAdventureBlocks = new ObjectSaver(adventure_blocks, GameMode.ADVENTURE, blocksDir, ListComplete.ADVENTURE_BLOCKS, true);
+			saveAdventureBlocks = new ObjectSaver(adventure_blocks, GameMode.ADVENTURE, blocksDir, "global5", true);
 			saveAdventureBlocks.setClear(clear);
 			saveAdventureBlocks.setLoad(load);
-			saveAdventureEntities = new ObjectSaver(adventure_entities, GameMode.ADVENTURE, entitiesDir, ListComplete.ADVENTURE_ENTITIES, false);
+			saveAdventureEntities = new ObjectSaver(adventure_entities, GameMode.ADVENTURE, entitiesDir, "global6", false);
 			saveAdventureEntities.setClear(clear);
 			saveAdventureEntities.setLoad(load);
+			activeSaves.put("global5", false);
+			activeSaves.put("global6", false);
 		}else{
 			saveAdventureBlocks = null;
 			saveAdventureEntities = null;
@@ -171,15 +205,11 @@ public class BlockManager {
 			Thread adventureBlocksThread = new Thread(saveAdventureBlocks);
 			adventureBlocksThread.setName("ANTISHARE-Save Adventure Blocks");
 			adventureBlocksThread.start();
-		}else{
-			markSaveAsDone(ListComplete.ADVENTURE_BLOCKS, nullSaver);
 		}
 		if(saveAdventureEntities != null){
 			Thread adventureEntitiesThread = new Thread(saveAdventureEntities);
 			adventureEntitiesThread.setName("ANTISHARE-Save Adventure Entities");
 			adventureEntitiesThread.start();
-		}else{
-			markSaveAsDone(ListComplete.ADVENTURE_ENTITIES, nullSaver);
 		}
 
 		// BlockSaver handles telling BlockManager that it is done
@@ -197,10 +227,10 @@ public class BlockManager {
 		return ymlFile;
 	}
 
-	void markSaveAsDone(ListComplete list, ObjectSaver save){
-		completedSaves[list.arrayIndex] = true;
-		for(int i = 0; i < maxLists; i++){
-			if(!completedSaves[i]){
+	void markSaveAsDone(String list, ObjectSaver save){
+		activeSaves.put(list, true);
+		for(String key : activeSaves.keySet()){
+			if(!activeSaves.get(key)){
 				return;
 			}
 		}
@@ -249,6 +279,7 @@ public class BlockManager {
 	 * @return the percent of the save completed (as a whole number, eg: 10)
 	 */
 	public int percentSaveDone(){
+		// TODO: Implement chunks
 		if(isSaveDone()){
 			return 100;
 		}

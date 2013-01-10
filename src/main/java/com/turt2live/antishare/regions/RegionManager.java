@@ -103,8 +103,8 @@ public class RegionManager {
 	 * Saves all loaded regions to disk, this overwrites (and deletes unloaded regions) any regions in the save folders
 	 */
 	public void save(){
-		ASUtils.wipeFolder(Region.REGION_CONFIGURATIONS);
-		ASUtils.wipeFolder(Region.REGION_INFORMATION);
+		ASUtils.wipeFolder(Region.REGION_CONFIGURATIONS, null);
+		ASUtils.wipeFolder(Region.REGION_INFORMATION, null);
 		for(String world : regions.keySet()){
 			Set<Region> regions = this.regions.get(world);
 			for(Region region : regions){

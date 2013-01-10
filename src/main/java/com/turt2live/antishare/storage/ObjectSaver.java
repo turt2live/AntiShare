@@ -11,7 +11,6 @@ import org.bukkit.GameMode;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.storage.BlockManager.ListComplete;
 
 class ObjectSaver implements Runnable {
 
@@ -20,22 +19,22 @@ class ObjectSaver implements Runnable {
 	private final BlockManager blockman = plugin.getBlockManager();
 	private final File dir;
 	private final String gamemode;
-	private final ListComplete listType;
+	private final String identity;
 	private boolean clear = false, load = false;
 	private double completed = 0;
 	private final int listSize;
 
-	public ObjectSaver(CopyOnWriteArrayList<String> list, GameMode gm, File saveDir, ListComplete type, boolean isBlock){
+	public ObjectSaver(CopyOnWriteArrayList<String> list, GameMode gm, File saveDir, String identity, boolean isBlock){
 		if(this instanceof NullObjectSaver){
 			dir = null;
 			gamemode = null;
-			listType = null;
+			this.identity = null;
 			listSize = 0;
 			return;
 		}
 		this.dir = saveDir;
 		this.gamemode = gm.name();
-		this.listType = type;
+		this.identity = identity;
 		for(String item : list){
 			/*
 			 * 0 = chunkX
@@ -71,7 +70,7 @@ class ObjectSaver implements Runnable {
 				completed++;
 			}
 		}
-		blockman.markSaveAsDone(listType, this);
+		blockman.markSaveAsDone(identity, this);
 	}
 
 	void save(File dir, String fname, String key){
