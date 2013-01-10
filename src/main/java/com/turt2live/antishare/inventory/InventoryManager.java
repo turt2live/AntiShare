@@ -27,7 +27,6 @@ import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfigurati
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
@@ -77,10 +76,6 @@ public class InventoryManager {
 			if(archive.exists()){
 				// Move file
 				archive.renameTo(expected);
-			}
-		}else{
-			if(archive.exists()){
-				archive.delete(); // Delete archive as the expected exists
 			}
 		}
 
@@ -153,53 +148,17 @@ public class InventoryManager {
 		if(player == null){
 			return;
 		}
-
-		refreshInventories(player, false);
-
-		final String name = player.getName();
-		final List<String> worlds = new ArrayList<String>();
-		for(World w : Bukkit.getWorlds()){
-			worlds.add(w.getName());
+		if(isInTemporary(player)){
+			removeFromTemporary(player);
 		}
-
-		ScheduleLayer.runTaskAsynchronously(plugin, new Runnable(){
-			@Override
-			public void run(){
-				// Release
-				if(isInTemporary(player)){
-					removeFromTemporary(player);
-				}
-
-				refreshInventories(player, false);
-				// Cleanup
-				for(String world : worlds){
-					if(creative.get(name + "." + world) != null){
-						creative.get(name + "." + world).save();
-					}
-					if(survival.get(name + "." + world) != null){
-						survival.get(name + "." + world).save();
-					}
-					if(adventure.get(name + "." + world) != null){
-						adventure.get(name + "." + world).save();
-					}
-					if(enderCreative.get(name + "." + world) != null){
-						enderCreative.get(name + "." + world).save();
-					}
-					if(enderSurvival.get(name + "." + world) != null){
-						enderSurvival.get(name + "." + world).save();
-					}
-					if(enderAdventure.get(name + "." + world) != null){
-						enderAdventure.get(name + "." + world).save();
-					}
-					creative.remove(name + "." + world);
-					survival.remove(name + "." + world);
-					adventure.remove(name + "." + world);
-					enderCreative.remove(name + "." + world);
-					enderSurvival.remove(name + "." + world);
-					enderAdventure.remove(name + "." + world);
-				}
-			}
-		});
+		savePlayer(player);
+		String name = player.getName(), world = player.getWorld().getName();
+		creative.remove(name + "." + world);
+		survival.remove(name + "." + world);
+		adventure.remove(name + "." + world);
+		enderCreative.remove(name + "." + world);
+		enderSurvival.remove(name + "." + world);
+		enderAdventure.remove(name + "." + world);
 	}
 
 	void inject(ASInventory inventory){
@@ -383,6 +342,7 @@ public class InventoryManager {
 	public void saveCreativeInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
 		inventory.setWorld(world);
+		inventory.setGamemode(GameMode.CREATIVE);
 		creative.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -396,6 +356,7 @@ public class InventoryManager {
 	public void saveEnderCreativeInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
 		inventory.setWorld(world);
+		inventory.setGamemode(GameMode.CREATIVE);
 		enderCreative.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -409,6 +370,7 @@ public class InventoryManager {
 	public void saveSurvivalInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
 		inventory.setWorld(world);
+		inventory.setGamemode(GameMode.SURVIVAL);
 		survival.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -422,6 +384,7 @@ public class InventoryManager {
 	public void saveEnderSurvivalInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
 		inventory.setWorld(world);
+		inventory.setGamemode(GameMode.SURVIVAL);
 		enderSurvival.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -435,6 +398,7 @@ public class InventoryManager {
 	public void saveAdventureInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.PLAYER);
 		inventory.setWorld(world);
+		inventory.setGamemode(GameMode.ADVENTURE);
 		adventure.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -448,6 +412,7 @@ public class InventoryManager {
 	public void saveEnderAdventureInventory(Player player, World world){
 		ASInventory inventory = ASInventory.generate(player, InventoryType.ENDER);
 		inventory.setWorld(world);
+		inventory.setGamemode(GameMode.ADVENTURE);
 		enderAdventure.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -592,10 +557,6 @@ public class InventoryManager {
 		}
 
 		// Status
-		int loaded = creative.size() + survival.size() + playerTemp.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
-		if(loaded > 0){
-			AntiShare.getInstance().log("Inventories Loaded: " + loaded, Level.INFO);
-		}
 		if(this.links.size() > 0){
 			AntiShare.getInstance().log("Linked Inventories: " + this.links.size(), Level.INFO);
 		}
@@ -651,6 +612,15 @@ public class InventoryManager {
 		enderAdventure.clear();
 		playerTemp.clear();
 		load();
+	}
+
+	/**
+	 * Gets the number of loaded inventories
+	 * 
+	 * @return the number of loaded inventories
+	 */
+	public int getLoaded(){
+		return creative.size() + survival.size() + playerTemp.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
 	}
 
 	/**

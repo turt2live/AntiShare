@@ -202,7 +202,8 @@ public class ASInventory implements Cloneable {
 						ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
 						for(String strSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
 							Integer slot = Integer.valueOf(strSlot);
-							inventory.set(slot, file.getItemStack(world + "." + gamemode + "." + strSlot));
+							ItemStack item = file.getItemStack(world + "." + gamemode + "." + strSlot);
+							inventory.set(slot, item);
 						}
 						inventories.add(inventory);
 					}
@@ -328,14 +329,11 @@ public class ASInventory implements Cloneable {
 		File saveFile = new File(dir, inventoryName + ".yml");
 		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, plugin);
 		file.load();
+		file.set(world.getName() + "." + gamemode.name(), null);
 
 		// Save data
 		// Structure: yml:world.gamemode.slot.properties
 		for(Integer slot : inventory.keySet()){
-			if(inventory.get(slot) == null){
-				continue;
-			}
-
 			// Don't save AIR
 			ItemStack item = inventory.get(slot);
 			if(item == null || item.getType() == Material.AIR){

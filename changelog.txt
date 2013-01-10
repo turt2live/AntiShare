@@ -15,9 +15,8 @@ Since 5.1.3:
     - Crafting notification not being shown
 - Added auto-cleaning feature to startup. This removes old keys from the configuration files
 - Fix survival players being denied item frames if the server is not tracking them
+- Fixed inventories not loading/saving correctly
+- Added error-string to identify versions easier in config.yml
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
-
-Confirmed Bugs:
-- /creative, /as rl, /survival - Inv lost

@@ -124,6 +124,13 @@ public class AntiShare extends PluginWrapper {
 		}
 		getConfig().load();
 
+		// Create version string
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Creating version string in config.yml...");
+		}
+		getConfig().set("error-reporting.error-string", getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + getServer().getServerId());
+		saveConfig();
+
 		// Move SimpleNotice file
 		File oldSNFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");
 		if(oldSNFile.exists()){
@@ -312,32 +319,13 @@ public class AntiShare extends PluginWrapper {
 			TabRegister.register(getCommand("antishare"));
 		}
 
-		// Check players
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Checking online players for regions...");
-		}
-		for(Player player : Bukkit.getOnlinePlayers()){
-			Region playerRegion = regions.getRegion(player.getLocation());
-			if(playerRegion != null){
-				playerRegion.alertSilentEntry(player);
-			}
-		}
-
 		// Enabled
 		getLogger().info("Enabled!");
 
-		// Scan for players
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Scheduling inventory updates...");
+			getLogger().info("Scheduling inventory and region updates...");
 		}
-		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
-			@Override
-			public void run(){
-				for(Player player : Bukkit.getOnlinePlayers()){
-					inventories.loadPlayer(player);
-				}
-			}
-		});
+		loadPlayerInformation();
 
 		// Conflict messages
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
@@ -483,6 +471,26 @@ public class AntiShare extends PluginWrapper {
 		// Metrics has no reload
 		// Tracker List has no reload
 		// Simple Notice has no reload
+		loadPlayerInformation();
+	}
+
+	private void loadPlayerInformation(){
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+			@Override
+			public void run(){
+				for(Player player : Bukkit.getOnlinePlayers()){
+					inventories.loadPlayer(player);
+					Region playerRegion = regions.getRegion(player.getLocation());
+					if(playerRegion != null){
+						playerRegion.alertSilentEntry(player);
+					}
+				}
+				int loaded = inventories.getLoaded();
+				if(loaded > 0){
+					AntiShare.getInstance().log("Inventories Loaded: " + loaded, Level.INFO);
+				}
+			}
+		});
 	}
 
 	/**

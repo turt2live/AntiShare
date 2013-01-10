@@ -201,3 +201,6 @@ other:
   dont-look-for-updates: false
   stop-spam-for-conflicts: false
   use-sleep: true
+# For when turt2live needs a copy of your configuration
+error-reporting:
+  error-string: TO BE DETERMINED
