@@ -94,6 +94,7 @@ public class BlockManager {
 		ChunkWrapper wrapper = new ChunkWrapper(this, chunk);
 		wrappers.put(str, wrapper);
 		wrapper.load(blocksDir, entitiesDir);
+		loadedChunks.add(str);
 	}
 
 	/**
@@ -112,6 +113,7 @@ public class BlockManager {
 			}
 			wrapper.save(names, false, false, blocksDir, entitiesDir);
 			wrappers.remove(wrapper);
+			loadedChunks.remove(key);
 		}
 	}
 
