@@ -1037,6 +1037,9 @@ public class ASListener implements Listener {
 		if(plugin.getPermissions().has(player, PermissionNodes.ITEM_FRAMES, player.getWorld())){
 			type = AlertType.LEGAL;
 		}
+		if(egm == null){
+			type = AlertType.LEGAL;
+		}
 
 		// Cancel if needed
 		if(type == AlertType.ILLEGAL){
