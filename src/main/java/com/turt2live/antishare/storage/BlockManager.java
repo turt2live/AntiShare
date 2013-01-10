@@ -161,9 +161,11 @@ public class BlockManager {
 		if(doneLastSave == true){
 			return;
 		}
-		activeSaves.remove(list);
-		if(activeSaves.size() > 0){
-			return;
+		activeSaves.put(list, true);
+		for(String key : activeSaves.keySet()){
+			if(!activeSaves.get(key)){
+				return;
+			}
 		}
 		if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
 			plugin.getLogger().info("[Block Manager] Saving files...");
@@ -202,14 +204,17 @@ public class BlockManager {
 		if(isSaveDone()){
 			return 100;
 		}
-		//		double percentCreative = saveCreativeBlocks.getPercent() + saveCreativeEntities.getPercent();
-		//		double percentSurvival = saveSurvivalBlocks.getPercent() + saveSurvivalEntities.getPercent();
-		//		double percentAdventure = (saveAdventureBlocks != null ? saveAdventureBlocks.getPercent() : 0)
-		//				+ (saveAdventureEntities != null ? saveAdventureEntities.getPercent() : 0);
-		//		double divisible = 6 - (saveAdventureBlocks == null ? 1 : 0) - (saveAdventureEntities == null ? 1 : 0);
-		//		Double avg = (percentCreative + percentAdventure + percentSurvival) / divisible;
-		//		return avg.intValue();
-		return 100;
+		double total = 0;
+		int divisor = 0;
+		for(String key : wrappers.keySet()){
+			divisor++;
+			total += wrappers.get(key).percentDoneSave();
+		}
+		if(divisor <= 0){
+			return 100;
+		}
+		Double avg = total / divisor;
+		return avg.intValue();
 	}
 
 	/**

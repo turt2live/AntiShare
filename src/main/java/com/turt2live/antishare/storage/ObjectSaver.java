@@ -23,6 +23,7 @@ class ObjectSaver implements Runnable {
 	private boolean clear = false, load = false;
 	private double completed = 0;
 	private final int listSize;
+	private boolean done = false;
 
 	public ObjectSaver(CopyOnWriteArrayList<String> list, GameMode gm, File saveDir, String identity, boolean isBlock){
 		if(this instanceof NullObjectSaver){
@@ -63,6 +64,7 @@ class ObjectSaver implements Runnable {
 
 	@Override
 	public void run(){
+		done = false;
 		for(String chunk : list.keySet()){
 			List<String> list = this.list.get(chunk);
 			for(String item : list){
@@ -71,6 +73,7 @@ class ObjectSaver implements Runnable {
 			}
 		}
 		blockman.markSaveAsDone(identity, this);
+		done = true;
 	}
 
 	void save(File dir, String fname, String key){
@@ -95,6 +98,9 @@ class ObjectSaver implements Runnable {
 	}
 
 	double getPercent(){
+		if(done){
+			return 100; // Redundant
+		}
 		return listSize == 0 ? 100 : ((completed / listSize) * 100);
 	}
 

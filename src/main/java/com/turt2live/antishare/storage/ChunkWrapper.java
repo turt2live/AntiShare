@@ -339,4 +339,19 @@ class ChunkWrapper {
 		}
 	}
 
+	/**
+	 * Gets the percentage done save
+	 * 
+	 * @return the percent done
+	 */
+	public double percentDoneSave(){
+		double percentCreative = saveCreativeBlocks.getPercent() + saveCreativeEntities.getPercent();
+		double percentSurvival = saveSurvivalBlocks.getPercent() + saveSurvivalEntities.getPercent();
+		double percentAdventure = (saveAdventureBlocks != null ? saveAdventureBlocks.getPercent() : 0)
+				+ (saveAdventureEntities != null ? saveAdventureEntities.getPercent() : 0);
+		double divisible = 6 - (saveAdventureBlocks == null ? 1 : 0) - (saveAdventureEntities == null ? 1 : 0);
+		Double avg = (percentCreative + percentAdventure + percentSurvival) / divisible;
+		return avg.intValue();
+	}
+
 }
