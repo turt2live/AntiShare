@@ -200,7 +200,6 @@ public class BlockManager {
 	 * @return the percent of the save completed (as a whole number, eg: 10)
 	 */
 	public int percentSaveDone(){
-		// TODO: Implement chunks
 		if(isSaveDone()){
 			return 100;
 		}
@@ -233,26 +232,35 @@ public class BlockManager {
 			}
 		}
 
-		// TODO: Display values
 		// Tell console what we loaded
-		//		if(creative_blocks.size() > 0){
-		//			plugin.getLogger().info("Creative Blocks Loaded: " + creative_blocks.size());
-		//		}
-		//		if(survival_blocks.size() > 0){
-		//			plugin.getLogger().info("Survival Blocks Loaded: " + survival_blocks.size());
-		//		}
-		//		if(adventure_blocks.size() > 0){
-		//			plugin.getLogger().info("Adventure Blocks Loaded: " + adventure_blocks.size());
-		//		}
-		//		if(creative_entities.size() > 0){
-		//			plugin.getLogger().info("Creative Entities Loaded: " + creative_entities.size());
-		//		}
-		//		if(survival_entities.size() > 0){
-		//			plugin.getLogger().info("Survival Entities Loaded: " + survival_entities.size());
-		//		}
-		//		if(adventure_entities.size() > 0){
-		//			plugin.getLogger().info("Adventure Entities Loaded: " + adventure_entities.size());
-		//		}
+		int cb = 0, ce = 0, sb = 0, se = 0, ab = 0, ae = 0;
+		for(String key : wrappers.keySet()){
+			ChunkWrapper wrapper = wrappers.get(key);
+			cb += wrapper.creative_blocks.size();
+			ce += wrapper.creative_entities.size();
+			sb += wrapper.survival_blocks.size();
+			se += wrapper.survival_entities.size();
+			ab += wrapper.adventure_blocks.size();
+			ae += wrapper.adventure_entities.size();
+		}
+		if(cb > 0){
+			plugin.getLogger().info("Creative Blocks Loaded: " + cb);
+		}
+		if(sb > 0){
+			plugin.getLogger().info("Survival Blocks Loaded: " + sb);
+		}
+		if(ab > 0){
+			plugin.getLogger().info("Adventure Blocks Loaded: " + ab);
+		}
+		if(ce > 0){
+			plugin.getLogger().info("Creative Entities Loaded: " + ce);
+		}
+		if(se > 0){
+			plugin.getLogger().info("Survival Entities Loaded: " + se);
+		}
+		if(ae > 0){
+			plugin.getLogger().info("Adventure Entities Loaded: " + ae);
+		}
 	}
 
 	/**

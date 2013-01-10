@@ -21,12 +21,12 @@ class ChunkWrapper {
 
 	private BlockManager manager;
 	private AntiShare plugin = AntiShare.getInstance();
-	private CopyOnWriteArrayList<String> creative_blocks = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> survival_blocks = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> adventure_blocks = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> creative_entities = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> survival_entities = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> adventure_entities = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> creative_blocks = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> survival_blocks = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> adventure_blocks = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> creative_entities = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> survival_entities = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> adventure_entities = new CopyOnWriteArrayList<String>();
 	private int cx, cz;
 	private String world;
 	private ObjectSaver saveCreativeBlocks, saveSurvivalBlocks, saveAdventureBlocks, saveCreativeEntities, saveSurvivalEntities, saveAdventureEntities;
