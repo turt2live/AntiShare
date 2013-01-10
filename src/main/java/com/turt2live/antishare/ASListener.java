@@ -1022,7 +1022,13 @@ public class ASListener implements Listener {
 				&& plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
 			Entity entity = event.getRightClicked();
 			GameMode mode = plugin.getBlockManager().getType(entity);
-			ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.getEntityName(entity) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
+			Material item = Material.AIR;
+			if(ServerHas.mc14xEntities() && entity.getType() == EntityType.ITEM_FRAME){
+				item = Material.ITEM_FRAME;
+			}else{
+				item = Material.PAINTING;
+			}
+			ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
 			event.setCancelled(true);
 			return;
 		}
