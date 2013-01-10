@@ -18,11 +18,11 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -39,11 +39,6 @@ import com.turt2live.antishare.util.events.TrackerList;
  * 
  * @author turt2live
  */
-/*
- *  TODO:
- *  - Implement chunk loading/saving
- *  - Remove per-world loading
- */
 public class BlockManager {
 
 	/**
@@ -51,39 +46,20 @@ public class BlockManager {
 	 * 
 	 * @author turt2live
 	 */
-	private class ASMaterial {
+	static class ASMaterial {
 		public Location location;
 		public GameMode gamemode;
 	}
 
-	enum ListComplete{
-		CREATIVE_BLOCKS(0), ADVENTURE_BLOCKS(1), SURVIVAL_BLOCKS(2),
-		CREATIVE_ENTITIES(3), SURVIVAL_ENTITIES(4), ADVENTURE_ENTITIES(5);
-
-		public final int arrayIndex;
-
-		private ListComplete(int arrayIndex){
-			this.arrayIndex = arrayIndex;
-		}
-	}
-
 	private AntiShare plugin;
 	private CopyOnWriteArrayList<String> loadedChunks = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> creative_blocks = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> survival_blocks = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> adventure_blocks = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> creative_entities = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> survival_entities = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<String> adventure_entities = new CopyOnWriteArrayList<String>();
-	private TrackerList tracked_creative;
-	private TrackerList tracked_survival;
-	private TrackerList tracked_adventure;
+	private Map<String, ChunkWrapper> wrappers = new HashMap<String, ChunkWrapper>();
+	TrackerList tracked_creative;
+	TrackerList tracked_survival;
+	TrackerList tracked_adventure;
 	private CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
 	private ConcurrentMap<String, EnhancedConfiguration> saveFiles = new ConcurrentHashMap<String, EnhancedConfiguration>();
-	private boolean[] completedSaves;
-	private final int maxLists = ListComplete.values().length;
 	private boolean doneLastSave = false;
-	private ObjectSaver saveCreativeBlocks, saveSurvivalBlocks, saveAdventureBlocks, saveCreativeEntities, saveSurvivalEntities, saveAdventureEntities;
 	private final File entitiesDir;
 	private final File blocksDir;
 	private final Map<String, Boolean> activeSaves = new HashMap<String, Boolean>();
@@ -104,13 +80,20 @@ public class BlockManager {
 		load();
 	}
 
+	String chunkToString(Chunk chunk){
+		return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
+	}
+
 	/**
 	 * Loads a chunk into the block manager
 	 * 
 	 * @param chunk the chunk to load
 	 */
 	public void loadChunk(Chunk chunk){
-		throw new UnsupportedOperationException("Not supported");
+		String str = chunkToString(chunk);
+		ChunkWrapper wrapper = new ChunkWrapper(this, chunk);
+		wrappers.put(str, wrapper);
+		wrapper.load(blocksDir, entitiesDir);
 	}
 
 	/**
@@ -119,7 +102,17 @@ public class BlockManager {
 	 * @param chunk the chunk to unload
 	 */
 	public void unloadChunk(Chunk chunk){
-		throw new UnsupportedOperationException("Not supported");
+		String key = chunkToString(chunk);
+		ChunkWrapper wrapper = wrappers.get(key);
+		if(wrapper != null){
+			String[] names = new String[6];
+			for(int i = 0; i < names.length; i++){
+				names[i] = key + i;
+				activeSaves.put(names[i], false);
+			}
+			wrapper.save(names, false, false, blocksDir, entitiesDir);
+			wrappers.remove(wrapper);
+		}
 	}
 
 	/**
@@ -130,86 +123,21 @@ public class BlockManager {
 	 */
 	public void save(boolean clear, boolean load){
 		// Load files
-		ASUtils.wipeFolder(blocksDir, loadedChunks);
-		ASUtils.wipeFolder(entitiesDir, loadedChunks);
 		blocksDir.mkdirs();
 		entitiesDir.mkdirs();
-		completedSaves = new boolean[maxLists];
-		for(int i = 0; i < maxLists; i++){
-			completedSaves[i] = false;
-		}
+		ASUtils.wipeFolder(blocksDir, loadedChunks);
+		ASUtils.wipeFolder(entitiesDir, loadedChunks);
 		doneLastSave = false;
 
 		// Create savers
-		saveCreativeBlocks = new ObjectSaver(creative_blocks, GameMode.CREATIVE, blocksDir, "global1", true);
-		saveSurvivalBlocks = new ObjectSaver(survival_blocks, GameMode.SURVIVAL, blocksDir, "global2", true);
-		saveCreativeEntities = new ObjectSaver(creative_entities, GameMode.CREATIVE, entitiesDir, "global3", false);
-		saveSurvivalEntities = new ObjectSaver(survival_entities, GameMode.SURVIVAL, entitiesDir, "global4", false);
-
-		saveCreativeBlocks.setClear(clear);
-		saveSurvivalBlocks.setClear(clear);
-		saveCreativeBlocks.setLoad(load);
-		saveSurvivalBlocks.setLoad(load);
-		saveCreativeEntities.setClear(clear);
-		saveSurvivalEntities.setClear(clear);
-		saveCreativeEntities.setLoad(load);
-		saveSurvivalEntities.setLoad(load);
-		activeSaves.put("global1", false);
-		activeSaves.put("global2", false);
-		activeSaves.put("global3", false);
-		activeSaves.put("global4", false);
-
-		// Treat adventure on it's own
-		if(ServerHas.adventureMode()){
-			saveAdventureBlocks = new ObjectSaver(adventure_blocks, GameMode.ADVENTURE, blocksDir, "global5", true);
-			saveAdventureBlocks.setClear(clear);
-			saveAdventureBlocks.setLoad(load);
-			saveAdventureEntities = new ObjectSaver(adventure_entities, GameMode.ADVENTURE, entitiesDir, "global6", false);
-			saveAdventureEntities.setClear(clear);
-			saveAdventureEntities.setLoad(load);
-			activeSaves.put("global5", false);
-			activeSaves.put("global6", false);
-		}else{
-			saveAdventureBlocks = null;
-			saveAdventureEntities = null;
-		}
-
-		// Schedule saves
-
-		/*
-		 * Because of how the scheduler works, we have to use the java Thread class.
-		 */
-
-		Thread creativeBlocksThread = new Thread(saveCreativeBlocks);
-		Thread survivalBlocksThread = new Thread(saveSurvivalBlocks);
-		Thread creativeEntitiesThread = new Thread(saveCreativeEntities);
-		Thread survivalEntitiesThread = new Thread(saveSurvivalEntities);
-
-		// Set names, in case there is a bug
-		creativeBlocksThread.setName("ANTISHARE-Save Creative Blocks");
-		survivalBlocksThread.setName("ANTISHARE-Save Survival Blocks");
-		creativeEntitiesThread.setName("ANTISHARE-Save Creative Entities");
-		survivalEntitiesThread.setName("ANTISHARE-Save Survival Entities");
-
-		// Run
-		creativeBlocksThread.start();
-		survivalBlocksThread.start();
-		creativeEntitiesThread.start();
-		survivalEntitiesThread.start();
-
-		// Treat adventure on it's own
-		ObjectSaver nullSaver = new NullObjectSaver();
-		nullSaver.setClear(clear);
-		nullSaver.setLoad(load);
-		if(saveAdventureBlocks != null){
-			Thread adventureBlocksThread = new Thread(saveAdventureBlocks);
-			adventureBlocksThread.setName("ANTISHARE-Save Adventure Blocks");
-			adventureBlocksThread.start();
-		}
-		if(saveAdventureEntities != null){
-			Thread adventureEntitiesThread = new Thread(saveAdventureEntities);
-			adventureEntitiesThread.setName("ANTISHARE-Save Adventure Entities");
-			adventureEntitiesThread.start();
+		for(String key : wrappers.keySet()){
+			ChunkWrapper wrapper = wrappers.get(key);
+			String[] names = new String[6];
+			for(int i = 0; i < names.length; i++){
+				names[i] = key + i;
+				activeSaves.put(names[i], false);
+			}
+			wrapper.save(names, load, clear, blocksDir, entitiesDir);
 		}
 
 		// BlockSaver handles telling BlockManager that it is done
@@ -228,13 +156,11 @@ public class BlockManager {
 	}
 
 	void markSaveAsDone(String list, ObjectSaver save){
-		activeSaves.put(list, true);
-		for(String key : activeSaves.keySet()){
-			if(!activeSaves.get(key)){
-				return;
-			}
-		}
 		if(doneLastSave == true){
+			return;
+		}
+		activeSaves.remove(list);
+		if(activeSaves.size() > 0){
 			return;
 		}
 		if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
@@ -245,17 +171,14 @@ public class BlockManager {
 		}
 		saveFiles.clear();
 		if(save.getClear()){
-			creative_blocks.clear();
-			survival_blocks.clear();
-			adventure_blocks.clear();
-			creative_entities.clear();
-			survival_entities.clear();
-			adventure_entities.clear();
+			loadedChunks.clear();
+			wrappers.clear();
 		}
 		if(save.getLoad()){
 			load();
 		}
 		doneLastSave = true;
+		activeSaves.clear();
 	}
 
 	/**
@@ -264,13 +187,7 @@ public class BlockManager {
 	 * @return true if done
 	 */
 	public boolean isSaveDone(){
-		return doneLastSave || (
-				creative_blocks.size() <= 0 &&
-						survival_blocks.size() <= 0 &&
-						adventure_blocks.size() <= 0 &&
-						creative_entities.size() <= 0 &&
-						survival_entities.size() <= 0 &&
-				adventure_entities.size() <= 0);
+		return doneLastSave || loadedChunks.size() <= 0 || wrappers.size() <= 0;
 	}
 
 	/**
@@ -283,111 +200,14 @@ public class BlockManager {
 		if(isSaveDone()){
 			return 100;
 		}
-		double percentCreative = saveCreativeBlocks.getPercent() + saveCreativeEntities.getPercent();
-		double percentSurvival = saveSurvivalBlocks.getPercent() + saveSurvivalEntities.getPercent();
-		double percentAdventure = (saveAdventureBlocks != null ? saveAdventureBlocks.getPercent() : 0)
-				+ (saveAdventureEntities != null ? saveAdventureEntities.getPercent() : 0);
-		double divisible = 6 - (saveAdventureBlocks == null ? 1 : 0) - (saveAdventureEntities == null ? 1 : 0);
-		Double avg = (percentCreative + percentAdventure + percentSurvival) / divisible;
-		return avg.intValue();
-	}
-
-	/**
-	 * Loads a directory
-	 * 
-	 * @param directory the directory
-	 * @param worldname the world name (or null to not load a specific world)
-	 * @param isBlock true for a block file
-	 */
-	private void load(File directory, String worldname, boolean isBlock){
-		if(directory.listFiles() != null){
-			for(File file : directory.listFiles()){
-				if(!file.getName().endsWith(".yml")){
-					continue;
-				}
-				String[] fparts = file.getName().split("\\.");
-				if(fparts.length < 3){
-					plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " FILE: " + file.getName());
-					continue;
-				}
-				String w = fparts[2];
-				if(Bukkit.getWorld(w) == null){
-					continue;
-				}
-				if(worldname != null && !w.equalsIgnoreCase(worldname)){
-					continue;
-				}
-				EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
-				blocks.load();
-				for(String key : blocks.getKeys(false)){
-					String[] keyParts = key.split(";");
-					if(keyParts.length < (isBlock ? 3 : 4)){
-						plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " FILE: " + file.getName());
-						continue;
-					}
-					Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
-					if(Bukkit.getWorld(keyParts[3]) == null || location == null || location.getWorld() == null){
-						continue;
-					}
-					EntityType etype = null;
-					if(keyParts.length > 4){
-						try{
-							etype = EntityType.fromName(keyParts[4]);
-						}catch(Exception e){ // Prevents messy consoles
-							etype = null;
-						}
-					}
-					GameMode gm = GameMode.valueOf(blocks.getString(key));
-					if(isBlock){
-						Block block = location.getBlock();
-						if(block == null){
-							location.getChunk().load();
-							block = location.getBlock();
-						}
-						addBlock(gm, block);
-					}else{
-						if(etype == null){
-							plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " KEY IN FILE ('" + file.getName() + "'): " + key);
-							continue;
-						}
-						addEntity(gm, location, etype);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Loads blocks for a specific world
-	 * 
-	 * @param world the world to load
-	 */
-	public void loadWorld(String world){
-		int pc = creative_blocks.size(), ps = survival_blocks.size(), pa = adventure_blocks.size(), pce = creative_entities.size(), pse = survival_entities.size(), pae = adventure_entities.size();
-
-		// Load
-		load(blocksDir, world, true);
-		load(entitiesDir, world, false);
-
-		// Tell console what we loaded
-		if(creative_blocks.size() - pc > 0){
-			plugin.getLogger().info("Creative Blocks Loaded (for world '" + world + "'): " + (creative_blocks.size() - pc));
-		}
-		if(survival_blocks.size() - ps > 0){
-			plugin.getLogger().info("Survival Blocks Loaded (for world '" + world + "'): " + (survival_blocks.size() - ps));
-		}
-		if(adventure_blocks.size() - pa > 0){
-			plugin.getLogger().info("Adventure Blocks Loaded (for world '" + world + "'): " + (adventure_blocks.size() - pa));
-		}
-		if(creative_entities.size() - pce > 0){
-			plugin.getLogger().info("Creative Entities Loaded (for world '" + world + "'): " + (creative_entities.size() - pce));
-		}
-		if(survival_entities.size() - pse > 0){
-			plugin.getLogger().info("Survival Entities Loaded (for world '" + world + "'): " + (survival_entities.size() - pse));
-		}
-		if(adventure_entities.size() - pae > 0){
-			plugin.getLogger().info("Adventure Entities Loaded (for world '" + world + "'): " + (adventure_entities.size() - pae));
-		}
+		//		double percentCreative = saveCreativeBlocks.getPercent() + saveCreativeEntities.getPercent();
+		//		double percentSurvival = saveSurvivalBlocks.getPercent() + saveSurvivalEntities.getPercent();
+		//		double percentAdventure = (saveAdventureBlocks != null ? saveAdventureBlocks.getPercent() : 0)
+		//				+ (saveAdventureEntities != null ? saveAdventureEntities.getPercent() : 0);
+		//		double divisible = 6 - (saveAdventureBlocks == null ? 1 : 0) - (saveAdventureEntities == null ? 1 : 0);
+		//		Double avg = (percentCreative + percentAdventure + percentSurvival) / divisible;
+		//		return avg.intValue();
+		return 100;
 	}
 
 	/**
@@ -400,28 +220,32 @@ public class BlockManager {
 		tracked_adventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
 
 		// Load
-		load(blocksDir, null, true);
-		load(entitiesDir, null, false);
+		for(World world : plugin.getServer().getWorlds()){
+			for(Chunk chunk : world.getLoadedChunks()){
+				loadChunk(chunk);
+			}
+		}
 
+		// TODO: Display values
 		// Tell console what we loaded
-		if(creative_blocks.size() > 0){
-			plugin.getLogger().info("Creative Blocks Loaded: " + creative_blocks.size());
-		}
-		if(survival_blocks.size() > 0){
-			plugin.getLogger().info("Survival Blocks Loaded: " + survival_blocks.size());
-		}
-		if(adventure_blocks.size() > 0){
-			plugin.getLogger().info("Adventure Blocks Loaded: " + adventure_blocks.size());
-		}
-		if(creative_entities.size() > 0){
-			plugin.getLogger().info("Creative Entities Loaded: " + creative_entities.size());
-		}
-		if(survival_entities.size() > 0){
-			plugin.getLogger().info("Survival Entities Loaded: " + survival_entities.size());
-		}
-		if(adventure_entities.size() > 0){
-			plugin.getLogger().info("Adventure Entities Loaded: " + adventure_entities.size());
-		}
+		//		if(creative_blocks.size() > 0){
+		//			plugin.getLogger().info("Creative Blocks Loaded: " + creative_blocks.size());
+		//		}
+		//		if(survival_blocks.size() > 0){
+		//			plugin.getLogger().info("Survival Blocks Loaded: " + survival_blocks.size());
+		//		}
+		//		if(adventure_blocks.size() > 0){
+		//			plugin.getLogger().info("Adventure Blocks Loaded: " + adventure_blocks.size());
+		//		}
+		//		if(creative_entities.size() > 0){
+		//			plugin.getLogger().info("Creative Entities Loaded: " + creative_entities.size());
+		//		}
+		//		if(survival_entities.size() > 0){
+		//			plugin.getLogger().info("Survival Entities Loaded: " + survival_entities.size());
+		//		}
+		//		if(adventure_entities.size() > 0){
+		//			plugin.getLogger().info("Adventure Entities Loaded: " + adventure_entities.size());
+		//		}
 	}
 
 	/**
@@ -441,25 +265,25 @@ public class BlockManager {
 		switch (type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(block)){
-				break;
+				return;
 			}
-			creative_blocks.add(blockToString(block));
 			break;
 		case SURVIVAL:
 			if(!tracked_survival.isTracked(block)){
-				break;
+				return;
 			}
-			survival_blocks.add(blockToString(block));
 			break;
 		default:
 			if(ServerHas.adventureMode()){
 				if(!tracked_adventure.isTracked(block)){
-					break;
+					return;
 				}
-				adventure_blocks.add(blockToString(block));
 			}
 			break;
 		}
+		String c = chunkToString(block.getChunk());
+		ChunkWrapper wrapper = wrappers.get(c);
+		wrapper.addBlock(type, block);
 	}
 
 	/**
@@ -472,25 +296,25 @@ public class BlockManager {
 		switch (type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(entity)){
-				break;
+				return;
 			}
-			creative_entities.add(entityToString(entity));
 			break;
 		case SURVIVAL:
 			if(!tracked_survival.isTracked(entity)){
-				break;
+				return;
 			}
-			survival_entities.add(entityToString(entity));
 			break;
 		default:
 			if(ServerHas.adventureMode()){
 				if(!tracked_adventure.isTracked(entity)){
-					break;
+					return;
 				}
-				adventure_entities.add(entityToString(entity));
 			}
 			break;
 		}
+		String c = chunkToString(entity.getLocation().getChunk());
+		ChunkWrapper wrapper = wrappers.get(c);
+		wrapper.addEntity(type, entity);
 	}
 
 	/**
@@ -504,25 +328,25 @@ public class BlockManager {
 		switch (type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(entityType)){
-				break;
+				return;
 			}
-			creative_entities.add(entityToString(entity, entityType));
 			break;
 		case SURVIVAL:
 			if(!tracked_survival.isTracked(entityType)){
-				break;
+				return;
 			}
-			survival_entities.add(entityToString(entity, entityType));
 			break;
 		default:
 			if(ServerHas.adventureMode()){
 				if(!tracked_adventure.isTracked(entityType)){
-					break;
+					return;
 				}
-				adventure_entities.add(entityToString(entity, entityType));
 			}
 			break;
 		}
+		String c = chunkToString(entity.getChunk());
+		ChunkWrapper wrapper = wrappers.get(c);
+		wrapper.addEntity(type, entity, entityType);
 	}
 
 	/**
@@ -537,19 +361,9 @@ public class BlockManager {
 			material.gamemode = type;
 			material.location = entity.getLocation();
 			recentlyRemoved.add(material);
-			switch (type){
-			case CREATIVE:
-				creative_entities.remove(entityToString(entity));
-				break;
-			case SURVIVAL:
-				survival_entities.remove(entityToString(entity));
-				break;
-			default:
-				if(ServerHas.adventureMode()){
-					adventure_entities.remove(entityToString(entity));
-				}
-				break;
-			}
+			String c = chunkToString(entity.getLocation().getChunk());
+			ChunkWrapper wrapper = wrappers.get(c);
+			wrapper.removeEntity(entity);
 		}
 	}
 
@@ -565,19 +379,9 @@ public class BlockManager {
 			material.gamemode = type;
 			material.location = block.getLocation();
 			recentlyRemoved.add(material);
-			switch (type){
-			case CREATIVE:
-				creative_blocks.remove(blockToString(block));
-				break;
-			case SURVIVAL:
-				survival_blocks.remove(blockToString(block));
-				break;
-			default:
-				if(ServerHas.adventureMode()){
-					adventure_blocks.remove(blockToString(block));
-				}
-				break;
-			}
+			String c = chunkToString(block.getChunk());
+			ChunkWrapper wrapper = wrappers.get(c);
+			wrapper.removeBlock(block);
 		}
 	}
 
@@ -643,16 +447,9 @@ public class BlockManager {
 	 * @return the gamemode, or null if no assignment
 	 */
 	public GameMode getType(Block block){
-		if(creative_blocks.contains(blockToString(block))){
-			return GameMode.CREATIVE;
-		}else if(survival_blocks.contains(blockToString(block))){
-			return GameMode.SURVIVAL;
-		}else if(adventure_blocks.contains(blockToString(block))){
-			if(ServerHas.adventureMode()){
-				return GameMode.ADVENTURE;
-			}
-		}
-		return null;
+		String c = chunkToString(block.getChunk());
+		ChunkWrapper wrapper = wrappers.get(c);
+		return wrapper.getType(block);
 	}
 
 	/**
@@ -662,16 +459,9 @@ public class BlockManager {
 	 * @return the gamemode, or null if no assignment
 	 */
 	public GameMode getType(Entity entity){
-		if(creative_entities.contains(entityToString(entity))){
-			return GameMode.CREATIVE;
-		}else if(survival_entities.contains(entityToString(entity))){
-			return GameMode.SURVIVAL;
-		}else if(adventure_entities.contains(entityToString(entity))){
-			if(ServerHas.adventureMode()){
-				return GameMode.ADVENTURE;
-			}
-		}
-		return null;
+		String c = chunkToString(entity.getLocation().getChunk());
+		ChunkWrapper wrapper = wrappers.get(c);
+		return wrapper.getType(entity);
 	}
 
 	/**

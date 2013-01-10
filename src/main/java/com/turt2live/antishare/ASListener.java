@@ -76,6 +76,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.InventoryView;
@@ -161,13 +163,26 @@ public class ASListener implements Listener {
 		return config.get(world);
 	}
 
+	// ################# Chunk Load
+
+	@EventHandler
+	public void onChunkLoad(ChunkLoadEvent event){
+		plugin.getBlockManager().loadChunk(event.getChunk());
+	}
+
+	// ################# Chunk Unload
+
+	@EventHandler
+	public void onChunkUnload(ChunkUnloadEvent event){
+		plugin.getBlockManager().unloadChunk(event.getChunk());
+	}
+
 	// ################# World Load
 
 	@EventHandler
 	public void onWorldLoad(WorldLoadEvent event){
 		World world = event.getWorld();
 		config.put(world.getName(), new PerWorldConfig(world.getName()));
-		plugin.getBlockManager().loadWorld(world.getName());
 		plugin.getRegionManager().loadWorld(world.getName());
 	}
 

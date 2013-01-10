@@ -507,7 +507,6 @@ public class ASUtils {
 				}
 			}
 		}
-		folder.delete();
 	}
 
 	/**
