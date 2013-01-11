@@ -5,6 +5,7 @@ description: Create social awkwardness for creative-mode players
 authors: [Turt2Live, Sayshal]
 website: http://dev.bukkit.org/server-mods/antishare
 softdepend: [Vault, xMail]
+build: jenkins-build-number
 commands:
   antishare:
     description: AntiShare command

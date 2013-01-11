@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -124,11 +125,26 @@ public class AntiShare extends PluginWrapper {
 		}
 		getConfig().load();
 
+		// Get build number
+		String buildNumber = "UNKNOWN";
+		try{
+			BufferedReader in = new BufferedReader(new InputStreamReader(getResource("plugin.yml")));
+			String line;
+			while ((line = in.readLine()) != null){
+				if(line.startsWith("build: ")){
+					line = line.replace("build: ", "");
+					buildNumber = line;
+					break;
+				}
+			}
+		}catch(IOException e){}
+
 		// Create version string
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Creating version string in config.yml...");
 		}
-		getConfig().set("error-reporting.error-string", getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + getServer().getServerId());
+		String val = getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + buildNumber;
+		getConfig().set("error-reporting.error-string", val);
 		saveConfig();
 
 		// Move SimpleNotice file
