@@ -44,9 +44,10 @@ import com.turt2live.antishare.util.ASUtils;
  */
 public class CommandHandler implements CommandExecutor {
 
+	private AntiShare plugin = AntiShare.getInstance();
+
 	@Override
 	public boolean onCommand(final CommandSender sender, Command command, String label, String[] args){
-		AntiShare plugin = AntiShare.getInstance();
 		if(ServerHas.commandBlock()){
 			if(CommandBlockLayer.isCommandBlock(sender)){
 				return false;
@@ -54,7 +55,10 @@ public class CommandHandler implements CommandExecutor {
 		}
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
-				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
+				if(args[0].equalsIgnoreCase("version")){
+					ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
+					return true;
+				}else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(plugin.getPermissions().has(sender, PermissionNodes.RELOAD)){
 						ASUtils.sendToPlayer(sender, "Reloading...", true);
 						plugin.reload();
@@ -540,5 +544,4 @@ public class CommandHandler implements CommandExecutor {
 		}
 		return false; //Shows usage in plugin.yml
 	}
-
 }

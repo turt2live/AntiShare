@@ -28,6 +28,7 @@ commands:
       /<command> money status - Tells you if you get fine/reward messages
       /<command> simplenotice - Toggle SimpleNotice support
       /<command> check [creative/survival/adventure/playername] - Find Game Mode users
+      /<command> version - Show AntiShare version information
       /<command> help = This menu
 
 permissions:

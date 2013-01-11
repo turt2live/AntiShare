@@ -92,6 +92,7 @@ public class AntiShare extends PluginWrapper {
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private HookManager hooks;
 	private CuboidManager cuboids;
+	private String build = "Unknown build, custom?";
 
 	/**
 	 * Gets the active AntiShare instance
@@ -126,14 +127,13 @@ public class AntiShare extends PluginWrapper {
 		getConfig().load();
 
 		// Get build number
-		String buildNumber = "UNKNOWN";
 		try{
 			BufferedReader in = new BufferedReader(new InputStreamReader(getResource("plugin.yml")));
 			String line;
 			while ((line = in.readLine()) != null){
 				if(line.startsWith("build: ")){
 					line = line.replace("build: ", "");
-					buildNumber = line;
+					build = line;
 					break;
 				}
 			}
@@ -143,7 +143,7 @@ public class AntiShare extends PluginWrapper {
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Creating version string in config.yml...");
 		}
-		String val = getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + buildNumber;
+		String val = getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + build;
 		getConfig().set("error-reporting.error-string", val);
 		saveConfig();
 
@@ -922,6 +922,15 @@ public class AntiShare extends PluginWrapper {
 			ASUtils.sendToPlayer(target, ChatColor.DARK_AQUA + "Debug Mode Settings: TOOL: " + getConfig().getBoolean("other.debug-settings.force-use-tool") + " IGNORE: " + ignoreTool, true);
 		}
 		return !getConfig().getBoolean("other.debug");
+	}
+
+	/**
+	 * Gets the AntiShare build number
+	 * 
+	 * @return the build number
+	 */
+	public String getBuild(){
+		return build;
 	}
 
 }
