@@ -71,6 +71,7 @@ class ObjectSaver implements Runnable {
 				save(dir, chunk, item);
 				completed++;
 			}
+			blockman.getFile(dir, chunk).save();
 		}
 		blockman.markSaveAsDone(identity, this);
 		done = true;

@@ -104,14 +104,6 @@ public class BlockManager {
 		String key = chunkToString(chunk);
 		ChunkWrapper wrapper = wrappers.get(key);
 		if(wrapper != null){
-			File file = new File(blocksDir, key + ".yml");
-			if(file.exists()){
-				file.delete();
-			}
-			file = new File(entitiesDir, key + ".yml");
-			if(file.exists()){
-				file.delete();
-			}
 			String[] names = new String[6];
 			for(int i = 0; i < names.length; i++){
 				names[i] = key + i;

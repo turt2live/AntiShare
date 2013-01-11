@@ -224,6 +224,16 @@ class ChunkWrapper {
 		if(names.length < 6){
 			throw new IllegalArgumentException("6 names are required");
 		}
+
+		File blockFile = new File(blocksDir, cx + "." + cz + "." + world + ".yml");
+		File entityFile = new File(entitiesDir, cx + "." + cz + "." + world + ".yml");
+		if(blockFile.exists()){
+			blockFile.delete();
+		}
+		if(entityFile.exists()){
+			entityFile.delete();
+		}
+
 		saveCreativeBlocks = new ObjectSaver(creative_blocks, GameMode.CREATIVE, blocksDir, names[0], true);
 		saveSurvivalBlocks = new ObjectSaver(survival_blocks, GameMode.SURVIVAL, blocksDir, names[1], true);
 		saveCreativeEntities = new ObjectSaver(creative_entities, GameMode.CREATIVE, entitiesDir, names[2], false);
