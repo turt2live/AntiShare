@@ -195,10 +195,28 @@ class ChunkWrapper {
 	}
 
 	public GameMode getType(Entity entity){
+		if(creative_entities.contains(manager.entityToString(entity))){
+			return GameMode.CREATIVE;
+		}else if(survival_entities.contains(manager.entityToString(entity))){
+			return GameMode.SURVIVAL;
+		}else if(adventure_entities.contains(manager.entityToString(entity))){
+			if(ServerHas.adventureMode()){
+				return GameMode.ADVENTURE;
+			}
+		}
 		return null;
 	}
 
 	public GameMode getType(Block block){
+		if(creative_blocks.contains(manager.blockToString(block))){
+			return GameMode.CREATIVE;
+		}else if(survival_blocks.contains(manager.blockToString(block))){
+			return GameMode.SURVIVAL;
+		}else if(adventure_blocks.contains(manager.blockToString(block))){
+			if(ServerHas.adventureMode()){
+				return GameMode.ADVENTURE;
+			}
+		}
 		return null;
 	}
 

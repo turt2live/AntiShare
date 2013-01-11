@@ -11,8 +11,6 @@
 package com.turt2live.antishare.storage;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -53,7 +51,7 @@ public class BlockManager {
 
 	private AntiShare plugin;
 	private CopyOnWriteArrayList<String> loadedChunks = new CopyOnWriteArrayList<String>();
-	private Map<String, ChunkWrapper> wrappers = new HashMap<String, ChunkWrapper>();
+	private ConcurrentMap<String, ChunkWrapper> wrappers = new ConcurrentHashMap<String, ChunkWrapper>();
 	TrackerList tracked_creative;
 	TrackerList tracked_survival;
 	TrackerList tracked_adventure;
@@ -62,7 +60,7 @@ public class BlockManager {
 	private boolean doneLastSave = false;
 	private final File entitiesDir;
 	private final File blocksDir;
-	private final Map<String, Boolean> activeSaves = new HashMap<String, Boolean>();
+	private final ConcurrentMap<String, Boolean> activeSaves = new ConcurrentHashMap<String, Boolean>();
 
 	/**
 	 * Creates a new block manager, also loads the block lists
@@ -106,6 +104,14 @@ public class BlockManager {
 		String key = chunkToString(chunk);
 		ChunkWrapper wrapper = wrappers.get(key);
 		if(wrapper != null){
+			File file = new File(blocksDir, key + ".yml");
+			if(file.exists()){
+				file.delete();
+			}
+			file = new File(entitiesDir, key + ".yml");
+			if(file.exists()){
+				file.delete();
+			}
 			String[] names = new String[6];
 			for(int i = 0; i < names.length; i++){
 				names[i] = key + i;
@@ -134,6 +140,9 @@ public class BlockManager {
 		// Create savers
 		for(String key : wrappers.keySet()){
 			ChunkWrapper wrapper = wrappers.get(key);
+			if(wrapper == null){
+				continue;
+			}
 			String[] names = new String[6];
 			for(int i = 0; i < names.length; i++){
 				names[i] = key + i;
