@@ -18,12 +18,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.turt2live.antishare.cuboid.Cuboid;
@@ -389,6 +391,87 @@ public class CommandHandler implements CommandExecutor {
 								}
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!", true);
+							}
+						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("settool")){
+					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_GET)){
+						// Sanity check
+						if(!(sender instanceof Player)){
+							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You must be a player to use the set block tool!", true);
+						}else{
+							// Setup
+							Player player = (Player) sender;
+							PlayerInventory inventory = player.getInventory();
+
+							// Check inventory
+							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
+								if(inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the set block tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
+								}else{
+									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player);
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the set block tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
+								}
+								ASUtils.sendToPlayer(player, ChatColor.AQUA + "" + ChatColor.ITALIC + "LEFT" + ChatColor.RESET + ChatColor.AQUA + " click to set the block type", true);
+								ASUtils.sendToPlayer(player, ChatColor.AQUA + "" + ChatColor.ITALIC + "RIGHT" + ChatColor.RESET + ChatColor.AQUA + " click to remove the block type", true);
+							}else{
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!", true);
+							}
+						}
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have permission!", true);
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("toolbox")){
+					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_GET)){
+						// Sanity check
+						if(!(sender instanceof Player)){
+							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You must be a player to use the toolbox!", true);
+						}else{
+							// Setup
+							Player player = (Player) sender;
+							PlayerInventory inventory = player.getInventory();
+
+							// Find clear spots
+							int clearSpots = 0;
+							for(ItemStack stack : inventory.getContents()){
+								if(stack == null || stack.getType() == Material.AIR){
+									clearSpots++;
+								}
+							}
+
+							// Check inventory
+							if(clearSpots >= 3){
+								if(!inventory.contains(AntiShare.ANTISHARE_TOOL)){
+									ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player, 1);
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
+								}
+								if(!inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
+									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player, 2);
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the set block tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
+								}else{
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the set block tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
+								}
+								if(plugin.getPermissions().has(sender, PermissionNodes.CREATE_CUBOID)){
+									if(!inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
+										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player, 3);
+										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the cuboid tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
+									}else{
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the cuboid tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
+									}
+								}else{
+									ASUtils.sendToPlayer(player, ChatColor.RED + "You are missing the cuboid tool: You do not have permission.", true);
+								}
+								ASUtils.sendToPlayer(player, ChatColor.YELLOW + "With the " + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + " simply left or right click a block to see what type it is.", false);
+								ASUtils.sendToPlayer(player, ChatColor.GOLD + "With the " + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + " simply left click to set the block type, and right click to remove the type.", false);
+								ASUtils.sendToPlayer(player, ChatColor.YELLOW + "With the " + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + " simply left click to set point 1 and right click to set point 2.", false);
+							}else{
+								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 3 free spots in your inventory!", true);
 							}
 						}
 					}else{

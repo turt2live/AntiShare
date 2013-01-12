@@ -21,6 +21,8 @@ commands:
       /<command> listregions # = List regions found on page #
       /<command> mirror <player> [ender/normal] [gamemode] [world] - Mirror <player>'s inventory
       /<command> tool - Get the AntiShare tool (Blaze Rod)
+      /<command> settool - Get the set block AntiShare tool (Blaze Powder)
+      /<command> toolbox - Get the AntiShare toolbox (set tool, tool, and cuboid tool)
       /<command> cuboid tool - Get the Cuboid tool (Slimeball)
       /<command> cuboid clear - Clear current cuboid save
       /<command> cuboid status - Show cuboid status

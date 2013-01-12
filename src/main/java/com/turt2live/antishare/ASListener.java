@@ -790,6 +790,23 @@ public class ASListener implements Listener {
 				// Cancel and stop the check
 				event.setCancelled(plugin.shouldCancel(player, true));
 				return;
+			}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
+				GameMode gm = plugin.getBlockManager().getType(block);
+				switch (action){
+				case LEFT_CLICK_BLOCK:
+					if(gm != null){
+						plugin.getBlockManager().removeBlock(block);
+					}
+					plugin.getBlockManager().addBlock(player.getGameMode(), block);
+					ASUtils.sendToPlayer(player, ChatColor.GREEN + "Block set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
+					break;
+				case RIGHT_CLICK_BLOCK:
+					plugin.getBlockManager().removeBlock(block);
+					ASUtils.sendToPlayer(player, ChatColor.RED + "Block " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (gm == null ? "natural" : gm.name()) + ChatColor.RED + ")", true);
+					break;
+				}
+				event.setCancelled(plugin.shouldCancel(player, true));
+				return;
 			}
 		}
 
@@ -1033,19 +1050,28 @@ public class ASListener implements Listener {
 	public void onItemFrameClick(PlayerInteractEntityEvent event){
 		if(!event.isCancelled()
 				&& event.getPlayer().getItemInHand() != null
-				&& event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL
+				&& (event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL || event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL)
 				&& plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
 			Entity entity = event.getRightClicked();
 			GameMode mode = plugin.getBlockManager().getType(entity);
 			Material item = Material.AIR;
 			if(ServerHas.mc14xEntities() && entity.getType() == EntityType.ITEM_FRAME){
 				item = Material.ITEM_FRAME;
-			}else{
+			}else if(entity.getType() == EntityType.PAINTING){
 				item = Material.PAINTING;
 			}
-			ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
-			event.setCancelled(true);
-			return;
+			if(item != Material.AIR){
+				if(event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
+					plugin.getBlockManager().removeEntity(entity);
+					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + ASUtils.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (mode == null ? "natural" : mode.name()) + ChatColor.RED + ")", true);
+					event.setCancelled(plugin.shouldCancel(event.getPlayer(), true));
+					return;
+				}else{
+					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
+					event.setCancelled(plugin.shouldCancel(event.getPlayer(), true));
+					return;
+				}
+			}
 		}
 		if(event.isCancelled()
 				|| !plugin.getConfig().getBoolean("enabled-features.disable-item-frame-cross-game-mode")

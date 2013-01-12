@@ -515,15 +515,26 @@ public class ASUtils {
 	 * @param tool the tool
 	 * @param player the player
 	 */
-	@SuppressWarnings ("deprecation")
 	public static void giveTool(Material tool, Player player){
+		giveTool(tool, player, 1);
+	}
+
+	/**
+	 * Gives a tool to a player
+	 * 
+	 * @param tool the tool
+	 * @param player the player
+	 * @param slot the slot to place it in. <b>Starts at 1</b>
+	 */
+	@SuppressWarnings ("deprecation")
+	public static void giveTool(Material tool, Player player, int slot){
 		Inventory inv = player.getInventory();
 		if(inv.firstEmpty() >= 0){
-			ItemStack original = inv.getItem(0);
+			ItemStack original = inv.getItem(slot - 1);
 			if(original != null){
 				original = original.clone();
 			}
-			inv.setItem(0, new ItemStack(tool));
+			inv.setItem(slot - 1, new ItemStack(tool));
 			if(original != null){
 				inv.addItem(original);
 			}

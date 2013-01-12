@@ -69,6 +69,10 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public static final Material ANTISHARE_CUBOID_TOOL = Material.SLIME_BALL;
 	/**
+	 * Used to force-set a block
+	 */
+	public static final Material ANTISHARE_SET_TOOL = Material.BLAZE_POWDER;
+	/**
 	 * Used for debug stuff
 	 */
 	public static final Material ANTISHARE_DEBUG_TOOL = Material.BONE;
