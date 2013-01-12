@@ -28,8 +28,6 @@ public class TrackerList extends ArrayList<Tracker> {
 	 * @author turt2live
 	 */
 	public static enum TrackerType{
-		FLAT_FILE("Storage System", "Flat-File (YAML)"),
-		SQL("Storage System", "SQL"),
 		SPECIAL("Unknown", "Unkown"),
 		FEATURE_FINES("Features Used", "Fines/Rewards"),
 		FEATURE_SIGNS("Features Used", "Signs");
@@ -72,14 +70,6 @@ public class TrackerList extends ArrayList<Tracker> {
 			add(new Tracker(type.getName(), type));
 		}
 		remove(TrackerType.SPECIAL);
-
-		// Fix the SQL/Flat File graphs
-		remove(TrackerType.SQL);
-		remove(TrackerType.FLAT_FILE);
-		StorageTracker sql = new StorageTracker(TrackerType.SQL.getName(), TrackerType.SQL);
-		StorageTracker yaml = new StorageTracker(TrackerType.FLAT_FILE.getName(), TrackerType.FLAT_FILE);
-		add(sql);
-		add(yaml);
 	}
 
 	// Removes a graph type, must be called before metric gets the graph

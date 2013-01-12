@@ -1,5 +1,5 @@
 Since 5.2.0:
-Nothing
+- Remove SQL Support
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

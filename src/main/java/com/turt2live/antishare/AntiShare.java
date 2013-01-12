@@ -47,7 +47,6 @@ import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.ASUtils;
-import com.turt2live.antishare.util.SQL;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
 import com.turt2live.antishare.util.generic.SelfCompatibility;
@@ -78,8 +77,6 @@ public class AntiShare extends PluginWrapper {
 	public static final Material ANTISHARE_DEBUG_TOOL = Material.BONE;
 
 	private static AntiShare instance;
-	private boolean useSQL = false;
-	private boolean sqlRetry = false;
 	private Permissions permissions;
 	private ItemMap itemMap;
 	private ASListener listener;
@@ -88,7 +85,6 @@ public class AntiShare extends PluginWrapper {
 	private RegionManager regions;
 	private BlockManager blocks;
 	private InventoryManager inventories;
-	private SQL sql;
 	private Metrics metrics;
 	private TrackerList trackers;
 	private SignManager signs;
@@ -175,22 +171,6 @@ public class AntiShare extends PluginWrapper {
 			}
 		}catch(IOException e){
 			e.printStackTrace();
-		}
-
-		// We need to initiate an SQL connection now
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting SQL if needed...");
-		}
-		startSQL();
-
-		// Spam about SQL
-		if(getConfig().getBoolean("enabled-features.sql")){
-			getLogger().warning("**************************************************");
-			getLogger().warning("| WARNING: SQL SUPPORT IS BEING REMOVED IN 5.3.0 |");
-			getLogger().warning("--------------------------------------------------");
-			getLogger().warning("| Contact turt2live (via Private Message) on     |");
-			getLogger().warning("| BukkitDev for conversion/information           |");
-			getLogger().warning("--------------------------------------------------");
 		}
 
 		// Check for online mode
@@ -415,12 +395,6 @@ public class AntiShare extends PluginWrapper {
 			}
 			metrics.flush();
 		}
-		if(sql != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Disconnecting from SQL...");
-			}
-			sql.disconnect();
-		}
 		if(cuboids != null){
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
 				getLogger().info("Saving cuboid information...");
@@ -441,7 +415,6 @@ public class AntiShare extends PluginWrapper {
 		blocks = null;
 		inventories = null;
 		regions = null;
-		sql = null;
 		metrics = null;
 		trackers = null;
 		signs = null;
@@ -484,9 +457,6 @@ public class AntiShare extends PluginWrapper {
 		regions.reload();
 		blocks.reload();
 		inventories.reload();
-		if(sql != null){
-			sql.reconnect();
-		}
 		cuboids.reload();
 		// Metrics has no reload
 		// Tracker List has no reload
@@ -800,71 +770,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public MoneyManager getMoneyManager(){
 		return tender;
-	}
-
-	/**
-	 * Gets the SQL manager for AntiShare
-	 * 
-	 * @return the SQL manager
-	 */
-	public SQL getSQL(){
-		return sql;
-	}
-
-	/**
-	 * Determines if AntiShare should use SQL or not
-	 * 
-	 * @return true if SQL should be used
-	 */
-	public boolean useSQL(){
-		if(getConfig().getBoolean("enabled-features.sql") && !useSQL && !sqlRetry){
-			startSQL();
-			sqlRetry = true;
-		}
-		return useSQL && getConfig().getBoolean("enabled-features.sql") && sql.isConnected();
-	}
-
-	/**
-	 * Force starts the SQL connection
-	 * 
-	 * @return true if connected
-	 */
-	public boolean startSQL(){
-		if(!getConfig().getBoolean("enabled-features.sql")){
-			return false;
-		}
-		sql = new SQL();
-		if(getConfig().getBoolean("settings.sql.sqlite.use-instead")){
-			// Setup properties
-			String location = getConfig().getString("settings.sql.sqlite.location");
-			String name = getConfig().getString("settings.sql.sqlite.name");
-
-			// Try connection
-			boolean connected = sql.connect(location, name);
-			if(connected){
-				sql.setup();
-				useSQL = true;
-				return true;
-			}
-		}else{
-			// Setup properties
-			String hostname = getConfig().getString("settings.sql.host");
-			String username = getConfig().getString("settings.sql.username");
-			String password = getConfig().getString("settings.sql.password");
-			String database = getConfig().getString("settings.sql.database");
-			String port = getConfig().getString("settings.sql.port");
-
-			// Try connection
-			boolean connected = sql.connect(hostname, username, password, database, port);
-			if(connected){
-				sql.setup();
-				useSQL = true;
-				return true;
-			}
-		}
-
-		// Failed connection
-		return false;
 	}
 
 	/**
