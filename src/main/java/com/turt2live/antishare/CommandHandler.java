@@ -75,6 +75,10 @@ public class CommandHandler implements CommandExecutor {
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, and therefore cannot view inventories. Sorry!", true);
 					}else{
 						if(plugin.getPermissions().has(sender, PermissionNodes.MIRROR)){
+							if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
+								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You do not have inventories enabled." + ChatColor.RED + " You will not be able to view inventories without inventory tracking on.", true);
+								return true;
+							}
 							if(args.length < 2){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "No player name provided! Try /as mirror <player> [enderchest/normal] [gamemode] [world]", true);
 							}else{
