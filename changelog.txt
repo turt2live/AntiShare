@@ -1,32 +1,5 @@
-Since 5.1.3:
-
-Bugs FIXED:
-- Fixed block manager corruption
-- Fixed regions to work 100% of the time
-- Fixed some notifications not firing correctly
-- Fix survival players being denied item frames if the server is not tracking them
-- Fixed inventories not saving/loading correctly
-
-Features ADDED:
-- Added warning for SQL being used (Will be dropped in 5.3.0)
-- Added option for cross-gamemode contamination
-    - EXAMPLE: Survival dirt trying to place creative torch
-    - EXAMPLE: Survival dirt has creative torch, when dirt broken in Survival, torch is broken as if in creative (disappears, no drop)
-- Added ability to see ender chests, specific gamemodes, and specific world inventories with /as mirror. Required inventory handler to be in use
-- Added ability to look up players with /as check
-- Added cuboid code (use Slime Ball), this is how you make regions now
-- Added protection for spawning of Golems (snow and iron) as well as the Wither
-- Added auto-cleaning feature to configurations
-- Added error-string to help with debugging / user errors
-- Added /as version
-- Added set block tool (left click=set, right=remove. Blaze Powder)
-- Added /as toolbox
-
-Features CHANGED:
-- SQL is no longer used to SAVE. However, AntiShare will load off of it. 
-    - AntiShare loads the first time off SQL, then when it saves it disables SQL to load off flat file
-- The block manager now only loads what it needs (loaded chunks only, as chunks are unloaded the block manager saves those chunk's gamemode blocks to disk)
-- Changed how tools are added to your inventory. They will now try to take the first slot by force (move items)
+Since 5.2.0:
+Nothing
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
