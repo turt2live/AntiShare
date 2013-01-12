@@ -1,5 +1,8 @@
 Since 5.2.0:
 - Remove SQL Support
+- Move location of inventories
+- Temp now deletes itself
+- Fix (not harmful) bug in block manager save
  
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
