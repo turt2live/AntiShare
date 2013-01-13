@@ -221,6 +221,48 @@ public class AntiShare extends PluginWrapper {
 		}
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
+		// Convert blocks
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Converting blocks...");
+		}
+		SelfCompatibility.convertBlocks();
+
+		// Migrate world configurations
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Migrating world configurations...");
+		}
+		SelfCompatibility.migrateWorldConfigurations();
+
+		// Migrate region players (3.8.0-3.9.0)
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Migrating region player data...");
+		}
+		SelfCompatibility.migratePlayerData();
+
+		// Convert inventories (3.1.3-3.2.0/Current)
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Converting 3.1.3 inventories...");
+		}
+		SelfCompatibility.convert313Inventories();
+
+		// Convert inventories (5.2.0/Current)
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Converting 5.2.0 inventories...");
+		}
+		SelfCompatibility.cleanup520Inventories();
+
+		// Cleanup old files
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Cleaning up inventories...");
+		}
+		SelfCompatibility.cleanupOldInventories(); // Handles on/off in config internally
+
+		// Cleanup old files
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Cleaning up configuration files...");
+		}
+		SelfCompatibility.cleanupYAML();
+
 		// Setup everything
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting Metrics trackers...");
@@ -274,42 +316,6 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info("Starting cuboid manager...");
 		}
 		cuboids = new CuboidManager();
-
-		// Convert blocks
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] Converting blocks...");
-		}
-		SelfCompatibility.convertBlocks();
-
-		// Migrate world configurations
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] Migrating world configurations...");
-		}
-		SelfCompatibility.migrateWorldConfigurations();
-
-		// Migrate region players (3.8.0-3.9.0)
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] Migrating region player data...");
-		}
-		SelfCompatibility.migratePlayerData();
-
-		// Convert inventories (3.1.3-3.2.0/Current)
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] Converting 3.1.3 inventories...");
-		}
-		SelfCompatibility.convert313Inventories();
-
-		// Cleanup old files
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] Cleaning up inventories...");
-		}
-		SelfCompatibility.cleanupOldInventories(); // Handles on/off in config internally
-
-		// Cleanup old files
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] Cleaning up configuration files...");
-		}
-		SelfCompatibility.cleanupYAML();
 
 		// Statistics
 		if(!getConfig().getBoolean("other.more-quiet-startup")){

@@ -27,6 +27,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.util.ASUtils;
 
 public class SelfCompatibility {
 
@@ -35,7 +36,10 @@ public class SelfCompatibility {
 		PLAYER_DATA(5),
 		INV_313(10),
 		WORLD_CONF(15),
-		CONFIG_520(20);
+		@Deprecated
+		CONFIG_520(20),
+		CONFIG_530(25),
+		INV_520(30);
 
 		public final int BYTE_POS;
 
@@ -304,7 +308,7 @@ public class SelfCompatibility {
 	 * Cleans YAML files
 	 */
 	public static void cleanupYAML(){
-		if(!needsUpdate(Compat.CONFIG_520)){
+		if(!needsUpdate(Compat.CONFIG_530)){
 			return;
 		}
 		int cleaned = 0;
@@ -327,7 +331,23 @@ public class SelfCompatibility {
 		if(cleaned > 0){
 			plugin.getLogger().info("Configuration files cleaned: " + cleaned);
 		}
-		noLongerNeedsUpdate(Compat.CONFIG_520);
+		noLongerNeedsUpdate(Compat.CONFIG_530);
+	}
+
+	/**
+	 * Relocates 5.2.0 inventories
+	 */
+	public static void cleanup520Inventories(){
+		if(!needsUpdate(Compat.INV_520)){
+			return;
+		}
+		File data = AntiShare.getInstance().getDataFolder();
+		File inventoryFile = new File(data, "inventories");
+		File newFolder = new File(data, "data" + File.separator + "inventories");
+		if(inventoryFile.exists()){
+			inventoryFile.renameTo(newFolder);
+		}
+		noLongerNeedsUpdate(Compat.INV_520);
 	}
 
 	private static int cleanFolder(File folder, FileType type){
@@ -374,6 +394,8 @@ public class SelfCompatibility {
 			}
 		}
 		actual.save();
+		ASUtils.wipeFolder(temp, null);
+		temp.delete();
 	}
 
 }

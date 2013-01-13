@@ -489,7 +489,7 @@ public class ASUtils {
 	 * Wipes a folder
 	 * 
 	 * @param folder the folder to wipe
-	 * @param fileNames file names to wip
+	 * @param fileNames file names to wipe, can be null for "all"
 	 */
 	public static void wipeFolder(File folder, CopyOnWriteArrayList<String> fileNames){
 		if(!folder.exists()){
