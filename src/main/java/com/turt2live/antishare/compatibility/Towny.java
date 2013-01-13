@@ -14,7 +14,7 @@ public class Towny extends RegionProtection {
 
 	@Override
 	public boolean isRegion(Location location){
-		return TownyUniverse.isWilderness(location.getBlock());
+		return !TownyUniverse.isWilderness(location.getBlock());
 	}
 
 	@Override
@@ -29,9 +29,6 @@ public class Towny extends RegionProtection {
 		try{
 			Town town = tblock.getTown();
 			if(town == null){
-				return true;
-			}
-			if(town.isPublic()){
 				return true;
 			}
 			if(town.hasResident(player.getName()) || town.getMayor().getName().equalsIgnoreCase(player.getName())){

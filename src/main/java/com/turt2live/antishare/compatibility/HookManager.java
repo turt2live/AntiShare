@@ -63,7 +63,7 @@ public class HookManager {
 
 	public boolean checkForRegion(Player player, Block block){
 		for(RegionProtection protection : regions){
-			if(protection.isAllowed(player, block)){
+			if(!protection.isAllowed(player, block)){
 				return true;
 			}
 		}

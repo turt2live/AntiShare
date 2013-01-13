@@ -335,6 +335,15 @@ public class ASListener implements Listener {
 		}
 	}
 
+	// ################# Block Break (2)
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onGameModeBlockBreak(BlockBreakEvent event){
+		if(!event.isCancelled()){
+			plugin.getBlockManager().removeBlock(event.getBlock());
+		}
+	}
+
 	// ################# Block Break
 
 	@EventHandler (priority = EventPriority.LOW)
