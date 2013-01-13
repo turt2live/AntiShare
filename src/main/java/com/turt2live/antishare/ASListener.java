@@ -272,11 +272,16 @@ public class ASListener implements Listener {
 			Block[][] bodies = {body1, body2, body3, body4, body5, body6};
 			boolean matched = false;
 			for(Block[] body : bodies){
+				boolean noBody = false;
 				for(int i = 0; i < body.length - 2; i++){
 					Block bodyBlock = body[i];
 					if(bodyBlock.getType() != Material.SOUL_SAND){
-						continue;
+						noBody = true;
+						break;
 					}
+				}
+				if(noBody){
+					continue;
 				}
 				Block head1 = body[body.length - 2];
 				Block head2 = body[body.length - 1];
