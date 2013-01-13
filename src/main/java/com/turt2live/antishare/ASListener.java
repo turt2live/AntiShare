@@ -91,8 +91,8 @@ import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.PerWorldConfig;
-import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
+import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.tekkitcompat.EntityLayer;
 import com.turt2live.antishare.tekkitcompat.HangingListener;
 import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
@@ -371,7 +371,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check hooks
-		if(plugin.getHookManager().checkForSignProtection(block)){
+		if(plugin.getHookManager().checkForSignProtection(block) || plugin.getHookManager().checkForRegion(player, block)){
 			return; // Don't handle any further, let the other plugin handle it
 		}
 
