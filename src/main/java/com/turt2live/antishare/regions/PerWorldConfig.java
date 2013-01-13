@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.storage;
+package com.turt2live.antishare.regions;
 
 import java.io.File;
 
@@ -20,7 +20,6 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.regions.WorldSplit;
 import com.turt2live.antishare.regions.WorldSplit.Axis;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.events.EntityList;

@@ -29,6 +29,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.turt2live.antishare.blocks.BlockManager;
 import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.feildmaster.lib.configuration.PluginWrapper;
@@ -43,7 +44,6 @@ import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.signs.SignManager;
-import com.turt2live.antishare.storage.BlockManager;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.ASUtils;

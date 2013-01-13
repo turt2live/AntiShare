@@ -24,7 +24,7 @@ import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.storage.PerWorldConfig.ListType;
+import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.util.ASUtils;
 
 public class HangingListener implements Listener {

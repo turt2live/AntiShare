@@ -33,7 +33,7 @@ public class WorldSplit {
 	 * 
 	 * @author turt2live
 	 */
-	public enum Axis{
+	public static enum Axis{
 		X,
 		Z,
 		NONE;

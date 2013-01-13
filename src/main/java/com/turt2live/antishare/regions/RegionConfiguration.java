@@ -18,8 +18,7 @@ import org.bukkit.entity.Entity;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.storage.PerWorldConfig;
-import com.turt2live.antishare.storage.PerWorldConfig.ListType;
+import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.events.EntityList;
 import com.turt2live.antishare.util.events.EventList;
