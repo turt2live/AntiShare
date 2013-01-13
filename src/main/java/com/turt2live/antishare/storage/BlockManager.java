@@ -164,7 +164,7 @@ public class BlockManager {
 		}
 		activeSaves.put(list, true);
 		for(String key : activeSaves.keySet()){
-			if(!activeSaves.get(key)){
+			if(activeSaves.get(key) != null && !activeSaves.get(key)){
 				return;
 			}
 		}
