@@ -11,6 +11,8 @@
 package com.turt2live.antishare.inventory;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,14 +22,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.material.MaterialData;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.antishare.util.SQL;
 
 /**
  * AntiShare Inventory
@@ -111,49 +116,106 @@ public class ASInventory implements Cloneable {
 		if(!AntiShare.getInstance().getConfig().getBoolean("handled-actions.gamemode-inventories")){
 			return inventories;
 		}
-		// Setup
-		File dir = new File(AntiShare.getInstance().getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
-		dir.mkdirs();
-		File saveFile = new File(dir, name + ".yml");
-		if(!saveFile.exists()){
-			return inventories;
-		}
-		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, AntiShare.getInstance());
-		file.load();
 
-		// Load data
-		// Structure: yml:world.gamemode.slot.properties
-		List<String> removeWorlds = new ArrayList<String>();
-		for(String world : file.getKeys(false)){
-			for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
-				World worldV = Bukkit.getWorld(world);
-				if(worldV == null){
-					AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE);
-					if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
-						AntiShare.getInstance().log("=== AntiShare is REMOVING this world from the player ===", Level.SEVERE);
-						AntiShare.getInstance().log("This cannot be reversed. Check your settings if you don't like this.", Level.SEVERE);
-						removeWorlds.add(world);
+		if(AntiShare.getInstance().useSQL()){
+			// SQL load
+
+			// Setup
+			for(World world : Bukkit.getWorlds()){
+				for(GameMode gamemode : GameMode.values()){
+					try{
+						ResultSet items = AntiShare.getInstance().getSQL().get("SELECT * FROM `" + SQL.INVENTORIES_TABLE + "` WHERE `name`='" + name + "' AND `type`='" + type.name() + "' AND `gamemode`='" + gamemode.name() + "' AND `world`='" + world.getName() + "'");
+						ASInventory inventory = new ASInventory(type, name, world, gamemode);
+
+						// Get items
+						if(items != null){
+							while (items.next()){
+								int slot = items.getInt("slot");
+
+								// Item properties
+								int id = items.getInt("itemID");
+								String durability = items.getString("itemDurability");
+								int amount = items.getInt("itemAmount");
+								byte data = Byte.parseByte(items.getString("itemData"));
+
+								// Create item
+								ItemStack item = new ItemStack(id);
+								item.setAmount(amount);
+								MaterialData itemData = item.getData();
+								itemData.setData(data);
+								item.setData(itemData);
+								item.setDurability(Short.parseShort(durability));
+								String enchants[] = items.getString("itemEnchant").split(" ");
+								if(items.getString("itemEnchant").length() > 0){
+									for(String enchant : enchants){
+										String parts[] = enchant.split("\\|");
+										String enchantID = parts[0];
+										int level = Integer.parseInt(parts[1]);
+										Enchantment e = Enchantment.getById(Integer.parseInt(enchantID));
+										item.addEnchantment(e, level);
+									}
+								}
+
+								// Set
+								inventory.set(slot, item);
+							}
+						}
+
+						// Save item to map
+						inventories.add(inventory);
+					}catch(SQLException e){
+						AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
+						e.printStackTrace();
 					}
-					continue;
-				}
-				if((gamemode.equalsIgnoreCase("adventure") && ServerHas.adventureMode()) ||
-						(gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival"))){
-					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
-					for(String strSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
-						Integer slot = Integer.valueOf(strSlot);
-						ItemStack item = file.getItemStack(world + "." + gamemode + "." + strSlot);
-						inventory.set(slot, item);
-					}
-					inventories.add(inventory);
 				}
 			}
-		}
-		// Remove old worlds
-		if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){ // Safe-guard check
-			for(String world : removeWorlds){
-				file.set(world, null);
+		}else{
+			// Flat-File (YAML) load
+
+			// Setup
+			File dir = new File(AntiShare.getInstance().getDataFolder(), "inventories" + File.separator + type.getRelativeFolderName());
+			dir.mkdirs();
+			File saveFile = new File(dir, name + ".yml");
+			if(!saveFile.exists()){
+				return inventories;
 			}
-			file.save();
+			EnhancedConfiguration file = new EnhancedConfiguration(saveFile, AntiShare.getInstance());
+			file.load();
+
+			// Load data
+			// Structure: yml:world.gamemode.slot.properties
+			List<String> removeWorlds = new ArrayList<String>();
+			for(String world : file.getKeys(false)){
+				for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
+					World worldV = Bukkit.getWorld(world);
+					if(worldV == null){
+						AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE);
+						if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
+							AntiShare.getInstance().log("=== AntiShare is REMOVING this world from the player ===", Level.SEVERE);
+							AntiShare.getInstance().log("This cannot be reversed. Check your settings if you don't like this.", Level.SEVERE);
+							removeWorlds.add(world);
+						}
+						continue;
+					}
+					if((gamemode.equalsIgnoreCase("adventure") && ServerHas.adventureMode()) ||
+							(gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival"))){
+						ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
+						for(String strSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
+							Integer slot = Integer.valueOf(strSlot);
+							ItemStack item = file.getItemStack(world + "." + gamemode + "." + strSlot);
+							inventory.set(slot, item);
+						}
+						inventories.add(inventory);
+					}
+				}
+			}
+			// Remove old worlds
+			if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){ // Safe-guard check
+				for(String world : removeWorlds){
+					file.set(world, null);
+				}
+				file.save();
+			}
 		}
 
 		// return

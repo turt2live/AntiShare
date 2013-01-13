@@ -1234,7 +1234,7 @@ public class ASListener implements Listener {
 				if(asregion.getConfig().clearBlockInventoryOnBreak()){
 					cart.getInventory().clear();
 				}
-			}else{
+				//			}else{
 				if(getConfig(player.getWorld()).clearBlockInventoryOnBreak()){
 					cart.getInventory().clear();
 				}

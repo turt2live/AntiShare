@@ -39,6 +39,9 @@ public class RegionManager {
 	 * @param worldname the world
 	 */
 	public void loadWorld(String worldname){
+		if(plugin.useSQL()){
+			LegacyRegionLoader.loadSQL(this, worldname);
+		}
 		File path = Region.REGION_INFORMATION;
 		if(!path.exists()){
 			path.mkdirs();
@@ -68,6 +71,9 @@ public class RegionManager {
 	 * Loads all reachable regions into memory
 	 */
 	public void load(){
+		if(plugin.useSQL()){
+			LegacyRegionLoader.loadSQL(this);
+		}
 		File path = Region.REGION_INFORMATION;
 		if(!path.exists()){
 			path.mkdirs();

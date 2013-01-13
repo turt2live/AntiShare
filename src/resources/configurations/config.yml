@@ -40,6 +40,8 @@ enabled-features:
   gamemode-regions: true
   # Set to false to NOT use the World Split
   world-split: true
+  # Set to TRUE to USE SQL support
+  sql: false
   # Determines if creative players can gain experience
   no-experience-for-creative: true
   # Determines if you want to create per-Game Mode experience values
@@ -89,6 +91,17 @@ gamemode-change-cooldown:
   time-in-seconds: 5
 # Settings
 settings:
+  # SQL settings, these are pretty easy
+  sql:
+    host: localhost
+    username: MySQLUsername
+    password: MySQLPassword
+    database: AntiShare
+    port: 3306
+    sqlite:
+      use-instead: false
+      location: '/plugins/AntiShare/Database.db'
+      name: MyDatabase
   # Set to FALSE to disable "creative" and "survival"
   # blocks.
   track-blocks: true
