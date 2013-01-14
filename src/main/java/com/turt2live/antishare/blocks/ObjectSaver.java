@@ -10,9 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 
-class ObjectSaver implements Runnable {
+class ObjectSaver {
 
 	private final Map<String, List<String>> list = new HashMap<String, List<String>>();
 	private final AntiShare plugin = AntiShare.getInstance();
@@ -62,7 +61,6 @@ class ObjectSaver implements Runnable {
 		this.listSize = this.list.keySet().size();
 	}
 
-	@Override
 	public void run(){
 		done = false;
 		for(String chunk : list.keySet()){
@@ -71,15 +69,13 @@ class ObjectSaver implements Runnable {
 				save(dir, chunk, item);
 				completed++;
 			}
-			blockman.getFile(dir, chunk).save();
 		}
 		blockman.markSaveAsDone(identity, this);
 		done = true;
 	}
 
 	void save(File dir, String fname, String key){
-		EnhancedConfiguration file = blockman.getFile(dir, fname);
-		file.set(key, gamemode);
+		plugin.getIOManager().insertValue(key, gamemode, new File(dir, fname));
 	}
 
 	boolean getClear(){

@@ -103,6 +103,7 @@ public class BlockManager {
 	public void unloadChunk(Chunk chunk){
 		String key = chunkToString(chunk);
 		ChunkWrapper wrapper = wrappers.get(key);
+		plugin.getIOManager().setWait(true);
 		if(wrapper != null){
 			String[] names = new String[6];
 			for(int i = 0; i < names.length; i++){
@@ -113,6 +114,7 @@ public class BlockManager {
 			wrappers.remove(wrapper);
 			loadedChunks.remove(key);
 		}
+		plugin.getIOManager().setWait(false);
 	}
 
 	/**

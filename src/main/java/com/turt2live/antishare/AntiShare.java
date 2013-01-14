@@ -34,6 +34,7 @@ import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.inventory.InventoryManager;
+import com.turt2live.antishare.io.IOManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
 import com.turt2live.antishare.money.MoneyManager;
@@ -93,6 +94,7 @@ public class AntiShare extends PluginWrapper {
 	private HookManager hooks;
 	private CuboidManager cuboids;
 	private String build = "Unknown build, custom?";
+	private IOManager io;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -245,6 +247,10 @@ public class AntiShare extends PluginWrapper {
 
 		// Setup everything
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting IO Manager...");
+		}
+		io = new IOManager();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting Metrics trackers...");
 		}
 		trackers = new TrackerList();
@@ -343,6 +349,10 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
+		if(io != null){
+			io.setWait(true);
+			io.shift();
+		}
 		if(regions != null){
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
 				getLogger().info("Saving regions...");
@@ -407,6 +417,33 @@ public class AntiShare extends PluginWrapper {
 			}
 			cuboids.save();
 		}
+		if(io != null){
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				getLogger().info("Waiting for IO manager...");
+			}
+			io.setWait(false);
+			int last = 0;
+			while (!io.isDone()){
+				if(getConfig().getBoolean("other.use-sleep")){
+					try{
+						Thread.sleep(50); // To avoid a higher CPU use
+					}catch(InterruptedException e){
+						e.printStackTrace();
+					}
+				}
+				if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+					int r = io.getRemaining();
+					if(r < 0){
+						r = 0;
+					}
+					if((r > last && (last - r) >= 10) || r == 0 || last == 0){
+						getLogger().info("[IO Manager] Items remaining: " + r);
+						last = r;
+					}
+				}
+			}
+			io.stop();
+		}
 
 		// Disable
 		getServer().getScheduler().cancelTasks(this);
@@ -427,6 +464,7 @@ public class AntiShare extends PluginWrapper {
 		tender = null;
 		hooks = null;
 		cuboids = null;
+		io = null;
 
 		// Disable SQL for next time
 		if(getConfig().getBoolean("enabled-features.sql")){
@@ -452,6 +490,7 @@ public class AntiShare extends PluginWrapper {
 	 * Reloads AntiShare
 	 */
 	public void reload(){
+		io.setWait(true);
 		reloadConfig();
 		// Permissions has no reload
 		itemMap.reload();
@@ -461,12 +500,35 @@ public class AntiShare extends PluginWrapper {
 		messages.reload();
 		tender.reload();
 		regions.reload();
-		blocks.reload();
+		blocks.save(true, false);
+		io.setWait(false);
+		int last = 0;
+		while (!io.isDone()){
+			if(getConfig().getBoolean("other.use-sleep")){
+				try{
+					Thread.sleep(50); // To avoid a higher CPU use
+				}catch(InterruptedException e){
+					e.printStackTrace();
+				}
+			}
+			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+				int r = io.getRemaining();
+				if(r < 0){
+					r = 0;
+				}
+				if((r > last && (last - r) >= 10) || r == 0 || last == 0){
+					getLogger().info("[IO Manager] Items remaining: " + r);
+					last = r;
+				}
+			}
+		}
+		blocks.load();
 		inventories.reload();
 		cuboids.reload();
 		// Metrics has no reload
 		// Tracker List has no reload
 		// Simple Notice has no reload
+		// IO has no reload
 		loadPlayerInformation();
 	}
 
@@ -487,6 +549,15 @@ public class AntiShare extends PluginWrapper {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Gets the active IO manager
+	 * 
+	 * @return the IO manager
+	 */
+	public IOManager getIOManager(){
+		return io;
 	}
 
 	/**
