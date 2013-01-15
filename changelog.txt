@@ -6,4 +6,7 @@ Since 5.2.0:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 TODO: 
-- Inventory system could use a refresh (but it works!)
+- Rewrite inventory system
+- Rewrite block manager (again)
+- Rewrite listener
+- Improve toggles of features
