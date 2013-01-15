@@ -266,18 +266,42 @@ class ChunkWrapper {
 			manager.markSaveAsDone(names[5], nullObject);
 		}
 
-		// Save
-		saveCreativeBlocks.run();
-		saveSurvivalBlocks.run();
-		saveCreativeEntities.run();
-		saveSurvivalEntities.run();
+		// Schedule saves
+
+		/*
+		 * Because of how the scheduler works, we have to use the java Thread class.
+		 */
+
+		Thread creativeBlocksThread = new Thread(saveCreativeBlocks);
+		Thread survivalBlocksThread = new Thread(saveSurvivalBlocks);
+		Thread creativeEntitiesThread = new Thread(saveCreativeEntities);
+		Thread survivalEntitiesThread = new Thread(saveSurvivalEntities);
+
+		// Set names, in case there is a bug
+		creativeBlocksThread.setName("ANTISHARE-Save Creative Blocks");
+		survivalBlocksThread.setName("ANTISHARE-Save Survival Blocks");
+		creativeEntitiesThread.setName("ANTISHARE-Save Creative Entities");
+		survivalEntitiesThread.setName("ANTISHARE-Save Survival Entities");
+
+		// Run
+		creativeBlocksThread.start();
+		survivalBlocksThread.start();
+		creativeEntitiesThread.start();
+		survivalEntitiesThread.start();
 
 		// Treat adventure on it's own
+		ObjectSaver nullSaver = new NullObjectSaver();
+		nullSaver.setClear(clear);
+		nullSaver.setLoad(load);
 		if(saveAdventureBlocks != null){
-			saveAdventureBlocks.run();
+			Thread adventureBlocksThread = new Thread(saveAdventureBlocks);
+			adventureBlocksThread.setName("ANTISHARE-Save Adventure Blocks");
+			adventureBlocksThread.start();
 		}
 		if(saveAdventureEntities != null){
-			saveAdventureEntities.run();
+			Thread adventureEntitiesThread = new Thread(saveAdventureEntities);
+			adventureEntitiesThread.setName("ANTISHARE-Save Adventure Entities");
+			adventureEntitiesThread.start();
 		}
 	}
 
