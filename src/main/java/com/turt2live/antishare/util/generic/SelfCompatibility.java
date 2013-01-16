@@ -49,7 +49,7 @@ public class SelfCompatibility {
 	}
 
 	private static enum FileType{
-		CONFIG, NOTIFICATIONS, REGION, MESSAGES, WORLD;
+		CONFIG, NOTIFICATIONS, REGION, MESSAGES, WORLD, FEATURES;
 	}
 
 	private static final String COMPAT_NAME = "compat.antishare";
@@ -319,6 +319,7 @@ public class SelfCompatibility {
 		files.put("notifications.yml", FileType.NOTIFICATIONS);
 		files.put("data" + File.separator + "regions", FileType.REGION);
 		files.put("world_configurations", FileType.WORLD);
+		files.put("features.yml", FileType.FEATURES);
 		for(String name : files.keySet()){
 			File file = new File(plugin.getDataFolder(), name);
 			if(file.isDirectory()){
@@ -383,6 +384,9 @@ public class SelfCompatibility {
 			break;
 		case WORLD:
 			local.loadDefaults(plugin.getResource("resources/world.yml"));
+			break;
+		case FEATURES:
+			local.loadDefaults(plugin.getResource("resources/features.yml"));
 			break;
 		}
 		local.save();

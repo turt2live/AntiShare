@@ -1,6 +1,7 @@
-Since 5.2.0:
+Since 5.2.1:
 - Remove SQL Support
 - Add Towny support
+- Added feature toggle
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

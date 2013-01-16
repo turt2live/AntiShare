@@ -94,6 +94,9 @@ public class AntiShare extends PluginWrapper {
 	private CuboidManager cuboids;
 	private String build = "Unknown build, custom?";
 
+	// Systems manager
+	private Systems sys;
+
 	/**
 	 * Gets the active AntiShare instance
 	 * 
@@ -242,6 +245,10 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info("[Self Compat] Cleaning up configuration files...");
 		}
 		SelfCompatibility.cleanupYAML();
+
+		// Startup Systems Manager
+		sys = new Systems();
+		sys.load();
 
 		// Setup everything
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
@@ -407,6 +414,9 @@ public class AntiShare extends PluginWrapper {
 			}
 			cuboids.save();
 		}
+		if(sys != null){
+			sys.save();
+		}
 
 		// Disable
 		getServer().getScheduler().cancelTasks(this);
@@ -427,6 +437,7 @@ public class AntiShare extends PluginWrapper {
 		tender = null;
 		hooks = null;
 		cuboids = null;
+		sys = null;
 
 		// Disable SQL for next time
 		if(getConfig().getBoolean("enabled-features.sql")){
@@ -467,6 +478,7 @@ public class AntiShare extends PluginWrapper {
 		// Metrics has no reload
 		// Tracker List has no reload
 		// Simple Notice has no reload
+		sys.reload();
 		loadPlayerInformation();
 	}
 
@@ -487,6 +499,15 @@ public class AntiShare extends PluginWrapper {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Gets the general purpose systems manager
+	 * 
+	 * @return the general purpose systems manager
+	 */
+	public Systems getSystemsManager(){
+		return sys;
 	}
 
 	/**
