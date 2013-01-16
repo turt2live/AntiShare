@@ -195,8 +195,8 @@ public class CommandHandler implements CommandExecutor {
 								GameMode gamemode = ASUtils.getGameMode(args[1]);
 								if(gamemode != null){
 									if(!((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).isRegionNameTaken(regionName)){
-										if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).isCuboidComplete(player.getName())){
-											Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).getCuboid(player.getName());
+										if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).isCuboidComplete(player.getName())){
+											Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName());
 											((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).addRegion(cuboid, player.getName(), regionName, gamemode);
 											ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region created", true);
 										}else{
@@ -565,8 +565,8 @@ public class CommandHandler implements CommandExecutor {
 					}
 					if(args.length > 1){
 						if(args[1].equalsIgnoreCase("clear")){
-							if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).isCuboidComplete(sender.getName())){
-								((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).removeCuboid(sender.getName());
+							if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).isCuboidComplete(sender.getName())){
+								((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).removeCuboid(sender.getName());
 								ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Your cuboid save was removed.", true);
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "You have no saved cuboid!", true);
@@ -592,7 +592,7 @@ public class CommandHandler implements CommandExecutor {
 								}
 							}
 						}else if(args[1].equalsIgnoreCase("status")){
-							Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).getCuboid(sender.getName());
+							Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(sender.getName());
 							if(cuboid == null){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "No saved cuboid", false);
 							}else{

@@ -154,7 +154,7 @@ public class SelfCompatibility {
 				block = location.getBlock();
 			}
 			GameMode gm = GameMode.valueOf(blocks.getString(key));
-			((BlockManager) AntiShare.getInstance().getSystemsManager().getManager(Manager.BLOCKS)).addBlock(gm, block);
+			((BlockManager) AntiShare.getInstance().getSystemsManager().getManager(Manager.BLOCK)).addBlock(gm, block);
 			converted++;
 		}
 		oldBlockFile.delete();

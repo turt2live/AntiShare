@@ -17,7 +17,7 @@ class ObjectSaver implements Runnable {
 
 	private final Map<String, List<String>> list = new HashMap<String, List<String>>();
 	private final AntiShare plugin = AntiShare.getInstance();
-	private final BlockManager blockman = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS);
+	private final BlockManager blockman = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK);
 	private final File dir;
 	private final String gamemode;
 	private final String identity;

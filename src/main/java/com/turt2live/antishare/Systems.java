@@ -16,9 +16,9 @@ public class Systems extends AntiShareManager {
 	public static enum Manager{
 		REGION(Feature.REGIONS, RegionManager.class, "region manager"),
 		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager"),
-		FEATURES(Feature.SELF, FeatureManager.class, "feature manager"),
-		BLOCKS(Feature.BLOCKS, BlockManager.class, "block manager"),
-		CUBOIDS(Feature.ALWAYS_ON, CuboidManager.class, "cuboid manager");
+		FEATURE(Feature.SELF, FeatureManager.class, "feature manager"),
+		BLOCK(Feature.BLOCKS, BlockManager.class, "block manager"),
+		CUBOID(Feature.ALWAYS_ON, CuboidManager.class, "cuboid manager");
 
 		private Feature f;
 		private Class<? extends AntiShareManager> m;
@@ -60,7 +60,7 @@ public class Systems extends AntiShareManager {
 			if(!plugin.getConfig().getBoolean("other.more-quiet-startup")){
 				plugin.getLogger().info("Starting " + s.getName() + "...");
 			}
-			if(s == Manager.FEATURES){
+			if(s == Manager.FEATURE){
 				managers.put(s, features);
 			}else{
 				Class<? extends AntiShareManager> m = s.getManagerClass();

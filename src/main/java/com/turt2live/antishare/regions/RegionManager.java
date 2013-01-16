@@ -343,8 +343,8 @@ public class RegionManager extends AntiShareManager {
 				break;
 			}
 			Player player = (Player) sender;
-			if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).isCuboidComplete(player.getName())){
-				Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).getCuboid(player.getName());
+			if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).isCuboidComplete(player.getName())){
+				Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName());
 				region.setCuboid(cuboid);
 				changed = true;
 			}else{

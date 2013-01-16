@@ -172,14 +172,14 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent event){
-		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).loadChunk(event.getChunk());
+		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).loadChunk(event.getChunk());
 	}
 
 	// ################# Chunk Unload
 
 	@EventHandler
 	public void onChunkUnload(ChunkUnloadEvent event){
-		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).unloadChunk(event.getChunk());
+		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).unloadChunk(event.getChunk());
 	}
 
 	// ################# World Load
@@ -350,7 +350,7 @@ public class ASListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onGameModeBlockBreak(BlockBreakEvent event){
 		if(!event.isCancelled()){
-			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(event.getBlock());
+			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(event.getBlock());
 		}
 	}
 
@@ -396,7 +396,7 @@ public class ASListener implements Listener {
 
 		// Check creative/survival blocks
 		if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
-			GameMode blockGamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block);
+			GameMode blockGamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(block);
 			if(blockGamemode != null){
 				blockGM = blockGamemode.name().toLowerCase();
 				String oGM = player.getGameMode().name().toLowerCase();
@@ -411,7 +411,7 @@ public class ASListener implements Listener {
 					for(BlockFace face : ASUtils.realFaces){
 						Block rel = block.getRelative(face);
 						if(ASUtils.isDroppedOnBreak(rel, block)){
-							GameMode relGamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(rel);
+							GameMode relGamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(rel);
 							if(relGamemode != null){
 								attachedGM = relGamemode.name().toLowerCase();
 								if(relGamemode != blockGamemode){
@@ -447,7 +447,7 @@ public class ASListener implements Listener {
 		if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
 			event.setCancelled(plugin.shouldCancel(player, false));
 		}else{
-			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
+			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(block);
 		}
 
 		// Alert
@@ -487,10 +487,10 @@ public class ASListener implements Listener {
 		// Handle drops
 		if(drops != null && !deny && special){
 			if(drops){
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(block);
 				block.breakNaturally();
 			}else{
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(block);
 				block.setType(Material.AIR);
 			}
 		}
@@ -501,7 +501,7 @@ public class ASListener implements Listener {
 				Block rel = block.getRelative(face);
 				if(ASUtils.isDroppedOnBreak(rel, block)){
 					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
-						GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(rel);
+						GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(rel);
 						if(gm != null){
 							switch (gm){
 							case CREATIVE:
@@ -522,7 +522,7 @@ public class ASListener implements Listener {
 					}else{
 						rel.setType(Material.AIR);
 					}
-					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(rel);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(rel);
 				}
 			}
 		}
@@ -563,7 +563,7 @@ public class ASListener implements Listener {
 					Block rel = block.getRelative(face);
 					if(ASUtils.isDroppedOnBreak(rel, block)){
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
-							GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(rel);
+							GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(rel);
 							if(gm != null){
 								switch (gm){
 								case CREATIVE:
@@ -584,7 +584,7 @@ public class ASListener implements Listener {
 						}else{
 							rel.setType(Material.AIR);
 						}
-						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(rel);
+						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(rel);
 					}
 				}
 
@@ -632,7 +632,7 @@ public class ASListener implements Listener {
 							Block rel = above.getRelative(face);
 							if(ASUtils.isDroppedOnBreak(rel, above)){
 								rel.setType(Material.AIR);
-								((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(rel);
+								((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(rel);
 							}
 						}
 					}else{
@@ -649,7 +649,7 @@ public class ASListener implements Listener {
 					do{
 						Block above = active.getRelative(BlockFace.UP);
 						if(above.getType() == Material.CACTUS){
-							((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(above);
+							((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(above);
 							breakBlocks.add(above.getLocation());
 						}else{
 							moreBlocks = false;
@@ -670,7 +670,7 @@ public class ASListener implements Listener {
 					do{
 						Block above = active.getRelative(BlockFace.UP);
 						if(above.getType() == Material.SUGAR_CANE_BLOCK){
-							((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(above);
+							((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(above);
 							breakBlocks.add(above.getLocation());
 						}else{
 							moreBlocks = false;
@@ -736,7 +736,7 @@ public class ASListener implements Listener {
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
 				GameMode potentialNewGM = player.getGameMode();
 				if(ASUtils.isDroppedOnBreak(relative, source)){
-					existing = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(source);
+					existing = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(source);
 					if(existing != null){
 						if(existing != potentialNewGM){
 							type = AlertType.ILLEGAL;
@@ -753,7 +753,7 @@ public class ASListener implements Listener {
 		}else{
 			// Handle block place for tracker
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).addBlock(player.getGameMode(), block);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).addBlock(player.getGameMode(), block);
 			}
 		}
 
@@ -803,24 +803,24 @@ public class ASListener implements Listener {
 				&& (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)){
 			if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
 				String blockname = block.getType().name().replaceAll("_", " ").toLowerCase();
-				String gamemode = (((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block) != null ? ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block).name() : "natural").toLowerCase();
+				String gamemode = (((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(block) != null ? ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(block).name() : "natural").toLowerCase();
 				ASUtils.sendToPlayer(player, "That " + ChatColor.YELLOW + blockname + ChatColor.WHITE + " is a " + ChatColor.YELLOW + gamemode + ChatColor.WHITE + " block.", true);
 
 				// Cancel and stop the check
 				event.setCancelled(plugin.shouldCancel(player, true));
 				return;
 			}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
-				GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block);
+				GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(block);
 				switch (action){
 				case LEFT_CLICK_BLOCK:
 					if(gm != null){
-						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
+						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(block);
 					}
-					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).addBlock(player.getGameMode(), block);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).addBlock(player.getGameMode(), block);
 					ASUtils.sendToPlayer(player, ChatColor.GREEN + "Block set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					break;
 				case RIGHT_CLICK_BLOCK:
-					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(block);
 					ASUtils.sendToPlayer(player, ChatColor.RED + "Block " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (gm == null ? "natural" : gm.name()) + ChatColor.RED + ")", true);
 					break;
 				}
@@ -1072,7 +1072,7 @@ public class ASListener implements Listener {
 				&& (event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL || event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL)
 				&& plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
 			Entity entity = event.getRightClicked();
-			GameMode mode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(entity);
+			GameMode mode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(entity);
 			Material item = Material.AIR;
 			if(ServerHas.mc14xEntities() && entity.getType() == EntityType.ITEM_FRAME){
 				item = Material.ITEM_FRAME;
@@ -1081,7 +1081,7 @@ public class ASListener implements Listener {
 			}
 			if(item != Material.AIR){
 				if(event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
-					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeEntity(entity);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(entity);
 					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + ASUtils.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (mode == null ? "natural" : mode.name()) + ChatColor.RED + ")", true);
 					event.setCancelled(plugin.shouldCancel(event.getPlayer(), true));
 					return;
@@ -1104,7 +1104,7 @@ public class ASListener implements Listener {
 		AlertType type = AlertType.LEGAL;
 		Material item = Material.ITEM_FRAME;
 		Entity entity = event.getRightClicked();
-		GameMode egm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(entity);
+		GameMode egm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(entity);
 
 		// Handle
 		if(egm != player.getGameMode()){
@@ -1904,7 +1904,7 @@ public class ASListener implements Listener {
 		}
 		for(Block block : event.getBlocks()){
 			// Check for block type
-			GameMode type = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block);
+			GameMode type = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(block);
 
 			// Sanity
 			if(type == null){
@@ -1916,7 +1916,7 @@ public class ASListener implements Listener {
 			Location newLocation = block.getRelative(event.getDirection()).getLocation();
 
 			// Move
-			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).moveBlock(oldLocation, newLocation);
+			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).moveBlock(oldLocation, newLocation);
 		}
 	}
 
@@ -1933,7 +1933,7 @@ public class ASListener implements Listener {
 		Block block = event.getBlock().getRelative(event.getDirection()).getRelative(event.getDirection());
 
 		// Check for block type
-		GameMode type = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block);
+		GameMode type = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(block);
 
 		// Sanity
 		if(type == null){
@@ -1945,7 +1945,7 @@ public class ASListener implements Listener {
 		Location newLocation = block.getRelative(event.getDirection().getOppositeFace()).getLocation();
 
 		// Move
-		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).moveBlock(oldLocation, newLocation);
+		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).moveBlock(oldLocation, newLocation);
 	}
 
 	// ################# Player Join
@@ -2285,13 +2285,13 @@ public class ASListener implements Listener {
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		Block to = event.getToBlock();
 		if(ASUtils.canBeBrokenByWater(to.getType())){
-			if(((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(to) == GameMode.CREATIVE){
+			if(((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(to) == GameMode.CREATIVE){
 				if(deny){
 					event.setCancelled(plugin.shouldCancel(null, true));
 				}else if(!drops){
 					to.setType(Material.AIR);
 				}
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(to);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(to);
 			}
 		}
 	}
@@ -2307,14 +2307,14 @@ public class ASListener implements Listener {
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		for(int i = 0; i < event.blockList().size(); i++){
 			Block block = event.blockList().get(i);
-			if(((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block) == GameMode.CREATIVE){
+			if(((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(block) == GameMode.CREATIVE){
 				if(deny){
 					event.blockList().remove(i);
 				}else if(!drops){
 					block.setType(Material.AIR);
 					event.blockList().remove(i);
 				}
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(block);
 			}
 		}
 	}
@@ -2344,14 +2344,14 @@ public class ASListener implements Listener {
 					}
 					if(point != null){
 						Location location = event.getClickedBlock().getLocation();
-						((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).updateCuboid(player.getName(), point, location);
+						((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).updateCuboid(player.getName(), point, location);
 						ASUtils.sendToPlayer(player, ChatColor.GREEN + "Point " + (point == CuboidPoint.POINT1 ? "1" : "2")
 								+ " set as ("
 								+ location.getBlockX() + ", "
 								+ location.getBlockY() + ", "
 								+ location.getBlockZ() + ", "
 								+ location.getWorld().getName()
-								+ "). Volume = " + ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).getCuboid(player.getName()).getVolume(), true);
+								+ "). Volume = " + ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName()).getVolume(), true);
 						event.setCancelled(plugin.shouldCancel(player, true));
 					}
 				}

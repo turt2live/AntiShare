@@ -43,11 +43,11 @@ public class PaintingListener implements Listener {
 			// Removed by something
 			Painting hanging = event.getPainting();
 			Location block = hanging.getLocation().getBlock().getRelative(hanging.getAttachedFace()).getLocation();
-			GameMode gamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getRecentBreak(block);
+			GameMode gamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getRecentBreak(block);
 			if(gamemode != null && gamemode == GameMode.CREATIVE){
 				event.setCancelled(true);
 				hanging.remove();
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeEntity(hanging);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(hanging);
 			}
 		}
 	}
@@ -93,7 +93,7 @@ public class PaintingListener implements Listener {
 		}else{
 			// Handle block place for tracker
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).addEntity(player.getGameMode(), hanging);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).addEntity(player.getGameMode(), hanging);
 			}
 		}
 
@@ -120,7 +120,7 @@ public class PaintingListener implements Listener {
 			return;
 		}
 		Painting hanging = event.getPainting();
-		GameMode blockGamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(hanging);
+		GameMode blockGamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(hanging);
 		if(blockGamemode == null){
 			return;
 		}
@@ -129,12 +129,12 @@ public class PaintingListener implements Listener {
 		if(remover instanceof Player){
 			Player player = (Player) remover;
 			if(player.getItemInHand() != null && plugin.getPermissions().has(player, PermissionNodes.TOOL_USE)){
-				GameMode mode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(hanging);
+				GameMode mode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(hanging);
 				if(player.getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 					if(mode != null){
-						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeEntity(hanging);
+						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(hanging);
 					}
-					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).addEntity(player.getGameMode(), hanging);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).addEntity(player.getGameMode(), hanging);
 					event.setCancelled(plugin.shouldCancel(player, true));
 					ASUtils.sendToPlayer(player, ChatColor.GREEN + ASUtils.capitalize(item.name()) + " set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					return;
@@ -198,7 +198,7 @@ public class PaintingListener implements Listener {
 			if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
 				event.setCancelled(plugin.shouldCancel(player, false));
 			}else{
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeEntity(hanging);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(hanging);
 			}
 
 			// Alert
@@ -229,11 +229,11 @@ public class PaintingListener implements Listener {
 			// Handle drops
 			if(drops != null && !deny && special){
 				if(drops){
-					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeEntity(hanging);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(hanging);
 					hanging.getWorld().dropItemNaturally(hanging.getLocation(), new ItemStack(item));
 					hanging.remove();
 				}else{
-					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeEntity(hanging);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(hanging);
 					hanging.remove();
 				}
 			}
@@ -241,7 +241,7 @@ public class PaintingListener implements Listener {
 			if(blockGamemode == GameMode.CREATIVE && plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
 				event.setCancelled(true);
 				hanging.remove();
-				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeEntity(hanging);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(hanging);
 			}
 		}
 	}
