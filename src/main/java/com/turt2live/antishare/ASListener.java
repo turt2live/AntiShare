@@ -89,6 +89,7 @@ import com.turt2live.antishare.blocks.BlockManager;
 import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.cuboid.CuboidManager.CuboidPoint;
 import com.turt2live.antishare.inventory.InventoryManager;
+import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -1969,7 +1970,7 @@ public class ASListener implements Listener {
 		}
 
 		// Money (fines/rewards) status
-		plugin.getMoneyManager().showStatusOnLogin(player);
+		((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).showStatusOnLogin(player);
 	}
 
 	// ################# Player Quit

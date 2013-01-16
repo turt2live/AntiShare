@@ -9,6 +9,7 @@ import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.manager.FeatureManager;
 import com.turt2live.antishare.manager.FeatureManager.Feature;
+import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.regions.RegionManager;
 
 public class Systems extends AntiShareManager {
@@ -18,7 +19,8 @@ public class Systems extends AntiShareManager {
 		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager"),
 		FEATURE(Feature.SELF, FeatureManager.class, "feature manager"),
 		BLOCK(Feature.BLOCKS, BlockManager.class, "block manager"),
-		CUBOID(Feature.REGIONS, CuboidManager.class, "cuboid manager");
+		CUBOID(Feature.REGIONS, CuboidManager.class, "cuboid manager"),
+		MONEY(Feature.MONEY, MoneyManager.class, "money manager");
 
 		private Feature f;
 		private Class<? extends AntiShareManager> m;

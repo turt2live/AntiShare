@@ -25,6 +25,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
@@ -36,7 +37,7 @@ import com.turt2live.antishare.util.generic.ASGameMode;
  * 
  * @author turt2live
  */
-public class MoneyManager {
+public class MoneyManager extends AntiShareManager {
 
 	private List<Reward> rewards = new ArrayList<Reward>();
 	private List<Fine> fines = new ArrayList<Fine>();
@@ -65,9 +66,46 @@ public class MoneyManager {
 	}
 
 	/**
-	 * Reloads the manager
+	 * Saves the Money Manager
 	 */
-	public void reload(){
+	@Override
+	public boolean save(){
+		File silent = new File(plugin.getDataFolder() + File.separator + "data", "money-silent.txt");
+		try{
+			silent.getParentFile().mkdirs();
+			BufferedWriter out = new BufferedWriter(new FileWriter(silent, false));
+			for(String player : silentTo){
+				out.write(player + "\r\n");
+			}
+			out.close();
+		}catch(IOException e){
+			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+	/**
+	 * Loads the Money Manager
+	 */
+	@Override
+	public boolean load(){
+		silentTo.clear();
+		File silent = new File(plugin.getDataFolder() + File.separator + "data", "money-silent.txt");
+		try{
+			if(silent.exists()){
+				BufferedReader in = new BufferedReader(new FileReader(silent));
+				String line;
+				while ((line = in.readLine()) != null){
+					silentTo.add(line);
+				}
+				in.close();
+			}
+		}catch(IOException e){
+			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
+			e.printStackTrace();
+		}
+
 		// Load config
 		EnhancedConfiguration money = new EnhancedConfiguration(new File(plugin.getDataFolder(), "fines.yml"), plugin);
 		money.loadDefaults(plugin.getResource("resources/fines.yml"));
@@ -75,10 +113,6 @@ public class MoneyManager {
 			money.saveDefaults();
 		}
 		money.load();
-
-		// Load silents
-		save();
-		load();
 
 		// Set settings
 		doRewards = money.getBoolean("rewards-enabled");
@@ -145,45 +179,7 @@ public class MoneyManager {
 		if(rewardsLoaded > 0){
 			plugin.log("Rewards Loaded: " + rewardsLoaded, Level.INFO);
 		}
-	}
-
-	/**
-	 * Saves the Money Manager
-	 */
-	public void save(){
-		File silent = new File(plugin.getDataFolder() + File.separator + "data", "money-silent.txt");
-		try{
-			silent.getParentFile().mkdirs();
-			BufferedWriter out = new BufferedWriter(new FileWriter(silent, false));
-			for(String player : silentTo){
-				out.write(player + "\r\n");
-			}
-			out.close();
-		}catch(IOException e){
-			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Loads the Money Manager
-	 */
-	public void load(){
-		silentTo.clear();
-		File silent = new File(plugin.getDataFolder() + File.separator + "data", "money-silent.txt");
-		try{
-			if(silent.exists()){
-				BufferedReader in = new BufferedReader(new FileReader(silent));
-				String line;
-				while ((line = in.readLine()) != null){
-					silentTo.add(line);
-				}
-				in.close();
-			}
-		}catch(IOException e){
-			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
-			e.printStackTrace();
-		}
+		return true;
 	}
 
 	/**

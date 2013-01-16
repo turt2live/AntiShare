@@ -7,7 +7,7 @@ import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfigurati
 public class FeatureManager extends AntiShareManager {
 
 	public static enum Feature{
-		INVENTORIES, REGIONS, BLOCKS, SELF, ALWAYS_ON;
+		INVENTORIES, REGIONS, BLOCKS, MONEY, SELF, ALWAYS_ON;
 	}
 
 	private EnhancedConfiguration config;

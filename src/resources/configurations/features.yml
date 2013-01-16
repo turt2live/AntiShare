@@ -10,4 +10,5 @@
 inventories: true
 regions: true
 blocks: true
+money: true
 # TODO: add more

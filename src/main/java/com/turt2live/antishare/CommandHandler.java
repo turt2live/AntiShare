@@ -35,6 +35,7 @@ import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.inventory.InventoryManager;
+import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
@@ -491,7 +492,7 @@ public class CommandHandler implements CommandExecutor {
 						ASUtils.sendToPlayer(sender, ChatColor.RED + "Syntax Error, try /as money on/off/status", true);
 					}else{
 						if(args[1].equalsIgnoreCase("status") || args[1].equalsIgnoreCase("state")){
-							String state = !plugin.getMoneyManager().isSilent(sender.getName()) ? ChatColor.GREEN + "getting" : ChatColor.RED + "not getting";
+							String state = !((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).isSilent(sender.getName()) ? ChatColor.GREEN + "getting" : ChatColor.RED + "not getting";
 							state = state + ChatColor.WHITE;
 							ASUtils.sendToPlayer(sender, "You are " + state + " fine/reward messages", true);
 							return true;
@@ -502,9 +503,9 @@ public class CommandHandler implements CommandExecutor {
 						}
 						boolean silent = !ASUtils.getBoolean(args[1]);
 						if(silent){
-							plugin.getMoneyManager().addToSilentList(sender.getName());
+							((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).addToSilentList(sender.getName());
 						}else{
-							plugin.getMoneyManager().removeFromSilentList(sender.getName());
+							((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).removeFromSilentList(sender.getName());
 						}
 						String message = "You are now " + (silent ? ChatColor.RED + "not getting" : ChatColor.GREEN + "getting") + ChatColor.WHITE + " fine/reward messages";
 						ASUtils.sendToPlayer(sender, message, true);

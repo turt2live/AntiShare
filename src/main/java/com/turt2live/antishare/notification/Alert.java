@@ -19,10 +19,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.metrics.ActionsTracker;
 import com.turt2live.antishare.metrics.Tracker;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
+import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
 
@@ -275,7 +277,7 @@ public class Alert {
 		// Send fine/reward
 		if(sender instanceof Player && reward){
 			Player player = (Player) sender;
-			AntiShare.getInstance().getMoneyManager().fire(trigger, type, player);
+			((MoneyManager) AntiShare.getInstance().getSystemsManager().getManager(Manager.MONEY)).fire(trigger, type, player);
 		}
 
 		// Reinsert (or insert if not found before) into the hashmap

@@ -35,7 +35,6 @@ import com.turt2live.antishare.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
-import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -84,7 +83,6 @@ public class AntiShare extends PluginWrapper {
 	private Metrics metrics;
 	private TrackerList trackers;
 	private SignList signs;
-	private MoneyManager tender;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private HookManager hooks;
 	private String build = "Unknown build, custom?";
@@ -259,10 +257,6 @@ public class AntiShare extends PluginWrapper {
 		}
 		signs = new SignList();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting money manager...");
-		}
-		tender = new MoneyManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting permissions...");
 		}
 		permissions = new Permissions();
@@ -332,12 +326,6 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
-		if(tender != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving tender functions...");
-			}
-			tender.save();
-		}
 		if(metrics != null){
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
 				getLogger().info("Flushing Metrics...");
@@ -361,7 +349,6 @@ public class AntiShare extends PluginWrapper {
 		metrics = null;
 		trackers = null;
 		signs = null;
-		tender = null;
 		hooks = null;
 		sys = null;
 
@@ -396,7 +383,6 @@ public class AntiShare extends PluginWrapper {
 		listener.reload();
 		alerts.reload();
 		messages.reload();
-		tender.reload();
 		// Metrics has no reload
 		// Tracker List has no reload
 		// Simple Notice has no reload
@@ -685,15 +671,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public SignList getSignList(){
 		return signs;
-	}
-
-	/**
-	 * Gets the money manager (rewards/fines) being used by AntiShare
-	 * 
-	 * @return the money manager
-	 */
-	public MoneyManager getMoneyManager(){
-		return tender;
 	}
 
 	/**
