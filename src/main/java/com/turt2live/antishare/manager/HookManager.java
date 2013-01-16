@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.compatibility;
+package com.turt2live.antishare.manager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.compatibility.ChestShop;
+import com.turt2live.antishare.compatibility.LWC;
+import com.turt2live.antishare.compatibility.Lockette;
+import com.turt2live.antishare.compatibility.Towny;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
 import com.turt2live.antishare.compatibility.type.SignProtection;
-import com.turt2live.antishare.manager.AntiShareManager;
 
 public class HookManager extends AntiShareManager {
 

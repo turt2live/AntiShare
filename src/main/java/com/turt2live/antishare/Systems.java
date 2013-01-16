@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.turt2live.antishare.blocks.BlockManager;
-import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.manager.FeatureManager;
+import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.FeatureManager.Feature;
 import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.regions.RegionManager;
