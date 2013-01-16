@@ -50,7 +50,6 @@ public class BlockManager extends AntiShareManager {
 		public GameMode gamemode;
 	}
 
-	private AntiShare plugin;
 	private CopyOnWriteArrayList<String> loadedChunks = new CopyOnWriteArrayList<String>();
 	private ConcurrentMap<String, ChunkWrapper> wrappers = new ConcurrentHashMap<String, ChunkWrapper>();
 	TrackerList tracked_creative;
@@ -67,8 +66,6 @@ public class BlockManager extends AntiShareManager {
 	 * Creates a new block manager, also loads the block lists
 	 */
 	public BlockManager(){
-		this.plugin = AntiShare.getInstance();
-
 		// Setup files
 		entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
 		blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
