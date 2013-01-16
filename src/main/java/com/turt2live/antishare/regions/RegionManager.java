@@ -18,10 +18,11 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.util.ASUtils;
 
-public class RegionManager {
+public class RegionManager extends AntiShareManager {
 
 	private AntiShare plugin = AntiShare.getInstance();
 	private Map<String, Set<Region>> regions = new HashMap<String, Set<Region>>();
@@ -67,7 +68,8 @@ public class RegionManager {
 	/**
 	 * Loads all reachable regions into memory
 	 */
-	public void load(){
+	@Override
+	public boolean load(){
 		File path = Region.REGION_INFORMATION;
 		if(!path.exists()){
 			path.mkdirs();
@@ -91,12 +93,14 @@ public class RegionManager {
 		if(regions.keySet().size() > 0){
 			plugin.getLogger().info("Regions Loaded: " + regions.keySet().size());
 		}
+		return true;
 	}
 
 	/**
 	 * Saves all loaded regions to disk, this overwrites (and deletes unloaded regions) any regions in the save folders
 	 */
-	public void save(){
+	@Override
+	public boolean save(){
 		ASUtils.wipeFolder(Region.REGION_CONFIGURATIONS, null);
 		ASUtils.wipeFolder(Region.REGION_INFORMATION, null);
 		for(String world : regions.keySet()){
@@ -106,14 +110,7 @@ public class RegionManager {
 			}
 		}
 		regions.clear();
-	}
-
-	/**
-	 * Performs a save and a load in sequence
-	 */
-	public void reload(){
-		save();
-		load();
+		return true;
 	}
 
 	/**
