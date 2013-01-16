@@ -30,7 +30,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
@@ -84,7 +83,6 @@ public class AntiShare extends PluginWrapper {
 	private TrackerList trackers;
 	private SignList signs;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
-	private HookManager hooks;
 	private String build = "Unknown build, custom?";
 
 	// Systems manager
@@ -249,10 +247,6 @@ public class AntiShare extends PluginWrapper {
 		}
 		trackers = new TrackerList();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting hook manager...");
-		}
-		hooks = new HookManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting sign list...");
 		}
 		signs = new SignList();
@@ -349,7 +343,6 @@ public class AntiShare extends PluginWrapper {
 		metrics = null;
 		trackers = null;
 		signs = null;
-		hooks = null;
 		sys = null;
 
 		// Disable SQL for next time
@@ -671,15 +664,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public SignList getSignList(){
 		return signs;
-	}
-
-	/**
-	 * Gets the Hook Manager in use by AntiShare
-	 * 
-	 * @return the hook manager
-	 */
-	public HookManager getHookManager(){
-		return hooks;
 	}
 
 	/**

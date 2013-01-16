@@ -86,6 +86,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.blocks.BlockManager;
+import com.turt2live.antishare.compatibility.HookManager;
 import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.cuboid.CuboidManager.CuboidPoint;
 import com.turt2live.antishare.inventory.InventoryManager;
@@ -391,7 +392,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check hooks
-		if(plugin.getHookManager().checkForSignProtection(block) || plugin.getHookManager().checkForRegion(player, block)){
+		if(((HookManager) plugin.getSystemsManager().getManager(Manager.HOOK)).checkForSignProtection(block) || ((HookManager) plugin.getSystemsManager().getManager(Manager.HOOK)).checkForRegion(player, block)){
 			return; // Don't handle any further, let the other plugin handle it
 		}
 

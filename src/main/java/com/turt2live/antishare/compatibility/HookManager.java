@@ -22,35 +22,14 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
 import com.turt2live.antishare.compatibility.type.SignProtection;
+import com.turt2live.antishare.manager.AntiShareManager;
 
-public class HookManager {
+public class HookManager extends AntiShareManager {
 
 	private AntiShare plugin = AntiShare.getInstance();
 	private List<SignProtection> signs = new ArrayList<SignProtection>();
 	private List<BlockProtection> blocks = new ArrayList<BlockProtection>();
 	private List<RegionProtection> regions = new ArrayList<RegionProtection>();
-
-	public HookManager(){
-		Plugin chestshop = plugin.getServer().getPluginManager().getPlugin("ChestShop");
-		if(chestshop != null){
-			signs.add(new ChestShop());
-			blocks.add(new ChestShop());
-		}
-		Plugin lwc = plugin.getServer().getPluginManager().getPlugin("lwc");
-		if(lwc != null){
-			signs.add(new LWC());
-			blocks.add(new LWC());
-		}
-		Plugin lockette = plugin.getServer().getPluginManager().getPlugin("Lockette");
-		if(lockette != null){
-			signs.add(new Lockette());
-			blocks.add(new Lockette());
-		}
-		Plugin towny = plugin.getServer().getPluginManager().getPlugin("Towny");
-		if(towny != null){
-			regions.add(new Towny());
-		}
-	}
 
 	public boolean checkForRegion(Location location){
 		for(RegionProtection protection : regions){
@@ -86,6 +65,41 @@ public class HookManager {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean load(){
+		// Clear
+		signs.clear();
+		blocks.clear();
+		regions.clear();
+
+		// Find plugins
+		Plugin chestshop = plugin.getServer().getPluginManager().getPlugin("ChestShop");
+		if(chestshop != null){
+			signs.add(new ChestShop());
+			blocks.add(new ChestShop());
+		}
+		Plugin lwc = plugin.getServer().getPluginManager().getPlugin("lwc");
+		if(lwc != null){
+			signs.add(new LWC());
+			blocks.add(new LWC());
+		}
+		Plugin lockette = plugin.getServer().getPluginManager().getPlugin("Lockette");
+		if(lockette != null){
+			signs.add(new Lockette());
+			blocks.add(new Lockette());
+		}
+		Plugin towny = plugin.getServer().getPluginManager().getPlugin("Towny");
+		if(towny != null){
+			regions.add(new Towny());
+		}
+		return true;
+	}
+
+	@Override
+	public boolean save(){
+		return true;
 	}
 
 }
