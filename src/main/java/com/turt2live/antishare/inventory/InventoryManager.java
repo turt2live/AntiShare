@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
@@ -35,7 +36,7 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
-public class InventoryManager {
+public class InventoryManager extends AntiShareManager {
 
 	private ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
@@ -516,7 +517,16 @@ public class InventoryManager {
 	/**
 	 * Loads the inventory manager
 	 */
-	public void load(){
+	@Override
+	public boolean load(){
+		// Clear
+		creative.clear();
+		survival.clear();
+		adventure.clear();
+		enderCreative.clear();
+		enderSurvival.clear();
+		enderAdventure.clear();
+		playerTemp.clear();
 		// Loads regions
 		for(Region region : AntiShare.getInstance().getRegionManager().getAllRegions()){
 			String UID = region.getID();
@@ -560,12 +570,14 @@ public class InventoryManager {
 		if(this.links.size() > 0){
 			AntiShare.getInstance().log("Linked Inventories: " + this.links.size(), Level.INFO);
 		}
+		return true;
 	}
 
 	/**
 	 * Saves the inventory manager
 	 */
-	public void save(){
+	@Override
+	public boolean save(){
 		// Save players
 		if(Bukkit.getOnlinePlayers() != null){
 			for(Player player : Bukkit.getOnlinePlayers()){
@@ -597,21 +609,7 @@ public class InventoryManager {
 				region.getInventory().save();
 			}
 		}
-	}
-
-	/**
-	 * Reloads the inventory manager
-	 */
-	public void reload(){
-		save();
-		creative.clear();
-		survival.clear();
-		adventure.clear();
-		enderCreative.clear();
-		enderSurvival.clear();
-		enderAdventure.clear();
-		playerTemp.clear();
-		load();
+		return true;
 	}
 
 	/**
