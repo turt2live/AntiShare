@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.turt2live.antishare.blocks.BlockManager;
+import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.manager.FeatureManager;
@@ -16,7 +17,8 @@ public class Systems extends AntiShareManager {
 		REGION(Feature.REGIONS, RegionManager.class, "region manager"),
 		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager"),
 		FEATURES(Feature.SELF, FeatureManager.class, "feature manager"),
-		BLOCKS(Feature.BLOCKS, BlockManager.class, "block manager");
+		BLOCKS(Feature.BLOCKS, BlockManager.class, "block manager"),
+		CUBOIDS(Feature.ALWAYS_ON, CuboidManager.class, "cuboid manager");
 
 		private Feature f;
 		private Class<? extends AntiShareManager> m;

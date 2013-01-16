@@ -7,7 +7,7 @@ import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfigurati
 public class FeatureManager extends ConfigBackedManager {
 
 	public static enum Feature{
-		INVENTORIES, REGIONS, BLOCKS, SELF;
+		INVENTORIES, REGIONS, BLOCKS, SELF, ALWAYS_ON;
 	}
 
 	private EnhancedConfiguration config;
@@ -30,7 +30,7 @@ public class FeatureManager extends ConfigBackedManager {
 	}
 
 	public boolean isEnabled(Feature feature){
-		if(feature == Feature.SELF){
+		if(feature == Feature.SELF || feature == Feature.ALWAYS_ON){
 			return true;
 		}
 		return config.getBoolean(feature.name().toLowerCase().trim());

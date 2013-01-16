@@ -8,11 +8,12 @@ import org.bukkit.Location;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.manager.AntiShareManager;
 
 /**
  * Cuboid manager
  */
-public class CuboidManager {
+public class CuboidManager extends AntiShareManager {
 
 	/**
 	 * A cuboid point
@@ -75,7 +76,8 @@ public class CuboidManager {
 	/**
 	 * Saves all the cuboids to disk for loading later
 	 */
-	public void save(){
+	@Override
+	public boolean save(){
 		File file = new File(plugin.getDataFolder(), "data" + File.separator + "cuboids.yml");
 		if(file.exists()){
 			file.delete();
@@ -88,15 +90,17 @@ public class CuboidManager {
 		}
 		config.save();
 		cuboids.clear();
+		return true;
 	}
 
 	/**
 	 * Loads all cuboids
 	 */
-	public void load(){
+	@Override
+	public boolean load(){
 		File file = new File(plugin.getDataFolder(), "data" + File.separator + "cuboids.yml");
 		if(!file.exists()){
-			return;
+			return true;
 		}
 		EnhancedConfiguration config = new EnhancedConfiguration(file, plugin);
 		config.load();
@@ -107,14 +111,7 @@ public class CuboidManager {
 		if(cuboids.keySet().size() > 0){
 			plugin.getLogger().info("Cuboids Loaded: " + cuboids.keySet().size());
 		}
-	}
-
-	/**
-	 * Reloads the cuboid manager
-	 */
-	public void reload(){
-		save();
-		load();
+		return true;
 	}
 
 	/**

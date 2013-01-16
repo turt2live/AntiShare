@@ -9,4 +9,5 @@
 # For help, please contact turt2live.
 inventories: true
 regions: true
+blocks: true
 # TODO: add more
