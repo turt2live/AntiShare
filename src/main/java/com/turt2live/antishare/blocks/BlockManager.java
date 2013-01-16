@@ -27,6 +27,7 @@ import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
@@ -37,7 +38,7 @@ import com.turt2live.antishare.util.events.TrackerList;
  * 
  * @author turt2live
  */
-public class BlockManager {
+public class BlockManager extends AntiShareManager {
 
 	/**
 	 * AntiShare material - used for simplicity
@@ -146,6 +147,12 @@ public class BlockManager {
 		// BlockSaver handles telling BlockManager that it is done
 	}
 
+	@Override
+	public boolean save(){
+		save(true, false);
+		return true;
+	}
+
 	EnhancedConfiguration getFile(File dir, String fname){
 		EnhancedConfiguration ymlFile = null;
 		if(!saveFiles.containsKey(fname)){
@@ -220,7 +227,8 @@ public class BlockManager {
 	/**
 	 * Loads from disk
 	 */
-	public void load(){
+	@Override
+	public boolean load(){
 		// Setup lists
 		tracked_creative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
 		tracked_survival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
@@ -262,13 +270,7 @@ public class BlockManager {
 		if(ae > 0){
 			plugin.getLogger().info("Adventure Entities Loaded: " + ae);
 		}
-	}
-
-	/**
-	 * Reloads the manager
-	 */
-	public void reload(){
-		save(true, true);
+		return true;
 	}
 
 	/**

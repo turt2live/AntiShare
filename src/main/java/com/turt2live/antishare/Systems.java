@@ -3,6 +3,7 @@ package com.turt2live.antishare;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.turt2live.antishare.blocks.BlockManager;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.manager.FeatureManager;
 import com.turt2live.antishare.manager.FeatureManager.Feature;
@@ -13,7 +14,7 @@ public class Systems extends AntiShareManager {
 		REGION(Feature.REGIONS, null, "region manager"),
 		INVENTORY(Feature.BLOCKS, null, "inventory manager"),
 		FEATURES(Feature.SELF, FeatureManager.class, "feature manager"),
-		BLOCKS(Feature.BLOCKS, null, "block manager");
+		BLOCKS(Feature.BLOCKS, BlockManager.class, "block manager");
 
 		private Feature f;
 		private Class<? extends AntiShareManager> m;
