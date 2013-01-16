@@ -11,4 +11,3 @@ TODO:
 - Rewrite inventory system
 - Rewrite block manager (again)
 - Rewrite listener
-- Improve toggles of features
