@@ -42,7 +42,7 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionManager;
-import com.turt2live.antishare.signs.SignManager;
+import com.turt2live.antishare.signs.SignList;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.ASUtils;
@@ -83,7 +83,7 @@ public class AntiShare extends PluginWrapper {
 	private Messages messages;
 	private Metrics metrics;
 	private TrackerList trackers;
-	private SignManager signs;
+	private SignList signs;
 	private MoneyManager tender;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private HookManager hooks;
@@ -255,9 +255,9 @@ public class AntiShare extends PluginWrapper {
 		}
 		hooks = new HookManager();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting sign manager...");
+			getLogger().info("Starting sign list...");
 		}
-		signs = new SignManager();
+		signs = new SignList();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting money manager...");
 		}
@@ -679,11 +679,11 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	/**
-	 * Gets the sign manager being used by AntiShare
+	 * Gets the sign list being used by AntiShare
 	 * 
-	 * @return the sign manager
+	 * @return the sign list
 	 */
-	public SignManager getSignManager(){
+	public SignList getSignList(){
 		return signs;
 	}
 

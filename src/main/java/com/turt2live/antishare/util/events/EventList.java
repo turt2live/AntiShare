@@ -85,7 +85,7 @@ public class EventList {
 				}
 
 				// Add signs
-				for(Sign s : plugin.getSignManager().getAllSigns()){
+				for(Sign s : plugin.getSignList().getAllSigns()){
 					if(!negate){
 						blockedsigns.add(s);
 					}else{
@@ -115,7 +115,7 @@ public class EventList {
 					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;
 				}
-				Sign sign = plugin.getSignManager().getSign(signname);
+				Sign sign = plugin.getSignList().getSign(signname);
 				if(sign == null){
 					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;

@@ -24,7 +24,7 @@ import com.turt2live.antishare.metrics.TrackerList.TrackerType;
  * 
  * @author turt2live
  */
-public class SignManager extends ArrayList<Sign> {
+public class SignList extends ArrayList<Sign> {
 
 	private static final long serialVersionUID = -7383444270595912585L;
 	private AntiShare plugin;
@@ -32,7 +32,7 @@ public class SignManager extends ArrayList<Sign> {
 	/**
 	 * Creates a new sign manager
 	 */
-	public SignManager(){
+	public SignList(){
 		plugin = AntiShare.getInstance();
 
 		// Prepare config

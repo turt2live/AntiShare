@@ -63,7 +63,7 @@ public class ItemMap {
 		if(list.getString(name) != null){
 			String[] parts = list.getString(name).split(":");
 			if(parts.length == 2){
-				return AntiShare.getInstance().getSignManager().getSign(parts[1]);
+				return AntiShare.getInstance().getSignList().getSign(parts[1]);
 			}
 		}
 		return null;
