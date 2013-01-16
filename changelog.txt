@@ -11,3 +11,9 @@ TODO:
 - Rewrite inventory system
 - Rewrite block manager (again)
 - Rewrite listener
+
+REQUESTS:
+- (Requested from ravand.org) Creative players allowed to play music
+
+BUGS:
+- (Reported from ravand.org) Bookshelf bypass
