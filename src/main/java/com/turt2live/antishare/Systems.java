@@ -18,7 +18,7 @@ public class Systems extends AntiShareManager {
 		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager"),
 		FEATURE(Feature.SELF, FeatureManager.class, "feature manager"),
 		BLOCK(Feature.BLOCKS, BlockManager.class, "block manager"),
-		CUBOID(Feature.ALWAYS_ON, CuboidManager.class, "cuboid manager");
+		CUBOID(Feature.REGIONS, CuboidManager.class, "cuboid manager");
 
 		private Feature f;
 		private Class<? extends AntiShareManager> m;
