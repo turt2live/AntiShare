@@ -17,3 +17,4 @@ REQUESTS:
 
 BUGS:
 - (Reported from ravand.org) Bookshelf bypass
+- (Reported from ravand.org) Mechanically created golems
