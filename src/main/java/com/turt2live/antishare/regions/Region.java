@@ -14,9 +14,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -392,7 +394,7 @@ public class Region {
 				player.setGameMode(gamemode);
 			}
 			if(inventory != null){
-				plugin.getInventoryManager().setToTemporary(player, inventory);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).setToTemporary(player, inventory);
 			}
 		}
 	}
@@ -411,7 +413,7 @@ public class Region {
 				player.setGameMode(gamemode);
 			}
 			if(inventory != null){
-				plugin.getInventoryManager().setToTemporary(player, inventory);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).setToTemporary(player, inventory);
 			}
 		}
 	}
@@ -437,7 +439,7 @@ public class Region {
 		// Reset the player
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
 			if(inventory != null){
-				plugin.getInventoryManager().removeFromTemporary(player);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).removeFromTemporary(player);
 			}
 			player.setGameMode(gamemodes.get(player.getName()) == null ? player.getGameMode() : gamemodes.get(player.getName()));
 		}

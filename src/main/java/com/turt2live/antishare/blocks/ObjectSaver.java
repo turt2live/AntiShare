@@ -10,13 +10,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.GameMode;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 
 class ObjectSaver implements Runnable {
 
 	private final Map<String, List<String>> list = new HashMap<String, List<String>>();
 	private final AntiShare plugin = AntiShare.getInstance();
-	private final BlockManager blockman = plugin.getBlockManager();
+	private final BlockManager blockman = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS);
 	private final File dir;
 	private final String gamemode;
 	private final String identity;

@@ -24,6 +24,8 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.blocks.BlockManager;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
@@ -152,7 +154,7 @@ public class SelfCompatibility {
 				block = location.getBlock();
 			}
 			GameMode gm = GameMode.valueOf(blocks.getString(key));
-			AntiShare.getInstance().getBlockManager().addBlock(gm, block);
+			((BlockManager) AntiShare.getInstance().getSystemsManager().getManager(Manager.BLOCKS)).addBlock(gm, block);
 			converted++;
 		}
 		oldBlockFile.delete();

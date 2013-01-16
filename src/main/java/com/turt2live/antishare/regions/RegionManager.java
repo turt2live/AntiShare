@@ -15,7 +15,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
+import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.manager.AntiShareManager;
@@ -297,7 +299,7 @@ public class RegionManager extends AntiShareManager {
 		Cuboid last = region.getCuboid(); // Pre-cloned
 		switch (key){
 		case NAME:
-			if(AntiShare.getInstance().getRegionManager().isRegionNameTaken(value)){
+			if(isRegionNameTaken(value)){
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name '" + value + "' already exists!", true);
 			}else{
 				region.setName(value);
@@ -341,8 +343,8 @@ public class RegionManager extends AntiShareManager {
 				break;
 			}
 			Player player = (Player) sender;
-			if(plugin.getCuboidManager().isCuboidComplete(player.getName())){
-				Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
+			if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).isCuboidComplete(player.getName())){
+				Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).getCuboid(player.getName());
 				region.setCuboid(cuboid);
 				changed = true;
 			}else{

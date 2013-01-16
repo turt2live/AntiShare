@@ -28,13 +28,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
+import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
+import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
+import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.tekkitcompat.CommandBlockLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
@@ -139,7 +143,7 @@ public class CommandHandler implements CommandExecutor {
 								// Load all inventories
 								if(player.isOnline()){
 									Player p = (Player) player;
-									plugin.getInventoryManager().savePlayer(p);
+									((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).savePlayer(p);
 								}
 								ASInventory chosen = null;
 								List<ASInventory> inventories = ASInventory.generateInventory(player.getName(), isEnder ? InventoryType.ENDER : InventoryType.PLAYER);
@@ -190,10 +194,10 @@ public class CommandHandler implements CommandExecutor {
 								String regionName = args[2];
 								GameMode gamemode = ASUtils.getGameMode(args[1]);
 								if(gamemode != null){
-									if(!plugin.getRegionManager().isRegionNameTaken(regionName)){
-										if(plugin.getCuboidManager().isCuboidComplete(player.getName())){
-											Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
-											plugin.getRegionManager().addRegion(cuboid, player.getName(), regionName, gamemode);
+									if(!((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).isRegionNameTaken(regionName)){
+										if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).isCuboidComplete(player.getName())){
+											Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).getCuboid(player.getName());
+											((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).addRegion(cuboid, player.getName(), regionName, gamemode);
 											ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region created", true);
 										}else{
 											ASUtils.sendToPlayer(sender, ChatColor.RED + "You need to use the Cuboid tool to create a cuboid.", true);
@@ -219,18 +223,18 @@ public class CommandHandler implements CommandExecutor {
 							// Remove region
 							if(args.length == 1){
 								Location location = ((Player) sender).getLocation();
-								Region region = plugin.getRegionManager().getRegion(location);
+								Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(location);
 								if(region != null){
-									plugin.getRegionManager().removeRegion(region.getName());
+									((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).removeRegion(region.getName());
 									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed", true);
 								}else{
 									ASUtils.sendToPlayer(sender, ChatColor.RED + "No region where you are standing!", true);
 								}
 							}else{
 								String regionName = args[1];
-								Region region = plugin.getRegionManager().getRegion(regionName);
+								Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(regionName);
 								if(region != null){
-									plugin.getRegionManager().removeRegion(region.getName());
+									((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).removeRegion(region.getName());
 									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed", true);
 								}else{
 									ASUtils.sendToPlayer(sender, ChatColor.RED + "Region not found!", true);
@@ -240,9 +244,9 @@ public class CommandHandler implements CommandExecutor {
 							// Remove region
 							if(args.length > 1){
 								String regionName = args[1];
-								Region region = plugin.getRegionManager().getRegion(regionName);
+								Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(regionName);
 								if(region != null){
-									plugin.getRegionManager().removeRegion(region.getName());
+									((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).removeRegion(region.getName());
 									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region removed", true);
 								}else{
 									ASUtils.sendToPlayer(sender, ChatColor.RED + "Region not found!", true);
@@ -309,12 +313,12 @@ public class CommandHandler implements CommandExecutor {
 							}
 
 							// Check region
-							if(plugin.getRegionManager().getRegion(name) == null){
+							if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(name) == null){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "That region does not exist!", true);
 							}else{
 								// Update region if needed
 								if(RegionKey.isKey(key)){
-									plugin.getRegionManager().updateRegion(plugin.getRegionManager().getRegion(name), RegionKey.getKey(key), value, sender);
+									((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).updateRegion(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(name), RegionKey.getKey(key), value, sender);
 								}else{
 									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "That is not a valid region key", true);
 									ASUtils.sendToPlayer(sender, ChatColor.RED + "For keys and values type /as editregion help", true);
@@ -341,7 +345,7 @@ public class CommandHandler implements CommandExecutor {
 						// Setup
 						page = Math.abs(page);
 						int resultsPerPage = 6; // Put as a variable for ease of changing
-						Set<Region> set = plugin.getRegionManager().getAllRegions();
+						Set<Region> set = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getAllRegions();
 						List<Region> regions = new ArrayList<Region>();
 						regions.addAll(set);
 
@@ -561,8 +565,8 @@ public class CommandHandler implements CommandExecutor {
 					}
 					if(args.length > 1){
 						if(args[1].equalsIgnoreCase("clear")){
-							if(plugin.getCuboidManager().isCuboidComplete(sender.getName())){
-								plugin.getCuboidManager().removeCuboid(sender.getName());
+							if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).isCuboidComplete(sender.getName())){
+								((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).removeCuboid(sender.getName());
 								ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Your cuboid save was removed.", true);
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "You have no saved cuboid!", true);
@@ -588,7 +592,7 @@ public class CommandHandler implements CommandExecutor {
 								}
 							}
 						}else if(args[1].equalsIgnoreCase("status")){
-							Cuboid cuboid = plugin.getCuboidManager().getCuboid(sender.getName());
+							Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).getCuboid(sender.getName());
 							if(cuboid == null){
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "No saved cuboid", false);
 							}else{

@@ -84,7 +84,11 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.blocks.BlockManager;
+import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.cuboid.CuboidManager.CuboidPoint;
+import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -93,6 +97,7 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.PerWorldConfig;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
+import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.tekkitcompat.EntityLayer;
 import com.turt2live.antishare.tekkitcompat.HangingListener;
 import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
@@ -167,14 +172,14 @@ public class ASListener implements Listener {
 
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent event){
-		plugin.getBlockManager().loadChunk(event.getChunk());
+		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).loadChunk(event.getChunk());
 	}
 
 	// ################# Chunk Unload
 
 	@EventHandler
 	public void onChunkUnload(ChunkUnloadEvent event){
-		plugin.getBlockManager().unloadChunk(event.getChunk());
+		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).unloadChunk(event.getChunk());
 	}
 
 	// ################# World Load
@@ -183,7 +188,7 @@ public class ASListener implements Listener {
 	public void onWorldLoad(WorldLoadEvent event){
 		World world = event.getWorld();
 		config.put(world.getName(), new PerWorldConfig(world.getName()));
-		plugin.getRegionManager().loadWorld(world.getName());
+		((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).loadWorld(world.getName());
 	}
 
 	// ################# World Unload
@@ -345,7 +350,7 @@ public class ASListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onGameModeBlockBreak(BlockBreakEvent event){
 		if(!event.isCancelled()){
-			plugin.getBlockManager().removeBlock(event.getBlock());
+			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(event.getBlock());
 		}
 	}
 
@@ -373,7 +378,7 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_BREAK)){
 				type = AlertType.LEGAL;
@@ -391,7 +396,7 @@ public class ASListener implements Listener {
 
 		// Check creative/survival blocks
 		if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
-			GameMode blockGamemode = plugin.getBlockManager().getType(block);
+			GameMode blockGamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block);
 			if(blockGamemode != null){
 				blockGM = blockGamemode.name().toLowerCase();
 				String oGM = player.getGameMode().name().toLowerCase();
@@ -406,7 +411,7 @@ public class ASListener implements Listener {
 					for(BlockFace face : ASUtils.realFaces){
 						Block rel = block.getRelative(face);
 						if(ASUtils.isDroppedOnBreak(rel, block)){
-							GameMode relGamemode = plugin.getBlockManager().getType(rel);
+							GameMode relGamemode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(rel);
 							if(relGamemode != null){
 								attachedGM = relGamemode.name().toLowerCase();
 								if(relGamemode != blockGamemode){
@@ -429,8 +434,8 @@ public class ASListener implements Listener {
 
 		// Check regions
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_BREAK)){
-			Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-			Region blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
+			Region playerRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
+			Region blockRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
 			if(playerRegion != blockRegion){
 				special = true;
 				region = true;
@@ -442,7 +447,7 @@ public class ASListener implements Listener {
 		if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
 			event.setCancelled(plugin.shouldCancel(player, false));
 		}else{
-			plugin.getBlockManager().removeBlock(block);
+			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
 		}
 
 		// Alert
@@ -482,10 +487,10 @@ public class ASListener implements Listener {
 		// Handle drops
 		if(drops != null && !deny && special){
 			if(drops){
-				plugin.getBlockManager().removeBlock(block);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
 				block.breakNaturally();
 			}else{
-				plugin.getBlockManager().removeBlock(block);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
 				block.setType(Material.AIR);
 			}
 		}
@@ -496,7 +501,7 @@ public class ASListener implements Listener {
 				Block rel = block.getRelative(face);
 				if(ASUtils.isDroppedOnBreak(rel, block)){
 					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
-						GameMode gm = plugin.getBlockManager().getType(rel);
+						GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(rel);
 						if(gm != null){
 							switch (gm){
 							case CREATIVE:
@@ -517,7 +522,7 @@ public class ASListener implements Listener {
 					}else{
 						rel.setType(Material.AIR);
 					}
-					plugin.getBlockManager().removeBlock(rel);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(rel);
 				}
 			}
 		}
@@ -558,7 +563,7 @@ public class ASListener implements Listener {
 					Block rel = block.getRelative(face);
 					if(ASUtils.isDroppedOnBreak(rel, block)){
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
-							GameMode gm = plugin.getBlockManager().getType(rel);
+							GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(rel);
 							if(gm != null){
 								switch (gm){
 								case CREATIVE:
@@ -579,7 +584,7 @@ public class ASListener implements Listener {
 						}else{
 							rel.setType(Material.AIR);
 						}
-						plugin.getBlockManager().removeBlock(rel);
+						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(rel);
 					}
 				}
 
@@ -627,7 +632,7 @@ public class ASListener implements Listener {
 							Block rel = above.getRelative(face);
 							if(ASUtils.isDroppedOnBreak(rel, above)){
 								rel.setType(Material.AIR);
-								plugin.getBlockManager().removeBlock(rel);
+								((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(rel);
 							}
 						}
 					}else{
@@ -644,7 +649,7 @@ public class ASListener implements Listener {
 					do{
 						Block above = active.getRelative(BlockFace.UP);
 						if(above.getType() == Material.CACTUS){
-							plugin.getBlockManager().removeBlock(above);
+							((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(above);
 							breakBlocks.add(above.getLocation());
 						}else{
 							moreBlocks = false;
@@ -665,7 +670,7 @@ public class ASListener implements Listener {
 					do{
 						Block above = active.getRelative(BlockFace.UP);
 						if(above.getType() == Material.SUGAR_CANE_BLOCK){
-							plugin.getBlockManager().removeBlock(above);
+							((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(above);
 							breakBlocks.add(above.getLocation());
 						}else{
 							moreBlocks = false;
@@ -704,7 +709,7 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_PLACE)){
 				type = AlertType.LEGAL;
@@ -716,8 +721,8 @@ public class ASListener implements Listener {
 		}
 
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PLACE)){
-			Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-			Region blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
+			Region playerRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
+			Region blockRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
 			if(playerRegion != blockRegion){
 				type = AlertType.ILLEGAL;
 				region = true;
@@ -731,7 +736,7 @@ public class ASListener implements Listener {
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
 				GameMode potentialNewGM = player.getGameMode();
 				if(ASUtils.isDroppedOnBreak(relative, source)){
-					existing = plugin.getBlockManager().getType(source);
+					existing = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(source);
 					if(existing != null){
 						if(existing != potentialNewGM){
 							type = AlertType.ILLEGAL;
@@ -748,7 +753,7 @@ public class ASListener implements Listener {
 		}else{
 			// Handle block place for tracker
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
-				plugin.getBlockManager().addBlock(player.getGameMode(), block);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).addBlock(player.getGameMode(), block);
 			}
 		}
 
@@ -798,24 +803,24 @@ public class ASListener implements Listener {
 				&& (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)){
 			if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
 				String blockname = block.getType().name().replaceAll("_", " ").toLowerCase();
-				String gamemode = (plugin.getBlockManager().getType(block) != null ? plugin.getBlockManager().getType(block).name() : "natural").toLowerCase();
+				String gamemode = (((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block) != null ? ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block).name() : "natural").toLowerCase();
 				ASUtils.sendToPlayer(player, "That " + ChatColor.YELLOW + blockname + ChatColor.WHITE + " is a " + ChatColor.YELLOW + gamemode + ChatColor.WHITE + " block.", true);
 
 				// Cancel and stop the check
 				event.setCancelled(plugin.shouldCancel(player, true));
 				return;
 			}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
-				GameMode gm = plugin.getBlockManager().getType(block);
+				GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block);
 				switch (action){
 				case LEFT_CLICK_BLOCK:
 					if(gm != null){
-						plugin.getBlockManager().removeBlock(block);
+						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
 					}
-					plugin.getBlockManager().addBlock(player.getGameMode(), block);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).addBlock(player.getGameMode(), block);
 					ASUtils.sendToPlayer(player, ChatColor.GREEN + "Block set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					break;
 				case RIGHT_CLICK_BLOCK:
-					plugin.getBlockManager().removeBlock(block);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
 					ASUtils.sendToPlayer(player, ChatColor.RED + "Block " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (gm == null ? "natural" : gm.name()) + ChatColor.RED + ")", true);
 					break;
 				}
@@ -832,7 +837,7 @@ public class ASListener implements Listener {
 		// Right click list
 		if(action == Action.RIGHT_CLICK_BLOCK){
 			// Check if they should be blocked
-			Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
 			if(asregion != null){
 				if(asregion.getConfig().isBlocked(block, ListType.RIGHT_CLICK)){
 					type = AlertType.ILLEGAL;
@@ -856,7 +861,7 @@ public class ASListener implements Listener {
 
 		// If this event is triggered as legal from the right click, check use lists
 		if(type == AlertType.LEGAL){
-			Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
 			if(asregion != null){
 				if(asregion.getConfig().isBlocked(block, ListType.USE)){
 					type = AlertType.ILLEGAL;
@@ -882,7 +887,7 @@ public class ASListener implements Listener {
 		// If the event is triggered as legal from the use lists, check the player's item in hand
 		if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
 			// Check if they should be blocked
-			Region asregion = plugin.getRegionManager().getRegion(block.getLocation());
+			Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
 			if(asregion != null){
 				if(asregion.getConfig().isBlocked(player.getItemInHand().getType(), ListType.USE)){
 					type = AlertType.ILLEGAL;
@@ -911,7 +916,7 @@ public class ASListener implements Listener {
 				&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
 				|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
 			boolean potion = false;
-			Region region = plugin.getRegionManager().getRegion(player.getLocation());
+			Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 			if(region != null){
 				if(!region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
 					type = AlertType.ILLEGAL;
@@ -941,7 +946,7 @@ public class ASListener implements Listener {
 				&& player.getItemInHand() != null
 				&& player.getItemInHand().getType() == Material.POTION){
 			boolean potion = false;
-			Region region = plugin.getRegionManager().getRegion(player.getLocation());
+			Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 			if(player.getItemInHand().getDurability() > 32000){
 				if(region != null){
 					if(!region.getConfig().isThrownPotionAllowed()){
@@ -1020,7 +1025,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check permissions
-		Region region = plugin.getRegionManager().getRegion(event.getVehicle().getLocation());
+		Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getVehicle().getLocation());
 		if(region != null){
 			if(!region.getConfig().isBlocked(item, ListType.BLOCK_BREAK)){
 				type = AlertType.LEGAL;
@@ -1067,7 +1072,7 @@ public class ASListener implements Listener {
 				&& (event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL || event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL)
 				&& plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
 			Entity entity = event.getRightClicked();
-			GameMode mode = plugin.getBlockManager().getType(entity);
+			GameMode mode = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(entity);
 			Material item = Material.AIR;
 			if(ServerHas.mc14xEntities() && entity.getType() == EntityType.ITEM_FRAME){
 				item = Material.ITEM_FRAME;
@@ -1076,7 +1081,7 @@ public class ASListener implements Listener {
 			}
 			if(item != Material.AIR){
 				if(event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
-					plugin.getBlockManager().removeEntity(entity);
+					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeEntity(entity);
 					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + ASUtils.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (mode == null ? "natural" : mode.name()) + ChatColor.RED + ")", true);
 					event.setCancelled(plugin.shouldCancel(event.getPlayer(), true));
 					return;
@@ -1099,7 +1104,7 @@ public class ASListener implements Listener {
 		AlertType type = AlertType.LEGAL;
 		Material item = Material.ITEM_FRAME;
 		Entity entity = event.getRightClicked();
-		GameMode egm = plugin.getBlockManager().getType(entity);
+		GameMode egm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(entity);
 
 		// Handle
 		if(egm != player.getGameMode()){
@@ -1160,7 +1165,7 @@ public class ASListener implements Listener {
 
 		// If the entity is not found, check for interacted entities
 		if(item == Material.AIR){
-			Region region = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
+			Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getRightClicked().getLocation());
 			if(region != null){
 				if(!region.getConfig().isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
 					type = AlertType.LEGAL;
@@ -1193,7 +1198,7 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = plugin.getRegionManager().getRegion(event.getRightClicked().getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getRightClicked().getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
 				type = AlertType.LEGAL;
@@ -1243,7 +1248,7 @@ public class ASListener implements Listener {
 		// Check internal inventories
 		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
 			// Check inventories
-			Region asregion = plugin.getRegionManager().getRegion(cart.getLocation());
+			Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(cart.getLocation());
 			if(asregion != null){
 				if(asregion.getConfig().clearBlockInventoryOnBreak()){
 					cart.getInventory().clear();
@@ -1268,7 +1273,7 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = plugin.getRegionManager().getRegion(event.getEgg().getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getEgg().getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
 				type = AlertType.LEGAL;
@@ -1318,7 +1323,7 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = plugin.getRegionManager().getRegion(bottle.getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(bottle.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
 				type = AlertType.LEGAL;
@@ -1363,7 +1368,7 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = plugin.getRegionManager().getRegion(item.getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.DROP)){
 				type = AlertType.LEGAL;
@@ -1375,7 +1380,7 @@ public class ASListener implements Listener {
 		}
 
 		// Region Check
-		if(plugin.getRegionManager().getRegion(player.getLocation()) != plugin.getRegionManager().getRegion(item.getLocation()) && type == AlertType.LEGAL){
+		if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL){
 			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_THROW)){
 				type = AlertType.ILLEGAL;
 				region = true;
@@ -1417,7 +1422,7 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = plugin.getRegionManager().getRegion(item.getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.PICKUP)){
 				type = AlertType.LEGAL;
@@ -1429,7 +1434,7 @@ public class ASListener implements Listener {
 		}
 
 		// Region Check
-		if(plugin.getRegionManager().getRegion(player.getLocation()) != plugin.getRegionManager().getRegion(item.getLocation()) && type == AlertType.LEGAL){
+		if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL){
 			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PICKUP)){
 				type = AlertType.ILLEGAL;
 				region = true;
@@ -1464,7 +1469,7 @@ public class ASListener implements Listener {
 		int illegalItems = 0;
 
 		// Remove them from a region (if applicable)
-		Region region = plugin.getRegionManager().getRegion(player.getLocation());
+		Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 		if(region != null){
 			region.alertExit(player);
 		}
@@ -1477,7 +1482,7 @@ public class ASListener implements Listener {
 		// Handle event
 		if(type == AlertType.ILLEGAL){
 			List<ItemStack> remove = new ArrayList<ItemStack>();
-			Region asregion = plugin.getRegionManager().getRegion(player.getLocation());
+			Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 			for(ItemStack item : drops){
 				if(asregion != null){
 					if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
@@ -1529,7 +1534,7 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), command)){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(command, ListType.COMMAND)){
 				type = AlertType.LEGAL;
@@ -1569,8 +1574,8 @@ public class ASListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
-		Region currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
-		Region toRegion = plugin.getRegionManager().getRegion(event.getTo());
+		Region currentRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getFrom());
+		Region toRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getTo());
 
 		// Check split
 		if(getConfig(player.getWorld()).isSplitActive()){
@@ -1666,7 +1671,7 @@ public class ASListener implements Listener {
 
 		// Region Check
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
-			Region region = plugin.getRegionManager().getRegion(player.getLocation());
+			Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
 				event.setCancelled(plugin.shouldCancel(player, false));
@@ -1676,49 +1681,49 @@ public class ASListener implements Listener {
 		}
 
 		// Check temp
-		if(plugin.getInventoryManager().isInTemporary(player)){
-			plugin.getInventoryManager().removeFromTemporary(player);
+		if(((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).isInTemporary(player)){
+			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).removeFromTemporary(player);
 		}
 
 		if(!plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
 			// Save from
 			switch (from){
 			case CREATIVE:
-				plugin.getInventoryManager().saveCreativeInventory(player, player.getWorld());
-				plugin.getInventoryManager().saveEnderCreativeInventory(player, player.getWorld());
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveCreativeInventory(player, player.getWorld());
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderCreativeInventory(player, player.getWorld());
 				break;
 			case SURVIVAL:
-				plugin.getInventoryManager().saveSurvivalInventory(player, player.getWorld());
-				plugin.getInventoryManager().saveEnderSurvivalInventory(player, player.getWorld());
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveSurvivalInventory(player, player.getWorld());
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderSurvivalInventory(player, player.getWorld());
 				break;
 			default:
 				if(ServerHas.adventureMode()){
 					if(from == GameMode.ADVENTURE){
-						plugin.getInventoryManager().saveAdventureInventory(player, player.getWorld());
-						plugin.getInventoryManager().saveEnderAdventureInventory(player, player.getWorld());
+						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveAdventureInventory(player, player.getWorld());
+						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderAdventureInventory(player, player.getWorld());
 					}
 				}
 				break;
 			}
 
 			// Update inventories
-			plugin.getInventoryManager().refreshInventories(player, true);
+			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).refreshInventories(player, true);
 
 			// Set to
 			switch (to){
 			case CREATIVE:
-				plugin.getInventoryManager().getCreativeInventory(player, player.getWorld()).setTo(player);
-				plugin.getInventoryManager().getEnderCreativeInventory(player, player.getWorld()).setTo(player);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getCreativeInventory(player, player.getWorld()).setTo(player);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderCreativeInventory(player, player.getWorld()).setTo(player);
 				break;
 			case SURVIVAL:
-				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player);
-				plugin.getInventoryManager().getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getSurvivalInventory(player, player.getWorld()).setTo(player);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
 				break;
 			default:
 				if(ServerHas.adventureMode()){
 					if(from == GameMode.ADVENTURE){
-						plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player);
-						plugin.getInventoryManager().getEnderAdventureInventory(player, player.getWorld()).setTo(player);
+						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getAdventureInventory(player, player.getWorld()).setTo(player);
+						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderAdventureInventory(player, player.getWorld()).setTo(player);
 					}
 				}
 				break;
@@ -1790,7 +1795,7 @@ public class ASListener implements Listener {
 			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), ASUtils.getEntityName(target))){
 				type = AlertType.LEGAL;
 			}
-			Region region = plugin.getRegionManager().getRegion(target.getLocation());
+			Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(target.getLocation());
 			if(region != null){
 				if(!region.getConfig().isBlocked(target, ListType.MOBS)){
 					type = AlertType.LEGAL;
@@ -1803,7 +1808,7 @@ public class ASListener implements Listener {
 		}
 
 		// Check if we need to continue based on settings
-		Region asregion = plugin.getRegionManager().getRegion(target.getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(target.getLocation());
 		if(playerCombat){
 			if(asregion != null){
 				if(!asregion.getConfig().combatAgainstPlayers()){
@@ -1899,7 +1904,7 @@ public class ASListener implements Listener {
 		}
 		for(Block block : event.getBlocks()){
 			// Check for block type
-			GameMode type = plugin.getBlockManager().getType(block);
+			GameMode type = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block);
 
 			// Sanity
 			if(type == null){
@@ -1911,7 +1916,7 @@ public class ASListener implements Listener {
 			Location newLocation = block.getRelative(event.getDirection()).getLocation();
 
 			// Move
-			plugin.getBlockManager().moveBlock(oldLocation, newLocation);
+			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).moveBlock(oldLocation, newLocation);
 		}
 	}
 
@@ -1928,7 +1933,7 @@ public class ASListener implements Listener {
 		Block block = event.getBlock().getRelative(event.getDirection()).getRelative(event.getDirection());
 
 		// Check for block type
-		GameMode type = plugin.getBlockManager().getType(block);
+		GameMode type = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block);
 
 		// Sanity
 		if(type == null){
@@ -1940,7 +1945,7 @@ public class ASListener implements Listener {
 		Location newLocation = block.getRelative(event.getDirection().getOppositeFace()).getLocation();
 
 		// Move
-		plugin.getBlockManager().moveBlock(oldLocation, newLocation);
+		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).moveBlock(oldLocation, newLocation);
 	}
 
 	// ################# Player Join
@@ -1949,10 +1954,10 @@ public class ASListener implements Listener {
 	public void onJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
 		// Tell the inventory manager to prepare this player
-		plugin.getInventoryManager().loadPlayer(player);
+		((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).loadPlayer(player);
 
 		// Check region
-		Region region = plugin.getRegionManager().getRegion(player.getLocation());
+		Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 		if(region != null){
 			// Add join key
 			player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
@@ -1974,13 +1979,13 @@ public class ASListener implements Listener {
 		Player player = event.getPlayer();
 
 		// Remove from regions
-		Region region = plugin.getRegionManager().getRegion(player.getLocation());
+		Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 		if(region != null){
 			region.alertExit(player);
 		}
 
 		// Tell the inventory manager to release this player
-		plugin.getInventoryManager().releasePlayer(player);
+		((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).releasePlayer(player);
 	}
 
 	// ################# Player World Change
@@ -1995,13 +2000,13 @@ public class ASListener implements Listener {
 		// Check to see if we should even bother checking
 		if(!plugin.getConfig().getBoolean("handled-actions.world-transfers")){
 			// Fix up inventories
-			plugin.getInventoryManager().fixInventory(player, event.getFrom());
+			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).fixInventory(player, event.getFrom());
 			return;
 		}
 
 		// Check temp
-		if(plugin.getInventoryManager().isInTemporary(player)){
-			plugin.getInventoryManager().removeFromTemporary(player);
+		if(((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).isInTemporary(player)){
+			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).removeFromTemporary(player);
 		}
 
 		// Inventory check
@@ -2009,44 +2014,44 @@ public class ASListener implements Listener {
 			// Save from
 			switch (player.getGameMode()){
 			case CREATIVE:
-				plugin.getInventoryManager().saveCreativeInventory(player, from);
-				plugin.getInventoryManager().saveEnderCreativeInventory(player, from);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveCreativeInventory(player, from);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderCreativeInventory(player, from);
 				break;
 			case SURVIVAL:
-				plugin.getInventoryManager().saveSurvivalInventory(player, from);
-				plugin.getInventoryManager().saveEnderSurvivalInventory(player, from);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveSurvivalInventory(player, from);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderSurvivalInventory(player, from);
 				break;
 			default:
 				if(ServerHas.adventureMode()){
 					if(player.getGameMode() == GameMode.ADVENTURE){
-						plugin.getInventoryManager().saveAdventureInventory(player, from);
-						plugin.getInventoryManager().saveEnderAdventureInventory(player, from);
+						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveAdventureInventory(player, from);
+						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderAdventureInventory(player, from);
 					}
 				}
 				break;
 			}
 
 			// Check for linked inventories
-			plugin.getInventoryManager().checkLinks(player, to, from);
+			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).checkLinks(player, to, from);
 
 			// Update the inventories (check for merges)
-			plugin.getInventoryManager().refreshInventories(player, true);
+			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).refreshInventories(player, true);
 
 			// Set to
 			switch (player.getGameMode()){
 			case CREATIVE:
-				plugin.getInventoryManager().getCreativeInventory(player, to).setTo(player);
-				plugin.getInventoryManager().getEnderCreativeInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getCreativeInventory(player, to).setTo(player);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderCreativeInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
 			case SURVIVAL:
-				plugin.getInventoryManager().getSurvivalInventory(player, to).setTo(player);
-				plugin.getInventoryManager().getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getSurvivalInventory(player, to).setTo(player);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
 			default:
 				if(ServerHas.adventureMode()){
 					if(player.getGameMode() == GameMode.ADVENTURE){
-						plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player);
-						plugin.getInventoryManager().getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getAdventureInventory(player, to).setTo(player);
+						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 					}
 				}
 				break;
@@ -2070,8 +2075,8 @@ public class ASListener implements Listener {
 			return;
 		}
 		Player player = event.getPlayer();
-		Region currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
-		Region toRegion = plugin.getRegionManager().getRegion(event.getTo());
+		Region currentRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getFrom());
+		Region toRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getTo());
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check teleport cause for ender pearl
@@ -2143,7 +2148,7 @@ public class ASListener implements Listener {
 				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())){
 					type = AlertType.LEGAL;
 				}
-				Region region = plugin.getRegionManager().getRegion(player.getLocation());
+				Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
 				if(region != null){
 					if(!region.getConfig().isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
 						type = AlertType.LEGAL;
@@ -2181,7 +2186,7 @@ public class ASListener implements Listener {
 
 		// Right click list
 		// Check if they should be blocked
-		Region asregion = plugin.getRegionManager().getRegion(event.getPotion().getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getPotion().getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isThrownPotionAllowed()){
 				type = AlertType.ILLEGAL;
@@ -2239,7 +2244,7 @@ public class ASListener implements Listener {
 
 		// Right click list
 		// Check if they should be blocked
-		Region asregion = plugin.getRegionManager().getRegion(event.getEntity().getLocation());
+		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getEntity().getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
 				type = AlertType.ILLEGAL;
@@ -2280,13 +2285,13 @@ public class ASListener implements Listener {
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		Block to = event.getToBlock();
 		if(ASUtils.canBeBrokenByWater(to.getType())){
-			if(plugin.getBlockManager().getType(to) == GameMode.CREATIVE){
+			if(((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(to) == GameMode.CREATIVE){
 				if(deny){
 					event.setCancelled(plugin.shouldCancel(null, true));
 				}else if(!drops){
 					to.setType(Material.AIR);
 				}
-				plugin.getBlockManager().removeBlock(to);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(to);
 			}
 		}
 	}
@@ -2302,14 +2307,14 @@ public class ASListener implements Listener {
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		for(int i = 0; i < event.blockList().size(); i++){
 			Block block = event.blockList().get(i);
-			if(plugin.getBlockManager().getType(block) == GameMode.CREATIVE){
+			if(((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(block) == GameMode.CREATIVE){
 				if(deny){
 					event.blockList().remove(i);
 				}else if(!drops){
 					block.setType(Material.AIR);
 					event.blockList().remove(i);
 				}
-				plugin.getBlockManager().removeBlock(block);
+				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCKS)).removeBlock(block);
 			}
 		}
 	}
@@ -2339,14 +2344,14 @@ public class ASListener implements Listener {
 					}
 					if(point != null){
 						Location location = event.getClickedBlock().getLocation();
-						plugin.getCuboidManager().updateCuboid(player.getName(), point, location);
+						((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).updateCuboid(player.getName(), point, location);
 						ASUtils.sendToPlayer(player, ChatColor.GREEN + "Point " + (point == CuboidPoint.POINT1 ? "1" : "2")
 								+ " set as ("
 								+ location.getBlockX() + ", "
 								+ location.getBlockY() + ", "
 								+ location.getBlockZ() + ", "
 								+ location.getWorld().getName()
-								+ "). Volume = " + plugin.getCuboidManager().getCuboid(player.getName()).getVolume(), true);
+								+ "). Volume = " + ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOIDS)).getCuboid(player.getName()).getVolume(), true);
 						event.setCancelled(plugin.shouldCancel(player, true));
 					}
 				}
@@ -2363,7 +2368,7 @@ public class ASListener implements Listener {
 	//		}
 	//		if(event.getCause() == PotionChangeCause.BEACON){
 	//			Block beacon = event.getLocation();
-	//			GameMode beaconGM = plugin.getBlockManager().getType(beacon);
+	//			GameMode beaconGM = ((BlockManager)plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(beacon);
 	//			Player player = (Player) event.getEntity();
 	//			if(player.getGameMode() != beaconGM){
 	//				event.setCancelled(plugin.shouldCancel(player));

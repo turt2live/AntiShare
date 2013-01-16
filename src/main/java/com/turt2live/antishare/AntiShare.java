@@ -29,9 +29,8 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.blocks.BlockManager;
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.compatibility.HookManager;
-import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.metrics.Metrics;
@@ -82,16 +81,12 @@ public class AntiShare extends PluginWrapper {
 	private ASListener listener;
 	private Alert alerts;
 	private Messages messages;
-	private RegionManager regions;
-	private BlockManager blocks;
-	private InventoryManager inventories;
 	private Metrics metrics;
 	private TrackerList trackers;
 	private SignManager signs;
 	private MoneyManager tender;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private HookManager hooks;
-	private CuboidManager cuboids;
 	private String build = "Unknown build, custom?";
 
 	// Systems manager
@@ -290,19 +285,6 @@ public class AntiShare extends PluginWrapper {
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting region manager...");
 		}
-		regions = new RegionManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting block manager...");
-		}
-		blocks = new BlockManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting inventory manager...");
-		}
-		inventories = new InventoryManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting cuboid manager...");
-		}
-		cuboids = new CuboidManager();
 
 		// Statistics
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
@@ -350,52 +332,6 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
-		if(regions != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving regions...");
-			}
-			regions.save();
-		}
-		if(blocks != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving blocks...");
-			}
-			blocks.save(true, false);
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Waiting for block manager to be done...");
-			}
-			int lastPercent = 0, goal = 10;
-			boolean hit100 = false;
-			while (!blocks.isSaveDone()){
-				if(getConfig().getBoolean("other.use-sleep")){
-					try{
-						Thread.sleep(50); // To avoid a higher CPU use
-					}catch(InterruptedException e){
-						e.printStackTrace();
-					}
-				}
-				if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-					int percent = blocks.percentSaveDone();
-					goal = lastPercent + 10;
-					if(goal > 100){
-						goal = 100;
-					}
-					if(goal <= percent && !hit100 && percent <= 100){
-						getLogger().info("[Block Manager] Percent Done: " + percent + "%");
-						lastPercent = percent;
-						if(percent >= 100){
-							hit100 = true;
-						}
-					}
-				}
-			}
-		}
-		if(inventories != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving inventories...");
-			}
-			inventories.save();
-		}
 		if(tender != null){
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
 				getLogger().info("Saving tender functions...");
@@ -407,12 +343,6 @@ public class AntiShare extends PluginWrapper {
 				getLogger().info("Flushing Metrics...");
 			}
 			metrics.flush();
-		}
-		if(cuboids != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving cuboid information...");
-			}
-			cuboids.save();
 		}
 		if(sys != null){
 			sys.save();
@@ -428,15 +358,11 @@ public class AntiShare extends PluginWrapper {
 		listener = null;
 		alerts = null;
 		messages = null;
-		blocks = null;
-		inventories = null;
-		regions = null;
 		metrics = null;
 		trackers = null;
 		signs = null;
 		tender = null;
 		hooks = null;
-		cuboids = null;
 		sys = null;
 
 		// Disable SQL for next time
@@ -471,10 +397,6 @@ public class AntiShare extends PluginWrapper {
 		alerts.reload();
 		messages.reload();
 		tender.reload();
-		regions.reload();
-		blocks.reload();
-		inventories.reload();
-		cuboids.reload();
 		// Metrics has no reload
 		// Tracker List has no reload
 		// Simple Notice has no reload
@@ -486,6 +408,8 @@ public class AntiShare extends PluginWrapper {
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
 			@Override
 			public void run(){
+				InventoryManager inventories = (InventoryManager) sys.getManager(Manager.INVENTORY);
+				RegionManager regions = (RegionManager) sys.getManager(Manager.REGION);
 				for(Player player : Bukkit.getOnlinePlayers()){
 					inventories.loadPlayer(player);
 					Region playerRegion = regions.getRegion(player.getLocation());
@@ -737,33 +661,6 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	/**
-	 * Gets the region manager being used by AntiShare
-	 * 
-	 * @return the region manager
-	 */
-	public RegionManager getRegionManager(){
-		return regions;
-	}
-
-	/**
-	 * Gets the block manager being used by AntiShare
-	 * 
-	 * @return the block manager
-	 */
-	public BlockManager getBlockManager(){
-		return blocks;
-	}
-
-	/**
-	 * Gets the inventory manager being used by AntiShare
-	 * 
-	 * @return the inventory manager
-	 */
-	public InventoryManager getInventoryManager(){
-		return inventories;
-	}
-
-	/**
 	 * Gets the metrics being used by AntiShare
 	 * 
 	 * @return the metrics
@@ -806,15 +703,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public HookManager getHookManager(){
 		return hooks;
-	}
-
-	/**
-	 * Gets the cuboid manager in use by AntiShare
-	 * 
-	 * @return the cuboid manager
-	 */
-	public CuboidManager getCuboidManager(){
-		return cuboids;
 	}
 
 	/**

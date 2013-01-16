@@ -23,11 +23,13 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
+import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
@@ -528,7 +530,7 @@ public class InventoryManager extends AntiShareManager {
 		enderAdventure.clear();
 		playerTemp.clear();
 		// Loads regions
-		for(Region region : AntiShare.getInstance().getRegionManager().getAllRegions()){
+		for(Region region : ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getAllRegions()){
 			String UID = region.getID();
 			List<ASInventory> inventory = ASInventory.generateInventory(UID, InventoryType.REGION);
 			if(inventory != null){
@@ -604,7 +606,7 @@ public class InventoryManager extends AntiShareManager {
 		for(String key : enderAdventure.keySet()){
 			enderAdventure.get(key).save();
 		}
-		for(Region region : plugin.getRegionManager().getAllRegions()){
+		for(Region region : ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getAllRegions()){
 			if(region.getInventory() != null){
 				region.getInventory().save();
 			}

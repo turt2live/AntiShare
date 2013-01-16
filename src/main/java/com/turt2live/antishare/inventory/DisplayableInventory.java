@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 
 /**
@@ -77,7 +78,7 @@ public class DisplayableInventory implements InventoryHolder, Listener {
 						}
 					}
 				}
-				plugin.getInventoryManager().inject(asinventory); // Force-save the inventory into the manager
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).inject(asinventory); // Force-save the inventory into the manager
 				event.getInventory().clear(); // Sanitary
 				inventory = null; // Sanitary
 				useEvent = false;
