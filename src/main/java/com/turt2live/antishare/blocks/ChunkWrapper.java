@@ -222,12 +222,6 @@ class ChunkWrapper {
 	public void save(boolean load, boolean clear, File blocksDir, File entitiesDir){
 		File blockFile = new File(blocksDir, cx + "." + cz + "." + world + ".yml");
 		File entityFile = new File(entitiesDir, cx + "." + cz + "." + world + ".yml");
-		//		if(blockFile.exists()){
-		//			blockFile.delete();
-		//		}
-		//		if(entityFile.exists()){
-		//			entityFile.delete();
-		//		}
 		EnhancedConfiguration blocks = new EnhancedConfiguration(blockFile, plugin);
 		EnhancedConfiguration entities = new EnhancedConfiguration(entityFile, plugin);
 		blocks.load();
