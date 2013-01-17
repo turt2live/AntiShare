@@ -11,10 +11,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.blocks.BlockManager.ASMaterial;
-import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 import com.turt2live.antishare.util.generic.ChunkLocation;
 
 class ChunkWrapper {
@@ -222,8 +223,8 @@ class ChunkWrapper {
 	public void save(boolean load, boolean clear, File blocksDir, File entitiesDir){
 		File blockFile = new File(blocksDir, cx + "." + cz + "." + world + ".yml");
 		File entityFile = new File(entitiesDir, cx + "." + cz + "." + world + ".yml");
-		EnhancedConfiguration blocks = new EnhancedConfiguration(blockFile, plugin);
-		EnhancedConfiguration entities = new EnhancedConfiguration(entityFile, plugin);
+		WrappedEnhancedConfiguration blocks = new WrappedEnhancedConfiguration(blockFile, plugin);
+		WrappedEnhancedConfiguration entities = new WrappedEnhancedConfiguration(entityFile, plugin);
 		blocks.load();
 		blocks.clearFile();
 		entities.load();

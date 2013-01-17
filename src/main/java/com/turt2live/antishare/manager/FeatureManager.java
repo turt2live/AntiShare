@@ -2,7 +2,7 @@ package com.turt2live.antishare.manager;
 
 import java.io.File;
 
-import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
 public class FeatureManager extends AntiShareManager {
 
