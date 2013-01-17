@@ -76,8 +76,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.InventoryView;
@@ -170,20 +168,6 @@ public class ASListener implements Listener {
 		return config.get(world);
 	}
 
-	// ################# Chunk Load
-
-	@EventHandler
-	public void onChunkLoad(ChunkLoadEvent event){
-		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).loadChunk(event.getChunk());
-	}
-
-	// ################# Chunk Unload
-
-	@EventHandler
-	public void onChunkUnload(ChunkUnloadEvent event){
-		((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).unloadChunk(event.getChunk());
-	}
-
 	// ################# World Load
 
 	@EventHandler
@@ -209,6 +193,7 @@ public class ASListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
+		// TODO: Optimize
 		AlertType type = AlertType.LEGAL;
 		Player player = event.getPlayer();
 		/*
@@ -347,15 +332,6 @@ public class ASListener implements Listener {
 		}
 	}
 
-	// ################# Block Break (2)
-
-	@EventHandler (priority = EventPriority.MONITOR)
-	public void onGameModeBlockBreak(BlockBreakEvent event){
-		if(!event.isCancelled()){
-			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(event.getBlock());
-		}
-	}
-
 	// ################# Block Break
 
 	@EventHandler (priority = EventPriority.LOW)
@@ -448,8 +424,6 @@ public class ASListener implements Listener {
 		// Handle event
 		if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
 			event.setCancelled(plugin.shouldCancel(player, false));
-		}else{
-			((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(block);
 		}
 
 		// Alert
