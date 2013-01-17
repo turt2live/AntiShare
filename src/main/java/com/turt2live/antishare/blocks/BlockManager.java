@@ -1,16 +1,8 @@
-/*******************************************************************************
- * Copyright (c) 2012 turt2live (Travis Ralston).
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
- * 
- * Contributors:
- * turt2live (Travis Ralston) - initial API and implementation
- ******************************************************************************/
 package com.turt2live.antishare.blocks;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -26,45 +18,29 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
-import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.events.TrackerList;
 
-/**
- * Block Manager - Handles creative/survival blocks
- * 
- * @author turt2live
- */
 public class BlockManager extends AntiShareManager {
 
-	/**
-	 * AntiShare material - used for simplicity
-	 * 
-	 * @author turt2live
-	 */
 	static class ASMaterial {
 		public Location location;
 		public GameMode gamemode;
+		public long added;
 	}
 
-	private CopyOnWriteArrayList<String> loadedChunks = new CopyOnWriteArrayList<String>();
-	private ConcurrentMap<String, ChunkWrapper> wrappers = new ConcurrentHashMap<String, ChunkWrapper>();
+	private final File entitiesDir;
+	private final File blocksDir;
 	TrackerList tracked_creative;
 	TrackerList tracked_survival;
 	TrackerList tracked_adventure;
 	private CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
-	private ConcurrentMap<String, EnhancedConfiguration> saveFiles = new ConcurrentHashMap<String, EnhancedConfiguration>();
-	private boolean doneLastSave = false;
-	private final File entitiesDir;
-	private final File blocksDir;
-	private final ConcurrentMap<String, Boolean> activeSaves = new ConcurrentHashMap<String, Boolean>();
+	private ConcurrentMap<String, ChunkWrapper> wrappers = new ConcurrentHashMap<String, ChunkWrapper>();
+	private boolean doneSave = false;
+	private int percent = 0;
 
-	/**
-	 * Creates a new block manager, also loads the block lists
-	 */
 	public BlockManager(){
 		// Setup files
 		entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
@@ -72,161 +48,25 @@ public class BlockManager extends AntiShareManager {
 		blocksDir.mkdirs();
 		entitiesDir.mkdirs();
 
-		// Load blocks
-		load();
-	}
-
-	String chunkToString(Chunk chunk){
-		return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
-	}
-
-	/**
-	 * Loads a chunk into the block manager
-	 * 
-	 * @param chunk the chunk to load
-	 */
-	public void loadChunk(Chunk chunk){
-		String str = chunkToString(chunk);
-		ChunkWrapper wrapper = new ChunkWrapper(this, chunk);
-		wrappers.put(str, wrapper);
-		wrapper.load(blocksDir, entitiesDir);
-		loadedChunks.add(str);
-	}
-
-	/**
-	 * Unloads a chunk from the block manager
-	 * 
-	 * @param chunk the chunk to unload
-	 */
-	public void unloadChunk(Chunk chunk){
-		String key = chunkToString(chunk);
-		ChunkWrapper wrapper = wrappers.get(key);
-		if(wrapper != null){
-			String[] names = new String[6];
-			for(int i = 0; i < names.length; i++){
-				names[i] = key + i;
-				activeSaves.put(names[i], false);
+		// Start cleanup
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+			@Override
+			public void run(){
+				List<ASMaterial> r = new ArrayList<ASMaterial>();
+				for(ASMaterial m : recentlyRemoved){
+					if(System.currentTimeMillis() - m.added >= 1000){
+						r.add(m);
+					}
+				}
+				recentlyRemoved.removeAll(r);
 			}
-			wrapper.save(names, false, false, blocksDir, entitiesDir);
-			wrappers.remove(wrapper);
-			loadedChunks.remove(key);
-		}
+		}, 0, 20 * 5);
 	}
 
-	/**
-	 * Saves everything to disk
-	 * 
-	 * @param clear set to true to prepare for a reload
-	 * @param load set to true to load everything after saving (reload)
-	 */
-	public void save(boolean clear, boolean load){
-		// Load files
-		blocksDir.mkdirs();
-		entitiesDir.mkdirs();
-		ASUtils.wipeFolder(blocksDir, loadedChunks);
-		ASUtils.wipeFolder(entitiesDir, loadedChunks);
-		doneLastSave = false;
-
-		// Create savers
-		for(String key : wrappers.keySet()){
-			ChunkWrapper wrapper = wrappers.get(key);
-			if(wrapper == null){
-				continue;
-			}
-			String[] names = new String[6];
-			for(int i = 0; i < names.length; i++){
-				names[i] = key + i;
-				activeSaves.put(names[i], false);
-			}
-			wrapper.save(names, load, clear, blocksDir, entitiesDir);
-		}
-
-		// BlockSaver handles telling BlockManager that it is done
-	}
-
-	@Override
-	public boolean save(){
-		save(true, false);
-		return true;
-	}
-
-	EnhancedConfiguration getFile(File dir, String fname){
-		EnhancedConfiguration ymlFile = null;
-		if(!saveFiles.containsKey(fname)){
-			File file = new File(dir, fname);
-			ymlFile = new EnhancedConfiguration(file, AntiShare.getInstance());
-			saveFiles.put(fname, ymlFile);
-		}else{
-			ymlFile = saveFiles.get(fname);
-		}
-		return ymlFile;
-	}
-
-	void markSaveAsDone(String list, ObjectSaver save){
-		if(doneLastSave == true){
-			return;
-		}
-		activeSaves.put(list, true);
-		for(String key : activeSaves.keySet()){
-			if(activeSaves.get(key) != null && !activeSaves.get(key)){
-				return;
-			}
-		}
-		if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-			plugin.getLogger().info("[Block Manager] Saving files...");
-		}
-		for(String key : saveFiles.keySet()){
-			saveFiles.get(key).save();
-		}
-		saveFiles.clear();
-		if(save.getClear()){
-			loadedChunks.clear();
-			wrappers.clear();
-		}
-		if(save.getLoad()){
-			load();
-		}
-		doneLastSave = true;
-		activeSaves.clear();
-	}
-
-	/**
-	 * Determines if the last save is done
-	 * 
-	 * @return true if done
-	 */
-	public boolean isSaveDone(){
-		return doneLastSave || loadedChunks.size() <= 0 || wrappers.size() <= 0;
-	}
-
-	/**
-	 * Gets the percentage of the save completed
-	 * 
-	 * @return the percent of the save completed (as a whole number, eg: 10)
-	 */
-	public int percentSaveDone(){
-		if(isSaveDone()){
-			return 100;
-		}
-		double total = 0;
-		int divisor = 0;
-		for(String key : wrappers.keySet()){
-			divisor++;
-			total += wrappers.get(key).percentDoneSave();
-		}
-		if(divisor <= 0){
-			return 100;
-		}
-		Double avg = total / divisor;
-		return avg.intValue();
-	}
-
-	/**
-	 * Loads from disk
-	 */
 	@Override
 	public boolean load(){
 		// Setup lists
+		System.out.println("LOAD");
 		tracked_creative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
 		tracked_survival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
 		tracked_adventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
@@ -268,6 +108,91 @@ public class BlockManager extends AntiShareManager {
 			plugin.getLogger().info("Adventure Entities Loaded: " + ae);
 		}
 		return true;
+	}
+
+	@Override
+	public boolean save(){
+		doneSave = false;
+		Double max = ((Integer) wrappers.size()).doubleValue();
+		Double done = 0.0;
+		for(String key : wrappers.keySet()){
+			ChunkWrapper w = wrappers.get(key);
+			w.save(false, true, blocksDir, entitiesDir);
+			done++;
+			this.percent = ((Double) (done / max)).intValue();
+		}
+		wrappers.clear();
+		doneSave = true;
+		return true;
+	}
+
+	/**
+	 * Loads a chunk into the block manager
+	 * 
+	 * @param chunk the chunk to load
+	 */
+	public void loadChunk(Chunk chunk){
+		String str = chunkToString(chunk);
+		ChunkWrapper wrapper = new ChunkWrapper(this, chunk);
+		wrapper.load(blocksDir, entitiesDir);
+		wrappers.put(str, wrapper);
+	}
+
+	/**
+	 * Unloads a chunk from the block manager
+	 * 
+	 * @param chunk the chunk to unload
+	 */
+	public void unloadChunk(Chunk chunk){
+		String key = chunkToString(chunk);
+		ChunkWrapper wrapper = wrappers.get(key);
+		if(wrapper != null){
+			wrapper.save(false, false, blocksDir, entitiesDir);
+			wrappers.remove(wrapper);
+		}
+	}
+
+	/**
+	 * Gets the Game Mode of a recently broken block at a location
+	 * 
+	 * @param location the location
+	 * @return the Game Mode (or null if not applicable)
+	 */
+	public GameMode getRecentBreak(Location location){
+		for(ASMaterial material : recentlyRemoved){
+			Location l = material.location;
+			if(Math.floor(l.getX()) == Math.floor(location.getX())
+					&& Math.floor(l.getY()) == Math.floor(location.getY())
+					&& Math.floor(l.getZ()) == Math.floor(location.getZ())
+					&& l.getWorld().getName().equalsIgnoreCase(location.getWorld().getName())){
+				return material.gamemode;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the gamemode associated with a block
+	 * 
+	 * @param block the block
+	 * @return the gamemode, or null if no assignment
+	 */
+	public GameMode getType(Block block){
+		String c = chunkToString(block.getChunk());
+		ChunkWrapper wrapper = wrappers.get(c);
+		return wrapper.getType(block);
+	}
+
+	/**
+	 * Gets the gamemode associated with a entity
+	 * 
+	 * @param entity the entity
+	 * @return the gamemode, or null if no assignment
+	 */
+	public GameMode getType(Entity entity){
+		String c = chunkToString(entity.getLocation().getChunk());
+		ChunkWrapper wrapper = wrappers.get(c);
+		return wrapper.getType(entity);
 	}
 
 	/**
@@ -455,47 +380,8 @@ public class BlockManager extends AntiShareManager {
 		});
 	}
 
-	/**
-	 * Gets the gamemode associated with a block
-	 * 
-	 * @param block the block
-	 * @return the gamemode, or null if no assignment
-	 */
-	public GameMode getType(Block block){
-		String c = chunkToString(block.getChunk());
-		ChunkWrapper wrapper = wrappers.get(c);
-		return wrapper.getType(block);
-	}
-
-	/**
-	 * Gets the gamemode associated with a entity
-	 * 
-	 * @param entity the entity
-	 * @return the gamemode, or null if no assignment
-	 */
-	public GameMode getType(Entity entity){
-		String c = chunkToString(entity.getLocation().getChunk());
-		ChunkWrapper wrapper = wrappers.get(c);
-		return wrapper.getType(entity);
-	}
-
-	/**
-	 * Gets the Game Mode of a recently broken block at a location
-	 * 
-	 * @param location the location
-	 * @return the Game Mode (or null if not applicable)
-	 */
-	public GameMode getRecentBreak(Location location){
-		for(ASMaterial material : recentlyRemoved){
-			Location l = material.location;
-			if(Math.floor(l.getX()) == Math.floor(location.getX())
-					&& Math.floor(l.getY()) == Math.floor(location.getY())
-					&& Math.floor(l.getZ()) == Math.floor(location.getZ())
-					&& l.getWorld().getName().equalsIgnoreCase(location.getWorld().getName())){
-				return material.gamemode;
-			}
-		}
-		return null;
+	String chunkToString(Chunk chunk){
+		return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
 	}
 
 	String blockToString(Block block){
@@ -509,6 +395,17 @@ public class BlockManager extends AntiShareManager {
 
 	String entityToString(Location entity, EntityType type){
 		return entity.getChunk().getX() + ";" + entity.getChunk().getZ() + ";" + entity.getWorld().getName() + ";" + entity.getX() + ";" + entity.getY() + ";" + entity.getZ() + ";" + type.name();
+	}
+
+	public int percentSaveDone(){
+		if(isSaveDone()){
+			return 100;
+		}
+		return percent;
+	}
+
+	public boolean isSaveDone(){
+		return this.doneSave;
 	}
 
 }

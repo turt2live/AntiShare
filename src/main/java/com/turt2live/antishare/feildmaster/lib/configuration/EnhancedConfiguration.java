@@ -83,6 +83,11 @@ public class EnhancedConfiguration extends org.bukkit.configuration.file.YamlCon
 		load();
 	}
 
+	public final void clearFile(){
+		cache.clear();
+		super.map.clear();
+	}
+
 	/**
 	 * Loads set file
 	 * <p />

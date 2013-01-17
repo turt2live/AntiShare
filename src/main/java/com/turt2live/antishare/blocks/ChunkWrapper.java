@@ -29,7 +29,6 @@ class ChunkWrapper {
 	CopyOnWriteArrayList<String> adventure_entities = new CopyOnWriteArrayList<String>();
 	private int cx, cz;
 	private String world;
-	private ObjectSaver saveCreativeBlocks, saveSurvivalBlocks, saveAdventureBlocks, saveCreativeEntities, saveSurvivalEntities, saveAdventureEntities;
 
 	ChunkWrapper(BlockManager manager, Chunk chunk){
 		this.manager = manager;
@@ -220,11 +219,7 @@ class ChunkWrapper {
 		return null;
 	}
 
-	public void save(String[] names, boolean load, boolean clear, File blocksDir, File entitiesDir){
-		if(names.length < 6){
-			throw new IllegalArgumentException("6 names are required");
-		}
-
+	public void save(boolean load, boolean clear, File blocksDir, File entitiesDir){
 		File blockFile = new File(blocksDir, cx + "." + cz + "." + world + ".yml");
 		File entityFile = new File(entitiesDir, cx + "." + cz + "." + world + ".yml");
 		if(blockFile.exists()){
@@ -233,75 +228,63 @@ class ChunkWrapper {
 		if(entityFile.exists()){
 			entityFile.delete();
 		}
-
-		saveCreativeBlocks = new ObjectSaver(creative_blocks, GameMode.CREATIVE, blocksDir, names[0], true);
-		saveSurvivalBlocks = new ObjectSaver(survival_blocks, GameMode.SURVIVAL, blocksDir, names[1], true);
-		saveCreativeEntities = new ObjectSaver(creative_entities, GameMode.CREATIVE, entitiesDir, names[2], false);
-		saveSurvivalEntities = new ObjectSaver(survival_entities, GameMode.SURVIVAL, entitiesDir, names[3], false);
-
-		saveCreativeBlocks.setClear(clear);
-		saveSurvivalBlocks.setClear(clear);
-		saveCreativeBlocks.setLoad(load);
-		saveSurvivalBlocks.setLoad(load);
-		saveCreativeEntities.setClear(clear);
-		saveSurvivalEntities.setClear(clear);
-		saveCreativeEntities.setLoad(load);
-		saveSurvivalEntities.setLoad(load);
-
-		// Treat adventure on it's own
-		if(ServerHas.adventureMode()){
-			saveAdventureBlocks = new ObjectSaver(adventure_blocks, GameMode.ADVENTURE, blocksDir, names[4], true);
-			saveAdventureBlocks.setClear(clear);
-			saveAdventureBlocks.setLoad(load);
-			saveAdventureEntities = new ObjectSaver(adventure_entities, GameMode.ADVENTURE, entitiesDir, names[5], false);
-			saveAdventureEntities.setClear(clear);
-			saveAdventureEntities.setLoad(load);
-		}else{
-			saveAdventureBlocks = null;
-			saveAdventureEntities = null;
-			NullObjectSaver nullObject = new NullObjectSaver();
-			nullObject.setClear(clear);
-			nullObject.setLoad(load);
-			manager.markSaveAsDone(names[4], nullObject);
-			manager.markSaveAsDone(names[5], nullObject);
+		EnhancedConfiguration blocks = new EnhancedConfiguration(blockFile, plugin);
+		EnhancedConfiguration entities = new EnhancedConfiguration(entityFile, plugin);
+		blocks.load();
+		blocks.clearFile();
+		entities.load();
+		entities.clearFile();
+		for(String s : this.adventure_blocks){
+			save(s, GameMode.ADVENTURE, blocks, true);
 		}
+		for(String s : this.creative_blocks){
+			save(s, GameMode.CREATIVE, blocks, true);
+		}
+		for(String s : this.survival_blocks){
+			save(s, GameMode.SURVIVAL, blocks, true);
+		}
+		for(String s : this.adventure_entities){
+			save(s, GameMode.ADVENTURE, entities, false);
+		}
+		for(String s : this.creative_entities){
+			save(s, GameMode.CREATIVE, entities, false);
+		}
+		for(String s : this.survival_entities){
+			save(s, GameMode.SURVIVAL, entities, false);
+		}
+		blocks.save();
+		entities.save();
+		if(clear){
+			this.adventure_blocks.clear();
+			this.adventure_entities.clear();
+			this.creative_blocks.clear();
+			this.creative_entities.clear();
+			this.survival_blocks.clear();
+			this.survival_entities.clear();
+		}
+		if(load){
+			load(true, blocksDir);
+			load(false, entitiesDir);
+		}
+	}
 
-		// Schedule saves
-
+	private void save(String s, GameMode gm, EnhancedConfiguration c, boolean isBlock){
 		/*
-		 * Because of how the scheduler works, we have to use the java Thread class.
+		 * 0 = chunkX
+		 * 1 = chunkZ
+		 * 2 = world name
+		 * 3 = block x
+		 * 4 = block y
+		 * 5 = block z
+		 * 6 = (if provided) entity type as string
 		 */
-
-		Thread creativeBlocksThread = new Thread(saveCreativeBlocks);
-		Thread survivalBlocksThread = new Thread(saveSurvivalBlocks);
-		Thread creativeEntitiesThread = new Thread(saveCreativeEntities);
-		Thread survivalEntitiesThread = new Thread(saveSurvivalEntities);
-
-		// Set names, in case there is a bug
-		creativeBlocksThread.setName("ANTISHARE-Save Creative Blocks");
-		survivalBlocksThread.setName("ANTISHARE-Save Survival Blocks");
-		creativeEntitiesThread.setName("ANTISHARE-Save Creative Entities");
-		survivalEntitiesThread.setName("ANTISHARE-Save Survival Entities");
-
-		// Run
-		creativeBlocksThread.start();
-		survivalBlocksThread.start();
-		creativeEntitiesThread.start();
-		survivalEntitiesThread.start();
-
-		// Treat adventure on it's own
-		ObjectSaver nullSaver = new NullObjectSaver();
-		nullSaver.setClear(clear);
-		nullSaver.setLoad(load);
-		if(saveAdventureBlocks != null){
-			Thread adventureBlocksThread = new Thread(saveAdventureBlocks);
-			adventureBlocksThread.setName("ANTISHARE-Save Adventure Blocks");
-			adventureBlocksThread.start();
-		}
-		if(saveAdventureEntities != null){
-			Thread adventureEntitiesThread = new Thread(saveAdventureEntities);
-			adventureEntitiesThread.setName("ANTISHARE-Save Adventure Entities");
-			adventureEntitiesThread.start();
+		String[] parts = s.split(";");
+		if(parts.length < (isBlock ? 6 : 7) || parts.length > (isBlock ? 6 : 7)){
+			plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + ": " + s + " (GM=" + gm.name() + "). Report this to Turt2Live.");
+		}else{
+			String key = parts[3] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2] + (isBlock ? "" : ";" + parts[6]);
+			String value = gm.name();
+			c.set(key, value);
 		}
 	}
 
@@ -365,21 +348,6 @@ class ChunkWrapper {
 				addEntity(gm, location, etype);
 			}
 		}
-	}
-
-	/**
-	 * Gets the percentage done save
-	 * 
-	 * @return the percent done
-	 */
-	public double percentDoneSave(){
-		double percentCreative = saveCreativeBlocks.getPercent() + saveCreativeEntities.getPercent();
-		double percentSurvival = saveSurvivalBlocks.getPercent() + saveSurvivalEntities.getPercent();
-		double percentAdventure = (saveAdventureBlocks != null ? saveAdventureBlocks.getPercent() : 0)
-				+ (saveAdventureEntities != null ? saveAdventureEntities.getPercent() : 0);
-		double divisible = 6 - (saveAdventureBlocks == null ? 1 : 0) - (saveAdventureEntities == null ? 1 : 0);
-		Double avg = (percentCreative + percentAdventure + percentSurvival) / divisible;
-		return avg.intValue();
 	}
 
 }

@@ -237,15 +237,7 @@ public class AntiShare extends PluginWrapper {
 		}
 		SelfCompatibility.cleanupYAML();
 
-		// Startup Systems Manager
-		sys = new Systems();
-		sys.load();
-
-		// Setup everything
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting Metrics trackers...");
-		}
-		trackers = new TrackerList();
+		// Pre-load
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting sign list...");
 		}
@@ -259,20 +251,27 @@ public class AntiShare extends PluginWrapper {
 		}
 		itemMap = new ItemMap();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting listener...");
-		}
-		listener = new ASListener();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting alerts...");
 		}
+
+		// Startup Systems Manager
+		sys = new Systems();
+		sys.load();
+
+		// Setup everything
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting Metrics trackers...");
+		}
+		trackers = new TrackerList();
 		alerts = new Alert();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting messages...");
 		}
 		messages = new Messages();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting region manager...");
+			getLogger().info("Starting listener...");
 		}
+		listener = new ASListener();
 
 		// Statistics
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
