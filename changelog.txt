@@ -8,9 +8,10 @@ Since 5.2.1:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 TODO: 
-- Rewrite inventory system
-- Rewrite block manager (again)
-- Rewrite listener
+- [In testing] Rewrite block manager (again)
+- [In Progress - Split] Rewrite listener
+
+// All of the below will be done after the TODO is done
 
 REQUESTS:
 - (Requested from ravand.org) Creative players allowed to play music
