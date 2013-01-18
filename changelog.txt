@@ -3,13 +3,13 @@ Since 5.2.1:
 - Add Towny support
 - Added feature toggle
 - Removed API (contact turt2live for development help)
+- Fixed up block manager (again)
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 TODO: 
-- [In testing] Rewrite block manager (again)
-- [In Progress - Split] Rewrite listener
+- [In testing] Rewrite listener
 
 // All of the below will be done after the TODO is done
 
