@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -41,13 +40,13 @@ public class InventoryListener implements Listener{
 		// Check to see if we should even bother checking
 		if(!plugin.getConfig().getBoolean("handled-actions.world-transfers")){
 			// Fix up inventories
-			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).fixInventory(player, event.getFrom());
+			manager.fixInventory(player, event.getFrom());
 			return;
 		}
 
 		// Check temp
-		if(((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).isInTemporary(player)){
-			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).removeFromTemporary(player);
+		if(manager.isInTemporary(player)){
+			manager.removeFromTemporary(player);
 		}
 
 		// Inventory check
@@ -55,44 +54,44 @@ public class InventoryListener implements Listener{
 			// Save from
 			switch (player.getGameMode()){
 			case CREATIVE:
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveCreativeInventory(player, from);
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderCreativeInventory(player, from);
+				manager.saveCreativeInventory(player, from);
+				manager.saveEnderCreativeInventory(player, from);
 				break;
 			case SURVIVAL:
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveSurvivalInventory(player, from);
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderSurvivalInventory(player, from);
+				manager.saveSurvivalInventory(player, from);
+				manager.saveEnderSurvivalInventory(player, from);
 				break;
 			default:
 				if(ServerHas.adventureMode()){
 					if(player.getGameMode() == GameMode.ADVENTURE){
-						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveAdventureInventory(player, from);
-						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderAdventureInventory(player, from);
+						manager.saveAdventureInventory(player, from);
+						manager.saveEnderAdventureInventory(player, from);
 					}
 				}
 				break;
 			}
 
 			// Check for linked inventories
-			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).checkLinks(player, to, from);
+			manager.checkLinks(player, to, from);
 
 			// Update the inventories (check for merges)
-			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).refreshInventories(player, true);
+			manager.refreshInventories(player, true);
 
 			// Set to
 			switch (player.getGameMode()){
 			case CREATIVE:
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getCreativeInventory(player, to).setTo(player);
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderCreativeInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				manager.getCreativeInventory(player, to).setTo(player);
+				manager.getEnderCreativeInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
 			case SURVIVAL:
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getSurvivalInventory(player, to).setTo(player);
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				manager.getSurvivalInventory(player, to).setTo(player);
+				manager.getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
 			default:
 				if(ServerHas.adventureMode()){
 					if(player.getGameMode() == GameMode.ADVENTURE){
-						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getAdventureInventory(player, to).setTo(player);
-						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+						manager.getAdventureInventory(player, to).setTo(player);
+						manager.getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 					}
 				}
 				break;
@@ -115,7 +114,7 @@ public class InventoryListener implements Listener{
 		Player player = event.getPlayer();
 
 		// Tell the inventory manager to release this player
-		((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).releasePlayer(player);
+		manager.releasePlayer(player);
 	}
 
 	// ################# Player Join
@@ -125,7 +124,7 @@ public class InventoryListener implements Listener{
 		Player player = event.getPlayer();
 		
 		// Tell the inventory manager to prepare this player
-		((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).loadPlayer(player);
+		manager.loadPlayer(player);
 	}
 
 	// ################# Player Game Mode Change
@@ -145,49 +144,49 @@ public class InventoryListener implements Listener{
 		}
 
 		// Check temp
-		if(((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).isInTemporary(player)){
-			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).removeFromTemporary(player);
+		if(manager.isInTemporary(player)){
+			manager.removeFromTemporary(player);
 		}
 
 		if(!plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
 			// Save from
 			switch (from){
 			case CREATIVE:
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveCreativeInventory(player, player.getWorld());
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderCreativeInventory(player, player.getWorld());
+				manager.saveCreativeInventory(player, player.getWorld());
+				manager.saveEnderCreativeInventory(player, player.getWorld());
 				break;
 			case SURVIVAL:
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveSurvivalInventory(player, player.getWorld());
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderSurvivalInventory(player, player.getWorld());
+				manager.saveSurvivalInventory(player, player.getWorld());
+				manager.saveEnderSurvivalInventory(player, player.getWorld());
 				break;
 			default:
 				if(ServerHas.adventureMode()){
 					if(from == GameMode.ADVENTURE){
-						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveAdventureInventory(player, player.getWorld());
-						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).saveEnderAdventureInventory(player, player.getWorld());
+						manager.saveAdventureInventory(player, player.getWorld());
+						manager.saveEnderAdventureInventory(player, player.getWorld());
 					}
 				}
 				break;
 			}
 
 			// Update inventories
-			((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).refreshInventories(player, true);
+			manager.refreshInventories(player, true);
 
 			// Set to
 			switch (to){
 			case CREATIVE:
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getCreativeInventory(player, player.getWorld()).setTo(player);
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderCreativeInventory(player, player.getWorld()).setTo(player);
+				manager.getCreativeInventory(player, player.getWorld()).setTo(player);
+				manager.getEnderCreativeInventory(player, player.getWorld()).setTo(player);
 				break;
 			case SURVIVAL:
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getSurvivalInventory(player, player.getWorld()).setTo(player);
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
+				manager.getSurvivalInventory(player, player.getWorld()).setTo(player);
+				manager.getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
 				break;
 			default:
 				if(ServerHas.adventureMode()){
 					if(from == GameMode.ADVENTURE){
-						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getAdventureInventory(player, player.getWorld()).setTo(player);
-						((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).getEnderAdventureInventory(player, player.getWorld()).setTo(player);
+						manager.getAdventureInventory(player, player.getWorld()).setTo(player);
+						manager.getEnderAdventureInventory(player, player.getWorld()).setTo(player);
 					}
 				}
 				break;

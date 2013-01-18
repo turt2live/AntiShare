@@ -95,6 +95,10 @@ import com.turt2live.antishare.util.generic.LevelSaver.Level;
  */
 public class ASListener implements Listener {
 
+	/*
+	 * TODO: Fix messages to their own listener (MONITOR)
+	 */
+	
 	private AntiShare plugin = AntiShare.getInstance();
 	private HashMap<String, PerWorldConfig> config = new HashMap<String, PerWorldConfig>();
 	private boolean hasMobCatcher = false;

@@ -102,7 +102,7 @@ public class RegionListener implements Listener{
 
 		// Right click list
 		// Check if they should be blocked
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getEntity().getLocation());
+		Region asregion = manager.getRegion(event.getEntity().getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
 				type = AlertType.ILLEGAL;
@@ -142,7 +142,7 @@ public class RegionListener implements Listener{
 
 		// Right click list
 		// Check if they should be blocked
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getPotion().getLocation());
+		Region asregion = manager.getRegion(event.getPotion().getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isThrownPotionAllowed()){
 				type = AlertType.ILLEGAL;
@@ -186,7 +186,7 @@ public class RegionListener implements Listener{
 				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())){
 					type = AlertType.LEGAL;
 				}
-				Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
+				Region region = manager.getRegion(player.getLocation());
 				if(region != null){
 					if(!region.getConfig().isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
 						type = AlertType.LEGAL;
@@ -214,8 +214,8 @@ public class RegionListener implements Listener{
 			return;
 		}
 		Player player = event.getPlayer();
-		Region currentRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getFrom());
-		Region toRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getTo());
+		Region currentRegion = manager.getRegion(event.getFrom());
+		Region toRegion = manager.getRegion(event.getTo());
 
 		// World Split
 		if(currentRegion == null){
@@ -244,7 +244,7 @@ public class RegionListener implements Listener{
 		Player player = event.getPlayer();
 
 		// Remove from regions
-		Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
+		Region region = manager.getRegion(player.getLocation());
 		if(region != null){
 			region.alertExit(player);
 		}
@@ -257,7 +257,7 @@ public class RegionListener implements Listener{
 		Player player = event.getPlayer();
 
 		// Check region
-		Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
+		Region region = manager.getRegion(player.getLocation());
 		if(region != null){
 			// Add join key
 			player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
@@ -319,7 +319,7 @@ public class RegionListener implements Listener{
 			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), ASUtils.getEntityName(target))){
 				type = AlertType.LEGAL;
 			}
-			Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(target.getLocation());
+			Region region = manager.getRegion(target.getLocation());
 			if(region != null){
 				if(!region.getConfig().isBlocked(target, ListType.MOBS)){
 					type = AlertType.LEGAL;
@@ -330,7 +330,7 @@ public class RegionListener implements Listener{
 		}
 
 		// Check if we need to continue based on settings
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(target.getLocation());if(asregion == null){
+		Region asregion = manager.getRegion(target.getLocation());if(asregion == null){
 						return;
 		}
 		if(playerCombat){
@@ -401,7 +401,7 @@ public class RegionListener implements Listener{
 
 		// Region Check
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
-			Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
+			Region region = manager.getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
 				event.setCancelled(plugin.shouldCancel(player, false));
@@ -433,8 +433,8 @@ public class RegionListener implements Listener{
 		}
 
 		Player player = event.getPlayer();
-		Region currentRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getFrom());
-		Region toRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getTo());
+		Region currentRegion = manager.getRegion(event.getFrom());
+		Region toRegion = manager.getRegion(event.getTo());
 
 		// Check split
 		if(plugin.getListener().getConfig(player.getWorld()).isSplitActive()){
@@ -476,7 +476,7 @@ public class RegionListener implements Listener{
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), command)){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
+		Region asregion = manager.getRegion(player.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(command, ListType.COMMAND)){
 				type = AlertType.LEGAL;
@@ -507,7 +507,7 @@ public class RegionListener implements Listener{
 		Player player = event.getEntity();
 
 		// Remove them from a region (if applicable)
-		Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
+		Region region = manager.getRegion(player.getLocation());
 		if(region != null){
 			region.alertExit(player);
 		}
@@ -530,7 +530,7 @@ public class RegionListener implements Listener{
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation());
+		Region asregion = manager.getRegion(item.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.PICKUP)){
 				type = AlertType.LEGAL;
@@ -540,7 +540,7 @@ public class RegionListener implements Listener{
 		}
 
 		// Region Check
-		if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL){
+		if(manager.getRegion(player.getLocation()) != manager.getRegion(item.getLocation()) && type == AlertType.LEGAL){
 			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PICKUP)){
 				type = AlertType.ILLEGAL;
 				region = true;
@@ -581,7 +581,7 @@ public class RegionListener implements Listener{
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation());
+		Region asregion = manager.getRegion(item.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.DROP)){
 				type = AlertType.LEGAL;
@@ -591,7 +591,7 @@ public class RegionListener implements Listener{
 		}
 
 		// Region Check
-		if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL){
+		if(manager.getRegion(player.getLocation()) != manager.getRegion(item.getLocation()) && type == AlertType.LEGAL){
 			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_THROW)){
 				type = AlertType.ILLEGAL;
 			}
@@ -636,7 +636,7 @@ public class RegionListener implements Listener{
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(bottle.getLocation());
+		Region asregion = manager.getRegion(bottle.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
 				type = AlertType.LEGAL;
@@ -674,7 +674,7 @@ public class RegionListener implements Listener{
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getEgg().getLocation());
+		Region asregion = manager.getRegion(event.getEgg().getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
 				type = AlertType.LEGAL;
@@ -722,7 +722,7 @@ public class RegionListener implements Listener{
 		// Check internal inventories
 		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
 			// Check inventories
-			Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(cart.getLocation());
+			Region asregion = manager.getRegion(cart.getLocation());
 			if(asregion != null){
 				if(asregion.getConfig().clearBlockInventoryOnBreak()){
 					cart.getInventory().clear();
@@ -765,7 +765,7 @@ public class RegionListener implements Listener{
 
 		// If the entity is not found, check for interacted entities
 		if(item == Material.AIR){
-			Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getRightClicked().getLocation());
+			Region region = manager.getRegion(event.getRightClicked().getLocation());
 			if(region != null){
 				if(!region.getConfig().isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
 					type = AlertType.LEGAL;
@@ -796,7 +796,7 @@ public class RegionListener implements Listener{
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getRightClicked().getLocation());
+		Region asregion = manager.getRegion(event.getRightClicked().getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
 				type = AlertType.LEGAL;
@@ -846,7 +846,7 @@ public class RegionListener implements Listener{
 		}
 
 		// Check permissions
-		Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(event.getVehicle().getLocation());
+		Region region = manager.getRegion(event.getVehicle().getLocation());
 		if(region != null){
 			if(!region.getConfig().isBlocked(item, ListType.BLOCK_BREAK)){
 				type = AlertType.LEGAL;
@@ -902,7 +902,7 @@ public class RegionListener implements Listener{
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
+		Region asregion = manager.getRegion(block.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_PLACE)){
 				type = AlertType.LEGAL;
@@ -912,8 +912,8 @@ public class RegionListener implements Listener{
 		}
 
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PLACE)){
-			Region playerRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
-			Region blockRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
+			Region playerRegion = manager.getRegion(player.getLocation());
+			Region blockRegion = manager.getRegion(block.getLocation());
 			if(playerRegion != blockRegion){
 				type = AlertType.ILLEGAL;
 			}
@@ -947,7 +947,7 @@ public class RegionListener implements Listener{
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){
 			specialType = AlertType.LEGAL;
 		}
-		Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
+		Region asregion = manager.getRegion(block.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_BREAK)){
 				specialType = AlertType.LEGAL;
@@ -963,8 +963,8 @@ public class RegionListener implements Listener{
 
 		// Check regions
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_BREAK)){
-			Region playerRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
-			Region blockRegion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(block.getLocation());
+			Region playerRegion = manager.getRegion(player.getLocation());
+			Region blockRegion = manager.getRegion(block.getLocation());
 			if(playerRegion != blockRegion){
 								specialType = AlertType.ILLEGAL;
 			}
