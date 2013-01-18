@@ -8,6 +8,7 @@ import org.bukkit.Location;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.listener.CuboidListener;
 import com.turt2live.antishare.manager.AntiShareManager;
 
 /**
@@ -29,6 +30,7 @@ public class CuboidManager extends AntiShareManager {
 	 * Creates a new cuboid manager
 	 */
 	public CuboidManager(){
+		plugin.getServer().getPluginManager().registerEvents(new CuboidListener(this), plugin);
 		load();
 	}
 

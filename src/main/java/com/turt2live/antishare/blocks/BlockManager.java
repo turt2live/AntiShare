@@ -18,7 +18,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.listener.BlockManagerListener;
+import com.turt2live.antishare.listener.BlockListener;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
@@ -64,7 +64,7 @@ public class BlockManager extends AntiShareManager {
 		}, 0, 20 * 5);
 
 		// Start listener
-		plugin.getServer().getPluginManager().registerEvents(new BlockManagerListener(this), plugin);
+		plugin.getServer().getPluginManager().registerEvents(new BlockListener(this), plugin);
 	}
 
 	@Override

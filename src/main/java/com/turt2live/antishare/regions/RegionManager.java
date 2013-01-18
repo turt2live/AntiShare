@@ -20,6 +20,7 @@ import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.listener.RegionListener;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.util.ASUtils;
@@ -33,6 +34,7 @@ public class RegionManager extends AntiShareManager {
 	 * Creates a new Region Manager
 	 */
 	public RegionManager(){
+		plugin.getServer().getPluginManager().registerEvents(new RegionListener(this),plugin);
 		load();
 	}
 
