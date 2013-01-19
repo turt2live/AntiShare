@@ -452,9 +452,11 @@ public class BlockListener implements Listener {
 								}
 								break;
 							}
+						}else{
+							rel.breakNaturally();
 						}
 					}else{
-						rel.setType(Material.AIR);
+						rel.breakNaturally();
 					}
 					blocks.removeBlock(rel);
 				}
@@ -493,11 +495,15 @@ public class BlockListener implements Listener {
 					}
 
 				}
+			}
+
+			if(plugin.getListener().getConfig(block.getWorld()).removeAttachedBlocksOnBreak()){
 				for(BlockFace face : ASUtils.realFaces){
 					Block rel = block.getRelative(face);
 					if(ASUtils.isDroppedOnBreak(rel, block)){
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 							GameMode gm = blocks.getType(rel);
+							System.out.println(gm);
 							if(gm != null){
 								switch (gm){
 								case CREATIVE:
@@ -514,6 +520,8 @@ public class BlockListener implements Listener {
 									}
 									break;
 								}
+							}else{
+								rel.setType(Material.AIR);
 							}
 						}else{
 							rel.setType(Material.AIR);
