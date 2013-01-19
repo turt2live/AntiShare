@@ -4,6 +4,7 @@ Since 5.2.1:
 - Added feature toggle
 - Removed API (contact turt2live for development help)
 - Fixed up block manager (again)
+- Fixed beds and doors being breakable
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
@@ -20,4 +21,3 @@ BUGS:
 - (Reported from ravand.org) Bookshelf bypass
 - (Reported from ravand.org) Mechanically created golems
 - (Reported by self) /as rl breaks block manager
-- (Reported by self) Bed blocks are not protected

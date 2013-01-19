@@ -120,6 +120,10 @@ public class BlockListener implements Listener {
 		Player player = event.getPlayer();
 		if(!event.isCancelled() && !plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
 			blocks.addBlock(player.getGameMode(), event.getBlock());
+			Block second = ASUtils.multipleBlocks(event.getBlock());
+			if(second != null){
+				blocks.addBlock(player.getGameMode(), second);
+			}
 		}
 	}
 

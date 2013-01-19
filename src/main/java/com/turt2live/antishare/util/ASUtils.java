@@ -28,6 +28,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.Bed;
+import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
@@ -38,6 +40,7 @@ import com.turt2live.antishare.util.generic.ASEntity;
  * 
  * @author turt2live
  */
+@SuppressWarnings ("deprecation")
 public class ASUtils {
 
 	public static final BlockFace[] realFaces = {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP};
@@ -526,7 +529,6 @@ public class ASUtils {
 	 * @param player the player
 	 * @param slot the slot to place it in. <b>Starts at 1</b>
 	 */
-	@SuppressWarnings ("deprecation")
 	public static void giveTool(Material tool, Player player, int slot){
 		Inventory inv = player.getInventory();
 		if(inv.firstEmpty() >= 0){
@@ -539,6 +541,34 @@ public class ASUtils {
 				inv.addItem(original);
 			}
 			player.updateInventory();
+		}
+	}
+
+	/**
+	 * Determines the second block to a source block (like a bed)
+	 * 
+	 * @param block the source
+	 * @return the second block, or null if not found
+	 */
+	public static Block multipleBlocks(Block block){
+		switch (block.getType()){
+		case WOODEN_DOOR:
+		case IRON_DOOR_BLOCK:
+			Door door = (Door) block.getState().getData();
+			if(door.isTopHalf()){
+				return block.getRelative(BlockFace.DOWN);
+			}else{
+				return block.getRelative(BlockFace.UP);
+			}
+		case BED_BLOCK:
+			Bed bed = (Bed) block.getState().getData();
+			if(bed.isHeadOfBed()){
+				return block.getRelative(bed.getFacing().getOppositeFace());
+			}else{
+				return block.getRelative(bed.getFacing());
+			}
+		default:
+			return null;
 		}
 	}
 
