@@ -69,7 +69,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.blocks.BlockManager;
 import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
@@ -353,38 +352,6 @@ public class ASListener implements Listener {
 		factory.insert(block, player, block.getWorld(), TenderType.BLOCK_BREAK);
 		playerMessage = factory.toString();
 		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_BREAK);
-
-		// Check for 'attached' blocks
-		if(player.getGameMode() == GameMode.SURVIVAL && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
-			for(BlockFace face : ASUtils.realFaces){
-				Block rel = block.getRelative(face);
-				if(ASUtils.isDroppedOnBreak(rel, block)){
-					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
-						GameMode gm = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).getType(rel);
-						if(gm != null){
-							switch (gm){
-							case CREATIVE:
-								rel.setType(Material.AIR);
-								break;
-							case SURVIVAL:
-								rel.breakNaturally();
-								break;
-							default:
-								if(ServerHas.adventureMode()){
-									if(gm == GameMode.ADVENTURE){
-										rel.setType(Material.AIR);
-									}
-								}
-								break;
-							}
-						}
-					}else{
-						rel.setType(Material.AIR);
-					}
-					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeBlock(rel);
-				}
-			}
-		}
 	}
 
 	// ################# Block Place
