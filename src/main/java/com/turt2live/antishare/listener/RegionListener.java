@@ -942,7 +942,7 @@ public class RegionListener implements Listener {
 		}
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		AlertType specialType = AlertType.LEGAL;
+		AlertType specialType = AlertType.ILLEGAL;
 
 		// Check if they should be blocked
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){

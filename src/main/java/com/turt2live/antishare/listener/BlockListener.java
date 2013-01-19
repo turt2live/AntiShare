@@ -391,8 +391,6 @@ public class BlockListener implements Listener {
 						}
 					}
 				}
-			}else{
-				return;
 			}
 		}
 
@@ -503,7 +501,6 @@ public class BlockListener implements Listener {
 					if(ASUtils.isDroppedOnBreak(rel, block)){
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 							GameMode gm = blocks.getType(rel);
-							System.out.println(gm);
 							if(gm != null){
 								switch (gm){
 								case CREATIVE:
