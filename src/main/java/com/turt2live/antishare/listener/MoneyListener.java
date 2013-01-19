@@ -11,9 +11,9 @@ import com.turt2live.antishare.money.MoneyManager;
 public class MoneyListener implements Listener {
 
 	private MoneyManager manager;
-	
+
 	public MoneyListener(MoneyManager manager){
-		this.manager=manager;
+		this.manager = manager;
 	}
 
 	// ################# Player Join
@@ -25,5 +25,5 @@ public class MoneyListener implements Listener {
 		// Money (fines/rewards) status
 		manager.showStatusOnLogin(player);
 	}
-	
+
 }

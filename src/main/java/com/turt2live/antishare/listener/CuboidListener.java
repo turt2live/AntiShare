@@ -16,13 +16,13 @@ import com.turt2live.antishare.cuboid.CuboidManager.CuboidPoint;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
 
-public class CuboidListener implements Listener{
+public class CuboidListener implements Listener {
 
 	private AntiShare plugin = AntiShare.getInstance();
 	private CuboidManager manager;
-	
+
 	public CuboidListener(CuboidManager manager){
-		this.manager=manager;
+		this.manager = manager;
 	}
 
 	// ################# Player Interact Event (2)
@@ -64,5 +64,5 @@ public class CuboidListener implements Listener{
 			}
 		}
 	}
-	
+
 }

@@ -19,13 +19,13 @@ import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 
-public class InventoryListener implements Listener{
+public class InventoryListener implements Listener {
 
 	private AntiShare plugin = AntiShare.getInstance();
 	private InventoryManager manager;
-	
+
 	public InventoryListener(InventoryManager manager){
-		this.manager=manager;
+		this.manager = manager;
 	}
 
 	// ################# Player World Change
@@ -122,7 +122,7 @@ public class InventoryListener implements Listener{
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
-		
+
 		// Tell the inventory manager to prepare this player
 		manager.loadPlayer(player);
 	}
@@ -206,5 +206,5 @@ public class InventoryListener implements Listener{
 		}
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
 	}
-	
+
 }

@@ -95,10 +95,10 @@ import com.turt2live.antishare.util.generic.LevelSaver.Level;
  */
 public class ASListener implements Listener {
 
-	/*
+	/* 
 	 * TODO: Fix messages to their own listener (MONITOR)
 	 */
-	
+
 	private AntiShare plugin = AntiShare.getInstance();
 	private HashMap<String, PerWorldConfig> config = new HashMap<String, PerWorldConfig>();
 	private boolean hasMobCatcher = false;
@@ -332,9 +332,9 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
-			if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_BREAK)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_BREAK)){
+			type = AlertType.LEGAL;
+		}
 
 		// Check hooks
 		if(((HookManager) plugin.getSystemsManager().getManager(Manager.HOOK)).checkForSignProtection(block) || ((HookManager) plugin.getSystemsManager().getManager(Manager.HOOK)).checkForRegion(player, block)){
@@ -347,12 +347,12 @@ public class ASListener implements Listener {
 		}
 
 		// Alert
-			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
-			String playerMessage = plugin.getMessage("blocked-action.break-block");
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert(block, player, block.getWorld(), TenderType.BLOCK_BREAK);
-			playerMessage = factory.toString();
-			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_BREAK);
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
+		String playerMessage = plugin.getMessage("blocked-action.break-block");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(block, player, block.getWorld(), TenderType.BLOCK_BREAK);
+		playerMessage = factory.toString();
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_BREAK);
 
 		// Check for 'attached' blocks
 		if(player.getGameMode() == GameMode.SURVIVAL && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
@@ -407,9 +407,9 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getWorld(), block.getType())){
 			type = AlertType.LEGAL;
 		}
-			if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_PLACE)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_PLACE)){
+			type = AlertType.LEGAL;
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -417,12 +417,12 @@ public class ASListener implements Listener {
 		}
 
 		// Alert
-			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
-				String playerMessage = plugin.getMessage("blocked-action.place-block");
-				MessageFactory factory = new MessageFactory(playerMessage);
-				factory.insert(block, player, block.getWorld(), TenderType.BLOCK_PLACE);
-				playerMessage = factory.toString();
-				plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ");
+		String playerMessage = plugin.getMessage("blocked-action.place-block");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(block, player, block.getWorld(), TenderType.BLOCK_PLACE);
+		playerMessage = factory.toString();
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
 	}
 
 	// ################# Player Interact Block
@@ -448,9 +448,9 @@ public class ASListener implements Listener {
 		// Right click list
 		if(action == Action.RIGHT_CLICK_BLOCK){
 			// Check if they should be blocked
-				if(getConfig(block.getWorld()).isBlocked(block, ListType.RIGHT_CLICK)){
-					type = AlertType.ILLEGAL;
-				}
+			if(getConfig(block.getWorld()).isBlocked(block, ListType.RIGHT_CLICK)){
+				type = AlertType.ILLEGAL;
+			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, block.getWorld(), block.getType())){
 				type = AlertType.LEGAL;
 			}
@@ -465,9 +465,9 @@ public class ASListener implements Listener {
 
 		// If this event is triggered as legal from the right click, check use lists
 		if(type == AlertType.LEGAL){
-				if(getConfig(block.getWorld()).isBlocked(block, ListType.USE)){
-					type = AlertType.ILLEGAL;
-				}
+			if(getConfig(block.getWorld()).isBlocked(block, ListType.USE)){
+				type = AlertType.ILLEGAL;
+			}
 			// Check if they should be blocked
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getWorld(), block.getType())){
 				type = AlertType.LEGAL;
@@ -484,9 +484,9 @@ public class ASListener implements Listener {
 		// If the event is triggered as legal from the use lists, check the player's item in hand
 		if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
 			// Check if they should be blocked
-				if(getConfig(block.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
-					type = AlertType.ILLEGAL;
-				}
+			if(getConfig(block.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
+				type = AlertType.ILLEGAL;
+			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
@@ -506,10 +506,10 @@ public class ASListener implements Listener {
 				&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
 				|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
 			boolean potion = false;
-				if(!getConfig(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
-					type = AlertType.ILLEGAL;
-					potion = true;
-				}
+			if(!getConfig(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
+				type = AlertType.ILLEGAL;
+				potion = true;
+			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
@@ -529,15 +529,15 @@ public class ASListener implements Listener {
 				&& player.getItemInHand().getType() == Material.POTION){
 			boolean potion = false;
 			if(player.getItemInHand().getDurability() > 32000){
-					if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
-						type = AlertType.ILLEGAL;
-						potion = true;
-					}
+				if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
+					type = AlertType.ILLEGAL;
+					potion = true;
+				}
 			}else{
-					if(!getConfig(player.getWorld()).isPotionAllowed()){
-						type = AlertType.ILLEGAL;
-						potion = true;
-					}
+				if(!getConfig(player.getWorld()).isPotionAllowed()){
+					type = AlertType.ILLEGAL;
+					potion = true;
+				}
 			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
@@ -592,9 +592,9 @@ public class ASListener implements Listener {
 		}
 
 		// Check permissions
-			if(!getConfig(player.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(player.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
+			type = AlertType.LEGAL;
+		}
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
@@ -657,9 +657,9 @@ public class ASListener implements Listener {
 
 		// If the entity is not found, check for interacted entities
 		if(item == Material.AIR){
-				if(!getConfig(player.getWorld()).isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
-					type = AlertType.LEGAL;
-				}
+			if(!getConfig(player.getWorld()).isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
+				type = AlertType.LEGAL;
+			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, player.getWorld(), ASUtils.getEntityName(event.getRightClicked()))){
 				type = AlertType.LEGAL;
 			}
@@ -683,9 +683,9 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-			if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
+			type = AlertType.LEGAL;
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -726,9 +726,9 @@ public class ASListener implements Listener {
 		// Check internal inventories
 		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
 			// Check inventories
-						if(getConfig(player.getWorld()).clearBlockInventoryOnBreak()){
-					cart.getInventory().clear();
-				}
+			if(getConfig(player.getWorld()).clearBlockInventoryOnBreak()){
+				cart.getInventory().clear();
+			}
 		}
 	}
 
@@ -744,9 +744,9 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-			if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
+			type = AlertType.LEGAL;
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -787,9 +787,9 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-			if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
+			type = AlertType.LEGAL;
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -824,9 +824,9 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
-			if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.DROP)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.DROP)){
+			type = AlertType.LEGAL;
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -836,7 +836,7 @@ public class ASListener implements Listener {
 		// Alert (with sanity check)
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to throw " : " threw ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(itemStack.getType().name());
 		String playerMessage = plugin.getMessage("blocked-action.drop-item");
-				MessageFactory factory = new MessageFactory(playerMessage);
+		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert((Material) null, player, player.getWorld(), TenderType.ITEM_DROP, ASUtils.capitalize(itemStack.getType().name()));
 		playerMessage = factory.toString();
 		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.ITEM_DROP);
@@ -859,9 +859,9 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, player.getWorld(), itemStack.getType())){
 			type = AlertType.LEGAL;
 		}
-			if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.PICKUP)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.PICKUP)){
+			type = AlertType.LEGAL;
+		}
 
 		// Region Check
 		if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL){
@@ -958,9 +958,9 @@ public class ASListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), command)){
 			type = AlertType.LEGAL;
 		}
-			if(!getConfig(player.getWorld()).isBlocked(command, ListType.COMMAND)){
-				type = AlertType.LEGAL;
-			}
+		if(!getConfig(player.getWorld()).isBlocked(command, ListType.COMMAND)){
+			type = AlertType.LEGAL;
+		}
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
@@ -1030,7 +1030,7 @@ public class ASListener implements Listener {
 			desired.setTo(player);
 			player.setMetadata("ASlevelChange", new FixedMetadataValue(plugin, currentLevel));
 		}
-		
+
 		// Alerts
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to Game Mode " + ChatColor.YELLOW + to.name();
 		String playerMessage = "no message";
@@ -1090,20 +1090,20 @@ public class ASListener implements Listener {
 			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), ASUtils.getEntityName(target))){
 				type = AlertType.LEGAL;
 			}
-				if(!getConfig(target.getWorld()).isBlocked(target, ListType.MOBS)){
-					type = AlertType.LEGAL;
-				}
+			if(!getConfig(target.getWorld()).isBlocked(target, ListType.MOBS)){
+				type = AlertType.LEGAL;
+			}
 		}
 
 		// Check if we need to continue based on settings
 		if(playerCombat){
-				if(!getConfig(target.getWorld()).combatAgainstPlayers()){
-					return;
-				}
+			if(!getConfig(target.getWorld()).combatAgainstPlayers()){
+				return;
+			}
 		}else{
-				if(!getConfig(target.getWorld()).combatAgainstMobs()){
-					return;
-				}
+			if(!getConfig(target.getWorld()).combatAgainstMobs()){
+				return;
+			}
 		}
 
 		// Handle event
@@ -1197,16 +1197,16 @@ public class ASListener implements Listener {
 			type = AlertType.LEGAL;
 		}
 
-			event.setCancelled(plugin.shouldCancel(player, false));
+		event.setCancelled(plugin.shouldCancel(player, false));
 
-			// Alert (with sanity check)
-			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(pearl.name());
-			String playerMessage = plugin.getMessage("blocked-action.use-item");
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert((Material) null, player, player.getWorld(), TenderType.USE, ASUtils.capitalize(pearl.name()));
-			playerMessage = factory.toString();
-			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.USE_ITEM);
-			}
+		// Alert (with sanity check)
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(pearl.name());
+		String playerMessage = plugin.getMessage("blocked-action.use-item");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert((Material) null, player, player.getWorld(), TenderType.USE, ASUtils.capitalize(pearl.name()));
+		playerMessage = factory.toString();
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.USE_ITEM);
+	}
 
 	// ################# Player Craft Item Event
 
@@ -1224,9 +1224,9 @@ public class ASListener implements Listener {
 				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())){
 					type = AlertType.LEGAL;
 				}
-					if(getConfig(player.getWorld()).isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
-						type = AlertType.LEGAL;
-					}
+				if(getConfig(player.getWorld()).isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
+					type = AlertType.LEGAL;
+				}
 			}else{
 				type = AlertType.LEGAL;
 			}
@@ -1255,9 +1255,9 @@ public class ASListener implements Listener {
 
 		// Right click list
 		// Check if they should be blocked
-			if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
-				type = AlertType.ILLEGAL;
-			}
+		if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
+			type = AlertType.ILLEGAL;
+		}
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), Material.POTION)
 				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), Material.POTION)){
 			type = AlertType.LEGAL;
@@ -1306,9 +1306,9 @@ public class ASListener implements Listener {
 
 		// Right click list
 		// Check if they should be blocked
-			if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
-				type = AlertType.ILLEGAL;
-			}
+		if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
+			type = AlertType.ILLEGAL;
+		}
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)
 				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
 			type = AlertType.LEGAL;

@@ -65,13 +65,13 @@ import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
 
-public class RegionListener implements Listener{
+public class RegionListener implements Listener {
 
-	private AntiShare plugin= AntiShare.getInstance();
+	private AntiShare plugin = AntiShare.getInstance();
 	private RegionManager manager;
-	
+
 	public RegionListener(RegionManager manager){
-		this.manager=manager;
+		this.manager = manager;
 	}
 
 	// ################# Projectile Launch Event
@@ -330,17 +330,18 @@ public class RegionListener implements Listener{
 		}
 
 		// Check if we need to continue based on settings
-		Region asregion = manager.getRegion(target.getLocation());if(asregion == null){
-						return;
+		Region asregion = manager.getRegion(target.getLocation());
+		if(asregion == null){
+			return;
 		}
 		if(playerCombat){
-				if(!asregion.getConfig().combatAgainstPlayers()){
-					return;
-				}
+			if(!asregion.getConfig().combatAgainstPlayers()){
+				return;
+			}
 		}else{
-				if(!asregion.getConfig().combatAgainstMobs()){
-					return;
-				}
+			if(!asregion.getConfig().combatAgainstMobs()){
+				return;
+			}
 		}
 
 		// Handle event
@@ -406,7 +407,7 @@ public class RegionListener implements Listener{
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
 				event.setCancelled(plugin.shouldCancel(player, false));
 				if(player.hasMetadata("ASlevelChange")){
-					List<MetadataValue> values =player.getMetadata("ASlevelChange");
+					List<MetadataValue> values = player.getMetadata("ASlevelChange");
 					for(MetadataValue value : values){
 						if(value.getOwningPlugin().getName().equalsIgnoreCase("AntiShare")){
 							Level currentLevel = (Level) value.value();
@@ -603,9 +604,9 @@ public class RegionListener implements Listener{
 		}
 
 		// Alert (with sanity check)
-		String 			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to throw " : " threw ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(itemStack.getType().name()) + ChatColor.WHITE + " into a region.";
-			String playerMessage = ChatColor.RED + "You cannot throw items into another region!";
-				MessageFactory factory = new MessageFactory(playerMessage);
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to throw " : " threw ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(itemStack.getType().name()) + ChatColor.WHITE + " into a region.";
+		String playerMessage = ChatColor.RED + "You cannot throw items into another region!";
+		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert((Material) null, player, player.getWorld(), TenderType.ITEM_DROP, ASUtils.capitalize(itemStack.getType().name()));
 		playerMessage = factory.toString();
 		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.ITEM_DROP);
@@ -925,11 +926,11 @@ public class RegionListener implements Listener{
 		}
 
 		// Alert
-			if(type == AlertType.ILLEGAL){
-				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ") + ChatColor.WHITE + " in a region.";
-				String playerMessage = ChatColor.RED + "You cannot place blocks in another region!";
-				plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
-			}
+		if(type == AlertType.ILLEGAL){
+			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ") + ChatColor.WHITE + " in a region.";
+			String playerMessage = ChatColor.RED + "You cannot place blocks in another region!";
+			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
+		}
 	}
 
 	// ################# Block Break
@@ -966,7 +967,7 @@ public class RegionListener implements Listener{
 			Region playerRegion = manager.getRegion(player.getLocation());
 			Region blockRegion = manager.getRegion(block.getLocation());
 			if(playerRegion != blockRegion){
-								specialType = AlertType.ILLEGAL;
+				specialType = AlertType.ILLEGAL;
 			}
 		}
 
@@ -976,11 +977,11 @@ public class RegionListener implements Listener{
 		}
 
 		// Alert
-				if(specialType == AlertType.ILLEGAL){
-					String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break " : " broke  ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ") + ChatColor.WHITE + " in a region.";
-					String specialPlayerMessage = ChatColor.RED + "You cannot break blocks that are not in your region";
-					plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, AlertTrigger.BLOCK_BREAK);
-				}
+		if(specialType == AlertType.ILLEGAL){
+			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break " : " broke  ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ") + ChatColor.WHITE + " in a region.";
+			String specialPlayerMessage = ChatColor.RED + "You cannot break blocks that are not in your region";
+			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, AlertTrigger.BLOCK_BREAK);
+		}
 	}
-	
+
 }
