@@ -18,6 +18,5 @@ REQUESTS:
 - (Requested from ravand.org) Creative players allowed to play music
 
 BUGS:
-- (Reported from ravand.org) Bookshelf bypass
 - (Reported from ravand.org) Mechanically created golems
 - (Reported by self) /as rl breaks block manager
