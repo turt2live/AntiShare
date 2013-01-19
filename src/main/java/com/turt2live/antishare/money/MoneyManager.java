@@ -25,6 +25,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.listener.MoneyListener;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -41,7 +42,6 @@ public class MoneyManager extends AntiShareManager {
 
 	private List<Reward> rewards = new ArrayList<Reward>();
 	private List<Fine> fines = new ArrayList<Fine>();
-	private AntiShare plugin;
 	private boolean doRewards = false, doFines = false, tab = false, showStatusOnLogin = false;
 	private VaultEconomy econ;
 	private List<String> silentTo = new ArrayList<String>();
@@ -51,9 +51,7 @@ public class MoneyManager extends AntiShareManager {
 	 * Creates a new Money Manager
 	 */
 	public MoneyManager(){
-		plugin = AntiShare.getInstance();
 		load();
-		reload();
 		if(doRewards || doFines){
 			plugin.getTrackers().getTracker(TrackerType.FEATURE_FINES).increment(1);
 			Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
@@ -63,6 +61,7 @@ public class MoneyManager extends AntiShareManager {
 				plugin.log("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work", Level.SEVERE);
 			}
 		}
+		plugin.getServer().getPluginManager().registerEvents(new MoneyListener(this), plugin);
 	}
 
 	/**

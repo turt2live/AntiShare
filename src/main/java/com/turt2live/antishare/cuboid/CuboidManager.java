@@ -7,7 +7,6 @@ import java.util.Map;
 import org.bukkit.Location;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.listener.CuboidListener;
 import com.turt2live.antishare.manager.AntiShareManager;
 
@@ -23,7 +22,6 @@ public class CuboidManager extends AntiShareManager {
 		POINT1, POINT2;
 	}
 
-	private AntiShare plugin = AntiShare.getInstance();
 	private Map<String, Cuboid> cuboids = new HashMap<String, Cuboid>();
 
 	/**

@@ -14,7 +14,6 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.cuboid.CuboidManager;
@@ -27,14 +26,13 @@ import com.turt2live.antishare.util.ASUtils;
 
 public class RegionManager extends AntiShareManager {
 
-	private AntiShare plugin = AntiShare.getInstance();
 	private Map<String, Set<Region>> regions = new HashMap<String, Set<Region>>();
 
 	/**
 	 * Creates a new Region Manager
 	 */
 	public RegionManager(){
-		plugin.getServer().getPluginManager().registerEvents(new RegionListener(this),plugin);
+		plugin.getServer().getPluginManager().registerEvents(new RegionListener(this), plugin);
 		load();
 	}
 

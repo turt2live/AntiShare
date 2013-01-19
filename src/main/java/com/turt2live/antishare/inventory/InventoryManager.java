@@ -26,6 +26,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.listener.InventoryListener;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
@@ -48,7 +49,6 @@ public class InventoryManager extends AntiShareManager {
 	private ConcurrentHashMap<String, ASInventory> enderAdventure = new ConcurrentHashMap<String, ASInventory>();
 	private ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
 	private List<LinkedInventory> links = new ArrayList<LinkedInventory>();
-	private AntiShare plugin = AntiShare.getInstance();
 
 	/**
 	 * Creates a new Inventory Manager
@@ -61,7 +61,7 @@ public class InventoryManager extends AntiShareManager {
 			links.saveDefaults();
 		}
 		links.load();
-
+		plugin.getServer().getPluginManager().registerEvents(new InventoryListener(this), plugin);
 		load();
 	}
 

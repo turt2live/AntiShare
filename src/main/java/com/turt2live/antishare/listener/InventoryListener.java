@@ -191,9 +191,6 @@ public class InventoryListener implements Listener {
 				}
 				break;
 			}
-
-			// Check for open inventories and stuff
-			player.closeInventory();
 		}else{
 			return;
 		}
