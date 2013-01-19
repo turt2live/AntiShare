@@ -19,7 +19,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.blocks.BlockManager;
+import com.turt2live.antishare.manager.BlockManager;
+import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -27,7 +28,6 @@ import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.util.ASUtils;
 
 public class HangingListener implements Listener {

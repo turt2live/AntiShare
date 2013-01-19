@@ -18,7 +18,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.inventory.InventoryManager;
+import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -551,7 +551,7 @@ public class Region {
 		}
 	}
 
-	void onCreate(){
+	public void onCreate(){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if(players != null){
@@ -563,7 +563,7 @@ public class Region {
 		}
 	}
 
-	void onUpdate(Cuboid last){
+	public void onUpdate(Cuboid last){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if(players != null){
@@ -577,7 +577,7 @@ public class Region {
 		}
 	}
 
-	void onDelete(){
+	public void onDelete(){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if(players != null){

@@ -1,4 +1,4 @@
-package com.turt2live.antishare.blocks;
+package com.turt2live.antishare.manager;
 
 import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,7 +13,7 @@ import org.bukkit.entity.EntityType;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.blocks.BlockManager.ASMaterial;
+import com.turt2live.antishare.manager.BlockManager.ASMaterial;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 import com.turt2live.antishare.util.generic.ChunkLocation;

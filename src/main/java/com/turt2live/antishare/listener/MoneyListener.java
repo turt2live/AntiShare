@@ -6,7 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.turt2live.antishare.money.MoneyManager;
+import com.turt2live.antishare.manager.MoneyManager;
 
 public class MoneyListener implements Listener {
 

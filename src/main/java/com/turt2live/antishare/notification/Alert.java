@@ -21,10 +21,10 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.metrics.ActionsTracker;
 import com.turt2live.antishare.metrics.Tracker;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
-import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
 

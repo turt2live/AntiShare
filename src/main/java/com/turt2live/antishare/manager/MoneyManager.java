@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.money;
+package com.turt2live.antishare.manager;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,9 +26,12 @@ import org.bukkit.plugin.Plugin;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.listener.MoneyListener;
-import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
+import com.turt2live.antishare.money.Fine;
+import com.turt2live.antishare.money.Reward;
 import com.turt2live.antishare.money.Tender.TenderType;
+import com.turt2live.antishare.money.TransactionResult;
+import com.turt2live.antishare.money.VaultEconomy;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.util.generic.ASGameMode;

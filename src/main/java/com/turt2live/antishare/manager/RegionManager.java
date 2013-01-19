@@ -1,4 +1,4 @@
-package com.turt2live.antishare.regions;
+package com.turt2live.antishare.manager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -16,11 +16,11 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
-import com.turt2live.antishare.cuboid.CuboidManager;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.listener.RegionListener;
-import com.turt2live.antishare.manager.AntiShareManager;
+import com.turt2live.antishare.regions.Region;
+import com.turt2live.antishare.regions.RegionConfiguration;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.util.ASUtils;
 

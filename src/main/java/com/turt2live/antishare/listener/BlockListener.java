@@ -33,7 +33,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.blocks.BlockManager;
+import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;

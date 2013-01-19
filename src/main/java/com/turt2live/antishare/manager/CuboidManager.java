@@ -1,4 +1,4 @@
-package com.turt2live.antishare.cuboid;
+package com.turt2live.antishare.manager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -7,8 +7,8 @@ import java.util.Map;
 import org.bukkit.Location;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.listener.CuboidListener;
-import com.turt2live.antishare.manager.AntiShareManager;
 
 /**
  * Cuboid manager

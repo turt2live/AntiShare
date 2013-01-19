@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.inventory;
+package com.turt2live.antishare.manager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,12 +25,13 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.inventory.LinkedInventory;
+import com.turt2live.antishare.inventory.TemporaryASInventory;
 import com.turt2live.antishare.listener.InventoryListener;
-import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
@@ -164,7 +165,7 @@ public class InventoryManager extends AntiShareManager {
 		enderAdventure.remove(name + "." + world);
 	}
 
-	void inject(ASInventory inventory){
+	public void inject(ASInventory inventory){
 		// player.world = key
 		String key = inventory.getName() + "." + inventory.getWorld().getName();
 		switch (inventory.getType()){

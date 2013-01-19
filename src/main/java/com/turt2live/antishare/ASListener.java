@@ -70,6 +70,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.manager.HookManager;
+import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -78,7 +79,6 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.PerWorldConfig;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.tekkitcompat.HangingListener;
 import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
 import com.turt2live.antishare.tekkitcompat.PaintingListener;

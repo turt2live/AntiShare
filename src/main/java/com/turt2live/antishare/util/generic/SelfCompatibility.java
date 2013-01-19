@@ -26,9 +26,9 @@ import org.bukkit.inventory.ItemStack;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.blocks.BlockManager;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.util.ASUtils;
 
 public class SelfCompatibility {

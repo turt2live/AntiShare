@@ -31,7 +31,8 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.inventory.InventoryManager;
+import com.turt2live.antishare.manager.InventoryManager;
+import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
 import com.turt2live.antishare.notification.Alert;
@@ -39,7 +40,6 @@ import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.regions.RegionManager;
 import com.turt2live.antishare.signs.SignList;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;

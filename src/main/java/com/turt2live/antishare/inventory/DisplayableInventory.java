@@ -11,6 +11,7 @@ import org.bukkit.inventory.InventoryHolder;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.manager.InventoryManager;
 
 /**
  * Displays an AntiShare inventory

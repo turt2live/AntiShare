@@ -3,15 +3,15 @@ package com.turt2live.antishare;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.turt2live.antishare.blocks.BlockManager;
-import com.turt2live.antishare.cuboid.CuboidManager;
-import com.turt2live.antishare.inventory.InventoryManager;
 import com.turt2live.antishare.manager.AntiShareManager;
+import com.turt2live.antishare.manager.BlockManager;
+import com.turt2live.antishare.manager.CuboidManager;
 import com.turt2live.antishare.manager.FeatureManager;
+import com.turt2live.antishare.manager.InventoryManager;
+import com.turt2live.antishare.manager.MoneyManager;
+import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.manager.FeatureManager.Feature;
 import com.turt2live.antishare.manager.HookManager;
-import com.turt2live.antishare.money.MoneyManager;
-import com.turt2live.antishare.regions.RegionManager;
 
 public class Systems extends AntiShareManager {
 

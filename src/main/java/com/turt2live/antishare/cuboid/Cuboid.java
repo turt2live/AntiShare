@@ -10,7 +10,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.cuboid.CuboidManager.CuboidPoint;
+import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
 
 public class Cuboid implements Cloneable, ConfigurationSerializable {
 

@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.cuboid.CuboidManager;
-import com.turt2live.antishare.cuboid.CuboidManager.CuboidPoint;
+import com.turt2live.antishare.manager.CuboidManager;
+import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
 
