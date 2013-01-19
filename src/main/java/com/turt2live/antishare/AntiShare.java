@@ -31,6 +31,7 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.listener.BaseListener;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.metrics.Metrics;
@@ -76,7 +77,7 @@ public class AntiShare extends PluginWrapper {
 	private static AntiShare instance;
 	private Permissions permissions;
 	private ItemMap itemMap;
-	private ASListener listener;
+	private BaseListener listener;
 	private Alert alerts;
 	private Messages messages;
 	private Metrics metrics;
@@ -271,7 +272,7 @@ public class AntiShare extends PluginWrapper {
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting listener...");
 		}
-		listener = new ASListener();
+		listener = new BaseListener();
 
 		// Statistics
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
@@ -634,7 +635,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the listener
 	 */
-	public ASListener getListener(){
+	public BaseListener getListener(){
 		return listener;
 	}
 

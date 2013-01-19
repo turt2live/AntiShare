@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare;
+package com.turt2live.antishare.listener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +68,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.RegionManager;
@@ -92,7 +93,7 @@ import com.turt2live.antishare.util.generic.LevelSaver.Level;
  * 
  * @author turt2live
  */
-public class ASListener implements Listener {
+public class BaseListener implements Listener {
 
 	/* 
 	 * TODO: Fix messages to their own listener (MONITOR)
@@ -106,7 +107,7 @@ public class ASListener implements Listener {
 	/**
 	 * Creates a new Listener
 	 */
-	public ASListener(){
+	public BaseListener(){
 		reload();
 		if(ServerHas.hangingEvents()){
 			plugin.getServer().getPluginManager().registerEvents(new HangingListener(), plugin);
