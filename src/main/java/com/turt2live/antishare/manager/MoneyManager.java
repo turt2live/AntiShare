@@ -26,7 +26,6 @@ import org.bukkit.plugin.Plugin;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.listener.MoneyListener;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.money.Fine;
 import com.turt2live.antishare.money.Reward;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -56,7 +55,6 @@ public class MoneyManager extends AntiShareManager {
 	public MoneyManager(){
 		load();
 		if(doRewards || doFines){
-			plugin.getTrackers().getTracker(TrackerType.FEATURE_FINES).increment(1);
 			Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
 			if(vault != null){
 				econ = new VaultEconomy();

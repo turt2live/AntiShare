@@ -7,31 +7,38 @@ import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.CuboidManager;
 import com.turt2live.antishare.manager.FeatureManager;
+import com.turt2live.antishare.manager.FeatureManager.Feature;
+import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.manager.RegionManager;
-import com.turt2live.antishare.manager.FeatureManager.Feature;
-import com.turt2live.antishare.manager.HookManager;
+import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 
 public class Systems extends AntiShareManager {
 
 	public static enum Manager{
-		REGION(Feature.REGIONS, RegionManager.class, "region manager"),
-		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager"),
-		FEATURE(Feature.SELF, FeatureManager.class, "feature manager"),
-		BLOCK(Feature.BLOCKS, BlockManager.class, "block manager"),
-		CUBOID(Feature.REGIONS, CuboidManager.class, "cuboid manager"),
-		MONEY(Feature.MONEY, MoneyManager.class, "money manager"),
-		HOOK(Feature.ALWAYS_ON, HookManager.class, "hook manager");
+		REGION(Feature.REGIONS, RegionManager.class, "region manager", TrackerType.FEATURE_REGIONS),
+		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager", TrackerType.FEATURE_INVENTORIES),
+		FEATURE(Feature.SELF, FeatureManager.class, "feature manager", null),
+		BLOCK(Feature.BLOCKS, BlockManager.class, "block manager", TrackerType.FEATURE_GM_BLOCKS),
+		CUBOID(Feature.REGIONS, CuboidManager.class, "cuboid manager", null),
+		MONEY(Feature.MONEY, MoneyManager.class, "money manager", TrackerType.FEATURE_FINES_REWARDS),
+		HOOK(Feature.ALWAYS_ON, HookManager.class, "hook manager", null);
 
 		private Feature f;
 		private Class<? extends AntiShareManager> m;
 		private String name;
+		private TrackerType tracker;
 
-		private Manager(Feature f, Class<? extends AntiShareManager> m, String name){
+		private Manager(Feature f, Class<? extends AntiShareManager> m, String name, TrackerType tracker){
 			this.f = f;
 			this.m = m;
 			this.name = name;
+			this.tracker = tracker;
+		}
+
+		public TrackerType getTrackerType(){
+			return tracker;
 		}
 
 		public String getName(){
@@ -75,6 +82,9 @@ public class Systems extends AntiShareManager {
 					AntiShareManager man = m.newInstance();
 					man.load();
 					managers.put(s, man);
+					if(s.getTrackerType() != null){
+						plugin.getTrackers().getTracker(s.getTrackerType()).increment(1);
+					}
 				}catch(InstantiationException e){
 					e.printStackTrace();
 				}catch(IllegalAccessException e){

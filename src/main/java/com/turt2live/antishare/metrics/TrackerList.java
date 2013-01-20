@@ -29,8 +29,11 @@ public class TrackerList extends ArrayList<Tracker> {
 	 */
 	public static enum TrackerType{
 		SPECIAL("Unknown", "Unkown"),
-		FEATURE_FINES("Features Used", "Fines/Rewards"),
-		FEATURE_SIGNS("Features Used", "Signs");
+		FEATURE_FINES_REWARDS("Features Used", "Fines/Rewards"),
+		FEATURE_SIGNS("Features Used", "Signs"),
+		FEATURE_REGIONS("Features Used", "Regions"),
+		FEATURE_GM_BLOCKS("Features Used", "GameMode Blocks"),
+		FEATURE_INVENTORIES("Features Used", "Inventories");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
