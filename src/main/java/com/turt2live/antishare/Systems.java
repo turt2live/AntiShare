@@ -113,34 +113,7 @@ public class Systems {
 			managers.get(s).save();
 			if(s.getFeature() == Feature.BLOCKS){
 				BlockManager blocks = (BlockManager) managers.get(s);
-				if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-					plugin.getLogger().info("Waiting for block manager to be done...");
-				}
-				int lastPercent = 0, goal = 10;
-				boolean hit100 = false;
-				while (!blocks.isSaveDone()){
-					if(plugin.getConfig().getBoolean("other.use-sleep")){
-						try{
-							Thread.sleep(50); // To avoid a higher CPU use
-						}catch(InterruptedException e){
-							e.printStackTrace();
-						}
-					}
-					if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-						int percent = blocks.percentSaveDone();
-						goal = lastPercent + 10;
-						if(goal > 100){
-							goal = 100;
-						}
-						if(goal <= percent && !hit100 && percent <= 100){
-							plugin.getLogger().info("[Block Manager] Percent Done: " + percent + "%");
-							lastPercent = percent;
-							if(percent >= 100){
-								hit100 = true;
-							}
-						}
-					}
-				}
+				waitForBlockManager(blocks);
 			}
 		}
 		managers.clear();
@@ -164,37 +137,41 @@ public class Systems {
 			}
 			if(s.getFeature() == Feature.BLOCKS){
 				BlockManager blocks = (BlockManager) managers.get(s);
-				if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-					plugin.getLogger().info("Waiting for block manager to be done...");
+				waitForBlockManager(blocks);
+			}
+		}
+		return anyFailed;
+	}
+
+	private void waitForBlockManager(BlockManager blocks){
+		if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+			plugin.getLogger().info("Waiting for block manager to be done...");
+		}
+		int lastPercent = 0, goal = 10;
+		boolean hit100 = false;
+		while (!blocks.isSaveDone()){
+			if(plugin.getConfig().getBoolean("other.use-sleep")){
+				try{
+					Thread.sleep(50); // To avoid a higher CPU use
+				}catch(InterruptedException e){
+					e.printStackTrace();
 				}
-				int lastPercent = 0, goal = 10;
-				boolean hit100 = false;
-				while (!blocks.isSaveDone()){
-					if(plugin.getConfig().getBoolean("other.use-sleep")){
-						try{
-							Thread.sleep(50); // To avoid a higher CPU use
-						}catch(InterruptedException e){
-							e.printStackTrace();
-						}
-					}
-					if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-						int percent = blocks.percentSaveDone();
-						goal = lastPercent + 10;
-						if(goal > 100){
-							goal = 100;
-						}
-						if(goal <= percent && !hit100 && percent <= 100){
-							plugin.getLogger().info("[Block Manager] Percent Done: " + percent + "%");
-							lastPercent = percent;
-							if(percent >= 100){
-								hit100 = true;
-							}
-						}
+			}
+			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+				int percent = blocks.percentSaveDone();
+				goal = lastPercent + 10;
+				if(goal > 100){
+					goal = 100;
+				}
+				if(goal <= percent && !hit100 && percent <= 100){
+					plugin.getLogger().info("[Block Manager] Percent Done: " + percent + "%");
+					lastPercent = percent;
+					if(percent >= 100){
+						hit100 = true;
 					}
 				}
 			}
 		}
-		return anyFailed;
 	}
 
 	/**
