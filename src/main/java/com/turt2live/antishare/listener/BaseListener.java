@@ -385,15 +385,13 @@ public class BaseListener implements Listener {
 				&& player.getItemInHand() != null
 				&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
 				|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
-			boolean potion = false;
-			if(!getConfig(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
+			if(getConfig(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
 				type = AlertType.ILLEGAL;
-				potion = true;
 			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
-				type = AlertType.LEGAL;
+				type = AlertType.ILLEGAL;
 			}
-			if(type == AlertType.ILLEGAL && potion){
+			if(type == AlertType.ILLEGAL){
 				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(player.getItemInHand().getType().name());
 				playerMessage = plugin.getMessage("blocked-action.use-item");
 				trigger = AlertTrigger.USE_ITEM;
