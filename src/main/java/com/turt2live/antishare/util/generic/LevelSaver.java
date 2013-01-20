@@ -55,12 +55,18 @@ public class LevelSaver {
 
 	public static Level getLevel(String player, GameMode gamemode){
 		EnhancedConfiguration file = getFile();
+		if(!file.isSet(player + "." + gamemode.name())){
+			return new Level(0, 0);
+		}
 		float percent = (float) file.getDouble(player + "." + gamemode.name() + ".percent", 0f);
 		int level = file.getInt(player + "." + gamemode.name() + ".level", 0);
 		return new Level(level, percent);
 	}
 
 	public static void saveLevel(String player, GameMode gamemode, Level level){
+		if(level.level == 0 && level.percent < 0.01){
+			return;
+		}
 		EnhancedConfiguration file = getFile();
 		file.set(player + "." + gamemode.name() + ".level", level.level);
 		file.set(player + "." + gamemode.name() + ".percent", level.percent);

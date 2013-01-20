@@ -10,6 +10,7 @@ Since 5.2.1:
         - Reason for duplicate messages: Sanity in understanding what is going on.
 - Fixed notifications not being in the same format
 - Fixed legacy regions not loading correctly 
+- Levels no longer waste space by saving a zero
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
