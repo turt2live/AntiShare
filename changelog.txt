@@ -19,5 +19,5 @@ REQUESTS:
 
 BUGS:
 - (Reported from ravand.org) Mechanically created golems
-- (Reported by self) /as rl breaks block manager\
+- (Reported by self) /as rl breaks block manager
 - (Reported by self) Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
