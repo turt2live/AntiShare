@@ -20,7 +20,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.EnderPearl;
@@ -180,7 +179,6 @@ public class BaseListener implements Listener {
 		if(event.isCancelled()){
 			return;
 		}
-		// TODO: Optimize
 		AlertType type = AlertType.LEGAL;
 		Player player = event.getPlayer();
 		/*
@@ -191,96 +189,13 @@ public class BaseListener implements Listener {
 		 */
 		int mob = 0;
 		Block block = event.getBlock();
-		if(block.getType() == Material.PUMPKIN){
-			Block body1 = block.getRelative(BlockFace.DOWN);
-			Block body2 = body1.getRelative(BlockFace.DOWN);
-			Block arm1 = body1.getRelative(BlockFace.EAST);
-			Block arm2 = body1.getRelative(BlockFace.WEST);
-			Block arm3 = body1.getRelative(BlockFace.NORTH);
-			Block arm4 = body1.getRelative(BlockFace.SOUTH);
-			if(body1.getType() == Material.SNOW_BLOCK && body2.getType() == Material.SNOW_BLOCK){
-				mob = 1;
-			}else if(body1.getType() == Material.IRON_BLOCK && body2.getType() == Material.IRON_BLOCK){
-				boolean isGolem = false;
-				if(arm1.getType() == Material.IRON_BLOCK && arm2.getType() == Material.IRON_BLOCK){
-					isGolem = true;
-				}else if(arm3.getType() == Material.IRON_BLOCK && arm4.getType() == Material.IRON_BLOCK){
-					isGolem = true;
-				}
-				if(isGolem){
-					mob = 2;
-				}
-			}
-		}else if(block.getType() == Material.SKULL){
-			Block[] body1 = {block.getRelative(BlockFace.DOWN), // Center of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH), // Side of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH), // Side of T 
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN), // Base of T
-					block.getRelative(BlockFace.NORTH), // HEAD
-					block.getRelative(BlockFace.SOUTH)}; // HEAD
-			Block[] body2 = {block.getRelative(BlockFace.DOWN), // Center of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST), // Side of T 
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST), // Side of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.DOWN), // Base of T
-					block.getRelative(BlockFace.EAST), // HEAD
-					block.getRelative(BlockFace.WEST)}; // HEAD
-			Block[] body3 = {block.getRelative(BlockFace.DOWN), // Right of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST), // Center of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST).getRelative(BlockFace.WEST), // Side of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST).getRelative(BlockFace.DOWN), // Base of T
-					block.getRelative(BlockFace.WEST), // HEAD
-					block.getRelative(BlockFace.WEST).getRelative(BlockFace.WEST)}; // HEAD
-			Block[] body4 = {block.getRelative(BlockFace.DOWN), // Left of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST), // Center of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST).getRelative(BlockFace.EAST), // Side of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST).getRelative(BlockFace.DOWN), // Base of T
-					block.getRelative(BlockFace.EAST), // HEAD
-					block.getRelative(BlockFace.EAST).getRelative(BlockFace.EAST)}; // HEAD
-			Block[] body5 = {block.getRelative(BlockFace.DOWN), // Right of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH), // Center of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH).getRelative(BlockFace.NORTH), // Side of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH).getRelative(BlockFace.DOWN), // Base of T
-					block.getRelative(BlockFace.NORTH), // HEAD
-					block.getRelative(BlockFace.NORTH).getRelative(BlockFace.NORTH)}; // HEAD
-			Block[] body6 = {block.getRelative(BlockFace.DOWN), // Left of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH), // Center of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH).getRelative(BlockFace.SOUTH), // Side of T
-					block.getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH).getRelative(BlockFace.DOWN), // Base of T
-					block.getRelative(BlockFace.SOUTH), // HEAD
-					block.getRelative(BlockFace.SOUTH).getRelative(BlockFace.SOUTH)}; // HEAD
-			Block[][] bodies = {body1, body2, body3, body4, body5, body6};
-			boolean matched = false;
-			for(Block[] body : bodies){
-				boolean noBody = false;
-				for(int i = 0; i < body.length - 2; i++){
-					Block bodyBlock = body[i];
-					if(bodyBlock.getType() != Material.SOUL_SAND){
-						noBody = true;
-						break;
-					}
-				}
-				if(noBody){
-					continue;
-				}
-				Block head1 = body[body.length - 2];
-				Block head2 = body[body.length - 1];
-				// TODO: BUKKIT-3406
-				//				if(head1.getType() != Material.SKULL || head2.getType() != Material.SKULL){
-				//					continue;
-				//				}
-				if(head1.getType() == Material.SKULL || head2.getType() == Material.SKULL){
-					matched = true;
-				}else{
-					continue;
-				}
-				break;
-			}
-			if(!matched){
-				return;
-			}
+		if(AntiShare.SNOW_GOLEM.exists(block)){
+			mob = 1;
+		}else if(AntiShare.IRON_GOLEM.exists(block)){
+			mob = 2;
+		}else if(AntiShare.WITHER.exists(block)){
+			// TODO: Withers are still affected by BUKKIT-3406
 			mob = 3;
-		}else{
-			return; // Not a mob
 		}
 		String mobName = "Unknown";
 		switch (mob){
