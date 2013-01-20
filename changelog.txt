@@ -12,8 +12,6 @@ Since 5.2.1:
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
-// All of the below will be done after the TODO is done
-
 REQUESTS:
 - (Requested from ravand.org) Creative players allowed to play music
 
