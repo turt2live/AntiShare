@@ -508,6 +508,7 @@ public class Region {
 			Location l2 = new Location(world, max, may, maz);
 			Cuboid cuboid = new Cuboid(l1, l2);
 			region.setCuboid(cuboid);
+			region.setID(saveFile.getName().replace(".yml", ""));
 			loadLegacyPlayerInformation(region);
 		}
 		if(region.getID().equalsIgnoreCase("-1")){
