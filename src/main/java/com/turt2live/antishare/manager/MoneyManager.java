@@ -50,22 +50,6 @@ public class MoneyManager extends AntiShareManager {
 	private String finesTo = "nowhere", rewardsFrom = "nowhere";
 
 	/**
-	 * Creates a new Money Manager
-	 */
-	public MoneyManager(){
-		load();
-		if(doRewards || doFines){
-			Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
-			if(vault != null){
-				econ = new VaultEconomy();
-			}else{
-				plugin.log("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work", Level.SEVERE);
-			}
-		}
-		plugin.getServer().getPluginManager().registerEvents(new MoneyListener(this), plugin);
-	}
-
-	/**
 	 * Saves the Money Manager
 	 */
 	@Override
@@ -171,6 +155,18 @@ public class MoneyManager extends AntiShareManager {
 				rewardsLoaded++;
 			}
 		}
+
+		// Check load state
+		if(doRewards || doFines){
+			Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
+			if(vault != null){
+				econ = new VaultEconomy();
+			}else{
+				plugin.log("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work", Level.SEVERE);
+				return false;
+			}
+		}
+		plugin.getServer().getPluginManager().registerEvents(new MoneyListener(this), plugin);
 
 		// Spam console
 		if(finesLoaded > 0){
