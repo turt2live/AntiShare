@@ -192,8 +192,6 @@ public class AntiShare extends PluginWrapper {
 				getLogger().severe("**********************");
 			}
 		}
-
-		// Setup (order is important!)
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Setting up Metrics...");
 		}
@@ -266,8 +264,9 @@ public class AntiShare extends PluginWrapper {
 		}
 		itemMap = new ItemMap();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting alerts...");
+			getLogger().info("Starting Metrics trackers...");
 		}
+		trackers = new TrackerList();
 
 		// Startup Systems Manager
 		sys = new Systems();
@@ -275,9 +274,8 @@ public class AntiShare extends PluginWrapper {
 
 		// Setup everything
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting Metrics trackers...");
+			getLogger().info("Starting alerts...");
 		}
-		trackers = new TrackerList();
 		alerts = new Alert();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting messages...");
