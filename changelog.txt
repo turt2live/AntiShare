@@ -11,12 +11,11 @@ Since 5.2.1:
 - Fixed notifications not being in the same format
 - Fixed legacy regions not loading correctly 
 - Levels no longer waste space by saving a zero
+- Added ability to isolate chests/other items to specific game modes
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
-REQUESTS:
-- (Requested from ravand.org) Creative players allowed to play music
-
 BUGS:
 - (Reported by self) Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
+- Carrots (etc) can be fetched from a block >.>

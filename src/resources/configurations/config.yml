@@ -132,6 +132,11 @@ settings:
     method: archive
     # Days
     after: 120
+  # Set to true to allow players of the same Game Mode to interact with similar
+  # Game Mode objects. Such as a Creative player trying to use a Creative chest.
+  # This will still not allow Survival players to use Creative blocks (like the
+  # example chest)
+  similar-gamemode-allow: false
 # Where the magic happens.
 # Here you can define EXACTLY what you want
 # AntiShare to control (restrict). You can use

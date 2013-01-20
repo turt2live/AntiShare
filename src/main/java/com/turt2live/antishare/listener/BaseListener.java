@@ -69,6 +69,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -323,11 +324,17 @@ public class BaseListener implements Listener {
 		String message = "no message";
 		String playerMessage = "no message";
 		AlertTrigger trigger = AlertTrigger.RIGHT_CLICK;
+		BlockManager blocks = null;
+		if(plugin.getSystemsManager().isEnabled(Manager.BLOCK)){
+			blocks = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK);
+		}
+		boolean use = false;
 
 		// For use from here on in
 		if(block == null){
 			block = player.getWorld().getBlockAt(player.getLocation());
 		}
+		Material used = block.getType();
 
 		// Right click list
 		if(action == Action.RIGHT_CLICK_BLOCK){
@@ -338,13 +345,8 @@ public class BaseListener implements Listener {
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, block.getWorld(), block.getType())){
 				type = AlertType.LEGAL;
 			}
-
-			// Set messages
-			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(block.getType().name());
-			playerMessage = plugin.getMessage("blocked-action.right-click");
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert(block, player, block.getWorld(), TenderType.RIGHT_CLICK);
-			playerMessage = factory.toString();
+			use = false;
+			used = block.getType();
 		}
 
 		// If this event is triggered as legal from the right click, check use lists
@@ -356,13 +358,7 @@ public class BaseListener implements Listener {
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getWorld(), block.getType())){
 				type = AlertType.LEGAL;
 			}
-
-			// Set messages
-			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(block.getType().name());
-			playerMessage = plugin.getMessage("blocked-action.right-click");
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert(block, player, block.getWorld(), TenderType.RIGHT_CLICK);
-			playerMessage = factory.toString();
+			use = false;
 		}
 
 		// If the event is triggered as legal from the use lists, check the player's item in hand
@@ -374,14 +370,8 @@ public class BaseListener implements Listener {
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
-
-			// Set messages
-			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(player.getItemInHand().getType().name());
-			playerMessage = plugin.getMessage("blocked-action.use-item");
-			trigger = AlertTrigger.USE_ITEM;
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert(block, player, block.getWorld(), TenderType.USE);
-			playerMessage = factory.toString();
+			use = true;
+			used = player.getItemInHand().getType();
 		}
 
 		// Check for eye of ender / ender pearl
@@ -395,14 +385,8 @@ public class BaseListener implements Listener {
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.ILLEGAL;
 			}
-			if(type == AlertType.ILLEGAL){
-				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(player.getItemInHand().getType().name());
-				playerMessage = plugin.getMessage("blocked-action.use-item");
-				trigger = AlertTrigger.USE_ITEM;
-				MessageFactory factory = new MessageFactory(playerMessage);
-				factory.insert(block, player, block.getWorld(), TenderType.USE);
-				playerMessage = factory.toString();
-			}
+			use = true;
+			used = player.getItemInHand().getType();
 		}
 
 		// Check for potion
@@ -424,14 +408,43 @@ public class BaseListener implements Listener {
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 				type = AlertType.LEGAL;
 			}
-			if(type == AlertType.ILLEGAL && potion){
-				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(player.getItemInHand().getType().name());
-				playerMessage = plugin.getMessage("blocked-action.use-item");
-				trigger = AlertTrigger.USE_ITEM;
-				MessageFactory factory = new MessageFactory(playerMessage);
-				factory.insert(block, player, block.getWorld(), TenderType.USE);
-				playerMessage = factory.toString();
+			if(potion){
+				use = true;
+				used = player.getItemInHand().getType();
 			}
+		}
+
+		// Game Mode check
+		if(blocks != null){
+			if(plugin.getConfig().getBoolean("settings.similar-gamemode-allow")){
+				GameMode blockGM = blocks.getType(block);
+				if(blockGM != null){
+					if(used == Material.AIR){
+						used = block.getType();
+					}
+					if(blockGM != player.getGameMode()){
+						type = AlertType.ILLEGAL;
+					}else{
+						type = AlertType.LEGAL;
+					}
+				}
+			}
+		}
+
+		// Set messages
+		if(use){
+			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(used.name());
+			playerMessage = plugin.getMessage("blocked-action.use-item");
+			trigger = AlertTrigger.USE_ITEM;
+			MessageFactory factory = new MessageFactory(playerMessage);
+			factory.insert(block, player, block.getWorld(), TenderType.USE);
+			playerMessage = factory.toString();
+		}else{
+			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(used.name());
+			playerMessage = plugin.getMessage("blocked-action.right-click");
+			MessageFactory factory = new MessageFactory(playerMessage);
+			factory.insert(block, player, block.getWorld(), TenderType.RIGHT_CLICK);
+			playerMessage = factory.toString();
 		}
 
 		// Handle event
