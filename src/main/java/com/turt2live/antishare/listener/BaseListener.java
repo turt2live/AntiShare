@@ -1077,15 +1077,19 @@ public class BaseListener implements Listener {
 			type = AlertType.LEGAL;
 		}
 
-		event.setCancelled(plugin.shouldCancel(player, false));
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(plugin.shouldCancel(player, false));
+		}
 
 		// Alert (with sanity check)
-		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(pearl.name());
-		String playerMessage = plugin.getMessage("blocked-action.use-item");
-		MessageFactory factory = new MessageFactory(playerMessage);
-		factory.insert((Material) null, player, player.getWorld(), TenderType.USE, ASUtils.capitalize(pearl.name()));
-		playerMessage = factory.toString();
-		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.USE_ITEM);
+		if(event.getCause() == TeleportCause.ENDER_PEARL){
+			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(pearl.name());
+			String playerMessage = plugin.getMessage("blocked-action.use-item");
+			MessageFactory factory = new MessageFactory(playerMessage);
+			factory.insert((Material) null, player, player.getWorld(), TenderType.USE, ASUtils.capitalize(pearl.name()));
+			playerMessage = factory.toString();
+			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.USE_ITEM);
+		}
 	}
 
 	// ################# Player Craft Item Event
