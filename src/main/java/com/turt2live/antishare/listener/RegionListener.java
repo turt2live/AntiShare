@@ -197,7 +197,7 @@ public class RegionListener implements Listener {
 			}else{
 				type = AlertType.LEGAL;
 			}
-			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to craft an item" : " crafted an item");
+			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to craft " + ChatColor.RED : " crafted " + ChatColor.GREEN) + ASUtils.capitalize(event.getRecipe().getResult().getType().name());
 			String playerMessage = plugin.getMessage("blocked-action.crafting");
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CRAFTING);
 			if(type == AlertType.ILLEGAL){
@@ -927,7 +927,7 @@ public class RegionListener implements Listener {
 
 		// Alert
 		if(type == AlertType.ILLEGAL){
-			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ") + ChatColor.WHITE + " in a region.";
+			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(block.getType().name()) + ChatColor.WHITE + " in a region.";
 			String playerMessage = ChatColor.RED + "You cannot place blocks in another region!";
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
 		}
@@ -978,7 +978,7 @@ public class RegionListener implements Listener {
 
 		// Alert
 		if(specialType == AlertType.ILLEGAL){
-			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break " : " broke  ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + block.getType().name().replace("_", " ") + ChatColor.WHITE + " in a region.";
+			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break " : " broke  ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(block.getType().name()) + ChatColor.WHITE + " in a region.";
 			String specialPlayerMessage = ChatColor.RED + "You cannot break blocks that are not in your region";
 			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, AlertTrigger.BLOCK_BREAK);
 		}

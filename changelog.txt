@@ -8,6 +8,7 @@ Since 5.2.1:
 - Listener logic re-written
     - Notable change: Notifications now follow a different scheme. You may get duplicate messages (intended)
         - Reason for duplicate messages: Sanity in understanding what is going on.
+- Fixed notifications not being in the same format
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
