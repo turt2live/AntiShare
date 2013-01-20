@@ -122,6 +122,10 @@ public class BaseListener implements Listener {
 		hasMobCatcher = plugin.getServer().getPluginManager().getPlugin("MobCatcher") != null;
 	}
 
+	public boolean hasMobCatcher(){
+		return hasMobCatcher;
+	}
+
 	/**
 	 * Gets the configuration for the world
 	 * 
