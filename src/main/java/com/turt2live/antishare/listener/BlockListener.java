@@ -471,7 +471,6 @@ public class BlockListener implements Listener {
 				}else if(block.getState() instanceof Jukebox){
 					Jukebox state = (Jukebox) block.getState();
 					state.setPlaying(null);
-					// TODO: BROKEN. Requires Bukkit fix
 				}else if(block.getState() instanceof Furnace){
 					Furnace state = (Furnace) block.getState();
 					state.getInventory().clear();
