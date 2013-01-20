@@ -260,7 +260,7 @@ public class Alert {
 			details.player_last_sent = System.currentTimeMillis();
 			ASUtils.sendToPlayer(sender, playerMessage, true);
 		}
-		if(sendToAdmins && toPlayers){
+		if(sendToAdmins && toPlayers && !message.equalsIgnoreCase("no message")){
 			details.admin_last_sent = System.currentTimeMillis();
 			for(Player player : Bukkit.getOnlinePlayers()){
 				if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.GET_NOTIFICATIONS)){
@@ -270,7 +270,7 @@ public class Alert {
 				}
 			}
 		}
-		if(sendToAdmins && toConsole){
+		if(sendToAdmins && toConsole && !message.equalsIgnoreCase("no message")){
 			ASUtils.sendToPlayer(Bukkit.getConsoleSender(), "[" + type.name() + "] " + message, true);
 		}
 
