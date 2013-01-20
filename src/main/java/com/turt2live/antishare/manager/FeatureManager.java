@@ -15,8 +15,11 @@ public class FeatureManager extends AntiShareManager {
 	@Override
 	public boolean load(){
 		config = new EnhancedConfiguration(new File(plugin.getDataFolder(), "features.yml"), plugin);
-		config.load();
 		config.loadDefaults(plugin.getResource("resources/features.yml"));
+		if(!config.fileExists() || !config.checkDefaults()){
+			config.saveDefaults();
+		}
+		config.load();
 		return true;
 	}
 
