@@ -5,12 +5,12 @@ Since 5.2.1:
 - Removed API (contact turt2live for development help)
 - Fixed up block manager (again)
 - Fixed beds and doors being breakable
+- Listener logic re-written
+    - Notable change: Notifications now follow a different scheme. You may get duplicate messages (intended)
+        - Reason for duplicate messages: Sanity in understanding what is going on.
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
-
-TODO: 
-- [In testing] Rewrite listener
 
 // All of the below will be done after the TODO is done
 
