@@ -194,7 +194,6 @@ public class BaseListener implements Listener {
 		}else if(AntiShare.IRON_GOLEM.exists(block)){
 			mob = 2;
 		}else if(AntiShare.WITHER.exists(block)){
-			// TODO: Withers are still affected by BUKKIT-3406
 			mob = 3;
 		}
 		String mobName = "Unknown";
