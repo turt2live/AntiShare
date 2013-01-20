@@ -74,6 +74,7 @@ public class BlockManager extends AntiShareManager {
 		tracked_adventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
 
 		// Load
+		wrappers.clear();
 		for(World world : plugin.getServer().getWorlds()){
 			for(Chunk chunk : world.getLoadedChunks()){
 				loadChunk(chunk);

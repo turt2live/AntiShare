@@ -14,7 +14,7 @@ import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 
-public class Systems extends AntiShareManager {
+public class Systems {
 
 	public static enum Manager{
 		REGION(Feature.REGIONS, RegionManager.class, "region manager", TrackerType.FEATURE_REGIONS),
@@ -56,8 +56,13 @@ public class Systems extends AntiShareManager {
 
 	private FeatureManager features;
 	private Map<Manager, AntiShareManager> managers = new HashMap<Manager, AntiShareManager>();
+	private AntiShare plugin = AntiShare.getInstance();
 
-	@Override
+	/**
+	 * Loads this manager
+	 * 
+	 * @return true if successful
+	 */
 	public boolean load(){
 		features = new FeatureManager();
 		features.load();
@@ -95,7 +100,11 @@ public class Systems extends AntiShareManager {
 		return true;
 	}
 
-	@Override
+	/**
+	 * Saves this manager
+	 * 
+	 * @return true if successful
+	 */
 	public boolean save(){
 		for(Manager s : managers.keySet()){
 			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
@@ -136,6 +145,56 @@ public class Systems extends AntiShareManager {
 		}
 		managers.clear();
 		return true;
+	}
+
+	/**
+	 * Reloads this manager
+	 * 
+	 * @return true if successful
+	 */
+	public boolean reload(){
+		boolean anyFailed = false;
+		for(Manager s : managers.keySet()){
+			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+				plugin.getLogger().info("Reloading " + s.getName() + "...");
+			}
+			boolean done = managers.get(s).reload();
+			if(!done){
+				anyFailed = true;
+			}
+			if(s.getFeature() == Feature.BLOCKS){
+				BlockManager blocks = (BlockManager) managers.get(s);
+				if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+					plugin.getLogger().info("Waiting for block manager to be done...");
+				}
+				int lastPercent = 0, goal = 10;
+				boolean hit100 = false;
+				while (!blocks.isSaveDone()){
+					if(plugin.getConfig().getBoolean("other.use-sleep")){
+						try{
+							Thread.sleep(50); // To avoid a higher CPU use
+						}catch(InterruptedException e){
+							e.printStackTrace();
+						}
+					}
+					if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+						int percent = blocks.percentSaveDone();
+						goal = lastPercent + 10;
+						if(goal > 100){
+							goal = 100;
+						}
+						if(goal <= percent && !hit100 && percent <= 100){
+							plugin.getLogger().info("[Block Manager] Percent Done: " + percent + "%");
+							lastPercent = percent;
+							if(percent >= 100){
+								hit100 = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return anyFailed;
 	}
 
 	/**

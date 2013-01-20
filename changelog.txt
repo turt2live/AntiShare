@@ -17,5 +17,4 @@ REQUESTS:
 - (Requested from ravand.org) Creative players allowed to play music
 
 BUGS:
-- (Reported by self) /as rl breaks block manager
 - (Reported by self) Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
