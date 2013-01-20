@@ -63,7 +63,6 @@ public class InventoryManager extends AntiShareManager {
 		}
 		links.load();
 		plugin.getServer().getPluginManager().registerEvents(new InventoryListener(this), plugin);
-		load();
 	}
 
 	/**

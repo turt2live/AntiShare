@@ -29,7 +29,6 @@ public class CuboidManager extends AntiShareManager {
 	 */
 	public CuboidManager(){
 		plugin.getServer().getPluginManager().registerEvents(new CuboidListener(this), plugin);
-		load();
 	}
 
 	/**

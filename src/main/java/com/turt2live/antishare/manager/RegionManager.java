@@ -33,7 +33,6 @@ public class RegionManager extends AntiShareManager {
 	 */
 	public RegionManager(){
 		plugin.getServer().getPluginManager().registerEvents(new RegionListener(this), plugin);
-		load();
 	}
 
 	/**
