@@ -371,7 +371,7 @@ public class BlockListener implements Listener {
 						type = AlertType.ILLEGAL;
 					}
 				}else if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.disable-breaking-mixed-gamemode")){
-					for(BlockFace face : ASUtils.realFaces){
+					for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 						Block rel = block.getRelative(face);
 						if(ASUtils.isDroppedOnBreak(rel, block)){
 							GameMode relGamemode = blocks.getType(rel);
@@ -429,7 +429,7 @@ public class BlockListener implements Listener {
 
 		// Check for 'attached' blocks
 		if(player.getGameMode() == GameMode.SURVIVAL && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
-			for(BlockFace face : ASUtils.realFaces){
+			for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 				Block rel = block.getRelative(face);
 				if(ASUtils.isDroppedOnBreak(rel, block)){
 					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
@@ -496,7 +496,7 @@ public class BlockListener implements Listener {
 			}
 
 			if(plugin.getListener().getConfig(block.getWorld()).removeAttachedBlocksOnBreak()){
-				for(BlockFace face : ASUtils.realFaces){
+				for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 					Block rel = block.getRelative(face);
 					if(ASUtils.isDroppedOnBreak(rel, block)){
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){

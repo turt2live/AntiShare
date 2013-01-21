@@ -49,8 +49,8 @@ public class ASUtils {
 		SNOW_GOLEM, IRON_GOLEM, WITHER;
 	}
 
-	public static final BlockFace[] realFaces = {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP};
-	public static final List<ASEntity> names = new ArrayList<ASEntity>();
+	public static final BlockFace[] TRUE_BLOCK_FACES = {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP};
+	private static final List<ASEntity> ENTITY_NAMES = new ArrayList<ASEntity>();
 	private static MobPattern SNOW_GOLEM_PATTERN;
 	private static MobPattern IRON_GOLEM_PATTERN;
 	private static MobPattern WITHER_PATTERN;
@@ -349,51 +349,51 @@ public class ASUtils {
 	 * @return a list of entities
 	 */
 	public static List<ASEntity> allEntities(){
-		if(names.size() <= 0){
-			names.add(new ASEntity("blaze", "blaze"));
-			names.add(new ASEntity("cavespider", "cave spider"));
-			names.add(new ASEntity("cave spider", "cave spider"));
-			names.add(new ASEntity("chicken", "chicken"));
-			names.add(new ASEntity("cow", "cow"));
-			names.add(new ASEntity("creeper", "creeper"));
-			names.add(new ASEntity("enderdragon", "ender dragon"));
-			names.add(new ASEntity("ender dragon", "ender dragon"));
-			names.add(new ASEntity("enderman", "enderman"));
-			names.add(new ASEntity("ghast", "ghast"));
-			names.add(new ASEntity("giant", "giant"));
-			names.add(new ASEntity("irongolem", "iron golem"));
-			names.add(new ASEntity("iron golem", "iron golem"));
-			names.add(new ASEntity("mushroomcow", "mooshroom"));
-			names.add(new ASEntity("mushroom cow", "mooshroom"));
-			names.add(new ASEntity("mooshroom", "mooshroom"));
-			names.add(new ASEntity("ocelot", "ocelot"));
-			names.add(new ASEntity("cat", "ocelot"));
-			names.add(new ASEntity("pig", "pig"));
-			names.add(new ASEntity("pigzombie", "pigman"));
-			names.add(new ASEntity("zombiepigman", "pigman"));
-			names.add(new ASEntity("pig zombie", "pigman"));
-			names.add(new ASEntity("zombie pigman", "pigman"));
-			names.add(new ASEntity("pigman", "pigman"));
-			names.add(new ASEntity("sheep", "sheep"));
-			names.add(new ASEntity("silverfish", "silverfish"));
-			names.add(new ASEntity("skeleton", "skeleton"));
-			names.add(new ASEntity("slime", "slime"));
-			names.add(new ASEntity("magmacube", "magma cube"));
-			names.add(new ASEntity("magma cube", "magma cube"));
-			names.add(new ASEntity("spider", "spider"));
-			names.add(new ASEntity("snowman", "snowman"));
-			names.add(new ASEntity("squid", "squid"));
-			names.add(new ASEntity("villager", "villager"));
-			names.add(new ASEntity("testificate", "villager"));
-			names.add(new ASEntity("wolf", "wolf"));
-			names.add(new ASEntity("zombie", "zombie"));
-			names.add(new ASEntity("witch", "witch"));
-			names.add(new ASEntity("wither", "wither boss"));
-			names.add(new ASEntity("witherboss", "wither boss"));
-			names.add(new ASEntity("wither boss", "wither boss"));
-			names.add(new ASEntity("bat", "bat"));
+		if(ENTITY_NAMES.size() <= 0){
+			ENTITY_NAMES.add(new ASEntity("blaze", "blaze"));
+			ENTITY_NAMES.add(new ASEntity("cavespider", "cave spider"));
+			ENTITY_NAMES.add(new ASEntity("cave spider", "cave spider"));
+			ENTITY_NAMES.add(new ASEntity("chicken", "chicken"));
+			ENTITY_NAMES.add(new ASEntity("cow", "cow"));
+			ENTITY_NAMES.add(new ASEntity("creeper", "creeper"));
+			ENTITY_NAMES.add(new ASEntity("enderdragon", "ender dragon"));
+			ENTITY_NAMES.add(new ASEntity("ender dragon", "ender dragon"));
+			ENTITY_NAMES.add(new ASEntity("enderman", "enderman"));
+			ENTITY_NAMES.add(new ASEntity("ghast", "ghast"));
+			ENTITY_NAMES.add(new ASEntity("giant", "giant"));
+			ENTITY_NAMES.add(new ASEntity("irongolem", "iron golem"));
+			ENTITY_NAMES.add(new ASEntity("iron golem", "iron golem"));
+			ENTITY_NAMES.add(new ASEntity("mushroomcow", "mooshroom"));
+			ENTITY_NAMES.add(new ASEntity("mushroom cow", "mooshroom"));
+			ENTITY_NAMES.add(new ASEntity("mooshroom", "mooshroom"));
+			ENTITY_NAMES.add(new ASEntity("ocelot", "ocelot"));
+			ENTITY_NAMES.add(new ASEntity("cat", "ocelot"));
+			ENTITY_NAMES.add(new ASEntity("pig", "pig"));
+			ENTITY_NAMES.add(new ASEntity("pigzombie", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("zombiepigman", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("pig zombie", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("zombie pigman", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("pigman", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("sheep", "sheep"));
+			ENTITY_NAMES.add(new ASEntity("silverfish", "silverfish"));
+			ENTITY_NAMES.add(new ASEntity("skeleton", "skeleton"));
+			ENTITY_NAMES.add(new ASEntity("slime", "slime"));
+			ENTITY_NAMES.add(new ASEntity("magmacube", "magma cube"));
+			ENTITY_NAMES.add(new ASEntity("magma cube", "magma cube"));
+			ENTITY_NAMES.add(new ASEntity("spider", "spider"));
+			ENTITY_NAMES.add(new ASEntity("snowman", "snowman"));
+			ENTITY_NAMES.add(new ASEntity("squid", "squid"));
+			ENTITY_NAMES.add(new ASEntity("villager", "villager"));
+			ENTITY_NAMES.add(new ASEntity("testificate", "villager"));
+			ENTITY_NAMES.add(new ASEntity("wolf", "wolf"));
+			ENTITY_NAMES.add(new ASEntity("zombie", "zombie"));
+			ENTITY_NAMES.add(new ASEntity("witch", "witch"));
+			ENTITY_NAMES.add(new ASEntity("wither", "wither boss"));
+			ENTITY_NAMES.add(new ASEntity("witherboss", "wither boss"));
+			ENTITY_NAMES.add(new ASEntity("wither boss", "wither boss"));
+			ENTITY_NAMES.add(new ASEntity("bat", "bat"));
 		}
-		return names;
+		return ENTITY_NAMES;
 	}
 
 	/**
