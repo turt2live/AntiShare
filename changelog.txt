@@ -14,6 +14,7 @@ Since 5.2.1:
 - Added ability to isolate chests/other items to specific game modes
 - Fixed dragon egg/anvil duping glitch
     - Directly fixes sand/gravel dupe glitch as well
+- Added easy player game mode check (hit them with a blaze rod)
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

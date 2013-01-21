@@ -518,6 +518,21 @@ public class BaseListener implements Listener {
 		}
 	}
 
+	public void onInteractPlayer(PlayerInteractEntityEvent event){
+		Player player = event.getPlayer();
+		if(event.isCancelled()
+				|| player.getItemInHand() == null
+				|| player.getItemInHand().getType() != AntiShare.ANTISHARE_TOOL
+				|| !plugin.getPermissions().has(player, PermissionNodes.TOOL_USE, player.getWorld())){
+			return;
+		}
+		if(event.getRightClicked() instanceof Player){
+			Player target = (Player) event.getRightClicked();
+			ASUtils.sendToPlayer(player, ChatColor.YELLOW + target.getName() + ChatColor.WHITE + " is in " + ChatColor.YELLOW + target.getGameMode().name(), true);
+			event.setCancelled(plugin.shouldCancel(player, true));
+		}
+	}
+
 	// ################# Player Interact Entity (2)
 
 	@EventHandler (priority = EventPriority.LOW)
