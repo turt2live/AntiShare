@@ -151,6 +151,9 @@ public class ASUtils {
 		case DIODE_BLOCK_ON:
 		case STEP:
 		case WATER_LILY:
+		case SEEDS:
+		case POTATO:
+		case CARROT:
 			return true;
 		default:
 			if(ServerHas.mc14xItems()){
@@ -188,8 +191,10 @@ public class ASUtils {
 				|| block.getType() == Material.WHEAT || block.getType() == Material.WOODEN_DOOR
 				|| block.getType() == Material.IRON_DOOR || block.getType() == Material.IRON_DOOR_BLOCK
 				|| block.getType() == Material.CROPS || block.getType() == Material.LONG_GRASS
-				|| block.getType() == Material.SAPLING || (ServerHas.mc14xItems() && (block.getType() == Material.ITEM_FRAME
-				|| block.getType() == Material.FLOWER_POT))){
+				|| block.getType() == Material.CAKE_BLOCK || block.getType() == Material.SAPLING
+				|| (ServerHas.mc14xItems() && (block.getType() == Material.ITEM_FRAME
+						|| block.getType() == Material.FLOWER_POT || block.getType() == Material.POTATO
+						|| block.getType() == Material.CARROT))){
 			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
 			Location l1 = source.getLocation();
 			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();

@@ -18,4 +18,3 @@ Since 5.2.1:
 
 BUGS:
 - (Reported by self) Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
-- Carrots (etc) can be fetched from a block >.>
