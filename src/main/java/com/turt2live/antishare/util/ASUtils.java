@@ -12,6 +12,8 @@ package com.turt2live.antishare.util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -49,7 +51,10 @@ public class ASUtils {
 		SNOW_GOLEM, IRON_GOLEM, WITHER;
 	}
 
-	public static final BlockFace[] TRUE_BLOCK_FACES = {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP};
+	/**
+	 * Array of true block faces (none of the SOUTH_WEST-like ones)
+	 */
+	public static final List<BlockFace> TRUE_BLOCK_FACES = Collections.unmodifiableList(Arrays.asList(new BlockFace[]{BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP})); 
 	private static final List<ASEntity> ENTITY_NAMES = new ArrayList<ASEntity>();
 	private static MobPattern SNOW_GOLEM_PATTERN;
 	private static MobPattern IRON_GOLEM_PATTERN;

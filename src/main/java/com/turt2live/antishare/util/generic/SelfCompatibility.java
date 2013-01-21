@@ -31,6 +31,9 @@ import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.util.ASUtils;
 
+/**
+ * Compatibility class for other AntiShare versions
+ */
 public class SelfCompatibility {
 
 	private static enum Compat{

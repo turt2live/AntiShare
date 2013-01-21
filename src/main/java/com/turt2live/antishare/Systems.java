@@ -16,6 +16,9 @@ import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 
 public class Systems {
 
+	/**
+	 * Represents the available managers in AntiShare's system
+	 */
 	public static enum Manager{
 		REGION(Feature.REGIONS, RegionManager.class, "region manager", TrackerType.FEATURE_REGIONS),
 		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager", TrackerType.FEATURE_INVENTORIES),
@@ -37,14 +40,26 @@ public class Systems {
 			this.tracker = tracker;
 		}
 
+		/**
+		 * Gets the tracker type associated with this manager
+		 * @return the tracker type
+		 */
 		public TrackerType getTrackerType(){
 			return tracker;
 		}
 
+		/**
+		 * Gets the name of the manager
+		 * @return the name of the manager
+		 */
 		public String getName(){
 			return name;
 		}
 
+		/**
+		 * Gets the feature enum for this manager
+		 * @return the feature enum
+		 */
 		public Feature getFeature(){
 			return f;
 		}
