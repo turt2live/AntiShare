@@ -586,6 +586,11 @@ public class ASUtils {
 		}
 	}
 
+	/**
+	 * Gets the mob pattern for the supplied entity, if found	
+	 * @param pattern the pattern to look for
+	 * @return the pattern. This will be null if the pattern is not found or unsupported
+	 */
 	public static MobPattern getMobPattern(EntityPattern pattern){
 		switch (pattern){
 		case SNOW_GOLEM:
