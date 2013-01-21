@@ -12,6 +12,8 @@ Since 5.2.1:
 - Fixed legacy regions not loading correctly 
 - Levels no longer waste space by saving a zero
 - Added ability to isolate chests/other items to specific game modes
+- Fixed dragon egg/anvil duping glitch
+    - Directly fixes sand/gravel dupe glitch as well
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

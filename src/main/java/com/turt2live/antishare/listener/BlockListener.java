@@ -530,8 +530,8 @@ public class BlockListener implements Listener {
 				// Check for falling sand/gravel exploit
 				boolean moreBlocks = true;
 				Block active = block;
-				if(block.getType() == Material.SAND || block.getType() == Material.GRAVEL ||
-						block.getRelative(BlockFace.UP).getType() == Material.SAND || block.getRelative(BlockFace.UP).getType() == Material.GRAVEL){
+				Block above = block.getRelative(BlockFace.UP);
+				if(ASUtils.isAffectedByGravity(active.getType()) || ASUtils.isAffectedByGravity(above.getType())){
 					do{
 						Block below = active.getRelative(BlockFace.DOWN);
 						active = below;
@@ -541,9 +541,9 @@ public class BlockListener implements Listener {
 						if(ASUtils.canBreakFallingBlock(below.getType())){
 							// Remove all sand/gravel above this block
 							boolean checkMoreBlocks = true;
-							Block above = block.getRelative(BlockFace.UP);
+							above = block.getRelative(BlockFace.UP);
 							do{
-								if(above.getType() == Material.SAND || above.getType() == Material.GRAVEL){
+								if(ASUtils.isAffectedByGravity(above.getType())){
 									above.setType(Material.AIR);
 									above = above.getRelative(BlockFace.UP);
 								}else{
@@ -565,7 +565,7 @@ public class BlockListener implements Listener {
 				 * Break the bottom SAND block and the torch falls
 				 */
 				do{
-					Block above = active.getRelative(BlockFace.UP);
+					above = active.getRelative(BlockFace.UP);
 					if(ASUtils.isAffectedByGravity(above.getType())){
 						for(BlockFace face : BlockFace.values()){
 							Block rel = above.getRelative(face);
@@ -586,7 +586,7 @@ public class BlockListener implements Listener {
 					moreBlocks = true;
 					List<Location> breakBlocks = new ArrayList<Location>();
 					do{
-						Block above = active.getRelative(BlockFace.UP);
+						above = active.getRelative(BlockFace.UP);
 						if(above.getType() == Material.CACTUS){
 							blocks.removeBlock(above);
 							breakBlocks.add(above.getLocation());
@@ -607,7 +607,7 @@ public class BlockListener implements Listener {
 					moreBlocks = true;
 					List<Location> breakBlocks = new ArrayList<Location>();
 					do{
-						Block above = active.getRelative(BlockFace.UP);
+						above = active.getRelative(BlockFace.UP);
 						if(above.getType() == Material.SUGAR_CANE_BLOCK){
 							blocks.removeBlock(above);
 							breakBlocks.add(above.getLocation());
