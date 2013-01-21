@@ -6,6 +6,9 @@ import org.bukkit.block.Block;
 
 public class MobPattern {
 
+	/**
+	 * Mob pattern type, representing shape
+	 */
 	public static enum MobPatternType{
 		POLE, T_SHAPE;
 	}
@@ -13,6 +16,13 @@ public class MobPattern {
 	private final MobPatternType type;
 	private final Material body, head, head2;
 
+	/**
+	 * Creates a new mob pattern containing 2 potential heads
+	 * @param type shape of mob
+	 * @param body body material (eg: IRON_BLOCK)
+	 * @param head first possible head type (eg: PUMPKIN)
+	 * @param head2 second possible head type (eg: JACK_O_LANTERN)
+	 */
 	public MobPattern(MobPatternType type, Material body, Material head, Material head2){
 		this.type = type;
 		this.head = head;
@@ -20,13 +30,21 @@ public class MobPattern {
 		this.head2 = head2;
 	}
 
+	/**
+	 * Creates a mob pattern containing a single head type
+	 * @param type the mob shape
+	 * @param body the body material (eg: SOUL_SAND)
+	 * @param head the single head type (eg: SKULL)
+	 */
 	public MobPattern(MobPatternType type, Material body, Material head){
-		this.type = type;
-		this.head = head;
-		this.body = body;
-		this.head2 = head;
+		this(type,body,head,head);
 	}
 
+	/**
+	 * Determines if the block passed is involved with this mob pattern
+	 * @param block the block to use as a source
+	 * @return true if the block forms a complete mob, false otherwise
+	 */
 	public boolean exists(Block block){
 		World world = block.getWorld();
 		if(!(block.getType() == head || block.getType() == head2)){

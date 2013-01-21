@@ -16,7 +16,6 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
-import com.turt2live.antishare.util.generic.ChunkLocation;
 
 class ChunkWrapper {
 
@@ -40,10 +39,6 @@ class ChunkWrapper {
 
 	public String getWorldName(){
 		return world;
-	}
-
-	public ChunkLocation getLocation(){
-		return new ChunkLocation(cx, cz);
 	}
 
 	/**
