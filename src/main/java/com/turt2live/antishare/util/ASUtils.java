@@ -34,6 +34,8 @@ import org.bukkit.material.Door;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.generic.ASEntity;
+import com.turt2live.antishare.util.generic.MobPattern;
+import com.turt2live.antishare.util.generic.MobPattern.MobPatternType;
 
 /**
  * Utilities
@@ -43,8 +45,15 @@ import com.turt2live.antishare.util.generic.ASEntity;
 @SuppressWarnings ("deprecation")
 public class ASUtils {
 
+	public static enum EntityPattern{
+		SNOW_GOLEM, IRON_GOLEM, WITHER;
+	}
+
 	public static final BlockFace[] realFaces = {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP};
 	public static final List<ASEntity> names = new ArrayList<ASEntity>();
+	private static MobPattern SNOW_GOLEM_PATTERN;
+	private static MobPattern IRON_GOLEM_PATTERN;
+	private static MobPattern WITHER_PATTERN;
 
 	/**
 	 * Sends a message to a player.<br>
@@ -575,6 +584,29 @@ public class ASUtils {
 		default:
 			return null;
 		}
+	}
+
+	public static MobPattern getMobPattern(EntityPattern pattern){
+		switch (pattern){
+		case SNOW_GOLEM:
+			if(SNOW_GOLEM_PATTERN == null){
+				SNOW_GOLEM_PATTERN = new MobPattern(MobPatternType.POLE, Material.SNOW_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
+			}
+			return SNOW_GOLEM_PATTERN;
+		case IRON_GOLEM:
+			if(IRON_GOLEM_PATTERN == null){
+				IRON_GOLEM_PATTERN = new MobPattern(MobPatternType.T_SHAPE, Material.IRON_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
+			}
+			return IRON_GOLEM_PATTERN;
+		case WITHER:
+			if(ServerHas.mc14xItems()){
+				if(WITHER_PATTERN == null){
+					WITHER_PATTERN = new MobPattern(MobPatternType.T_SHAPE, Material.SOUL_SAND, Material.SKULL);
+				}
+				return WITHER_PATTERN;
+			}
+		}
+		return null;
 	}
 
 }

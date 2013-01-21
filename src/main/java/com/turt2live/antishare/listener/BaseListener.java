@@ -85,8 +85,10 @@ import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
 import com.turt2live.antishare.tekkitcompat.PaintingListener;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.generic.LevelSaver;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
+import com.turt2live.antishare.util.generic.MobPattern;
 
 /**
  * The core listener - Listens to all events needed by AntiShare and handles them
@@ -190,11 +192,14 @@ public class BaseListener implements Listener {
 		 */
 		int mob = 0;
 		Block block = event.getBlock();
-		if(AntiShare.SNOW_GOLEM.exists(block)){
+		MobPattern snow = ASUtils.getMobPattern(EntityPattern.SNOW_GOLEM);
+		MobPattern iron = ASUtils.getMobPattern(EntityPattern.IRON_GOLEM);
+		MobPattern wither = ASUtils.getMobPattern(EntityPattern.WITHER);
+		if(snow != null && snow.exists(block)){
 			mob = 1;
-		}else if(AntiShare.IRON_GOLEM.exists(block)){
+		}else if(iron != null && iron.exists(block)){
 			mob = 2;
-		}else if(AntiShare.WITHER.exists(block)){
+		}else if(wither != null && wither.exists(block)){
 			mob = 3;
 		}
 		String mobName = "Unknown";

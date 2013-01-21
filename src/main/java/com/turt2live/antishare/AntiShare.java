@@ -47,8 +47,6 @@ import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
-import com.turt2live.antishare.util.generic.MobPattern;
-import com.turt2live.antishare.util.generic.MobPattern.MobPatternType;
 import com.turt2live.antishare.util.generic.SelfCompatibility;
 import com.turt2live.antishare.util.generic.UpdateChecker;
 
@@ -75,18 +73,6 @@ public class AntiShare extends PluginWrapper {
 	 * Used for debug stuff
 	 */
 	public static final Material ANTISHARE_DEBUG_TOOL = Material.BONE;
-	/**
-	 * Mob pattern for snow golem
-	 */
-	public static final MobPattern SNOW_GOLEM = new MobPattern(MobPatternType.POLE, Material.SNOW_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
-	/**
-	 * Mob pattern for iron golem
-	 */
-	public static final MobPattern IRON_GOLEM = new MobPattern(MobPatternType.T_SHAPE, Material.IRON_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
-	/**
-	 * Mob pattern for Wither
-	 */
-	public static final MobPattern WITHER = new MobPattern(MobPatternType.T_SHAPE, Material.SOUL_SAND, Material.SKULL);
 
 	private static AntiShare instance;
 	private Permissions permissions;
