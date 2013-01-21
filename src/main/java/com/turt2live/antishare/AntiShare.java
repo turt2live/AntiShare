@@ -22,11 +22,9 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
@@ -44,7 +42,6 @@ import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.signs.SignList;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;
-import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
 import com.turt2live.antishare.util.generic.SelfCompatibility;
@@ -69,10 +66,6 @@ public class AntiShare extends PluginWrapper {
 	 * Used to force-set a block
 	 */
 	public static final Material ANTISHARE_SET_TOOL = Material.BLAZE_POWDER;
-	/**
-	 * Used for debug stuff
-	 */
-	public static final Material ANTISHARE_DEBUG_TOOL = Material.BONE;
 
 	private static AntiShare instance;
 	private Permissions permissions;
@@ -85,8 +78,6 @@ public class AntiShare extends PluginWrapper {
 	private SignList signs;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
 	private String build = "Unknown build, custom?";
-
-	// Systems manager
 	private Systems sys;
 
 	/**
@@ -343,13 +334,6 @@ public class AntiShare extends PluginWrapper {
 		signs = null;
 		sys = null;
 
-		// Disable SQL for next time
-		if(getConfig().getBoolean("enabled-features.sql")){
-			getLogger().info("DISABLING SQL for next load. AntiShare has converted your data.");
-			getConfig().set("enabled-features.sql", false);
-			saveConfig();
-		}
-
 		// Save disabled SimpleNotice users
 		try{
 			File snFile = new File(getDataFolder(), "data" + File.separator + "disabled-simplenotice-users.txt");
@@ -368,15 +352,11 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public void reload(){
 		reloadConfig();
-		// Permissions has no reload
 		itemMap.reload();
 		signs.reload();
 		listener.reload();
 		alerts.reload();
 		messages.reload();
-		// Metrics has no reload
-		// Tracker List has no reload
-		// Simple Notice has no reload
 		sys.reload();
 		loadPlayerInformation();
 	}
@@ -681,30 +661,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public String getPrefix(){
 		return messages.getPrefix();
-	}
-
-	/**
-	 * Determines if the plugin should cancel an event. This method assumes that the event would be cancelled normally, but needs a debug check.
-	 * 
-	 * @param target the target to alert to (null to not send the message). Alert the user why the event was not cancelled
-	 * @param ignoreTool set to true to ignore the force use tool setting
-	 * @return true if the event should be cancelled, false if the server is in debug mode
-	 */
-	public boolean shouldCancel(CommandSender target, boolean ignoreTool){
-		if(target != null && getConfig().getBoolean("other.debug")){
-			if(getConfig().getBoolean("other.debug-settings.force-use-tool") && target instanceof Player && !ignoreTool){
-				Player player = (Player) target;
-				if(player.getItemInHand() != null){
-					if(player.getItemInHand().getType() != ANTISHARE_DEBUG_TOOL){
-						ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event cancelled. Debug mode tool not in hand.", true);
-						return true;
-					}
-				}
-			}
-			ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event not cancelled. You are in Debug Mode", true);
-			ASUtils.sendToPlayer(target, ChatColor.DARK_AQUA + "Debug Mode Settings: TOOL: " + getConfig().getBoolean("other.debug-settings.force-use-tool") + " IGNORE: " + ignoreTool, true);
-		}
-		return !getConfig().getBoolean("other.debug");
 	}
 
 	/**

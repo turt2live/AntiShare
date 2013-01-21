@@ -94,7 +94,7 @@ public class BlockListener implements Listener {
 					existing = blocks.getType(source);
 					if(existing != null){
 						if(existing != potentialNewGM){
-							event.setCancelled(plugin.shouldCancel(player, true));
+							event.setCancelled(true);
 							type = AlertType.ILLEGAL;
 						}
 					}
@@ -140,7 +140,7 @@ public class BlockListener implements Listener {
 		if(ASUtils.canBeBrokenByWater(to.getType())){
 			if(blocks.getType(to) == GameMode.CREATIVE){
 				if(deny){
-					event.setCancelled(plugin.shouldCancel(null, true));
+					event.setCancelled(true);
 				}else if(!drops){
 					to.setType(Material.AIR);
 				}
@@ -245,11 +245,11 @@ public class BlockListener implements Listener {
 				if(event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 					blocks.removeEntity(entity);
 					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + ASUtils.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (mode == null ? "natural" : mode.name()) + ChatColor.RED + ")", true);
-					event.setCancelled(plugin.shouldCancel(event.getPlayer(), true));
+					event.setCancelled(true);
 					return;
 				}else{
 					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
-					event.setCancelled(plugin.shouldCancel(event.getPlayer(), true));
+					event.setCancelled(true);
 					return;
 				}
 			}
@@ -281,7 +281,7 @@ public class BlockListener implements Listener {
 
 		// Cancel if needed
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -313,7 +313,7 @@ public class BlockListener implements Listener {
 				ASUtils.sendToPlayer(player, "That " + ChatColor.YELLOW + blockname + ChatColor.WHITE + " is a " + ChatColor.YELLOW + gamemode + ChatColor.WHITE + " block.", true);
 
 				// Cancel and stop the check
-				event.setCancelled(plugin.shouldCancel(player, true));
+				event.setCancelled(true);
 				return;
 			}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 				GameMode gm = blocks.getType(block);
@@ -330,7 +330,7 @@ public class BlockListener implements Listener {
 					ASUtils.sendToPlayer(player, ChatColor.RED + "Block " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (gm == null ? "natural" : gm.name()) + ChatColor.RED + ")", true);
 					break;
 				}
-				event.setCancelled(plugin.shouldCancel(player, true));
+				event.setCancelled(true);
 				return;
 			}
 		}
@@ -396,7 +396,7 @@ public class BlockListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert

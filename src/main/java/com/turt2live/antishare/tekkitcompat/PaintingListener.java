@@ -33,6 +33,8 @@ import com.turt2live.antishare.util.ASUtils;
 public class PaintingListener implements Listener {
 
 	private AntiShare plugin = AntiShare.getInstance();
+	
+	// TODO: Rewrite for safer manager use
 
 	@EventHandler (priority = EventPriority.LOW)
 	public void onPaintingBreak(PaintingBreakEvent event){
@@ -89,7 +91,7 @@ public class PaintingListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, true));
+			event.setCancelled(true);
 		}else{
 			// Handle block place for tracker
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
@@ -135,12 +137,12 @@ public class PaintingListener implements Listener {
 						((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(hanging);
 					}
 					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).addEntity(player.getGameMode(), hanging);
-					event.setCancelled(plugin.shouldCancel(player, true));
+					event.setCancelled(true);
 					ASUtils.sendToPlayer(player, ChatColor.GREEN + ASUtils.capitalize(item.name()) + " set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					return;
 				}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
 					ASUtils.sendToPlayer(player, ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
-					event.setCancelled(plugin.shouldCancel(player, true));
+					event.setCancelled(true);
 					return;
 				}
 			}
@@ -196,7 +198,7 @@ public class PaintingListener implements Listener {
 
 			// Handle event
 			if(type == AlertType.ILLEGAL || specialType == AlertType.ILLEGAL){
-				event.setCancelled(plugin.shouldCancel(player, false));
+				event.setCancelled(true);
 			}else{
 				((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).removeEntity(hanging);
 			}

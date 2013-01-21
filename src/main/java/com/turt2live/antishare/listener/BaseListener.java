@@ -265,7 +265,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert
@@ -303,7 +303,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, true));
+			event.setCancelled(true);
 		}
 
 		// Alert
@@ -454,7 +454,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, true));
+			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 			if(hasMobCatcher && player.getItemInHand() != null){
 				ItemStack item = player.getItemInHand();
@@ -501,7 +501,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -534,7 +534,7 @@ public class BaseListener implements Listener {
 		if(event.getRightClicked() instanceof Player){
 			Player target = (Player) event.getRightClicked();
 			ASUtils.sendToPlayer(player, ChatColor.YELLOW + target.getName() + ChatColor.WHITE + " is in " + ChatColor.YELLOW + target.getGameMode().name(), true);
-			event.setCancelled(plugin.shouldCancel(player, true));
+			event.setCancelled(true);
 		}
 	}
 
@@ -581,7 +581,7 @@ public class BaseListener implements Listener {
 
 			// Handle event
 			if(type == AlertType.ILLEGAL){
-				event.setCancelled(plugin.shouldCancel(player, false));
+				event.setCancelled(true);
 			}
 
 			// Alert (with sanity check)
@@ -604,7 +604,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -745,7 +745,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, true));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -788,7 +788,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -879,7 +879,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -920,7 +920,7 @@ public class BaseListener implements Listener {
 						GMCD.put(player.getName(), now);
 					}else{
 						// Deny
-						event.setCancelled(plugin.shouldCancel(player, false));
+						event.setCancelled(true);
 						int seconds = (int) (time - (now - lastUsed)) / 1000;
 						String s = "";
 						if(seconds == 0 || seconds > 1){
@@ -1023,7 +1023,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(playerAttacker, false));
+			event.setCancelled(true);
 		}
 
 		// Alert
@@ -1081,7 +1081,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(playerTarget, false));
+			event.setCancelled(true);
 		}
 	}
 
@@ -1113,7 +1113,7 @@ public class BaseListener implements Listener {
 		}
 
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -1153,7 +1153,7 @@ public class BaseListener implements Listener {
 			String playerMessage = plugin.getMessage("blocked-action.crafting");
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CRAFTING);
 			if(type == AlertType.ILLEGAL){
-				event.setCancelled(plugin.shouldCancel(player, true));
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -1192,7 +1192,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
@@ -1243,7 +1243,7 @@ public class BaseListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}

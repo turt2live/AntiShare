@@ -58,7 +58,7 @@ public class CuboidListener implements Listener {
 								+ location.getBlockZ() + ", "
 								+ location.getWorld().getName()
 								+ "). Volume = " + ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName()).getVolume(), true);
-						event.setCancelled(plugin.shouldCancel(player, true));
+						event.setCancelled(true);
 					}
 				}
 			}

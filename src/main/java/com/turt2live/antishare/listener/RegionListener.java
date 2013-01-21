@@ -124,7 +124,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
@@ -168,7 +168,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
@@ -204,7 +204,7 @@ public class RegionListener implements Listener {
 			String playerMessage = plugin.getMessage("blocked-action.crafting");
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CRAFTING);
 			if(type == AlertType.ILLEGAL){
-				event.setCancelled(plugin.shouldCancel(player, true));
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -349,7 +349,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(playerAttacker, false));
+			event.setCancelled(true);
 		}
 
 		// Alert
@@ -408,7 +408,7 @@ public class RegionListener implements Listener {
 			Region region = manager.getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
-				event.setCancelled(plugin.shouldCancel(player, false));
+				event.setCancelled(true);
 				if(player.hasMetadata("ASlevelChange")){
 					List<MetadataValue> values = player.getMetadata("ASlevelChange");
 					for(MetadataValue value : values){
@@ -491,7 +491,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -553,7 +553,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -603,7 +603,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, true));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -783,7 +783,7 @@ public class RegionListener implements Listener {
 
 			// Handle event
 			if(type == AlertType.ILLEGAL){
-				event.setCancelled(plugin.shouldCancel(player, false));
+				event.setCancelled(true);
 			}
 
 			// Alert (with sanity check)
@@ -811,7 +811,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -864,7 +864,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
@@ -925,7 +925,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, true));
+			event.setCancelled(true);
 		}
 
 		// Alert
@@ -976,7 +976,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(specialType == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, false));
+			event.setCancelled(true);
 		}
 
 		// Alert
@@ -1127,7 +1127,7 @@ public class RegionListener implements Listener {
 
 		// Handle event
 		if(type == AlertType.ILLEGAL){
-			event.setCancelled(plugin.shouldCancel(player, true));
+			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 			if(plugin.getListener().hasMobCatcher() && player.getItemInHand() != null){
 				ItemStack item = player.getItemInHand();

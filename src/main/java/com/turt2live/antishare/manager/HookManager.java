@@ -25,12 +25,10 @@ import com.turt2live.antishare.compatibility.Lockette;
 import com.turt2live.antishare.compatibility.Towny;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
-import com.turt2live.antishare.compatibility.type.SignProtection;
 
 public class HookManager extends AntiShareManager {
 
 	private AntiShare plugin = AntiShare.getInstance();
-	private List<SignProtection> signs = new ArrayList<SignProtection>();
 	private List<BlockProtection> blocks = new ArrayList<BlockProtection>();
 	private List<RegionProtection> regions = new ArrayList<RegionProtection>();
 
@@ -53,12 +51,7 @@ public class HookManager extends AntiShareManager {
 	}
 
 	public boolean checkForSignProtection(Block block){
-		for(SignProtection protection : signs){
-			if(protection.isProtected(block)){
-				return true;
-			}
-		}
-		return false;
+		return checkForBlockProtection(block);
 	}
 
 	public boolean checkForBlockProtection(Block block){
@@ -73,24 +66,20 @@ public class HookManager extends AntiShareManager {
 	@Override
 	public boolean load(){
 		// Clear
-		signs.clear();
 		blocks.clear();
 		regions.clear();
 
 		// Find plugins
 		Plugin chestshop = plugin.getServer().getPluginManager().getPlugin("ChestShop");
 		if(chestshop != null){
-			signs.add(new ChestShop());
 			blocks.add(new ChestShop());
 		}
 		Plugin lwc = plugin.getServer().getPluginManager().getPlugin("lwc");
 		if(lwc != null){
-			signs.add(new LWC());
 			blocks.add(new LWC());
 		}
 		Plugin lockette = plugin.getServer().getPluginManager().getPlugin("Lockette");
 		if(lockette != null){
-			signs.add(new Lockette());
 			blocks.add(new Lockette());
 		}
 		Plugin towny = plugin.getServer().getPluginManager().getPlugin("Towny");
