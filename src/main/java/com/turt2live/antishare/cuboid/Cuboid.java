@@ -205,6 +205,9 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	public static Cuboid deserialize(Map<String, Object> map){
 		String world = (String) map.get("world");
 		int mix = (Integer) map.get("minimum X"), miy = (Integer) map.get("minimum Y"), miz = (Integer) map.get("minimum Z"), max = (Integer) map.get("maximum X"), may = (Integer) map.get("maximum Y"), maz = (Integer) map.get("maximum Z");
+		if(world == null){
+			throw new IllegalArgumentException("World not found: " + world);
+		}
 		World matching = AntiShare.getInstance().getServer().getWorld(world);
 		if(matching == null){
 			throw new IllegalArgumentException("World not found: " + world);
