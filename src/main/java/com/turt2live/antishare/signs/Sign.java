@@ -75,11 +75,6 @@ public class Sign {
 		return caseSensitive;
 	}
 
-	// Commented to avoid configuration breaking
-	//public void setName(String name){
-	//	this.name = name;
-	//}
-
 	/**
 	 * Sets the lines of this sign
 	 * 

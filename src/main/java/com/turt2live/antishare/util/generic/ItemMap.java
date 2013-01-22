@@ -14,8 +14,8 @@ import java.io.File;
 
 import org.bukkit.Material;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.signs.Sign;
 
 /**
@@ -63,7 +63,7 @@ public class ItemMap {
 		if(list.getString(name) != null){
 			String[] parts = list.getString(name).split(":");
 			if(parts.length == 2){
-				return AntiShare.getInstance().getSignManager().getSign(parts[1]);
+				return AntiShare.getInstance().getSignList().getSign(parts[1]);
 			}
 		}
 		return null;

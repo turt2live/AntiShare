@@ -29,8 +29,12 @@ public class TrackerList extends ArrayList<Tracker> {
 	 */
 	public static enum TrackerType{
 		SPECIAL("Unknown", "Unkown"),
-		FEATURE_FINES("Features Used", "Fines/Rewards"),
-		FEATURE_SIGNS("Features Used", "Signs");
+		FEATURE_FINES_REWARDS("Features Used", "Fines/Rewards"),
+		FEATURE_SIGNS("Features Used", "Signs"),
+		FEATURE_REGIONS("Features Used", "Regions"),
+		FEATURE_GM_BLOCKS("Features Used", "GameMode Blocks"),
+		FEATURE_INVENTORIES("Features Used", "Inventories"),
+		FEATURE_WORLD_SPLIT("Features Used", "World Split");
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
@@ -67,17 +71,19 @@ public class TrackerList extends ArrayList<Tracker> {
 	 */
 	public TrackerList(){
 		for(TrackerType type : TrackerType.values()){
-			add(new Tracker(type.getName(), type));
-		}
-		remove(TrackerType.SPECIAL);
-	}
-
-	// Removes a graph type, must be called before metric gets the graph
-	private void remove(TrackerType type){
-		for(int i = 0; i < size(); i++){
-			Tracker t = get(i);
-			if(t.getType() == type){
-				remove(i);
+			switch (type){
+			case FEATURE_FINES_REWARDS:
+			case FEATURE_SIGNS:
+			case FEATURE_REGIONS:
+			case FEATURE_INVENTORIES:
+			case FEATURE_GM_BLOCKS:
+			case FEATURE_WORLD_SPLIT:
+				add(new NonMovingTracker(type.getName(), type));
+				break;
+			case SPECIAL:
+				break;
+			default:
+				add(new Tracker(type.getName(), type));
 				break;
 			}
 		}

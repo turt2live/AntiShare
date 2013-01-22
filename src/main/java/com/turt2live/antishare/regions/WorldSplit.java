@@ -17,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -172,6 +173,7 @@ public class WorldSplit {
 	private void checkValues(){
 		if(positive != negative && positive != null && negative != null){
 			// Valid
+			plugin.getTrackers().getTracker(TrackerType.FEATURE_WORLD_SPLIT).increment(1);
 		}else{
 			axis = Axis.NONE;
 			plugin.log("Invalid world split for world " + world, Level.WARNING);

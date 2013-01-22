@@ -16,9 +16,9 @@ import org.bukkit.entity.Player;
 
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import com.turt2live.antishare.compatibility.type.SignProtection;
+import com.turt2live.antishare.compatibility.type.BlockProtection;
 
-public class ChestShop extends SignProtection {
+public class ChestShop extends BlockProtection {
 
 	@Override
 	public boolean isProtected(Block block){

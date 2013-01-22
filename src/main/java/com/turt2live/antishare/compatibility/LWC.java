@@ -13,9 +13,9 @@ package com.turt2live.antishare.compatibility;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.compatibility.type.SignProtection;
+import com.turt2live.antishare.compatibility.type.BlockProtection;
 
-public class LWC extends SignProtection {
+public class LWC extends BlockProtection {
 
 	private com.griefcraft.lwc.LWC lwc;
 

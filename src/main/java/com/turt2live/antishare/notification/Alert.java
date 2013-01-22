@@ -18,8 +18,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.metrics.ActionsTracker;
 import com.turt2live.antishare.metrics.Tracker;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
@@ -258,7 +260,7 @@ public class Alert {
 			details.player_last_sent = System.currentTimeMillis();
 			ASUtils.sendToPlayer(sender, playerMessage, true);
 		}
-		if(sendToAdmins && toPlayers){
+		if(sendToAdmins && toPlayers && !message.equalsIgnoreCase("no message")){
 			details.admin_last_sent = System.currentTimeMillis();
 			for(Player player : Bukkit.getOnlinePlayers()){
 				if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.GET_NOTIFICATIONS)){
@@ -268,14 +270,14 @@ public class Alert {
 				}
 			}
 		}
-		if(sendToAdmins && toConsole){
+		if(sendToAdmins && toConsole && !message.equalsIgnoreCase("no message")){
 			ASUtils.sendToPlayer(Bukkit.getConsoleSender(), "[" + type.name() + "] " + message, true);
 		}
 
 		// Send fine/reward
 		if(sender instanceof Player && reward){
 			Player player = (Player) sender;
-			AntiShare.getInstance().getMoneyManager().fire(trigger, type, player);
+			((MoneyManager) AntiShare.getInstance().getSystemsManager().getManager(Manager.MONEY)).fire(trigger, type, player);
 		}
 
 		// Reinsert (or insert if not found before) into the hashmap

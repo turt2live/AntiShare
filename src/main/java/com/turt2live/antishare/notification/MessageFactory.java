@@ -17,6 +17,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.MVWorlds;
@@ -149,8 +151,8 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertTender(TenderType type){
-		message = message.replaceAll(FINE, plugin.getMoneyManager().formatAmount(plugin.getMoneyManager().getFine(type).getAmount()));
-		message = message.replaceAll(REWARD, plugin.getMoneyManager().formatAmount(plugin.getMoneyManager().getReward(type).getAmount()));
+		message = message.replaceAll(FINE, ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getFine(type).getAmount()));
+		message = message.replaceAll(REWARD, ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getReward(type).getAmount()));
 		return this;
 	}
 
