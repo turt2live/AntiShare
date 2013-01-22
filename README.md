@@ -13,10 +13,20 @@ Maven
 POM Information:
 
 ```xml
+...
+<dependency>
+    <groupId>com.turt2live.antishare</groupId>
+    <artifactId>AntiShare</artifactId>
+    <version>LATEST</version>
+    <type>jar</type>
+    <scope>compile</scope>
+</dependency>
+...
 <repository>
 	<id>antishare-repo</id>
 	<url>http://repo.turt2live.com</url>
 </repository>
+...
 ```
 
 Compiling
