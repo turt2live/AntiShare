@@ -1,21 +1,5 @@
-Since 5.2.1:
-- Remove SQL Support
-- Add Towny support
-- Added feature toggle
-- Removed API (contact turt2live for development help)
-- Fixed up block manager (again)
-- Fixed beds and doors being breakable
-- Listener logic re-written
-    - Notable change: Notifications now follow a different scheme. You may get duplicate messages (intended)
-        - Reason for duplicate messages: Sanity in understanding what is going on.
-- Fixed notifications not being in the same format
-- Fixed legacy regions not loading correctly 
-- Levels no longer waste space by saving a zero
-- Added ability to isolate chests/other items to specific game modes
-- Fixed dragon egg/anvil duping glitch
-    - Directly fixes sand/gravel dupe glitch as well
-- Added easy player game mode check (hit them with a blaze rod)
-- Added more metrics support
+Since 5.3.0:
+None
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
