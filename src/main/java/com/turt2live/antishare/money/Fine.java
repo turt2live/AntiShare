@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.ASGameMode;
@@ -59,18 +61,18 @@ public class Fine extends Tender {
 
 		// Apply to account
 		double amount = getAmount();
-		if(plugin.getMoneyManager().getRawEconomyHook().requiresTab(player.getName())){
+		if(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getRawEconomyHook().requiresTab(player.getName())){
 			amount = overcharge;
 		}
-		TransactionResult result = plugin.getMoneyManager().subtractFromAccount(player, amount);
+		TransactionResult result = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).subtractFromAccount(player, amount);
 		if(!result.completed){
 			ASUtils.sendToPlayer(player, ChatColor.RED + "Fine Failed: " + ChatColor.ITALIC + result.message, true);
 			plugin.log("Fine Failed (" + player.getName() + "): " + result.message, Level.WARNING);
 			return;
 		}else{
-			String formatted = plugin.getMoneyManager().formatAmount(getAmount());
-			String balance = plugin.getMoneyManager().formatAmount(plugin.getMoneyManager().getBalance(player));
-			if(!plugin.getMoneyManager().isSilent(player.getName())){
+			String formatted = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(getAmount());
+			String balance = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getBalance(player));
+			if(!((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).isSilent(player.getName())){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You've been fined " + formatted + "!", true);
 				ASUtils.sendToPlayer(player, "Your new balance is " + ChatColor.YELLOW + balance, true);
 			}

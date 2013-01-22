@@ -132,6 +132,11 @@ settings:
     method: archive
     # Days
     after: 120
+  # Set to true to allow players of the same Game Mode to interact with similar
+  # Game Mode objects. Such as a Creative player trying to use a Creative chest.
+  # This will still not allow Survival players to use Creative blocks (like the
+  # example chest)
+  similar-gamemode-allow: false
 # Where the magic happens.
 # Here you can define EXACTLY what you want
 # AntiShare to control (restrict). You can use
@@ -145,8 +150,8 @@ blocked-lists:
   dropped-items-on-death: all
   picked-up-items: all
   dropped-items: all
-  right-click: storage minecart, powered minecart, chest, furnace, dispenser, jukebox, anvil
-  use-items: fire, flint and steel, exp bottle, 383, egg, lava bucket, water bucket, fireball, item frame
+  right-click: storage minecart, powered minecart, chest, furnace, dispenser, jukebox, anvil, enchantment table, ender portal frame
+  use-items: fire, flint and steel, exp bottle, monster egg, egg, lava bucket, water bucket, fireball, item frame
   commands: /someCommand, /anotherCommand
   mobs: all
   right-click-mobs: all

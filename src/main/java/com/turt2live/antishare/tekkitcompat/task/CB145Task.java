@@ -6,6 +6,10 @@ public class CB145Task extends AntiShareTask {
 
 	private BukkitTask task;
 
+	/**
+	 * Creates a new CraftBukkit 1.4.5+ task
+	 * @param task the scheduler's task
+	 */
 	public CB145Task(BukkitTask task){
 		this.task = task;
 	}

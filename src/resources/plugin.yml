@@ -170,6 +170,7 @@ permissions:
             AntiShare.regions.pickup_item: true
             AntiShare.regions.place: true
             AntiShare.regions.break: true
+            AntiShare.regions.use_item: true
             AntiShare.regions.list: true
     AntiShare.regions.create:
         description: Allows the target to create AntiShare regions
@@ -194,6 +195,9 @@ permissions:
         default: op
     AntiShare.regions.break:
         description: Allows the target to break blocks between regions
+        default: op
+    AntiShare.regions.use_item:
+        description: Allows the target to use items between regions
         default: op
     AntiShare.regions.list:
         description: Allows the target to list and lookup regions

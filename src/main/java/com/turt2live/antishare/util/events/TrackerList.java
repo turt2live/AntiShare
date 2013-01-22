@@ -71,7 +71,7 @@ public class TrackerList {
 					}
 
 					// Add signs
-					for(Sign s : plugin.getSignManager().getAllSigns()){
+					for(Sign s : plugin.getSignList().getAllSigns()){
 						if(!negate){
 							trackedsigns.add(s);
 						}else{
@@ -93,7 +93,7 @@ public class TrackerList {
 					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;
 				}
-				Sign sign = plugin.getSignManager().getSign(signname);
+				Sign sign = plugin.getSignList().getSign(signname);
 				if(sign == null){
 					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;

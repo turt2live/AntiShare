@@ -81,6 +81,7 @@ public class PermissionNodes {
 	public static final String REGION_PICKUP = "AntiShare.regions.pickup_item";
 	public static final String REGION_PLACE = "AntiShare.regions.place";
 	public static final String REGION_BREAK = "AntiShare.regions.break";
+	public static final String REGION_USE = "AntiShare.regions.use_item";
 	public static final String REGION_LIST = "AntiShare.regions.list";
 
 	// World Split Nodes

@@ -20,7 +20,7 @@ import com.turt2live.antishare.metrics.TrackerList.TrackerType;
  */
 public class Tracker extends Plotter {
 
-	private int value = 0;
+	protected int value = 0;
 	private String name = "UNKNOWN";
 	private TrackerType type;
 

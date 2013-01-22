@@ -12,6 +12,8 @@ package com.turt2live.antishare.util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,20 +30,35 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.Bed;
+import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.util.generic.ASEntity;
+import com.turt2live.antishare.util.generic.MobPattern;
+import com.turt2live.antishare.util.generic.MobPattern.MobPatternType;
 
 /**
  * Utilities
  * 
  * @author turt2live
  */
+@SuppressWarnings ("deprecation")
 public class ASUtils {
 
-	public static final BlockFace[] realFaces = {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP};
-	public static final List<ASEntity> names = new ArrayList<ASEntity>();
+	public static enum EntityPattern{
+		SNOW_GOLEM, IRON_GOLEM, WITHER;
+	}
+
+	/**
+	 * Array of true block faces (none of the SOUTH_WEST-like ones)
+	 */
+	public static final List<BlockFace> TRUE_BLOCK_FACES = Collections.unmodifiableList(Arrays.asList(new BlockFace[]{BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP})); 
+	private static final List<ASEntity> ENTITY_NAMES = new ArrayList<ASEntity>();
+	private static MobPattern SNOW_GOLEM_PATTERN;
+	private static MobPattern IRON_GOLEM_PATTERN;
+	private static MobPattern WITHER_PATTERN;
 
 	/**
 	 * Sends a message to a player.<br>
@@ -148,6 +165,9 @@ public class ASUtils {
 		case DIODE_BLOCK_ON:
 		case STEP:
 		case WATER_LILY:
+		case SEEDS:
+		case POTATO:
+		case CARROT:
 			return true;
 		default:
 			if(ServerHas.mc14xItems()){
@@ -185,8 +205,10 @@ public class ASUtils {
 				|| block.getType() == Material.WHEAT || block.getType() == Material.WOODEN_DOOR
 				|| block.getType() == Material.IRON_DOOR || block.getType() == Material.IRON_DOOR_BLOCK
 				|| block.getType() == Material.CROPS || block.getType() == Material.LONG_GRASS
-				|| block.getType() == Material.SAPLING || (ServerHas.mc14xItems() && (block.getType() == Material.ITEM_FRAME
-				|| block.getType() == Material.FLOWER_POT))){
+				|| block.getType() == Material.CAKE_BLOCK || block.getType() == Material.SAPLING
+				|| (ServerHas.mc14xItems() && (block.getType() == Material.ITEM_FRAME
+						|| block.getType() == Material.FLOWER_POT || block.getType() == Material.POTATO
+						|| block.getType() == Material.CARROT))){
 			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
 			Location l1 = source.getLocation();
 			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
@@ -332,51 +354,51 @@ public class ASUtils {
 	 * @return a list of entities
 	 */
 	public static List<ASEntity> allEntities(){
-		if(names.size() <= 0){
-			names.add(new ASEntity("blaze", "blaze"));
-			names.add(new ASEntity("cavespider", "cave spider"));
-			names.add(new ASEntity("cave spider", "cave spider"));
-			names.add(new ASEntity("chicken", "chicken"));
-			names.add(new ASEntity("cow", "cow"));
-			names.add(new ASEntity("creeper", "creeper"));
-			names.add(new ASEntity("enderdragon", "ender dragon"));
-			names.add(new ASEntity("ender dragon", "ender dragon"));
-			names.add(new ASEntity("enderman", "enderman"));
-			names.add(new ASEntity("ghast", "ghast"));
-			names.add(new ASEntity("giant", "giant"));
-			names.add(new ASEntity("irongolem", "iron golem"));
-			names.add(new ASEntity("iron golem", "iron golem"));
-			names.add(new ASEntity("mushroomcow", "mooshroom"));
-			names.add(new ASEntity("mushroom cow", "mooshroom"));
-			names.add(new ASEntity("mooshroom", "mooshroom"));
-			names.add(new ASEntity("ocelot", "ocelot"));
-			names.add(new ASEntity("cat", "ocelot"));
-			names.add(new ASEntity("pig", "pig"));
-			names.add(new ASEntity("pigzombie", "pigman"));
-			names.add(new ASEntity("zombiepigman", "pigman"));
-			names.add(new ASEntity("pig zombie", "pigman"));
-			names.add(new ASEntity("zombie pigman", "pigman"));
-			names.add(new ASEntity("pigman", "pigman"));
-			names.add(new ASEntity("sheep", "sheep"));
-			names.add(new ASEntity("silverfish", "silverfish"));
-			names.add(new ASEntity("skeleton", "skeleton"));
-			names.add(new ASEntity("slime", "slime"));
-			names.add(new ASEntity("magmacube", "magma cube"));
-			names.add(new ASEntity("magma cube", "magma cube"));
-			names.add(new ASEntity("spider", "spider"));
-			names.add(new ASEntity("snowman", "snowman"));
-			names.add(new ASEntity("squid", "squid"));
-			names.add(new ASEntity("villager", "villager"));
-			names.add(new ASEntity("testificate", "villager"));
-			names.add(new ASEntity("wolf", "wolf"));
-			names.add(new ASEntity("zombie", "zombie"));
-			names.add(new ASEntity("witch", "witch"));
-			names.add(new ASEntity("wither", "wither boss"));
-			names.add(new ASEntity("witherboss", "wither boss"));
-			names.add(new ASEntity("wither boss", "wither boss"));
-			names.add(new ASEntity("bat", "bat"));
+		if(ENTITY_NAMES.size() <= 0){
+			ENTITY_NAMES.add(new ASEntity("blaze", "blaze"));
+			ENTITY_NAMES.add(new ASEntity("cavespider", "cave spider"));
+			ENTITY_NAMES.add(new ASEntity("cave spider", "cave spider"));
+			ENTITY_NAMES.add(new ASEntity("chicken", "chicken"));
+			ENTITY_NAMES.add(new ASEntity("cow", "cow"));
+			ENTITY_NAMES.add(new ASEntity("creeper", "creeper"));
+			ENTITY_NAMES.add(new ASEntity("enderdragon", "ender dragon"));
+			ENTITY_NAMES.add(new ASEntity("ender dragon", "ender dragon"));
+			ENTITY_NAMES.add(new ASEntity("enderman", "enderman"));
+			ENTITY_NAMES.add(new ASEntity("ghast", "ghast"));
+			ENTITY_NAMES.add(new ASEntity("giant", "giant"));
+			ENTITY_NAMES.add(new ASEntity("irongolem", "iron golem"));
+			ENTITY_NAMES.add(new ASEntity("iron golem", "iron golem"));
+			ENTITY_NAMES.add(new ASEntity("mushroomcow", "mooshroom"));
+			ENTITY_NAMES.add(new ASEntity("mushroom cow", "mooshroom"));
+			ENTITY_NAMES.add(new ASEntity("mooshroom", "mooshroom"));
+			ENTITY_NAMES.add(new ASEntity("ocelot", "ocelot"));
+			ENTITY_NAMES.add(new ASEntity("cat", "ocelot"));
+			ENTITY_NAMES.add(new ASEntity("pig", "pig"));
+			ENTITY_NAMES.add(new ASEntity("pigzombie", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("zombiepigman", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("pig zombie", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("zombie pigman", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("pigman", "pigman"));
+			ENTITY_NAMES.add(new ASEntity("sheep", "sheep"));
+			ENTITY_NAMES.add(new ASEntity("silverfish", "silverfish"));
+			ENTITY_NAMES.add(new ASEntity("skeleton", "skeleton"));
+			ENTITY_NAMES.add(new ASEntity("slime", "slime"));
+			ENTITY_NAMES.add(new ASEntity("magmacube", "magma cube"));
+			ENTITY_NAMES.add(new ASEntity("magma cube", "magma cube"));
+			ENTITY_NAMES.add(new ASEntity("spider", "spider"));
+			ENTITY_NAMES.add(new ASEntity("snowman", "snowman"));
+			ENTITY_NAMES.add(new ASEntity("squid", "squid"));
+			ENTITY_NAMES.add(new ASEntity("villager", "villager"));
+			ENTITY_NAMES.add(new ASEntity("testificate", "villager"));
+			ENTITY_NAMES.add(new ASEntity("wolf", "wolf"));
+			ENTITY_NAMES.add(new ASEntity("zombie", "zombie"));
+			ENTITY_NAMES.add(new ASEntity("witch", "witch"));
+			ENTITY_NAMES.add(new ASEntity("wither", "wither boss"));
+			ENTITY_NAMES.add(new ASEntity("witherboss", "wither boss"));
+			ENTITY_NAMES.add(new ASEntity("wither boss", "wither boss"));
+			ENTITY_NAMES.add(new ASEntity("bat", "bat"));
 		}
-		return names;
+		return ENTITY_NAMES;
 	}
 
 	/**
@@ -417,7 +439,7 @@ public class ASUtils {
 	 * @return true if gravity applies
 	 */
 	public static boolean isAffectedByGravity(Material material){
-		return material == Material.GRAVEL || material == Material.SAND || (ServerHas.mc14xItems() && material == Material.ANVIL);
+		return material == Material.GRAVEL || material == Material.SAND || material == Material.DRAGON_EGG || (ServerHas.mc14xItems() && material == Material.ANVIL);
 	}
 
 	/**
@@ -526,7 +548,6 @@ public class ASUtils {
 	 * @param player the player
 	 * @param slot the slot to place it in. <b>Starts at 1</b>
 	 */
-	@SuppressWarnings ("deprecation")
 	public static void giveTool(Material tool, Player player, int slot){
 		Inventory inv = player.getInventory();
 		if(inv.firstEmpty() >= 0){
@@ -540,6 +561,62 @@ public class ASUtils {
 			}
 			player.updateInventory();
 		}
+	}
+
+	/**
+	 * Determines the second block to a source block (like a bed)
+	 * 
+	 * @param block the source
+	 * @return the second block, or null if not found
+	 */
+	public static Block multipleBlocks(Block block){
+		switch (block.getType()){
+		case WOODEN_DOOR:
+		case IRON_DOOR_BLOCK:
+			Door door = (Door) block.getState().getData();
+			if(door.isTopHalf()){
+				return block.getRelative(BlockFace.DOWN);
+			}else{
+				return block.getRelative(BlockFace.UP);
+			}
+		case BED_BLOCK:
+			Bed bed = (Bed) block.getState().getData();
+			if(bed.isHeadOfBed()){
+				return block.getRelative(bed.getFacing().getOppositeFace());
+			}else{
+				return block.getRelative(bed.getFacing());
+			}
+		default:
+			return null;
+		}
+	}
+
+	/**
+	 * Gets the mob pattern for the supplied entity, if found	
+	 * @param pattern the pattern to look for
+	 * @return the pattern. This will be null if the pattern is not found or unsupported
+	 */
+	public static MobPattern getMobPattern(EntityPattern pattern){
+		switch (pattern){
+		case SNOW_GOLEM:
+			if(SNOW_GOLEM_PATTERN == null){
+				SNOW_GOLEM_PATTERN = new MobPattern(MobPatternType.POLE, Material.SNOW_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
+			}
+			return SNOW_GOLEM_PATTERN;
+		case IRON_GOLEM:
+			if(IRON_GOLEM_PATTERN == null){
+				IRON_GOLEM_PATTERN = new MobPattern(MobPatternType.T_SHAPE, Material.IRON_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
+			}
+			return IRON_GOLEM_PATTERN;
+		case WITHER:
+			if(ServerHas.mc14xItems()){
+				if(WITHER_PATTERN == null){
+					WITHER_PATTERN = new MobPattern(MobPatternType.T_SHAPE, Material.SOUL_SAND, Material.SKULL);
+				}
+				return WITHER_PATTERN;
+			}
+		}
+		return null;
 	}
 
 }

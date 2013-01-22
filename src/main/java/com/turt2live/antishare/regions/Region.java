@@ -13,10 +13,12 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
-import com.turt2live.antishare.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -392,7 +394,7 @@ public class Region {
 				player.setGameMode(gamemode);
 			}
 			if(inventory != null){
-				plugin.getInventoryManager().setToTemporary(player, inventory);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).setToTemporary(player, inventory);
 			}
 		}
 	}
@@ -411,7 +413,7 @@ public class Region {
 				player.setGameMode(gamemode);
 			}
 			if(inventory != null){
-				plugin.getInventoryManager().setToTemporary(player, inventory);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).setToTemporary(player, inventory);
 			}
 		}
 	}
@@ -437,7 +439,7 @@ public class Region {
 		// Reset the player
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
 			if(inventory != null){
-				plugin.getInventoryManager().removeFromTemporary(player);
+				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).removeFromTemporary(player);
 			}
 			player.setGameMode(gamemodes.get(player.getName()) == null ? player.getGameMode() : gamemodes.get(player.getName()));
 		}
@@ -506,6 +508,7 @@ public class Region {
 			Location l2 = new Location(world, max, may, maz);
 			Cuboid cuboid = new Cuboid(l1, l2);
 			region.setCuboid(cuboid);
+			region.setID(saveFile.getName().replace(".yml", ""));
 			loadLegacyPlayerInformation(region);
 		}
 		if(region.getID().equalsIgnoreCase("-1")){
@@ -549,7 +552,7 @@ public class Region {
 		}
 	}
 
-	void onCreate(){
+	public void onCreate(){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if(players != null){
@@ -561,7 +564,7 @@ public class Region {
 		}
 	}
 
-	void onUpdate(Cuboid last){
+	public void onUpdate(Cuboid last){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if(players != null){
@@ -575,7 +578,7 @@ public class Region {
 		}
 	}
 
-	void onDelete(){
+	public void onDelete(){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if(players != null){

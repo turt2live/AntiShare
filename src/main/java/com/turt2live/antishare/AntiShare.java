@@ -22,31 +22,26 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.blocks.BlockManager;
-import com.turt2live.antishare.compatibility.HookManager;
-import com.turt2live.antishare.cuboid.CuboidManager;
-import com.turt2live.antishare.feildmaster.lib.configuration.PluginWrapper;
-import com.turt2live.antishare.inventory.InventoryManager;
+import com.feildmaster.lib.configuration.PluginWrapper;
+import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.listener.BaseListener;
+import com.turt2live.antishare.manager.InventoryManager;
+import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.metrics.Metrics;
 import com.turt2live.antishare.metrics.TrackerList;
-import com.turt2live.antishare.money.MoneyManager;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.regions.RegionManager;
-import com.turt2live.antishare.signs.SignManager;
+import com.turt2live.antishare.signs.SignList;
 import com.turt2live.antishare.tekkitcompat.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;
-import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
 import com.turt2live.antishare.util.generic.SelfCompatibility;
@@ -71,28 +66,19 @@ public class AntiShare extends PluginWrapper {
 	 * Used to force-set a block
 	 */
 	public static final Material ANTISHARE_SET_TOOL = Material.BLAZE_POWDER;
-	/**
-	 * Used for debug stuff
-	 */
-	public static final Material ANTISHARE_DEBUG_TOOL = Material.BONE;
 
 	private static AntiShare instance;
 	private Permissions permissions;
 	private ItemMap itemMap;
-	private ASListener listener;
+	private BaseListener listener;
 	private Alert alerts;
 	private Messages messages;
-	private RegionManager regions;
-	private BlockManager blocks;
-	private InventoryManager inventories;
 	private Metrics metrics;
 	private TrackerList trackers;
-	private SignManager signs;
-	private MoneyManager tender;
+	private SignList signs;
 	private List<String> disabledSNPlayers = new ArrayList<String>();
-	private HookManager hooks;
-	private CuboidManager cuboids;
 	private String build = "Unknown build, custom?";
+	private Systems sys;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -183,8 +169,6 @@ public class AntiShare extends PluginWrapper {
 				getLogger().severe("**********************");
 			}
 		}
-
-		// Setup (order is important!)
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Setting up Metrics...");
 		}
@@ -243,23 +227,11 @@ public class AntiShare extends PluginWrapper {
 		}
 		SelfCompatibility.cleanupYAML();
 
-		// Setup everything
+		// Pre-load
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting Metrics trackers...");
+			getLogger().info("Starting sign list...");
 		}
-		trackers = new TrackerList();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting hook manager...");
-		}
-		hooks = new HookManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting sign manager...");
-		}
-		signs = new SignManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting money manager...");
-		}
-		tender = new MoneyManager();
+		signs = new SignList();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting permissions...");
 		}
@@ -269,9 +241,19 @@ public class AntiShare extends PluginWrapper {
 		}
 		itemMap = new ItemMap();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("Starting Metrics trackers...");
+		}
+		trackers = new TrackerList();
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting listener...");
 		}
-		listener = new ASListener();
+		listener = new BaseListener();
+
+		// Startup Systems Manager
+		sys = new Systems();
+		sys.load();
+
+		// Setup everything
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting alerts...");
 		}
@@ -280,22 +262,6 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info("Starting messages...");
 		}
 		messages = new Messages();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting region manager...");
-		}
-		regions = new RegionManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting block manager...");
-		}
-		blocks = new BlockManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting inventory manager...");
-		}
-		inventories = new InventoryManager();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("Starting cuboid manager...");
-		}
-		cuboids = new CuboidManager();
 
 		// Statistics
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
@@ -343,69 +309,14 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
-		if(regions != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving regions...");
-			}
-			regions.save();
-		}
-		if(blocks != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving blocks...");
-			}
-			blocks.save(true, false);
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Waiting for block manager to be done...");
-			}
-			int lastPercent = 0, goal = 10;
-			boolean hit100 = false;
-			while (!blocks.isSaveDone()){
-				if(getConfig().getBoolean("other.use-sleep")){
-					try{
-						Thread.sleep(50); // To avoid a higher CPU use
-					}catch(InterruptedException e){
-						e.printStackTrace();
-					}
-				}
-				if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-					int percent = blocks.percentSaveDone();
-					goal = lastPercent + 10;
-					if(goal > 100){
-						goal = 100;
-					}
-					if(goal <= percent && !hit100 && percent <= 100){
-						getLogger().info("[Block Manager] Percent Done: " + percent + "%");
-						lastPercent = percent;
-						if(percent >= 100){
-							hit100 = true;
-						}
-					}
-				}
-			}
-		}
-		if(inventories != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving inventories...");
-			}
-			inventories.save();
-		}
-		if(tender != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving tender functions...");
-			}
-			tender.save();
-		}
 		if(metrics != null){
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
 				getLogger().info("Flushing Metrics...");
 			}
 			metrics.flush();
 		}
-		if(cuboids != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				getLogger().info("Saving cuboid information...");
-			}
-			cuboids.save();
+		if(sys != null){
+			sys.save();
 		}
 
 		// Disable
@@ -418,22 +329,10 @@ public class AntiShare extends PluginWrapper {
 		listener = null;
 		alerts = null;
 		messages = null;
-		blocks = null;
-		inventories = null;
-		regions = null;
 		metrics = null;
 		trackers = null;
 		signs = null;
-		tender = null;
-		hooks = null;
-		cuboids = null;
-
-		// Disable SQL for next time
-		if(getConfig().getBoolean("enabled-features.sql")){
-			getLogger().info("DISABLING SQL for next load. AntiShare has converted your data.");
-			getConfig().set("enabled-features.sql", false);
-			saveConfig();
-		}
+		sys = null;
 
 		// Save disabled SimpleNotice users
 		try{
@@ -453,20 +352,12 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public void reload(){
 		reloadConfig();
-		// Permissions has no reload
 		itemMap.reload();
 		signs.reload();
 		listener.reload();
 		alerts.reload();
 		messages.reload();
-		tender.reload();
-		regions.reload();
-		blocks.reload();
-		inventories.reload();
-		cuboids.reload();
-		// Metrics has no reload
-		// Tracker List has no reload
-		// Simple Notice has no reload
+		sys.reload();
 		loadPlayerInformation();
 	}
 
@@ -474,6 +365,8 @@ public class AntiShare extends PluginWrapper {
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
 			@Override
 			public void run(){
+				InventoryManager inventories = (InventoryManager) sys.getManager(Manager.INVENTORY);
+				RegionManager regions = (RegionManager) sys.getManager(Manager.REGION);
 				for(Player player : Bukkit.getOnlinePlayers()){
 					inventories.loadPlayer(player);
 					Region playerRegion = regions.getRegion(player.getLocation());
@@ -487,6 +380,15 @@ public class AntiShare extends PluginWrapper {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Gets the general purpose systems manager
+	 * 
+	 * @return the general purpose systems manager
+	 */
+	public Systems getSystemsManager(){
+		return sys;
 	}
 
 	/**
@@ -711,35 +613,8 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the listener
 	 */
-	public ASListener getListener(){
+	public BaseListener getListener(){
 		return listener;
-	}
-
-	/**
-	 * Gets the region manager being used by AntiShare
-	 * 
-	 * @return the region manager
-	 */
-	public RegionManager getRegionManager(){
-		return regions;
-	}
-
-	/**
-	 * Gets the block manager being used by AntiShare
-	 * 
-	 * @return the block manager
-	 */
-	public BlockManager getBlockManager(){
-		return blocks;
-	}
-
-	/**
-	 * Gets the inventory manager being used by AntiShare
-	 * 
-	 * @return the inventory manager
-	 */
-	public InventoryManager getInventoryManager(){
-		return inventories;
 	}
 
 	/**
@@ -761,39 +636,12 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	/**
-	 * Gets the sign manager being used by AntiShare
+	 * Gets the sign list being used by AntiShare
 	 * 
-	 * @return the sign manager
+	 * @return the sign list
 	 */
-	public SignManager getSignManager(){
+	public SignList getSignList(){
 		return signs;
-	}
-
-	/**
-	 * Gets the money manager (rewards/fines) being used by AntiShare
-	 * 
-	 * @return the money manager
-	 */
-	public MoneyManager getMoneyManager(){
-		return tender;
-	}
-
-	/**
-	 * Gets the Hook Manager in use by AntiShare
-	 * 
-	 * @return the hook manager
-	 */
-	public HookManager getHookManager(){
-		return hooks;
-	}
-
-	/**
-	 * Gets the cuboid manager in use by AntiShare
-	 * 
-	 * @return the cuboid manager
-	 */
-	public CuboidManager getCuboidManager(){
-		return cuboids;
 	}
 
 	/**
@@ -813,30 +661,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public String getPrefix(){
 		return messages.getPrefix();
-	}
-
-	/**
-	 * Determines if the plugin should cancel an event. This method assumes that the event would be cancelled normally, but needs a debug check.
-	 * 
-	 * @param target the target to alert to (null to not send the message). Alert the user why the event was not cancelled
-	 * @param ignoreTool set to true to ignore the force use tool setting
-	 * @return true if the event should be cancelled, false if the server is in debug mode
-	 */
-	public boolean shouldCancel(CommandSender target, boolean ignoreTool){
-		if(target != null && getConfig().getBoolean("other.debug")){
-			if(getConfig().getBoolean("other.debug-settings.force-use-tool") && target instanceof Player && !ignoreTool){
-				Player player = (Player) target;
-				if(player.getItemInHand() != null){
-					if(player.getItemInHand().getType() != ANTISHARE_DEBUG_TOOL){
-						ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event cancelled. Debug mode tool not in hand.", true);
-						return true;
-					}
-				}
-			}
-			ASUtils.sendToPlayer(target, ChatColor.AQUA + "Event not cancelled. You are in Debug Mode", true);
-			ASUtils.sendToPlayer(target, ChatColor.DARK_AQUA + "Debug Mode Settings: TOOL: " + getConfig().getBoolean("other.debug-settings.force-use-tool") + " IGNORE: " + ignoreTool, true);
-		}
-		return !getConfig().getBoolean("other.debug");
 	}
 
 	/**
