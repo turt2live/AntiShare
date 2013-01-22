@@ -150,8 +150,8 @@ blocked-lists:
   dropped-items-on-death: all
   picked-up-items: all
   dropped-items: all
-  right-click: storage minecart, powered minecart, chest, furnace, dispenser, jukebox, anvil
-  use-items: fire, flint and steel, exp bottle, 383, egg, lava bucket, water bucket, fireball, item frame
+  right-click: storage minecart, powered minecart, chest, furnace, dispenser, jukebox, anvil, enchantment table, ender portal frame
+  use-items: fire, flint and steel, exp bottle, monster egg, egg, lava bucket, water bucket, fireball, item frame
   commands: /someCommand, /anotherCommand
   mobs: all
   right-click-mobs: all
