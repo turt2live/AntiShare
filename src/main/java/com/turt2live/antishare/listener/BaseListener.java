@@ -523,6 +523,7 @@ public class BaseListener implements Listener {
 		}
 	}
 
+	@EventHandler
 	public void onInteractPlayer(PlayerInteractEntityEvent event){
 		Player player = event.getPlayer();
 		if(event.isCancelled()
