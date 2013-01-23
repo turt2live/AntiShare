@@ -222,6 +222,11 @@
 					</replacements>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+			</plugin>
 		</plugins>
 	</build>
 	<distributionManagement>
@@ -230,17 +235,4 @@
 			<url>ftp://ftp.turt2live.com/public_html/maven2</url>
 		</repository>
 	</distributionManagement>
-	<profiles>
-		<profile>
-			<id>jenkins</id>
-			<activation>
-				<property>
-					<name>env.BUILD_NUMBER</name>
-				</property>
-			</activation>
-			<properties>
-				<project.build.number>${env.BUILD_NUMBER}</project.build.number>
-			</properties>
-		</profile>
-	</profiles>
 </project>
