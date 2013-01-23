@@ -32,10 +32,10 @@ import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.generic.ASEntity;
 import com.turt2live.antishare.util.generic.MobPattern;
 import com.turt2live.antishare.util.generic.MobPattern.MobPatternType;
+import com.turt2live.materials.ServerHas;
 
 /**
  * Utilities
@@ -102,6 +102,9 @@ public class ASUtils {
 	 * @return the boolean (or null if not found)
 	 */
 	public static Boolean getBoolean(String value){
+		if(value == null || value.trim().length() == 0){
+			return null;
+		}
 		if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("on")
 				|| value.equalsIgnoreCase("active") || value.equalsIgnoreCase("1")){
 			return true;
