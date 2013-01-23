@@ -6,3 +6,6 @@ None
 
 BUGS:
 - (Reported by self) Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
+
+Tests to be made:
+- Every bloddy class, including ServerHas (and making sure ASUtils and such return if ServerHas is 'tekkit')

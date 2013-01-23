@@ -122,6 +122,9 @@ public class ASUtils {
 	 * @return the GameMode (or null if not found)
 	 */
 	public static GameMode getGameMode(String value){
+		if(value == null){
+			return null;
+		}
 		if(value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")){
 			return GameMode.CREATIVE;
 		}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")){
@@ -174,6 +177,9 @@ public class ASUtils {
 	 * @return the material as a string
 	 */
 	public static String materialToString(Material material, boolean zero){
+		if(material == null){
+			return null;
+		}
 		StringBuilder ret = new StringBuilder();
 		ret.append(material.getId());
 		if(!zero){
@@ -190,11 +196,14 @@ public class ASUtils {
 	 * @return the wool ID (with data value) or null if not wool
 	 */
 	public static String getWool(String input){
-		if(!input.toLowerCase().contains("wool")){
+		if(input == null || !input.toLowerCase().contains("wool")){
 			return null;
 		}
 
 		String color = input.replace("wool", "").trim().toLowerCase();
+		if(color.length() == 0){
+			color = "white";
+		}
 		color = color.replaceAll(" ", "_");
 		color = color.replace("orange", "1");
 		color = color.replace("white", "0");
@@ -203,8 +212,8 @@ public class ASUtils {
 		color = color.replace("yellow", "4");
 		color = color.replace("lime", "5");
 		color = color.replace("pink", "6");
-		color = color.replace("gray", "7");
 		color = color.replace("light_gray", "8");
+		color = color.replace("gray", "7");
 		color = color.replace("cyan", "9");
 		color = color.replace("purple", "10");
 		color = color.replace("blue", "11");
@@ -317,6 +326,9 @@ public class ASUtils {
 	 * @return the comma-separated String
 	 */
 	public static String commas(List<String> list){
+		if(list == null){
+			return "no one";
+		}
 		StringBuilder commas = new StringBuilder();
 		for(String s : list){
 			commas.append(s).append(", ");
@@ -330,9 +342,12 @@ public class ASUtils {
 	 * 
 	 * @param gamemode the gamemode
 	 * @param shortVersion true to use the single letter, false otherwise
-	 * @return the short hand version
+	 * @return the short hand version, or null if invalid
 	 */
 	public static String gamemodeAbbreviation(GameMode gamemode, boolean shortVersion){
+		if(gamemode == null){
+			return null;
+		}
 		return (shortVersion ? "" : "GM = ") + gamemode.name().charAt(0);
 	}
 
@@ -353,17 +368,17 @@ public class ASUtils {
 	 * @param fileNames file names to wipe, can be null for "all"
 	 */
 	public static void wipeFolder(File folder, CopyOnWriteArrayList<String> fileNames){
-		if(!folder.exists()){
+		if(folder == null || !folder.exists()){
 			return;
 		}
-		if(folder.listFiles() != null){
+		if(folder.listFiles() == null){
+			return;
+		}else{
 			for(File file : folder.listFiles()){
-				if(fileNames != null && !fileNames.contains(file.getName())){
-					continue;
-				}
 				if(file.isDirectory()){
-					wipeFolder(folder, fileNames);
-				}else{
+					wipeFolder(file, fileNames);
+				}
+				if(fileNames == null || fileNames.contains(file.getName())){
 					file.delete();
 				}
 			}
@@ -437,6 +452,9 @@ public class ASUtils {
 	 * @return the pattern. This will be null if the pattern is not found or unsupported
 	 */
 	public static MobPattern getMobPattern(EntityPattern pattern){
+		if(pattern == null){
+			return null;
+		}
 		switch (pattern){
 		case SNOW_GOLEM:
 			if(SNOW_GOLEM_PATTERN == null){
