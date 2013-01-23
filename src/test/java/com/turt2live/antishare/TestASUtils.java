@@ -44,7 +44,7 @@ public class TestASUtils {
 		assertNull(ASUtils.getBoolean(null));
 		assertNull(ASUtils.getBoolean(""));
 		assertNull(ASUtils.getBoolean(" "));
-		assertNull(ASUtils.getBoolean("		"));
+		assertNull(ASUtils.getBoolean("		")); // Has a tab character in it
 	}
 
 }
