@@ -28,12 +28,13 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.materials.MaterialAPI;
 
 @SuppressWarnings ("deprecation")
 public class PaintingListener implements Listener {
 
 	private AntiShare plugin = AntiShare.getInstance();
-	
+
 	// TODO: Rewrite for safer manager use
 
 	@EventHandler (priority = EventPriority.LOW)
@@ -138,10 +139,10 @@ public class PaintingListener implements Listener {
 					}
 					((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK)).addEntity(player.getGameMode(), hanging);
 					event.setCancelled(true);
-					ASUtils.sendToPlayer(player, ChatColor.GREEN + ASUtils.capitalize(item.name()) + " set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
+					ASUtils.sendToPlayer(player, ChatColor.GREEN + MaterialAPI.capitalize(item.name()) + " set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					return;
 				}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
-					ASUtils.sendToPlayer(player, ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
+					ASUtils.sendToPlayer(player, ChatColor.WHITE + "That " + ChatColor.YELLOW + MaterialAPI.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
 					event.setCancelled(true);
 					return;
 				}

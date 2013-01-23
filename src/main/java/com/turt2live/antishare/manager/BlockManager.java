@@ -20,7 +20,7 @@ import org.bukkit.entity.EntityType;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.listener.BlockListener;
 import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.events.TrackerList;
 
 public class BlockManager extends AntiShareManager {

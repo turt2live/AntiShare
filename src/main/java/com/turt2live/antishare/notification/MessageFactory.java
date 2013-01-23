@@ -20,8 +20,8 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.money.Tender.TenderType;
-import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.MVWorlds;
+import com.turt2live.materials.MaterialAPI;
 
 /**
  * Creates messages to send to the client
@@ -105,7 +105,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertBlock(Block block){
-		message = message.replaceAll(BLOCK, ASUtils.capitalize(block.getType().name()));
+		message = message.replaceAll(BLOCK, MaterialAPI.capitalize(block.getType().name()));
 		return this;
 	}
 
@@ -116,7 +116,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertBlock(Material block){
-		message = message.replaceAll(BLOCK, ASUtils.capitalize(block.name()));
+		message = message.replaceAll(BLOCK, MaterialAPI.capitalize(block.name()));
 		return this;
 	}
 

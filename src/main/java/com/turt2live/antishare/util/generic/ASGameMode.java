@@ -12,7 +12,7 @@ package com.turt2live.antishare.util.generic;
 
 import org.bukkit.GameMode;
 
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 
 /**
  * An enum to represent a Game Mode

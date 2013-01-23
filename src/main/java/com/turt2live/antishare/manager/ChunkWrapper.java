@@ -14,7 +14,7 @@ import org.bukkit.entity.EntityType;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
 class ChunkWrapper {

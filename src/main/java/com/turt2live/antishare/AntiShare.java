@@ -40,7 +40,7 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.signs.SignList;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;

@@ -20,7 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -29,12 +28,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Attachable;
 import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.generic.ASEntity;
 import com.turt2live.antishare.util.generic.MobPattern;
 import com.turt2live.antishare.util.generic.MobPattern.MobPatternType;
@@ -129,114 +127,6 @@ public class ASUtils {
 			return GameMode.ADVENTURE;
 		}
 		return null;
-	}
-
-	/**
-	 * Determines if a material can break a falling block (like sand)
-	 * 
-	 * @param material the material
-	 * @return true if it can break it
-	 */
-	public static boolean canBreakFallingBlock(Material material){
-		switch (material){
-		case RAILS:
-		case POWERED_RAIL:
-		case DETECTOR_RAIL:
-		case SAPLING:
-		case RED_ROSE:
-		case YELLOW_FLOWER:
-		case RED_MUSHROOM:
-		case BROWN_MUSHROOM:
-		case STONE_PLATE:
-		case WOOD_PLATE:
-		case LEVER:
-		case STONE_BUTTON:
-		case STRING:
-		case SIGN:
-		case WALL_SIGN:
-		case SIGN_POST:
-		case REDSTONE_WIRE:
-		case DIODE:
-		case TORCH:
-		case REDSTONE_TORCH_OFF:
-		case REDSTONE_TORCH_ON:
-		case CAKE_BLOCK:
-		case DIODE_BLOCK_OFF:
-		case DIODE_BLOCK_ON:
-		case STEP:
-		case WATER_LILY:
-		case SEEDS:
-		case POTATO:
-		case CARROT:
-			return true;
-		default:
-			if(ServerHas.mc14xItems()){
-				switch (material){
-				case ITEM_FRAME:
-				case FLOWER_POT:
-				case TRIPWIRE_HOOK:
-				case TRIPWIRE:
-					return true;
-				default:
-					return false;
-				}
-			}
-			return false;
-		}
-	}
-
-	/**
-	 * Determines if a block would be dropped if an attached block were to break.<br>
-	 * This also checks if the block is attached to a source.
-	 * 
-	 * @param block the block (attached to the breaking block)
-	 * @param source the block that the checked block may be attached to (null for no source)
-	 * @return true if the block would fall
-	 */
-	public static boolean isDroppedOnBreak(Block block, Block source){
-		boolean attached = false;
-		if(block.getType() == Material.REDSTONE_WIRE || block.getType() == Material.STRING
-				|| block.getType() == Material.DIODE_BLOCK_OFF || block.getType() == Material.DIODE_BLOCK_ON
-				|| block.getType() == Material.DETECTOR_RAIL || block.getType() == Material.POWERED_RAIL
-				|| block.getType() == Material.RAILS || block.getType() == Material.RED_MUSHROOM
-				|| block.getType() == Material.RED_ROSE || block.getType() == Material.BROWN_MUSHROOM
-				|| block.getType() == Material.YELLOW_FLOWER || block.getType() == Material.STONE_PLATE
-				|| block.getType() == Material.WOOD_PLATE || block.getType() == Material.SEEDS
-				|| block.getType() == Material.WHEAT || block.getType() == Material.WOODEN_DOOR
-				|| block.getType() == Material.IRON_DOOR || block.getType() == Material.IRON_DOOR_BLOCK
-				|| block.getType() == Material.CROPS || block.getType() == Material.LONG_GRASS
-				|| block.getType() == Material.CAKE_BLOCK || block.getType() == Material.SAPLING
-				|| (ServerHas.mc14xItems() && (block.getType() == Material.ITEM_FRAME
-						|| block.getType() == Material.FLOWER_POT || block.getType() == Material.POTATO
-						|| block.getType() == Material.CARROT))){
-			// Check to ensure that the block is above the one we are breaking (so no nearby blocks are damaged)
-			Location l1 = source.getLocation();
-			Location l2 = block.getRelative(BlockFace.DOWN).getLocation();
-			attached = l1.distanceSquared(l2) == 0;
-		}else if(block.getState().getData() instanceof Attachable && !block.getType().equals(Material.PISTON_EXTENSION)){
-			Attachable att = (Attachable) block.getState().getData();
-			// We need to use location because Java is mean like that >.<
-			Location l1 = source.getLocation();
-			Location l2 = block.getRelative(att.getAttachedFace()).getLocation();
-			attached = l1.distanceSquared(l2) == 0;
-		}
-		return attached;
-	}
-
-	/**
-	 * Capitalizes item names. Eg: EXP_BOTTLE -> Exp Bottle
-	 * 
-	 * @param string the string
-	 * @return the string, capitalized correctly
-	 */
-	public static String capitalize(String string){
-		String parts[] = string.toLowerCase().replaceAll(" ", "_").split("_");
-		StringBuilder returnString = new StringBuilder();
-		for(String part : parts){
-			// No need for part.substring(1).toLowerCase(), the split handles this
-			returnString.append(part.substring(0, 1).toUpperCase() + part.substring(1) + " ");
-		}
-		return returnString.toString().trim();
 	}
 
 	/**
@@ -430,60 +320,6 @@ public class ASUtils {
 		}
 		String finalComma = commas.toString().trim();
 		return finalComma.length() > 0 ? finalComma.substring(0, finalComma.length() - 1) : "no one";
-	}
-
-	/**
-	 * Determines if a material is affected by gravity (moves down when the block below it breaks)
-	 * 
-	 * @param material the material
-	 * @return true if gravity applies
-	 */
-	public static boolean isAffectedByGravity(Material material){
-		return material == Material.GRAVEL || material == Material.SAND || material == Material.DRAGON_EGG || (ServerHas.mc14xItems() && material == Material.ANVIL);
-	}
-
-	/**
-	 * Returns true if the supplied material is breakable through water flow
-	 * 
-	 * @param type the material
-	 * @return true if it would be broken
-	 */
-	public static boolean canBeBrokenByWater(Material type){
-		switch (type){
-		case SAPLING:
-		case LONG_GRASS:
-		case DEAD_BUSH:
-		case YELLOW_FLOWER:
-		case RED_ROSE:
-		case BROWN_MUSHROOM:
-		case RED_MUSHROOM:
-		case TORCH:
-		case REDSTONE_WIRE:
-		case CROPS:
-		case STONE_PLATE:
-		case LEVER:
-		case WOOD_PLATE:
-		case STONE_BUTTON:
-		case WOOD_BUTTON:
-		case REDSTONE_TORCH_ON:
-		case REDSTONE_TORCH_OFF:
-		case SNOW:
-		case SUGAR_CANE_BLOCK:
-		case DIODE_BLOCK_ON:
-		case DIODE_BLOCK_OFF:
-		case PUMPKIN_STEM:
-		case MELON_STEM:
-		case VINE:
-		case COCOA:
-			return true;
-		default:
-			if(ServerHas.mc14xItems()){
-				if(type == Material.TRIPWIRE || type == Material.TRIPWIRE_HOOK){
-					return true;
-				}
-			}
-			return false;
-		}
 	}
 
 	/**

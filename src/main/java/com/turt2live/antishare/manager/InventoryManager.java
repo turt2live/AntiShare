@@ -32,7 +32,7 @@ import com.turt2live.antishare.inventory.TemporaryASInventory;
 import com.turt2live.antishare.listener.InventoryListener;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
 /**

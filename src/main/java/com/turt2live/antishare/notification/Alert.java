@@ -27,6 +27,7 @@ import com.turt2live.antishare.metrics.Tracker;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.materials.MaterialAPI;
 
 /**
  * Alerts people
@@ -127,8 +128,8 @@ public class Alert {
 			case CLOSE_TO_WORLD_SPLIT:
 				break;
 			default:
-				ActionsTracker legal = new ActionsTracker(ASUtils.capitalize(trigger.name()), TrackerType.SPECIAL, "Legal Actions");
-				ActionsTracker illegal = new ActionsTracker(ASUtils.capitalize(trigger.name()), TrackerType.SPECIAL, "Illegal Actions");
+				ActionsTracker legal = new ActionsTracker(MaterialAPI.capitalize(trigger.name()), TrackerType.SPECIAL, "Legal Actions");
+				ActionsTracker illegal = new ActionsTracker(MaterialAPI.capitalize(trigger.name()), TrackerType.SPECIAL, "Illegal Actions");
 				this.legal.put(trigger, legal);
 				this.illegal.put(trigger, illegal);
 				AntiShare.getInstance().getTrackers().add(illegal);

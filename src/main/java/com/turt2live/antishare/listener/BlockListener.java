@@ -41,8 +41,10 @@ import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.tekkitcompat.EntityLayer;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.materials.MaterialAPI;
+import com.turt2live.materials.TekkitMaterialAPI;
 
 public class BlockListener implements Listener {
 
@@ -89,7 +91,7 @@ public class BlockListener implements Listener {
 			Block relative = event.getBlockPlaced();
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
 				GameMode potentialNewGM = player.getGameMode();
-				if(ASUtils.isDroppedOnBreak(relative, source)){
+				if(TekkitMaterialAPI.isDroppedOnBreak(relative, source)){
 					handle = true;
 					existing = blocks.getType(source);
 					if(existing != null){
@@ -105,7 +107,7 @@ public class BlockListener implements Listener {
 			return;
 		}
 		Block block = event.getBlock();
-		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to attach " : " attached ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(block.getType().name()) + ChatColor.WHITE + " onto a " + (existing != null ? existing.name().toLowerCase() : "natural") + " block";
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to attach " : " attached ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " onto a " + (existing != null ? existing.name().toLowerCase() : "natural") + " block";
 		String playerMessage = plugin.getMessage("blocked-action.attach-block");
 		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert(block, player, block.getWorld(), TenderType.BLOCK_PLACE);
@@ -137,7 +139,7 @@ public class BlockListener implements Listener {
 		boolean deny = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.deny");
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		Block to = event.getToBlock();
-		if(ASUtils.canBeBrokenByWater(to.getType())){
+		if(TekkitMaterialAPI.canBeBrokenByWater(to.getType())){
 			if(blocks.getType(to) == GameMode.CREATIVE){
 				if(deny){
 					event.setCancelled(true);
@@ -244,11 +246,11 @@ public class BlockListener implements Listener {
 			if(item != Material.AIR){
 				if(event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 					blocks.removeEntity(entity);
-					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + ASUtils.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (mode == null ? "natural" : mode.name()) + ChatColor.RED + ")", true);
+					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + MaterialAPI.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (mode == null ? "natural" : mode.name()) + ChatColor.RED + ")", true);
 					event.setCancelled(true);
 					return;
 				}else{
-					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + ASUtils.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
+					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + MaterialAPI.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
 					event.setCancelled(true);
 					return;
 				}
@@ -285,10 +287,10 @@ public class BlockListener implements Listener {
 		}
 
 		// Alert (with sanity check)
-		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(item.name());
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(item.name());
 		String playerMessage = plugin.getMessage("blocked-action.right-click");
 		MessageFactory factory = new MessageFactory(playerMessage);
-		factory.insert((Material) null, player, player.getWorld(), TenderType.RIGHT_CLICK, ASUtils.capitalize(item.name()));
+		factory.insert((Material) null, player, player.getWorld(), TenderType.RIGHT_CLICK, MaterialAPI.capitalize(item.name()));
 		playerMessage = factory.toString();
 		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.RIGHT_CLICK);
 	}
@@ -373,7 +375,7 @@ public class BlockListener implements Listener {
 				}else if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.disable-breaking-mixed-gamemode")){
 					for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 						Block rel = block.getRelative(face);
-						if(ASUtils.isDroppedOnBreak(rel, block)){
+						if(TekkitMaterialAPI.isDroppedOnBreak(rel, block)){
 							GameMode relGamemode = blocks.getType(rel);
 							if(relGamemode != null){
 								attachedGM = relGamemode.name().toLowerCase();
@@ -401,14 +403,14 @@ public class BlockListener implements Listener {
 
 		// Alert
 		if(extraSpecial){
-			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break the attached " + attachedGM + " block " : " broke the attached " + attachedGM + " block ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(attached.name());
+			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break the attached " + attachedGM + " block " : " broke the attached " + attachedGM + " block ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(attached.name());
 			String specialPlayerMessage = plugin.getMessage("blocked-action." + attachedGM + "-attached-block-break");
 			MessageFactory factory = new MessageFactory(specialPlayerMessage);
 			factory.insert(block, player, block.getWorld(), attachedGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (attachedGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
 			specialPlayerMessage = factory.toString();
 			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, type, (attachedGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : (attachedGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK)));
 		}else{
-			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + ASUtils.capitalize(block.getType().name());
+			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
 			String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
 			MessageFactory factory = new MessageFactory(specialPlayerMessage);
 			factory.insert(block, player, block.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
@@ -431,7 +433,7 @@ public class BlockListener implements Listener {
 		if(player.getGameMode() == GameMode.SURVIVAL && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
 			for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 				Block rel = block.getRelative(face);
-				if(ASUtils.isDroppedOnBreak(rel, block)){
+				if(TekkitMaterialAPI.isDroppedOnBreak(rel, block)){
 					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 						GameMode gm = blocks.getType(rel);
 						if(gm != null){
@@ -498,7 +500,7 @@ public class BlockListener implements Listener {
 			if(plugin.getListener().getConfig(block.getWorld()).removeAttachedBlocksOnBreak()){
 				for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 					Block rel = block.getRelative(face);
-					if(ASUtils.isDroppedOnBreak(rel, block)){
+					if(TekkitMaterialAPI.isDroppedOnBreak(rel, block)){
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 							GameMode gm = blocks.getType(rel);
 							if(gm != null){
@@ -531,19 +533,19 @@ public class BlockListener implements Listener {
 				boolean moreBlocks = true;
 				Block active = block;
 				Block above = block.getRelative(BlockFace.UP);
-				if(ASUtils.isAffectedByGravity(active.getType()) || ASUtils.isAffectedByGravity(above.getType())){
+				if(TekkitMaterialAPI.isAffectedByGravity(active.getType()) || TekkitMaterialAPI.isAffectedByGravity(above.getType())){
 					do{
 						Block below = active.getRelative(BlockFace.DOWN);
 						active = below;
 						if(below.getType() == Material.AIR){
 							continue;
 						}
-						if(ASUtils.canBreakFallingBlock(below.getType())){
+						if(TekkitMaterialAPI.canBreakFallingBlock(below.getType())){
 							// Remove all sand/gravel above this block
 							boolean checkMoreBlocks = true;
 							above = block.getRelative(BlockFace.UP);
 							do{
-								if(ASUtils.isAffectedByGravity(above.getType())){
+								if(TekkitMaterialAPI.isAffectedByGravity(above.getType())){
 									above.setType(Material.AIR);
 									above = above.getRelative(BlockFace.UP);
 								}else{
@@ -566,10 +568,10 @@ public class BlockListener implements Listener {
 				 */
 				do{
 					above = active.getRelative(BlockFace.UP);
-					if(ASUtils.isAffectedByGravity(above.getType())){
+					if(TekkitMaterialAPI.isAffectedByGravity(above.getType())){
 						for(BlockFace face : BlockFace.values()){
 							Block rel = above.getRelative(face);
-							if(ASUtils.isDroppedOnBreak(rel, above)){
+							if(TekkitMaterialAPI.isDroppedOnBreak(rel, above)){
 								rel.setType(Material.AIR);
 								blocks.removeBlock(rel);
 							}

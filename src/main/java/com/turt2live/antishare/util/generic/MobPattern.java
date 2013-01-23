@@ -18,6 +18,7 @@ public class MobPattern {
 
 	/**
 	 * Creates a new mob pattern containing 2 potential heads
+	 * 
 	 * @param type shape of mob
 	 * @param body body material (eg: IRON_BLOCK)
 	 * @param head first possible head type (eg: PUMPKIN)
@@ -32,16 +33,18 @@ public class MobPattern {
 
 	/**
 	 * Creates a mob pattern containing a single head type
+	 * 
 	 * @param type the mob shape
 	 * @param body the body material (eg: SOUL_SAND)
 	 * @param head the single head type (eg: SKULL)
 	 */
 	public MobPattern(MobPatternType type, Material body, Material head){
-		this(type,body,head,head);
+		this(type, body, head, head);
 	}
 
 	/**
 	 * Determines if the block passed is involved with this mob pattern
+	 * 
 	 * @param block the block to use as a source
 	 * @return true if the block forms a complete mob, false otherwise
 	 */

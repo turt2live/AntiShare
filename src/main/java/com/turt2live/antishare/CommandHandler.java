@@ -41,8 +41,9 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.tekkitcompat.CommandBlockLayer;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.materials.MaterialAPI;
 
 /**
  * Command Handler
@@ -393,10 +394,10 @@ public class CommandHandler implements CommandExecutor {
 							// Check inventory
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 								if(inventory.contains(AntiShare.ANTISHARE_TOOL)){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
 								}else{
 									ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player);
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
 								}
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!", true);
@@ -419,10 +420,10 @@ public class CommandHandler implements CommandExecutor {
 							// Check inventory
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 								if(inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the set block tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the set block tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
 								}else{
 									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player);
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the set block tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the set block tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
 								}
 								ASUtils.sendToPlayer(player, ChatColor.AQUA + "" + ChatColor.ITALIC + "LEFT" + ChatColor.RESET + ChatColor.AQUA + " click to set the block type", true);
 								ASUtils.sendToPlayer(player, ChatColor.AQUA + "" + ChatColor.ITALIC + "RIGHT" + ChatColor.RESET + ChatColor.AQUA + " click to remove the block type", true);
@@ -456,29 +457,29 @@ public class CommandHandler implements CommandExecutor {
 							if(clearSpots >= 3){
 								if(!inventory.contains(AntiShare.ANTISHARE_TOOL)){
 									ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player, 1);
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name()) + ")", true);
 								}
 								if(!inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
 									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player, 2);
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the set block tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the set block tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the set block tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
+									ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the set block tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + ")", true);
 								}
 								if(plugin.getPermissions().has(sender, PermissionNodes.CREATE_CUBOID)){
 									if(!inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
 										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player, 3);
-										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the cuboid tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
+										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the cuboid tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
 									}else{
-										ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the cuboid tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the cuboid tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
 									}
 								}else{
 									ASUtils.sendToPlayer(player, ChatColor.RED + "You are missing the cuboid tool: You do not have permission.", true);
 								}
-								ASUtils.sendToPlayer(player, ChatColor.YELLOW + "With the " + ASUtils.capitalize(AntiShare.ANTISHARE_TOOL.name()) + " simply left or right click a block to see what type it is.", false);
-								ASUtils.sendToPlayer(player, ChatColor.GOLD + "With the " + ASUtils.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + " simply left click to set the block type, and right click to remove the type.", false);
-								ASUtils.sendToPlayer(player, ChatColor.YELLOW + "With the " + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + " simply left click to set point 1 and right click to set point 2.", false);
+								ASUtils.sendToPlayer(player, ChatColor.YELLOW + "With the " + MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name()) + " simply left or right click a block to see what type it is.", false);
+								ASUtils.sendToPlayer(player, ChatColor.GOLD + "With the " + MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name()) + " simply left click to set the block type, and right click to remove the type.", false);
+								ASUtils.sendToPlayer(player, ChatColor.YELLOW + "With the " + MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + " simply left click to set point 1 and right click to set point 2.", false);
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 3 free spots in your inventory!", true);
 							}
@@ -583,10 +584,10 @@ public class CommandHandler implements CommandExecutor {
 								// Check inventory
 								if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 									if(inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
-										ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the cuboid tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
+										ASUtils.sendToPlayer(sender, ChatColor.RED + "You already have the cuboid tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
 									}else{
 										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player);
-										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the cuboid tool! (" + ASUtils.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
+										ASUtils.sendToPlayer(sender, ChatColor.GREEN + "You now have the cuboid tool! (" + MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name()) + ")", true);
 									}
 								}else{
 									ASUtils.sendToPlayer(sender, ChatColor.RED + "You must have at least 1 free spot in your inventory!", true);

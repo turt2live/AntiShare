@@ -17,7 +17,7 @@ import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 
 public class InventoryListener implements Listener {
 

@@ -27,7 +27,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.tekkitcompat.ServerHas;
+import com.turt2live.materials.ServerHas;
 
 /**
  * AntiShare Inventory
