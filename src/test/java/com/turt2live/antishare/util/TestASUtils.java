@@ -1,4 +1,4 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.util;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
