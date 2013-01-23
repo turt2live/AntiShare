@@ -117,8 +117,6 @@
 	<build>
 		<defaultGoal>clean package</defaultGoal>
 		<finalName>AntiShare</finalName>
-		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-		<testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -126,27 +124,6 @@
 				<version>1.0-alpha-6</version>
 			</extension>
 		</extensions>
-		<resources>
-			<resource>
-				<targetPath>resources</targetPath>
-				<filtering>false</filtering>
-				<directory>${basedir}/src/resources/configurations</directory>
-				<includes>
-					<include>*.yml</include>
-				</includes>
-				<excludes>
-					<exclude>plugin.yml</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<targetPath>.</targetPath>
-				<filtering>false</filtering>
-				<directory>${basedir}/src/resources</directory>
-				<includes>
-					<include>plugin.yml</include>
-				</includes>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -193,9 +170,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.11</version>
 				<configuration>
-					<excludes>
-						<exclude>**/Skip*.java</exclude>
-					</excludes>
 					<includes>
 						<include>**/Test*.java</include>
 					</includes>
