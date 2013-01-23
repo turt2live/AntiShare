@@ -7,6 +7,7 @@ public class ItemFrameLayer {
 
 	/**
 	 * Determines if an entity is an Item Frame. This method is safe for Tekkit use
+	 * 
 	 * @param entity the entity
 	 * @return true if the entity is an item frame, false otherwise
 	 */
@@ -16,6 +17,7 @@ public class ItemFrameLayer {
 
 	/**
 	 * Determines the material for the Item Frame. This is safe for Tekkit use
+	 * 
 	 * @return the material for Item Frame, or null if not found (like on Tekkit)
 	 */
 	public static Material getItemFrame(){

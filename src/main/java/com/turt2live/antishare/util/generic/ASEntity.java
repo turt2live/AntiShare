@@ -22,6 +22,7 @@ public class ASEntity {
 
 	/**
 	 * Creates a new entity name
+	 * 
 	 * @param given given name
 	 * @param proper proper name
 	 */
@@ -32,6 +33,7 @@ public class ASEntity {
 
 	/**
 	 * Gets the proper name for this entity
+	 * 
 	 * @return the proper name
 	 */
 	public String getProperName(){
@@ -40,6 +42,7 @@ public class ASEntity {
 
 	/**
 	 * Gets the given name for this entity
+	 * 
 	 * @return the given name
 	 */
 	public String getGivenName(){

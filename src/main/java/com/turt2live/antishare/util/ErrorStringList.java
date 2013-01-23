@@ -11,7 +11,8 @@ public class ErrorStringList extends StringList {
 	private String msg;
 
 	/**
-	 * Creates a new Error String List with an error message 
+	 * Creates a new Error String List with an error message
+	 * 
 	 * @param err the error message
 	 * @param list collection of options for the String List
 	 */

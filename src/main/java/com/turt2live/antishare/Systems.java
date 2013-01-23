@@ -42,6 +42,7 @@ public class Systems {
 
 		/**
 		 * Gets the tracker type associated with this manager
+		 * 
 		 * @return the tracker type
 		 */
 		public TrackerType getTrackerType(){
@@ -50,6 +51,7 @@ public class Systems {
 
 		/**
 		 * Gets the name of the manager
+		 * 
 		 * @return the name of the manager
 		 */
 		public String getName(){
@@ -58,6 +60,7 @@ public class Systems {
 
 		/**
 		 * Gets the feature enum for this manager
+		 * 
 		 * @return the feature enum
 		 */
 		public Feature getFeature(){

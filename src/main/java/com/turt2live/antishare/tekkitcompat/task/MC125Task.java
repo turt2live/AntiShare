@@ -8,6 +8,7 @@ public class MC125Task extends AntiShareTask {
 
 	/**
 	 * Creates a new MC 1.2.5 task (Tekkit)
+	 * 
 	 * @param id the task ID from the scheduler
 	 */
 	public MC125Task(int id){

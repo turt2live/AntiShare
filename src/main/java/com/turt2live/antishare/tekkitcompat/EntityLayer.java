@@ -6,6 +6,7 @@ public class EntityLayer {
 
 	/**
 	 * Determines if an entity is of a specific type
+	 * 
 	 * @param entity the entity
 	 * @param name the entity type (name of class)
 	 * @return true if there is a match, false otherwise

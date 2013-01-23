@@ -37,6 +37,7 @@ public class LevelSaver {
 
 		/**
 		 * Creates a new level
+		 * 
 		 * @param level the level
 		 * @param percent percent, as a decimal, to next level
 		 */
@@ -47,6 +48,7 @@ public class LevelSaver {
 
 		/**
 		 * Assigns this level to a player
+		 * 
 		 * @param player the player to apply
 		 */
 		public void setTo(Player player){
@@ -73,6 +75,7 @@ public class LevelSaver {
 
 	/**
 	 * Gets the level for a player
+	 * 
 	 * @param player the player
 	 * @param gamemode the gamemode to get the level for
 	 * @return a level. If not found this will return a level of 0 with 0% to the next level.
@@ -89,6 +92,7 @@ public class LevelSaver {
 
 	/**
 	 * Saves a level for a player
+	 * 
 	 * @param player the player
 	 * @param gamemode the gamemode to save as
 	 * @param level the level to save

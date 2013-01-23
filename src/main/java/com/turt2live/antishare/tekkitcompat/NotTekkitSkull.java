@@ -12,6 +12,7 @@ public class NotTekkitSkull {
 
 	/**
 	 * Creates a new Not-Tekkit (CraftBukkit) Skull wrapper
+	 * 
 	 * @param block the block to wrap
 	 */
 	public NotTekkitSkull(Block block){
@@ -22,6 +23,7 @@ public class NotTekkitSkull {
 
 	/**
 	 * Gets the owner of the skull
+	 * 
 	 * @return the owner, or null if not found/error occurred (not a skull, for example)
 	 */
 	public String getOwner(){
