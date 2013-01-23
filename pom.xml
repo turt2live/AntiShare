@@ -5,6 +5,14 @@
   <artifactId>AntiShare</artifactId>
   <version>5.4.0-SNAPSHOT</version>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <junit.version>4.11</junit.version>
+    <powermock.version>1.4.11</powermock.version>
+    <easymock.version>3.1</easymock.version>
+    <annotations.version>9.0.4</annotations.version>
+  </properties>
+
   <!-- DEPENDENCIES -->
 
   <dependencies>
@@ -100,6 +108,15 @@
       </exclusions>
     </dependency>
 
+    <!-- Configuration Library -->
+    <dependency>
+      <groupId>com.feildmaster.lib</groupId>
+      <artifactId>EnhancedConfiguration</artifactId>
+      <version>1.1.3</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
     <!-- JUnit -->
     <dependency>
       <groupId>junit</groupId>
@@ -108,13 +125,39 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Configuration Library -->
+    <!-- Power Mock (JUnit) -->
     <dependency>
-      <groupId>com.feildmaster.lib</groupId>
-      <artifactId>EnhancedConfiguration</artifactId>
-      <version>1.1.3</version>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${powermock.version}</version>
       <type>jar</type>
-      <scope>compile</scope>
+      <scope>test</scope>
+    </dependency>
+
+    <!--Easy Mock (API) -->
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-easymock</artifactId>
+      <version>${powermock.version}</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Mockito -->
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+      <version>${powermock.version}</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Easy Mock -->
+    <dependency>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>${easymock.version}</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
@@ -264,9 +307,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.9</version>
-        <!--<configuration>
-          <stylesheetfile>${project.basedir}/style/stylesheet.css</stylesheetfile>
-        </configuration>-->
+        <!--<configuration> <stylesheetfile>${project.basedir}/style/stylesheet.css</stylesheetfile> 
+          </configuration> -->
         <executions>
           <execution>
             <id>non-aggregate</id>
