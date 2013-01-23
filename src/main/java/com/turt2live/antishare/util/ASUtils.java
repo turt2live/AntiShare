@@ -54,7 +54,7 @@ public class ASUtils {
 	/**
 	 * Array of true block faces (none of the SOUTH_WEST-like ones)
 	 */
-	public static final List<BlockFace> TRUE_BLOCK_FACES = Collections.unmodifiableList(Arrays.asList(new BlockFace[]{BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP})); 
+	public static final List<BlockFace> TRUE_BLOCK_FACES = Collections.unmodifiableList(Arrays.asList(new BlockFace[] {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP}));
 	private static final List<ASEntity> ENTITY_NAMES = new ArrayList<ASEntity>();
 	private static MobPattern SNOW_GOLEM_PATTERN;
 	private static MobPattern IRON_GOLEM_PATTERN;
@@ -592,7 +592,8 @@ public class ASUtils {
 	}
 
 	/**
-	 * Gets the mob pattern for the supplied entity, if found	
+	 * Gets the mob pattern for the supplied entity, if found
+	 * 
 	 * @param pattern the pattern to look for
 	 * @return the pattern. This will be null if the pattern is not found or unsupported
 	 */

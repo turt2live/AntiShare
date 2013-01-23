@@ -24,6 +24,13 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+			<groupId>com.turt2live.materials</groupId>
+			<artifactId>MaterialAPI</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
 			<version>1.19.5</version>
@@ -102,6 +109,10 @@
 			<id>onarandombox</id>
 			<url>http://repo.onarandombox.com/content/groups/public</url>
 		</repository>
+		<repository>
+			<id>turt2live-repo</id>
+			<url>http://repo.turt2live.com</url>
+		</repository>
 	</repositories>
 	<build>
 		<defaultGoal>clean package</defaultGoal>
@@ -155,12 +166,17 @@
 							<artifactSet>
 								<includes>
 									<include>com.feildmaster.lib:EnhancedConfiguration</include>
+									<include>com.turt2live.materials:MaterialAPI</include>
 								</includes>
 							</artifactSet>
 							<relocations>
 								<relocation>
 									<pattern>com.feildmaster.lib.configuration</pattern>
 									<shadedPattern>com.feildmaster.lib.configuration.${project.name}</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>com.turt2live.materials</pattern>
+									<shadedPattern>com.turt2live.materials.${project.name}</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>
