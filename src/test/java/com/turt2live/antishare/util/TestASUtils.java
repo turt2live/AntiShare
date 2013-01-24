@@ -145,19 +145,19 @@ public class TestASUtils {
 	@Test
 	public void testGetGameMode(){
 		// Creative
-		assertEquals(ASUtils.getGameMode("creative"), GameMode.CREATIVE);
-		assertEquals(ASUtils.getGameMode("c"), GameMode.CREATIVE);
-		assertEquals(ASUtils.getGameMode("1"), GameMode.CREATIVE);
+		assertEquals(GameMode.CREATIVE, ASUtils.getGameMode("creative"));
+		assertEquals(GameMode.CREATIVE, ASUtils.getGameMode("c"));
+		assertEquals(GameMode.CREATIVE, ASUtils.getGameMode("1"));
 
 		// Survival
-		assertEquals(ASUtils.getGameMode("survival"), GameMode.SURVIVAL);
-		assertEquals(ASUtils.getGameMode("s"), GameMode.SURVIVAL);
-		assertEquals(ASUtils.getGameMode("0"), GameMode.SURVIVAL);
+		assertEquals(GameMode.SURVIVAL, ASUtils.getGameMode("survival"));
+		assertEquals(GameMode.SURVIVAL, ASUtils.getGameMode("s"));
+		assertEquals(GameMode.SURVIVAL, ASUtils.getGameMode("0"));
 
 		// Adventure
-		assertEquals(ASUtils.getGameMode("adventure"), GameMode.ADVENTURE);
-		assertEquals(ASUtils.getGameMode("a"), GameMode.ADVENTURE);
-		assertEquals(ASUtils.getGameMode("2"), GameMode.ADVENTURE);
+		assertEquals(GameMode.ADVENTURE, ASUtils.getGameMode("adventure"));
+		assertEquals(GameMode.ADVENTURE, ASUtils.getGameMode("a"));
+		assertEquals(GameMode.ADVENTURE, ASUtils.getGameMode("2"));
 
 		// Invalid
 		assertNull(ASUtils.getGameMode("NotGameMode"));
@@ -166,9 +166,9 @@ public class TestASUtils {
 		assertNull(ASUtils.getGameMode(null));
 
 		// Case insensitivity
-		assertEquals(ASUtils.getGameMode("CreaTIve"), GameMode.CREATIVE);
-		assertEquals(ASUtils.getGameMode("SurviVAL"), GameMode.SURVIVAL);
-		assertEquals(ASUtils.getGameMode("ADVenTUre"), GameMode.ADVENTURE);
+		assertEquals(GameMode.CREATIVE, ASUtils.getGameMode("CreaTIve"));
+		assertEquals(GameMode.SURVIVAL, ASUtils.getGameMode("SurviVAL"));
+		assertEquals(GameMode.ADVENTURE, ASUtils.getGameMode("ADVenTUre"));
 	}
 
 	@Test
@@ -178,34 +178,34 @@ public class TestASUtils {
 
 	@Test
 	public void testMaterialToString(){
-		assertEquals(ASUtils.materialToString(Material.STONE, false), "1:*");
-		assertEquals(ASUtils.materialToString(Material.STONE, true), "1");
+		assertEquals("1:*", ASUtils.materialToString(Material.STONE, false));
+		assertEquals("1", ASUtils.materialToString(Material.STONE, true));
 		assertNull(ASUtils.materialToString(null, false));
 		assertNull(ASUtils.materialToString(null, true));
 	}
 
 	@Test
 	public void testGetWool(){
-		assertEquals(ASUtils.getWool("orange wool"), "35:1");
-		assertEquals(ASUtils.getWool("white wool"), "35:0");
-		assertEquals(ASUtils.getWool("magenta wool"), "35:2");
-		assertEquals(ASUtils.getWool("light_blue wool"), "35:3");
-		assertEquals(ASUtils.getWool("light blue wool"), "35:3");
-		assertEquals(ASUtils.getWool("yellow wool"), "35:4");
-		assertEquals(ASUtils.getWool("lime wool"), "35:5");
-		assertEquals(ASUtils.getWool("pink wool"), "35:6");
-		assertEquals(ASUtils.getWool("gray wool"), "35:7");
-		assertEquals(ASUtils.getWool("light_gray wool"), "35:8");
-		assertEquals(ASUtils.getWool("light gray wool"), "35:8");
-		assertEquals(ASUtils.getWool("cyan wool"), "35:9");
-		assertEquals(ASUtils.getWool("purple wool"), "35:10");
-		assertEquals(ASUtils.getWool("blue wool"), "35:11");
-		assertEquals(ASUtils.getWool("brown wool"), "35:12");
-		assertEquals(ASUtils.getWool("green wool"), "35:13");
-		assertEquals(ASUtils.getWool("red wool"), "35:14");
-		assertEquals(ASUtils.getWool("black wool"), "35:15");
-		assertEquals(ASUtils.getWool("notacolor wool"), "35:notacolor");
-		assertEquals(ASUtils.getWool("wool"), "35:0");
+		assertEquals("35:1", ASUtils.getWool("orange wool"));
+		assertEquals("35:0", ASUtils.getWool("white wool"));
+		assertEquals("35:2", ASUtils.getWool("magenta wool"));
+		assertEquals("35:3", ASUtils.getWool("light_blue wool"));
+		assertEquals("35:4", ASUtils.getWool("light blue wool"));
+		assertEquals("35:5", ASUtils.getWool("yellow wool"));
+		assertEquals("35:5", ASUtils.getWool("lime wool"));
+		assertEquals("35:6", ASUtils.getWool("pink wool"));
+		assertEquals("35:7", ASUtils.getWool("gray wool"));
+		assertEquals("35:8", ASUtils.getWool("light_gray wool"));
+		assertEquals("35:8", ASUtils.getWool("light gray wool"));
+		assertEquals("35:9", ASUtils.getWool("cyan wool"));
+		assertEquals("35:10", ASUtils.getWool("purple wool"));
+		assertEquals("35:11", ASUtils.getWool("blue wool"));
+		assertEquals("35:12", ASUtils.getWool("brown wool"));
+		assertEquals("35:13", ASUtils.getWool("green wool"));
+		assertEquals("35:14", ASUtils.getWool("red wool"));
+		assertEquals("35:15", ASUtils.getWool("black wool"));
+		assertEquals("35:notacolor", ASUtils.getWool("notacolor wool"));
+		assertEquals("35:0", ASUtils.getWool("wool"));
 		assertNull(ASUtils.getWool("notAColor"));
 		assertNull(ASUtils.getWool(null));
 	}
@@ -220,10 +220,10 @@ public class TestASUtils {
 	public void testGetEntityNameFromString(){
 		for(String test : names.keySet()){
 			String proper = names.get(test);
-			assertEquals(ASUtils.getEntityName(test), proper);
-			assertEquals(ASUtils.getEntityName(test.toUpperCase()), proper);
-			assertEquals(ASUtils.getEntityName(proper), proper);
-			assertEquals(ASUtils.getEntityName(proper.toUpperCase()), proper);
+			assertEquals(proper, ASUtils.getEntityName(test));
+			assertEquals(proper, ASUtils.getEntityName(test.toUpperCase()));
+			assertEquals(proper, ASUtils.getEntityName(proper));
+			assertEquals(proper, ASUtils.getEntityName(proper.toUpperCase()));
 		}
 		assertNull(ASUtils.getEntityName("NotAMob"));
 		assertNull(ASUtils.getEntityName((String) null));
@@ -241,30 +241,30 @@ public class TestASUtils {
 
 	@Test
 	public void testCommas(){
-		assertEquals(ASUtils.commas(commas), "c0, c1, c2");
-		assertEquals(ASUtils.commas(new ArrayList<String>()), "no one");
-		assertEquals(ASUtils.commas(null), "no one");
+		assertEquals("c0, c1, c2", ASUtils.commas(commas));
+		assertEquals("no one", ASUtils.commas(new ArrayList<String>()));
+		assertEquals("no one", ASUtils.commas(null));
 	}
 
 	@Test
 	public void testGamemodeAbbreviation(){
-		assertEquals(ASUtils.gamemodeAbbreviation(GameMode.CREATIVE, false), "GM = C");
-		assertEquals(ASUtils.gamemodeAbbreviation(GameMode.SURVIVAL, false), "GM = S");
-		assertEquals(ASUtils.gamemodeAbbreviation(GameMode.ADVENTURE, false), "GM = A");
-		assertEquals(ASUtils.gamemodeAbbreviation(GameMode.CREATIVE, true), "C");
-		assertEquals(ASUtils.gamemodeAbbreviation(GameMode.SURVIVAL, true), "S");
-		assertEquals(ASUtils.gamemodeAbbreviation(GameMode.ADVENTURE, true), "A");
+		assertEquals("GM = C", ASUtils.gamemodeAbbreviation(GameMode.CREATIVE, false));
+		assertEquals("GM = S", ASUtils.gamemodeAbbreviation(GameMode.SURVIVAL, false));
+		assertEquals("GM = A", ASUtils.gamemodeAbbreviation(GameMode.ADVENTURE, false));
+		assertEquals("C", ASUtils.gamemodeAbbreviation(GameMode.CREATIVE, true));
+		assertEquals("S", ASUtils.gamemodeAbbreviation(GameMode.SURVIVAL, true));
+		assertEquals("A", ASUtils.gamemodeAbbreviation(GameMode.ADVENTURE, true));
 		assertNull(ASUtils.gamemodeAbbreviation(null, false));
 		assertNull(ASUtils.gamemodeAbbreviation(null, true));
 	}
 
 	@Test
 	public void testFileSafeName(){
-		assertEquals(ASUtils.fileSafeName("000"), "000");
-		assertEquals(ASUtils.fileSafeName("@0@"), "-0-");
-		assertEquals(ASUtils.fileSafeName("AaA"), "AaA");
-		assertEquals(ASUtils.fileSafeName("A!A"), "A-A");
-		assertEquals(ASUtils.fileSafeName("---"), "---");
+		assertEquals("000", ASUtils.fileSafeName("000"));
+		assertEquals("-0-", ASUtils.fileSafeName("@0@"));
+		assertEquals("AaA", ASUtils.fileSafeName("AaA"));
+		assertEquals("A-A", ASUtils.fileSafeName("A!A"));
+		assertEquals("---", ASUtils.fileSafeName("---"));
 	}
 
 	@Test
