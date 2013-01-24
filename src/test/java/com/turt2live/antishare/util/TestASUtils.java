@@ -190,8 +190,8 @@ public class TestASUtils {
 		assertEquals("35:0", ASUtils.getWool("white wool"));
 		assertEquals("35:2", ASUtils.getWool("magenta wool"));
 		assertEquals("35:3", ASUtils.getWool("light_blue wool"));
-		assertEquals("35:4", ASUtils.getWool("light blue wool"));
-		assertEquals("35:5", ASUtils.getWool("yellow wool"));
+		assertEquals("35:3", ASUtils.getWool("light blue wool"));
+		assertEquals("35:4", ASUtils.getWool("yellow wool"));
 		assertEquals("35:5", ASUtils.getWool("lime wool"));
 		assertEquals("35:6", ASUtils.getWool("pink wool"));
 		assertEquals("35:7", ASUtils.getWool("gray wool"));
