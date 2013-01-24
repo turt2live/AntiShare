@@ -41,9 +41,9 @@ import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.tekkitcompat.EntityLayer;
-import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.materials.MaterialAPI;
+import com.turt2live.materials.ServerHas;
 import com.turt2live.materials.TekkitMaterialAPI;
 
 public class BlockListener implements Listener {
@@ -337,6 +337,27 @@ public class BlockListener implements Listener {
 			}
 		}
 	}
+
+	// ################# Block Piston Extend (2)
+
+	// TODO: Review code when BUKKIT-269 is fixed
+	//	@EventHandler (priority = EventPriority.LOW)
+	//	public void onPiston(BlockPistonExtendEvent event){
+	//		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
+	//			return;
+	//		}
+	//      // This logic needs reviewing
+	//		for(Block block : event.getBlocks()){
+	//			if(TekkitMaterialAPI.canPistonBreak(block.getType())){
+	//			if(blocks.getType(block) == GameMode.CREATIVE){
+	//			event.setCancelled(true);
+	//			block.setType(Material.AIR);
+	//			blocks.removeBlock(block);
+	//			return;
+	//			}
+	//			}
+	//		}
+	//	}
 
 	// ################# Block Break
 

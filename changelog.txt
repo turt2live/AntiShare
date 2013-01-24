@@ -6,7 +6,7 @@ None
 
 BUGS:
 - Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
-- Melons (amoung others) can be fetched through the use of pistons
+- Melons (amoung others) can be fetched through the use of pistons (Impossible Fix: BUKKIT-269)
 
 Tests to be made:
 - Every bloody class, including ServerHas (and making sure ASUtils and such return if ServerHas is 'tekkit')
