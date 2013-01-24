@@ -73,7 +73,11 @@ public class ASUtils {
 				&& !message.equalsIgnoreCase("noshow")
 				&& !message.equalsIgnoreCase("no show")){
 			message = ChatColor.translateAlternateColorCodes('&', message);
-			String prefix = ChatColor.translateAlternateColorCodes('&', AntiShare.getInstance().getPrefix());
+			String prefix = "[AntiShare]";
+			try{
+				prefix = AntiShare.getInstance().getPrefix();
+			}catch(NullPointerException e){}
+			prefix = ChatColor.translateAlternateColorCodes('&', prefix);
 			if(!ChatColor.stripColor(message).startsWith(ChatColor.stripColor(prefix))){
 				message = ChatColor.GRAY + prefix + " " + ChatColor.WHITE + message;
 			}
@@ -229,9 +233,12 @@ public class ASUtils {
 	 * Gets an entity name from an entity object
 	 * 
 	 * @param entity the entity
-	 * @return the name
+	 * @return the name, or null if invalid
 	 */
 	public static String getEntityName(Entity entity){
+		if(entity == null){
+			return null;
+		}
 		return getEntityName(entity.getClass().getSimpleName().replace("Craft", ""));
 	}
 

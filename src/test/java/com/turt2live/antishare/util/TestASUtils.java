@@ -4,6 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,15 +19,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.turt2live.antishare.test.CraftWolf;
 import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.generic.MobPattern;
 
+@RunWith (PowerMockRunner.class)
+@PrepareForTest ({Bukkit.class})
 public class TestASUtils {
 
 	private File testDirectory = new File("testingdirectory");
@@ -29,10 +45,13 @@ public class TestASUtils {
 	private CopyOnWriteArrayList<String> selectiveNames = new CopyOnWriteArrayList<String>();
 	private List<String> commas = new ArrayList<String>();
 	private Map<String, String> names = new HashMap<String, String>();
+	private Player player;
+	private Player players[] = new Player[5];
+	private Entity wolf = new CraftWolf();
 
 	@Before
+	// Runs before EACH test
 	public void setUp() throws IOException{
-		// Runs before @Test
 		testDirectory.mkdirs();
 		for(int i = 0; i < 10; i++){
 			File file = new File(testDirectory, "file" + i + ".txt");
@@ -99,17 +118,38 @@ public class TestASUtils {
 		names.put("witherboss", "wither boss");
 		names.put("wither boss", "wither boss");
 		names.put("bat", "bat");
+
+		// Players
+		player = mock(Player.class);
+		for(int i = 0; i < players.length; i++){
+			Player p = mock(Player.class);
+			GameMode gm = GameMode.CREATIVE;
+			if(i > 2 && i < 4){
+				gm = GameMode.SURVIVAL;
+			}else if(i >= 4){
+				gm = GameMode.ADVENTURE;
+			}
+			when(p.getGameMode()).thenReturn(gm);
+			players[i] = p;
+		}
+
+		// Class setup
+		PowerMockito.mockStatic(Bukkit.class);
+		when(Bukkit.getOnlinePlayers()).thenReturn(players);
 	}
 
 	@After
+	// Runs after EACH test
 	public void tearDown(){
-		// Runs after @Test
 		ASUtils.wipeFolder(testDirectory, null);
 	}
 
 	@Test
 	public void testSendToPlayer(){
-		// TODO
+		ASUtils.sendToPlayer(player, "no message", false);
+		verify(player, never()).sendMessage(anyString());
+		ASUtils.sendToPlayer(player, "test message", false);
+		verify(player, times(1)).sendMessage(anyString());
 	}
 
 	@Test
@@ -211,9 +251,9 @@ public class TestASUtils {
 	}
 
 	@Test
-	// ASUtils.getEntityName(Entity)
 	public void testGetEntityNameFromEntity(){
-		// TODO
+		assertEquals("wolf", ASUtils.getEntityName(wolf));
+		assertNull(ASUtils.getEntityName((Entity) null));
 	}
 
 	@Test
@@ -236,7 +276,12 @@ public class TestASUtils {
 
 	@Test
 	public void testFindGameModePlayers(){
-		// TODO
+		List<String> creative = ASUtils.findGameModePlayers(GameMode.CREATIVE); // 3
+		List<String> survival = ASUtils.findGameModePlayers(GameMode.SURVIVAL); // 1
+		List<String> adventure = ASUtils.findGameModePlayers(GameMode.ADVENTURE); // 1
+		assertTrue(creative.size() == 3);
+		assertTrue(survival.size() == 1);
+		assertTrue(adventure.size() == 1);
 	}
 
 	@Test
