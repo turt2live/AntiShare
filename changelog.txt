@@ -5,7 +5,8 @@ None
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 BUGS:
-- (Reported by self) Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
+- Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
+- Melons (amoung others) can be fetched through the use of pistons
 
 Tests to be made:
-- Every bloddy class, including ServerHas (and making sure ASUtils and such return if ServerHas is 'tekkit')
+- Every bloody class, including ServerHas (and making sure ASUtils and such return if ServerHas is 'tekkit')
