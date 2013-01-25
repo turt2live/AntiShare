@@ -21,14 +21,10 @@ public class MobPattern {
 	/**
 	 * Creates a new mob pattern containing 2 potential heads
 	 * 
-	 * @param type
-	 *            shape of mob
-	 * @param body
-	 *            body material (eg: IRON_BLOCK)
-	 * @param head
-	 *            first possible head type (eg: PUMPKIN)
-	 * @param head2
-	 *            second possible head type (eg: JACK_O_LANTERN)
+	 * @param type shape of mob
+	 * @param body body material (eg: IRON_BLOCK)
+	 * @param head first possible head type (eg: PUMPKIN)
+	 * @param head2 second possible head type (eg: JACK_O_LANTERN)
 	 */
 	public MobPattern(MobPatternType type, Material body, Material head, Material head2) {
 		this.type = type;
@@ -40,12 +36,9 @@ public class MobPattern {
 	/**
 	 * Creates a mob pattern containing a single head type
 	 * 
-	 * @param type
-	 *            the mob shape
-	 * @param body
-	 *            the body material (eg: SOUL_SAND)
-	 * @param head
-	 *            the single head type (eg: SKULL)
+	 * @param type the mob shape
+	 * @param body the body material (eg: SOUL_SAND)
+	 * @param head the single head type (eg: SKULL)
 	 */
 	public MobPattern(MobPatternType type, Material body, Material head) {
 		this(type, body, head, head);
@@ -54,8 +47,7 @@ public class MobPattern {
 	/**
 	 * Determines if the block passed is involved with this mob pattern
 	 * 
-	 * @param block
-	 *            the block to use as a source
+	 * @param block the block to use as a source
 	 * @return true if the block forms a complete mob, false otherwise
 	 */
 	public boolean exists(Block block) {
@@ -79,7 +71,7 @@ public class MobPattern {
 	}
 
 	/**
-	 * Schedules block updates to correct false information
+	 * Schedules block updates to correct false information 
 	 */
 	public void scheduleUpdate(final Block block) {
 		AntiShare plugin = AntiShare.getInstance();
