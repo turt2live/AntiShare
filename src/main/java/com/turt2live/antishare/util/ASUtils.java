@@ -431,6 +431,9 @@ public class ASUtils {
 	 * @return the second block, or null if not found
 	 */
 	public static Block multipleBlocks(Block block){
+		if(block == null){
+			return null;
+		}
 		switch (block.getType()){
 		case WOODEN_DOOR:
 		case IRON_DOOR_BLOCK:
