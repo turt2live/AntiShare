@@ -1,11 +1,10 @@
 Since 5.3.0:
-None
+- Withers can no longer be created
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 BUGS:
-- Withers are still affected by BUKKIT-3406 (FAULT: BUKKIT)
 - Melons (amoung others) can be fetched through the use of pistons (Impossible Fix: BUKKIT-269)
 
 Tests to be made:

@@ -83,13 +83,13 @@ import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.tekkitcompat.HangingListener;
 import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
 import com.turt2live.antishare.tekkitcompat.PaintingListener;
-import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.generic.LevelSaver;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
 import com.turt2live.antishare.util.generic.MobPattern;
 import com.turt2live.materials.MaterialAPI;
+import com.turt2live.materials.ServerHas;
 
 /**
  * The core listener - Listens to all events needed by AntiShare and handles them
@@ -98,19 +98,19 @@ import com.turt2live.materials.MaterialAPI;
  */
 public class BaseListener implements Listener {
 
-	private AntiShare plugin = AntiShare.getInstance();
-	private HashMap<String, PerWorldConfig> config = new HashMap<String, PerWorldConfig>();
+	private final AntiShare plugin = AntiShare.getInstance();
+	private final HashMap<String, PerWorldConfig> config = new HashMap<String, PerWorldConfig>();
 	private boolean hasMobCatcher = false;
-	private HashMap<String, Long> GMCD = new HashMap<String, Long>();
+	private final HashMap<String, Long> GMCD = new HashMap<String, Long>();
 
 	/**
 	 * Creates a new Listener
 	 */
-	public BaseListener(){
+	public BaseListener() {
 		reload();
-		if(ServerHas.hangingEvents()){
+		if (ServerHas.hangingEvents()) {
 			plugin.getServer().getPluginManager().registerEvents(new HangingListener(), plugin);
-		}else{
+		} else {
 			plugin.getServer().getPluginManager().registerEvents(new PaintingListener(), plugin);
 		}
 	}
@@ -118,26 +118,27 @@ public class BaseListener implements Listener {
 	/**
 	 * Reloads lists
 	 */
-	public void reload(){
+	public void reload() {
 		config.clear();
-		for(World world : Bukkit.getWorlds()){
+		for (World world : Bukkit.getWorlds()) {
 			config.put(world.getName(), new PerWorldConfig(world.getName()));
 		}
 		hasMobCatcher = plugin.getServer().getPluginManager().getPlugin("MobCatcher") != null;
 	}
 
-	public boolean hasMobCatcher(){
+	public boolean hasMobCatcher() {
 		return hasMobCatcher;
 	}
 
 	/**
 	 * Gets the configuration for the world
 	 * 
-	 * @param world the world
+	 * @param world
+	 *            the world
 	 * @return the configuration
 	 */
-	public PerWorldConfig getConfig(World world){
-		if(!config.containsKey(world.getName())){
+	public PerWorldConfig getConfig(World world) {
+		if (!config.containsKey(world.getName())) {
 			config.put(world.getName(), new PerWorldConfig(world.getName()));
 		}
 		return config.get(world.getName());
@@ -146,11 +147,12 @@ public class BaseListener implements Listener {
 	/**
 	 * Gets the configuration for the world
 	 * 
-	 * @param world the world
+	 * @param world
+	 *            the world
 	 * @return the configuration
 	 */
-	public PerWorldConfig getConfig(String world){
-		if(!config.containsKey(world)){
+	public PerWorldConfig getConfig(String world) {
+		if (!config.containsKey(world)) {
 			config.put(world, new PerWorldConfig(world));
 		}
 		return config.get(world);
@@ -159,7 +161,7 @@ public class BaseListener implements Listener {
 	// ################# World Load
 
 	@EventHandler
-	public void onWorldLoad(WorldLoadEvent event){
+	public void onWorldLoad(WorldLoadEvent event) {
 		World world = event.getWorld();
 		config.put(world.getName(), new PerWorldConfig(world.getName()));
 		((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).loadWorld(world.getName());
@@ -168,8 +170,8 @@ public class BaseListener implements Listener {
 	// ################# World Unload
 
 	@EventHandler
-	public void onWorldUnload(WorldUnloadEvent event){
-		if(event.isCancelled()){
+	public void onWorldUnload(WorldUnloadEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		World world = event.getWorld();
@@ -178,9 +180,9 @@ public class BaseListener implements Listener {
 
 	// ################# Block Place Event - Entity
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onEntityMake(BlockPlaceEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onEntityMake(BlockPlaceEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		AlertType type = AlertType.LEGAL;
@@ -196,37 +198,42 @@ public class BaseListener implements Listener {
 		MobPattern snow = ASUtils.getMobPattern(EntityPattern.SNOW_GOLEM);
 		MobPattern iron = ASUtils.getMobPattern(EntityPattern.IRON_GOLEM);
 		MobPattern wither = ASUtils.getMobPattern(EntityPattern.WITHER);
-		if(snow != null && snow.exists(block)){
+		MobPattern pattern = null;
+		// TODO: Store name information in pattern
+		if (snow != null && snow.exists(block)) {
 			mob = 1;
-		}else if(iron != null && iron.exists(block)){
+			pattern = snow;
+		} else if (iron != null && iron.exists(block)) {
 			mob = 2;
-		}else if(wither != null && wither.exists(block)){
+			pattern = iron;
+		} else if (wither != null && wither.exists(block)) {
 			mob = 3;
+			pattern = wither;
 		}
 		String mobName = "Unknown";
-		switch (mob){
+		switch (mob) {
 		case 1:
 			mobName = "Snow Golem";
-			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-snow-golems")){
+			if (!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-snow-golems")) {
 				type = AlertType.LEGAL;
 			}
 			break;
 		case 2:
 			mobName = "Iron Golem";
-			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-iron-golems")){
+			if (!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-iron-golems")) {
 				type = AlertType.LEGAL;
 			}
 			break;
 		case 3:
 			mobName = "Wither";
-			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-wither")){
+			if (!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-wither")) {
 				type = AlertType.LEGAL;
 			}
 			break;
 		default:
 			return;
 		}
-		if(plugin.isBlocked(player, PermissionNodes.ALLOW_MOB_CREATION, PermissionNodes.DENY_MOB_CREATION, player.getWorld(), (Material) null)){
+		if (plugin.isBlocked(player, PermissionNodes.ALLOW_MOB_CREATION, PermissionNodes.DENY_MOB_CREATION, player.getWorld(), (Material) null)) {
 			type = AlertType.ILLEGAL;
 		}
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to create a " : " spawned a ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + mobName;
@@ -235,16 +242,17 @@ public class BaseListener implements Listener {
 		factory.insert(block, player, block.getWorld(), TenderType.MOB_MAKE);
 		playerMessage = factory.toString();
 		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CREATE_MOB);
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
+			pattern.scheduleUpdate(block);
 		}
 	}
 
 	// ################# Block Break
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onBlockBreak(BlockBreakEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onBlockBreak(BlockBreakEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -252,20 +260,20 @@ public class BaseListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())) {
 			type = AlertType.LEGAL;
 		}
-		if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_BREAK)){
+		if (!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_BREAK)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Check hooks
-		if(((HookManager) plugin.getSystemsManager().getManager(Manager.HOOK)).checkForSignProtection(block) || ((HookManager) plugin.getSystemsManager().getManager(Manager.HOOK)).checkForRegion(player, block)){
+		if (((HookManager) plugin.getSystemsManager().getManager(Manager.HOOK)).checkForSignProtection(block) || ((HookManager) plugin.getSystemsManager().getManager(Manager.HOOK)).checkForRegion(player, block)) {
 			return; // Don't handle any further, let the other plugin handle it
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
@@ -280,9 +288,9 @@ public class BaseListener implements Listener {
 
 	// ################# Block Place
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onBlockPlace(BlockPlaceEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onBlockPlace(BlockPlaceEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -290,20 +298,20 @@ public class BaseListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 
 		// Sanity check
-		if(block.getType() == Material.AIR){
+		if (block.getType() == Material.AIR) {
 			return;
 		}
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getWorld(), block.getType())){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getWorld(), block.getType())) {
 			type = AlertType.LEGAL;
 		}
-		if(!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_PLACE)){
+		if (!getConfig(block.getWorld()).isBlocked(block, ListType.BLOCK_PLACE)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
@@ -318,9 +326,9 @@ public class BaseListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onInteract(PlayerInteractEvent event){
-		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onInteract(PlayerInteractEvent event) {
+		if (event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -331,24 +339,24 @@ public class BaseListener implements Listener {
 		String playerMessage = "no message";
 		AlertTrigger trigger = AlertTrigger.RIGHT_CLICK;
 		BlockManager blocks = null;
-		if(plugin.getSystemsManager().isEnabled(Manager.BLOCK)){
+		if (plugin.getSystemsManager().isEnabled(Manager.BLOCK)) {
 			blocks = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK);
 		}
 		boolean use = false;
 
 		// For use from here on in
-		if(block == null){
+		if (block == null) {
 			block = player.getWorld().getBlockAt(player.getLocation());
 		}
 		Material used = block.getType();
 
 		// Right click list
-		if(action == Action.RIGHT_CLICK_BLOCK){
+		if (action == Action.RIGHT_CLICK_BLOCK) {
 			// Check if they should be blocked
-			if(getConfig(block.getWorld()).isBlocked(block, ListType.RIGHT_CLICK)){
+			if (getConfig(block.getWorld()).isBlocked(block, ListType.RIGHT_CLICK)) {
 				type = AlertType.ILLEGAL;
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, block.getWorld(), block.getType())){
+			if (!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, block.getWorld(), block.getType())) {
 				type = AlertType.LEGAL;
 			}
 			use = false;
@@ -356,24 +364,24 @@ public class BaseListener implements Listener {
 		}
 
 		// If this event is triggered as legal from the right click, check use lists
-		if(type == AlertType.LEGAL){
-			if(getConfig(block.getWorld()).isBlocked(block, ListType.USE)){
+		if (type == AlertType.LEGAL) {
+			if (getConfig(block.getWorld()).isBlocked(block, ListType.USE)) {
 				type = AlertType.ILLEGAL;
 			}
 			// Check if they should be blocked
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getWorld(), block.getType())){
+			if (!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getWorld(), block.getType())) {
 				type = AlertType.LEGAL;
 			}
 			use = false;
 		}
 
 		// If the event is triggered as legal from the use lists, check the player's item in hand
-		if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
+		if (type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null) {
 			// Check if they should be blocked
-			if(getConfig(block.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)){
+			if (getConfig(block.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.USE)) {
 				type = AlertType.ILLEGAL;
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), player.getItemInHand().getType())){
+			if (!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), player.getItemInHand().getType())) {
 				type = AlertType.LEGAL;
 			}
 			use = true;
@@ -381,14 +389,11 @@ public class BaseListener implements Listener {
 		}
 
 		// Check for eye of ender / ender pearl
-		if(action == Action.RIGHT_CLICK_BLOCK
-				&& player.getItemInHand() != null
-				&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
-				|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
-			if(getConfig(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
+		if (action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null && (player.getItemInHand().getType() == Material.EYE_OF_ENDER || player.getItemInHand().getType() == Material.ENDER_PEARL)) {
+			if (getConfig(player.getWorld()).isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)) {
 				type = AlertType.ILLEGAL;
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
+			if (!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())) {
 				type = AlertType.ILLEGAL;
 			}
 			use = true;
@@ -396,41 +401,39 @@ public class BaseListener implements Listener {
 		}
 
 		// Check for potion
-		if(action == Action.RIGHT_CLICK_BLOCK
-				&& player.getItemInHand() != null
-				&& player.getItemInHand().getType() == Material.POTION){
+		if (action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null && player.getItemInHand().getType() == Material.POTION) {
 			boolean potion = false;
-			if(player.getItemInHand().getDurability() > 32000){
-				if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
+			if (player.getItemInHand().getDurability() > 32000) {
+				if (!getConfig(player.getWorld()).isThrownPotionAllowed()) {
 					type = AlertType.ILLEGAL;
 					potion = true;
 				}
-			}else{
-				if(!getConfig(player.getWorld()).isPotionAllowed()){
+			} else {
+				if (!getConfig(player.getWorld()).isPotionAllowed()) {
 					type = AlertType.ILLEGAL;
 					potion = true;
 				}
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
+			if (!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())) {
 				type = AlertType.LEGAL;
 			}
-			if(potion){
+			if (potion) {
 				use = true;
 				used = player.getItemInHand().getType();
 			}
 		}
 
 		// Game Mode check
-		if(blocks != null){
-			if(plugin.getConfig().getBoolean("settings.similar-gamemode-allow")){
+		if (blocks != null) {
+			if (plugin.getConfig().getBoolean("settings.similar-gamemode-allow")) {
 				GameMode blockGM = blocks.getType(block);
-				if(blockGM != null){
-					if(used == Material.AIR){
+				if (blockGM != null) {
+					if (used == Material.AIR) {
 						used = block.getType();
 					}
-					if(blockGM != player.getGameMode()){
+					if (blockGM != player.getGameMode()) {
 						type = AlertType.ILLEGAL;
-					}else{
+					} else {
 						type = AlertType.LEGAL;
 					}
 				}
@@ -438,14 +441,14 @@ public class BaseListener implements Listener {
 		}
 
 		// Set messages
-		if(use){
+		if (use) {
 			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
 			playerMessage = plugin.getMessage("blocked-action.use-item");
 			trigger = AlertTrigger.USE_ITEM;
 			MessageFactory factory = new MessageFactory(playerMessage);
 			factory.insert(block, player, block.getWorld(), TenderType.USE);
 			playerMessage = factory.toString();
-		}else{
+		} else {
 			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
 			playerMessage = plugin.getMessage("blocked-action.right-click");
 			MessageFactory factory = new MessageFactory(playerMessage);
@@ -454,12 +457,12 @@ public class BaseListener implements Listener {
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
-			if(hasMobCatcher && player.getItemInHand() != null){
+			if (hasMobCatcher && player.getItemInHand() != null) {
 				ItemStack item = player.getItemInHand();
-				if(item.getType() == Material.EGG || item.getType() == Material.MONSTER_EGG){
+				if (item.getType() == Material.EGG || item.getType() == Material.MONSTER_EGG) {
 					item.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
 				}
 			}
@@ -468,9 +471,9 @@ public class BaseListener implements Listener {
 
 	// ################# Destroy Vehicle
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onVechicleDestroy(VehicleDestroyEvent event){
-		if(event.isCancelled() || !(event.getAttacker() instanceof Player)){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onVechicleDestroy(VehicleDestroyEvent event) {
+		if (event.isCancelled() || !(event.getAttacker() instanceof Player)) {
 			return;
 		}
 		Player player = (Player) event.getAttacker();
@@ -478,30 +481,30 @@ public class BaseListener implements Listener {
 
 		// Convert entity -> item ID
 		Material item = Material.AIR;
-		if(event.getVehicle() instanceof StorageMinecart){
+		if (event.getVehicle() instanceof StorageMinecart) {
 			item = Material.STORAGE_MINECART;
-		}else if(event.getVehicle() instanceof PoweredMinecart){
+		} else if (event.getVehicle() instanceof PoweredMinecart) {
 			item = Material.POWERED_MINECART;
-		}else if(event.getVehicle() instanceof Boat){
+		} else if (event.getVehicle() instanceof Boat) {
 			item = Material.BOAT;
-		}else if(event.getVehicle() instanceof Minecart){
+		} else if (event.getVehicle() instanceof Minecart) {
 			item = Material.MINECART;
 		}
 
-		if(item == Material.AIR){
+		if (item == Material.AIR) {
 			return;
 		}
 
 		// Check permissions
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
+		if (!getConfig(player.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)) {
 			type = AlertType.LEGAL;
 		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, player.getWorld(), item)){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, player.getWorld(), item)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
@@ -514,9 +517,9 @@ public class BaseListener implements Listener {
 		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_BREAK);
 
 		// Remove drops if required
-		if(type == AlertType.LEGAL && !event.isCancelled()){
-			if(!plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING, player.getWorld()) && player.getGameMode() == GameMode.CREATIVE){
-				if(plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.vehicles")){
+		if (type == AlertType.LEGAL && !event.isCancelled()) {
+			if (!plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING, player.getWorld()) && player.getGameMode() == GameMode.CREATIVE) {
+				if (plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.vehicles")) {
 					event.setCancelled(true);
 					event.getVehicle().remove();
 				}
@@ -527,15 +530,12 @@ public class BaseListener implements Listener {
 	// ################# Player Interact Entity
 
 	@EventHandler
-	public void onInteractPlayer(PlayerInteractEntityEvent event){
+	public void onInteractPlayer(PlayerInteractEntityEvent event) {
 		Player player = event.getPlayer();
-		if(event.isCancelled()
-				|| player.getItemInHand() == null
-				|| player.getItemInHand().getType() != AntiShare.ANTISHARE_TOOL
-				|| !plugin.getPermissions().has(player, PermissionNodes.TOOL_USE, player.getWorld())){
+		if (event.isCancelled() || player.getItemInHand() == null || player.getItemInHand().getType() != AntiShare.ANTISHARE_TOOL || !plugin.getPermissions().has(player, PermissionNodes.TOOL_USE, player.getWorld())) {
 			return;
 		}
-		if(event.getRightClicked() instanceof Player){
+		if (event.getRightClicked() instanceof Player) {
 			Player target = (Player) event.getRightClicked();
 			ASUtils.sendToPlayer(player, ChatColor.YELLOW + target.getName() + ChatColor.WHITE + " is in " + ChatColor.YELLOW + target.getGameMode().name(), true);
 			event.setCancelled(true);
@@ -544,9 +544,9 @@ public class BaseListener implements Listener {
 
 	// ################# Player Interact Entity (2)
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onInteractEntity(PlayerInteractEntityEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onInteractEntity(PlayerInteractEntityEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -554,37 +554,37 @@ public class BaseListener implements Listener {
 
 		// Convert entity -> item ID
 		Material item = Material.AIR;
-		if(event.getRightClicked() instanceof StorageMinecart){
+		if (event.getRightClicked() instanceof StorageMinecart) {
 			item = Material.STORAGE_MINECART;
-		}else if(event.getRightClicked() instanceof PoweredMinecart){
+		} else if (event.getRightClicked() instanceof PoweredMinecart) {
 			item = Material.POWERED_MINECART;
-		}else if(event.getRightClicked() instanceof Boat){
+		} else if (event.getRightClicked() instanceof Boat) {
 			item = Material.BOAT;
-		}else if(event.getRightClicked() instanceof Minecart){
+		} else if (event.getRightClicked() instanceof Minecart) {
 			item = Material.MINECART;
-		}else if(event.getRightClicked() instanceof Painting){
+		} else if (event.getRightClicked() instanceof Painting) {
 			item = Material.PAINTING;
-		}else if(event.getRightClicked() instanceof Sheep){
+		} else if (event.getRightClicked() instanceof Sheep) {
 			item = Material.SHEARS;
-		}else{
-			if(ServerHas.mc14xItems()){
-				if(ItemFrameLayer.isItemFrame(event.getRightClicked())){
+		} else {
+			if (ServerHas.mc14xItems()) {
+				if (ItemFrameLayer.isItemFrame(event.getRightClicked())) {
 					item = ItemFrameLayer.getItemFrame();
 				}
 			}
 		}
 
 		// If the entity is not found, check for interacted entities
-		if(item == Material.AIR){
-			if(!getConfig(player.getWorld()).isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
+		if (item == Material.AIR) {
+			if (!getConfig(player.getWorld()).isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)) {
 				type = AlertType.LEGAL;
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, player.getWorld(), ASUtils.getEntityName(event.getRightClicked()))){
+			if (!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, player.getWorld(), ASUtils.getEntityName(event.getRightClicked()))) {
 				type = AlertType.LEGAL;
 			}
 
 			// Handle event
-			if(type == AlertType.ILLEGAL){
+			if (type == AlertType.ILLEGAL) {
 				event.setCancelled(true);
 			}
 
@@ -599,15 +599,15 @@ public class BaseListener implements Listener {
 		}
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)) {
 			type = AlertType.LEGAL;
 		}
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
+		if (!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
@@ -622,19 +622,19 @@ public class BaseListener implements Listener {
 
 	// ################# Cart Death Check
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onCartDeath(VehicleDestroyEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onCartDeath(VehicleDestroyEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Entity attacker = event.getAttacker();
 		Vehicle potentialCart = event.getVehicle();
 
 		// Sanity checks
-		if(attacker == null || !(potentialCart instanceof StorageMinecart)){
+		if (attacker == null || !(potentialCart instanceof StorageMinecart)) {
 			return;
 		}
-		if(!(attacker instanceof Player)){
+		if (!(attacker instanceof Player)) {
 			return;
 		}
 
@@ -643,9 +643,9 @@ public class BaseListener implements Listener {
 		StorageMinecart cart = (StorageMinecart) potentialCart;
 
 		// Check internal inventories
-		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
+		if (player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)) {
 			// Check inventories
-			if(getConfig(player.getWorld()).clearBlockInventoryOnBreak()){
+			if (getConfig(player.getWorld()).clearBlockInventoryOnBreak()) {
 				cart.getInventory().clear();
 			}
 		}
@@ -653,22 +653,22 @@ public class BaseListener implements Listener {
 
 	// ################# Egg Check
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onEggThrow(PlayerEggThrowEvent event){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onEggThrow(PlayerEggThrowEvent event) {
 		Player player = event.getPlayer();
 		AlertType type = AlertType.ILLEGAL;
 		Material item = Material.EGG;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)) {
 			type = AlertType.LEGAL;
 		}
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
+		if (!getConfig(player.getWorld()).isBlocked(item, ListType.USE)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setHatching(false);
 		}
 
@@ -683,9 +683,9 @@ public class BaseListener implements Listener {
 
 	// ################# Experience Bottle Check
 
-	@EventHandler (priority = EventPriority.NORMAL)
-	public void onExpBottle(ExpBottleEvent event){
-		if(event.getExperience() == 0){
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onExpBottle(ExpBottleEvent event) {
+		if (event.getExperience() == 0) {
 			return;
 		}
 
@@ -695,7 +695,7 @@ public class BaseListener implements Listener {
 		Material item = Material.EXP_BOTTLE;
 
 		// Sanity Check
-		if(!(shooter instanceof Player)){
+		if (!(shooter instanceof Player)) {
 			return;
 		}
 
@@ -703,15 +703,15 @@ public class BaseListener implements Listener {
 		Player player = (Player) shooter;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)) {
 			type = AlertType.LEGAL;
 		}
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.USE)){
+		if (!getConfig(player.getWorld()).isBlocked(item, ListType.USE)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setExperience(0);
 			event.setShowEffect(false);
 		}
@@ -722,16 +722,16 @@ public class BaseListener implements Listener {
 		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert((Material) null, player, player.getWorld(), TenderType.USE, MaterialAPI.capitalize(item.name()));
 		playerMessage = factory.toString();
-		if(type == AlertType.ILLEGAL){ // We don't want to show legal events because of spam
+		if (type == AlertType.ILLEGAL) { // We don't want to show legal events because of spam
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.USE_ITEM);
 		}
 	}
 
 	// ################# Drop Item
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onDrop(PlayerDropItemEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDrop(PlayerDropItemEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -740,15 +740,15 @@ public class BaseListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, player.getWorld(), itemStack.getType())){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, player.getWorld(), itemStack.getType())) {
 			type = AlertType.LEGAL;
 		}
-		if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.DROP)){
+		if (!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.DROP)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
@@ -763,9 +763,9 @@ public class BaseListener implements Listener {
 
 	// ################# Pickup Item
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onPickup(PlayerPickupItemEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPickup(PlayerPickupItemEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -775,30 +775,30 @@ public class BaseListener implements Listener {
 		boolean region = false;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, player.getWorld(), itemStack.getType())){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, player.getWorld(), itemStack.getType())) {
 			type = AlertType.LEGAL;
 		}
-		if(!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.PICKUP)){
+		if (!getConfig(player.getWorld()).isBlocked(itemStack.getType(), ListType.PICKUP)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Region Check
-		if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL){
-			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PICKUP)){
+		if (((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL) {
+			if (!plugin.getPermissions().has(player, PermissionNodes.REGION_PICKUP)) {
 				type = AlertType.ILLEGAL;
 				region = true;
 			}
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to pickup " : " picked up ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(itemStack.getType().name());
 		String playerMessage = plugin.getMessage("blocked-action.pickup-item");
-		if(region){
+		if (region) {
 			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to pickup " : " picked up ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(itemStack.getType().name()) + ChatColor.WHITE + " from a region.";
 			playerMessage = ChatColor.RED + "You cannot pickup items from another region!";
 		}
@@ -810,45 +810,43 @@ public class BaseListener implements Listener {
 
 	// ################# Player Death
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onDeath(PlayerDeathEvent event){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDeath(PlayerDeathEvent event) {
 		Player player = event.getEntity();
 		List<ItemStack> drops = event.getDrops();
 		AlertType type = AlertType.ILLEGAL;
 		int illegalItems = 0;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), (Material) null)){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), (Material) null)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			List<ItemStack> remove = new ArrayList<ItemStack>();
 			Region asregion = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation());
-			for(ItemStack item : drops){
-				if(asregion != null){
-					if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
-							&& asregion.getConfig().isBlocked(item.getType(), ListType.DEATH)){
+			for (ItemStack item : drops) {
+				if (asregion != null) {
+					if (plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true) && asregion.getConfig().isBlocked(item.getType(), ListType.DEATH)) {
 						illegalItems++;
 						remove.add(item);
 					}
-				}else{
-					if(plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true)
-							&& getConfig(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)){
+				} else {
+					if (plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, player.getWorld(), item.getType(), true) && getConfig(player.getWorld()).isBlocked(item.getType(), ListType.DEATH)) {
 						illegalItems++;
 						remove.add(item);
 					}
 				}
 			}
 			// Remove items
-			for(ItemStack item : remove){
+			for (ItemStack item : remove) {
 				drops.remove(item);
 			}
 		}
 
 		// Determine new status
-		if(illegalItems == 0){
+		if (illegalItems == 0) {
 			type = AlertType.LEGAL;
 		}
 
@@ -864,9 +862,9 @@ public class BaseListener implements Listener {
 
 	// ################# Player Command
 
-	@EventHandler (priority = EventPriority.LOWEST)
-	public void onCommand(PlayerCommandPreprocessEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onCommand(PlayerCommandPreprocessEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -874,15 +872,15 @@ public class BaseListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check if they should be blocked
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), command)){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, player.getWorld(), command)) {
 			type = AlertType.LEGAL;
 		}
-		if(!getConfig(player.getWorld()).isBlocked(command, ListType.COMMAND)){
+		if (!getConfig(player.getWorld()).isBlocked(command, ListType.COMMAND)) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
@@ -893,14 +891,14 @@ public class BaseListener implements Listener {
 		factory.insert((Material) null, player, player.getWorld(), TenderType.COMMAND);
 		factory.insertCommand(command);
 		playerMessage = factory.toString();
-		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.COMMAND, !(event.getMessage().toLowerCase().startsWith("/as money")));
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.COMMAND, !event.getMessage().toLowerCase().startsWith("/as money"));
 	}
 
 	// ################# Player Game Mode Change
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onGameModeChange(PlayerGameModeChangeEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onGameModeChange(PlayerGameModeChangeEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -908,32 +906,32 @@ public class BaseListener implements Listener {
 
 		// Automatically close all open windows
 		InventoryView active = player.getOpenInventory();
-		if(active != null){
+		if (active != null) {
 			active.close();
 		}
 
 		// Implement cooldown if needed
-		if(plugin.getConfig().getBoolean("gamemode-change-cooldown.use") && !plugin.getPermissions().has(player, PermissionNodes.NO_GM_CD)){
+		if (plugin.getConfig().getBoolean("gamemode-change-cooldown.use") && !plugin.getPermissions().has(player, PermissionNodes.NO_GM_CD)) {
 			long time = (long) Math.abs(plugin.getConfig().getDouble("gamemode-change-cooldown.time-in-seconds")) * 1000;
 			long now = System.currentTimeMillis();
-			if(time > 0){
-				if(GMCD.containsKey(player.getName())){
+			if (time > 0) {
+				if (GMCD.containsKey(player.getName())) {
 					long lastUsed = GMCD.get(player.getName());
-					if(now - lastUsed > time){
+					if (now - lastUsed > time) {
 						// Allow
 						GMCD.put(player.getName(), now);
-					}else{
+					} else {
 						// Deny
 						event.setCancelled(true);
 						int seconds = (int) (time - (now - lastUsed)) / 1000;
 						String s = "";
-						if(seconds == 0 || seconds > 1){
+						if (seconds == 0 || seconds > 1) {
 							s = "s";
 						}
 						ASUtils.sendToPlayer(player, ChatColor.RED + "You must wait at least " + seconds + " more second" + s + " before changing Game Modes.", true);
 						return;
 					}
-				}else{
+				} else {
 					GMCD.put(player.getName(), now);
 				}
 			}
@@ -941,9 +939,7 @@ public class BaseListener implements Listener {
 
 		// Change level if needed
 		Level currentLevel = new Level(player.getLevel(), player.getExp());
-		if(plugin.getConfig().getBoolean("enabled-features.change-level-on-gamemode-change")
-				&& !event.isCancelled()
-				&& !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
+		if (plugin.getConfig().getBoolean("enabled-features.change-level-on-gamemode-change") && !event.isCancelled() && !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)) {
 			Level desired = LevelSaver.getLevel(player.getName(), event.getNewGameMode());
 			LevelSaver.saveLevel(player.getName(), player.getGameMode(), currentLevel);
 			desired.setTo(player);
@@ -953,7 +949,7 @@ public class BaseListener implements Listener {
 		// Alerts
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to Game Mode " + ChatColor.YELLOW + to.name();
 		String playerMessage = "no message";
-		if(!plugin.getConfig().getBoolean("other.send-gamemode-change-message")){
+		if (!plugin.getConfig().getBoolean("other.send-gamemode-change-message")) {
 			playerMessage = "no message";
 		}
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
@@ -961,9 +957,9 @@ public class BaseListener implements Listener {
 
 	// ################# Player Combat
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onCombat(EntityDamageByEntityEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onCombat(EntityDamageByEntityEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		DamageCause cause = event.getCause();
@@ -974,12 +970,12 @@ public class BaseListener implements Listener {
 		Player playerAttacker = null;
 
 		// Check case
-		switch (cause){
+		switch (cause) {
 		case ENTITY_ATTACK:
 			// attacker = entity
-			if(attacker instanceof Player){
+			if (attacker instanceof Player) {
 				playerAttacker = (Player) attacker;
-			}else{
+			} else {
 				return;
 			}
 			break;
@@ -987,9 +983,9 @@ public class BaseListener implements Listener {
 			// attacker = Projectile
 			Projectile projectile = (Projectile) attacker;
 			LivingEntity shooter = projectile.getShooter();
-			if(shooter instanceof Player){
+			if (shooter instanceof Player) {
 				playerAttacker = (Player) shooter;
-			}else{
+			} else {
 				return;
 			}
 			break;
@@ -998,35 +994,35 @@ public class BaseListener implements Listener {
 		}
 
 		// Determine if we are hitting a mob or not, and whether it is legal
-		if(target instanceof Player){
+		if (target instanceof Player) {
 			// target = Player
 			playerCombat = true;
-			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_PLAYERS, PermissionNodes.DENY_COMBAT_PLAYERS, playerAttacker.getWorld(), ((Player) target).getName())){
+			if (!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_PLAYERS, PermissionNodes.DENY_COMBAT_PLAYERS, playerAttacker.getWorld(), ((Player) target).getName())) {
 				type = AlertType.LEGAL;
 			}
-		}else{
+		} else {
 			// target = other entity
-			if(!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), ASUtils.getEntityName(target))){
+			if (!plugin.isBlocked(playerAttacker, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerAttacker.getWorld(), ASUtils.getEntityName(target))) {
 				type = AlertType.LEGAL;
 			}
-			if(!getConfig(target.getWorld()).isBlocked(target, ListType.MOBS)){
+			if (!getConfig(target.getWorld()).isBlocked(target, ListType.MOBS)) {
 				type = AlertType.LEGAL;
 			}
 		}
 
 		// Check if we need to continue based on settings
-		if(playerCombat){
-			if(!getConfig(target.getWorld()).combatAgainstPlayers()){
+		if (playerCombat) {
+			if (!getConfig(target.getWorld()).combatAgainstPlayers()) {
 				return;
 			}
-		}else{
-			if(!getConfig(target.getWorld()).combatAgainstMobs()){
+		} else {
+			if (!getConfig(target.getWorld()).combatAgainstMobs()) {
 				return;
 			}
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
@@ -1036,14 +1032,14 @@ public class BaseListener implements Listener {
 		AlertTrigger trigger = AlertTrigger.HIT_MOB;
 		TenderType tender = TenderType.HIT_MOB;
 		String targetFactoryName;
-		if(playerCombat){
+		if (playerCombat) {
 			String playerName = ((Player) target).getName();
 			message = ChatColor.YELLOW + playerAttacker.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to hit " + ChatColor.RED : " hit " + ChatColor.GREEN) + playerName;
 			playerMessage = plugin.getMessage("blocked-action.hit-player");
 			trigger = AlertTrigger.HIT_PLAYER;
 			tender = TenderType.HIT_PLAYER;
 			targetFactoryName = playerName;
-		}else{
+		} else {
 			String targetName = ASUtils.getEntityName(target);
 			message = ChatColor.YELLOW + playerAttacker.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to hit a " + ChatColor.RED : " hit a " + ChatColor.GREEN) + targetName;
 			playerMessage = plugin.getMessage("blocked-action.hit-mob");
@@ -1051,9 +1047,9 @@ public class BaseListener implements Listener {
 		}
 		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert((Material) null, playerAttacker, playerAttacker.getWorld(), tender);
-		if(tender == TenderType.HIT_MOB){
+		if (tender == TenderType.HIT_MOB) {
 			factory.insertHitMob(targetFactoryName);
-		}else{
+		} else {
 			factory.insertHitPlayer(targetFactoryName);
 		}
 		playerMessage = factory.toString();
@@ -1062,9 +1058,9 @@ public class BaseListener implements Listener {
 
 	// ################# Entity Target
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onEntityTarget(EntityTargetLivingEntityEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onEntityTarget(EntityTargetLivingEntityEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		LivingEntity target = event.getTarget();
@@ -1072,28 +1068,28 @@ public class BaseListener implements Listener {
 		AlertType type = AlertType.ILLEGAL;
 
 		// Check target
-		if(target instanceof Player){
+		if (target instanceof Player) {
 			playerTarget = (Player) target;
-		}else{
+		} else {
 			return;
 		}
 
 		// Check permissions
-		if(!plugin.isBlocked(playerTarget, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerTarget.getWorld(), ASUtils.getEntityName(target))){
+		if (!plugin.isBlocked(playerTarget, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, playerTarget.getWorld(), ASUtils.getEntityName(target))) {
 			type = AlertType.LEGAL;
 		}
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 	}
 
 	// ################# Player Teleport
 
-	@EventHandler (priority = EventPriority.MONITOR)
-	public void onPlayerTeleport(PlayerTeleportEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 		Player player = event.getPlayer();
@@ -1101,27 +1097,26 @@ public class BaseListener implements Listener {
 
 		// Check teleport cause for ender pearl
 		Material pearl = Material.ENDER_PEARL;
-		if(event.getCause() == TeleportCause.ENDER_PEARL){
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), pearl)
-					|| !plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), pearl)){
+		if (event.getCause() == TeleportCause.ENDER_PEARL) {
+			if (!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), pearl) || !plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), pearl)) {
 				type = AlertType.LEGAL;
 			}
-			if(!getConfig(player.getWorld()).isBlocked(pearl, ListType.USE)){
+			if (!getConfig(player.getWorld()).isBlocked(pearl, ListType.USE)) {
 				type = AlertType.LEGAL;
 			}
-			if(!getConfig(player.getWorld()).isBlocked(pearl, ListType.RIGHT_CLICK)){
+			if (!getConfig(player.getWorld()).isBlocked(pearl, ListType.RIGHT_CLICK)) {
 				type = AlertType.LEGAL;
 			}
-		}else{
+		} else {
 			type = AlertType.LEGAL;
 		}
 
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 		}
 
 		// Alert (with sanity check)
-		if(event.getCause() == TeleportCause.ENDER_PEARL){
+		if (event.getCause() == TeleportCause.ENDER_PEARL) {
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(pearl.name());
 			String playerMessage = plugin.getMessage("blocked-action.use-item");
 			MessageFactory factory = new MessageFactory(playerMessage);
@@ -1133,30 +1128,30 @@ public class BaseListener implements Listener {
 
 	// ################# Player Craft Item Event
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onCrafting(CraftItemEvent event){
-		if(event.isCancelled()){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onCrafting(CraftItemEvent event) {
+		if (event.isCancelled()) {
 			return;
 		}
 
 		HumanEntity he = event.getWhoClicked();
-		if((he instanceof Player)){
+		if (he instanceof Player) {
 			Player player = (Player) he;
 			AlertType type = AlertType.ILLEGAL;
-			if(player.getGameMode() == GameMode.CREATIVE){
-				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())){
+			if (player.getGameMode() == GameMode.CREATIVE) {
+				if (plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())) {
 					type = AlertType.LEGAL;
 				}
-				if(getConfig(player.getWorld()).isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
+				if (getConfig(player.getWorld()).isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)) {
 					type = AlertType.LEGAL;
 				}
-			}else{
+			} else {
 				type = AlertType.LEGAL;
 			}
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to craft an item" : " crafted an item");
 			String playerMessage = plugin.getMessage("blocked-action.crafting");
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CRAFTING);
-			if(type == AlertType.ILLEGAL){
+			if (type == AlertType.ILLEGAL) {
 				event.setCancelled(true);
 			}
 		}
@@ -1164,9 +1159,9 @@ public class BaseListener implements Listener {
 
 	// ################# Potion Splash Event
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onPotionSplash(PotionSplashEvent event){
-		if(event.isCancelled() || !(event.getPotion().getShooter() instanceof Player)){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPotionSplash(PotionSplashEvent event) {
+		if (event.isCancelled() || !(event.getPotion().getShooter() instanceof Player)) {
 			return;
 		}
 
@@ -1178,11 +1173,10 @@ public class BaseListener implements Listener {
 
 		// Right click list
 		// Check if they should be blocked
-		if(!getConfig(player.getWorld()).isThrownPotionAllowed()){
+		if (!getConfig(player.getWorld()).isThrownPotionAllowed()) {
 			type = AlertType.ILLEGAL;
 		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), Material.POTION)
-				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), Material.POTION)){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), Material.POTION) || !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), Material.POTION)) {
 			type = AlertType.LEGAL;
 		}
 
@@ -1195,7 +1189,7 @@ public class BaseListener implements Listener {
 		playerMessage = factory.toString();
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
@@ -1203,9 +1197,9 @@ public class BaseListener implements Listener {
 
 	// ################# Projectile Launch Event
 
-	@EventHandler (priority = EventPriority.LOW)
-	public void onProjectileLaunch(ProjectileLaunchEvent event){
-		if(event.isCancelled() || !(event.getEntity().getShooter() instanceof Player)){
+	@EventHandler(priority = EventPriority.LOW)
+	public void onProjectileLaunch(ProjectileLaunchEvent event) {
+		if (event.isCancelled() || !(event.getEntity().getShooter() instanceof Player)) {
 			return;
 		}
 
@@ -1217,23 +1211,22 @@ public class BaseListener implements Listener {
 		Material item = Material.AIR;
 
 		// Check for entity
-		if(event.getEntity() instanceof EnderPearl){
+		if (event.getEntity() instanceof EnderPearl) {
 			item = Material.ENDER_PEARL;
-		}else if(event.getEntity() instanceof Snowball){
+		} else if (event.getEntity() instanceof Snowball) {
 			item = Material.SNOW_BALL;
 		}
 
-		if(item == Material.AIR){
+		if (item == Material.AIR) {
 			return;
 		}
 
 		// Right click list
 		// Check if they should be blocked
-		if(!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)){
+		if (!getConfig(player.getWorld()).isBlocked(item, ListType.RIGHT_CLICK)) {
 			type = AlertType.ILLEGAL;
 		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item)
-				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)){
+		if (!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), item) || !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), item)) {
 			type = AlertType.LEGAL;
 		}
 
@@ -1246,7 +1239,7 @@ public class BaseListener implements Listener {
 		playerMessage = factory.toString();
 
 		// Handle event
-		if(type == AlertType.ILLEGAL){
+		if (type == AlertType.ILLEGAL) {
 			event.setCancelled(true);
 			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
@@ -1254,19 +1247,19 @@ public class BaseListener implements Listener {
 
 	// ################# Potion Effect Change Event
 
-	//	@EventHandler (priority = EventPriority.HIGHEST)
-	//	public void onPotionEffectChange(EntityPotionEffectChangeEvent event){
-	//		if(event.isCancelled() || !(event.getEntity() instanceof Player)){
-	//			return;
-	//		}
-	//		if(event.getCause() == PotionChangeCause.BEACON){
-	//			Block beacon = event.getLocation();
-	//			GameMode beaconGM = ((BlockManager)plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(beacon);
-	//			Player player = (Player) event.getEntity();
-	//			if(player.getGameMode() != beaconGM){
-	//				event.setCancelled(plugin.shouldCancel(player));
-	//			}
-	//		}
-	//	}
+	// @EventHandler (priority = EventPriority.HIGHEST)
+	// public void onPotionEffectChange(EntityPotionEffectChangeEvent event){
+	// if(event.isCancelled() || !(event.getEntity() instanceof Player)){
+	// return;
+	// }
+	// if(event.getCause() == PotionChangeCause.BEACON){
+	// Block beacon = event.getLocation();
+	// GameMode beaconGM = ((BlockManager)plugin.getSystemsManager().getManager(Manager.BLOCKS)).getType(beacon);
+	// Player player = (Player) event.getEntity();
+	// if(player.getGameMode() != beaconGM){
+	// event.setCancelled(plugin.shouldCancel(player));
+	// }
+	// }
+	// }
 
 }
