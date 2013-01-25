@@ -187,51 +187,24 @@ public class BaseListener implements Listener {
 		}
 		AlertType type = AlertType.LEGAL;
 		Player player = event.getPlayer();
-		/*
-		 * 1 = Snow Golem
-		 * 2 = Iron Golem
-		 * 3 = Wither
-		 * else = none
-		 */
-		int mob = 0;
 		Block block = event.getBlock();
 		MobPattern snow = ASUtils.getMobPattern(EntityPattern.SNOW_GOLEM);
 		MobPattern iron = ASUtils.getMobPattern(EntityPattern.IRON_GOLEM);
 		MobPattern wither = ASUtils.getMobPattern(EntityPattern.WITHER);
 		MobPattern pattern = null;
-		// TODO: Store name information in pattern
 		if(snow != null && snow.exists(block)){
-			mob = 1;
 			pattern = snow;
 		}else if(iron != null && iron.exists(block)){
-			mob = 2;
 			pattern = iron;
 		}else if(wither != null && wither.exists(block)){
-			mob = 3;
 			pattern = wither;
 		}
-		String mobName = "Unknown";
-		switch(mob){
-		case 1:
-			mobName = "Snow Golem";
-			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-snow-golems")){
-				type = AlertType.LEGAL;
-			}
-			break;
-		case 2:
-			mobName = "Iron Golem";
-			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-iron-golems")){
-				type = AlertType.LEGAL;
-			}
-			break;
-		case 3:
-			mobName = "Wither";
-			if(!plugin.getConfig().getBoolean("enabled-features.mob-creation.allow-wither")){
-				type = AlertType.LEGAL;
-			}
-			break;
-		default:
+		if(pattern == null){
 			return;
+		}
+		String mobName = pattern.name;
+		if(!plugin.getConfig().getBoolean(pattern.configurationNode)){
+			type = AlertType.LEGAL;
 		}
 		if(plugin.isBlocked(player, PermissionNodes.ALLOW_MOB_CREATION, PermissionNodes.DENY_MOB_CREATION, player.getWorld(), (Material) null)){
 			type = AlertType.ILLEGAL;

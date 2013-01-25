@@ -11,10 +11,11 @@ public class MobPattern {
 	/**
 	 * Mob pattern type, representing shape
 	 */
-	public static enum MobPatternType {
+	public static enum MobPatternType{
 		POLE, T_SHAPE;
 	}
 
+	public final String name, configurationNode;
 	private final MobPatternType type;
 	private final Material body, head, head2;
 
@@ -26,11 +27,28 @@ public class MobPattern {
 	 * @param head first possible head type (eg: PUMPKIN)
 	 * @param head2 second possible head type (eg: JACK_O_LANTERN)
 	 */
-	public MobPattern(MobPatternType type, Material body, Material head, Material head2) {
+	public MobPattern(MobPatternType type, Material body, Material head, Material head2){
 		this.type = type;
 		this.head = head;
 		this.body = body;
 		this.head2 = head2;
+		switch(body){
+		case SNOW:
+			name = "Snow Golem";
+			configurationNode = "enabled-features.mob-creation.allow-snow-golems";
+			break;
+		case IRON_BLOCK:
+			name = "Iron Golem";
+			configurationNode = "enabled-features.mob-creation.allow-iron-golems";
+			break;
+		case SOUL_SAND:
+			name = "Wither";
+			configurationNode = "enabled-features.mob-creation.allow-wither";
+			break;
+		default:
+			name = "Unknown";
+			configurationNode = "unknown.unknown";
+		}
 	}
 
 	/**
@@ -40,7 +58,7 @@ public class MobPattern {
 	 * @param body the body material (eg: SOUL_SAND)
 	 * @param head the single head type (eg: SKULL)
 	 */
-	public MobPattern(MobPatternType type, Material body, Material head) {
+	public MobPattern(MobPatternType type, Material body, Material head){
 		this(type, body, head, head);
 	}
 
@@ -50,19 +68,19 @@ public class MobPattern {
 	 * @param block the block to use as a source
 	 * @return true if the block forms a complete mob, false otherwise
 	 */
-	public boolean exists(Block block) {
+	public boolean exists(Block block){
 		World world = block.getWorld();
-		if (!(block.getType() == head || block.getType() == head2)) {
+		if(!(block.getType() == head || block.getType() == head2)){
 			return false;
 		}
-		switch (type) {
+		switch(type){
 		case POLE:
-			if (world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body) {
+			if(world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body){
 				return true;
 			}
 			break;
 		case T_SHAPE:
-			if (world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body && (world.getBlockAt(block.getX() + 1, block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX() - 1, block.getY() - 1, block.getZ()).getType() == body || world.getBlockAt(block.getX(), block.getY() - 1, block.getZ() + 1).getType() == body && world.getBlockAt(block.getX(), block.getY() - 1, block.getZ() - 1).getType() == body)) {
+			if(world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body && (world.getBlockAt(block.getX() + 1, block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX() - 1, block.getY() - 1, block.getZ()).getType() == body || world.getBlockAt(block.getX(), block.getY() - 1, block.getZ() + 1).getType() == body && world.getBlockAt(block.getX(), block.getY() - 1, block.getZ() - 1).getType() == body)){
 				return true;
 			}
 			break;
@@ -73,12 +91,12 @@ public class MobPattern {
 	/**
 	 * Schedules block updates to correct false information 
 	 */
-	public void scheduleUpdate(final Block block) {
+	public void scheduleUpdate(final Block block){
 		AntiShare plugin = AntiShare.getInstance();
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 
 			@Override
-			public void run() {
+			public void run(){
 				World world = block.getWorld();
 				world.refreshChunk(block.getChunk().getX(), block.getChunk().getZ());
 			}
