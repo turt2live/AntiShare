@@ -32,6 +32,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.HookManager;
@@ -83,6 +84,7 @@ public class BlockListener implements Listener {
 	@EventHandler (priority = EventPriority.NORMAL)
 	public void onBlockPlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
+		System.out.println(player.getGameMode());
 		GameMode existing = null;
 		AlertType type = AlertType.LEGAL;
 		boolean handle = false;
@@ -95,7 +97,7 @@ public class BlockListener implements Listener {
 					handle = true;
 					existing = blocks.getType(source);
 					if(existing != null){
-						if(existing != potentialNewGM){
+						if(GamemodeAbstraction.isMatch(potentialNewGM, existing)){
 							event.setCancelled(true);
 							type = AlertType.ILLEGAL;
 						}
@@ -140,7 +142,7 @@ public class BlockListener implements Listener {
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		Block to = event.getToBlock();
 		if(TekkitMaterialAPI.canBeBrokenByWater(to.getType())){
-			if(blocks.getType(to) == GameMode.CREATIVE){
+			if(GamemodeAbstraction.isCreative(blocks.getType(to))){
 				if(deny){
 					event.setCancelled(true);
 				}else if(!drops){
@@ -162,7 +164,7 @@ public class BlockListener implements Listener {
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		for(int i = 0; i < event.blockList().size(); i++){
 			Block block = event.blockList().get(i);
-			if(blocks.getType(block) == GameMode.CREATIVE){
+			if(GamemodeAbstraction.isCreative(blocks.getType(block))){
 				if(deny){
 					event.blockList().remove(i);
 				}else if(!drops){
@@ -387,7 +389,7 @@ public class BlockListener implements Listener {
 			if(blockGamemode != null){
 				blockGM = blockGamemode.name().toLowerCase();
 				String oGM = player.getGameMode().name().toLowerCase();
-				if(player.getGameMode() != blockGamemode){
+				if(!GamemodeAbstraction.isMatch(player.getGameMode(), blockGamemode)){
 					deny = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + blockGM + "-blocks.deny");
 					drops = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + blockGM + "-blocks.block-drops");
 					if(deny){
@@ -400,7 +402,7 @@ public class BlockListener implements Listener {
 							GameMode relGamemode = blocks.getType(rel);
 							if(relGamemode != null){
 								attachedGM = relGamemode.name().toLowerCase();
-								if(relGamemode != blockGamemode){
+								if(!GamemodeAbstraction.isMatch(blockGamemode, relGamemode)){
 									extraSpecial = true;
 									deny = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + attachedGM + "-blocks.deny");
 									drops = plugin.getConfig().getBoolean("settings." + oGM + "-breaking-" + attachedGM + "-blocks.block-drops");
@@ -485,7 +487,7 @@ public class BlockListener implements Listener {
 		}
 
 		// Check for 'attached' blocks and internal inventories
-		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
+		if(GamemodeAbstraction.isCreative(player.getGameMode()) && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
 			// Check inventories
 			if(plugin.getListener().getConfig(block.getWorld()).clearBlockInventoryOnBreak()){
 				if(block.getState() instanceof Chest){

@@ -53,6 +53,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.RegionManager;
@@ -64,10 +65,10 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
-import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
 import com.turt2live.materials.MaterialAPI;
+import com.turt2live.materials.ServerHas;
 
 public class RegionListener implements Listener {
 
@@ -186,7 +187,7 @@ public class RegionListener implements Listener {
 		if((he instanceof Player)){
 			Player player = (Player) he;
 			AlertType type = AlertType.ILLEGAL;
-			if(player.getGameMode() == GameMode.CREATIVE){
+			if(GamemodeAbstraction.isCreative(player.getGameMode())){
 				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())){
 					type = AlertType.LEGAL;
 				}

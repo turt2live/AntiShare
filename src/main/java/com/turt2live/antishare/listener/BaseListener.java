@@ -68,6 +68,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.HookManager;
@@ -397,6 +398,7 @@ public class BaseListener implements Listener {
 		}
 
 		// Game Mode check
+		// TODO: Move
 		if(blocks != null){
 			if(plugin.getConfig().getBoolean("settings.similar-gamemode-allow")){
 				GameMode blockGM = blocks.getType(block);
@@ -404,7 +406,7 @@ public class BaseListener implements Listener {
 					if(used == Material.AIR){
 						used = block.getType();
 					}
-					if(blockGM != player.getGameMode()){
+					if(!GamemodeAbstraction.isMatch(blockGM, player.getGameMode())){
 						type = AlertType.ILLEGAL;
 					}else{
 						type = AlertType.LEGAL;
@@ -756,6 +758,7 @@ public class BaseListener implements Listener {
 		}
 
 		// Region Check
+		// TODO: Move
 		if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL){
 			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PICKUP)){
 				type = AlertType.ILLEGAL;
@@ -1061,6 +1064,7 @@ public class BaseListener implements Listener {
 	// ################# Player Teleport
 
 	@EventHandler (priority = EventPriority.MONITOR)
+	// TODO: Verify working (correctly)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
 		if(event.isCancelled()){
 			return;

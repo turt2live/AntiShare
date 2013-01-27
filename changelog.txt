@@ -1,11 +1,15 @@
 Since 5.3.0:
 - Withers can no longer be created
+- Fixed issue with adventure mode not being correctly blocked
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 BUGS:
 - Melons (amoung others) can be fetched through the use of pistons (Impossible Fix: BUKKIT-269)
+- Ender pearls cannot be used by survival players if hit against the ground
+- CME RegionManager 224 with /as rmregion (standing)
+- Adventure mode NOT FUNCTIONAL (inventories only)
 
 Tests to be made:
 - Every bloody class, including ServerHas (and making sure ASUtils and such return if ServerHas is 'tekkit')

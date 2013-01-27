@@ -481,6 +481,11 @@ public class AntiShare extends PluginWrapper {
 		if(denyPermission != null && permissions.has(player, denyPermission, world)){
 			return true;
 		}
+		if(GamemodeAbstraction.isCreative(player.getGameMode())){
+			if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE, world) || permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world)){
+				return true;
+			}
+		}
 		if(permissions.has(player, PermissionNodes.AFFECT_CREATIVE, world) && player.getGameMode() == GameMode.CREATIVE){
 			return true;
 		}
