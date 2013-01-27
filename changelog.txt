@@ -4,6 +4,7 @@ Since 5.3.0:
 - Fixed issue with removing regions
 - Fixed ender pearl issues
 - Fix minor communication errors
+- Fixed unsafe item frame/painting code
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
