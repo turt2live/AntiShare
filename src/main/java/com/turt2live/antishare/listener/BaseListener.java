@@ -68,9 +68,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -312,10 +310,6 @@ public class BaseListener implements Listener {
 		String message = "no message";
 		String playerMessage = "no message";
 		AlertTrigger trigger = AlertTrigger.RIGHT_CLICK;
-		BlockManager blocks = null;
-		if(plugin.getSystemsManager().isEnabled(Manager.BLOCK)){
-			blocks = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK);
-		}
 		boolean use = false;
 
 		// For use from here on in
@@ -394,24 +388,6 @@ public class BaseListener implements Listener {
 			if(potion){
 				use = true;
 				used = player.getItemInHand().getType();
-			}
-		}
-
-		// Game Mode check
-		// TODO: Move, gives false message
-		if(blocks != null && event.getAction() != Action.LEFT_CLICK_BLOCK){
-			if(plugin.getConfig().getBoolean("settings.similar-gamemode-allow")){
-				GameMode blockGM = blocks.getType(block);
-				if(blockGM != null){
-					if(used == Material.AIR){
-						used = block.getType();
-					}
-					if(!GamemodeAbstraction.isMatch(blockGM, player.getGameMode())){
-						type = AlertType.ILLEGAL;
-					}else{
-						type = AlertType.LEGAL;
-					}
-				}
 			}
 		}
 
@@ -1064,7 +1040,6 @@ public class BaseListener implements Listener {
 	// ################# Player Teleport
 
 	@EventHandler (priority = EventPriority.MONITOR)
-	// TODO: Verify working (correctly)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
 		if(event.isCancelled()){
 			return;

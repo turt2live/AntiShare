@@ -3,6 +3,7 @@ Since 5.3.0:
 - Fixed issue with adventure mode not being correctly blocked
 - Fixed issue with removing regions
 - Fixed ender pearl issues
+- Fix minor communication errors
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

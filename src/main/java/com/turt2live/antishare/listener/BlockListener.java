@@ -13,6 +13,7 @@ import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Jukebox;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -30,6 +31,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.GamemodeAbstraction;
@@ -646,6 +648,114 @@ public class BlockListener implements Listener {
 					}
 				}
 			}
+		}
+	}
+
+	// ################# Player Interact Block
+
+	@EventHandler (priority = EventPriority.LOW)
+	public void onGameModeUse(PlayerInteractEvent event){
+		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
+			return;
+		}
+		Player player = event.getPlayer();
+		Block block = event.getClickedBlock();
+		AlertType type = AlertType.LEGAL;
+		String message = "no message";
+		String playerMessage = "no message";
+		AlertTrigger trigger = AlertTrigger.USE_ITEM;
+
+		// For use from here on in
+		if(block == null){
+			block = player.getWorld().getBlockAt(player.getLocation());
+		}
+		Material used = block.getType();
+
+		// Game Mode check
+		if(event.getAction() != Action.LEFT_CLICK_BLOCK){
+			if(plugin.getConfig().getBoolean("settings.similar-gamemode-allow")){
+				GameMode blockGM = blocks.getType(block);
+				if(blockGM != null){
+					if(used == Material.AIR){
+						used = block.getType();
+					}
+					if(!GamemodeAbstraction.isMatch(blockGM, player.getGameMode())){
+						type = AlertType.ILLEGAL;
+					}else{
+						type = AlertType.LEGAL;
+					}
+				}
+			}
+		}
+
+		// Set messages
+		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
+		playerMessage = plugin.getMessage("blocked-action.use-item");
+		trigger = AlertTrigger.USE_ITEM;
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(block, player, block.getWorld(), TenderType.USE);
+		playerMessage = factory.toString();
+
+		// Handle event
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(true);
+			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
+			if(plugin.getListener().hasMobCatcher() && player.getItemInHand() != null){
+				ItemStack item = player.getItemInHand();
+				if(item.getType() == Material.EGG || item.getType() == Material.MONSTER_EGG){
+					item.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
+				}
+			}
+		}
+	}
+
+	// ################# Player Break Block
+
+	@EventHandler (priority = EventPriority.LOW)
+	public void onGameModeBreak(BlockBreakEvent event){
+		if(event.isCancelled()){
+			return;
+		}
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
+		AlertType type = AlertType.LEGAL;
+		String message = "no message";
+		String playerMessage = "no message";
+		AlertTrigger trigger = AlertTrigger.BLOCK_BREAK;
+
+		// For use from here on in
+		if(block == null){
+			block = player.getWorld().getBlockAt(player.getLocation());
+		}
+		Material used = block.getType();
+
+		// Game Mode check
+		if(plugin.getConfig().getBoolean("settings.similar-gamemode-allow")){
+			GameMode blockGM = blocks.getType(block);
+			if(blockGM != null){
+				if(used == Material.AIR){
+					used = block.getType();
+				}
+				if(!GamemodeAbstraction.isMatch(blockGM, player.getGameMode())){
+					type = AlertType.ILLEGAL;
+				}else{
+					type = AlertType.LEGAL;
+				}
+			}
+		}
+
+		// Set messages
+		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
+		playerMessage = plugin.getMessage("blocked-action.break-block");
+		trigger = AlertTrigger.USE_ITEM;
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(block, player, block.getWorld(), TenderType.BLOCK_BREAK);
+		playerMessage = factory.toString();
+
+		// Handle event
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(true);
+			plugin.getAlerts().alert(message, player, playerMessage, type, trigger);
 		}
 	}
 
