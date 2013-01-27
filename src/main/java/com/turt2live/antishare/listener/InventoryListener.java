@@ -184,7 +184,7 @@ public class InventoryListener implements Listener {
 				break;
 			default:
 				if(ServerHas.adventureMode()){
-					if(from == GameMode.ADVENTURE){
+					if(to == GameMode.ADVENTURE){
 						manager.getAdventureInventory(player, player.getWorld()).setTo(player);
 						manager.getEnderAdventureInventory(player, player.getWorld()).setTo(player);
 					}

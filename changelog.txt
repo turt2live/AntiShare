@@ -9,7 +9,7 @@ BUGS:
 - Melons (amoung others) can be fetched through the use of pistons (Impossible Fix: BUKKIT-269)
 - Ender pearls cannot be used by survival players if hit against the ground
 - CME RegionManager 224 with /as rmregion (standing)
-- Adventure mode NOT FUNCTIONAL (inventories only)
+- Chunk unload (reported) laggy
 
 Tests to be made:
 - Every bloody class, including ServerHas (and making sure ASUtils and such return if ServerHas is 'tekkit')
