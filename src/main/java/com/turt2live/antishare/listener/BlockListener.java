@@ -84,7 +84,6 @@ public class BlockListener implements Listener {
 	@EventHandler (priority = EventPriority.NORMAL)
 	public void onBlockPlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
-		System.out.println(player.getGameMode());
 		GameMode existing = null;
 		AlertType type = AlertType.LEGAL;
 		boolean handle = false;
