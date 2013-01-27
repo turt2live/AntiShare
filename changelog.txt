@@ -5,6 +5,7 @@ Since 5.3.0:
 - Fixed ender pearl issues
 - Fix minor communication errors
 - Fixed unsafe item frame/painting code
+- Fixed 0kb bug
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
@@ -12,6 +13,9 @@ Since 5.3.0:
 BUGS:
 - Melons (amoung others) can be fetched through the use of pistons (Impossible Fix: BUKKIT-269)
 - Chunk unload (reported) laggy
+
+TODO:
+- Make 0kb file check threaded to allow for less-than-1-hour-cleanup time
 
 Tests to be made:
 - Every bloody class, including ServerHas (and making sure ASUtils and such return if ServerHas is 'tekkit')

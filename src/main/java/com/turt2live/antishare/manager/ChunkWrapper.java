@@ -14,8 +14,8 @@ import org.bukkit.entity.EntityType;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
-import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
+import com.turt2live.materials.ServerHas;
 
 class ChunkWrapper {
 
@@ -218,39 +218,57 @@ class ChunkWrapper {
 	public void save(boolean load, boolean clear, File blocksDir, File entitiesDir){
 		File blockFile = new File(blocksDir, cx + "." + cz + "." + world + ".yml");
 		File entityFile = new File(entitiesDir, cx + "." + cz + "." + world + ".yml");
-		WrappedEnhancedConfiguration blocks = new WrappedEnhancedConfiguration(blockFile, plugin);
-		WrappedEnhancedConfiguration entities = new WrappedEnhancedConfiguration(entityFile, plugin);
-		blocks.load();
-		blocks.clearFile();
-		entities.load();
-		entities.clearFile();
-		for(String s : this.adventure_blocks){
-			save(s, GameMode.ADVENTURE, blocks, true);
+		// Used for sane file creation
+		boolean noBlockFile = false, noEntityFile = false;
+		if(this.adventure_blocks.size() <= 0 && this.survival_blocks.size() <= 0 && this.creative_blocks.size() <= 0){
+			if(blockFile.exists()){
+				blockFile.delete();
+			}
+			noBlockFile = true;
 		}
-		for(String s : this.creative_blocks){
-			save(s, GameMode.CREATIVE, blocks, true);
+		if(this.adventure_entities.size() <= 0 && this.survival_entities.size() <= 0 && this.creative_entities.size() <= 0){
+			if(entityFile.exists()){
+				entityFile.delete();
+			}
+			noEntityFile = true;
 		}
-		for(String s : this.survival_blocks){
-			save(s, GameMode.SURVIVAL, blocks, true);
+		if(!noBlockFile){
+			WrappedEnhancedConfiguration blocks = new WrappedEnhancedConfiguration(blockFile, plugin);
+			blocks.load();
+			blocks.clearFile();
+			for(String s : this.adventure_blocks){
+				save(s, GameMode.ADVENTURE, blocks, true);
+			}
+			for(String s : this.creative_blocks){
+				save(s, GameMode.CREATIVE, blocks, true);
+			}
+			for(String s : this.survival_blocks){
+				save(s, GameMode.SURVIVAL, blocks, true);
+			}
+			blocks.save();
 		}
-		for(String s : this.adventure_entities){
-			save(s, GameMode.ADVENTURE, entities, false);
-		}
-		for(String s : this.creative_entities){
-			save(s, GameMode.CREATIVE, entities, false);
-		}
-		for(String s : this.survival_entities){
-			save(s, GameMode.SURVIVAL, entities, false);
-		}
-		blocks.save();
-		entities.save();
-		if(clear){
-			this.adventure_blocks.clear();
-			this.adventure_entities.clear();
-			this.creative_blocks.clear();
-			this.creative_entities.clear();
-			this.survival_blocks.clear();
-			this.survival_entities.clear();
+		if(!noEntityFile){
+			WrappedEnhancedConfiguration entities = new WrappedEnhancedConfiguration(entityFile, plugin);
+			entities.load();
+			entities.clearFile();
+			for(String s : this.adventure_entities){
+				save(s, GameMode.ADVENTURE, entities, false);
+			}
+			for(String s : this.creative_entities){
+				save(s, GameMode.CREATIVE, entities, false);
+			}
+			for(String s : this.survival_entities){
+				save(s, GameMode.SURVIVAL, entities, false);
+			}
+			entities.save();
+			if(clear){
+				this.adventure_blocks.clear();
+				this.adventure_entities.clear();
+				this.creative_blocks.clear();
+				this.creative_entities.clear();
+				this.survival_blocks.clear();
+				this.survival_entities.clear();
+			}
 		}
 		if(load){
 			load(true, blocksDir);

@@ -41,10 +41,14 @@ public class SelfCompatibility {
 		PLAYER_DATA(5),
 		INV_313(10),
 		WORLD_CONF(15),
+		// Above is the estimated version applied in
+		// -------------------------------------------
+		// Below is the version applied in
 		@Deprecated
 		CONFIG_520(20),
 		CONFIG_530(25),
-		INV_520(30);
+		INV_520(30),
+		BLOCKS_540(35);
 
 		public final int BYTE_POS;
 
@@ -354,6 +358,43 @@ public class SelfCompatibility {
 			inventoryFile.renameTo(newFolder);
 		}
 		noLongerNeedsUpdate(Compat.INV_520);
+	}
+
+	/**
+	 * Removes dead block files introduced in 5.3.0. "The 0kb bug"
+	 */
+	public static void cleanup520blocks(){
+		if(!needsUpdate(Compat.BLOCKS_540)){
+			return;
+		}
+		long deleted = 0;
+		AntiShare plugin = AntiShare.getInstance();
+		File entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
+		File blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
+		if(entitiesDir.listFiles() != null){
+			for(File file : entitiesDir.listFiles()){
+				if(file.isFile()){
+					if(file.length() < 100){ // 100 bytes
+						file.delete();
+						deleted++;
+					}
+				}
+			}
+		}
+		if(blocksDir.listFiles() != null){
+			for(File file : blocksDir.listFiles()){
+				if(file.isFile()){
+					if(file.length() <= 0){
+						file.delete();
+						deleted++;
+					}
+				}
+			}
+		}
+		if(deleted > 0){
+			plugin.getLogger().info("5.3.0 0kb Bug Files Removed: " + deleted);
+		}
+		noLongerNeedsUpdate(Compat.BLOCKS_540);
 	}
 
 	private static int cleanFolder(File folder, FileType type){

@@ -227,6 +227,12 @@ public class AntiShare extends PluginWrapper {
 		}
 		SelfCompatibility.cleanupYAML();
 
+		// Cleanup old files
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Cleaning up blocks directory...");
+		}
+		SelfCompatibility.cleanup520blocks();
+
 		// Pre-load
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("Starting sign list...");
