@@ -1,9 +1,11 @@
 package com.turt2live.antishare.manager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -220,12 +222,16 @@ public class RegionManager extends AntiShareManager {
 			if(regions.containsKey(world.getName())){
 				Set<Region> regions = this.regions.get(world.getName());
 				Iterator<Region> iterator = regions.iterator();
+				List<Region> remove = new ArrayList<Region>();
 				while (iterator.hasNext()){
 					Region region = iterator.next();
 					if(region.getName().equalsIgnoreCase(name)){
-						region.onDelete();
-						regions.remove(region);
+						remove.add(region);
 					}
+				}
+				for(Region region : remove){
+					region.onDelete();
+					regions.remove(region);
 				}
 				this.regions.put(world.getName(), regions);
 			}

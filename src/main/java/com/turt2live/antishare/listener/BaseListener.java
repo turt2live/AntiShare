@@ -368,7 +368,7 @@ public class BaseListener implements Listener {
 				type = AlertType.ILLEGAL;
 			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
-				type = AlertType.ILLEGAL;
+				type = AlertType.LEGAL;
 			}
 			use = true;
 			used = player.getItemInHand().getType();
@@ -398,8 +398,8 @@ public class BaseListener implements Listener {
 		}
 
 		// Game Mode check
-		// TODO: Move
-		if(blocks != null){
+		// TODO: Move, gives false message
+		if(blocks != null && event.getAction() != Action.LEFT_CLICK_BLOCK){
 			if(plugin.getConfig().getBoolean("settings.similar-gamemode-allow")){
 				GameMode blockGM = blocks.getType(block);
 				if(blockGM != null){
