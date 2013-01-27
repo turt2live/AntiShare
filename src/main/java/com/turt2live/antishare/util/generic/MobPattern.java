@@ -32,7 +32,7 @@ public class MobPattern {
 		this.head = head;
 		this.body = body;
 		this.head2 = head2;
-		switch(body){
+		switch (body){
 		case SNOW:
 			name = "Snow Golem";
 			configurationNode = "enabled-features.mob-creation.allow-snow-golems";
@@ -73,7 +73,7 @@ public class MobPattern {
 		if(!(block.getType() == head || block.getType() == head2)){
 			return false;
 		}
-		switch(type){
+		switch (type){
 		case POLE:
 			if(world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body){
 				return true;
@@ -89,7 +89,9 @@ public class MobPattern {
 	}
 
 	/**
-	 * Schedules block updates to correct false information 
+	 * Schedules block updates to correct false information
+	 * 
+	 * @param block The block (source) to update
 	 */
 	public void scheduleUpdate(final Block block){
 		AntiShare plugin = AntiShare.getInstance();
