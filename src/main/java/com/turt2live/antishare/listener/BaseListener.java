@@ -733,15 +733,6 @@ public class BaseListener implements Listener {
 			type = AlertType.LEGAL;
 		}
 
-		// Region Check
-		// TODO: Move
-		if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(player.getLocation()) != ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(item.getLocation()) && type == AlertType.LEGAL){
-			if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PICKUP)){
-				type = AlertType.ILLEGAL;
-				region = true;
-			}
-		}
-
 		// Handle event
 		if(type == AlertType.ILLEGAL){
 			event.setCancelled(true);
