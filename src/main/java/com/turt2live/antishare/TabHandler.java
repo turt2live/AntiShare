@@ -23,6 +23,13 @@ import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ErrorStringList;
 import com.turt2live.antishare.util.StringList;
 
+// TODO: Update for commands
+/*
+ * Known Issues:
+ * - Commands missing
+ * - Weird command behavior. (Player names not supported)
+ */
+
 public class TabHandler implements TabCompleter {
 
 	protected enum Tab{

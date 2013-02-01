@@ -534,7 +534,6 @@ public class RegionListener implements Listener {
 		if(region != null){
 			region.alertExit(player);
 		}
-		// TODO: Death item modification
 	}
 
 	// ################# Pickup Item
