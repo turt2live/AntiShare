@@ -9,6 +9,7 @@ Since 5.3.0:
 - Fixed piston duplication bug
 - Fix wrong file path for inventories
 - Remove Tekkit support
+- Fix region issues
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

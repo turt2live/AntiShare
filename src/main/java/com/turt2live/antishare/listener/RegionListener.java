@@ -111,6 +111,12 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
 				type = AlertType.ILLEGAL;
 			}
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}else{
 			return;
 		}
@@ -151,9 +157,14 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isThrownPotionAllowed()){
 				type = AlertType.ILLEGAL;
 			}
-		}else{
-			return;
 		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
+		}
+
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), Material.POTION)
 				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), Material.POTION)){
 			type = AlertType.LEGAL;
@@ -195,8 +206,12 @@ public class RegionListener implements Listener {
 					if(!region.getConfig().isBlocked(event.getRecipe().getResult().getType(), ListType.CRAFTING)){
 						type = AlertType.LEGAL;
 					}
-				}else{
-					return;
+				}
+
+				// Check same region
+				Region playerRegion = manager.getRegion(player.getLocation());
+				if(playerRegion != region && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+					type = AlertType.ILLEGAL;
 				}
 			}else{
 				type = AlertType.LEGAL;
@@ -328,16 +343,16 @@ public class RegionListener implements Listener {
 				if(!region.getConfig().isBlocked(target, ListType.MOBS)){
 					type = AlertType.LEGAL;
 				}
-			}else{
-				return;
 			}
 		}
 
 		// Check if we need to continue based on settings
 		Region asregion = manager.getRegion(target.getLocation());
-		if(asregion == null){
-			return;
+		Region playerRegion = manager.getRegion(attacker.getLocation());
+		if(playerRegion != asregion && attacker instanceof Player ? !plugin.getPermissions().has((Player) attacker, PermissionNodes.REGION_ROAM, attacker.getWorld()) : true){
+			type = AlertType.ILLEGAL;
 		}
+
 		if(playerCombat){
 			if(!asregion.getConfig().combatAgainstPlayers()){
 				return;
@@ -419,7 +434,6 @@ public class RegionListener implements Listener {
 						}
 					}
 				}
-				return;
 			}
 		}
 	}
@@ -486,8 +500,12 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isBlocked(command, ListType.COMMAND)){
 				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}
 
 		// Handle event
@@ -516,6 +534,7 @@ public class RegionListener implements Listener {
 		if(region != null){
 			region.alertExit(player);
 		}
+		// TODO: Death item modification
 	}
 
 	// ################# Pickup Item
@@ -540,8 +559,12 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.PICKUP)){
 				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}
 
 		// Region Check
@@ -591,8 +614,12 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isBlocked(itemStack.getType(), ListType.DROP)){
 				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}
 
 		// Region Check
@@ -646,8 +673,12 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
 				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}
 
 		// Handle event
@@ -684,8 +715,12 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isBlocked(item, ListType.USE)){
 				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}
 
 		// Handle event
@@ -725,7 +760,7 @@ public class RegionListener implements Listener {
 		StorageMinecart cart = (StorageMinecart) potentialCart;
 
 		// Check internal inventories
-		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
+		if(GamemodeAbstraction.isCreative(player.getGameMode()) && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
 			// Check inventories
 			Region asregion = manager.getRegion(cart.getLocation());
 			if(asregion != null){
@@ -771,9 +806,14 @@ public class RegionListener implements Listener {
 				if(!region.getConfig().isBlocked(event.getRightClicked(), ListType.RIGHT_CLICK_MOBS)){
 					type = AlertType.LEGAL;
 				}
-			}else{
-				return;
 			}
+
+			// Check same region
+			Region playerRegion = manager.getRegion(player.getLocation());
+			if(playerRegion != region && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+				type = AlertType.ILLEGAL;
+			}
+
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, player.getWorld(), ASUtils.getEntityName(event.getRightClicked()))){
 				type = AlertType.LEGAL;
 			}
@@ -802,8 +842,12 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
 				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}
 
 		// Handle event
@@ -852,9 +896,14 @@ public class RegionListener implements Listener {
 			if(!region.getConfig().isBlocked(item, ListType.BLOCK_BREAK)){
 				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
 		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != region && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
+		}
+
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, player.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
@@ -908,12 +957,15 @@ public class RegionListener implements Listener {
 			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_PLACE)){
 				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}
 
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_PLACE)){
-			Region playerRegion = manager.getRegion(player.getLocation());
 			Region blockRegion = manager.getRegion(block.getLocation());
 			if(playerRegion != blockRegion){
 				type = AlertType.ILLEGAL;
@@ -942,19 +994,23 @@ public class RegionListener implements Listener {
 		}
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		AlertType specialType = AlertType.ILLEGAL;
+		AlertType type = AlertType.ILLEGAL;
 
 		// Check if they should be blocked
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getWorld(), block.getType())){
-			specialType = AlertType.LEGAL;
+			type = AlertType.LEGAL;
 		}
 		Region asregion = manager.getRegion(block.getLocation());
 		if(asregion != null){
 			if(!asregion.getConfig().isBlocked(block, ListType.BLOCK_BREAK)){
-				specialType = AlertType.LEGAL;
+				type = AlertType.LEGAL;
 			}
-		}else{
-			return;
+		}
+
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != asregion && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 		}
 
 		// Check hooks
@@ -964,23 +1020,22 @@ public class RegionListener implements Listener {
 
 		// Check regions
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_BREAK)){
-			Region playerRegion = manager.getRegion(player.getLocation());
 			Region blockRegion = manager.getRegion(block.getLocation());
 			if(playerRegion != blockRegion){
-				specialType = AlertType.ILLEGAL;
+				type = AlertType.ILLEGAL;
 			}
 		}
 
 		// Handle event
-		if(specialType == AlertType.ILLEGAL){
+		if(type == AlertType.ILLEGAL){
 			event.setCancelled(true);
 		}
 
 		// Alert
-		if(specialType == AlertType.ILLEGAL){
-			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break " : " broke  ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " in a region.";
+		if(type == AlertType.ILLEGAL){
+			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke  ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " in a region.";
 			String specialPlayerMessage = ChatColor.RED + "You cannot break blocks that are not in your region";
-			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, AlertTrigger.BLOCK_BREAK);
+			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, type, AlertTrigger.BLOCK_BREAK);
 		}
 	}
 
@@ -1004,19 +1059,11 @@ public class RegionListener implements Listener {
 			block = player.getWorld().getBlockAt(player.getLocation());
 		}
 		Region region = manager.getRegion(block.getLocation());
-		if(region == null){
-			return;
-		}
 
-		// Right click list
-		if(action == Action.RIGHT_CLICK_BLOCK){
-			// Check if they should be blocked
-			if(region.getConfig().isBlocked(block, ListType.RIGHT_CLICK)){
-				type = AlertType.ILLEGAL;
-			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, block.getWorld(), block.getType())){
-				type = AlertType.LEGAL;
-			}
+		// Check same region
+		Region playerRegion = manager.getRegion(player.getLocation());
+		if(playerRegion != region && !plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM, player.getWorld())){
+			type = AlertType.ILLEGAL;
 
 			// Set messages
 			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
@@ -1026,55 +1073,54 @@ public class RegionListener implements Listener {
 			playerMessage = factory.toString();
 		}
 
-		// If this event is triggered as legal from the right click, check use lists
-		if(type == AlertType.LEGAL){
-			if(region.getConfig().isBlocked(block, ListType.USE)){
-				type = AlertType.ILLEGAL;
-			}
-			// Check if they should be blocked
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getWorld(), block.getType())){
-				type = AlertType.LEGAL;
+		if(region != null){
+			// Right click list
+			if(action == Action.RIGHT_CLICK_BLOCK){
+				// Check if they should be blocked
+				if(region.getConfig().isBlocked(block, ListType.RIGHT_CLICK)){
+					type = AlertType.ILLEGAL;
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, block.getWorld(), block.getType())){
+					type = AlertType.LEGAL;
+				}
+
+				// Set messages
+				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
+				playerMessage = plugin.getMessage("blocked-action.right-click");
+				MessageFactory factory = new MessageFactory(playerMessage);
+				factory.insert(block, player, block.getWorld(), TenderType.RIGHT_CLICK);
+				playerMessage = factory.toString();
 			}
 
-			// Set messages
-			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
-			playerMessage = plugin.getMessage("blocked-action.right-click");
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert(block, player, block.getWorld(), TenderType.RIGHT_CLICK);
-			playerMessage = factory.toString();
-		}
+			// If this event is triggered as legal from the right click, check use lists
+			if(type == AlertType.LEGAL){
+				if(region.getConfig().isBlocked(block, ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
+				// Check if they should be blocked
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getWorld(), block.getType())){
+					type = AlertType.LEGAL;
+				}
 
-		// If the event is triggered as legal from the use lists, check the player's item in hand
-		if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
-			// Check if they should be blocked
-			if(region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.USE)){
-				type = AlertType.ILLEGAL;
-			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), player.getItemInHand().getType())){
-				type = AlertType.LEGAL;
+				// Set messages
+				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
+				playerMessage = plugin.getMessage("blocked-action.right-click");
+				MessageFactory factory = new MessageFactory(playerMessage);
+				factory.insert(block, player, block.getWorld(), TenderType.RIGHT_CLICK);
+				playerMessage = factory.toString();
 			}
 
-			// Set messages
-			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name());
-			playerMessage = plugin.getMessage("blocked-action.use-item");
-			trigger = AlertTrigger.USE_ITEM;
-			MessageFactory factory = new MessageFactory(playerMessage);
-			factory.insert(block, player, block.getWorld(), TenderType.USE);
-			playerMessage = factory.toString();
-		}
+			// If the event is triggered as legal from the use lists, check the player's item in hand
+			if(type == AlertType.LEGAL && action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null){
+				// Check if they should be blocked
+				if(region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.USE)){
+					type = AlertType.ILLEGAL;
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), player.getItemInHand().getType())){
+					type = AlertType.LEGAL;
+				}
 
-		// Check for eye of ender / ender pearl
-		if(action == Action.RIGHT_CLICK_BLOCK
-				&& player.getItemInHand() != null
-				&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
-				|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
-			if(region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
-				type = AlertType.ILLEGAL;
-			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
-				type = AlertType.ILLEGAL;
-			}
-			if(type == AlertType.ILLEGAL){
+				// Set messages
 				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name());
 				playerMessage = plugin.getMessage("blocked-action.use-item");
 				trigger = AlertTrigger.USE_ITEM;
@@ -1082,40 +1128,60 @@ public class RegionListener implements Listener {
 				factory.insert(block, player, block.getWorld(), TenderType.USE);
 				playerMessage = factory.toString();
 			}
-		}
 
-		// Check for potion
-		if(action == Action.RIGHT_CLICK_BLOCK
-				&& player.getItemInHand() != null
-				&& player.getItemInHand().getType() == Material.POTION){
-			boolean potion = false;
-			if(player.getItemInHand().getDurability() > 32000){
-				if(!region.getConfig().isThrownPotionAllowed()){
+			// Check for eye of ender / ender pearl
+			if(action == Action.RIGHT_CLICK_BLOCK
+					&& player.getItemInHand() != null
+					&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
+					|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
+				if(region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
 					type = AlertType.ILLEGAL;
-					potion = true;
 				}
-			}else{
-				if(!region.getConfig().isPotionAllowed()){
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 					type = AlertType.ILLEGAL;
-					potion = true;
+				}
+				if(type == AlertType.ILLEGAL){
+					message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name());
+					playerMessage = plugin.getMessage("blocked-action.use-item");
+					trigger = AlertTrigger.USE_ITEM;
+					MessageFactory factory = new MessageFactory(playerMessage);
+					factory.insert(block, player, block.getWorld(), TenderType.USE);
+					playerMessage = factory.toString();
 				}
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
-				type = AlertType.LEGAL;
-			}
-			if(type == AlertType.ILLEGAL && potion){
-				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name()) + ChatColor.WHITE + " in a region";
-				playerMessage = plugin.getMessage("blocked-action.use-item");
-				trigger = AlertTrigger.USE_ITEM;
-				MessageFactory factory = new MessageFactory(playerMessage);
-				factory.insert(block, player, block.getWorld(), TenderType.USE);
-				playerMessage = factory.toString();
+
+			// Check for potion
+			if(action == Action.RIGHT_CLICK_BLOCK
+					&& player.getItemInHand() != null
+					&& player.getItemInHand().getType() == Material.POTION){
+				boolean potion = false;
+				if(player.getItemInHand().getDurability() > 32000){
+					if(!region.getConfig().isThrownPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
+				}else{
+					if(!region.getConfig().isPotionAllowed()){
+						type = AlertType.ILLEGAL;
+						potion = true;
+					}
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
+					type = AlertType.LEGAL;
+				}
+				if(type == AlertType.ILLEGAL && potion){
+					message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name()) + ChatColor.WHITE + " in a region";
+					playerMessage = plugin.getMessage("blocked-action.use-item");
+					trigger = AlertTrigger.USE_ITEM;
+					MessageFactory factory = new MessageFactory(playerMessage);
+					factory.insert(block, player, block.getWorld(), TenderType.USE);
+					playerMessage = factory.toString();
+				}
 			}
 		}
 
 		// Check regions
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_USE)){
-			Region playerRegion = manager.getRegion(player.getLocation());
 			Region blockRegion = manager.getRegion(block.getLocation());
 			if(playerRegion != blockRegion){
 				type = AlertType.ILLEGAL;
