@@ -16,6 +16,7 @@ import org.bukkit.block.Jukebox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,11 +44,8 @@ import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.antishare.tekkitcompat.EntityLayer;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.materials.MaterialAPI;
-import com.turt2live.materials.ServerHas;
-import com.turt2live.materials.TekkitMaterialAPI;
 
 public class BlockListener implements Listener {
 
@@ -94,7 +92,7 @@ public class BlockListener implements Listener {
 			Block relative = event.getBlockPlaced();
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
 				GameMode potentialNewGM = player.getGameMode();
-				if(TekkitMaterialAPI.isDroppedOnBreak(relative, source)){
+				if(MaterialAPI.isDroppedOnBreak(relative, source, true)){
 					handle = true;
 					existing = blocks.getType(source);
 					if(existing != null){
@@ -142,7 +140,7 @@ public class BlockListener implements Listener {
 		boolean deny = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.deny");
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		Block to = event.getToBlock();
-		if(TekkitMaterialAPI.canBeBrokenByWater(to.getType())){
+		if(MaterialAPI.canBeBrokenByWater(to.getType())){
 			if(GamemodeAbstraction.isCreative(blocks.getType(to))){
 				if(deny){
 					event.setCancelled(true);
@@ -241,7 +239,7 @@ public class BlockListener implements Listener {
 			Entity entity = event.getRightClicked();
 			GameMode mode = blocks.getType(entity);
 			Material item = Material.AIR;
-			if(ServerHas.mc14xEntities() && entity.getType() == EntityType.ITEM_FRAME){
+			if(entity.getType() == EntityType.ITEM_FRAME){
 				item = Material.ITEM_FRAME;
 			}else if(entity.getType() == EntityType.PAINTING){
 				item = Material.PAINTING;
@@ -261,7 +259,6 @@ public class BlockListener implements Listener {
 		}
 		if(event.isCancelled()
 				|| !plugin.getConfig().getBoolean("enabled-features.disable-item-frame-cross-game-mode")
-				|| !ServerHas.mc14xEntities()
 				|| event.getRightClicked().getType() != EntityType.ITEM_FRAME){
 			return;
 		}
@@ -350,7 +347,7 @@ public class BlockListener implements Listener {
 		}
 		int dest = event.getLength() + 1; // Destination block
 		Block block = event.getBlock().getRelative(event.getDirection(), dest);
-		if(TekkitMaterialAPI.canPistonBreak(block.getType())){
+		if(MaterialAPI.canPistonBreak(block.getType())){
 			block.setType(Material.AIR);
 			blocks.removeBlock(block);
 		}
@@ -393,7 +390,7 @@ public class BlockListener implements Listener {
 				}else if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.disable-breaking-mixed-gamemode")){
 					for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 						Block rel = block.getRelative(face);
-						if(TekkitMaterialAPI.isDroppedOnBreak(rel, block)){
+						if(MaterialAPI.isDroppedOnBreak(rel, block, true)){
 							GameMode relGamemode = blocks.getType(rel);
 							if(relGamemode != null){
 								attachedGM = relGamemode.name().toLowerCase();
@@ -451,7 +448,7 @@ public class BlockListener implements Listener {
 		if(player.getGameMode() == GameMode.SURVIVAL && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
 			for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 				Block rel = block.getRelative(face);
-				if(TekkitMaterialAPI.isDroppedOnBreak(rel, block)){
+				if(MaterialAPI.isDroppedOnBreak(rel, block, true)){
 					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 						GameMode gm = blocks.getType(rel);
 						if(gm != null){
@@ -462,12 +459,10 @@ public class BlockListener implements Listener {
 							case SURVIVAL:
 								rel.breakNaturally();
 								break;
+							case ADVENTURE:
+								rel.setType(Material.AIR);
+								break;
 							default:
-								if(ServerHas.adventureMode()){
-									if(gm == GameMode.ADVENTURE){
-										rel.setType(Material.AIR);
-									}
-								}
 								break;
 							}
 						}else{
@@ -502,23 +497,20 @@ public class BlockListener implements Listener {
 
 			// Check for attached blocks
 			if(plugin.getListener().getConfig(block.getWorld()).removeAttachedBlocksOnBreak() && plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
-				if(ServerHas.mc14xItems()){
-					for(Entity e : block.getChunk().getEntities()){
-						if(EntityLayer.isEntity(e, "ItemFrame")){
-							double d2 = e.getLocation().distanceSquared(block.getLocation());
-							if((d2 < 1.65 && d2 > 1.6) || (d2 > 0.5 && d2 < 0.51)){
-								e.remove();
-							}
+				for(Entity e : block.getChunk().getEntities()){
+					if(e instanceof ItemFrame){
+						double d2 = e.getLocation().distanceSquared(block.getLocation());
+						if((d2 < 1.65 && d2 > 1.6) || (d2 > 0.5 && d2 < 0.51)){
+							e.remove();
 						}
 					}
-
 				}
 			}
 
 			if(plugin.getListener().getConfig(block.getWorld()).removeAttachedBlocksOnBreak()){
 				for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 					Block rel = block.getRelative(face);
-					if(TekkitMaterialAPI.isDroppedOnBreak(rel, block)){
+					if(MaterialAPI.isDroppedOnBreak(rel, block, true)){
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 							GameMode gm = blocks.getType(rel);
 							if(gm != null){
@@ -529,12 +521,10 @@ public class BlockListener implements Listener {
 								case SURVIVAL:
 									rel.breakNaturally();
 									break;
+								case ADVENTURE:
+									rel.setType(Material.AIR);
+									break;
 								default:
-									if(ServerHas.adventureMode()){
-										if(gm == GameMode.ADVENTURE){
-											rel.setType(Material.AIR);
-										}
-									}
 									break;
 								}
 							}else{
@@ -551,19 +541,19 @@ public class BlockListener implements Listener {
 				boolean moreBlocks = true;
 				Block active = block;
 				Block above = block.getRelative(BlockFace.UP);
-				if(TekkitMaterialAPI.isAffectedByGravity(active.getType()) || TekkitMaterialAPI.isAffectedByGravity(above.getType())){
+				if(MaterialAPI.isAffectedByGravity(active.getType()) || MaterialAPI.isAffectedByGravity(above.getType())){
 					do{
 						Block below = active.getRelative(BlockFace.DOWN);
 						active = below;
 						if(below.getType() == Material.AIR){
 							continue;
 						}
-						if(TekkitMaterialAPI.canBreakFallingBlock(below.getType())){
+						if(MaterialAPI.canBreakFallingBlock(below.getType())){
 							// Remove all sand/gravel above this block
 							boolean checkMoreBlocks = true;
 							above = block.getRelative(BlockFace.UP);
 							do{
-								if(TekkitMaterialAPI.isAffectedByGravity(above.getType())){
+								if(MaterialAPI.isAffectedByGravity(above.getType())){
 									above.setType(Material.AIR);
 									above = above.getRelative(BlockFace.UP);
 								}else{
@@ -586,10 +576,10 @@ public class BlockListener implements Listener {
 				 */
 				do{
 					above = active.getRelative(BlockFace.UP);
-					if(TekkitMaterialAPI.isAffectedByGravity(above.getType())){
+					if(MaterialAPI.isAffectedByGravity(above.getType())){
 						for(BlockFace face : BlockFace.values()){
 							Block rel = above.getRelative(face);
-							if(TekkitMaterialAPI.isDroppedOnBreak(rel, above)){
+							if(MaterialAPI.isDroppedOnBreak(rel, above, true)){
 								rel.setType(Material.AIR);
 								blocks.removeBlock(rel);
 							}

@@ -40,12 +40,10 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.signs.SignList;
-import com.turt2live.antishare.tekkitcompat.TabRegister;
 import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
 import com.turt2live.antishare.util.generic.SelfCompatibility;
 import com.turt2live.antishare.util.generic.UpdateChecker;
-import com.turt2live.materials.ServerHas;
 
 /**
  * AntiShare
@@ -305,9 +303,7 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info("Setting up commands...");
 		}
 		getCommand("antishare").setExecutor(new CommandHandler());
-		if(ServerHas.tabComplete()){
-			TabRegister.register(getCommand("antishare"));
-		}
+		getCommand("antishare").setTabCompleter(new TabHandler());
 
 		// Enabled
 		getLogger().info("Enabled!");
@@ -510,10 +506,8 @@ public class AntiShare extends PluginWrapper {
 		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL, world) && player.getGameMode() == GameMode.SURVIVAL){
 			return true;
 		}
-		if(ServerHas.adventureMode()){
-			if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
-				return true;
-			}
+		if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
+			return true;
 		}
 		return false;
 	}
@@ -577,10 +571,8 @@ public class AntiShare extends PluginWrapper {
 		if(permissions.has(player, PermissionNodes.AFFECT_SURVIVAL, world) && player.getGameMode() == GameMode.SURVIVAL){
 			return true;
 		}
-		if(ServerHas.adventureMode()){
-			if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
-				return true;
-			}
+		if(permissions.has(player, PermissionNodes.AFFECT_ADVENTURE, world) && player.getGameMode() == GameMode.ADVENTURE){
+			return true;
 		}
 		return false;
 	}

@@ -19,9 +19,7 @@ import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.listener.BlockListener;
-import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
 import com.turt2live.antishare.util.events.TrackerList;
-import com.turt2live.materials.ServerHas;
 
 public class BlockManager extends AntiShareManager {
 
@@ -214,12 +212,12 @@ public class BlockManager extends AntiShareManager {
 				return;
 			}
 			break;
-		default:
-			if(ServerHas.adventureMode()){
-				if(!tracked_adventure.isTracked(block)){
-					return;
-				}
+		case ADVENTURE:
+			if(!tracked_adventure.isTracked(block)){
+				return;
 			}
+			break;
+		default:
 			break;
 		}
 		String c = chunkToString(block.getChunk());
@@ -245,12 +243,12 @@ public class BlockManager extends AntiShareManager {
 				return;
 			}
 			break;
-		default:
-			if(ServerHas.adventureMode()){
-				if(!tracked_adventure.isTracked(entity)){
-					return;
-				}
+		case ADVENTURE:
+			if(!tracked_adventure.isTracked(entity)){
+				return;
 			}
+			break;
+		default:
 			break;
 		}
 		String c = chunkToString(entity.getLocation().getChunk());
@@ -277,12 +275,12 @@ public class BlockManager extends AntiShareManager {
 				return;
 			}
 			break;
-		default:
-			if(ServerHas.adventureMode()){
-				if(!tracked_adventure.isTracked(entityType)){
-					return;
-				}
+		case ADVENTURE:
+			if(!tracked_adventure.isTracked(entityType)){
+				return;
 			}
+			break;
+		default:
 			break;
 		}
 		String c = chunkToString(entity.getChunk());
@@ -345,7 +343,7 @@ public class BlockManager extends AntiShareManager {
 
 		// Start a thread to wait until the block changes
 		final Material oldType = oldBlock.getType();
-		ScheduleLayer.runTaskAsynchronously(plugin, new Runnable(){
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
 			@Override
 			public void run(){
 				// Setup vars

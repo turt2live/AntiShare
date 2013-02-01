@@ -12,6 +12,7 @@ import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Painting;
@@ -64,11 +65,9 @@ import com.turt2live.antishare.notification.MessageFactory;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
 import com.turt2live.materials.MaterialAPI;
-import com.turt2live.materials.ServerHas;
 
 public class RegionListener implements Listener {
 
@@ -761,12 +760,8 @@ public class RegionListener implements Listener {
 			item = Material.PAINTING;
 		}else if(event.getRightClicked() instanceof Sheep){
 			item = Material.SHEARS;
-		}else{
-			if(ServerHas.mc14xItems()){
-				if(ItemFrameLayer.isItemFrame(event.getRightClicked())){
-					item = ItemFrameLayer.getItemFrame();
-				}
-			}
+		}else if(event.getRightClicked() instanceof ItemFrame){
+			item = Material.ITEM_FRAME;
 		}
 
 		// If the entity is not found, check for interacted entities

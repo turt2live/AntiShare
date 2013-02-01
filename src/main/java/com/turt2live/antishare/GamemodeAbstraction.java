@@ -2,8 +2,6 @@ package com.turt2live.antishare;
 
 import org.bukkit.GameMode;
 
-import com.turt2live.materials.ServerHas;
-
 public class GamemodeAbstraction {
 
 	/**
@@ -33,7 +31,7 @@ public class GamemodeAbstraction {
 		if(!adventureIsCreative()){
 			return gm1 == GameMode.CREATIVE;
 		}
-		return gm1 == GameMode.CREATIVE || (ServerHas.adventureMode() && gm1 == GameMode.ADVENTURE);
+		return gm1 == GameMode.CREATIVE || gm1 == GameMode.ADVENTURE;
 	}
 
 	/**

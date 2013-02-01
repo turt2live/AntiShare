@@ -12,8 +12,6 @@ package com.turt2live.antishare.util.generic;
 
 import org.bukkit.GameMode;
 
-import com.turt2live.materials.ServerHas;
-
 /**
  * An enum to represent a Game Mode
  * 
@@ -49,7 +47,7 @@ public enum ASGameMode{
 			return true;
 		}else if(numeric == -3){
 			return true;
-		}else if(ServerHas.adventureMode() && numeric == 2 && gamemode == GameMode.ADVENTURE){
+		}else if(numeric == 2 && gamemode == GameMode.ADVENTURE){
 			return true;
 		}
 		return false; // Covers 'NONE'

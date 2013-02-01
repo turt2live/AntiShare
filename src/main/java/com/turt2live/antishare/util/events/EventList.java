@@ -16,11 +16,10 @@ import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Skull;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.signs.Sign;
-import com.turt2live.materials.ServerHas;
-import com.turt2live.antishare.tekkitcompat.SkullCompat;
 import com.turt2live.antishare.util.ASUtils;
 
 /**
@@ -232,20 +231,18 @@ public class EventList {
 			}
 
 			// Special case: Skull
-			if(ServerHas.skulls()){
-				if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull")
-						|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull")
-						|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
-						|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
-					if(!negate){
-						this.blocked.add(ASUtils.materialToString(Material.SKULL, false));
-						this.blocked.add(ASUtils.materialToString(Material.SKULL_ITEM, false));
-					}else{
-						this.blocked.remove(ASUtils.materialToString(Material.SKULL, false));
-						this.blocked.remove(ASUtils.materialToString(Material.SKULL_ITEM, false));
-					}
-					continue;
+			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull")
+					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull")
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
+					|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
+				if(!negate){
+					this.blocked.add(ASUtils.materialToString(Material.SKULL, false));
+					this.blocked.add(ASUtils.materialToString(Material.SKULL_ITEM, false));
+				}else{
+					this.blocked.remove(ASUtils.materialToString(Material.SKULL, false));
+					this.blocked.remove(ASUtils.materialToString(Material.SKULL_ITEM, false));
 				}
+				continue;
 			}
 
 			// Try to add the item, warn otherwise
@@ -259,21 +256,19 @@ public class EventList {
 			}
 			try{
 				boolean noSkull = true;
-				if(ServerHas.skulls()){
-					if(blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("skull")
-							|| blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("mobskull")
-							|| blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL.getId()))
-							|| blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL_ITEM.getId()))){
-						if(plugin.getItemMap().getItem(blocked, false, false) == null){
-							throw new Exception("");
-						}
-						if(!negate){
-							this.blocked.add(plugin.getItemMap().getItem(blocked, false, false));
-						}else{
-							this.blocked.remove(plugin.getItemMap().getItem(blocked, false, false));
-						}
-						noSkull = false;
+				if(blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("skull")
+						|| blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("mobskull")
+						|| blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL.getId()))
+						|| blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL_ITEM.getId()))){
+					if(plugin.getItemMap().getItem(blocked, false, false) == null){
+						throw new Exception("");
 					}
+					if(!negate){
+						this.blocked.add(plugin.getItemMap().getItem(blocked, false, false));
+					}else{
+						this.blocked.remove(plugin.getItemMap().getItem(blocked, false, false));
+					}
+					noSkull = false;
 				}
 				if(noSkull){
 					if(plugin.getItemMap().getItem(blocked, false, true) == null){
@@ -373,15 +368,13 @@ public class EventList {
 			if(!contained){
 				contained = !blocked.contains(block.getTypeId() + ":*");
 			}
-			if(ServerHas.skulls()){
-				if(!contained && SkullCompat.isSkull(block.getState())){
-					SkullCompat compat = new SkullCompat(block);
-					String owner = compat.getOwner();
-					if(owner == null){
-						contained = true;
-					}else{
-						contained = !blocked.contains(block.getTypeId() + ":" + owner);
-					}
+			if(!contained && block.getState() instanceof Skull){
+				Skull skull = (Skull) block.getState();
+				if(skull.hasOwner()){
+					String owner = skull.getOwner();
+					contained = !blocked.contains(block.getTypeId() + ":" + owner);
+				}else{
+					contained = true;
 				}
 			}
 			return contained;
@@ -390,15 +383,13 @@ public class EventList {
 		if(!contained){
 			contained = blocked.contains(block.getTypeId() + ":*");
 		}
-		if(ServerHas.skulls()){
-			if(!contained && SkullCompat.isSkull(block.getState())){
-				SkullCompat compat = new SkullCompat(block);
-				String owner = compat.getOwner();
-				if(owner == null){
-					contained = false;
-				}else{
-					contained = blocked.contains(block.getTypeId() + ":" + owner);
-				}
+		if(!contained && block.getState() instanceof Skull){
+			Skull skull = (Skull) block.getState();
+			if(skull.hasOwner()){
+				String owner = skull.getOwner();
+				contained = blocked.contains(block.getTypeId() + ":" + owner);
+			}else{
+				contained = false;
 			}
 		}
 		return contained;

@@ -17,7 +17,6 @@ import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.materials.ServerHas;
 
 public class InventoryListener implements Listener {
 
@@ -61,13 +60,11 @@ public class InventoryListener implements Listener {
 				manager.saveSurvivalInventory(player, from);
 				manager.saveEnderSurvivalInventory(player, from);
 				break;
+			case ADVENTURE:
+				manager.saveAdventureInventory(player, from);
+				manager.saveEnderAdventureInventory(player, from);
+				break;
 			default:
-				if(ServerHas.adventureMode()){
-					if(player.getGameMode() == GameMode.ADVENTURE){
-						manager.saveAdventureInventory(player, from);
-						manager.saveEnderAdventureInventory(player, from);
-					}
-				}
 				break;
 			}
 
@@ -87,13 +84,11 @@ public class InventoryListener implements Listener {
 				manager.getSurvivalInventory(player, to).setTo(player);
 				manager.getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
 				break;
+			case ADVENTURE:
+				manager.getAdventureInventory(player, to).setTo(player);
+				manager.getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				break;
 			default:
-				if(ServerHas.adventureMode()){
-					if(player.getGameMode() == GameMode.ADVENTURE){
-						manager.getAdventureInventory(player, to).setTo(player);
-						manager.getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
-					}
-				}
 				break;
 			}
 
@@ -159,13 +154,11 @@ public class InventoryListener implements Listener {
 				manager.saveSurvivalInventory(player, player.getWorld());
 				manager.saveEnderSurvivalInventory(player, player.getWorld());
 				break;
+			case ADVENTURE:
+				manager.saveAdventureInventory(player, player.getWorld());
+				manager.saveEnderAdventureInventory(player, player.getWorld());
+				break;
 			default:
-				if(ServerHas.adventureMode()){
-					if(from == GameMode.ADVENTURE){
-						manager.saveAdventureInventory(player, player.getWorld());
-						manager.saveEnderAdventureInventory(player, player.getWorld());
-					}
-				}
 				break;
 			}
 
@@ -182,13 +175,11 @@ public class InventoryListener implements Listener {
 				manager.getSurvivalInventory(player, player.getWorld()).setTo(player);
 				manager.getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
 				break;
+			case ADVENTURE:
+				manager.getAdventureInventory(player, player.getWorld()).setTo(player);
+				manager.getEnderAdventureInventory(player, player.getWorld()).setTo(player);
+				break;
 			default:
-				if(ServerHas.adventureMode()){
-					if(to == GameMode.ADVENTURE){
-						manager.getAdventureInventory(player, player.getWorld()).setTo(player);
-						manager.getEnderAdventureInventory(player, player.getWorld()).setTo(player);
-					}
-				}
 				break;
 			}
 		}else{

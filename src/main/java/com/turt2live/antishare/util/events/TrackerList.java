@@ -21,7 +21,6 @@ import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.signs.Sign;
-import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.ASUtils;
 
 /**
@@ -236,12 +235,10 @@ public class TrackerList {
 		case PAINTING:
 			mat = Material.PAINTING;
 			break;
+		case ITEM_FRAME:
+			mat = Material.ITEM_FRAME;
+			break;
 		default:
-			if(ServerHas.mc14xEntities()){
-				if(entityType == EntityType.ITEM_FRAME){
-					mat = Material.ITEM_FRAME;
-				}
-			}
 			break;
 		}
 		if(mat == Material.AIR){

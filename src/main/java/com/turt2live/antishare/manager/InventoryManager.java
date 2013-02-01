@@ -33,7 +33,6 @@ import com.turt2live.antishare.listener.InventoryListener;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
-import com.turt2live.materials.ServerHas;
 
 /**
  * Manages inventories within AntiShare
@@ -97,10 +96,10 @@ public class InventoryManager extends AntiShareManager {
 				case SURVIVAL:
 					survival.put(player.getName() + "." + world.getName(), inventory);
 					break;
+				case ADVENTURE:
+					adventure.put(player.getName() + "." + world.getName(), inventory);
+					break;
 				default:
-					if(ServerHas.adventureMode() && gamemode == GameMode.ADVENTURE){
-						adventure.put(player.getName() + "." + world.getName(), inventory);
-					}
 					break;
 				}
 			}
@@ -121,10 +120,10 @@ public class InventoryManager extends AntiShareManager {
 				case SURVIVAL:
 					enderSurvival.put(player.getName() + "." + world.getName(), inventory);
 					break;
+				case ADVENTURE:
+					enderAdventure.put(player.getName() + "." + world.getName(), inventory);
+					break;
 				default:
-					if(ServerHas.adventureMode() && gamemode == GameMode.ADVENTURE){
-						enderAdventure.put(player.getName() + "." + world.getName(), inventory);
-					}
 					break;
 				}
 			}
@@ -176,13 +175,11 @@ public class InventoryManager extends AntiShareManager {
 			case SURVIVAL:
 				survival.put(key, inventory);
 				break;
+			case ADVENTURE:
+				adventure.put(key, inventory);
+				break;
 			default:
-				if(ServerHas.adventureMode()){
-					if(inventory.getGameMode() == GameMode.ADVENTURE){
-						adventure.put(key, inventory);
-						break;
-					}
-				}
+				break;
 			}
 			break;
 		case ENDER:
@@ -193,12 +190,10 @@ public class InventoryManager extends AntiShareManager {
 			case SURVIVAL:
 				enderSurvival.put(key, inventory);
 				break;
+			case ADVENTURE:
+				enderAdventure.put(key, inventory);
+				break;
 			default:
-				if(ServerHas.adventureMode()){
-					if(inventory.getGameMode() == GameMode.ADVENTURE){
-						enderAdventure.put(key, inventory);
-					}
-				}
 				break;
 			}
 			break;
@@ -241,17 +236,17 @@ public class InventoryManager extends AntiShareManager {
 			}
 			enderPremerge = getEnderSurvivalInventory(player, player.getWorld());
 			break;
-		default:
-			if(ServerHas.adventureMode() && player.getGameMode() == GameMode.ADVENTURE){
-				if(!alreadySaved){
-					saveAdventureInventory(player, player.getWorld());
-				}
-				premerge = getAdventureInventory(player, player.getWorld());
-				if(!alreadySaved){
-					saveEnderAdventureInventory(player, player.getWorld());
-				}
-				enderPremerge = getEnderAdventureInventory(player, player.getWorld());
+		case ADVENTURE:
+			if(!alreadySaved){
+				saveAdventureInventory(player, player.getWorld());
 			}
+			premerge = getAdventureInventory(player, player.getWorld());
+			if(!alreadySaved){
+				saveEnderAdventureInventory(player, player.getWorld());
+			}
+			enderPremerge = getEnderAdventureInventory(player, player.getWorld());
+			break;
+		default:
 			break;
 		}
 
@@ -267,12 +262,10 @@ public class InventoryManager extends AntiShareManager {
 			enderMerge.setGamemode(GameMode.SURVIVAL);
 			survival.put(player.getName() + "." + world.getName(), merge);
 			enderSurvival.put(player.getName() + "." + world.getName(), enderMerge);
-			if(ServerHas.adventureMode()){
-				merge.setGamemode(GameMode.ADVENTURE);
-				enderMerge.setGamemode(GameMode.ADVENTURE);
-				adventure.put(player.getName() + "." + world.getName(), merge);
-				enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
-			}
+			merge.setGamemode(GameMode.ADVENTURE);
+			enderMerge.setGamemode(GameMode.ADVENTURE);
+			adventure.put(player.getName() + "." + world.getName(), merge);
+			enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
 		}
 	}
 
@@ -294,11 +287,11 @@ public class InventoryManager extends AntiShareManager {
 			saveSurvivalInventory(player, player.getWorld());
 			saveEnderSurvivalInventory(player, player.getWorld());
 			break;
+		case ADVENTURE:
+			saveAdventureInventory(player, player.getWorld());
+			saveEnderAdventureInventory(player, player.getWorld());
+			break;
 		default:
-			if(ServerHas.adventureMode() && player.getGameMode() == GameMode.ADVENTURE){
-				saveAdventureInventory(player, player.getWorld());
-				saveEnderAdventureInventory(player, player.getWorld());
-			}
 			break;
 		}
 
@@ -640,11 +633,11 @@ public class InventoryManager extends AntiShareManager {
 			saveSurvivalInventory(player, world);
 			saveEnderSurvivalInventory(player, world);
 			break;
+		case ADVENTURE:
+			saveAdventureInventory(player, world);
+			saveEnderAdventureInventory(player, world);
+			break;
 		default:
-			if(ServerHas.adventureMode() && player.getGameMode() == GameMode.ADVENTURE){
-				saveAdventureInventory(player, world);
-				saveEnderAdventureInventory(player, world);
-			}
 			break;
 		}
 		c = getCreativeInventory(player, world);
@@ -688,11 +681,10 @@ public class InventoryManager extends AntiShareManager {
 						inventory = getCreativeInventory(player, from);
 						enderInventory = getEnderCreativeInventory(player, from);
 						break;
+					case ADVENTURE:
+						inventory = getAdventureInventory(player, from);
+						enderInventory = getEnderAdventureInventory(player, from);
 					default:
-						if(ServerHas.adventureMode() && gamemode == GameMode.ADVENTURE){
-							inventory = getAdventureInventory(player, from);
-							enderInventory = getEnderAdventureInventory(player, from);
-						}
 						break;
 					}
 					for(String world : allWorlds){
@@ -709,11 +701,11 @@ public class InventoryManager extends AntiShareManager {
 							survival.put(p, inventory);
 							enderSurvival.put(p, enderInventory);
 							break;
+						case ADVENTURE:
+							adventure.put(p, inventory);
+							enderAdventure.put(p, enderInventory);
+							break;
 						default:
-							if(ServerHas.adventureMode() && gamemode == GameMode.ADVENTURE){
-								adventure.put(p, inventory);
-								enderAdventure.put(p, enderInventory);
-							}
 							break;
 						}
 					}
@@ -737,13 +729,11 @@ public class InventoryManager extends AntiShareManager {
 			saveSurvivalInventory(player, player.getWorld());
 			saveEnderSurvivalInventory(player, player.getWorld());
 			break;
+		case ADVENTURE:
+			saveAdventureInventory(player, player.getWorld());
+			saveEnderAdventureInventory(player, player.getWorld());
+			break;
 		default:
-			if(ServerHas.adventureMode() && player.getGameMode() == GameMode.ADVENTURE){
-				if(player.getGameMode() == GameMode.ADVENTURE){
-					saveAdventureInventory(player, player.getWorld());
-					saveEnderAdventureInventory(player, player.getWorld());
-				}
-			}
 			break;
 		}
 		refreshInventories(player, true);

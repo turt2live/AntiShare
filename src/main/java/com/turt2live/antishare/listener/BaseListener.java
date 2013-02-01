@@ -26,6 +26,7 @@ import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Painting;
@@ -79,16 +80,12 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.PerWorldConfig;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.tekkitcompat.HangingListener;
-import com.turt2live.antishare.tekkitcompat.ItemFrameLayer;
-import com.turt2live.antishare.tekkitcompat.PaintingListener;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.generic.LevelSaver;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
 import com.turt2live.antishare.util.generic.MobPattern;
 import com.turt2live.materials.MaterialAPI;
-import com.turt2live.materials.ServerHas;
 
 /**
  * The core listener - Listens to all events needed by AntiShare and handles them
@@ -106,12 +103,7 @@ public class BaseListener implements Listener {
 	 * Creates a new Listener
 	 */
 	public BaseListener(){
-		reload();
-		if(ServerHas.hangingEvents()){
-			plugin.getServer().getPluginManager().registerEvents(new HangingListener(), plugin);
-		}else{
-			plugin.getServer().getPluginManager().registerEvents(new PaintingListener(), plugin);
-		}
+		plugin.getServer().getPluginManager().registerEvents(new HangingListener(), plugin);
 	}
 
 	/**
@@ -517,12 +509,8 @@ public class BaseListener implements Listener {
 			item = Material.PAINTING;
 		}else if(event.getRightClicked() instanceof Sheep){
 			item = Material.SHEARS;
-		}else{
-			if(ServerHas.mc14xItems()){
-				if(ItemFrameLayer.isItemFrame(event.getRightClicked())){
-					item = ItemFrameLayer.getItemFrame();
-				}
-			}
+		}else if(event.getRightClicked() instanceof ItemFrame){
+			item = Material.ITEM_FRAME;
 		}
 
 		// If the entity is not found, check for interacted entities

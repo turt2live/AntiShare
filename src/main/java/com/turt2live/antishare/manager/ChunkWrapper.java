@@ -15,7 +15,6 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
-import com.turt2live.materials.ServerHas;
 
 class ChunkWrapper {
 
@@ -61,13 +60,13 @@ class ChunkWrapper {
 			}
 			survival_blocks.add(manager.blockToString(block));
 			break;
-		default:
-			if(ServerHas.adventureMode()){
-				if(!manager.tracked_adventure.isTracked(block)){
-					break;
-				}
-				adventure_blocks.add(manager.blockToString(block));
+		case ADVENTURE:
+			if(!manager.tracked_adventure.isTracked(block)){
+				break;
 			}
+			adventure_blocks.add(manager.blockToString(block));
+			break;
+		default:
 			break;
 		}
 	}
@@ -92,13 +91,13 @@ class ChunkWrapper {
 			}
 			survival_entities.add(manager.entityToString(entity));
 			break;
-		default:
-			if(ServerHas.adventureMode()){
-				if(!manager.tracked_adventure.isTracked(entity)){
-					break;
-				}
-				adventure_entities.add(manager.entityToString(entity));
+		case ADVENTURE:
+			if(!manager.tracked_adventure.isTracked(entity)){
+				break;
 			}
+			adventure_entities.add(manager.entityToString(entity));
+			break;
+		default:
 			break;
 		}
 	}
@@ -124,13 +123,13 @@ class ChunkWrapper {
 			}
 			survival_entities.add(manager.entityToString(entity, entityType));
 			break;
-		default:
-			if(ServerHas.adventureMode()){
-				if(!manager.tracked_adventure.isTracked(entityType)){
-					break;
-				}
-				adventure_entities.add(manager.entityToString(entity, entityType));
+		case ADVENTURE:
+			if(!manager.tracked_adventure.isTracked(entityType)){
+				break;
 			}
+			adventure_entities.add(manager.entityToString(entity, entityType));
+			break;
+		default:
 			break;
 		}
 	}
@@ -153,10 +152,10 @@ class ChunkWrapper {
 			case SURVIVAL:
 				survival_entities.remove(manager.entityToString(entity));
 				break;
+			case ADVENTURE:
+				adventure_entities.remove(manager.entityToString(entity));
+				break;
 			default:
-				if(ServerHas.adventureMode()){
-					adventure_entities.remove(manager.entityToString(entity));
-				}
 				break;
 			}
 		}
@@ -180,10 +179,10 @@ class ChunkWrapper {
 			case SURVIVAL:
 				survival_blocks.remove(manager.blockToString(block));
 				break;
+			case ADVENTURE:
+				adventure_blocks.remove(manager.blockToString(block));
+				break;
 			default:
-				if(ServerHas.adventureMode()){
-					adventure_blocks.remove(manager.blockToString(block));
-				}
 				break;
 			}
 		}
@@ -195,9 +194,7 @@ class ChunkWrapper {
 		}else if(survival_entities.contains(manager.entityToString(entity))){
 			return GameMode.SURVIVAL;
 		}else if(adventure_entities.contains(manager.entityToString(entity))){
-			if(ServerHas.adventureMode()){
-				return GameMode.ADVENTURE;
-			}
+			return GameMode.ADVENTURE;
 		}
 		return null;
 	}
@@ -208,9 +205,7 @@ class ChunkWrapper {
 		}else if(survival_blocks.contains(manager.blockToString(block))){
 			return GameMode.SURVIVAL;
 		}else if(adventure_blocks.contains(manager.blockToString(block))){
-			if(ServerHas.adventureMode()){
-				return GameMode.ADVENTURE;
-			}
+			return GameMode.ADVENTURE;
 		}
 		return null;
 	}

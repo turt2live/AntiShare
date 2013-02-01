@@ -35,7 +35,6 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.util.generic.ASEntity;
 import com.turt2live.antishare.util.generic.MobPattern;
 import com.turt2live.antishare.util.generic.MobPattern.MobPatternType;
-import com.turt2live.materials.ServerHas;
 
 /**
  * Utilities
@@ -133,7 +132,7 @@ public class ASUtils {
 			return GameMode.CREATIVE;
 		}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")){
 			return GameMode.SURVIVAL;
-		}else if(ServerHas.adventureMode() && value.equalsIgnoreCase("adventure") || value.equalsIgnoreCase("a") || value.equalsIgnoreCase("2")){
+		}else if(value.equalsIgnoreCase("adventure") || value.equalsIgnoreCase("a") || value.equalsIgnoreCase("2")){
 			return GameMode.ADVENTURE;
 		}
 		return null;
@@ -477,12 +476,10 @@ public class ASUtils {
 			}
 			return IRON_GOLEM_PATTERN;
 		case WITHER:
-			if(ServerHas.mc14xItems()){
-				if(WITHER_PATTERN == null){
-					WITHER_PATTERN = new MobPattern(MobPatternType.T_SHAPE, Material.SOUL_SAND, Material.SKULL);
-				}
-				return WITHER_PATTERN;
+			if(WITHER_PATTERN == null){
+				WITHER_PATTERN = new MobPattern(MobPatternType.T_SHAPE, Material.SOUL_SAND, Material.SKULL);
 			}
+			return WITHER_PATTERN;
 		}
 		return null;
 	}

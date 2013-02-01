@@ -1,4 +1,4 @@
-package com.turt2live.antishare.tekkitcompat;
+package com.turt2live.antishare.listener;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -6,15 +6,15 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Painting;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.painting.PaintingBreakByEntityEvent;
-import org.bukkit.event.painting.PaintingBreakEvent;
-import org.bukkit.event.painting.PaintingBreakEvent.RemoveCause;
-import org.bukkit.event.painting.PaintingPlaceEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
@@ -31,21 +31,19 @@ import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.materials.MaterialAPI;
-import com.turt2live.materials.ServerHas;
 
-@SuppressWarnings ("deprecation")
-public class PaintingListener implements Listener {
+public class HangingListener implements Listener {
 
 	private AntiShare plugin = AntiShare.getInstance();
 
 	@EventHandler (priority = EventPriority.LOW)
-	public void onPaintingBreak(PaintingBreakEvent event){
+	public void onPaintingBreak(HangingBreakEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
 			return;
 		}
 		if(event.getCause() == RemoveCause.PHYSICS){
 			// Removed by something
-			Painting hanging = event.getPainting();
+			Hanging hanging = event.getEntity();
 			Location block = hanging.getLocation().getBlock().getRelative(hanging.getAttachedFace()).getLocation();
 			BlockManager blocks = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK));
 			if(blocks != null){
@@ -60,18 +58,16 @@ public class PaintingListener implements Listener {
 	}
 
 	@EventHandler (priority = EventPriority.LOW)
-	public void onPaintingBreak(PaintingPlaceEvent event){
+	public void onPaintingBreak(HangingPlaceEvent event){
 		if(event.isCancelled()){
 			return;
 		}
 		Player player = event.getPlayer();
-		Painting hanging = event.getPainting();
+		Hanging hanging = event.getEntity();
 		AlertType type = AlertType.ILLEGAL;
 		Material item = Material.PAINTING;
-		if(ServerHas.mc14xEntities()){
-			if(hanging.getType() == EntityType.ITEM_FRAME){
-				item = Material.ITEM_FRAME;
-			}
+		if(hanging.getType() == EntityType.ITEM_FRAME){
+			item = Material.ITEM_FRAME;
 		}
 		boolean region = false;
 
@@ -133,11 +129,11 @@ public class PaintingListener implements Listener {
 	}
 
 	@EventHandler (priority = EventPriority.LOW)
-	public void onPaintingBreak(PaintingBreakByEntityEvent event){
+	public void onPaintingBreak(HangingBreakByEntityEvent event){
 		if(event.isCancelled()){
 			return;
 		}
-		Painting hanging = event.getPainting();
+		Hanging hanging = event.getEntity();
 		BlockManager blocks = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK));
 		if(blocks == null){
 			return;
@@ -147,10 +143,8 @@ public class PaintingListener implements Listener {
 			return;
 		}
 		Material item = Material.PAINTING;
-		if(ServerHas.mc14xEntities()){
-			if(hanging.getType() == EntityType.ITEM_FRAME){
-				item = Material.ITEM_FRAME;
-			}
+		if(hanging.getType() == EntityType.ITEM_FRAME){
+			item = Material.ITEM_FRAME;
 		}
 		Entity remover = event.getRemover();
 		if(remover instanceof Player){
