@@ -12,10 +12,6 @@ Since 5.3.0:
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
-BUGS:
-- Chunk unload (reported) laggy
-- Region glitches are possible
-
 TODO:
 - Make 0kb file check threaded to allow for less-than-1-hour-cleanup time
 
