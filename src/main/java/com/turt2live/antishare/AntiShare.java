@@ -209,11 +209,17 @@ public class AntiShare extends PluginWrapper {
 		}
 		SelfCompatibility.convert313Inventories();
 
-		// Convert inventories (5.2.0/Current)
+		// Convert inventories (5.2.0/5.3.0)
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("[Self Compat] Converting 5.2.0 inventories...");
 		}
 		SelfCompatibility.cleanup520Inventories();
+
+		// Convert inventories (5.3.0/Current)
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Converting 5.3.0 inventories...");
+		}
+		SelfCompatibility.cleanup530Inventories();
 
 		// Cleanup old files
 		if(!getConfig().getBoolean("other.more-quiet-startup")){

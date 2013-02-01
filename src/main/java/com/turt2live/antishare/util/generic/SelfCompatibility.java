@@ -48,7 +48,8 @@ public class SelfCompatibility {
 		CONFIG_520(20),
 		CONFIG_530(25),
 		INV_520(30),
-		BLOCKS_540(35);
+		BLOCKS_540(35),
+		INV_540(40);
 
 		public final int BYTE_POS;
 
@@ -358,6 +359,29 @@ public class SelfCompatibility {
 			inventoryFile.renameTo(newFolder);
 		}
 		noLongerNeedsUpdate(Compat.INV_520);
+	}
+
+	/**
+	 * Relocates 5.3.0 inventories
+	 */
+	public static void cleanup530Inventories(){
+		if(!needsUpdate(Compat.INV_540)){
+			return;
+		}
+		File data = AntiShare.getInstance().getDataFolder();
+		File inventoryFile = new File(data, "inventories");
+		File newFolder = new File(data, "data" + File.separator + "inventories");
+		if(inventoryFile.exists()){
+			File[] files = inventoryFile.listFiles();
+			ASUtils.wipeFolder(newFolder, null);
+			if(files != null){
+				for(File file : files){
+					file.renameTo(new File(newFolder, file.getName()));
+				}
+			}
+			inventoryFile.delete();
+		}
+		noLongerNeedsUpdate(Compat.INV_540);
 	}
 
 	/**
