@@ -34,9 +34,9 @@ public class EventList {
 	private boolean expBlocked = false;
 	private boolean potions = true;
 	private boolean thrownPotions = true;
-	private List<String> blocked = new ArrayList<String>();
-	private List<String> blocked_strings = new ArrayList<String>();
-	private List<Sign> blockedsigns = new ArrayList<Sign>();
+	private final List<String> blocked = new ArrayList<String>();
+	private final List<String> blocked_strings = new ArrayList<String>();
+	private final List<Sign> blockedsigns = new ArrayList<Sign>();
 
 	/**
 	 * Creates a new Event List
@@ -111,11 +111,13 @@ public class EventList {
 			if(blocked.toLowerCase().startsWith("sign:")){
 				String signname = blocked.split(":").length > 0 ? blocked.split(":")[1] : null;
 				if(signname == null){
+					// TODO: Locale
 					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;
 				}
 				Sign sign = plugin.getSignList().getSign(signname);
 				if(sign == null){
+					// TODO: Locale
 					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;
 				}
@@ -146,8 +148,7 @@ public class EventList {
 			}
 
 			// Check if thrown potion
-			if(blocked.equalsIgnoreCase("thrown potion") || blocked.equalsIgnoreCase("thrown potions")
-					|| blocked.equalsIgnoreCase("splash potion") || blocked.equalsIgnoreCase("splash potions")){
+			if(blocked.equalsIgnoreCase("thrown potion") || blocked.equalsIgnoreCase("thrown potions") || blocked.equalsIgnoreCase("splash potion") || blocked.equalsIgnoreCase("splash potions")){
 				thrownPotions = false;
 				if(negate){
 					thrownPotions = true;
@@ -156,11 +157,7 @@ public class EventList {
 			}
 
 			// Special case: Furnaces
-			if(blocked.equalsIgnoreCase("furnace")
-					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("litfurnace")
-					|| blocked.equalsIgnoreCase("oven")
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.FURNACE.getId()))
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))){
+			if(blocked.equalsIgnoreCase("furnace") || blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("litfurnace") || blocked.equalsIgnoreCase("oven") || blocked.equalsIgnoreCase(String.valueOf(Material.FURNACE.getId())) || blocked.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))){
 				if(!negate){
 					this.blocked.add(ASUtils.materialToString(Material.FURNACE, false));
 					this.blocked.add(ASUtils.materialToString(Material.BURNING_FURNACE, false));
@@ -172,12 +169,7 @@ public class EventList {
 			}
 
 			// Special case: Signs
-			if(blocked.equalsIgnoreCase("sign")
-					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign")
-					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("signpost")
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
+			if(blocked.equalsIgnoreCase("sign") || blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign") || blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("signpost") || blocked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId())) || blocked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId())) || blocked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
 				if(!negate){
 					this.blocked.add(ASUtils.materialToString(Material.SIGN, false));
 					this.blocked.add(ASUtils.materialToString(Material.SIGN_POST, false));
@@ -191,10 +183,7 @@ public class EventList {
 			}
 
 			// Special case: Brewing Stand
-			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstand")
-					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstanditem")
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND.getId()))
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))){
+			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstand") || blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstanditem") || blocked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND.getId())) || blocked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))){
 				if(!negate){
 					this.blocked.add(ASUtils.materialToString(Material.BREWING_STAND, false));
 					this.blocked.add(ASUtils.materialToString(Material.BREWING_STAND_ITEM, false));
@@ -216,10 +205,7 @@ public class EventList {
 			}
 
 			// Special case: Ender portal
-			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("enderportal")
-					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("enderportalframe")
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL.getId()))
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL_FRAME.getId()))){
+			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("enderportal") || blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("enderportalframe") || blocked.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL.getId())) || blocked.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL_FRAME.getId()))){
 				if(!negate){
 					this.blocked.add(ASUtils.materialToString(Material.ENDER_PORTAL, false));
 					this.blocked.add(ASUtils.materialToString(Material.ENDER_PORTAL_FRAME, false));
@@ -231,10 +217,7 @@ public class EventList {
 			}
 
 			// Special case: Skull
-			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull")
-					|| blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull")
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
-					|| blocked.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
+			if(blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("skull") || blocked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("mobskull") || blocked.equalsIgnoreCase(String.valueOf(Material.SKULL.getId())) || blocked.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
 				if(!negate){
 					this.blocked.add(ASUtils.materialToString(Material.SKULL, false));
 					this.blocked.add(ASUtils.materialToString(Material.SKULL_ITEM, false));
@@ -256,10 +239,7 @@ public class EventList {
 			}
 			try{
 				boolean noSkull = true;
-				if(blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("skull")
-						|| blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("mobskull")
-						|| blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL.getId()))
-						|| blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL_ITEM.getId()))){
+				if(blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("skull") || blocked.replaceAll(" ", "").replaceAll("_", "").toLowerCase().startsWith("mobskull") || blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL.getId())) || blocked.toLowerCase().startsWith(String.valueOf(Material.SKULL_ITEM.getId()))){
 					if(plugin.getItemMap().getItem(blocked, false, false) == null){
 						throw new Exception("");
 					}
@@ -281,6 +261,7 @@ public class EventList {
 					}
 				}
 			}catch(Exception e){
+				// TODO: Locale
 				plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 			}
 		}

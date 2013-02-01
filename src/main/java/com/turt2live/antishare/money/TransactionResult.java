@@ -17,6 +17,7 @@ package com.turt2live.antishare.money;
  */
 public class TransactionResult {
 
+	// TODO: Locale
 	public static final TransactionResult NO_VAULT = new TransactionResult("You do not have Vault installed.", false);
 	public static final TransactionResult NO_TAB = new TransactionResult("Tab feature disabled", false);
 

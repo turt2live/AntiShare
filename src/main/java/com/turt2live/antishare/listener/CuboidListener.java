@@ -18,8 +18,8 @@ import com.turt2live.antishare.util.ASUtils;
 
 public class CuboidListener implements Listener {
 
-	private AntiShare plugin = AntiShare.getInstance();
-	private CuboidManager manager;
+	private final AntiShare plugin = AntiShare.getInstance();
+	private final CuboidManager manager;
 
 	public CuboidListener(CuboidManager manager){
 		this.manager = manager;
@@ -27,7 +27,7 @@ public class CuboidListener implements Listener {
 
 	// ################# Player Interact Event (2)
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInteract2(PlayerInteractEvent event){
 		if(event.isCancelled()){
 			return;
@@ -38,7 +38,7 @@ public class CuboidListener implements Listener {
 			if(item != null){
 				if(item.getType() == AntiShare.ANTISHARE_CUBOID_TOOL){
 					CuboidPoint point = null;
-					switch (event.getAction()){
+					switch(event.getAction()){
 					case RIGHT_CLICK_BLOCK:
 						point = CuboidPoint.POINT2;
 						break;
@@ -51,13 +51,8 @@ public class CuboidListener implements Listener {
 					if(point != null){
 						Location location = event.getClickedBlock().getLocation();
 						manager.updateCuboid(player.getName(), point, location);
-						ASUtils.sendToPlayer(player, ChatColor.GREEN + "Point " + (point == CuboidPoint.POINT1 ? "1" : "2")
-								+ " set as ("
-								+ location.getBlockX() + ", "
-								+ location.getBlockY() + ", "
-								+ location.getBlockZ() + ", "
-								+ location.getWorld().getName()
-								+ "). Volume = " + ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName()).getVolume(), true);
+						// TODO: Locale
+						ASUtils.sendToPlayer(player, ChatColor.GREEN + "Point " + (point == CuboidPoint.POINT1 ? "1" : "2") + " set as (" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ", " + location.getWorld().getName() + "). Volume = " + ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName()).getVolume(), true);
 						event.setCancelled(true);
 					}
 				}

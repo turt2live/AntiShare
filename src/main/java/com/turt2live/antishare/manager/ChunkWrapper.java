@@ -18,16 +18,16 @@ import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
 class ChunkWrapper {
 
-	private BlockManager manager;
-	private AntiShare plugin = AntiShare.getInstance();
+	private final BlockManager manager;
+	private final AntiShare plugin = AntiShare.getInstance();
 	CopyOnWriteArrayList<String> creative_blocks = new CopyOnWriteArrayList<String>();
 	CopyOnWriteArrayList<String> survival_blocks = new CopyOnWriteArrayList<String>();
 	CopyOnWriteArrayList<String> adventure_blocks = new CopyOnWriteArrayList<String>();
 	CopyOnWriteArrayList<String> creative_entities = new CopyOnWriteArrayList<String>();
 	CopyOnWriteArrayList<String> survival_entities = new CopyOnWriteArrayList<String>();
 	CopyOnWriteArrayList<String> adventure_entities = new CopyOnWriteArrayList<String>();
-	private int cx, cz;
-	private String world;
+	private final int cx, cz;
+	private final String world;
 
 	ChunkWrapper(BlockManager manager, Chunk chunk){
 		this.manager = manager;
@@ -47,7 +47,7 @@ class ChunkWrapper {
 	 * @param block the block
 	 */
 	public void addBlock(GameMode type, Block block){
-		switch (type){
+		switch(type){
 		case CREATIVE:
 			if(!manager.tracked_creative.isTracked(block)){
 				break;
@@ -78,7 +78,7 @@ class ChunkWrapper {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Entity entity){
-		switch (type){
+		switch(type){
 		case CREATIVE:
 			if(!manager.tracked_creative.isTracked(entity)){
 				break;
@@ -110,7 +110,7 @@ class ChunkWrapper {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Location entity, EntityType entityType){
-		switch (type){
+		switch(type){
 		case CREATIVE:
 			if(!manager.tracked_creative.isTracked(entityType)){
 				break;
@@ -145,7 +145,7 @@ class ChunkWrapper {
 			ASMaterial material = new ASMaterial();
 			material.gamemode = type;
 			material.location = entity.getLocation();
-			switch (type){
+			switch(type){
 			case CREATIVE:
 				creative_entities.remove(manager.entityToString(entity));
 				break;
@@ -172,7 +172,7 @@ class ChunkWrapper {
 			ASMaterial material = new ASMaterial();
 			material.gamemode = type;
 			material.location = block.getLocation();
-			switch (type){
+			switch(type){
 			case CREATIVE:
 				creative_blocks.remove(manager.blockToString(block));
 				break;
@@ -283,6 +283,7 @@ class ChunkWrapper {
 		 */
 		String[] parts = s.split(";");
 		if(parts.length < (isBlock ? 6 : 7) || parts.length > (isBlock ? 6 : 7)){
+			// TODO: Locale
 			plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + ": " + s + " (GM=" + gm.name() + "). Report this to Turt2Live.");
 		}else{
 			String key = parts[3] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2] + (isBlock ? "" : ";" + parts[6]);
@@ -303,15 +304,18 @@ class ChunkWrapper {
 		}
 		String[] fparts = file.getName().split("\\.");
 		if(fparts.length < 3){
+			// TODO: Locale
 			plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " FILE: " + file.getName());
 			return;
 		}
 		String w = fparts[2]; // To see if world == file name world
 		if(Bukkit.getWorld(w) == null){
+			// TODO: Locale
 			plugin.getLogger().warning("Failed to load world: " + w);
 			return;
 		}
 		if(!w.equals(world)){
+			// TODO: Locale
 			plugin.getLogger().warning("Worlds do not match: " + world + " | " + w);
 			return;
 		}
@@ -345,6 +349,7 @@ class ChunkWrapper {
 				addBlock(gm, block);
 			}else{
 				if(etype == null){
+					// TODO: Locale
 					plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " KEY IN FILE ('" + file.getName() + "'): " + key);
 					continue;
 				}

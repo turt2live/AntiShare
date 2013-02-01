@@ -18,7 +18,7 @@ import com.turt2live.antishare.AntiShare;
 
 public class ConflictThread implements Runnable {
 
-	private AntiShare plugin = AntiShare.getInstance();
+	private final AntiShare plugin = AntiShare.getInstance();
 
 	@Override
 	public void run(){
@@ -26,6 +26,7 @@ public class ConflictThread implements Runnable {
 			return;
 		}
 		boolean warningIssued = false;
+		// TODO: Locale
 		Plugin mv = plugin.getServer().getPluginManager().getPlugin("Multiverse");
 		if(mv != null){
 			if(plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){

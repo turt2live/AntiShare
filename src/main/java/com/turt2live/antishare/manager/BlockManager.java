@@ -17,13 +17,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.listener.BlockListener;
 import com.turt2live.antishare.util.events.TrackerList;
 
 public class BlockManager extends AntiShareManager {
 
 	static class ASMaterial {
+
 		public Location location;
 		public GameMode gamemode;
 		public long added;
@@ -34,8 +34,8 @@ public class BlockManager extends AntiShareManager {
 	TrackerList tracked_creative;
 	TrackerList tracked_survival;
 	TrackerList tracked_adventure;
-	private CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
-	private ConcurrentMap<String, ChunkWrapper> wrappers = new ConcurrentHashMap<String, ChunkWrapper>();
+	private final CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
+	private final ConcurrentMap<String, ChunkWrapper> wrappers = new ConcurrentHashMap<String, ChunkWrapper>();
 	private boolean doneSave = false;
 	private int percent = 0;
 
@@ -46,6 +46,7 @@ public class BlockManager extends AntiShareManager {
 
 		// Start cleanup
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+
 			@Override
 			public void run(){
 				List<ASMaterial> r = new ArrayList<ASMaterial>();
@@ -88,6 +89,7 @@ public class BlockManager extends AntiShareManager {
 			ab += wrapper.adventure_blocks.size();
 			ae += wrapper.adventure_entities.size();
 		}
+		// TODO: Locale
 		if(cb > 0){
 			plugin.getLogger().info("Creative Blocks Loaded: " + cb);
 		}
@@ -160,10 +162,7 @@ public class BlockManager extends AntiShareManager {
 	public GameMode getRecentBreak(Location location){
 		for(ASMaterial material : recentlyRemoved){
 			Location l = material.location;
-			if(Math.floor(l.getX()) == Math.floor(location.getX())
-					&& Math.floor(l.getY()) == Math.floor(location.getY())
-					&& Math.floor(l.getZ()) == Math.floor(location.getZ())
-					&& l.getWorld().getName().equalsIgnoreCase(location.getWorld().getName())){
+			if(Math.floor(l.getX()) == Math.floor(location.getX()) && Math.floor(l.getY()) == Math.floor(location.getY()) && Math.floor(l.getZ()) == Math.floor(location.getZ()) && l.getWorld().getName().equalsIgnoreCase(location.getWorld().getName())){
 				return material.gamemode;
 			}
 		}
@@ -201,7 +200,7 @@ public class BlockManager extends AntiShareManager {
 	 * @param block the block
 	 */
 	public void addBlock(GameMode type, Block block){
-		switch (type){
+		switch(type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(block)){
 				return;
@@ -232,7 +231,7 @@ public class BlockManager extends AntiShareManager {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Entity entity){
-		switch (type){
+		switch(type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(entity)){
 				return;
@@ -264,7 +263,7 @@ public class BlockManager extends AntiShareManager {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Location entity, EntityType entityType){
-		switch (type){
+		switch(type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(entityType)){
 				return;
@@ -344,6 +343,7 @@ public class BlockManager extends AntiShareManager {
 		// Start a thread to wait until the block changes
 		final Material oldType = oldBlock.getType();
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+
 			@Override
 			public void run(){
 				// Setup vars
@@ -353,7 +353,7 @@ public class BlockManager extends AntiShareManager {
 				boolean updated = false;
 
 				// Loop
-				while (runs <= maxRuns && !updated){
+				while(runs <= maxRuns && !updated){
 					// Check block
 					Block newBlock = newLocation.getBlock();
 					if(newBlock.getType() == oldType){
@@ -366,14 +366,14 @@ public class BlockManager extends AntiShareManager {
 					try{
 						Thread.sleep(delay);
 					}catch(InterruptedException e){
-						AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 						e.printStackTrace();
 					}
 				}
 
 				// Warn if not updated
 				if(!updated){
-					plugin.log("Move block took longer than " + (delay * maxRuns) + " milliseconds.", Level.SEVERE);
+					// TODO: Locale
+					plugin.log("Move block took longer than " + delay * maxRuns + " milliseconds.", Level.SEVERE);
 				}
 			}
 		});

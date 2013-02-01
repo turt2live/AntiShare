@@ -28,7 +28,7 @@ import com.turt2live.antishare.util.generic.ASEntity;
 public class EntityList {
 
 	private boolean whitelist = false;
-	private List<String> blocked = new ArrayList<String>();
+	private final List<String> blocked = new ArrayList<String>();
 
 	/**
 	 * Creates a new Event List
@@ -98,6 +98,7 @@ public class EntityList {
 					this.blocked.remove(ASUtils.getEntityName(blocked));
 				}
 			}catch(Exception e){
+				// TODO: Locale
 				plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 			}
 		}

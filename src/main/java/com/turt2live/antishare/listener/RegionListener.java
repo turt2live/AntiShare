@@ -71,8 +71,8 @@ import com.turt2live.materials.MaterialAPI;
 
 public class RegionListener implements Listener {
 
-	private AntiShare plugin = AntiShare.getInstance();
-	private RegionManager manager;
+	private final AntiShare plugin = AntiShare.getInstance();
+	private final RegionManager manager;
 
 	public RegionListener(RegionManager manager){
 		this.manager = manager;
@@ -80,7 +80,7 @@ public class RegionListener implements Listener {
 
 	// ################# Projectile Launch Event
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onProjectileLaunch(ProjectileLaunchEvent event){
 		if(event.isCancelled() || !(event.getEntity().getShooter() instanceof Player)){
 			return;
@@ -122,6 +122,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Set messages
+		// TODO: Locale
 		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(item.name());
 		playerMessage = plugin.getMessage("blocked-action.use-item");
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -138,7 +139,7 @@ public class RegionListener implements Listener {
 
 	// ################# Potion Splash Event
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPotionSplash(PotionSplashEvent event){
 		if(event.isCancelled() || !(event.getPotion().getShooter() instanceof Player)){
 			return;
@@ -165,12 +166,12 @@ public class RegionListener implements Listener {
 			type = AlertType.ILLEGAL;
 		}
 
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), Material.POTION)
-				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), Material.POTION)){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), Material.POTION) || !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, player.getWorld(), Material.POTION)){
 			type = AlertType.LEGAL;
 		}
 
 		// Set messages
+		// TODO: Locale
 		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(Material.POTION.name());
 		playerMessage = plugin.getMessage("blocked-action.use-item");
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -187,14 +188,14 @@ public class RegionListener implements Listener {
 
 	// ################# Player Craft Item Event
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onCrafting(CraftItemEvent event){
 		if(event.isCancelled()){
 			return;
 		}
 
 		HumanEntity he = event.getWhoClicked();
-		if((he instanceof Player)){
+		if(he instanceof Player){
 			Player player = (Player) he;
 			AlertType type = AlertType.ILLEGAL;
 			if(GamemodeAbstraction.isCreative(player.getGameMode())){
@@ -216,6 +217,7 @@ public class RegionListener implements Listener {
 			}else{
 				type = AlertType.LEGAL;
 			}
+			// TODO: Locale
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to craft " + ChatColor.RED : " crafted " + ChatColor.GREEN) + MaterialAPI.capitalize(event.getRecipe().getResult().getType().name());
 			String playerMessage = plugin.getMessage("blocked-action.crafting");
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CRAFTING);
@@ -227,7 +229,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Teleport
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
 		if(event.isCancelled()){
 			return;
@@ -258,7 +260,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Quit
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
 
@@ -271,7 +273,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Join
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
 
@@ -290,7 +292,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Combat
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onCombat(EntityDamageByEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -303,7 +305,7 @@ public class RegionListener implements Listener {
 		Player playerAttacker = null;
 
 		// Check case
-		switch (cause){
+		switch(cause){
 		case ENTITY_ATTACK:
 			// attacker = entity
 			if(attacker instanceof Player){
@@ -369,6 +371,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert
+		// TODO: Locale
 		String message = "no message";
 		String playerMessage = "no message";
 		AlertTrigger trigger = AlertTrigger.HIT_MOB;
@@ -400,7 +403,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Game Mode Change
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onGameModeChange(PlayerGameModeChangeEvent event){
 		if(event.isCancelled()){
 			return;
@@ -420,6 +423,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Region Check
+		// TODO: Locale
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
 			Region region = manager.getRegion(player.getLocation());
 			if(region != null){
@@ -440,7 +444,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Move
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMove(PlayerMoveEvent event){
 		if(event.isCancelled()){
 			return;
@@ -482,7 +486,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Command
 
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onCommand(PlayerCommandPreprocessEvent event){
 		if(event.isCancelled()){
 			return;
@@ -514,18 +518,19 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use the command " : " used the command ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + command;
 		String playerMessage = plugin.getMessage("blocked-action.command");
 		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert((Material) null, player, player.getWorld(), TenderType.COMMAND);
 		factory.insertCommand(command);
 		playerMessage = factory.toString();
-		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.COMMAND, !(event.getMessage().toLowerCase().startsWith("/as money")));
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.COMMAND, !event.getMessage().toLowerCase().startsWith("/as money"));
 	}
 
 	// ################# Player Death
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onDeath(PlayerDeathEvent event){
 		Player player = event.getEntity();
 
@@ -538,7 +543,7 @@ public class RegionListener implements Listener {
 
 	// ################# Pickup Item
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPickup(PlayerPickupItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -580,6 +585,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to pickup " : " picked up ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(itemStack.getType().name());
 		String playerMessage = plugin.getMessage("blocked-action.pickup-item");
 		if(region){
@@ -594,7 +600,7 @@ public class RegionListener implements Listener {
 
 	// ################# Drop Item
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onDrop(PlayerDropItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -634,6 +640,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to throw " : " threw ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(itemStack.getType().name()) + ChatColor.WHITE + " into a region.";
 		String playerMessage = ChatColor.RED + "You cannot throw items into another region!";
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -644,7 +651,7 @@ public class RegionListener implements Listener {
 
 	// ################# Experience Bottle Check
 
-	@EventHandler (priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onExpBottle(ExpBottleEvent event){
 		if(event.getExperience() == 0){
 			return;
@@ -687,6 +694,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(item.name());
 		String playerMessage = plugin.getMessage("blocked-action.use-item");
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -699,7 +707,7 @@ public class RegionListener implements Listener {
 
 	// ################# Egg Check
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onEggThrow(PlayerEggThrowEvent event){
 		Player player = event.getPlayer();
 		AlertType type = AlertType.ILLEGAL;
@@ -728,6 +736,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(item.name());
 		String playerMessage = plugin.getMessage("blocked-action.use-item");
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -738,7 +747,7 @@ public class RegionListener implements Listener {
 
 	// ################# Cart Death Check
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onCartDeath(VehicleDestroyEvent event){
 		if(event.isCancelled()){
 			return;
@@ -772,7 +781,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Interact Entity (2)
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onInteractEntity(PlayerInteractEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -855,6 +864,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + "a mob";
 		String playerMessage = plugin.getMessage("blocked-action.right-click");
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -865,7 +875,7 @@ public class RegionListener implements Listener {
 
 	// ################# Destroy Vehicle
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onVechicleDestroy(VehicleDestroyEvent event){
 		if(event.isCancelled() || !(event.getAttacker() instanceof Player)){
 			return;
@@ -913,6 +923,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + "a " + MaterialAPI.capitalize(item.name());
 		String playerMessage = plugin.getMessage("blocked-action.break-block");
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -933,7 +944,7 @@ public class RegionListener implements Listener {
 
 	// ################# Block Place
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockPlace(BlockPlaceEvent event){
 		if(event.isCancelled()){
 			return;
@@ -977,6 +988,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert
+		// TODO: Locale
 		if(type == AlertType.ILLEGAL){
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " in a region.";
 			String playerMessage = ChatColor.RED + "You cannot place blocks in another region!";
@@ -986,7 +998,7 @@ public class RegionListener implements Listener {
 
 	// ################# Block Break
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockBreak(BlockBreakEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1031,6 +1043,7 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert
+		// TODO: Locale
 		if(type == AlertType.ILLEGAL){
 			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke  ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " in a region.";
 			String specialPlayerMessage = ChatColor.RED + "You cannot break blocks that are not in your region";
@@ -1040,7 +1053,7 @@ public class RegionListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onInteract(PlayerInteractEvent event){
 		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
 			return;
@@ -1084,6 +1097,7 @@ public class RegionListener implements Listener {
 				}
 
 				// Set messages
+				// TODO: Locale
 				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
 				playerMessage = plugin.getMessage("blocked-action.right-click");
 				MessageFactory factory = new MessageFactory(playerMessage);
@@ -1102,6 +1116,7 @@ public class RegionListener implements Listener {
 				}
 
 				// Set messages
+				// TODO: Locale
 				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to right click " : " right clicked ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
 				playerMessage = plugin.getMessage("blocked-action.right-click");
 				MessageFactory factory = new MessageFactory(playerMessage);
@@ -1120,6 +1135,7 @@ public class RegionListener implements Listener {
 				}
 
 				// Set messages
+				// TODO: Locale
 				message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name());
 				playerMessage = plugin.getMessage("blocked-action.use-item");
 				trigger = AlertTrigger.USE_ITEM;
@@ -1129,16 +1145,14 @@ public class RegionListener implements Listener {
 			}
 
 			// Check for eye of ender / ender pearl
-			if(action == Action.RIGHT_CLICK_BLOCK
-					&& player.getItemInHand() != null
-					&& (player.getItemInHand().getType() == Material.EYE_OF_ENDER
-					|| player.getItemInHand().getType() == Material.ENDER_PEARL)){
+			if(action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null && (player.getItemInHand().getType() == Material.EYE_OF_ENDER || player.getItemInHand().getType() == Material.ENDER_PEARL)){
 				if(region.getConfig().isBlocked(player.getItemInHand().getType(), ListType.RIGHT_CLICK)){
 					type = AlertType.ILLEGAL;
 				}
 				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
 					type = AlertType.ILLEGAL;
 				}
+				// TODO: Locale
 				if(type == AlertType.ILLEGAL){
 					message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name());
 					playerMessage = plugin.getMessage("blocked-action.use-item");
@@ -1150,9 +1164,7 @@ public class RegionListener implements Listener {
 			}
 
 			// Check for potion
-			if(action == Action.RIGHT_CLICK_BLOCK
-					&& player.getItemInHand() != null
-					&& player.getItemInHand().getType() == Material.POTION){
+			if(action == Action.RIGHT_CLICK_BLOCK && player.getItemInHand() != null && player.getItemInHand().getType() == Material.POTION){
 				boolean potion = false;
 				if(player.getItemInHand().getDurability() > 32000){
 					if(!region.getConfig().isThrownPotionAllowed()){
@@ -1169,6 +1181,7 @@ public class RegionListener implements Listener {
 					type = AlertType.LEGAL;
 				}
 				if(type == AlertType.ILLEGAL && potion){
+					// TODO: Locale
 					message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name()) + ChatColor.WHITE + " in a region";
 					playerMessage = plugin.getMessage("blocked-action.use-item");
 					trigger = AlertTrigger.USE_ITEM;

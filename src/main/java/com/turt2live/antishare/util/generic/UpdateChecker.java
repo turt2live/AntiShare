@@ -23,6 +23,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 
 /**
  * Update Checker
@@ -46,14 +48,15 @@ public class UpdateChecker {
 			return;
 		}
 		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable(){
+
 			@Override
 			public void run(){
 				try{
 					if(isOutdated()){
 						String newVersion = getNewVersionString();
 						String currentVersion = getVersion();
-						plugin.getLogger().warning("AntiShare " + newVersion + " is out! You are running AntiShare " + currentVersion);
-						plugin.getLogger().warning("Update AntiShare at: http://dev.bukkit.org/server-mods/antishare");
+						plugin.getLogger().warning(Localization.getMessage(LocaleMessage.UPDATE_READY, newVersion, currentVersion));
+						plugin.getLogger().warning(Localization.getMessage(LocaleMessage.UPDATE_LINK, "http://dev.bukkit.org/server-mods/antishare"));
 					}
 				}catch(NumberFormatException e){} // Don't handle
 			}

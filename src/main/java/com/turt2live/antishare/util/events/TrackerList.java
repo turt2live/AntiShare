@@ -30,8 +30,8 @@ import com.turt2live.antishare.util.ASUtils;
  */
 public class TrackerList {
 
-	private List<String> tracked = new ArrayList<String>();
-	private List<Sign> trackedsigns = new ArrayList<Sign>();
+	private final List<String> tracked = new ArrayList<String>();
+	private final List<Sign> trackedsigns = new ArrayList<Sign>();
 
 	/**
 	 * Creates a new Tracker List
@@ -89,11 +89,13 @@ public class TrackerList {
 			if(tracked.toLowerCase().startsWith("sign:")){
 				String signname = tracked.split(":").length > 0 ? tracked.split(":")[1] : null;
 				if(signname == null){
+					// TODO: Locale
 					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;
 				}
 				Sign sign = plugin.getSignList().getSign(signname);
 				if(sign == null){
+					// TODO: Locale
 					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
 					continue;
 				}
@@ -106,11 +108,7 @@ public class TrackerList {
 			}
 
 			// Special case: Furnaces
-			if(tracked.equalsIgnoreCase("furnace")
-					|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("litfurnace")
-					|| tracked.equalsIgnoreCase("oven")
-					|| tracked.equalsIgnoreCase(String.valueOf(Material.FURNACE.getId()))
-					|| tracked.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))){
+			if(tracked.equalsIgnoreCase("furnace") || tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("litfurnace") || tracked.equalsIgnoreCase("oven") || tracked.equalsIgnoreCase(String.valueOf(Material.FURNACE.getId())) || tracked.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))){
 				if(!negate){
 					this.tracked.add(ASUtils.materialToString(Material.FURNACE, false));
 					this.tracked.add(ASUtils.materialToString(Material.BURNING_FURNACE, false));
@@ -122,12 +120,7 @@ public class TrackerList {
 			}
 
 			// Special case: Sign
-			if(tracked.equalsIgnoreCase("sign")
-					|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign")
-					|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("signpost")
-					|| tracked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
-					|| tracked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
-					|| tracked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
+			if(tracked.equalsIgnoreCase("sign") || tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("wallsign") || tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("signpost") || tracked.equalsIgnoreCase(String.valueOf(Material.SIGN.getId())) || tracked.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId())) || tracked.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
 				if(!negate){
 					this.tracked.add(ASUtils.materialToString(Material.SIGN, false));
 					this.tracked.add(ASUtils.materialToString(Material.SIGN_POST, false));
@@ -141,10 +134,7 @@ public class TrackerList {
 			}
 
 			// Special case: Brewing Stand
-			if(tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstand")
-					|| tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstanditem")
-					|| tracked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND.getId()))
-					|| tracked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))){
+			if(tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstand") || tracked.replaceAll(" ", "").replaceAll("_", "").equalsIgnoreCase("brewingstanditem") || tracked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND.getId())) || tracked.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))){
 				if(!negate){
 					this.tracked.add(ASUtils.materialToString(Material.BREWING_STAND, false));
 					this.tracked.add(ASUtils.materialToString(Material.BREWING_STAND_ITEM, false));
@@ -231,7 +221,7 @@ public class TrackerList {
 			return false;
 		}
 		Material mat = Material.AIR;
-		switch (entityType){
+		switch(entityType){
 		case PAINTING:
 			mat = Material.PAINTING;
 			break;

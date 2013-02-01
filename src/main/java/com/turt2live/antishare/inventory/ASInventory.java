@@ -128,14 +128,14 @@ public class ASInventory implements Cloneable {
 				if(worldV == null){
 					AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE);
 					if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
+						// TODO: Locale
 						AntiShare.getInstance().log("=== AntiShare is REMOVING this world from the player ===", Level.SEVERE);
 						AntiShare.getInstance().log("This cannot be reversed. Check your settings if you don't like this.", Level.SEVERE);
 						removeWorlds.add(world);
 					}
 					continue;
 				}
-				if((gamemode.equalsIgnoreCase("adventure")) ||
-						(gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival"))){
+				if(gamemode.equalsIgnoreCase("adventure") || gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival")){
 					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
 					for(String strSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
 						Integer slot = Integer.valueOf(strSlot);
@@ -158,8 +158,8 @@ public class ASInventory implements Cloneable {
 		return inventories;
 	}
 
-	private HashMap<Integer, ItemStack> inventory = new HashMap<Integer, ItemStack>();
-	private AntiShare plugin;
+	private final HashMap<Integer, ItemStack> inventory = new HashMap<Integer, ItemStack>();
+	private final AntiShare plugin;
 	private InventoryType type = InventoryType.PLAYER;
 	private String inventoryName = "UNKNOWN";
 	private World world;
@@ -209,7 +209,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @param player the player
 	 */
-	@SuppressWarnings ("deprecation")
+	@SuppressWarnings("deprecation")
 	public void setTo(Player player){
 		Inventory pInventory;
 		if(type == InventoryType.ENDER){
@@ -231,7 +231,7 @@ public class ASInventory implements Cloneable {
 				pInventory.setItem(slot, item);
 			}else{
 				if(pInventory instanceof PlayerInventory){
-					switch (slot){
+					switch(slot){
 					case 100:
 						((PlayerInventory) pInventory).setBoots(item);
 						break;
@@ -350,7 +350,7 @@ public class ASInventory implements Cloneable {
 	 * @return inventory size
 	 */
 	public int getSize(){
-		switch (this.type){
+		switch(this.type){
 		case ENDER:
 			return 27;
 		case PLAYER:

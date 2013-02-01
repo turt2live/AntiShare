@@ -28,7 +28,7 @@ import com.turt2live.antishare.util.generic.ASGameMode;
  */
 public class Fine extends Tender {
 
-	private double overcharge;
+	private final double overcharge;
 
 	/**
 	 * Creates a new fine
@@ -66,6 +66,7 @@ public class Fine extends Tender {
 		}
 		TransactionResult result = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).subtractFromAccount(player, amount);
 		if(!result.completed){
+			// TODO: Locale
 			ASUtils.sendToPlayer(player, ChatColor.RED + "Fine Failed: " + ChatColor.ITALIC + result.message, true);
 			plugin.log("Fine Failed (" + player.getName() + "): " + result.message, Level.WARNING);
 			return;
@@ -73,6 +74,7 @@ public class Fine extends Tender {
 			String formatted = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(getAmount());
 			String balance = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getBalance(player));
 			if(!((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).isSilent(player.getName())){
+				// TODO: Locale
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You've been fined " + formatted + "!", true);
 				ASUtils.sendToPlayer(player, "Your new balance is " + ChatColor.YELLOW + balance, true);
 			}

@@ -19,10 +19,11 @@ public class CuboidManager extends AntiShareManager {
 	 * A cuboid point
 	 */
 	public static enum CuboidPoint{
-		POINT1, POINT2;
+		POINT1,
+		POINT2;
 	}
 
-	private Map<String, Cuboid> cuboids = new HashMap<String, Cuboid>();
+	private final Map<String, Cuboid> cuboids = new HashMap<String, Cuboid>();
 
 	/**
 	 * Creates a new cuboid manager
@@ -108,6 +109,7 @@ public class CuboidManager extends AntiShareManager {
 			cuboids.put(player, cuboid);
 		}
 		if(cuboids.keySet().size() > 0){
+			// TODO: Locale
 			plugin.getLogger().info("Cuboids Loaded: " + cuboids.keySet().size());
 		}
 		return true;

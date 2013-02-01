@@ -49,8 +49,8 @@ import com.turt2live.materials.MaterialAPI;
 
 public class BlockListener implements Listener {
 
-	private BlockManager blocks;
-	private AntiShare plugin = AntiShare.getInstance();
+	private final BlockManager blocks;
+	private final AntiShare plugin = AntiShare.getInstance();
 
 	public BlockListener(BlockManager manager){
 		blocks = manager;
@@ -72,7 +72,7 @@ public class BlockListener implements Listener {
 
 	// ################# GameMode Block Break
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onGameModeBlockBreak(BlockBreakEvent event){
 		if(!event.isCancelled()){
 			blocks.removeBlock(event.getBlock());
@@ -81,7 +81,7 @@ public class BlockListener implements Listener {
 
 	// ################# Block Place
 
-	@EventHandler (priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onBlockPlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
 		GameMode existing = null;
@@ -108,6 +108,7 @@ public class BlockListener implements Listener {
 			return;
 		}
 		Block block = event.getBlock();
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to attach " : " attached ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " onto a " + (existing != null ? existing.name().toLowerCase() : "natural") + " block";
 		String playerMessage = plugin.getMessage("blocked-action.attach-block");
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -118,7 +119,7 @@ public class BlockListener implements Listener {
 
 	// ################# GameMode Block Place
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onGameModePlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
 		if(!event.isCancelled() && !plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
@@ -132,7 +133,7 @@ public class BlockListener implements Listener {
 
 	// ################# Block Flow Event
 
-	@EventHandler (priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockFlow(BlockFromToEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection")){
 			return;
@@ -154,7 +155,7 @@ public class BlockListener implements Listener {
 
 	// ################# Entity Explode Event
 
-	@EventHandler (priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onExplode(EntityExplodeEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection")){
 			return;
@@ -177,7 +178,7 @@ public class BlockListener implements Listener {
 
 	// ################# Piston Move (Retract)
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPistonRetract(BlockPistonRetractEvent event){
 		if(event.isCancelled()){
 			return;
@@ -205,7 +206,7 @@ public class BlockListener implements Listener {
 
 	// ################# Piston Move (Extend)
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPistonExtend(BlockPistonExtendEvent event){
 		if(event.isCancelled()){
 			return;
@@ -230,12 +231,9 @@ public class BlockListener implements Listener {
 
 	// ################# Player Interact Entity
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onItemFrameClick(PlayerInteractEntityEvent event){
-		if(!event.isCancelled()
-				&& event.getPlayer().getItemInHand() != null
-				&& (event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL || event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL)
-				&& plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
+		if(!event.isCancelled() && event.getPlayer().getItemInHand() != null && (event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL || event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL) && plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
 			Entity entity = event.getRightClicked();
 			GameMode mode = blocks.getType(entity);
 			Material item = Material.AIR;
@@ -247,19 +245,19 @@ public class BlockListener implements Listener {
 			if(item != Material.AIR){
 				if(event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 					blocks.removeEntity(entity);
+					// TODO: Locale
 					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + MaterialAPI.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (mode == null ? "natural" : mode.name()) + ChatColor.RED + ")", true);
 					event.setCancelled(true);
 					return;
 				}else{
+					// TODO: Locale
 					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + MaterialAPI.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
 					event.setCancelled(true);
 					return;
 				}
 			}
 		}
-		if(event.isCancelled()
-				|| !plugin.getConfig().getBoolean("enabled-features.disable-item-frame-cross-game-mode")
-				|| event.getRightClicked().getType() != EntityType.ITEM_FRAME){
+		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.disable-item-frame-cross-game-mode") || event.getRightClicked().getType() != EntityType.ITEM_FRAME){
 			return;
 		}
 
@@ -297,7 +295,7 @@ public class BlockListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onInteract(PlayerInteractEvent event){
 		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
 			return;
@@ -307,11 +305,11 @@ public class BlockListener implements Listener {
 		Action action = event.getAction();
 
 		// Check for AntiShare tool
-		if(plugin.getPermissions().has(player, PermissionNodes.TOOL_USE) && player.getItemInHand() != null
-				&& (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)){
+		if(plugin.getPermissions().has(player, PermissionNodes.TOOL_USE) && player.getItemInHand() != null && (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)){
 			if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
 				String blockname = block.getType().name().replaceAll("_", " ").toLowerCase();
 				String gamemode = (blocks.getType(block) != null ? blocks.getType(block).name() : "natural").toLowerCase();
+				// TODO: Locale
 				ASUtils.sendToPlayer(player, "That " + ChatColor.YELLOW + blockname + ChatColor.WHITE + " is a " + ChatColor.YELLOW + gamemode + ChatColor.WHITE + " block.", true);
 
 				// Cancel and stop the check
@@ -319,16 +317,18 @@ public class BlockListener implements Listener {
 				return;
 			}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 				GameMode gm = blocks.getType(block);
-				switch (action){
+				switch(action){
 				case LEFT_CLICK_BLOCK:
 					if(gm != null){
 						blocks.removeBlock(block);
 					}
 					blocks.addBlock(player.getGameMode(), block);
+					// TODO: Locale
 					ASUtils.sendToPlayer(player, ChatColor.GREEN + "Block set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					break;
 				case RIGHT_CLICK_BLOCK:
 					blocks.removeBlock(block);
+					// TODO: Locale
 					ASUtils.sendToPlayer(player, ChatColor.RED + "Block " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (gm == null ? "natural" : gm.name()) + ChatColor.RED + ")", true);
 					break;
 				}
@@ -340,7 +340,7 @@ public class BlockListener implements Listener {
 
 	// ################# Block Piston Extend (2)
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPiston(BlockPistonExtendEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 			return;
@@ -355,7 +355,7 @@ public class BlockListener implements Listener {
 
 	// ################# Block Break
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockBreak(BlockBreakEvent event){
 		if(event.isCancelled()){
 			return;
@@ -417,20 +417,21 @@ public class BlockListener implements Listener {
 		}
 
 		// Alert
+		// TODO: Locale
 		if(extraSpecial){
 			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break the attached " + attachedGM + " block " : " broke the attached " + attachedGM + " block ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(attached.name());
 			String specialPlayerMessage = plugin.getMessage("blocked-action." + attachedGM + "-attached-block-break");
 			MessageFactory factory = new MessageFactory(specialPlayerMessage);
-			factory.insert(block, player, block.getWorld(), attachedGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (attachedGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
+			factory.insert(block, player, block.getWorld(), attachedGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : attachedGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK);
 			specialPlayerMessage = factory.toString();
-			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, type, (attachedGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : (attachedGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK)));
+			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, type, attachedGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : attachedGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK);
 		}else{
 			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
 			String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
 			MessageFactory factory = new MessageFactory(specialPlayerMessage);
-			factory.insert(block, player, block.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
+			factory.insert(block, player, block.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK);
 			specialPlayerMessage = factory.toString();
-			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, type, (blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK)));
+			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, type, blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : blockGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK);
 		}
 
 		// Handle drops
@@ -452,7 +453,7 @@ public class BlockListener implements Listener {
 					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 						GameMode gm = blocks.getType(rel);
 						if(gm != null){
-							switch (gm){
+							switch(gm){
 							case CREATIVE:
 								rel.setType(Material.AIR);
 								break;
@@ -500,7 +501,7 @@ public class BlockListener implements Listener {
 				for(Entity e : block.getChunk().getEntities()){
 					if(e instanceof ItemFrame){
 						double d2 = e.getLocation().distanceSquared(block.getLocation());
-						if((d2 < 1.65 && d2 > 1.6) || (d2 > 0.5 && d2 < 0.51)){
+						if(d2 < 1.65 && d2 > 1.6 || d2 > 0.5 && d2 < 0.51){
 							e.remove();
 						}
 					}
@@ -514,7 +515,7 @@ public class BlockListener implements Listener {
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 							GameMode gm = blocks.getType(rel);
 							if(gm != null){
-								switch (gm){
+								switch(gm){
 								case CREATIVE:
 									rel.setType(Material.AIR);
 									break;
@@ -559,12 +560,12 @@ public class BlockListener implements Listener {
 								}else{
 									checkMoreBlocks = false;
 								}
-							}while (checkMoreBlocks);
+							}while(checkMoreBlocks);
 							moreBlocks = false;
 						}else{
 							moreBlocks = false;
 						}
-					}while (moreBlocks);
+					}while(moreBlocks);
 				}
 
 				/* We need to check the blocks above for falling blocks, as the following can happen:
@@ -588,7 +589,7 @@ public class BlockListener implements Listener {
 						moreBlocks = false;
 					}
 					active = above;
-				}while (moreBlocks);
+				}while(moreBlocks);
 
 				// Cacti check
 				active = block;
@@ -604,7 +605,7 @@ public class BlockListener implements Listener {
 							moreBlocks = false;
 						}
 						active = above;
-					}while (moreBlocks);
+					}while(moreBlocks);
 					for(int i = breakBlocks.size() - 1; i > -1; i--){
 						Location location = breakBlocks.get(i);
 						location.getBlock().setType(Material.AIR);
@@ -625,7 +626,7 @@ public class BlockListener implements Listener {
 							moreBlocks = false;
 						}
 						active = above;
-					}while (moreBlocks);
+					}while(moreBlocks);
 					for(int i = breakBlocks.size() - 1; i > -1; i--){
 						Location location = breakBlocks.get(i);
 						location.getBlock().setType(Material.AIR);
@@ -637,7 +638,7 @@ public class BlockListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onGameModeUse(PlayerInteractEvent event){
 		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
 			return;
@@ -673,6 +674,7 @@ public class BlockListener implements Listener {
 		}
 
 		// Set messages
+		// TODO: Locale
 		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
 		playerMessage = plugin.getMessage("blocked-action.use-item");
 		trigger = AlertTrigger.USE_ITEM;
@@ -695,7 +697,7 @@ public class BlockListener implements Listener {
 
 	// ################# Player Break Block
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onGameModeBreak(BlockBreakEvent event){
 		if(event.isCancelled()){
 			return;
@@ -729,6 +731,7 @@ public class BlockListener implements Listener {
 		}
 
 		// Set messages
+		// TODO: Locale
 		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
 		playerMessage = plugin.getMessage("blocked-action.break-block");
 		trigger = AlertTrigger.USE_ITEM;

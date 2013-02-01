@@ -28,7 +28,7 @@ import com.turt2live.antishare.util.ASUtils;
 
 public class RegionManager extends AntiShareManager {
 
-	private Map<String, Set<Region>> regions = new HashMap<String, Set<Region>>();
+	private final Map<String, Set<Region>> regions = new HashMap<String, Set<Region>>();
 
 	/**
 	 * Creates a new Region Manager
@@ -64,6 +64,7 @@ public class RegionManager extends AntiShareManager {
 			}
 		}
 		if(regions.keySet().size() > 0){
+			// TODO: Locale
 			plugin.getLogger().info("Regions Loaded: " + regions.keySet().size());
 		}
 	}
@@ -94,6 +95,7 @@ public class RegionManager extends AntiShareManager {
 			}
 		}
 		if(regions.keySet().size() > 0){
+			// TODO: Locale
 			plugin.getLogger().info("Regions Loaded: " + regions.keySet().size());
 		}
 		return true;
@@ -223,7 +225,7 @@ public class RegionManager extends AntiShareManager {
 				Set<Region> regions = this.regions.get(world.getName());
 				Iterator<Region> iterator = regions.iterator();
 				List<Region> remove = new ArrayList<Region>();
-				while (iterator.hasNext()){
+				while(iterator.hasNext()){
 					Region region = iterator.next();
 					if(region.getName().equalsIgnoreCase(name)){
 						remove.add(region);
@@ -302,9 +304,10 @@ public class RegionManager extends AntiShareManager {
 	public void updateRegion(Region region, RegionKeyType key, String value, CommandSender sender){
 		boolean changed = false;
 		Cuboid last = region.getCuboid(); // Pre-cloned
-		switch (key){
+		switch(key){
 		case NAME:
 			if(isRegionNameTaken(value)){
+				// TODO: Locale
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name '" + value + "' already exists!", true);
 			}else{
 				region.setName(value);
@@ -316,6 +319,7 @@ public class RegionManager extends AntiShareManager {
 				region.setShowEnterMessage(ASUtils.getBoolean(value));
 				changed = true;
 			}else{
+				// TODO: Locale
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?", true);
 			}
 			break;
@@ -324,6 +328,7 @@ public class RegionManager extends AntiShareManager {
 				region.setShowExitMessage(ASUtils.getBoolean(value));
 				changed = true;
 			}else{
+				// TODO: Locale
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?", true);
 			}
 			break;
@@ -336,9 +341,11 @@ public class RegionManager extends AntiShareManager {
 					region.setInventory(ASInventory.generate((Player) sender, InventoryType.REGION));
 					changed = true;
 				}else{
+					// TODO: Locale
 					ASUtils.sendToPlayer(sender, ChatColor.RED + "You can't set an inventory from the console, only clear.", true);
 				}
 			}else{
+				// TODO: Locale
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown to me, did you mean 'none' or 'set'?", true);
 			}
 			break;
@@ -353,6 +360,7 @@ public class RegionManager extends AntiShareManager {
 				region.setCuboid(cuboid);
 				changed = true;
 			}else{
+				// TODO: Locale
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "You need to use the Cuboid tool to create a cuboid.", true);
 			}
 			break;
@@ -364,6 +372,7 @@ public class RegionManager extends AntiShareManager {
 				region.setGameMode(GameMode.SURVIVAL);
 				changed = true;
 			}else{
+				// TODO: Locale
 				ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + value + "' is!", true);
 			}
 			break;
@@ -380,6 +389,7 @@ public class RegionManager extends AntiShareManager {
 		}
 		if(changed){
 			region.onUpdate(last);
+			// TODO: Locale
 			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region saved.", true);
 		}
 	}

@@ -35,7 +35,7 @@ public class Region {
 	private Cuboid size = new Cuboid();
 	private boolean showEnterMessage = true, showExitMessage = true;
 	private ASInventory inventory = null;
-	private Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
+	private final Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
 	private RegionConfiguration config = new RegionConfiguration(this);
 	private GameMode gamemode = GameMode.CREATIVE;
 
@@ -275,10 +275,10 @@ public class Region {
 		// Variables
 		Location min = size.getMinimumPoint();
 		Location max = size.getMaximumPoint();
-		Location northWall = new Location(size.getWorld(), (min.getX() > max.getX() ? min.getX() : max.getX()), location.getY(), location.getZ());
-		Location southWall = new Location(size.getWorld(), (min.getX() > max.getX() ? max.getX() : min.getX()), location.getY(), location.getZ());
-		Location eastWall = new Location(size.getWorld(), location.getX(), location.getY(), (min.getZ() > max.getZ() ? min.getZ() : max.getZ()));
-		Location westWall = new Location(size.getWorld(), location.getX(), location.getY(), (min.getZ() > max.getZ() ? max.getZ() : min.getZ()));
+		Location northWall = new Location(size.getWorld(), min.getX() > max.getX() ? min.getX() : max.getX(), location.getY(), location.getZ());
+		Location southWall = new Location(size.getWorld(), min.getX() > max.getX() ? max.getX() : min.getX(), location.getY(), location.getZ());
+		Location eastWall = new Location(size.getWorld(), location.getX(), location.getY(), min.getZ() > max.getZ() ? min.getZ() : max.getZ());
+		Location westWall = new Location(size.getWorld(), location.getX(), location.getY(), min.getZ() > max.getZ() ? max.getZ() : min.getZ());
 
 		// Check distances to walls
 		double toNorth = Math.abs(northWall.distanceSquared(location));
@@ -313,12 +313,12 @@ public class Region {
 		// Variables
 		Location min = size.getMinimumPoint();
 		Location max = size.getMaximumPoint();
-		Location northWall = new Location(size.getWorld(), (min.getX() > max.getX() ? min.getX() : max.getX()), location.getY(), location.getZ());
-		Location southWall = new Location(size.getWorld(), (min.getX() > max.getX() ? max.getX() : min.getX()), location.getY(), location.getZ());
-		Location eastWall = new Location(size.getWorld(), location.getX(), location.getY(), (min.getZ() > max.getZ() ? min.getZ() : max.getZ()));
-		Location westWall = new Location(size.getWorld(), location.getX(), location.getY(), (min.getZ() > max.getZ() ? max.getZ() : min.getZ()));
-		Location ceil = new Location(size.getWorld(), location.getX(), (min.getY() > max.getY() ? min.getY() : max.getY()), location.getZ());
-		Location floor = new Location(size.getWorld(), location.getX(), (min.getY() > max.getY() ? max.getY() : min.getY()), location.getZ());
+		Location northWall = new Location(size.getWorld(), min.getX() > max.getX() ? min.getX() : max.getX(), location.getY(), location.getZ());
+		Location southWall = new Location(size.getWorld(), min.getX() > max.getX() ? max.getX() : min.getX(), location.getY(), location.getZ());
+		Location eastWall = new Location(size.getWorld(), location.getX(), location.getY(), min.getZ() > max.getZ() ? min.getZ() : max.getZ());
+		Location westWall = new Location(size.getWorld(), location.getX(), location.getY(), min.getZ() > max.getZ() ? max.getZ() : min.getZ());
+		Location ceil = new Location(size.getWorld(), location.getX(), min.getY() > max.getY() ? min.getY() : max.getY(), location.getZ());
+		Location floor = new Location(size.getWorld(), location.getX(), min.getY() > max.getY() ? max.getY() : min.getY(), location.getZ());
 
 		// Get distances to faces
 		double toNorth = Math.abs(northWall.distanceSquared(location));
@@ -385,6 +385,7 @@ public class Region {
 		if(showEnterMessage){
 			playerMessage = ChatColor.GOLD + enterMessage.replaceAll("\\{name\\}", name);
 		}
+		// TODO: Locale
 		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " entered the region " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
 
 		// Set the player
@@ -431,6 +432,7 @@ public class Region {
 		if(showExitMessage){
 			playerMessage = ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name);
 		}
+		// TODO: Locale
 		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " left the region " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
 
 		// Tag the player so the Game Mode listener knows to ignore them
@@ -484,6 +486,7 @@ public class Region {
 		region.setName(yaml.getString("name"));
 		World world = plugin.getServer().getWorld(yaml.getString("worldName"));
 		if(world == null){
+			// TODO: Locale
 			plugin.getLogger().warning("Failed to load world for region '" + region.getName() + "' (world name='" + yaml.getString("worldName") + "')");
 			return null;
 		}

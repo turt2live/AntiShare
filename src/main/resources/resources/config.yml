@@ -197,6 +197,8 @@ other:
   # This does not affect inventories in any way (the creative
   # inventory will not become the adventure inventory)
   adventure-is-creative: true
+  # Locale settings
+  local-file: local_en_US.yml
 # For when turt2live needs a copy of your configuration
 error-reporting:
   error-string: TO BE DETERMINED

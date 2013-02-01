@@ -55,14 +55,14 @@ public class WorldSplit {
 		}
 	}
 
-	private String world;
-	private double split;
+	private final String world;
+	private final double split;
 	private Axis axis;
-	private GameMode positive, negative;
+	private final GameMode positive, negative;
 	private double blockWarn = 15;
 	private boolean warn = false;
 	private long warnEvery = 2;
-	private AntiShare plugin;
+	private final AntiShare plugin;
 
 	/**
 	 * Creates a new World Split
@@ -135,7 +135,7 @@ public class WorldSplit {
 		}
 
 		// Check permissions for the side they are traveling
-		if(!plugin.getPermissions().has(player, (gamemode == GameMode.CREATIVE ? PermissionNodes.WORLD_SPLIT_NO_SPLIT_CREATIVE : PermissionNodes.WORLD_SPLIT_NO_SPLIT_SURVIVAL))){
+		if(!plugin.getPermissions().has(player, gamemode == GameMode.CREATIVE ? PermissionNodes.WORLD_SPLIT_NO_SPLIT_CREATIVE : PermissionNodes.WORLD_SPLIT_NO_SPLIT_SURVIVAL)){
 			player.setGameMode(gamemode);
 		}
 	}
@@ -148,7 +148,7 @@ public class WorldSplit {
 	 */
 	public GameMode getSide(Player player){
 		GameMode gamemode = player.getGameMode();
-		if(plugin.getPermissions().has(player, (gamemode == GameMode.CREATIVE ? PermissionNodes.WORLD_SPLIT_NO_SPLIT_CREATIVE : PermissionNodes.WORLD_SPLIT_NO_SPLIT_SURVIVAL))){
+		if(plugin.getPermissions().has(player, gamemode == GameMode.CREATIVE ? PermissionNodes.WORLD_SPLIT_NO_SPLIT_CREATIVE : PermissionNodes.WORLD_SPLIT_NO_SPLIT_SURVIVAL)){
 			return null;
 		}
 
@@ -176,6 +176,7 @@ public class WorldSplit {
 			plugin.getTrackers().getTracker(TrackerType.FEATURE_WORLD_SPLIT).increment(1);
 		}else{
 			axis = Axis.NONE;
+			// TODO: Locale
 			plugin.log("Invalid world split for world " + world, Level.WARNING);
 		}
 	}

@@ -20,8 +20,8 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 
 public class InventoryListener implements Listener {
 
-	private AntiShare plugin = AntiShare.getInstance();
-	private InventoryManager manager;
+	private final AntiShare plugin = AntiShare.getInstance();
+	private final InventoryManager manager;
 
 	public InventoryListener(InventoryManager manager){
 		this.manager = manager;
@@ -29,7 +29,7 @@ public class InventoryListener implements Listener {
 
 	// ################# Player World Change
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onWorldChange(PlayerChangedWorldEvent event){
 		Player player = event.getPlayer();
 		World to = player.getWorld();
@@ -51,7 +51,7 @@ public class InventoryListener implements Listener {
 		// Inventory check
 		if(!plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
 			// Save from
-			switch (player.getGameMode()){
+			switch(player.getGameMode()){
 			case CREATIVE:
 				manager.saveCreativeInventory(player, from);
 				manager.saveEnderCreativeInventory(player, from);
@@ -75,7 +75,7 @@ public class InventoryListener implements Listener {
 			manager.refreshInventories(player, true);
 
 			// Set to
-			switch (player.getGameMode()){
+			switch(player.getGameMode()){
 			case CREATIVE:
 				manager.getCreativeInventory(player, to).setTo(player);
 				manager.getEnderCreativeInventory(player, to).setTo(player); // Sets to the ender chest, not the player
@@ -97,6 +97,7 @@ public class InventoryListener implements Listener {
 		}
 
 		// Alerts
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to world " + ChatColor.YELLOW + to.getName();
 		String playerMessage = ignore ? "no message" : "Your inventory has been changed to " + ChatColor.YELLOW + to.getName();
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
@@ -104,7 +105,7 @@ public class InventoryListener implements Listener {
 
 	// ################# Player Quit
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
 
@@ -114,7 +115,7 @@ public class InventoryListener implements Listener {
 
 	// ################# Player Join
 
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
 
@@ -124,7 +125,7 @@ public class InventoryListener implements Listener {
 
 	// ################# Player Game Mode Change
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onGameModeChange(PlayerGameModeChangeEvent event){
 		if(event.isCancelled()){
 			return;
@@ -145,7 +146,7 @@ public class InventoryListener implements Listener {
 
 		if(!plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
 			// Save from
-			switch (from){
+			switch(from){
 			case CREATIVE:
 				manager.saveCreativeInventory(player, player.getWorld());
 				manager.saveEnderCreativeInventory(player, player.getWorld());
@@ -166,7 +167,7 @@ public class InventoryListener implements Listener {
 			manager.refreshInventories(player, true);
 
 			// Set to
-			switch (to){
+			switch(to){
 			case CREATIVE:
 				manager.getCreativeInventory(player, player.getWorld()).setTo(player);
 				manager.getEnderCreativeInventory(player, player.getWorld()).setTo(player);
@@ -187,6 +188,7 @@ public class InventoryListener implements Listener {
 		}
 
 		// Alerts
+		// TODO: Locale
 		String message = "no message";
 		String playerMessage = "Your inventory has been changed to " + ChatColor.YELLOW + to.name();
 		if(!plugin.getConfig().getBoolean("other.send-gamemode-change-message")){

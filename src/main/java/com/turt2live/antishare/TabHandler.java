@@ -33,6 +33,7 @@ import com.turt2live.antishare.util.StringList;
 public class TabHandler implements TabCompleter {
 
 	protected enum Tab{
+		// TODO: Locale
 		REGION("The last argument is a region name.", new StringList("region"), new StringList("creative", "survival", "adventure")),
 		RELOAD("No more arguments", new StringList("reload", "rl")),
 		RMREGION("You can enter a name, or remove the region you are standing in.", new StringList("rmregion")),
@@ -108,7 +109,7 @@ public class TabHandler implements TabCompleter {
 
 	}
 
-	private List<String> preliminary = new ArrayList<String>();
+	private final List<String> preliminary = new ArrayList<String>();
 
 	public TabHandler(){
 		for(Tab tab : Tab.values()){

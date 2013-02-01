@@ -34,9 +34,9 @@ import com.turt2live.materials.MaterialAPI;
 
 public class HangingListener implements Listener {
 
-	private AntiShare plugin = AntiShare.getInstance();
+	private final AntiShare plugin = AntiShare.getInstance();
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingBreakEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
 			return;
@@ -45,7 +45,7 @@ public class HangingListener implements Listener {
 			// Removed by something
 			Hanging hanging = event.getEntity();
 			Location block = hanging.getLocation().getBlock().getRelative(hanging.getAttachedFace()).getLocation();
-			BlockManager blocks = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK));
+			BlockManager blocks = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK);
 			if(blocks != null){
 				GameMode gamemode = blocks.getRecentBreak(block);
 				if(gamemode != null && gamemode == GameMode.CREATIVE){
@@ -57,7 +57,7 @@ public class HangingListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingPlaceEvent event){
 		if(event.isCancelled()){
 			return;
@@ -75,7 +75,7 @@ public class HangingListener implements Listener {
 		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, hanging.getWorld(), item)){
 			type = AlertType.LEGAL;
 		}
-		RegionManager regions = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION));
+		RegionManager regions = (RegionManager) plugin.getSystemsManager().getManager(Manager.REGION);
 		if(regions != null){
 			Region asregion = regions.getRegion(hanging.getLocation());
 			if(asregion != null){
@@ -104,7 +104,7 @@ public class HangingListener implements Listener {
 		}else{
 			// Handle block place for tracker
 			if(!plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
-				BlockManager blocks = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK));
+				BlockManager blocks = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK);
 				if(blocks != null){
 					blocks.addEntity(player.getGameMode(), hanging);
 				}
@@ -112,6 +112,7 @@ public class HangingListener implements Listener {
 		}
 
 		// Alert
+		// TODO: Locale
 		if(region){
 			if(type == AlertType.ILLEGAL){
 				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ") + ChatColor.WHITE + " in a region.";
@@ -128,13 +129,13 @@ public class HangingListener implements Listener {
 		}
 	}
 
-	@EventHandler (priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingBreakByEntityEvent event){
 		if(event.isCancelled()){
 			return;
 		}
 		Hanging hanging = event.getEntity();
-		BlockManager blocks = ((BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK));
+		BlockManager blocks = (BlockManager) plugin.getSystemsManager().getManager(Manager.BLOCK);
 		if(blocks == null){
 			return;
 		}
@@ -157,9 +158,11 @@ public class HangingListener implements Listener {
 					}
 					blocks.addEntity(player.getGameMode(), hanging);
 					event.setCancelled(true);
+					// TODO: Locale
 					ASUtils.sendToPlayer(player, ChatColor.GREEN + MaterialAPI.capitalize(item.name()) + " set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					return;
 				}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
+					// TODO: Locale
 					ASUtils.sendToPlayer(player, ChatColor.WHITE + "That " + ChatColor.YELLOW + MaterialAPI.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
 					event.setCancelled(true);
 					return;
@@ -229,6 +232,7 @@ public class HangingListener implements Listener {
 			}
 
 			// Alert
+			// TODO: Locale
 			if(special){
 				if(region){
 					if(specialType == AlertType.ILLEGAL){
@@ -240,9 +244,9 @@ public class HangingListener implements Listener {
 					String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");
 					String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
 					MessageFactory factory = new MessageFactory(specialPlayerMessage);
-					factory.insert(item, player, hanging.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK));
+					factory.insert(item, player, hanging.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK);
 					specialPlayerMessage = factory.toString();
-					plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, (blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : (blockGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK)));
+					plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : blockGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK);
 				}
 			}else{
 				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");

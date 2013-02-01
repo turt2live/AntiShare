@@ -27,7 +27,7 @@ import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 public class SignList extends ArrayList<Sign> {
 
 	private static final long serialVersionUID = -7383444270595912585L;
-	private AntiShare plugin;
+	private final AntiShare plugin;
 
 	/**
 	 * Creates a new sign manager
@@ -76,12 +76,14 @@ public class SignList extends ArrayList<Sign> {
 				}
 			}
 			if(invalid){
+				// TODO: Locale
 				plugin.log("Invalid sign: " + name + " (property '" + invalidProp + "' is null)", Level.WARNING);
 			}
 			Sign assign = new Sign(name, lines, enabled, caseSensitive);
 			add(assign);
 		}
 		if(size() > 0){
+			// TODO: Locale
 			plugin.log("Signs Loaded: " + size(), Level.INFO);
 		}
 	}

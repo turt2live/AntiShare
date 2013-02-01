@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.listener.MoneyListener;
 import com.turt2live.antishare.money.Fine;
 import com.turt2live.antishare.money.Reward;
@@ -42,11 +41,11 @@ import com.turt2live.antishare.util.generic.ASGameMode;
  */
 public class MoneyManager extends AntiShareManager {
 
-	private List<Reward> rewards = new ArrayList<Reward>();
-	private List<Fine> fines = new ArrayList<Fine>();
+	private final List<Reward> rewards = new ArrayList<Reward>();
+	private final List<Fine> fines = new ArrayList<Fine>();
 	private boolean doRewards = false, doFines = false, tab = false, showStatusOnLogin = false;
 	private VaultEconomy econ;
-	private List<String> silentTo = new ArrayList<String>();
+	private final List<String> silentTo = new ArrayList<String>();
 	private String finesTo = "nowhere", rewardsFrom = "nowhere";
 
 	/**
@@ -63,7 +62,6 @@ public class MoneyManager extends AntiShareManager {
 			}
 			out.close();
 		}catch(IOException e){
-			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
 		}
 		return true;
@@ -80,13 +78,12 @@ public class MoneyManager extends AntiShareManager {
 			if(silent.exists()){
 				BufferedReader in = new BufferedReader(new FileReader(silent));
 				String line;
-				while ((line = in.readLine()) != null){
+				while((line = in.readLine()) != null){
 					silentTo.add(line);
 				}
 				in.close();
 			}
 		}catch(IOException e){
-			AntiShare.getInstance().log("AntiShare encountered and error. Please report this to turt2live.", Level.SEVERE);
 			e.printStackTrace();
 		}
 
@@ -124,7 +121,8 @@ public class MoneyManager extends AntiShareManager {
 
 			// Sanity
 			if(affect == null){
-				plugin.log("Configuration Problem: '" + money.getString(path + ".give-to") + "' is not valid! (See '" + (path + ".give-to") + "' in your fines.yml)", Level.WARNING);
+				// TODO: Locale
+				plugin.log("Configuration Problem: '" + money.getString(path + ".give-to") + "' is not valid! (See '" + path + ".give-to" + "' in your fines.yml)", Level.WARNING);
 				plugin.log("Assuming '" + money.getString(path + ".give-to") + "' means 'NONE'", Level.WARNING);
 				affect = ASGameMode.NONE;
 			}
@@ -162,6 +160,7 @@ public class MoneyManager extends AntiShareManager {
 			if(vault != null){
 				econ = new VaultEconomy();
 			}else{
+				// TODO: Locale
 				plugin.log("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work", Level.SEVERE);
 				return false;
 			}
@@ -170,9 +169,11 @@ public class MoneyManager extends AntiShareManager {
 
 		// Spam console
 		if(finesLoaded > 0){
+			// TODO: Locale
 			plugin.log("Fines Loaded: " + finesLoaded, Level.INFO);
 		}
 		if(rewardsLoaded > 0){
+			// TODO: Locale
 			plugin.log("Rewards Loaded: " + rewardsLoaded, Level.INFO);
 		}
 		return true;
@@ -335,7 +336,7 @@ public class MoneyManager extends AntiShareManager {
 
 		// Find tender
 		TenderType tender = null;
-		switch (trigger){
+		switch(trigger){
 		case BLOCK_BREAK:
 			tender = TenderType.BLOCK_BREAK;
 			break;

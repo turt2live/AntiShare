@@ -20,6 +20,7 @@ public class Systems {
 	 * Represents the available managers in AntiShare's system
 	 */
 	public static enum Manager{
+		// TODO: Locale
 		REGION(Feature.REGIONS, RegionManager.class, "region manager", TrackerType.FEATURE_REGIONS),
 		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager", TrackerType.FEATURE_INVENTORIES),
 		FEATURE(Feature.SELF, FeatureManager.class, "feature manager", null),
@@ -28,10 +29,10 @@ public class Systems {
 		MONEY(Feature.MONEY, MoneyManager.class, "money manager", TrackerType.FEATURE_FINES_REWARDS),
 		HOOK(Feature.ALWAYS_ON, HookManager.class, "hook manager", null);
 
-		private Feature f;
-		private Class<? extends AntiShareManager> m;
-		private String name;
-		private TrackerType tracker;
+		private final Feature f;
+		private final Class<? extends AntiShareManager> m;
+		private final String name;
+		private final TrackerType tracker;
 
 		private Manager(Feature f, Class<? extends AntiShareManager> m, String name, TrackerType tracker){
 			this.f = f;
@@ -73,8 +74,8 @@ public class Systems {
 	}
 
 	private FeatureManager features;
-	private Map<Manager, AntiShareManager> managers = new HashMap<Manager, AntiShareManager>();
-	private AntiShare plugin = AntiShare.getInstance();
+	private final Map<Manager, AntiShareManager> managers = new HashMap<Manager, AntiShareManager>();
+	private final AntiShare plugin = AntiShare.getInstance();
 
 	/**
 	 * Loads this manager
@@ -87,11 +88,13 @@ public class Systems {
 		for(Manager s : Manager.values()){
 			if(!features.isEnabled(s.getFeature())){
 				if(!plugin.getConfig().getBoolean("other.more-quiet-startup")){
+					// TODO: Locale
 					plugin.getLogger().info("Feature not enabled: " + s.getName() + ", skipping...");
 				}
 				continue;
 			}
 			if(!plugin.getConfig().getBoolean("other.more-quiet-startup")){
+				// TODO: Locale
 				plugin.getLogger().info("Starting " + s.getName() + "...");
 			}
 			if(s == Manager.FEATURE){
@@ -126,6 +129,7 @@ public class Systems {
 	public boolean save(){
 		for(Manager s : managers.keySet()){
 			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+				// TODO: Locale
 				plugin.getLogger().info("Saving " + s.getName() + "...");
 			}
 			managers.get(s).save();
@@ -147,6 +151,7 @@ public class Systems {
 		boolean anyFailed = false;
 		for(Manager s : managers.keySet()){
 			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+				// TODO: Locale
 				plugin.getLogger().info("Reloading " + s.getName() + "...");
 			}
 			boolean done = managers.get(s).reload();
@@ -163,11 +168,12 @@ public class Systems {
 
 	private void waitForBlockManager(BlockManager blocks){
 		if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
+			// TODO: Locale
 			plugin.getLogger().info("Waiting for block manager to be done...");
 		}
 		int lastPercent = 0, goal = 10;
 		boolean hit100 = false;
-		while (!blocks.isSaveDone()){
+		while(!blocks.isSaveDone()){
 			if(plugin.getConfig().getBoolean("other.use-sleep")){
 				try{
 					Thread.sleep(50); // To avoid a higher CPU use
@@ -182,6 +188,7 @@ public class Systems {
 					goal = 100;
 				}
 				if(goal <= percent && !hit100 && percent <= 100){
+					// TODO: Locale
 					plugin.getLogger().info("[Block Manager] Percent Done: " + percent + "%");
 					lastPercent = percent;
 					if(percent >= 100){

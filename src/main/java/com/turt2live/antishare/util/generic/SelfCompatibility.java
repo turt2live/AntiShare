@@ -28,6 +28,8 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.util.ASUtils;
 
@@ -59,7 +61,12 @@ public class SelfCompatibility {
 	}
 
 	private static enum FileType{
-		CONFIG, NOTIFICATIONS, REGION, MESSAGES, WORLD, FEATURES;
+		CONFIG,
+		NOTIFICATIONS,
+		REGION,
+		MESSAGES,
+		WORLD,
+		FEATURES;
 	}
 
 	private static final String COMPAT_NAME = "compat.antishare";
@@ -112,6 +119,7 @@ public class SelfCompatibility {
 		int files = 0;
 		if(directory.listFiles() != null){
 			for(File file : directory.listFiles(new FileFilter(){
+
 				@Override
 				public boolean accept(File arg0){
 					if(arg0.getName().endsWith("_config.yml")){
@@ -125,6 +133,7 @@ public class SelfCompatibility {
 				file.delete();
 			}
 			if(files > 0){
+				// TODO: Locale
 				AntiShare.getInstance().log("World Configurations Migrated: " + files, Level.INFO);
 			}
 		}
@@ -167,6 +176,7 @@ public class SelfCompatibility {
 		}
 		oldBlockFile.delete();
 		if(converted > 0){
+			// TODO: Locale
 			plugin.getLogger().info("Blocks Converted: " + converted);
 		}
 		noLongerNeedsUpdate(Compat.BLOCKS);
@@ -189,6 +199,7 @@ public class SelfCompatibility {
 				for(File file : files){
 					file.renameTo(new File(newSaveFolder, file.getName()));
 				}
+				// TODO: Locale
 				plugin.getLogger().info("Region Player Files Migrated: " + files.length);
 			}
 			oldSaveFolder.delete();
@@ -254,6 +265,7 @@ public class SelfCompatibility {
 				file.delete();
 			}
 			if(files.length > 0){
+				// TODO: Locale
 				plugin.getLogger().info("Player Inventories Converted: " + files.length);
 			}
 			noLongerNeedsUpdate(Compat.INV_313);
@@ -309,6 +321,7 @@ public class SelfCompatibility {
 				}
 			}
 			if(cleaned > 0){
+				// TODO: Locale
 				plugin.getLogger().info("Player Inventories Archived/Deleted: " + cleaned);
 			}
 		}
@@ -340,6 +353,7 @@ public class SelfCompatibility {
 			}
 		}
 		if(cleaned > 0){
+			// TODO: Locale
 			plugin.getLogger().info("Configuration files cleaned: " + cleaned);
 		}
 		noLongerNeedsUpdate(Compat.CONFIG_530);
@@ -416,7 +430,7 @@ public class SelfCompatibility {
 			}
 		}
 		if(deleted > 0){
-			plugin.getLogger().info("5.3.0 0kb Bug Files Removed: " + deleted);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.BUG_FILES_REMOVE, String.valueOf(deleted)));
 		}
 		noLongerNeedsUpdate(Compat.BLOCKS_540);
 	}
@@ -439,7 +453,7 @@ public class SelfCompatibility {
 		File temp = new File(plugin.getDataFolder(), "temp");
 		temp.mkdirs();
 		EnhancedConfiguration local = new EnhancedConfiguration(new File(temp, "temp1"), plugin);
-		switch (type){
+		switch(type){
 		case CONFIG:
 			local.loadDefaults(plugin.getResource("resources/config.yml"));
 			break;
@@ -482,6 +496,7 @@ public class SelfCompatibility {
 		File dataEntitiesFolder = new File(dataFolder, "entities");
 		File dataInventoriesFolder = new File(dataFolder, "inventories");
 		File dataRegionsFolder = new File(dataFolder, "regions");
+		File localeFolder = new File(dataFolder, "locale");
 
 		// Create folders
 		archiveFolder.mkdirs();
@@ -492,6 +507,7 @@ public class SelfCompatibility {
 		dataEntitiesFolder.mkdirs();
 		dataInventoriesFolder.mkdirs();
 		dataRegionsFolder.mkdirs();
+		localeFolder.mkdirs();
 
 		// Create inventory folders
 		for(InventoryType inv : InventoryType.values()){

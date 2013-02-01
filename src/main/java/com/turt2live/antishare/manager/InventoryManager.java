@@ -41,14 +41,14 @@ import com.turt2live.antishare.util.ASUtils;
  */
 public class InventoryManager extends AntiShareManager {
 
-	private ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
-	private ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
-	private ConcurrentHashMap<String, ASInventory> adventure = new ConcurrentHashMap<String, ASInventory>();
-	private ConcurrentHashMap<String, ASInventory> enderCreative = new ConcurrentHashMap<String, ASInventory>();
-	private ConcurrentHashMap<String, ASInventory> enderSurvival = new ConcurrentHashMap<String, ASInventory>();
-	private ConcurrentHashMap<String, ASInventory> enderAdventure = new ConcurrentHashMap<String, ASInventory>();
-	private ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
-	private List<LinkedInventory> links = new ArrayList<LinkedInventory>();
+	private final ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> adventure = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> enderCreative = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> enderSurvival = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> enderAdventure = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
+	private final List<LinkedInventory> links = new ArrayList<LinkedInventory>();
 
 	/**
 	 * Creates a new Inventory Manager
@@ -89,7 +89,7 @@ public class InventoryManager extends AntiShareManager {
 			for(ASInventory inventory : list){
 				World world = inventory.getWorld();
 				GameMode gamemode = inventory.getGameMode();
-				switch (gamemode){
+				switch(gamemode){
 				case CREATIVE:
 					creative.put(player.getName() + "." + world.getName(), inventory);
 					break;
@@ -113,7 +113,7 @@ public class InventoryManager extends AntiShareManager {
 			for(ASInventory inventory : list){
 				World world = inventory.getWorld();
 				GameMode gamemode = inventory.getGameMode();
-				switch (gamemode){
+				switch(gamemode){
 				case CREATIVE:
 					enderCreative.put(player.getName() + "." + world.getName(), inventory);
 					break;
@@ -166,9 +166,9 @@ public class InventoryManager extends AntiShareManager {
 	public void inject(ASInventory inventory){
 		// player.world = key
 		String key = inventory.getName() + "." + inventory.getWorld().getName();
-		switch (inventory.getType()){
+		switch(inventory.getType()){
 		case PLAYER:
-			switch (inventory.getGameMode()){
+			switch(inventory.getGameMode()){
 			case CREATIVE:
 				creative.put(key, inventory);
 				break;
@@ -183,7 +183,7 @@ public class InventoryManager extends AntiShareManager {
 			}
 			break;
 		case ENDER:
-			switch (inventory.getGameMode()){
+			switch(inventory.getGameMode()){
 			case CREATIVE:
 				enderCreative.put(key, inventory);
 				break;
@@ -215,7 +215,7 @@ public class InventoryManager extends AntiShareManager {
 		// Save
 		ASInventory premerge = ASInventory.generate(player, InventoryType.PLAYER);
 		ASInventory enderPremerge = ASInventory.generate(player, InventoryType.ENDER);
-		switch (player.getGameMode()){
+		switch(player.getGameMode()){
 		case CREATIVE:
 			if(!alreadySaved){
 				saveCreativeInventory(player, player.getWorld());
@@ -275,10 +275,10 @@ public class InventoryManager extends AntiShareManager {
 	 * @param player the player
 	 * @param inventory the temporary inventory
 	 */
-	@SuppressWarnings ("deprecation")
+	@SuppressWarnings("deprecation")
 	public void setToTemporary(Player player, ASInventory inventory){
 		// Save current inventory
-		switch (player.getGameMode()){
+		switch(player.getGameMode()){
 		case CREATIVE:
 			saveCreativeInventory(player, player.getWorld());
 			saveEnderCreativeInventory(player, player.getWorld());
@@ -556,6 +556,7 @@ public class InventoryManager extends AntiShareManager {
 					LinkedInventory link = new LinkedInventory(gamemode, allWorlds);
 					this.links.add(link);
 				}else{
+					// TODO: Locale
 					AntiShare.getInstance().log("Invalid linked inventory. Please check the linked-inventories.yml file", Level.WARNING);
 				}
 			}
@@ -563,6 +564,7 @@ public class InventoryManager extends AntiShareManager {
 
 		// Status
 		if(this.links.size() > 0){
+			// TODO: Locale
 			AntiShare.getInstance().log("Linked Inventories: " + this.links.size(), Level.INFO);
 		}
 		return true;
@@ -624,7 +626,7 @@ public class InventoryManager extends AntiShareManager {
 	 */
 	public void fixInventory(Player player, World world){
 		ASInventory c, s, a, ec, es, ea;
-		switch (player.getGameMode()){
+		switch(player.getGameMode()){
 		case CREATIVE:
 			saveCreativeInventory(player, world);
 			saveEnderCreativeInventory(player, world);
@@ -672,7 +674,7 @@ public class InventoryManager extends AntiShareManager {
 					String[] allWorlds = link.getAffectedWorlds();
 					ASInventory inventory = null;
 					ASInventory enderInventory = null;
-					switch (gamemode){
+					switch(gamemode){
 					case SURVIVAL:
 						inventory = getSurvivalInventory(player, from);
 						enderInventory = getEnderSurvivalInventory(player, from);
@@ -692,7 +694,7 @@ public class InventoryManager extends AntiShareManager {
 						if(world.equalsIgnoreCase(from.getName())){
 							continue;
 						}
-						switch (gamemode){
+						switch(gamemode){
 						case CREATIVE:
 							creative.put(p, inventory);
 							enderCreative.put(p, enderInventory);
@@ -720,7 +722,7 @@ public class InventoryManager extends AntiShareManager {
 	 * @param player the player to save
 	 */
 	public void savePlayer(Player player){
-		switch (player.getGameMode()){
+		switch(player.getGameMode()){
 		case CREATIVE:
 			saveCreativeInventory(player, player.getWorld());
 			saveEnderCreativeInventory(player, player.getWorld());
