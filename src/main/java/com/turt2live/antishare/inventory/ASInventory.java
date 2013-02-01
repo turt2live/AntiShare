@@ -14,7 +14,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -126,11 +125,11 @@ public class ASInventory implements Cloneable {
 			for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
 				World worldV = Bukkit.getWorld(world);
 				if(worldV == null){
-					AntiShare.getInstance().log("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.", Level.SEVERE);
+					AntiShare.getInstance().getLogger().severe("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.");
 					if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
 						// TODO: Locale
-						AntiShare.getInstance().log("=== AntiShare is REMOVING this world from the player ===", Level.SEVERE);
-						AntiShare.getInstance().log("This cannot be reversed. Check your settings if you don't like this.", Level.SEVERE);
+						AntiShare.getInstance().getLogger().severe("=== AntiShare is REMOVING this world from the player ===");
+						AntiShare.getInstance().getLogger().severe("This cannot be reversed. Check your settings if you don't like this.");
 						removeWorlds.add(world);
 					}
 					continue;

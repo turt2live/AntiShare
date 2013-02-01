@@ -12,7 +12,6 @@ package com.turt2live.antishare.util.events;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -90,13 +89,13 @@ public class TrackerList {
 				String signname = tracked.split(":").length > 0 ? tracked.split(":")[1] : null;
 				if(signname == null){
 					// TODO: Locale
-					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
+					plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")");
 					continue;
 				}
 				Sign sign = plugin.getSignList().getSign(signname);
 				if(sign == null){
 					// TODO: Locale
-					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
+					plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")");
 					continue;
 				}
 				if(!negate){
@@ -174,7 +173,7 @@ public class TrackerList {
 					this.tracked.remove(plugin.getItemMap().getItem(tracked, false, false));
 				}
 			}catch(Exception e){
-				plugin.log("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
+				plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")");
 			}
 		}
 	}

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
 
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
@@ -373,7 +372,7 @@ public class BlockManager extends AntiShareManager {
 				// Warn if not updated
 				if(!updated){
 					// TODO: Locale
-					plugin.log("Move block took longer than " + delay * maxRuns + " milliseconds.", Level.SEVERE);
+					plugin.getLogger().severe("Move block took longer than " + delay * maxRuns + " milliseconds.");
 				}
 			}
 		});

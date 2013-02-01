@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
-import java.util.logging.Level;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -51,7 +49,7 @@ public class Reward extends Tender {
 		if(!result.completed){
 			// TODO: Locale
 			ASUtils.sendToPlayer(player, ChatColor.RED + "Reward Failed: " + ChatColor.ITALIC + result.message, true);
-			plugin.log("Reward Failed (" + player.getName() + "): " + result.message, Level.WARNING);
+			plugin.getLogger().warning("Reward Failed (" + player.getName() + "): " + result.message);
 			return;
 		}else{
 			String formatted = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(getAmount());

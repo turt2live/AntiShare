@@ -13,7 +13,6 @@ package com.turt2live.antishare.signs;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
@@ -77,14 +76,14 @@ public class SignList extends ArrayList<Sign> {
 			}
 			if(invalid){
 				// TODO: Locale
-				plugin.log("Invalid sign: " + name + " (property '" + invalidProp + "' is null)", Level.WARNING);
+				plugin.getLogger().warning("Invalid sign: " + name + " (property '" + invalidProp + "' is null)");
 			}
 			Sign assign = new Sign(name, lines, enabled, caseSensitive);
 			add(assign);
 		}
 		if(size() > 0){
 			// TODO: Locale
-			plugin.log("Signs Loaded: " + size(), Level.INFO);
+			plugin.getLogger().info("Signs Loaded: " + size());
 		}
 	}
 

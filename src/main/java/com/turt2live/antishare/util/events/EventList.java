@@ -12,7 +12,6 @@ package com.turt2live.antishare.util.events;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -112,13 +111,13 @@ public class EventList {
 				String signname = blocked.split(":").length > 0 ? blocked.split(":")[1] : null;
 				if(signname == null){
 					// TODO: Locale
-					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
+					plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")");
 					continue;
 				}
 				Sign sign = plugin.getSignList().getSign(signname);
 				if(sign == null){
 					// TODO: Locale
-					plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
+					plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")");
 					continue;
 				}
 				if(!negate){
@@ -262,7 +261,7 @@ public class EventList {
 				}
 			}catch(Exception e){
 				// TODO: Locale
-				plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
+				plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")");
 			}
 		}
 	}

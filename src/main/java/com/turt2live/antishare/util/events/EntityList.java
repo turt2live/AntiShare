@@ -12,7 +12,6 @@ package com.turt2live.antishare.util.events;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.entity.Entity;
 
@@ -99,7 +98,7 @@ public class EntityList {
 				}
 			}catch(Exception e){
 				// TODO: Locale
-				plugin.log("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")", Level.WARNING);
+				plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")");
 			}
 		}
 	}

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -424,7 +423,7 @@ public class AntiShare extends PluginWrapper {
 				int loaded = inventories.getLoaded();
 				if(loaded > 0){
 					// TODO: Locale
-					AntiShare.getInstance().log("Inventories Loaded: " + loaded, Level.INFO);
+					getLogger().info("Inventories Loaded: " + loaded);
 				}
 			}
 		});
@@ -691,16 +690,6 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public SignList getSignList(){
 		return signs;
-	}
-
-	/**
-	 * Log a message
-	 * 
-	 * @param string the message
-	 * @param level the level
-	 */
-	public void log(String string, Level level){
-		getLogger().log(level, string);
 	}
 
 	/**

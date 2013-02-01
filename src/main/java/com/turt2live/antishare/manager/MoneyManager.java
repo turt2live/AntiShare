@@ -18,7 +18,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -122,8 +121,8 @@ public class MoneyManager extends AntiShareManager {
 			// Sanity
 			if(affect == null){
 				// TODO: Locale
-				plugin.log("Configuration Problem: '" + money.getString(path + ".give-to") + "' is not valid! (See '" + path + ".give-to" + "' in your fines.yml)", Level.WARNING);
-				plugin.log("Assuming '" + money.getString(path + ".give-to") + "' means 'NONE'", Level.WARNING);
+				plugin.getLogger().warning("Configuration Problem: '" + money.getString(path + ".give-to") + "' is not valid! (See '" + path + ".give-to" + "' in your fines.yml)");
+				plugin.getLogger().warning("Assuming '" + money.getString(path + ".give-to") + "' means 'NONE'");
 				affect = ASGameMode.NONE;
 			}
 
@@ -161,7 +160,7 @@ public class MoneyManager extends AntiShareManager {
 				econ = new VaultEconomy();
 			}else{
 				// TODO: Locale
-				plugin.log("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work", Level.SEVERE);
+				plugin.getLogger().severe("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work");
 				return false;
 			}
 		}
@@ -170,11 +169,11 @@ public class MoneyManager extends AntiShareManager {
 		// Spam console
 		if(finesLoaded > 0){
 			// TODO: Locale
-			plugin.log("Fines Loaded: " + finesLoaded, Level.INFO);
+			plugin.getLogger().info("Fines Loaded: " + finesLoaded);
 		}
 		if(rewardsLoaded > 0){
 			// TODO: Locale
-			plugin.log("Rewards Loaded: " + rewardsLoaded, Level.INFO);
+			plugin.getLogger().info("Rewards Loaded: " + rewardsLoaded);
 		}
 		return true;
 	}

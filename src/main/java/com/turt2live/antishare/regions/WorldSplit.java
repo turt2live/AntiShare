@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.turt2live.antishare.regions;
 
-import java.util.logging.Level;
-
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -177,7 +175,7 @@ public class WorldSplit {
 		}else{
 			axis = Axis.NONE;
 			// TODO: Locale
-			plugin.log("Invalid world split for world " + world, Level.WARNING);
+			plugin.getLogger().severe("Invalid world split for world " + world);
 		}
 	}
 }

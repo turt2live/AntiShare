@@ -12,7 +12,6 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -134,7 +133,7 @@ public class SelfCompatibility {
 			}
 			if(files > 0){
 				// TODO: Locale
-				AntiShare.getInstance().log("World Configurations Migrated: " + files, Level.INFO);
+				AntiShare.getInstance().getLogger().info("World Configurations Migrated: " + files);
 			}
 		}
 		noLongerNeedsUpdate(Compat.WORLD_CONF);

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -557,7 +556,7 @@ public class InventoryManager extends AntiShareManager {
 					this.links.add(link);
 				}else{
 					// TODO: Locale
-					AntiShare.getInstance().log("Invalid linked inventory. Please check the linked-inventories.yml file", Level.WARNING);
+					AntiShare.getInstance().getLogger().warning("Invalid linked inventory. Please check the linked-inventories.yml file");
 				}
 			}
 		}
@@ -565,7 +564,7 @@ public class InventoryManager extends AntiShareManager {
 		// Status
 		if(this.links.size() > 0){
 			// TODO: Locale
-			AntiShare.getInstance().log("Linked Inventories: " + this.links.size(), Level.INFO);
+			AntiShare.getInstance().getLogger().info("Linked Inventories: " + this.links.size());
 		}
 		return true;
 	}

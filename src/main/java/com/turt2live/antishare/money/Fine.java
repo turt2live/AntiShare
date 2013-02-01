@@ -10,8 +10,6 @@
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
-import java.util.logging.Level;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -68,7 +66,7 @@ public class Fine extends Tender {
 		if(!result.completed){
 			// TODO: Locale
 			ASUtils.sendToPlayer(player, ChatColor.RED + "Fine Failed: " + ChatColor.ITALIC + result.message, true);
-			plugin.log("Fine Failed (" + player.getName() + "): " + result.message, Level.WARNING);
+			plugin.getLogger().warning("Fine Failed (" + player.getName() + "): " + result.message);
 			return;
 		}else{
 			String formatted = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(getAmount());
