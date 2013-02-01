@@ -74,7 +74,7 @@ public class HookManager extends AntiShareManager {
 		if(chestshop != null){
 			blocks.add(new ChestShop());
 		}
-		Plugin lwc = plugin.getServer().getPluginManager().getPlugin("lwc");
+		Plugin lwc = plugin.getServer().getPluginManager().getPlugin("LWC");
 		if(lwc != null){
 			blocks.add(new LWC());
 		}

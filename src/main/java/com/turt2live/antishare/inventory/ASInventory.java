@@ -113,7 +113,6 @@ public class ASInventory implements Cloneable {
 		}
 		// Setup
 		File dir = new File(AntiShare.getInstance().getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
-		dir.mkdirs();
 		File saveFile = new File(dir, name + ".yml");
 		if(!saveFile.exists()){
 			return inventories;
@@ -263,7 +262,6 @@ public class ASInventory implements Cloneable {
 		}
 		// Setup
 		File dir = new File(plugin.getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
-		dir.mkdirs();
 		File saveFile = new File(dir, inventoryName + ".yml");
 		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, plugin);
 		file.load();

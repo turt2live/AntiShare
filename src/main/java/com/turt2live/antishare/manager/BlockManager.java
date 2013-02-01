@@ -20,8 +20,8 @@ import org.bukkit.entity.EntityType;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.listener.BlockListener;
 import com.turt2live.antishare.tekkitcompat.ScheduleLayer;
-import com.turt2live.materials.ServerHas;
 import com.turt2live.antishare.util.events.TrackerList;
+import com.turt2live.materials.ServerHas;
 
 public class BlockManager extends AntiShareManager {
 
@@ -45,8 +45,6 @@ public class BlockManager extends AntiShareManager {
 		// Setup files
 		entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
 		blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
-		blocksDir.mkdirs();
-		entitiesDir.mkdirs();
 
 		// Start cleanup
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){

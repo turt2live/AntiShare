@@ -472,4 +472,32 @@ public class SelfCompatibility {
 		temp.delete();
 	}
 
+	public static void folderSetup(){
+		AntiShare plugin = AntiShare.getInstance();
+		File archiveFolder = new File(plugin.getDataFolder(), "archive");
+		File dataFolder = new File(plugin.getDataFolder(), "data");
+		File worldConfigFolder = new File(plugin.getDataFolder(), "world_configurations");
+		File regionConfigFolder = new File(plugin.getDataFolder(), "region_configurations");
+		File dataBlocksFolder = new File(dataFolder, "blocks");
+		File dataEntitiesFolder = new File(dataFolder, "entities");
+		File dataInventoriesFolder = new File(dataFolder, "inventories");
+		File dataRegionsFolder = new File(dataFolder, "regions");
+
+		// Create folders
+		archiveFolder.mkdirs();
+		dataFolder.mkdirs();
+		worldConfigFolder.mkdirs();
+		regionConfigFolder.mkdirs();
+		dataBlocksFolder.mkdirs();
+		dataEntitiesFolder.mkdirs();
+		dataInventoriesFolder.mkdirs();
+		dataRegionsFolder.mkdirs();
+
+		// Create inventory folders
+		for(InventoryType inv : InventoryType.values()){
+			File folder = new File(dataInventoriesFolder, inv.getRelativeFolderName());
+			folder.mkdirs();
+		}
+	}
+
 }

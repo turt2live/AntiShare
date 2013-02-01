@@ -59,7 +59,6 @@ public class RegionConfiguration {
 
 		// Setup configuration
 		File path = Region.REGION_CONFIGURATIONS;
-		path.mkdirs();
 		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(path, ASUtils.fileSafeName(region.getName()) + ".yml"), plugin);
 		regionConfig.loadDefaults(plugin.getResource("resources/region.yml"));
 		if(!regionConfig.fileExists() || !regionConfig.checkDefaults()){

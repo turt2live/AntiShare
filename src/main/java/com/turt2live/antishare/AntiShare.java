@@ -185,6 +185,12 @@ public class AntiShare extends PluginWrapper {
 		}
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
+		// Setup folder structure
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info("[Self Compat] Setting up plugins/AntiShare...");
+		}
+		SelfCompatibility.folderSetup();
+
 		// Convert blocks
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info("[Self Compat] Converting blocks...");
