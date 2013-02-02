@@ -482,8 +482,7 @@ public class BaseListener implements Listener {
 		}
 		if(event.getRightClicked() instanceof Player){
 			Player target = (Player) event.getRightClicked();
-			// TODO: 2Locale
-			ASUtils.sendToPlayer(player, ChatColor.YELLOW + target.getName() + ChatColor.WHITE + " is in " + ChatColor.YELLOW + target.getGameMode().name(), true);
+			ASUtils.sendToPlayer(player, ChatColor.YELLOW + target.getName() + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.DICT_IS_IN) + " " + ChatColor.YELLOW + target.getGameMode().name(), true);
 			event.setCancelled(true);
 		}
 	}
@@ -862,8 +861,7 @@ public class BaseListener implements Listener {
 						if(seconds == 0 || seconds > 1){
 							s = "s";
 						}
-						// TODO: 2Locale
-						ASUtils.sendToPlayer(player, ChatColor.RED + "You must wait at least " + seconds + " more second" + s + " before changing Game Modes.", true);
+						ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.PHRASE_COOLDOWN, String.valueOf(seconds), s), true);
 						return;
 					}
 				}else{
@@ -882,8 +880,7 @@ public class BaseListener implements Listener {
 		}
 
 		// Alerts
-		// TODO: 2Locale
-		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to Game Mode " + ChatColor.YELLOW + to.name();
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.PHRASE_CHANGE_GAMEMODE) + " " + ChatColor.YELLOW + to.name();
 		String playerMessage = "no message";
 		if(!plugin.getConfig().getBoolean("other.send-gamemode-change-message")){
 			playerMessage = "no message";

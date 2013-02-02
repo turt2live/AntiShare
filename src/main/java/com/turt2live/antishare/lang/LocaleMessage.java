@@ -104,6 +104,13 @@ public enum LocaleMessage{
     DICT_GETTING("dictionary.getting"),
     DICT_NOT_GETTING("dictionary.not-getting"),
     DICT_NOT_SET("dictionary.not-set"),
+    DICT_SET_AS("dictionary.set-as"),
+    DICT_NATURAL("dictionary.natural"),
+    DICT_IS("dictionary.is"),
+    DICT_WAS("dictionary.was"),
+    DICT_THAT("dictionary.that"),
+    DICT_BLOCK("dictionary.block"),
+    DICT_REMOVED("dictionary.removed"),
     STATUS_INVENTORIES("status.inventories"),
     STATUS_CREATIVE_BLOCKS("status.creative-blocks"),
     STATUS_SURVIVAL_BLOCKS("status.survival-blocks"),
@@ -158,6 +165,15 @@ public enum LocaleMessage{
     PHRASE_CRAFT("phrase.crafted-a"),
     PHRASE_CRAFTED("phrase.crafted"),
     PHRASE_INV_CHANGE("phrase.inv-change"),
+    PHRASE_CHANGE_GAMEMODE("phrase.change-gm"),
+    PHRASE_COOLDOWN("phrase.wait"),
+    PHRASE_REGION("phrase.not-in-region"),
+    PHRASE_CANNOT_CHANGE("phrase.no-gm-change"),
+    PHRASE_GM_BREAK("phrase.gm-break"),
+    PHRASE_GM_BROKE("phrase.gm-broke"),
+    PHRASE_ATTACH("phrase.attach-a"),
+    PHRASE_ATTACHED("phrase.attached"),
+    
     ;
 
     private String node;

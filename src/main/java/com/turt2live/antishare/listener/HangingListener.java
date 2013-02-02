@@ -114,11 +114,10 @@ public class HangingListener implements Listener {
 		}
 
 		// Alert
-		// TODO: Locale
 		if(region){
 			if(type == AlertType.ILLEGAL){
 				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_PLACE) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_PLACED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ") + ChatColor.WHITE + " in a region.";
-				String playerMessage = ChatColor.RED + "You cannot place blocks in another region!";
+				String playerMessage = ChatColor.RED + Localization.getMessage(LocaleMessage.PHRASE_REGION);
 				plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
 			}
 		}else{
@@ -160,12 +159,10 @@ public class HangingListener implements Listener {
 					}
 					blocks.addEntity(player.getGameMode(), hanging);
 					event.setCancelled(true);
-					// TODO: Locale
-					ASUtils.sendToPlayer(player, ChatColor.GREEN + MaterialAPI.capitalize(item.name()) + " set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
+					ASUtils.sendToPlayer(player, ChatColor.GREEN + MaterialAPI.capitalize(item.name()) + " " + Localization.getMessage(LocaleMessage.DICT_SET_AS) + " " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					return;
 				}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
-					// TODO: Locale
-					ASUtils.sendToPlayer(player, ChatColor.WHITE + "That " + ChatColor.YELLOW + MaterialAPI.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
+					ASUtils.sendToPlayer(player, ChatColor.WHITE + Localization.getMessage(LocaleMessage.DICT_THAT) + " " + ChatColor.YELLOW + MaterialAPI.capitalize(item.name()) + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.DICT_IS) + " " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : Localization.getMessage(LocaleMessage.DICT_NATURAL)), true);
 					event.setCancelled(true);
 					return;
 				}
@@ -242,8 +239,7 @@ public class HangingListener implements Listener {
 						plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, AlertTrigger.BLOCK_BREAK);
 					}
 				}else{
-					// TODO: Locale
-					String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");
+					String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_GM_BREAK, blockGM) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_GM_BROKE, blockGM) + " ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");
 					String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
 					MessageFactory factory = new MessageFactory(specialPlayerMessage);
 					factory.insert(item, player, hanging.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK);

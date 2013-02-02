@@ -99,8 +99,7 @@ public class InventoryListener implements Listener {
 		}
 
 		// Alerts
-		// TODO: Locale
-		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to world " + ChatColor.YELLOW + to.getName();
+		String message = "no message";
 		String playerMessage = ignore ? "no message" : Localization.getMessage(LocaleMessage.PHRASE_INV_CHANGE) + " " + ChatColor.YELLOW + to.getName();
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
 	}

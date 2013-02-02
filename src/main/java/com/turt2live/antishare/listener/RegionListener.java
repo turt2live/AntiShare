@@ -421,11 +421,10 @@ public class RegionListener implements Listener {
 		}
 
 		// Region Check
-		// TODO: Locale
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
 			Region region = manager.getRegion(player.getLocation());
 			if(region != null){
-				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
+				ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.PHRASE_CANNOT_CHANGE), true);
 				event.setCancelled(true);
 				if(player.hasMetadata("ASlevelChange")){
 					List<MetadataValue> values = player.getMetadata("ASlevelChange");
@@ -582,12 +581,11 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
-		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_PICK) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_PICKED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(itemStack.getType().name());
 		String playerMessage = plugin.getMessage("blocked-action.pickup-item");
 		if(region){
 			message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_PICK) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_PICKED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(itemStack.getType().name()) + ChatColor.WHITE + " from a region.";
-			playerMessage = ChatColor.RED + "You cannot pickup items from another region!";
+			playerMessage = ChatColor.RED + Localization.getMessage(LocaleMessage.PHRASE_REGION);
 		}
 		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert((Material) null, player, player.getWorld(), TenderType.ITEM_PICKUP, MaterialAPI.capitalize(itemStack.getType().name()));
@@ -637,9 +635,8 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert (with sanity check)
-		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_THROW) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_THREW) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(itemStack.getType().name()) + ChatColor.WHITE + " into a region.";
-		String playerMessage = ChatColor.RED + "You cannot throw items into another region!";
+		String playerMessage = ChatColor.RED + Localization.getMessage(LocaleMessage.PHRASE_REGION);
 		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert((Material) null, player, player.getWorld(), TenderType.ITEM_DROP, MaterialAPI.capitalize(itemStack.getType().name()));
 		playerMessage = factory.toString();
@@ -981,10 +978,9 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert
-		// TODO: Locale
 		if(type == AlertType.ILLEGAL){
 			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_PLACE) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_PLACED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " in a region.";
-			String playerMessage = ChatColor.RED + "You cannot place blocks in another region!";
+			String playerMessage = ChatColor.RED + Localization.getMessage(LocaleMessage.PHRASE_REGION);
 			plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
 		}
 	}
@@ -1036,10 +1032,9 @@ public class RegionListener implements Listener {
 		}
 
 		// Alert
-		// TODO: Locale
 		if(type == AlertType.ILLEGAL){
 			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_BREAK) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_BROKE) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " in a region.";
-			String specialPlayerMessage = ChatColor.RED + "You cannot break blocks that are not in your region";
+			String specialPlayerMessage = ChatColor.RED + Localization.getMessage(LocaleMessage.PHRASE_REGION);
 			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, type, AlertTrigger.BLOCK_BREAK);
 		}
 	}
@@ -1170,7 +1165,6 @@ public class RegionListener implements Listener {
 					type = AlertType.LEGAL;
 				}
 				if(type == AlertType.ILLEGAL && potion){
-					// TODO: Locale
 					message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_USE) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_USED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name()) + ChatColor.WHITE + " in a region";
 					playerMessage = plugin.getMessage("blocked-action.use-item");
 					trigger = AlertTrigger.USE_ITEM;

@@ -110,8 +110,7 @@ public class BlockListener implements Listener {
 			return;
 		}
 		Block block = event.getBlock();
-		// TODO: Locale
-		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to attach " : " attached ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " onto a " + (existing != null ? existing.name().toLowerCase() : "natural") + " block";
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_ATTACH) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_ATTACHED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name()) + ChatColor.WHITE + " onto a " + (existing != null ? existing.name().toLowerCase() : "natural") + " block";
 		String playerMessage = plugin.getMessage("blocked-action.attach-block");
 		MessageFactory factory = new MessageFactory(playerMessage);
 		factory.insert(block, player, block.getWorld(), TenderType.BLOCK_PLACE);
@@ -247,13 +246,11 @@ public class BlockListener implements Listener {
 			if(item != Material.AIR){
 				if(event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 					blocks.removeEntity(entity);
-					// TODO: Locale
-					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + MaterialAPI.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (mode == null ? "natural" : mode.name()) + ChatColor.RED + ")", true);
+					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.RED + MaterialAPI.capitalize(item.name()) + " " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (" + Localization.getMessage(LocaleMessage.DICT_WAS) + " " + ChatColor.DARK_RED + (mode == null ? Localization.getMessage(LocaleMessage.DICT_NATURAL) : mode.name()) + ChatColor.RED + ")", true);
 					event.setCancelled(true);
 					return;
 				}else{
-					// TODO: Locale
-					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + "That " + ChatColor.YELLOW + MaterialAPI.capitalize(item.name()) + ChatColor.WHITE + " is " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : "natural"), true);
+					ASUtils.sendToPlayer(event.getPlayer(), ChatColor.WHITE + Localization.getMessage(LocaleMessage.DICT_THAT) + " " + ChatColor.YELLOW + MaterialAPI.capitalize(item.name()) + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.DICT_IS) + " " + ChatColor.YELLOW + (mode != null ? mode.name().toLowerCase() : Localization.getMessage(LocaleMessage.DICT_NATURAL)), true);
 					event.setCancelled(true);
 					return;
 				}
@@ -310,9 +307,8 @@ public class BlockListener implements Listener {
 		if(plugin.getPermissions().has(player, PermissionNodes.TOOL_USE) && player.getItemInHand() != null && (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)){
 			if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
 				String blockname = block.getType().name().replaceAll("_", " ").toLowerCase();
-				String gamemode = (blocks.getType(block) != null ? blocks.getType(block).name() : "natural").toLowerCase();
-				// TODO: Locale
-				ASUtils.sendToPlayer(player, "That " + ChatColor.YELLOW + blockname + ChatColor.WHITE + " is a " + ChatColor.YELLOW + gamemode + ChatColor.WHITE + " block.", true);
+				String gamemode = (blocks.getType(block) != null ? blocks.getType(block).name() : Localization.getMessage(LocaleMessage.DICT_NATURAL)).toLowerCase();
+				ASUtils.sendToPlayer(player, Localization.getMessage(LocaleMessage.DICT_THAT) + " " + ChatColor.YELLOW + blockname + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.DICT_IS) + " " + ChatColor.YELLOW + gamemode, true);
 
 				// Cancel and stop the check
 				event.setCancelled(true);
@@ -325,13 +321,11 @@ public class BlockListener implements Listener {
 						blocks.removeBlock(block);
 					}
 					blocks.addBlock(player.getGameMode(), block);
-					// TODO: Locale
-					ASUtils.sendToPlayer(player, ChatColor.GREEN + "Block set as " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
+					ASUtils.sendToPlayer(player, ChatColor.GREEN + Localization.getMessage(LocaleMessage.DICT_BLOCK) + " " + Localization.getMessage(LocaleMessage.DICT_SET_AS) + " " + ChatColor.DARK_GREEN + player.getGameMode().name(), true);
 					break;
 				case RIGHT_CLICK_BLOCK:
 					blocks.removeBlock(block);
-					// TODO: Locale
-					ASUtils.sendToPlayer(player, ChatColor.RED + "Block " + ChatColor.DARK_RED + "REMOVED" + ChatColor.RED + ". (was " + ChatColor.DARK_RED + (gm == null ? "natural" : gm.name()) + ChatColor.RED + ")", true);
+					ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.DICT_BLOCK) + " " + ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.DICT_REMOVED).toUpperCase() + ChatColor.RED + ". (" + Localization.getMessage(LocaleMessage.DICT_WAS) + " " + ChatColor.DARK_RED + (gm == null ? Localization.getMessage(LocaleMessage.DICT_NATURAL) : gm.name()) + ChatColor.RED + ")", true);
 					break;
 				}
 				event.setCancelled(true);
@@ -419,16 +413,15 @@ public class BlockListener implements Listener {
 		}
 
 		// Alert
-		// TODO: Locale
 		if(extraSpecial){
-			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break the attached " + attachedGM + " block " : " broke the attached " + attachedGM + " block ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(attached.name());
+			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_GM_BREAK, blockGM) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_GM_BROKE, blockGM) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(attached.name());
 			String specialPlayerMessage = plugin.getMessage("blocked-action." + attachedGM + "-attached-block-break");
 			MessageFactory factory = new MessageFactory(specialPlayerMessage);
 			factory.insert(block, player, block.getWorld(), attachedGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : attachedGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK);
 			specialPlayerMessage = factory.toString();
 			plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, type, attachedGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : attachedGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK);
 		}else{
-			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
+			String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_GM_BREAK, blockGM) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_GM_BROKE, blockGM) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(block.getType().name());
 			String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
 			MessageFactory factory = new MessageFactory(specialPlayerMessage);
 			factory.insert(block, player, block.getWorld(), blockGM.equalsIgnoreCase("creative") ? TenderType.CREATIVE_BLOCK : blockGM.equalsIgnoreCase("survival") ? TenderType.SURVIVAL_BLOCK : TenderType.ADVENTURE_BLOCK);
