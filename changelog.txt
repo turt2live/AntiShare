@@ -10,6 +10,8 @@ Since 5.3.0:
 - Fix wrong file path for inventories
 - Remove Tekkit support
 - Fix region issues
+- Added locale support
+- Removed conflict spam, conflicts may still be present although they can be fixed
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
