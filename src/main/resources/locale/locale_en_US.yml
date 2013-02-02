@@ -14,6 +14,7 @@ ender-welcome: 'Welcome to {0}''s enderchest inventory'
 inv-edit: 'You are able to edit their inventory as you please'
 region-created: 'Region created!'
 region-removed: 'Region removed!'
+region-saved: 'Region saved!'
 no-regions: 'No regions to list!'
 help: 'For additional help, type: {0}'
 tool-have: 'You already have the tool! ({0})'
@@ -48,6 +49,7 @@ error:
     bad-file: 'INVALID FILE: {0}'
     bad-key: 'INVALID KEY ({0}) IN FILE ({1})'
     no-vault: 'You have enabled fines/rewards but do not have Vault. Disabling fines/rewards.'
+    cannot-set: 'You cannot set an inventory from the console, only clear'
 startup:
     config: 'Checking configuration...'
     version-string: 'Creating version string in config.yml...'
@@ -97,6 +99,7 @@ status:
     linked-inventories: 'Linked Inventories: {0}'
     fines: 'Fines Loaded: {0}'
     rewards: 'Rewards Loaded: {0}'
+    regions: 'Regions Loaded: {0}'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'

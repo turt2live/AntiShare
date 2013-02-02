@@ -20,6 +20,8 @@ import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.listener.RegionListener;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionConfiguration;
@@ -64,8 +66,7 @@ public class RegionManager extends AntiShareManager {
 			}
 		}
 		if(regions.keySet().size() > 0){
-			// TODO: Locale
-			plugin.getLogger().info("Regions Loaded: " + regions.keySet().size());
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_REGIONS, String.valueOf(regions.keySet().size())));
 		}
 	}
 
@@ -95,8 +96,7 @@ public class RegionManager extends AntiShareManager {
 			}
 		}
 		if(regions.keySet().size() > 0){
-			// TODO: Locale
-			plugin.getLogger().info("Regions Loaded: " + regions.keySet().size());
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_REGIONS, String.valueOf(regions.keySet().size())));
 		}
 		return true;
 	}
@@ -307,8 +307,7 @@ public class RegionManager extends AntiShareManager {
 		switch (key){
 		case NAME:
 			if(isRegionNameTaken(value)){
-				// TODO: Locale
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "Region name '" + value + "' already exists!", true);
+				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_NAME_IN_USE), true);
 			}else{
 				region.setName(value);
 				changed = true;
@@ -319,8 +318,7 @@ public class RegionManager extends AntiShareManager {
 				region.setShowEnterMessage(ASUtils.getBoolean(value));
 				changed = true;
 			}else{
-				// TODO: Locale
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?", true);
+				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_VALUE), value), true);
 			}
 			break;
 		case EXIT_MESSAGE_SHOW:
@@ -328,8 +326,7 @@ public class RegionManager extends AntiShareManager {
 				region.setShowExitMessage(ASUtils.getBoolean(value));
 				changed = true;
 			}else{
-				// TODO: Locale
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown, did you mean 'true' or 'false'?", true);
+				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_VALUE), value), true);
 			}
 			break;
 		case INVENTORY:
@@ -341,17 +338,15 @@ public class RegionManager extends AntiShareManager {
 					region.setInventory(ASInventory.generate((Player) sender, InventoryType.REGION));
 					changed = true;
 				}else{
-					// TODO: Locale
-					ASUtils.sendToPlayer(sender, ChatColor.RED + "You can't set an inventory from the console, only clear.", true);
+					ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_ONLY_CLEAR), true);
 				}
 			}else{
-				// TODO: Locale
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "Value '" + value + "' is unknown to me, did you mean 'none' or 'set'?", true);
+				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_VALUE), value), true);
 			}
 			break;
 		case SELECTION_AREA:
 			if(!(sender instanceof Player)){
-				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + "You are not a player, sorry!", true);
+				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
 				break;
 			}
 			Player player = (Player) sender;
@@ -360,8 +355,7 @@ public class RegionManager extends AntiShareManager {
 				region.setCuboid(cuboid);
 				changed = true;
 			}else{
-				// TODO: Locale
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "You need to use the Cuboid tool to create a cuboid.", true);
+				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_NO_CUBOID_TOOL), true);
 			}
 			break;
 		case GAMEMODE:
@@ -372,8 +366,7 @@ public class RegionManager extends AntiShareManager {
 				region.setGameMode(GameMode.SURVIVAL);
 				changed = true;
 			}else{
-				// TODO: Locale
-				ASUtils.sendToPlayer(sender, ChatColor.RED + "I don't know what Game Mode '" + value + "' is!", true);
+				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, "Game Mode", value), true);
 			}
 			break;
 		case ENTER_MESSAGE:
@@ -389,8 +382,7 @@ public class RegionManager extends AntiShareManager {
 		}
 		if(changed){
 			region.onUpdate(last);
-			// TODO: Locale
-			ASUtils.sendToPlayer(sender, ChatColor.GREEN + "Region saved.", true);
+			ASUtils.sendToPlayer(sender, ChatColor.GREEN + Localization.getMessage(LocaleMessage.REGION_SAVED), true);
 		}
 	}
 
