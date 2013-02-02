@@ -85,7 +85,38 @@ public class Localization {
 	 * @param arguments arguments for message, optional
 	 * @return the localized message
 	 */
+	public String getLocalizedMessage(LocaleMessage message, LocaleMessage... arguments){
+		if(arguments != null && arguments.length > 0){
+			String[] strings = new String[arguments.length];
+			int i = 0;
+			for(LocaleMessage msg : arguments){
+				strings[i] = getLocalizedMessage(msg, (String[]) null);
+				i++;
+			}
+			return getLocalizedMessage(message, strings);
+		}
+		return getLocalizedMessage(message, (String[]) null);
+	}
+
+	/**
+	 * Gets a localized message
+	 * 
+	 * @param message the message
+	 * @param arguments arguments for message, optional
+	 * @return the localized message
+	 */
 	public static String getMessage(LocaleMessage message, String... arguments){
+		return getInstance().getLocalizedMessage(message, arguments);
+	}
+
+	/**
+	 * Gets a localized message
+	 * 
+	 * @param message the message
+	 * @param arguments arguments for message, optional
+	 * @return the localized message
+	 */
+	public static String getMessage(LocaleMessage message, LocaleMessage... arguments){
 		return getInstance().getLocalizedMessage(message, arguments);
 	}
 

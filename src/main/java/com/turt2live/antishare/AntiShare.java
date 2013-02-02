@@ -28,6 +28,8 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.listener.BaseListener;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.manager.RegionManager;
@@ -101,8 +103,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Check configuration
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Checking configuration...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_CHECK_CONFIG, (String[]) null));
 		}
 		getConfig().loadDefaults(getResource("resources/config.yml"));
 		if(!getConfig().fileExists() || !getConfig().checkDefaults()){
@@ -125,8 +126,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Create version string
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Creating version string in config.yml...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_VERSION_STRING, (String[]) null));
 		}
 		String val = getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + build;
 		getConfig().set("error-reporting.error-string", val);
@@ -140,8 +140,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Get all disabled SimpleNotice users
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Loading disabled SimpleNotice users...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_SIMPLENOTICE, (String[]) null));
 		}
 		try{
 			File snFile = new File(getDataFolder(), "data" + File.separator + "disabled-simplenotice-users.txt");
@@ -161,128 +160,108 @@ public class AntiShare extends PluginWrapper {
 
 		// Check for online mode
 		if(!getServer().getOnlineMode()){
-			// TODO: Locale
 			if(!getConfig().getBoolean("other.quiet-offline-mode-warning")){
 				getLogger().severe("**********************");
-				getLogger().severe("Your server is in Offline Mode. AntiShare does not support offline mode servers.");
-				getLogger().severe("AntiShare will still run, but you will not get help from turt2live!!");
-				getLogger().severe("You can turn this message off in the configuration.");
+				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_1, (String[]) null));
+				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_2, (String[]) null));
+				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_3, (String[]) null));
 				getLogger().severe("**********************");
 			}
 		}
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Setting up Metrics...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_SETUP, LocaleMessage.SERVICE_METRICS));
 		}
 		try{
 			metrics = new Metrics(this);
 		}catch(IOException e1){
-			// TODO: Locale
-			getLogger().severe("AntiShare encountered and error. Please report this to turt2live.");
 			e1.printStackTrace();
 		}
 
 		// Register SimpleNotice channel to AntiShare
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Registering SimpleNotice channel...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_REGISTER, LocaleMessage.SERVICE_SIMPLE_NOTICE));
 		}
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
 		// Setup folder structure
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Setting up plugins/AntiShare...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_FOLDERS, (String[]) null));
 		}
 		SelfCompatibility.folderSetup();
 
 		// Convert blocks
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Converting blocks...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_BLOCKS, (String[]) null));
 		}
 		SelfCompatibility.convertBlocks();
 
 		// Migrate world configurations
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Migrating world configurations...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_WORLDS, (String[]) null));
 		}
 		SelfCompatibility.migrateWorldConfigurations();
 
 		// Migrate region players (3.8.0-3.9.0)
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Migrating region player data...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_PLAYERS, (String[]) null));
 		}
 		SelfCompatibility.migratePlayerData();
 
 		// Convert inventories (3.1.3-3.2.0/Current)
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Converting 3.1.3 inventories...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_INVENTORIES, "3.1.3"));
 		}
 		SelfCompatibility.convert313Inventories();
 
 		// Convert inventories (5.2.0/5.3.0)
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Converting 5.2.0 inventories...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_INVENTORIES, "5.2.0"));
 		}
 		SelfCompatibility.cleanup520Inventories();
 
 		// Convert inventories (5.3.0/Current)
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Converting 5.3.0 inventories...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_INVENTORIES, "5.3.0"));
 		}
 		SelfCompatibility.cleanup530Inventories();
 
 		// Cleanup old files
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Cleaning up inventories...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_CLEANUP, LocaleMessage.SERVICE_INVENTORIES));
 		}
 		SelfCompatibility.cleanupOldInventories(); // Handles on/off in config internally
 
 		// Cleanup old files
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Cleaning up configuration files...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_CLEANUP, LocaleMessage.DICT_CONFIG_FILES));
 		}
 		SelfCompatibility.cleanupYAML();
 
 		// Cleanup old files
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("[Self Compat] Cleaning up blocks directory...");
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_CLEANUP, LocaleMessage.SERVICE_BLOCKS));
 		}
 		SelfCompatibility.cleanup520blocks();
 
 		// Pre-load
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting sign list...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_SIGNS));
 		}
 		signs = new SignList();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting permissions...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_PERMISSIONS));
 		}
 		permissions = new Permissions();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting item map...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_ITEM_MAP));
 		}
 		itemMap = new ItemMap();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting Metrics trackers...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_METRICS_TRACKERS));
 		}
 		trackers = new TrackerList();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting listener...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_LISTENER));
 		}
 		listener = new BaseListener();
 
@@ -292,60 +271,51 @@ public class AntiShare extends PluginWrapper {
 
 		// Setup everything
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting alerts...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_ALERTS));
 		}
 		alerts = new Alert();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting messages...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_MESSAGES));
 		}
 		messages = new Messages();
 
 		// Statistics
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting update check...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_UPDATE));
 		}
 		UpdateChecker.start();
 		// mcstats.org
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Starting Metrics...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_METRICS));
 		}
 		trackers.addTo(metrics);
 		metrics.start(); // Handles it's own opt-out
 
 		// Start listeners
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Registering listeners...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_REGISTER, LocaleMessage.SERVICE_LISTENER));
 		}
 		getServer().getPluginManager().registerEvents(permissions, this);
 		getServer().getPluginManager().registerEvents(listener, this);
 
 		// Command handlers
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Setting up commands...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_SETUP, LocaleMessage.SERVICE_COMMANDS));
 		}
 		getCommand("antishare").setExecutor(new CommandHandler());
 		getCommand("antishare").setTabCompleter(new TabHandler());
 
 		// Enabled
-		// TODO: Locale
-		getLogger().info("Enabled!");
+		getLogger().info(Localization.getMessage(LocaleMessage.ENABLED, (String[]) null));
 
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Scheduling inventory and region updates...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_SCHEDULE, LocaleMessage.SERVICE_REGION_INVENTORY_UPDATE));
 		}
 		loadPlayerInformation();
 
 		// Conflict messages
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			// TODO: Locale
-			getLogger().info("Scheduling conflict messages...");
+			getLogger().info(Localization.getMessage(LocaleMessage.START_SCHEDULE, LocaleMessage.SERVICE_CONFLICT));
 		}
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new ConflictThread());
 	}
@@ -355,8 +325,7 @@ public class AntiShare extends PluginWrapper {
 		// Save
 		if(metrics != null){
 			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
-				// TODO: Locale
-				getLogger().info("Flushing Metrics...");
+				getLogger().info(Localization.getMessage(LocaleMessage.STOP_FLUSH, LocaleMessage.SERVICE_METRICS));
 			}
 			metrics.flush();
 		}
@@ -366,7 +335,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Disable
 		getServer().getScheduler().cancelTasks(this);
-		getLogger().info("Disabled!");
+		getLogger().info(Localization.getMessage(LocaleMessage.DISABLED, (String[]) null));
 
 		// Prepare as though it's a reload
 		permissions = null;
@@ -422,8 +391,7 @@ public class AntiShare extends PluginWrapper {
 				}
 				int loaded = inventories.getLoaded();
 				if(loaded > 0){
-					// TODO: Locale
-					getLogger().info("Inventories Loaded: " + loaded);
+					getLogger().info(Localization.getMessage(LocaleMessage.STATUS_INVENTORIES, String.valueOf(loaded)));
 				}
 			}
 		});

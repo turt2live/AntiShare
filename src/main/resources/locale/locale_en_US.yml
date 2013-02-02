@@ -2,3 +2,49 @@
 update-ready: 'AntiShare {0} is out! You are running AntiShare {1}'
 update-link: 'Update AntiShare at: {0}'
 bug-files-removed: '5.3.0 0kb Bug Files Removed: {0}'
+enabled: 'Enabled!'
+diabled: 'Disabled!'
+startup:
+    config: 'Checking configuration...'
+    version-string: 'Creating version string in config.yml...'
+    simplenotice: Loading disabled SimpleNotice users...'
+    setup: 'Setting up {0}...'
+    start: 'Starting {0}...'
+    register: 'Registering {0}...'
+    schedule: 'Scheduling {0}...'
+    compat:
+        folders: 'Setting up plugins/AntiShare...'
+        blocks: 'Converting blocks...'
+        worlds: 'Migrating world configurations...'
+        players: 'Migrating region player data...'
+        inventories: 'Converting {0} inventories...'
+        cleanup: 'Cleaning up {0}...'
+    offline:
+        line1: 'Your server is in Offline Mode. AntiShare does not support offline mode servers.'
+        line2: 'AntiShare will still run, but you will not get help from turt2live!!'
+        line3: 'You can turn this message off in the configuration.'
+shutdown:
+    flush: 'Flushing {0}...'
+status:
+    inventories: 'Inventories loaded: {0}'
+service:
+    metrics: 'Metrics'
+    simplenotice: 'SimpleNotice'
+    blocks: 'Block Manager'
+    inventories: 'Inventory Manager'
+    signs: 'Sign Manager'
+    permissions: 'Permissions Manager'
+    item-map: 'Item Map'
+    metrics-trackers: 'Metrics Trackers'
+    listener: 'Listener'
+    alerts: 'Alert Service'
+    messages: 'Message Service'
+    update: 'Update Service'
+    commands: 'Command Handler'
+    region-inventory-update: 'inventory and region updates'
+    conflict: 'conflict messages'
+dictionary:
+    directory: 'directory'
+    config-files: 'configuration files'
+    
+    
