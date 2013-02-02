@@ -106,6 +106,7 @@ public enum LocaleMessage{
     STATUS_SURVIVAL_ENTITIES("status.survival-entities"),
     STATUS_ADVENTURE_ENTITIES("status.adventure-entities"),
     STATUS_CUBOIDS("status.cuboids"),
+    STATUS_LINKED_INVENTORIES("status.linked-inventories"),
     BLOCK_MAN_WAIT("blockman.wait"),
     BLOCK_MAN_PERCENT("blockman.percent"),
     TAB_NONE("tab.no-more"),

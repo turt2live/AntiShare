@@ -28,6 +28,8 @@ import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LinkedInventory;
 import com.turt2live.antishare.inventory.TemporaryASInventory;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.listener.InventoryListener;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
@@ -555,16 +557,14 @@ public class InventoryManager extends AntiShareManager {
 					LinkedInventory link = new LinkedInventory(gamemode, allWorlds);
 					this.links.add(link);
 				}else{
-					// TODO: Locale
-					AntiShare.getInstance().getLogger().warning("Invalid linked inventory. Please check the linked-inventories.yml file");
+					AntiShare.getInstance().getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_FILE, "linked-inventories.yml"));
 				}
 			}
 		}
 
 		// Status
 		if(this.links.size() > 0){
-			// TODO: Locale
-			AntiShare.getInstance().getLogger().info("Linked Inventories: " + this.links.size());
+			AntiShare.getInstance().getLogger().info(Localization.getMessage(LocaleMessage.STATUS_LINKED_INVENTORIES, String.valueOf(this.links.size())));
 		}
 		return true;
 	}

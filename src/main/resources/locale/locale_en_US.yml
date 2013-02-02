@@ -93,6 +93,7 @@ status:
     survival-entities: 'Survival Entities Loaded: {0}'
     adventure-entities: 'Adventure Entities Loaded: {0}'
     cuboids: 'Cuboids Loaded: {0}'
+    linked-inventories: 'Linked Inventories: {0}'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'
