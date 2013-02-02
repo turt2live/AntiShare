@@ -112,6 +112,12 @@ status:
     rewards: 'Rewards Loaded: {0}'
     regions: 'Regions Loaded: {0}'
     signs: 'Signs Loaded: {0}'
+    clean: 'Configuration files cleaned: {0}'
+    archive: 'Player inventories deleted/archived: {0}'
+    inv-convert: 'Inventories Converted: {0}'
+    region-migrate: 'Player (region) information migrated: {0}'
+    blocks-converted: 'Blocks Converted: {0}'
+    world-migrate: 'World configurations migrated: {0}'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'

@@ -132,8 +132,7 @@ public class SelfCompatibility {
 				file.delete();
 			}
 			if(files > 0){
-				// TODO: Locale
-				AntiShare.getInstance().getLogger().info("World Configurations Migrated: " + files);
+				AntiShare.getInstance().getLogger().info(Localization.getMessage(LocaleMessage.STATUS_WORLD_MIGRATE, String.valueOf(files)));
 			}
 		}
 		noLongerNeedsUpdate(Compat.WORLD_CONF);
@@ -175,8 +174,7 @@ public class SelfCompatibility {
 		}
 		oldBlockFile.delete();
 		if(converted > 0){
-			// TODO: Locale
-			plugin.getLogger().info("Blocks Converted: " + converted);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_BLOCKS_CONVERTED, String.valueOf(converted)));
 		}
 		noLongerNeedsUpdate(Compat.BLOCKS);
 	}
@@ -198,8 +196,7 @@ public class SelfCompatibility {
 				for(File file : files){
 					file.renameTo(new File(newSaveFolder, file.getName()));
 				}
-				// TODO: Locale
-				plugin.getLogger().info("Region Player Files Migrated: " + files.length);
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_REGION_MIGRATE, String.valueOf(files.length)));
 			}
 			oldSaveFolder.delete();
 		}
@@ -264,8 +261,7 @@ public class SelfCompatibility {
 				file.delete();
 			}
 			if(files.length > 0){
-				// TODO: Locale
-				plugin.getLogger().info("Player Inventories Converted: " + files.length);
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_INV_CONVERT, String.valueOf(files.length)));
 			}
 			noLongerNeedsUpdate(Compat.INV_313);
 		}
@@ -320,8 +316,7 @@ public class SelfCompatibility {
 				}
 			}
 			if(cleaned > 0){
-				// TODO: Locale
-				plugin.getLogger().info("Player Inventories Archived/Deleted: " + cleaned);
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_ARCHIVE, String.valueOf(cleaned)));
 			}
 		}
 	}
@@ -352,8 +347,7 @@ public class SelfCompatibility {
 			}
 		}
 		if(cleaned > 0){
-			// TODO: Locale
-			plugin.getLogger().info("Configuration files cleaned: " + cleaned);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CLEAN, String.valueOf(cleaned)));
 		}
 		noLongerNeedsUpdate(Compat.CONFIG_530);
 	}
