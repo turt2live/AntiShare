@@ -104,6 +104,8 @@ public enum LocaleMessage{
     TAB_REMOVE_REGION("tab.rmregion"),
     TAB_EDIT_REGION("tab.editregion"),
     TAB_LIST_REGION("tab.listregion"),
+    WARNING_REMOVE_WORLD("warning.remove-world"),
+    WARNING_REMOVE_WORLD2("warning.remove-world2"),
     ;
 
     private String node;

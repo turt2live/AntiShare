@@ -78,6 +78,9 @@ tab:
     rmregion: 'You can enter a name, or remove the region you are standing in'
     editregion: 'Please enter a value'
     listregion: 'Enter an optional page number'
+warning:
+    remove-world: 'AntiShare is REMOVING this world from the player'
+    remove-world2: 'This cannot be reversed. Check your settings if you don''t like this'
 status:
     inventories: 'Inventories loaded: {0}%'
 service:

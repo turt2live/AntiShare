@@ -26,6 +26,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 
 /**
  * AntiShare Inventory
@@ -127,9 +129,8 @@ public class ASInventory implements Cloneable {
 				if(worldV == null){
 					AntiShare.getInstance().getLogger().severe("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.");
 					if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
-						// TODO: Locale
-						AntiShare.getInstance().getLogger().severe("=== AntiShare is REMOVING this world from the player ===");
-						AntiShare.getInstance().getLogger().severe("This cannot be reversed. Check your settings if you don't like this.");
+						AntiShare.getInstance().getLogger().severe("=== " + Localization.getMessage(LocaleMessage.WARNING_REMOVE_WORLD) + " ===");
+						AntiShare.getInstance().getLogger().severe(Localization.getMessage(LocaleMessage.WARNING_REMOVE_WORLD2));
 						removeWorlds.add(world);
 					}
 					continue;
