@@ -123,6 +123,11 @@ public enum LocaleMessage{
     WARNING_REMOVE_WORLD("warning.remove-world"),
     WARNING_REMOVE_WORLD2("warning.remove-world2"),
     WARNING_MOVE_BLOCK("warning.move-block"),
+    FINES_REWARDS_FINE_FAILED("fines-and-rewards.fine.failed"),
+    FINES_REWARDS_FINE_SUCCESS("fines-and-rewards.fine.success"),
+    FINES_REWARDS_REWARD_FAILED("fines-and-rewards.reward.failed"),
+    FINES_REWARDS_REWARD_SUCCESS("fines-and-rewards.reward.success"),
+    FINES_REWARDS_BALANCE("fines-and-rewards.balance"),
     ;
 
     private String node;

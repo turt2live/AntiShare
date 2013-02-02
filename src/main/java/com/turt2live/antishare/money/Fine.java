@@ -14,6 +14,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
@@ -64,17 +66,15 @@ public class Fine extends Tender {
 		}
 		TransactionResult result = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).subtractFromAccount(player, amount);
 		if(!result.completed){
-			// TODO: Locale
-			ASUtils.sendToPlayer(player, ChatColor.RED + "Fine Failed: " + ChatColor.ITALIC + result.message, true);
-			plugin.getLogger().warning("Fine Failed (" + player.getName() + "): " + result.message);
+			ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.FINES_REWARDS_FINE_FAILED, result.message), true);
+			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.FINES_REWARDS_FINE_FAILED, result.message) + "  (" + player.getName() + ")");
 			return;
 		}else{
 			String formatted = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(getAmount());
 			String balance = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getBalance(player));
 			if(!((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).isSilent(player.getName())){
-				// TODO: Locale
-				ASUtils.sendToPlayer(player, ChatColor.RED + "You've been fined " + formatted + "!", true);
-				ASUtils.sendToPlayer(player, "Your new balance is " + ChatColor.YELLOW + balance, true);
+				ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.FINES_REWARDS_FINE_SUCCESS, formatted), true);
+				ASUtils.sendToPlayer(player, Localization.getMessage(LocaleMessage.FINES_REWARDS_BALANCE, balance), true);
 			}
 		}
 	}
