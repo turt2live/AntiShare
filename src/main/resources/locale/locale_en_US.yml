@@ -71,7 +71,7 @@ reload:
     reload: 'Reloading {0}...'
 blockman:
     wait: 'Waiting for block manager to be done...'
-    percent: 'Percent Done: {0}'
+    percent: 'Percent Done: {0}%'
 tab:
     no-more: 'No more arguments'
     region: 'The last argument is a region name'
@@ -81,8 +81,15 @@ tab:
 warning:
     remove-world: 'AntiShare is REMOVING this world from the player'
     remove-world2: 'This cannot be reversed. Check your settings if you don''t like this'
+    move-block: 'Move block took longer than {0} milliseconds'
 status:
-    inventories: 'Inventories loaded: {0}%'
+    inventories: 'Inventories loaded: {0}'
+    creative-blocks: 'Creative Blocks Loaded: {0}'
+    survival-blocks: 'Survival Blocks Loaded: {0}'
+    adventure-blocks: 'Adventure Blocks Loaded: {0}'
+    creative-entities: 'Creative Entities Loaded: {0}'
+    survival-entities: 'Survival Entities Loaded: {0}'
+    adventure-entities: 'Adventure Entities Loaded: {0}'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'

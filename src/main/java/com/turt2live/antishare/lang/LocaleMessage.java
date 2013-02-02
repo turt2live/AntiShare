@@ -97,6 +97,12 @@ public enum LocaleMessage{
     DICT_NOT_GETTING("dictionary.not-getting"),
     DICT_NOT_SET("dictionary.not-set"),
     STATUS_INVENTORIES("status.inventories"),
+    STATUS_CREATIVE_BLOCKS("status.creative-blocks"),
+    STATUS_SURVIVAL_BLOCKS("status.survival-blocks"),
+    STATUS_ADVENTURE_BLOCKS("status.adventure-blocks"),
+    STATUS_CREATIVE_ENTITIES("status.creative-entities"),
+    STATUS_SURVIVAL_ENTITIES("status.survival-entities"),
+    STATUS_ADVENTURE_ENTITIES("status.adventure-entities"),
     BLOCK_MAN_WAIT("blockman.wait"),
     BLOCK_MAN_PERCENT("blockman.percent"),
     TAB_NONE("tab.no-more"),
@@ -106,6 +112,7 @@ public enum LocaleMessage{
     TAB_LIST_REGION("tab.listregion"),
     WARNING_REMOVE_WORLD("warning.remove-world"),
     WARNING_REMOVE_WORLD2("warning.remove-world2"),
+    WARNING_MOVE_BLOCK("warning.move-block"),
     ;
 
     private String node;

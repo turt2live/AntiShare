@@ -16,6 +16,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.listener.BlockListener;
 import com.turt2live.antishare.util.events.TrackerList;
 
@@ -88,24 +90,23 @@ public class BlockManager extends AntiShareManager {
 			ab += wrapper.adventure_blocks.size();
 			ae += wrapper.adventure_entities.size();
 		}
-		// TODO: Locale
 		if(cb > 0){
-			plugin.getLogger().info("Creative Blocks Loaded: " + cb);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CREATIVE_BLOCKS, String.valueOf(cb)));
 		}
 		if(sb > 0){
-			plugin.getLogger().info("Survival Blocks Loaded: " + sb);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_SURVIVAL_BLOCKS, String.valueOf(sb)));
 		}
 		if(ab > 0){
-			plugin.getLogger().info("Adventure Blocks Loaded: " + ab);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_ADVENTURE_BLOCKS, String.valueOf(ab)));
 		}
 		if(ce > 0){
-			plugin.getLogger().info("Creative Entities Loaded: " + ce);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CREATIVE_ENTITIES, String.valueOf(ce)));
 		}
 		if(se > 0){
-			plugin.getLogger().info("Survival Entities Loaded: " + se);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_SURVIVAL_ENTITIES, String.valueOf(se)));
 		}
 		if(ae > 0){
-			plugin.getLogger().info("Adventure Entities Loaded: " + ae);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_ADVENTURE_ENTITIES, String.valueOf(ae)));
 		}
 		return true;
 	}
@@ -371,8 +372,7 @@ public class BlockManager extends AntiShareManager {
 
 				// Warn if not updated
 				if(!updated){
-					// TODO: Locale
-					plugin.getLogger().severe("Move block took longer than " + delay * maxRuns + " milliseconds.");
+					plugin.getLogger().severe(Localization.getMessage(LocaleMessage.WARNING_MOVE_BLOCK, String.valueOf(delay * maxRuns)));
 				}
 			}
 		});
