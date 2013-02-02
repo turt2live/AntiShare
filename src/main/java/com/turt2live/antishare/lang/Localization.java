@@ -11,6 +11,7 @@ public class Localization {
 
 	/**
 	 * Gets the localization instance
+	 * 
 	 * @return the localization instance
 	 */
 	public static Localization getInstance(){
@@ -58,7 +59,9 @@ public class Localization {
 
 	/**
 	 * Gets a localized message
+	 * 
 	 * @param message the message
+	 * @param arguments arguments for message, optional
 	 * @return the localized message
 	 */
 	public String getLocalizedMessage(LocaleMessage message, String... arguments){
@@ -77,7 +80,9 @@ public class Localization {
 
 	/**
 	 * Gets a localized message
+	 * 
 	 * @param message the message
+	 * @param arguments arguments for message, optional
 	 * @return the localized message
 	 */
 	public static String getMessage(LocaleMessage message, String... arguments){

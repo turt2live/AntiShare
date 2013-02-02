@@ -225,7 +225,7 @@ public class RegionManager extends AntiShareManager {
 				Set<Region> regions = this.regions.get(world.getName());
 				Iterator<Region> iterator = regions.iterator();
 				List<Region> remove = new ArrayList<Region>();
-				while(iterator.hasNext()){
+				while (iterator.hasNext()){
 					Region region = iterator.next();
 					if(region.getName().equalsIgnoreCase(name)){
 						remove.add(region);
@@ -304,7 +304,7 @@ public class RegionManager extends AntiShareManager {
 	public void updateRegion(Region region, RegionKeyType key, String value, CommandSender sender){
 		boolean changed = false;
 		Cuboid last = region.getCuboid(); // Pre-cloned
-		switch(key){
+		switch (key){
 		case NAME:
 			if(isRegionNameTaken(value)){
 				// TODO: Locale

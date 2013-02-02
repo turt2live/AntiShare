@@ -47,7 +47,7 @@ class ChunkWrapper {
 	 * @param block the block
 	 */
 	public void addBlock(GameMode type, Block block){
-		switch(type){
+		switch (type){
 		case CREATIVE:
 			if(!manager.tracked_creative.isTracked(block)){
 				break;
@@ -78,7 +78,7 @@ class ChunkWrapper {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Entity entity){
-		switch(type){
+		switch (type){
 		case CREATIVE:
 			if(!manager.tracked_creative.isTracked(entity)){
 				break;
@@ -110,7 +110,7 @@ class ChunkWrapper {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Location entity, EntityType entityType){
-		switch(type){
+		switch (type){
 		case CREATIVE:
 			if(!manager.tracked_creative.isTracked(entityType)){
 				break;
@@ -145,7 +145,7 @@ class ChunkWrapper {
 			ASMaterial material = new ASMaterial();
 			material.gamemode = type;
 			material.location = entity.getLocation();
-			switch(type){
+			switch (type){
 			case CREATIVE:
 				creative_entities.remove(manager.entityToString(entity));
 				break;
@@ -172,7 +172,7 @@ class ChunkWrapper {
 			ASMaterial material = new ASMaterial();
 			material.gamemode = type;
 			material.location = block.getLocation();
-			switch(type){
+			switch (type){
 			case CREATIVE:
 				creative_blocks.remove(manager.blockToString(block));
 				break;

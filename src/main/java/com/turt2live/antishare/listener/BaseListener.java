@@ -171,7 +171,7 @@ public class BaseListener implements Listener {
 
 	// ################# Block Place Event - Entity
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onEntityMake(BlockPlaceEvent event){
 		if(event.isCancelled()){
 			return;
@@ -215,7 +215,7 @@ public class BaseListener implements Listener {
 
 	// ################# Block Break
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onBlockBreak(BlockBreakEvent event){
 		if(event.isCancelled()){
 			return;
@@ -254,7 +254,7 @@ public class BaseListener implements Listener {
 
 	// ################# Block Place
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onBlockPlace(BlockPlaceEvent event){
 		if(event.isCancelled()){
 			return;
@@ -293,7 +293,7 @@ public class BaseListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onInteract(PlayerInteractEvent event){
 		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
 			return;
@@ -418,7 +418,7 @@ public class BaseListener implements Listener {
 
 	// ################# Destroy Vehicle
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onVechicleDestroy(VehicleDestroyEvent event){
 		if(event.isCancelled() || !(event.getAttacker() instanceof Player)){
 			return;
@@ -493,7 +493,7 @@ public class BaseListener implements Listener {
 
 	// ################# Player Interact Entity (2)
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onInteractEntity(PlayerInteractEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -569,7 +569,7 @@ public class BaseListener implements Listener {
 
 	// ################# Cart Death Check
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onCartDeath(VehicleDestroyEvent event){
 		if(event.isCancelled()){
 			return;
@@ -600,7 +600,7 @@ public class BaseListener implements Listener {
 
 	// ################# Egg Check
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onEggThrow(PlayerEggThrowEvent event){
 		Player player = event.getPlayer();
 		AlertType type = AlertType.ILLEGAL;
@@ -631,7 +631,7 @@ public class BaseListener implements Listener {
 
 	// ################# Experience Bottle Check
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler (priority = EventPriority.NORMAL)
 	public void onExpBottle(ExpBottleEvent event){
 		if(event.getExperience() == 0){
 			return;
@@ -678,7 +678,7 @@ public class BaseListener implements Listener {
 
 	// ################# Drop Item
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onDrop(PlayerDropItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -713,7 +713,7 @@ public class BaseListener implements Listener {
 
 	// ################# Pickup Item
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPickup(PlayerPickupItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -753,7 +753,7 @@ public class BaseListener implements Listener {
 
 	// ################# Player Death
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onDeath(PlayerDeathEvent event){
 		Player player = event.getEntity();
 		List<ItemStack> drops = event.getDrops();
@@ -806,7 +806,7 @@ public class BaseListener implements Listener {
 
 	// ################# Player Command
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOWEST)
 	public void onCommand(PlayerCommandPreprocessEvent event){
 		if(event.isCancelled()){
 			return;
@@ -841,7 +841,7 @@ public class BaseListener implements Listener {
 
 	// ################# Player Game Mode Change
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onGameModeChange(PlayerGameModeChangeEvent event){
 		if(event.isCancelled()){
 			return;
@@ -904,7 +904,7 @@ public class BaseListener implements Listener {
 
 	// ################# Player Combat
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onCombat(EntityDamageByEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -917,7 +917,7 @@ public class BaseListener implements Listener {
 		Player playerAttacker = null;
 
 		// Check case
-		switch(cause){
+		switch (cause){
 		case ENTITY_ATTACK:
 			// attacker = entity
 			if(attacker instanceof Player){
@@ -1006,7 +1006,7 @@ public class BaseListener implements Listener {
 
 	// ################# Entity Target
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onEntityTarget(EntityTargetLivingEntityEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1035,7 +1035,7 @@ public class BaseListener implements Listener {
 
 	// ################# Player Teleport
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1077,7 +1077,7 @@ public class BaseListener implements Listener {
 
 	// ################# Player Craft Item Event
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onCrafting(CraftItemEvent event){
 		if(event.isCancelled()){
 			return;
@@ -1109,7 +1109,7 @@ public class BaseListener implements Listener {
 
 	// ################# Potion Splash Event
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPotionSplash(PotionSplashEvent event){
 		if(event.isCancelled() || !(event.getPotion().getShooter() instanceof Player)){
 			return;
@@ -1148,7 +1148,7 @@ public class BaseListener implements Listener {
 
 	// ################# Projectile Launch Event
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onProjectileLaunch(ProjectileLaunchEvent event){
 		if(event.isCancelled() || !(event.getEntity().getShooter() instanceof Player)){
 			return;

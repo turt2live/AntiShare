@@ -199,7 +199,7 @@ public class BlockManager extends AntiShareManager {
 	 * @param block the block
 	 */
 	public void addBlock(GameMode type, Block block){
-		switch(type){
+		switch (type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(block)){
 				return;
@@ -230,7 +230,7 @@ public class BlockManager extends AntiShareManager {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Entity entity){
-		switch(type){
+		switch (type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(entity)){
 				return;
@@ -262,7 +262,7 @@ public class BlockManager extends AntiShareManager {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Location entity, EntityType entityType){
-		switch(type){
+		switch (type){
 		case CREATIVE:
 			if(!tracked_creative.isTracked(entityType)){
 				return;
@@ -352,7 +352,7 @@ public class BlockManager extends AntiShareManager {
 				boolean updated = false;
 
 				// Loop
-				while(runs <= maxRuns && !updated){
+				while (runs <= maxRuns && !updated){
 					// Check block
 					Block newBlock = newLocation.getBlock();
 					if(newBlock.getType() == oldType){

@@ -36,7 +36,7 @@ public class HangingListener implements Listener {
 
 	private final AntiShare plugin = AntiShare.getInstance();
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingBreakEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){
 			return;
@@ -57,7 +57,7 @@ public class HangingListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingPlaceEvent event){
 		if(event.isCancelled()){
 			return;
@@ -129,7 +129,7 @@ public class HangingListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingBreakByEntityEvent event){
 		if(event.isCancelled()){
 			return;

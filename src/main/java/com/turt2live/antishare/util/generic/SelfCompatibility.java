@@ -452,7 +452,7 @@ public class SelfCompatibility {
 		File temp = new File(plugin.getDataFolder(), "temp");
 		temp.mkdirs();
 		EnhancedConfiguration local = new EnhancedConfiguration(new File(temp, "temp1"), plugin);
-		switch(type){
+		switch (type){
 		case CONFIG:
 			local.loadDefaults(plugin.getResource("resources/config.yml"));
 			break;

@@ -77,7 +77,7 @@ public class MoneyManager extends AntiShareManager {
 			if(silent.exists()){
 				BufferedReader in = new BufferedReader(new FileReader(silent));
 				String line;
-				while((line = in.readLine()) != null){
+				while ((line = in.readLine()) != null){
 					silentTo.add(line);
 				}
 				in.close();
@@ -335,7 +335,7 @@ public class MoneyManager extends AntiShareManager {
 
 		// Find tender
 		TenderType tender = null;
-		switch(trigger){
+		switch (trigger){
 		case BLOCK_BREAK:
 			tender = TenderType.BLOCK_BREAK;
 			break;

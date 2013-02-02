@@ -173,7 +173,7 @@ public class Systems {
 		}
 		int lastPercent = 0, goal = 10;
 		boolean hit100 = false;
-		while(!blocks.isSaveDone()){
+		while (!blocks.isSaveDone()){
 			if(plugin.getConfig().getBoolean("other.use-sleep")){
 				try{
 					Thread.sleep(50); // To avoid a higher CPU use

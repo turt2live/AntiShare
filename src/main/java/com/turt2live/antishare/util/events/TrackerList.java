@@ -220,7 +220,7 @@ public class TrackerList {
 			return false;
 		}
 		Material mat = Material.AIR;
-		switch(entityType){
+		switch (entityType){
 		case PAINTING:
 			mat = Material.PAINTING;
 			break;

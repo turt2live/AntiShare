@@ -72,7 +72,7 @@ public class BlockListener implements Listener {
 
 	// ################# GameMode Block Break
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onGameModeBlockBreak(BlockBreakEvent event){
 		if(!event.isCancelled()){
 			blocks.removeBlock(event.getBlock());
@@ -81,7 +81,7 @@ public class BlockListener implements Listener {
 
 	// ################# Block Place
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler (priority = EventPriority.NORMAL)
 	public void onBlockPlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
 		GameMode existing = null;
@@ -119,7 +119,7 @@ public class BlockListener implements Listener {
 
 	// ################# GameMode Block Place
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onGameModePlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
 		if(!event.isCancelled() && !plugin.getPermissions().has(player, PermissionNodes.FREE_PLACE)){
@@ -133,7 +133,7 @@ public class BlockListener implements Listener {
 
 	// ################# Block Flow Event
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler (priority = EventPriority.HIGH)
 	public void onBlockFlow(BlockFromToEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection")){
 			return;
@@ -155,7 +155,7 @@ public class BlockListener implements Listener {
 
 	// ################# Entity Explode Event
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler (priority = EventPriority.HIGH)
 	public void onExplode(EntityExplodeEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection")){
 			return;
@@ -178,7 +178,7 @@ public class BlockListener implements Listener {
 
 	// ################# Piston Move (Retract)
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPistonRetract(BlockPistonRetractEvent event){
 		if(event.isCancelled()){
 			return;
@@ -206,7 +206,7 @@ public class BlockListener implements Listener {
 
 	// ################# Piston Move (Extend)
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPistonExtend(BlockPistonExtendEvent event){
 		if(event.isCancelled()){
 			return;
@@ -231,7 +231,7 @@ public class BlockListener implements Listener {
 
 	// ################# Player Interact Entity
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onItemFrameClick(PlayerInteractEntityEvent event){
 		if(!event.isCancelled() && event.getPlayer().getItemInHand() != null && (event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL || event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL) && plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
 			Entity entity = event.getRightClicked();
@@ -295,7 +295,7 @@ public class BlockListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onInteract(PlayerInteractEvent event){
 		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
 			return;
@@ -317,7 +317,7 @@ public class BlockListener implements Listener {
 				return;
 			}else if(player.getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 				GameMode gm = blocks.getType(block);
-				switch(action){
+				switch (action){
 				case LEFT_CLICK_BLOCK:
 					if(gm != null){
 						blocks.removeBlock(block);
@@ -340,7 +340,7 @@ public class BlockListener implements Listener {
 
 	// ################# Block Piston Extend (2)
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPiston(BlockPistonExtendEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 			return;
@@ -355,7 +355,7 @@ public class BlockListener implements Listener {
 
 	// ################# Block Break
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onBlockBreak(BlockBreakEvent event){
 		if(event.isCancelled()){
 			return;
@@ -453,7 +453,7 @@ public class BlockListener implements Listener {
 					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 						GameMode gm = blocks.getType(rel);
 						if(gm != null){
-							switch(gm){
+							switch (gm){
 							case CREATIVE:
 								rel.setType(Material.AIR);
 								break;
@@ -515,7 +515,7 @@ public class BlockListener implements Listener {
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 							GameMode gm = blocks.getType(rel);
 							if(gm != null){
-								switch(gm){
+								switch (gm){
 								case CREATIVE:
 									rel.setType(Material.AIR);
 									break;
@@ -560,12 +560,12 @@ public class BlockListener implements Listener {
 								}else{
 									checkMoreBlocks = false;
 								}
-							}while(checkMoreBlocks);
+							}while (checkMoreBlocks);
 							moreBlocks = false;
 						}else{
 							moreBlocks = false;
 						}
-					}while(moreBlocks);
+					}while (moreBlocks);
 				}
 
 				/* We need to check the blocks above for falling blocks, as the following can happen:
@@ -589,7 +589,7 @@ public class BlockListener implements Listener {
 						moreBlocks = false;
 					}
 					active = above;
-				}while(moreBlocks);
+				}while (moreBlocks);
 
 				// Cacti check
 				active = block;
@@ -605,7 +605,7 @@ public class BlockListener implements Listener {
 							moreBlocks = false;
 						}
 						active = above;
-					}while(moreBlocks);
+					}while (moreBlocks);
 					for(int i = breakBlocks.size() - 1; i > -1; i--){
 						Location location = breakBlocks.get(i);
 						location.getBlock().setType(Material.AIR);
@@ -626,7 +626,7 @@ public class BlockListener implements Listener {
 							moreBlocks = false;
 						}
 						active = above;
-					}while(moreBlocks);
+					}while (moreBlocks);
 					for(int i = breakBlocks.size() - 1; i > -1; i--){
 						Location location = breakBlocks.get(i);
 						location.getBlock().setType(Material.AIR);
@@ -638,7 +638,7 @@ public class BlockListener implements Listener {
 
 	// ################# Player Interact Block
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onGameModeUse(PlayerInteractEvent event){
 		if(event.isCancelled() || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
 			return;
@@ -697,7 +697,7 @@ public class BlockListener implements Listener {
 
 	// ################# Player Break Block
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onGameModeBreak(BlockBreakEvent event){
 		if(event.isCancelled()){
 			return;

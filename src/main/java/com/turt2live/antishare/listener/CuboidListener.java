@@ -27,7 +27,7 @@ public class CuboidListener implements Listener {
 
 	// ################# Player Interact Event (2)
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onInteract2(PlayerInteractEvent event){
 		if(event.isCancelled()){
 			return;
@@ -38,7 +38,7 @@ public class CuboidListener implements Listener {
 			if(item != null){
 				if(item.getType() == AntiShare.ANTISHARE_CUBOID_TOOL){
 					CuboidPoint point = null;
-					switch(event.getAction()){
+					switch (event.getAction()){
 					case RIGHT_CLICK_BLOCK:
 						point = CuboidPoint.POINT2;
 						break;

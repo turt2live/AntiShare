@@ -208,7 +208,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @param player the player
 	 */
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings ("deprecation")
 	public void setTo(Player player){
 		Inventory pInventory;
 		if(type == InventoryType.ENDER){
@@ -230,7 +230,7 @@ public class ASInventory implements Cloneable {
 				pInventory.setItem(slot, item);
 			}else{
 				if(pInventory instanceof PlayerInventory){
-					switch(slot){
+					switch (slot){
 					case 100:
 						((PlayerInventory) pInventory).setBoots(item);
 						break;
@@ -349,7 +349,7 @@ public class ASInventory implements Cloneable {
 	 * @return inventory size
 	 */
 	public int getSize(){
-		switch(this.type){
+		switch (this.type){
 		case ENDER:
 			return 27;
 		case PLAYER:

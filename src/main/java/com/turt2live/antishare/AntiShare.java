@@ -114,7 +114,7 @@ public class AntiShare extends PluginWrapper {
 		try{
 			BufferedReader in = new BufferedReader(new InputStreamReader(getResource("plugin.yml")));
 			String line;
-			while((line = in.readLine()) != null){
+			while ((line = in.readLine()) != null){
 				if(line.startsWith("build: ")){
 					line = line.replace("build: ", "");
 					build = line;
@@ -148,7 +148,7 @@ public class AntiShare extends PluginWrapper {
 			if(snFile.exists()){
 				BufferedReader in = new BufferedReader(new FileReader(snFile));
 				String line;
-				while((line = in.readLine()) != null){
+				while ((line = in.readLine()) != null){
 					disabledSNPlayers.add(line);
 				}
 				in.close();
