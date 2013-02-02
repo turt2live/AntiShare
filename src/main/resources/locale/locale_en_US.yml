@@ -92,6 +92,7 @@ status:
     creative-entities: 'Creative Entities Loaded: {0}'
     survival-entities: 'Survival Entities Loaded: {0}'
     adventure-entities: 'Adventure Entities Loaded: {0}'
+    cuboids: 'Cuboids Loaded: {0}'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'

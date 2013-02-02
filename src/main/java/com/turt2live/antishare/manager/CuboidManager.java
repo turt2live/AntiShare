@@ -8,6 +8,8 @@ import org.bukkit.Location;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.cuboid.Cuboid;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.listener.CuboidListener;
 
 /**
@@ -109,8 +111,7 @@ public class CuboidManager extends AntiShareManager {
 			cuboids.put(player, cuboid);
 		}
 		if(cuboids.keySet().size() > 0){
-			// TODO: Locale
-			plugin.getLogger().info("Cuboids Loaded: " + cuboids.keySet().size());
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CUBOIDS, String.valueOf(cuboids.keySet().size())));
 		}
 		return true;
 	}
