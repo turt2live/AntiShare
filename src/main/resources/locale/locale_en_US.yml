@@ -111,6 +111,7 @@ status:
     fines: 'Fines Loaded: {0}'
     rewards: 'Rewards Loaded: {0}'
     regions: 'Regions Loaded: {0}'
+    signs: 'Signs Loaded: {0}'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'

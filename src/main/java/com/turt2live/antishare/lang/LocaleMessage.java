@@ -115,6 +115,7 @@ public enum LocaleMessage{
     STATUS_FINES("status.fines"),
     STATUS_REWARDS("status.rewards"),
     STATUS_REGIONS("status.regions"),
+    STATUS_SIGNS("status.signs"),
     STATUS_LINKED_INVENTORIES("status.linked-inventories"),
     BLOCK_MAN_WAIT("blockman.wait"),
     BLOCK_MAN_PERCENT("blockman.percent"),

@@ -16,6 +16,8 @@ import java.util.List;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 
 /**
@@ -75,15 +77,13 @@ public class SignList extends ArrayList<Sign> {
 				}
 			}
 			if(invalid){
-				// TODO: Locale
-				plugin.getLogger().warning("Invalid sign: " + name + " (property '" + invalidProp + "' is null)");
+				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, invalidProp, "signs.yml") + " (" + name + ")");
 			}
 			Sign assign = new Sign(name, lines, enabled, caseSensitive);
 			add(assign);
 		}
 		if(size() > 0){
-			// TODO: Locale
-			plugin.getLogger().info("Signs Loaded: " + size());
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_SIGNS, String.valueOf(size())));
 		}
 	}
 
