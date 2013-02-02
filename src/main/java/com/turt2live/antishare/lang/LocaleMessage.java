@@ -73,7 +73,7 @@ public enum LocaleMessage{
     RELOAD_RELOAD("reload.reload"),
     SERVICE_METRICS("service.metrics"),
     SERVICE_SIMPLE_NOTICE("service.simplenotice"),
-    SERVICE_BLOCKS("service.blcoks"),
+    SERVICE_BLOCKS("service.blocks"),
     SERVICE_INVENTORIES("service.inventories"),
     SERVICE_SIGNS("service.signs"),
     SERVICE_PERMISSIONS("service.permissions"),
