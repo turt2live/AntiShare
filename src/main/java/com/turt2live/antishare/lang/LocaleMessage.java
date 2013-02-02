@@ -99,6 +99,11 @@ public enum LocaleMessage{
     STATUS_INVENTORIES("status.inventories"),
     BLOCK_MAN_WAIT("blockman.wait"),
     BLOCK_MAN_PERCENT("blockman.percent"),
+    TAB_NONE("tab.no-more"),
+    TAB_REGION("tab.region"),
+    TAB_REMOVE_REGION("tab.rmregion"),
+    TAB_EDIT_REGION("tab.editregion"),
+    TAB_LIST_REGION("tab.listregion"),
     ;
 
     private String node;

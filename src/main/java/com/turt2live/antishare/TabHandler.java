@@ -19,6 +19,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ErrorStringList;
 import com.turt2live.antishare.util.StringList;
@@ -33,18 +35,17 @@ import com.turt2live.antishare.util.StringList;
 public class TabHandler implements TabCompleter {
 
 	protected enum Tab{
-		// TODO: Locale
-		REGION("The last argument is a region name.", new StringList("region"), new StringList("creative", "survival", "adventure")),
-		RELOAD("No more arguments", new StringList("reload", "rl")),
-		RMREGION("You can enter a name, or remove the region you are standing in.", new StringList("rmregion")),
-		EDITREGION("Please enter a value", new StringList("editregion"), new ErrorStringList("Enter a region name"), new StringList("name", "ShowEnterMessage", "ShowExitMessage", "EnterMessage", "ExitMessage", "inventory", "gamemode", "area")),
-		LISTREGIONS("Enter a page number (optional)", new StringList("listregions")),
-		MIRROR("No more arguments", new StringList("mirror")),
-		TOOL("No more arguments", new StringList("tool")),
-		MONEY("No more arguments", new StringList("money"), new StringList("on", "off", "status")),
-		SIMPLENOTICE("No more arguments", new StringList("simplenotice")),
-		CHECK("No more arguments", new StringList("check"), new StringList("creative", "survival", "adventure", "all")),
-		HELP("No more arguments", new StringList("help", "?"));
+		REGION(Localization.getMessage(LocaleMessage.TAB_REGION), new StringList("region"), new StringList("creative", "survival", "adventure")),
+		RELOAD(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("reload", "rl")),
+		RMREGION(Localization.getMessage(LocaleMessage.TAB_REMOVE_REGION), new StringList("rmregion")),
+		EDITREGION(Localization.getMessage(LocaleMessage.TAB_EDIT_REGION), new StringList("editregion"), new ErrorStringList("Enter a region name"), new StringList("name", "ShowEnterMessage", "ShowExitMessage", "EnterMessage", "ExitMessage", "inventory", "gamemode", "area")),
+		LISTREGIONS(Localization.getMessage(LocaleMessage.TAB_LIST_REGION), new StringList("listregions")),
+		MIRROR(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("mirror")),
+		TOOL(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("tool")),
+		MONEY(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("money"), new StringList("on", "off", "status")),
+		SIMPLENOTICE(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("simplenotice")),
+		CHECK(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("check"), new StringList("creative", "survival", "adventure", "all")),
+		HELP(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("help", "?"));
 
 		private StringList[] arguments;
 		private StringList valid;

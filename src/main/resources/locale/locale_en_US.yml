@@ -72,6 +72,12 @@ reload:
 blockman:
     wait: 'Waiting for block manager to be done...'
     percent: 'Percent Done: {0}'
+tab:
+    no-more: 'No more arguments'
+    region: 'The last argument is a region name'
+    rmregion: 'You can enter a name, or remove the region you are standing in'
+    editregion: 'Please enter a value'
+    listregion: 'Enter an optional page number'
 status:
     inventories: 'Inventories loaded: {0}%'
 service:
