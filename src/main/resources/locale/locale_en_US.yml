@@ -60,6 +60,7 @@ error:
     cannot-set: 'You cannot set an inventory from the console, only clear'
     no-money-tab: 'Tab feature disabled'
     no-money-vault: 'Vault missing'
+    world-split: "world split for world"
 startup:
     config: 'Checking configuration...'
     version-string: 'Creating version string in config.yml...'

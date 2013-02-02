@@ -15,6 +15,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -174,8 +176,7 @@ public class WorldSplit {
 			plugin.getTrackers().getTracker(TrackerType.FEATURE_WORLD_SPLIT).increment(1);
 		}else{
 			axis = Axis.NONE;
-			// TODO: Locale
-			plugin.getLogger().severe("Invalid world split for world " + world);
+			plugin.getLogger().severe(Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.ERROR_WORLD_SPLIT), world));
 		}
 	}
 }

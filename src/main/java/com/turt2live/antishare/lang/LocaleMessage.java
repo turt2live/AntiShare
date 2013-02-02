@@ -51,6 +51,7 @@ public enum LocaleMessage{
     ERROR_ONLY_CLEAR("error.cannot-set"),
     ERROR_NO_MONEY_TAB("error.no-money-tab"),
     ERROR_NO_MONEY_VAULT("error.no-money-vault"),
+    ERROR_WORLD_SPLIT("error.world-split"),
     START_CHECK_CONFIG("startup.config"),
     START_VERSION_STRING("startup.version-string"),
     START_SIMPLENOTICE("startup.simplenotice"),
