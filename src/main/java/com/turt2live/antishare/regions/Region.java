@@ -18,6 +18,8 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -385,8 +387,7 @@ public class Region {
 		if(showEnterMessage){
 			playerMessage = ChatColor.GOLD + enterMessage.replaceAll("\\{name\\}", name);
 		}
-		// TODO: Locale
-		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " entered the region " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
+		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.PHRASE_REGION_ENTER) + " " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
 
 		// Set the player
 		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
@@ -432,8 +433,7 @@ public class Region {
 		if(showExitMessage){
 			playerMessage = ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name);
 		}
-		// TODO: Locale
-		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " left the region " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
+		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.PHRASE_REGION_LEAVE) + " " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
 
 		// Tag the player so the Game Mode listener knows to ignore them
 		player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
@@ -486,8 +486,7 @@ public class Region {
 		region.setName(yaml.getString("name"));
 		World world = plugin.getServer().getWorld(yaml.getString("worldName"));
 		if(world == null){
-			// TODO: Locale
-			plugin.getLogger().warning("Failed to load world for region '" + region.getName() + "' (world name='" + yaml.getString("worldName") + "')");
+			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_WORLD), yaml.getString("worldName")) + " (" + region.getName() + ")");
 			return null;
 		}
 		region.setEnterMessage(yaml.getString("enterMessage"));

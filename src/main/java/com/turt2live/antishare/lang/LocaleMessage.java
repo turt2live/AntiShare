@@ -173,7 +173,8 @@ public enum LocaleMessage{
     PHRASE_GM_BROKE("phrase.gm-broke"),
     PHRASE_ATTACH("phrase.attach-a"),
     PHRASE_ATTACHED("phrase.attached"),
-    
+    PHRASE_REGION_ENTER("phrase.region-enter"),
+    PHRASE_REGION_LEAVE("phrase.region-leave"),
     ;
 
     private String node;

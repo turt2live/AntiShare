@@ -156,6 +156,10 @@ dictionary:
     set-as: 'set as'
     natural: 'natural'
     is: 'is'
+    was: 'was'
+    that: 'that'
+    block: 'block'
+    removed: 'removed'
 phrase:
     create-a: 'tried to create a'
     spawned-a: 'spawned a'
@@ -183,3 +187,7 @@ phrase:
     no-gm-change: 'You cannot change Game Modes here'
     gm-break: 'tried to break the {0} block'
     gm-broke: 'broke the {0} block'
+    attach-a: 'tried to attach'
+    attached: 'attached'
+    region-enter: 'entered the region'
+    region-leave: 'left the region'
