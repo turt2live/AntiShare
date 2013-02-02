@@ -51,8 +51,7 @@ public class CuboidListener implements Listener {
 					if(point != null){
 						Location location = event.getClickedBlock().getLocation();
 						manager.updateCuboid(player.getName(), point, location);
-						// TODO: Locale
-						ASUtils.sendToPlayer(player, ChatColor.GREEN + "Point " + (point == CuboidPoint.POINT1 ? "1" : "2") + " set as (" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ", " + location.getWorld().getName() + "). Volume = " + ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName()).getVolume(), true);
+						ASUtils.sendToPlayer(player, ChatColor.GREEN + (point == CuboidPoint.POINT1 ? "A" : "B") + " = (" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ", " + location.getWorld().getName() + "). V = " + ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName()).getVolume(), true);
 						event.setCancelled(true);
 					}
 				}

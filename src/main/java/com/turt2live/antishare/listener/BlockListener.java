@@ -37,6 +37,8 @@ import org.bukkit.inventory.ItemStack;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -674,8 +676,7 @@ public class BlockListener implements Listener {
 		}
 
 		// Set messages
-		// TODO: Locale
-		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to use " : " used ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
+		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_USE) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_USED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
 		playerMessage = plugin.getMessage("blocked-action.use-item");
 		trigger = AlertTrigger.USE_ITEM;
 		MessageFactory factory = new MessageFactory(playerMessage);
@@ -731,8 +732,7 @@ public class BlockListener implements Listener {
 		}
 
 		// Set messages
-		// TODO: Locale
-		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
+		message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_BREAK) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_BROKE) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(used.name());
 		playerMessage = plugin.getMessage("blocked-action.break-block");
 		trigger = AlertTrigger.USE_ITEM;
 		MessageFactory factory = new MessageFactory(playerMessage);

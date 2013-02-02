@@ -20,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -115,12 +117,12 @@ public class HangingListener implements Listener {
 		// TODO: Locale
 		if(region){
 			if(type == AlertType.ILLEGAL){
-				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ") + ChatColor.WHITE + " in a region.";
+				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_PLACE) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_PLACED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ") + ChatColor.WHITE + " in a region.";
 				String playerMessage = ChatColor.RED + "You cannot place blocks in another region!";
 				plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.BLOCK_PLACE);
 			}
 		}else{
-			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to place " : " placed ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");
+			String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_PLACE) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_PLACED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");
 			String playerMessage = plugin.getMessage("blocked-action.place-block");
 			MessageFactory factory = new MessageFactory(playerMessage);
 			factory.insert(item, player, hanging.getWorld(), TenderType.BLOCK_PLACE);
@@ -232,15 +234,15 @@ public class HangingListener implements Listener {
 			}
 
 			// Alert
-			// TODO: Locale
 			if(special){
 				if(region){
 					if(specialType == AlertType.ILLEGAL){
-						String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break " : " broke  ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ") + ChatColor.WHITE + " in a region.";
+						String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_BREAK) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_BROKE) + " ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ") + ChatColor.WHITE + " in a region.";
 						String specialPlayerMessage = ChatColor.RED + "You cannot break blocks that are not in your region";
 						plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, AlertTrigger.BLOCK_BREAK);
 					}
 				}else{
+					// TODO: Locale
 					String specialMessage = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (specialType == AlertType.ILLEGAL ? " tried to break the " + blockGM + " block " : " broke the " + blockGM + " block ") + (specialType == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");
 					String specialPlayerMessage = plugin.getMessage("blocked-action." + blockGM + "-block-break");
 					MessageFactory factory = new MessageFactory(specialPlayerMessage);
@@ -249,7 +251,7 @@ public class HangingListener implements Listener {
 					plugin.getAlerts().alert(specialMessage, player, specialPlayerMessage, specialType, blockGM.equalsIgnoreCase("creative") ? AlertTrigger.CREATIVE_BLOCK : blockGM.equalsIgnoreCase("survival") ? AlertTrigger.SURVIVAL_BLOCK : AlertTrigger.ADVENTURE_BLOCK);
 				}
 			}else{
-				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " tried to break " : " broke ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");
+				String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_BREAK) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_BROKE) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + item.name().replace("_", " ");
 				String playerMessage = plugin.getMessage("blocked-action.break-block");
 				MessageFactory factory = new MessageFactory(playerMessage);
 				factory.insert(item, player, hanging.getWorld(), TenderType.BLOCK_BREAK);

@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -99,7 +101,7 @@ public class InventoryListener implements Listener {
 		// Alerts
 		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to world " + ChatColor.YELLOW + to.getName();
-		String playerMessage = ignore ? "no message" : "Your inventory has been changed to " + ChatColor.YELLOW + to.getName();
+		String playerMessage = ignore ? "no message" : Localization.getMessage(LocaleMessage.PHRASE_INV_CHANGE) + " " + ChatColor.YELLOW + to.getName();
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
 	}
 
@@ -188,9 +190,8 @@ public class InventoryListener implements Listener {
 		}
 
 		// Alerts
-		// TODO: Locale
 		String message = "no message";
-		String playerMessage = "Your inventory has been changed to " + ChatColor.YELLOW + to.name();
+		String playerMessage = Localization.getMessage(LocaleMessage.PHRASE_INV_CHANGE) + " " + ChatColor.YELLOW + to.name();
 		if(!plugin.getConfig().getBoolean("other.send-gamemode-change-message")){
 			playerMessage = "no message";
 		}
