@@ -44,6 +44,8 @@ public enum LocaleMessage{
     ERROR_REGION_MISSING("error.no-region"),
     ERROR_REGION_STAND_MISSING("error.no-stand-region"),
     ERROR_NO_PAGE("error.page"),
+    ERROR_BAD_FILE("error.bad-file"),
+    ERROR_BAD_KEY("error.bad-key"),
     START_CHECK_CONFIG("startup.config"),
     START_VERSION_STRING("startup.version-string"),
     START_SIMPLENOTICE("startup.simplenotice"),

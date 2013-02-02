@@ -13,6 +13,8 @@ import org.bukkit.entity.EntityType;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
@@ -304,19 +306,16 @@ class ChunkWrapper {
 		}
 		String[] fparts = file.getName().split("\\.");
 		if(fparts.length < 3){
-			// TODO: Locale
-			plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " FILE: " + file.getName());
+			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_FILE, file.getAbsolutePath()));
 			return;
 		}
 		String w = fparts[2]; // To see if world == file name world
 		if(Bukkit.getWorld(w) == null){
-			// TODO: Locale
-			plugin.getLogger().warning("Failed to load world: " + w);
+			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_WORLD), w));
 			return;
 		}
 		if(!w.equals(world)){
-			// TODO: Locale
-			plugin.getLogger().warning("Worlds do not match: " + world + " | " + w);
+			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_WORLD), w));
 			return;
 		}
 		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
@@ -324,7 +323,7 @@ class ChunkWrapper {
 		for(String key : blocks.getKeys(false)){
 			String[] keyParts = key.split(";");
 			if(keyParts.length < (isBlock ? 3 : 4)){
-				plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " FILE: " + file.getName());
+				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_FILE, file.getAbsolutePath()));
 				continue;
 			}
 			Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
@@ -349,8 +348,7 @@ class ChunkWrapper {
 				addBlock(gm, block);
 			}else{
 				if(etype == null){
-					// TODO: Locale
-					plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + " KEY IN FILE ('" + file.getName() + "'): " + key);
+					plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, key, file.getAbsolutePath()));
 					continue;
 				}
 				addEntity(gm, location, etype);

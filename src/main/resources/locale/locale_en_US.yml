@@ -45,6 +45,8 @@ error:
     no-region: 'Region not found'
     no-stand-region: 'No region where you are standing'
     page: 'Page {0} does not exist! The last page is {1}'
+    bad-file: 'INVALID FILE: {0}'
+    bad-key: 'INVALID KEY ({0}) IN FILE ({1})'
 startup:
     config: 'Checking configuration...'
     version-string: 'Creating version string in config.yml...'
