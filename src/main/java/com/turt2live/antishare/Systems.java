@@ -3,6 +3,8 @@ package com.turt2live.antishare;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.AntiShareManager;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.CuboidManager;
@@ -20,14 +22,13 @@ public class Systems {
 	 * Represents the available managers in AntiShare's system
 	 */
 	public static enum Manager{
-		// TODO: Locale
-		REGION(Feature.REGIONS, RegionManager.class, "region manager", TrackerType.FEATURE_REGIONS),
-		INVENTORY(Feature.INVENTORIES, InventoryManager.class, "inventory manager", TrackerType.FEATURE_INVENTORIES),
-		FEATURE(Feature.SELF, FeatureManager.class, "feature manager", null),
-		BLOCK(Feature.BLOCKS, BlockManager.class, "block manager", TrackerType.FEATURE_GM_BLOCKS),
-		CUBOID(Feature.REGIONS, CuboidManager.class, "cuboid manager", null),
-		MONEY(Feature.MONEY, MoneyManager.class, "money manager", TrackerType.FEATURE_FINES_REWARDS),
-		HOOK(Feature.ALWAYS_ON, HookManager.class, "hook manager", null);
+		REGION(Feature.REGIONS, RegionManager.class, Localization.getMessage(LocaleMessage.SERVICE_REGIONS), TrackerType.FEATURE_REGIONS),
+		INVENTORY(Feature.INVENTORIES, InventoryManager.class, Localization.getMessage(LocaleMessage.SERVICE_INVENTORIES), TrackerType.FEATURE_INVENTORIES),
+		FEATURE(Feature.SELF, FeatureManager.class, Localization.getMessage(LocaleMessage.SERVICE_FEATURES), null),
+		BLOCK(Feature.BLOCKS, BlockManager.class, Localization.getMessage(LocaleMessage.SERVICE_BLOCKS), TrackerType.FEATURE_GM_BLOCKS),
+		CUBOID(Feature.REGIONS, CuboidManager.class, Localization.getMessage(LocaleMessage.SERVICE_CUBOID), null),
+		MONEY(Feature.MONEY, MoneyManager.class, Localization.getMessage(LocaleMessage.SERVICE_MONEY), TrackerType.FEATURE_FINES_REWARDS),
+		HOOK(Feature.ALWAYS_ON, HookManager.class, Localization.getMessage(LocaleMessage.SERVICE_HOOKS), null);
 
 		private final Feature f;
 		private final Class<? extends AntiShareManager> m;
@@ -88,14 +89,12 @@ public class Systems {
 		for(Manager s : Manager.values()){
 			if(!features.isEnabled(s.getFeature())){
 				if(!plugin.getConfig().getBoolean("other.more-quiet-startup")){
-					// TODO: Locale
-					plugin.getLogger().info("Feature not enabled: " + s.getName() + ", skipping...");
+					plugin.getLogger().info(Localization.getMessage(LocaleMessage.NOT_ENABLED, s.getName()));
 				}
 				continue;
 			}
 			if(!plugin.getConfig().getBoolean("other.more-quiet-startup")){
-				// TODO: Locale
-				plugin.getLogger().info("Starting " + s.getName() + "...");
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.START_START, s.getName()));
 			}
 			if(s == Manager.FEATURE){
 				managers.put(s, features);
@@ -129,8 +128,7 @@ public class Systems {
 	public boolean save(){
 		for(Manager s : managers.keySet()){
 			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-				// TODO: Locale
-				plugin.getLogger().info("Saving " + s.getName() + "...");
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.STOP_SAVE, s.getName()));
 			}
 			managers.get(s).save();
 			if(s.getFeature() == Feature.BLOCKS){
@@ -151,8 +149,7 @@ public class Systems {
 		boolean anyFailed = false;
 		for(Manager s : managers.keySet()){
 			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-				// TODO: Locale
-				plugin.getLogger().info("Reloading " + s.getName() + "...");
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.RELOAD_RELOAD, s.getName()));
 			}
 			boolean done = managers.get(s).reload();
 			if(!done){
@@ -168,8 +165,7 @@ public class Systems {
 
 	private void waitForBlockManager(BlockManager blocks){
 		if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-			// TODO: Locale
-			plugin.getLogger().info("Waiting for block manager to be done...");
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.BLOCK_MAN_WAIT));
 		}
 		int lastPercent = 0, goal = 10;
 		boolean hit100 = false;
@@ -188,8 +184,7 @@ public class Systems {
 					goal = 100;
 				}
 				if(goal <= percent && !hit100 && percent <= 100){
-					// TODO: Locale
-					plugin.getLogger().info("[Block Manager] Percent Done: " + percent + "%");
+					plugin.getLogger().info("[Block Manager] " + Localization.getMessage(LocaleMessage.BLOCK_MAN_PERCENT, String.valueOf(percent)));
 					lastPercent = percent;
 					if(percent >= 100){
 						hit100 = true;

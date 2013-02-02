@@ -22,6 +22,7 @@ inv-space: 'You need {0} more free slots in your inventory!'
 no-cuboid-tool: 'You are missing the cuboid tool: You do not have permission'
 fine-reward-toggle: 'You are now {0} fine/reward messages.'
 fine-reward: 'You are {0} fine/reward messages.'
+not-enabled: 'Service not enabled: {0}, skipping...'
 cuboid:
     removed: 'Your cuboid save was removed'
     missing: 'You have no saved cuboid'
@@ -65,12 +66,23 @@ startup:
         line3: 'You can turn this message off in the configuration.'
 shutdown:
     flush: 'Flushing {0}...'
+    save: 'Saving {0}...'
+reload:
+    reload: 'Reloading {0}...'
+blockman:
+    wait: 'Waiting for block manager to be done...'
+    percent: 'Percent Done: {0}'
 status:
-    inventories: 'Inventories loaded: {0}'
+    inventories: 'Inventories loaded: {0}%'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'
     blocks: 'Block Manager'
+    regions: 'Region Manager'
+    features: 'Feature Manager'
+    cuboid: 'Cuboid Manager'
+    money: 'Money Manager'
+    hooks: 'Hook Manager'
     inventories: 'Inventory Manager'
     signs: 'Sign Manager'
     permissions: 'Permissions Manager'

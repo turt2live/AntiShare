@@ -19,6 +19,7 @@ public enum LocaleMessage{
     HAVE_TOOL("tool-have"),
     GET_TOOL("tool-get"),
     NO_CUBOID_TOOL("no-cuboid-tool"),
+    NOT_ENABLED("not-enabled"),
     FINE_REWARD_TOGGLE("fine-reward-toggle"),
     FINE_REWARD("fine-reward"),
     NEED_INV_SPACE("inv-space"),
@@ -60,6 +61,8 @@ public enum LocaleMessage{
     START_COMPAT_INVENTORIES("startup.compat.inventories"),
     START_COMPAT_CLEANUP("startup.compat.cleanup"),
     STOP_FLUSH("shutdown.flush"),
+    STOP_SAVE("shutdown.save"),
+    RELOAD_RELOAD("reload.reload"),
     SERVICE_METRICS("service.metrics"),
     SERVICE_SIMPLE_NOTICE("service.simplenotice"),
     SERVICE_BLOCKS("service.blcoks"),
@@ -75,6 +78,11 @@ public enum LocaleMessage{
     SERVICE_COMMANDS("service.commands"),
     SERVICE_REGION_INVENTORY_UPDATE("service.region-inventory-update"),
     SERVICE_CONFLICT("service.conflict"),
+    SERVICE_REGIONS("service.regions"),
+    SERVICE_FEATURES("service.features"),
+    SERVICE_CUBOID("service.cuboid"),
+    SERVICE_MONEY("service.money"),
+    SERVICE_HOOKS("service.hooks"),
     DICT_DIRECTORY("dictionary.directory"),
     DICT_CONFIG_FILES("dictionary.config-files"),
     DICT_INVENTORY("dictionary.inventory"),
@@ -89,6 +97,8 @@ public enum LocaleMessage{
     DICT_NOT_GETTING("dictionary.not-getting"),
     DICT_NOT_SET("dictionary.not-set"),
     STATUS_INVENTORIES("status.inventories"),
+    BLOCK_MAN_WAIT("blockman.wait"),
+    BLOCK_MAN_PERCENT("blockman.percent"),
     ;
 
     private String node;
