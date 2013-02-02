@@ -103,7 +103,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Check configuration
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info(Localization.getMessage(LocaleMessage.START_CHECK_CONFIG, (String[]) null));
+			getLogger().info(Localization.getMessage(LocaleMessage.START_CHECK_CONFIG));
 		}
 		getConfig().loadDefaults(getResource("resources/config.yml"));
 		if(!getConfig().fileExists() || !getConfig().checkDefaults()){
@@ -126,7 +126,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Create version string
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info(Localization.getMessage(LocaleMessage.START_VERSION_STRING, (String[]) null));
+			getLogger().info(Localization.getMessage(LocaleMessage.START_VERSION_STRING));
 		}
 		String val = getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + build;
 		getConfig().set("error-reporting.error-string", val);
@@ -140,7 +140,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Get all disabled SimpleNotice users
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info(Localization.getMessage(LocaleMessage.START_SIMPLENOTICE, (String[]) null));
+			getLogger().info(Localization.getMessage(LocaleMessage.START_SIMPLENOTICE));
 		}
 		try{
 			File snFile = new File(getDataFolder(), "data" + File.separator + "disabled-simplenotice-users.txt");
@@ -162,9 +162,9 @@ public class AntiShare extends PluginWrapper {
 		if(!getServer().getOnlineMode()){
 			if(!getConfig().getBoolean("other.quiet-offline-mode-warning")){
 				getLogger().severe("**********************");
-				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_1, (String[]) null));
-				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_2, (String[]) null));
-				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_3, (String[]) null));
+				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_1));
+				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_2));
+				getLogger().info(Localization.getMessage(LocaleMessage.START_OFFLINE_3));
 				getLogger().severe("**********************");
 			}
 		}
@@ -185,25 +185,25 @@ public class AntiShare extends PluginWrapper {
 
 		// Setup folder structure
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_FOLDERS, (String[]) null));
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_FOLDERS));
 		}
 		SelfCompatibility.folderSetup();
 
 		// Convert blocks
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_BLOCKS, (String[]) null));
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_BLOCKS));
 		}
 		SelfCompatibility.convertBlocks();
 
 		// Migrate world configurations
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_WORLDS, (String[]) null));
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_WORLDS));
 		}
 		SelfCompatibility.migrateWorldConfigurations();
 
 		// Migrate region players (3.8.0-3.9.0)
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_PLAYERS, (String[]) null));
+			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_PLAYERS));
 		}
 		SelfCompatibility.migratePlayerData();
 
@@ -306,7 +306,7 @@ public class AntiShare extends PluginWrapper {
 		getCommand("antishare").setTabCompleter(new TabHandler());
 
 		// Enabled
-		getLogger().info(Localization.getMessage(LocaleMessage.ENABLED, (String[]) null));
+		getLogger().info(Localization.getMessage(LocaleMessage.ENABLED));
 
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_SCHEDULE, LocaleMessage.SERVICE_REGION_INVENTORY_UPDATE));
@@ -335,7 +335,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Disable
 		getServer().getScheduler().cancelTasks(this);
-		getLogger().info(Localization.getMessage(LocaleMessage.DISABLED, (String[]) null));
+		getLogger().info(Localization.getMessage(LocaleMessage.DISABLED));
 
 		// Prepare as though it's a reload
 		permissions = null;

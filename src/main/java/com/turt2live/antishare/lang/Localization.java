@@ -120,4 +120,14 @@ public class Localization {
 		return getInstance().getLocalizedMessage(message, arguments);
 	}
 
+	/**
+	 * Gets a localized message
+	 * 
+	 * @param message the message
+	 * @return the localized message
+	 */
+	public static String getMessage(LocaleMessage message){
+		return getInstance().getLocalizedMessage(message, (String[]) null);
+	}
+
 }
