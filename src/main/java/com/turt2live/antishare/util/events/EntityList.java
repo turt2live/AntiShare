@@ -16,6 +16,8 @@ import java.util.List;
 import org.bukkit.entity.Entity;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.ASEntity;
 
@@ -97,8 +99,7 @@ public class EntityList {
 					this.blocked.remove(ASUtils.getEntityName(blocked));
 				}
 			}catch(Exception e){
-				// TODO: Locale
-				plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")");
+				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, node, file));
 			}
 		}
 	}

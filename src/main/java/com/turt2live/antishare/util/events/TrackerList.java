@@ -19,6 +19,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.signs.Sign;
 import com.turt2live.antishare.util.ASUtils;
 
@@ -88,14 +90,12 @@ public class TrackerList {
 			if(tracked.toLowerCase().startsWith("sign:")){
 				String signname = tracked.split(":").length > 0 ? tracked.split(":")[1] : null;
 				if(signname == null){
-					// TODO: Locale
-					plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")");
+					plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, node, file));
 					continue;
 				}
 				Sign sign = plugin.getSignList().getSign(signname);
 				if(sign == null){
-					// TODO: Locale
-					plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")");
+					plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, node, file));
 					continue;
 				}
 				if(!negate){
@@ -173,7 +173,7 @@ public class TrackerList {
 					this.tracked.remove(plugin.getItemMap().getItem(tracked, false, false));
 				}
 			}catch(Exception e){
-				plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + tracked + "' is not valid! (See '" + node + "' in your " + file + ")");
+				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, node, file));
 			}
 		}
 	}

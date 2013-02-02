@@ -18,6 +18,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.signs.Sign;
 import com.turt2live.antishare.util.ASUtils;
 
@@ -110,14 +112,12 @@ public class EventList {
 			if(blocked.toLowerCase().startsWith("sign:")){
 				String signname = blocked.split(":").length > 0 ? blocked.split(":")[1] : null;
 				if(signname == null){
-					// TODO: Locale
-					plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")");
+					plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, node, file));
 					continue;
 				}
 				Sign sign = plugin.getSignList().getSign(signname);
 				if(sign == null){
-					// TODO: Locale
-					plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")");
+					plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, node, file));
 					continue;
 				}
 				if(!negate){
@@ -260,8 +260,7 @@ public class EventList {
 					}
 				}
 			}catch(Exception e){
-				// TODO: Locale
-				plugin.getLogger().warning("Configuration Problem: '" + (negate ? "-" : "") + blocked + "' is not valid! (See '" + node + "' in your " + file + ")");
+				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, node, file));
 			}
 		}
 	}
