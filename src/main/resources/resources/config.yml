@@ -191,7 +191,6 @@ other:
   send-gamemode-change-message: true
   quiet-offline-mode-warning: false
   dont-look-for-updates: false
-  stop-spam-for-conflicts: false
   use-sleep: true
   # Set to true to treat Adventure mode like Creative mode.
   # This does not affect inventories in any way (the creative

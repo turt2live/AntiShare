@@ -85,7 +85,6 @@ public enum LocaleMessage{
     SERVICE_UPDATE("service.update"),
     SERVICE_COMMANDS("service.commands"),
     SERVICE_REGION_INVENTORY_UPDATE("service.region-inventory-update"),
-    SERVICE_CONFLICT("service.conflict"),
     SERVICE_REGIONS("service.regions"),
     SERVICE_FEATURES("service.features"),
     SERVICE_CUBOID("service.cuboid"),
@@ -174,8 +173,7 @@ public enum LocaleMessage{
     PHRASE_ATTACH("phrase.attach-a"),
     PHRASE_ATTACHED("phrase.attached"),
     PHRASE_REGION_ENTER("phrase.region-enter"),
-    PHRASE_REGION_LEAVE("phrase.region-leave"),
-    ;
+    PHRASE_REGION_LEAVE("phrase.region-leave");
 
     private String node;
 

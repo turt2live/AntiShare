@@ -41,7 +41,6 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.signs.SignList;
-import com.turt2live.antishare.util.generic.ConflictThread;
 import com.turt2live.antishare.util.generic.ItemMap;
 import com.turt2live.antishare.util.generic.SelfCompatibility;
 import com.turt2live.antishare.util.generic.UpdateChecker;
@@ -312,12 +311,6 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info(Localization.getMessage(LocaleMessage.START_SCHEDULE, LocaleMessage.SERVICE_REGION_INVENTORY_UPDATE));
 		}
 		loadPlayerInformation();
-
-		// Conflict messages
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info(Localization.getMessage(LocaleMessage.START_SCHEDULE, LocaleMessage.SERVICE_CONFLICT));
-		}
-		getServer().getScheduler().scheduleSyncDelayedTask(this, new ConflictThread());
 	}
 
 	@Override
