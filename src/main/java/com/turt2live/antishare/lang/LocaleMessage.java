@@ -49,6 +49,8 @@ public enum LocaleMessage{
     ERROR_BAD_KEY("error.bad-key"),
     ERROR_NO_VAULT("error.no-vault"),
     ERROR_ONLY_CLEAR("error.cannot-set"),
+    ERROR_NO_MONEY_TAB("error.no-money-tab"),
+    ERROR_NO_MONEY_VAULT("error.no-money-vault"),
     START_CHECK_CONFIG("startup.config"),
     START_VERSION_STRING("startup.version-string"),
     START_SIMPLENOTICE("startup.simplenotice"),

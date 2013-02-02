@@ -58,6 +58,8 @@ error:
     bad-key: 'INVALID KEY ({0}) IN FILE ({1})'
     no-vault: 'You have enabled fines/rewards but do not have Vault. Disabling fines/rewards.'
     cannot-set: 'You cannot set an inventory from the console, only clear'
+    no-money-tab: 'Tab feature disabled'
+    no-money-vault: 'Vault missing'
 startup:
     config: 'Checking configuration...'
     version-string: 'Creating version string in config.yml...'

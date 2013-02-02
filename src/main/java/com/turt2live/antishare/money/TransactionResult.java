@@ -10,6 +10,9 @@
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
+
 /**
  * For easy returning
  * 
@@ -17,9 +20,8 @@ package com.turt2live.antishare.money;
  */
 public class TransactionResult {
 
-	// TODO: Locale
-	public static final TransactionResult NO_VAULT = new TransactionResult("You do not have Vault installed.", false);
-	public static final TransactionResult NO_TAB = new TransactionResult("Tab feature disabled", false);
+	public static final TransactionResult NO_VAULT = new TransactionResult(Localization.getMessage(LocaleMessage.ERROR_NO_MONEY_VAULT), false);
+	public static final TransactionResult NO_TAB = new TransactionResult(Localization.getMessage(LocaleMessage.ERROR_NO_MONEY_TAB), false);
 
 	/**
 	 * Message applied to the result
