@@ -285,8 +285,7 @@ class ChunkWrapper {
 		 */
 		String[] parts = s.split(";");
 		if(parts.length < (isBlock ? 6 : 7) || parts.length > (isBlock ? 6 : 7)){
-			// TODO: Locale
-			plugin.getLogger().warning("INVALID " + (isBlock ? "BLOCK" : "ENTITY") + ": " + s + " (GM=" + gm.name() + "). Report this to Turt2Live.");
+			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, s, "gm=" + gm.name() + ":isB=" + isBlock));
 		}else{
 			String key = parts[3] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2] + (isBlock ? "" : ";" + parts[6]);
 			String value = gm.name();
