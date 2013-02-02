@@ -47,6 +47,7 @@ error:
     page: 'Page {0} does not exist! The last page is {1}'
     bad-file: 'INVALID FILE: {0}'
     bad-key: 'INVALID KEY ({0}) IN FILE ({1})'
+    no-vault: 'You have enabled fines/rewards but do not have Vault. Disabling fines/rewards.'
 startup:
     config: 'Checking configuration...'
     version-string: 'Creating version string in config.yml...'
@@ -94,6 +95,8 @@ status:
     adventure-entities: 'Adventure Entities Loaded: {0}'
     cuboids: 'Cuboids Loaded: {0}'
     linked-inventories: 'Linked Inventories: {0}'
+    fines: 'Fines Loaded: {0}'
+    rewards: 'Rewards Loaded: {0}'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'

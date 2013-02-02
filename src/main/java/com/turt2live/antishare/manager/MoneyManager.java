@@ -23,6 +23,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.listener.MoneyListener;
 import com.turt2live.antishare.money.Fine;
 import com.turt2live.antishare.money.Reward;
@@ -120,9 +122,8 @@ public class MoneyManager extends AntiShareManager {
 
 			// Sanity
 			if(affect == null){
-				// TODO: Locale
-				plugin.getLogger().warning("Configuration Problem: '" + money.getString(path + ".give-to") + "' is not valid! (See '" + path + ".give-to" + "' in your fines.yml)");
-				plugin.getLogger().warning("Assuming '" + money.getString(path + ".give-to") + "' means 'NONE'");
+				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, path + ".give-to", "fines.yml"));
+				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_ASSUME, Localization.getMessage(LocaleMessage.DICT_VALUE), money.getString(path + ".give-to"), "NONE"));
 				affect = ASGameMode.NONE;
 			}
 
@@ -159,8 +160,7 @@ public class MoneyManager extends AntiShareManager {
 			if(vault != null){
 				econ = new VaultEconomy();
 			}else{
-				// TODO: Locale
-				plugin.getLogger().severe("You have enabled fines/rewards but have not installed Vault. Please install Vault for AntiShare's fine/reward system to work");
+				plugin.getLogger().severe(Localization.getMessage(LocaleMessage.ERROR_NO_VAULT));
 				return false;
 			}
 		}
@@ -168,12 +168,10 @@ public class MoneyManager extends AntiShareManager {
 
 		// Spam console
 		if(finesLoaded > 0){
-			// TODO: Locale
-			plugin.getLogger().info("Fines Loaded: " + finesLoaded);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_FINES, String.valueOf(finesLoaded)));
 		}
 		if(rewardsLoaded > 0){
-			// TODO: Locale
-			plugin.getLogger().info("Rewards Loaded: " + rewardsLoaded);
+			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_REWARDS, String.valueOf(rewardsLoaded)));
 		}
 		return true;
 	}
