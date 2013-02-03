@@ -87,6 +87,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.CuboidManager;
 import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
@@ -103,8 +105,10 @@ import com.turt2live.antishare.regions.PerWorldConfig;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.generic.LevelSaver;
 import com.turt2live.antishare.util.generic.LevelSaver.Level;
+import com.turt2live.antishare.util.generic.MobPattern;
 import com.turt2live.materials.MaterialAPI;
 
 /**
@@ -128,6 +132,7 @@ public class BaseListener implements Listener {
 	/**
 	 * Creates a new Listener
 	 */
+	// TODO: Localize
 	public BaseListener(){
 		reload();
 		plugin.getServer().getPluginManager().registerEvents(new HangingListener(), plugin);
@@ -223,7 +228,43 @@ public class BaseListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOW)
 	public void onEntityMake(BlockPlaceEvent event){
-		// TODO: Entity Make
+		if(event.isCancelled()){
+			return;
+		}
+		AlertType type = AlertType.LEGAL;
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
+		MobPattern snow = ASUtils.getMobPattern(EntityPattern.SNOW_GOLEM);
+		MobPattern iron = ASUtils.getMobPattern(EntityPattern.IRON_GOLEM);
+		MobPattern wither = ASUtils.getMobPattern(EntityPattern.WITHER);
+		MobPattern pattern = null;
+		if(snow != null && snow.exists(block)){
+			pattern = snow;
+		}else if(iron != null && iron.exists(block)){
+			pattern = iron;
+		}else if(wither != null && wither.exists(block)){
+			pattern = wither;
+		}
+		if(pattern == null){
+			return;
+		}
+		String mobName = pattern.name;
+		if(!plugin.getConfig().getBoolean(pattern.configurationNode)){
+			type = AlertType.LEGAL;
+		}
+		if(plugin.isBlocked(player, PermissionNodes.ALLOW_MOB_CREATION, PermissionNodes.DENY_MOB_CREATION, player.getWorld(), (Material) null)){
+			type = AlertType.ILLEGAL;
+		}
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_CREATE) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_SPAWN) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + mobName;
+		String playerMessage = plugin.getMessage("blocked-action.create-mob");
+		MessageFactory factory = new MessageFactory(playerMessage);
+		factory.insert(block, player, block.getWorld(), TenderType.MOB_MAKE);
+		playerMessage = factory.toString();
+		plugin.getAlerts().alert(message, player, playerMessage, type, AlertTrigger.CREATE_MOB);
+		if(type == AlertType.ILLEGAL){
+			event.setCancelled(true);
+			pattern.scheduleUpdate(block);
+		}
 	}
 
 	// ################# Block Break
