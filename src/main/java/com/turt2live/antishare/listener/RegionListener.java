@@ -110,7 +110,7 @@ public class RegionListener implements Listener {
 		// Check if they should be blocked
 		Region asregion = manager.getRegion(event.getEntity().getLocation());
 		if(asregion != null){
-			if(!asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
+			if(asregion.getConfig().isBlocked(item, ListType.RIGHT_CLICK)){
 				type = AlertType.ILLEGAL;
 			}
 		}
@@ -354,13 +354,15 @@ public class RegionListener implements Listener {
 			type = AlertType.ILLEGAL;
 		}
 
-		if(playerCombat){
-			if(!asregion.getConfig().combatAgainstPlayers()){
-				return;
-			}
-		}else{
-			if(!asregion.getConfig().combatAgainstMobs()){
-				return;
+		if(asregion != null){
+			if(playerCombat){
+				if(!asregion.getConfig().combatAgainstPlayers()){
+					return;
+				}
+			}else{
+				if(!asregion.getConfig().combatAgainstMobs()){
+					return;
+				}
 			}
 		}
 
@@ -407,7 +409,6 @@ public class RegionListener implements Listener {
 			return;
 		}
 		Player player = event.getPlayer();
-		boolean checkRegion = true;
 
 		// Check to see if we should even bother
 		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
@@ -417,11 +418,11 @@ public class RegionListener implements Listener {
 		// Tag check
 		if(player.hasMetadata("antishare-regionleave")){
 			player.removeMetadata("antishare-regionleave", plugin);
-			checkRegion = false;
+			return;
 		}
 
 		// Region Check
-		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM) && checkRegion){
+		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
 			Region region = manager.getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.PHRASE_CANNOT_CHANGE), true);
@@ -1135,7 +1136,7 @@ public class RegionListener implements Listener {
 					type = AlertType.ILLEGAL;
 				}
 				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_RIGHT_CLICK, PermissionNodes.DENY_RIGHT_CLICK, player.getWorld(), player.getItemInHand().getType())){
-					type = AlertType.ILLEGAL;
+					type = AlertType.LEGAL;
 				}
 				if(type == AlertType.ILLEGAL){
 					message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + (type == AlertType.ILLEGAL ? " " + Localization.getMessage(LocaleMessage.PHRASE_USE) + " " : " " + Localization.getMessage(LocaleMessage.PHRASE_USED) + " ") + (type == AlertType.ILLEGAL ? ChatColor.RED : ChatColor.GREEN) + MaterialAPI.capitalize(player.getItemInHand().getType().name());
