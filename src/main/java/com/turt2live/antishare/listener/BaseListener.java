@@ -1826,6 +1826,21 @@ public class BaseListener implements Listener {
 		}
 	}
 
+	// ################# Block Piston Extend (2)
+
+	@EventHandler (priority = EventPriority.LOW)
+	public void onPiston(BlockPistonExtendEvent event){
+		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
+			return;
+		}
+		int dest = event.getLength() + 1; // Destination block
+		Block block = event.getBlock().getRelative(event.getDirection(), dest);
+		if(MaterialAPI.canPistonBreak(block.getType())){
+			block.setType(Material.AIR);
+			blocks.removeBlock(block);
+		}
+	}
+
 	// ################# Piston Move (Retract)
 
 	@EventHandler (priority = EventPriority.LOW)
