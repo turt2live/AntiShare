@@ -138,7 +138,6 @@ service:
     update: 'Update Service'
     commands: 'Command Handler'
     region-inventory-update: 'inventory and region updates'
-    conflict: 'conflict messages'
 dictionary:
     directory: 'directory'
     config-files: 'configuration files'
