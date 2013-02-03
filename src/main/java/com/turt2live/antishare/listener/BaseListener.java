@@ -86,6 +86,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
@@ -441,7 +442,7 @@ public class BaseListener implements Listener {
 		}
 
 		// Check for 'attached' blocks and internal inventories
-		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
+		if(GamemodeAbstraction.isCreative(player.getGameMode()) && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING) && !event.isCancelled()){
 			// Check inventories
 			if(getConfig(block.getWorld()).clearBlockInventoryOnBreak()){
 				if(block.getState() instanceof Chest){
@@ -967,7 +968,7 @@ public class BaseListener implements Listener {
 
 		// Remove drops if required
 		if(type == AlertType.LEGAL && !event.isCancelled()){
-			if(!plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING, player.getWorld()) && player.getGameMode() == GameMode.CREATIVE){
+			if(!plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING, player.getWorld()) && GamemodeAbstraction.isCreative(player.getGameMode())){
 				if(plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.vehicles")){
 					event.setCancelled(true);
 					event.getVehicle().remove();
@@ -1155,7 +1156,7 @@ public class BaseListener implements Listener {
 		StorageMinecart cart = (StorageMinecart) potentialCart;
 
 		// Check internal inventories
-		if(player.getGameMode() == GameMode.CREATIVE && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
+		if(GamemodeAbstraction.isCreative(player.getGameMode()) && !plugin.getPermissions().has(player, PermissionNodes.BREAK_ANYTHING)){
 			// Check inventories
 			Region asregion = regions == null ? null : regions.getRegion(cart.getLocation());
 			if(asregion != null){
@@ -2065,7 +2066,7 @@ public class BaseListener implements Listener {
 		if((he instanceof Player)){
 			Player player = (Player) he;
 			AlertType type = AlertType.ILLEGAL;
-			if(player.getGameMode() == GameMode.CREATIVE){
+			if(GamemodeAbstraction.isCreative(player.getGameMode())){
 				if(plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, player.getWorld(), event.getRecipe().getResult().getType())){
 					type = AlertType.LEGAL;
 				}
@@ -2206,7 +2207,7 @@ public class BaseListener implements Listener {
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		Block to = event.getToBlock();
 		if(MaterialAPI.canBeBrokenByWater(to.getType())){
-			if(blocks != null && blocks.getType(to) == GameMode.CREATIVE){
+			if(blocks != null && GamemodeAbstraction.isCreative(blocks.getType(to))){
 				if(deny){
 					event.setCancelled(true);
 				}else if(!drops){
@@ -2228,7 +2229,7 @@ public class BaseListener implements Listener {
 		boolean drops = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.natural-protection-mode.block-drops");
 		for(int i = 0; i < event.blockList().size(); i++){
 			Block block = event.blockList().get(i);
-			if(blocks != null && blocks.getType(block) == GameMode.CREATIVE){
+			if(blocks != null && GamemodeAbstraction.isCreative(blocks.getType(block))){
 				if(deny){
 					event.blockList().remove(i);
 				}else if(!drops){
