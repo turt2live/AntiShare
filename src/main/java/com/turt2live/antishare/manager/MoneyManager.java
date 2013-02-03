@@ -25,7 +25,6 @@ import org.bukkit.plugin.Plugin;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.listener.MoneyListener;
 import com.turt2live.antishare.money.Fine;
 import com.turt2live.antishare.money.Reward;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -164,7 +163,6 @@ public class MoneyManager extends AntiShareManager {
 				return false;
 			}
 		}
-		plugin.getServer().getPluginManager().registerEvents(new MoneyListener(this), plugin);
 
 		// Spam console
 		if(finesLoaded > 0){

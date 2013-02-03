@@ -22,7 +22,6 @@ import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.listener.RegionListener;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionConfiguration;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
@@ -31,13 +30,6 @@ import com.turt2live.antishare.util.ASUtils;
 public class RegionManager extends AntiShareManager {
 
 	private final Map<String, Set<Region>> regions = new HashMap<String, Set<Region>>();
-
-	/**
-	 * Creates a new Region Manager
-	 */
-	public RegionManager(){
-		plugin.getServer().getPluginManager().registerEvents(new RegionListener(this), plugin);
-	}
 
 	/**
 	 * Loads regions into memory for a specific world name

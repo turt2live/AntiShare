@@ -18,7 +18,6 @@ import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.listener.BlockListener;
 import com.turt2live.antishare.util.events.TrackerList;
 
 public class BlockManager extends AntiShareManager {
@@ -59,9 +58,6 @@ public class BlockManager extends AntiShareManager {
 				recentlyRemoved.removeAll(r);
 			}
 		}, 0, 20 * 5);
-
-		// Start listener
-		plugin.getServer().getPluginManager().registerEvents(new BlockListener(this), plugin);
 	}
 
 	@Override

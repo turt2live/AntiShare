@@ -259,16 +259,16 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_METRICS_TRACKERS));
 		}
 		trackers = new TrackerList();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
-			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_LISTENER));
-		}
-		listener = new BaseListener();
 
 		// Startup Systems Manager
 		sys = new Systems();
 		sys.load();
 
 		// Setup everything
+		if(!getConfig().getBoolean("other.more-quiet-startup")){
+			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_LISTENER));
+		}
+		listener = new BaseListener();
 		if(!getConfig().getBoolean("other.more-quiet-startup")){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_ALERTS));
 		}

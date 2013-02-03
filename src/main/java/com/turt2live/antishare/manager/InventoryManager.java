@@ -30,7 +30,6 @@ import com.turt2live.antishare.inventory.LinkedInventory;
 import com.turt2live.antishare.inventory.TemporaryASInventory;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.listener.InventoryListener;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
@@ -62,7 +61,6 @@ public class InventoryManager extends AntiShareManager {
 			links.saveDefaults();
 		}
 		links.load();
-		plugin.getServer().getPluginManager().registerEvents(new InventoryListener(this), plugin);
 	}
 
 	/**

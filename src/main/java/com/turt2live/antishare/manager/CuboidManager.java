@@ -10,7 +10,6 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.listener.CuboidListener;
 
 /**
  * Cuboid manager
@@ -26,13 +25,6 @@ public class CuboidManager extends AntiShareManager {
 	}
 
 	private final Map<String, Cuboid> cuboids = new HashMap<String, Cuboid>();
-
-	/**
-	 * Creates a new cuboid manager
-	 */
-	public CuboidManager(){
-		plugin.getServer().getPluginManager().registerEvents(new CuboidListener(this), plugin);
-	}
 
 	/**
 	 * Gets the cuboid for a player
