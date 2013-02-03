@@ -47,10 +47,12 @@ public class SelfCompatibility {
 		// Below is the version applied in
 		@Deprecated
 		CONFIG_520(20),
+		@Deprecated
 		CONFIG_530(25),
 		INV_520(30),
 		BLOCKS_540(35),
-		INV_540(40);
+		INV_540(40),
+		CONFIG_540(45);
 
 		public final int BYTE_POS;
 
@@ -325,7 +327,7 @@ public class SelfCompatibility {
 	 * Cleans YAML files
 	 */
 	public static void cleanupYAML(){
-		if(!needsUpdate(Compat.CONFIG_530)){
+		if(!needsUpdate(Compat.CONFIG_540)){
 			return;
 		}
 		int cleaned = 0;
@@ -349,7 +351,7 @@ public class SelfCompatibility {
 		if(cleaned > 0){
 			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CLEAN, String.valueOf(cleaned)));
 		}
-		noLongerNeedsUpdate(Compat.CONFIG_530);
+		noLongerNeedsUpdate(Compat.CONFIG_540);
 	}
 
 	/**
