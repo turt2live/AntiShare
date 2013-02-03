@@ -1,5 +1,5 @@
 Since 5.3.0:
-- Withers can no longer be created (Requires 1.4.7 Development Build)
+- Withers can no longer be created (Requires 1.4.7 Recommended Build)
 - Fixed issue with adventure mode not being correctly blocked
 - Fixed issue with removing regions
 - Fixed ender pearl issues
@@ -8,13 +8,15 @@ Since 5.3.0:
 - Fixed 0kb bug
 - Fixed piston duplication bug
 - Fix wrong file path for inventories
-- Remove Tekkit support
+- Removed Tekkit support
 - Fix region issues
 - Added locale support
 - Removed conflict spam, conflicts may still be present although they can be fixed
+- Reverted listener code to be more sane
+- Added localization
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]
 
 Tests to be made:
-- Every bloody class, including ServerHas (and making sure ASUtils and such return if ServerHas is 'tekkit')
+- Every class
