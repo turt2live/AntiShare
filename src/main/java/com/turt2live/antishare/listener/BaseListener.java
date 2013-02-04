@@ -1475,18 +1475,11 @@ public class BaseListener implements Listener {
 		}
 	}
 
-	// ################# Player Game Mode Change
-
-	@EventHandler (priority = EventPriority.LOW)
-	public void onGameModeChange(PlayerGameModeChangeEvent event){
-		if(event.isCancelled()){
-			return;
-		}
-		Player player = event.getPlayer();
-		GameMode from = player.getGameMode();
-		GameMode to = event.getNewGameMode();
+	// TODO: Method rename
+	private boolean doGMChange(Player player, GameMode from, GameMode to){
 		boolean ignore = true;
 		boolean checkRegion = true;
+		boolean cancel = false;
 
 		// Automatically close all open windows
 		InventoryView active = player.getOpenInventory();
@@ -1506,14 +1499,14 @@ public class BaseListener implements Listener {
 						GMCD.put(player.getName(), now);
 					}else{
 						// Deny
-						event.setCancelled(true);
+						cancel = true;
 						int seconds = (int) (time - (now - lastUsed)) / 1000;
 						String s = "";
 						if(seconds == 0 || seconds > 1){
 							s = "s";
 						}
 						ASUtils.sendToPlayer(player, ChatColor.RED + "You must wait at least " + seconds + " more second" + s + " before changing Game Modes.", true);
-						return;
+						return cancel;
 					}
 				}else{
 					GMCD.put(player.getName(), now);
@@ -1523,15 +1516,15 @@ public class BaseListener implements Listener {
 
 		// Change level if needed
 		Level currentLevel = new Level(player.getLevel(), player.getExp());
-		if(plugin.getConfig().getBoolean("enabled-features.change-level-on-gamemode-change") && !event.isCancelled() && !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
-			Level desired = LevelSaver.getLevel(player.getName(), event.getNewGameMode());
+		if(plugin.getConfig().getBoolean("enabled-features.change-level-on-gamemode-change") && !cancel && !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
+			Level desired = LevelSaver.getLevel(player.getName(), to);
 			LevelSaver.saveLevel(player.getName(), player.getGameMode(), currentLevel);
 			desired.setTo(player);
 		}
 
 		// Check to see if we should even bother
 		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
-			return;
+			return cancel;
 		}
 
 		// Tag check
@@ -1545,9 +1538,9 @@ public class BaseListener implements Listener {
 			Region region = regions == null ? null : regions.getRegion(player.getLocation());
 			if(region != null){
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
-				event.setCancelled(true);
+				cancel = true;
 				currentLevel.setTo(player); // Restore level
-				return;
+				return cancel;
 			}
 		}
 
@@ -1610,6 +1603,41 @@ public class BaseListener implements Listener {
 			playerMessage = "no message";
 		}
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
+		return cancel;
+	}
+
+	// TODO: Method rename
+	private void scheduleGMChange(PlayerGameModeChangeEvent event){
+		final Player player = event.getPlayer();
+		final GameMode from = player.getGameMode();
+		final GameMode to = event.getNewGameMode();
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+
+			@Override
+			public void run(){
+				doGMChange(player, from, to);
+			}
+		}, 2);
+	}
+
+	// ################# Player Game Mode Change
+
+	@EventHandler (priority = EventPriority.LOW)
+	public void onGameModeChange(final PlayerGameModeChangeEvent event){
+		if(event.isCancelled()){
+			return;
+		}
+		Player player = event.getPlayer();
+		if(!player.hasMetadata("antishare-joined")){
+			scheduleGMChange(event);
+		}else{
+			GameMode from = player.getGameMode();
+			GameMode to = event.getNewGameMode();
+			boolean cancel = doGMChange(player, from, to);
+			if(cancel){
+				event.setCancelled(true);
+			}
+		}
 	}
 
 	// ################# Player Combat
@@ -1839,6 +1867,8 @@ public class BaseListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onJoin(PlayerJoinEvent event){
 		Player player = event.getPlayer();
+		player.setMetadata("antishare-joined", new FixedMetadataValue(plugin, true));
+
 		// Tell the inventory manager to prepare this player
 		if(inventories != null){
 			inventories.loadPlayer(player);
@@ -1867,6 +1897,7 @@ public class BaseListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
+		player.removeMetadata("antishare-joined", plugin);
 
 		// Remove from regions
 		Region region = regions == null ? null : regions.getRegion(player.getLocation());
