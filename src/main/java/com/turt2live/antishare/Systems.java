@@ -14,6 +14,7 @@ import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.manager.RegionManager;
+import com.turt2live.antishare.manager.WorldConfigurationManager;
 import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 
 public class Systems {
@@ -22,6 +23,7 @@ public class Systems {
 	 * Represents the available managers in AntiShare's system
 	 */
 	public static enum Manager{
+		WORLD_CONFIGS(Feature.ALWAYS_ON, WorldConfigurationManager.class, Localization.getMessage(LocaleMessage.SERVICE_WORLD_CONFIG), null),
 		REGION(Feature.REGIONS, RegionManager.class, Localization.getMessage(LocaleMessage.SERVICE_REGIONS), TrackerType.FEATURE_REGIONS),
 		INVENTORY(Feature.INVENTORIES, InventoryManager.class, Localization.getMessage(LocaleMessage.SERVICE_INVENTORIES), TrackerType.FEATURE_INVENTORIES),
 		FEATURE(Feature.SELF, FeatureManager.class, Localization.getMessage(LocaleMessage.SERVICE_FEATURES), null),

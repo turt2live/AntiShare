@@ -18,6 +18,8 @@ import org.bukkit.entity.Entity;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.manager.WorldConfigurationManager;
 import com.turt2live.antishare.regions.PerWorldConfig.ListType;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.events.EntityList;
@@ -46,6 +48,7 @@ public class RegionConfiguration {
 	private boolean combatMobs = false;
 	private String world;
 	private Region region;
+	private WorldConfigurationManager worldConfigs = null;
 
 	/**
 	 * Creates a new region configuration
@@ -54,6 +57,8 @@ public class RegionConfiguration {
 	 */
 	public RegionConfiguration(Region region){
 		AntiShare plugin = AntiShare.getInstance();
+		if(plugin.getSystemsManager().isEnabled(Manager.WORLD_CONFIGS))
+			worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
 		this.world = region.getWorldName();
 		this.region = region;
 
@@ -85,11 +90,11 @@ public class RegionConfiguration {
 			value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.inventories");
 		}
 		if(regionConfig.getString("enabled-features.no-drops-when-block-break.inventories").equalsIgnoreCase("world")){
-			String tvalue = plugin.getListener().getConfig(world).getRaw().getString("enabled-features.no-drops-when-block-break.inventories");
+			String tvalue = worldConfigs.getConfig(world).getRaw().getString("enabled-features.no-drops-when-block-break.inventories");
 			if(tvalue.equalsIgnoreCase("global")){
 				value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.inventories");
 			}else{
-				value = plugin.getListener().getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.inventories");
+				value = worldConfigs.getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.inventories");
 			}
 		}
 		clearInventoriesOnBreak = value;
@@ -98,25 +103,25 @@ public class RegionConfiguration {
 			value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
 		}
 		if(regionConfig.getString("enabled-features.no-drops-when-block-break.attached-blocks").equalsIgnoreCase("world")){
-			String tvalue = plugin.getListener().getConfig(world).getRaw().getString("enabled-features.no-drops-when-block-break.attached-blocks");
+			String tvalue = worldConfigs.getConfig(world).getRaw().getString("enabled-features.no-drops-when-block-break.attached-blocks");
 			if(tvalue.equalsIgnoreCase("global")){
 				value = plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
 			}else{
-				value = plugin.getListener().getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
+				value = worldConfigs.getConfig(world).getRaw().getBoolean("enabled-features.no-drops-when-block-break.attached-blocks");
 			}
 		}
 		value = regionConfig.getBoolean("blocked-actions.combat-against-players");
 		if(regionConfig.getString("blocked-actions.combat-against-players").equalsIgnoreCase("global")){
 			value = plugin.getConfig().getBoolean("blocked-actions.combat-against-players");
 		}else if(regionConfig.getString("blocked-actions.combat-against-players").equalsIgnoreCase("world")){
-			value = plugin.getListener().getConfig(world).combatAgainstPlayers();
+			value = worldConfigs.getConfig(world).combatAgainstPlayers();
 		}
 		combatPlayers = value;
 		value = regionConfig.getBoolean("blocked-actions.combat-against-mobs");
 		if(regionConfig.getString("blocked-actions.combat-against-mobs").equalsIgnoreCase("global")){
 			value = plugin.getConfig().getBoolean("blocked-actions.combat-against-mobs");
 		}else if(regionConfig.getString("blocked-actions.combat-against-mobs").equalsIgnoreCase("world")){
-			value = plugin.getListener().getConfig(world).combatAgainstMobs();
+			value = worldConfigs.getConfig(world).combatAgainstMobs();
 		}
 		combatMobs = value;
 	}
@@ -133,7 +138,7 @@ public class RegionConfiguration {
 			global = true;
 			enabled = plugin.getConfig().getBoolean("blocked-actions." + triggerPath);
 		}else if(regionConfig.getString("blocked-actions." + triggerPath).equalsIgnoreCase("world")){
-			PerWorldConfig perWorld = plugin.getListener().getConfig(world);
+			PerWorldConfig perWorld = worldConfigs.getConfig(world);
 			if(perWorld == null){
 				enabled = true;
 				gworld = true;
@@ -160,7 +165,7 @@ public class RegionConfiguration {
 				list = plugin.getConfig().getString("blocked-lists." + listPath);
 			}
 			if(list.equalsIgnoreCase("world")){
-				list = plugin.getListener().getConfig(world).getRaw().getString("blocked-lists." + listPath);
+				list = worldConfigs.getConfig(world).getRaw().getString("blocked-lists." + listPath);
 				if(list.equalsIgnoreCase("global")){
 					list = plugin.getConfig().getString("blocked-lists." + listPath);
 				}

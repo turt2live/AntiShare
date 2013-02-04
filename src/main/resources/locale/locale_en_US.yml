@@ -138,6 +138,7 @@ service:
     update: 'Update Service'
     commands: 'Command Handler'
     region-inventory-update: 'inventory and region updates'
+    world-configs: 'World Configurations Manager'
 dictionary:
     directory: 'directory'
     config-files: 'configuration files'

@@ -90,6 +90,7 @@ public enum LocaleMessage{
     SERVICE_CUBOID("service.cuboid"),
     SERVICE_MONEY("service.money"),
     SERVICE_HOOKS("service.hooks"),
+    SERVICE_WORLD_CONFIG("service.world-configs"),
     DICT_DIRECTORY("dictionary.directory"),
     DICT_CONFIG_FILES("dictionary.config-files"),
     DICT_INVENTORY("dictionary.inventory"),

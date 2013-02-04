@@ -24,6 +24,7 @@ import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.RegionManager;
+import com.turt2live.antishare.manager.WorldConfigurationManager;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
@@ -37,6 +38,12 @@ import com.turt2live.materials.MaterialAPI;
 public class HangingListener implements Listener {
 
 	private final AntiShare plugin = AntiShare.getInstance();
+	private WorldConfigurationManager worldConfigs = null;
+
+	public HangingListener(){
+		if(plugin.getSystemsManager().isEnabled(Manager.WORLD_CONFIGS))
+			worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
+	}
 
 	@EventHandler (priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingBreakEvent event){
@@ -85,7 +92,7 @@ public class HangingListener implements Listener {
 					type = AlertType.LEGAL;
 				}
 			}else{
-				if(!plugin.getListener().getConfig(hanging.getWorld()).isBlocked(item, ListType.BLOCK_PLACE)){
+				if(!worldConfigs.getConfig(hanging.getWorld()).isBlocked(item, ListType.BLOCK_PLACE)){
 					type = AlertType.LEGAL;
 				}
 			}
@@ -187,7 +194,7 @@ public class HangingListener implements Listener {
 						type = AlertType.LEGAL;
 					}
 				}else{
-					if(!plugin.getListener().getConfig(hanging.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
+					if(!worldConfigs.getConfig(hanging.getWorld()).isBlocked(item, ListType.BLOCK_BREAK)){
 						type = AlertType.LEGAL;
 					}
 				}

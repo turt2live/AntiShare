@@ -359,12 +359,12 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public void reload(){
 		reloadConfig();
+		sys.reload();
 		itemMap.reload();
 		signs.reload();
 		listener.reload();
 		alerts.reload();
 		messages.reload();
-		sys.reload();
 		loadPlayerInformation();
 	}
 
