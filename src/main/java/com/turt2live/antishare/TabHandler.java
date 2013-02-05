@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -25,26 +27,27 @@ import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ErrorStringList;
 import com.turt2live.antishare.util.StringList;
 
-// TODO: Update for commands
-/*
- * Known Issues:
- * - Commands missing
- * - Weird command behavior. (Player names not supported)
- */
-
 public class TabHandler implements TabCompleter {
+
+	private static ErrorStringList REGION_NAME = new ErrorStringList(Localization.getMessage(LocaleMessage.TAB_REGION_NAME));
+	private static ErrorStringList PLAYER_NAME = new ErrorStringList(Localization.getMessage(LocaleMessage.TAB_PLAYER_NAME));
 
 	protected enum Tab{
 		REGION(Localization.getMessage(LocaleMessage.TAB_REGION), new StringList("region"), new StringList("creative", "survival", "adventure")),
 		RELOAD(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("reload", "rl")),
 		RMREGION(Localization.getMessage(LocaleMessage.TAB_REMOVE_REGION), new StringList("rmregion")),
-		EDITREGION(Localization.getMessage(LocaleMessage.TAB_EDIT_REGION), new StringList("editregion"), new ErrorStringList(Localization.getMessage(LocaleMessage.TAB_REGION_NAME)), new StringList("name", "ShowEnterMessage", "ShowExitMessage", "EnterMessage", "ExitMessage", "inventory", "gamemode", "area")),
+		EDITREGION(Localization.getMessage(LocaleMessage.TAB_EDIT_REGION), new StringList("editregion"), REGION_NAME, new StringList("name", "ShowEnterMessage", "ShowExitMessage", "EnterMessage", "ExitMessage", "inventory", "gamemode", "area")),
 		LISTREGIONS(Localization.getMessage(LocaleMessage.TAB_LIST_REGION), new StringList("listregions")),
-		MIRROR(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("mirror")),
+		MIRROR(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("mirror"), PLAYER_NAME, new StringList("enderchest", "normal"), new StringList("creative", "survival", "adventure"), TabHandler.generateWorldNames()),
 		TOOL(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("tool")),
+		SETTOOL(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("settool")),
+		TOOLBOX(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("toolbox")),
 		MONEY(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("money"), new StringList("on", "off", "status")),
 		SIMPLENOTICE(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("simplenotice")),
+		CUBOID(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("cuboid"), new StringList("clear", "tool", "status")),
 		CHECK(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("check"), new StringList("creative", "survival", "adventure", "all")),
+		TOOLS(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("tools")),
+		VERSION(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("version")),
 		HELP(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("help", "?"));
 
 		private StringList[] arguments;
@@ -108,6 +111,15 @@ public class TabHandler implements TabCompleter {
 			}
 		}
 
+	}
+
+	public static StringList generateWorldNames(){
+		List<String> worlds = new ArrayList<String>();
+		for(World world : Bukkit.getWorlds()){
+			worlds.add(world.getName());
+		}
+		Collections.sort(worlds, String.CASE_INSENSITIVE_ORDER);
+		return new StringList(worlds.toArray(new String[worlds.size()]));
 	}
 
 	private final List<String> preliminary = new ArrayList<String>();
