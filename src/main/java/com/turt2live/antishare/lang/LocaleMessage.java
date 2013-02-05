@@ -139,6 +139,8 @@ public enum LocaleMessage{
 	TAB_REMOVE_REGION("tab.rmregion"),
 	TAB_EDIT_REGION("tab.editregion"),
 	TAB_LIST_REGION("tab.listregion"),
+	TAB_REGION_NAME("tab.region-name"),
+	TAB_PLAYER_NAME("tab.player-name"),
 	WARNING_REMOVE_WORLD("warning.remove-world"),
 	WARNING_REMOVE_WORLD2("warning.remove-world2"),
 	WARNING_MOVE_BLOCK("warning.move-block"),

@@ -38,7 +38,7 @@ public class TabHandler implements TabCompleter {
 		REGION(Localization.getMessage(LocaleMessage.TAB_REGION), new StringList("region"), new StringList("creative", "survival", "adventure")),
 		RELOAD(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("reload", "rl")),
 		RMREGION(Localization.getMessage(LocaleMessage.TAB_REMOVE_REGION), new StringList("rmregion")),
-		EDITREGION(Localization.getMessage(LocaleMessage.TAB_EDIT_REGION), new StringList("editregion"), new ErrorStringList("Enter a region name"), new StringList("name", "ShowEnterMessage", "ShowExitMessage", "EnterMessage", "ExitMessage", "inventory", "gamemode", "area")),
+		EDITREGION(Localization.getMessage(LocaleMessage.TAB_EDIT_REGION), new StringList("editregion"), new ErrorStringList(Localization.getMessage(LocaleMessage.TAB_REGION_NAME)), new StringList("name", "ShowEnterMessage", "ShowExitMessage", "EnterMessage", "ExitMessage", "inventory", "gamemode", "area")),
 		LISTREGIONS(Localization.getMessage(LocaleMessage.TAB_LIST_REGION), new StringList("listregions")),
 		MIRROR(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("mirror")),
 		TOOL(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("tool")),

@@ -96,6 +96,8 @@ tab:
     rmregion: 'You can enter a name, or remove the region you are standing in'
     editregion: 'Please enter a value'
     listregion: 'Enter an optional page number'
+    region-name: 'Enter a region name'
+    player-name: 'Enter a player name'
 warning:
     remove-world: 'AntiShare is REMOVING this world from the player'
     remove-world2: 'This cannot be reversed. Check your settings if you don''t like this'
