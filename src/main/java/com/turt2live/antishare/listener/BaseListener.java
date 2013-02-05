@@ -1475,8 +1475,7 @@ public class BaseListener implements Listener {
 		}
 	}
 
-	// TODO: Method rename
-	private boolean doGMChange(Player player, GameMode from, GameMode to){
+	private boolean doGameModeChange(Player player, GameMode from, GameMode to){
 		boolean ignore = true;
 		boolean checkRegion = true;
 		boolean cancel = false;
@@ -1606,8 +1605,7 @@ public class BaseListener implements Listener {
 		return cancel;
 	}
 
-	// TODO: Method rename
-	private void scheduleGMChange(PlayerGameModeChangeEvent event){
+	private void scheduleGameModeChange(PlayerGameModeChangeEvent event){
 		final Player player = event.getPlayer();
 		final GameMode from = player.getGameMode();
 		final GameMode to = event.getNewGameMode();
@@ -1615,7 +1613,7 @@ public class BaseListener implements Listener {
 
 			@Override
 			public void run(){
-				doGMChange(player, from, to);
+				doGameModeChange(player, from, to);
 			}
 		}, 2);
 	}
@@ -1629,11 +1627,11 @@ public class BaseListener implements Listener {
 		}
 		Player player = event.getPlayer();
 		if(!player.hasMetadata("antishare-joined")){
-			scheduleGMChange(event);
+			scheduleGameModeChange(event);
 		}else{
 			GameMode from = player.getGameMode();
 			GameMode to = event.getNewGameMode();
-			boolean cancel = doGMChange(player, from, to);
+			boolean cancel = doGameModeChange(player, from, to);
 			if(cancel){
 				event.setCancelled(true);
 			}
