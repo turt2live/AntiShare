@@ -503,6 +503,8 @@ public class Region {
 
 			Cuboid area = (Cuboid) yaml.get("cuboid");
 			region.setCuboid(area);
+
+			region.setOwner(yaml.getString("owner"));
 		}else{
 			double mix = yaml.getDouble("mi-x"), miy = yaml.getDouble("mi-y"), miz = yaml.getDouble("mi-z");
 			double max = yaml.getDouble("ma-x"), may = yaml.getDouble("ma-y"), maz = yaml.getDouble("ma-z");
@@ -511,6 +513,7 @@ public class Region {
 			Cuboid cuboid = new Cuboid(l1, l2);
 			region.setCuboid(cuboid);
 			region.setID(saveFile.getName().replace(".yml", ""));
+			region.setOwner(yaml.getString("set-by"));
 			loadLegacyPlayerInformation(region);
 		}
 		if(region.getID().equalsIgnoreCase("-1")){
