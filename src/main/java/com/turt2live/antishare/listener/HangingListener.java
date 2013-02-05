@@ -158,7 +158,7 @@ public class HangingListener implements Listener {
 		Entity remover = event.getRemover();
 		if(remover instanceof Player){
 			Player player = (Player) remover;
-			if(player.getItemInHand() != null && plugin.getPermissions().has(player, PermissionNodes.TOOL_USE)){
+			if(player.getItemInHand() != null && plugin.getPermissions().has(player, PermissionNodes.TOOL_USE) && plugin.isToolEnabled(player.getName())){
 				GameMode mode = blocks.getType(hanging);
 				if(player.getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL){
 					if(mode != null){

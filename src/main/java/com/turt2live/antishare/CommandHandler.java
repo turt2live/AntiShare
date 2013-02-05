@@ -548,6 +548,20 @@ public class CommandHandler implements CommandExecutor {
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
 					}
 					return true;
+				}else if(args[0].equalsIgnoreCase("tools")){
+					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_USE)){
+						boolean on = false;
+						if(plugin.isToolEnabled(sender.getName())){
+							plugin.disableTools(sender.getName());
+						}else{
+							plugin.enableTools(sender.getName());
+							on = true;
+						}
+						ASUtils.sendToPlayer(sender, on ? (ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_ENABLE)) : (ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_DISABLE)), true);
+					}else{
+						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+					}
+					return true;
 				}else if(args[0].equalsIgnoreCase("cuboid")){
 					if(!plugin.getPermissions().has(sender, PermissionNodes.CREATE_CUBOID)){
 						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);

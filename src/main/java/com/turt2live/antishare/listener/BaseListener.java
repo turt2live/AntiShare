@@ -489,12 +489,12 @@ public class BaseListener implements Listener {
 								}else{
 									checkMoreBlocks = false;
 								}
-							}while(checkMoreBlocks);
+							}while (checkMoreBlocks);
 							moreBlocks = false;
 						}else{
 							moreBlocks = false;
 						}
-					}while(moreBlocks);
+					}while (moreBlocks);
 				}
 
 				/* We need to check the blocks above for falling blocks, as the following can happen:
@@ -520,7 +520,7 @@ public class BaseListener implements Listener {
 						moreBlocks = false;
 					}
 					active = above;
-				}while(moreBlocks);
+				}while (moreBlocks);
 
 				// Cacti check
 				active = block;
@@ -538,7 +538,7 @@ public class BaseListener implements Listener {
 							moreBlocks = false;
 						}
 						active = above;
-					}while(moreBlocks);
+					}while (moreBlocks);
 					for(int i = breakBlocks.size() - 1; i > -1; i--){
 						Location location = breakBlocks.get(i);
 						location.getBlock().setType(Material.AIR);
@@ -561,7 +561,7 @@ public class BaseListener implements Listener {
 							moreBlocks = false;
 						}
 						active = above;
-					}while(moreBlocks);
+					}while (moreBlocks);
 					for(int i = breakBlocks.size() - 1; i > -1; i--){
 						Location location = breakBlocks.get(i);
 						location.getBlock().setType(Material.AIR);
@@ -686,7 +686,7 @@ public class BaseListener implements Listener {
 		AlertTrigger trigger = AlertTrigger.RIGHT_CLICK;
 
 		// Check for AntiShare tool
-		if(plugin.getPermissions().has(player, PermissionNodes.TOOL_USE) && player.getItemInHand() != null && (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)){
+		if(plugin.getPermissions().has(player, PermissionNodes.TOOL_USE) && plugin.isToolEnabled(player.getName()) && player.getItemInHand() != null && (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)){
 			if(player.getItemInHand().getType() == AntiShare.ANTISHARE_TOOL){
 				String blockname = block.getType().name().replaceAll("_", " ").toLowerCase();
 				String gamemode = ((blocks == null ? null : blocks.getType(block)) != null ? blocks.getType(block).name() : "natural").toLowerCase();
@@ -950,7 +950,7 @@ public class BaseListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOW)
 	public void onItemFrameClick(PlayerInteractEntityEvent event){
-		if(!event.isCancelled() && event.getPlayer().getItemInHand() != null && (event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL || event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL) && plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
+		if(!event.isCancelled() && plugin.isToolEnabled(event.getPlayer().getName()) && event.getPlayer().getItemInHand() != null && (event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_TOOL || event.getPlayer().getItemInHand().getType() == AntiShare.ANTISHARE_SET_TOOL) && plugin.getPermissions().has(event.getPlayer(), PermissionNodes.TOOL_USE)){
 			Entity entity = event.getRightClicked();
 			GameMode mode = blocks == null ? null : blocks.getType(entity);
 			Material item = Material.AIR;
@@ -1889,6 +1889,11 @@ public class BaseListener implements Listener {
 		// Money (fines/rewards) status
 		if(money != null){
 			money.showStatusOnLogin(player);
+		}
+
+		// AntiShare tools
+		if(plugin.getPermissions().has(player, PermissionNodes.TOOL_USE)){
+			ASUtils.sendToPlayer(player, plugin.isToolEnabled(player.getName()) ? (ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_ENABLE)) : (ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_DISABLE)), true);
 		}
 	}
 

@@ -15,6 +15,7 @@ Since 5.3.0:
 - Reverted listener code to be more sane
 - Added localization
 - Fixed multiworld plugin compatibility issues
+- Added a way to disable 'tool' function (per-player)
 
 1.4 changes that need to be protected:
 - Beacon powers need to be blocked (eg: if made by creative player, only creative is affected) [PR: CB-915]

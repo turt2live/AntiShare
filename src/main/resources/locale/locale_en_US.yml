@@ -40,6 +40,8 @@ simplenotice:
     off: 'SimpleNotice is now NOT being used to send you messages'
     missing: 'You do not have SimpleNotice'
 tool:
+    toggle-on: 'You can now use the AntiShare tools as tools'
+    toggle-off: 'You can now use the AntiShare tools as items'
     generic: 'With the {0} simply left or right click to see what type a block is'
     set: 'With the {0} simply left click to SET block type, right click to REMOVE'
     cuboid: 'With the {0} simply left click to set point 1, and right click to set point 2'

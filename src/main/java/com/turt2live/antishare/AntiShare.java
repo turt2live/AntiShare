@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -41,6 +42,7 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.signs.SignList;
+import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.ItemMap;
 import com.turt2live.antishare.util.generic.SelfCompatibility;
 import com.turt2live.antishare.util.generic.UpdateChecker;
@@ -75,6 +77,7 @@ public class AntiShare extends PluginWrapper {
 	private TrackerList trackers;
 	private SignList signs;
 	private final List<String> disabledSNPlayers = new ArrayList<String>();
+	private final List<String> disabledTools = new ArrayList<String>();
 	private String build = "Unknown build, custom?";
 	private Systems sys;
 
@@ -381,6 +384,9 @@ public class AntiShare extends PluginWrapper {
 					if(playerRegion != null){
 						playerRegion.alertSilentEntry(player);
 					}
+					if(permissions.has(player, PermissionNodes.TOOL_USE)){
+						ASUtils.sendToPlayer(player, isToolEnabled(player.getName()) ? (ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_ENABLE)) : (ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_DISABLE)), true);
+					}
 				}
 				int loaded = inventories.getLoaded();
 				if(loaded > 0){
@@ -425,6 +431,34 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public void disableSimpleNotice(String name){
 		disabledSNPlayers.add(name);
+	}
+
+	/**
+	 * Determines if a player decided to turn off tool support
+	 * 
+	 * @param name the player name
+	 * @return true if enabled
+	 */
+	public boolean isToolEnabled(String name){
+		return !disabledTools.contains(name);
+	}
+
+	/**
+	 * Enables tool support for a user
+	 * 
+	 * @param name the user
+	 */
+	public void enableTools(String name){
+		disabledTools.remove(name);
+	}
+
+	/**
+	 * Disables tool support for a user
+	 * 
+	 * @param name the user
+	 */
+	public void disableTools(String name){
+		disabledTools.add(name);
 	}
 
 	/**
