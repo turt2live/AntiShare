@@ -13,6 +13,7 @@ package com.turt2live.antishare.metrics;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.metrics.Metrics.Graph;
 
 /**
@@ -34,7 +35,8 @@ public class TrackerList extends ArrayList<Tracker> {
 		FEATURE_REGIONS("Features Used", "Regions"),
 		FEATURE_GM_BLOCKS("Features Used", "GameMode Blocks"),
 		FEATURE_INVENTORIES("Features Used", "Inventories"),
-		FEATURE_WORLD_SPLIT("Features Used", "World Split");
+		FEATURE_WORLD_SPLIT("Features Used", "World Split"),
+		LOCALE("Locale (File Name)", Localization.getLocaleFileName());
 
 		private String graphname = "DEFAULT";
 		private String name = "DEFAULT";
@@ -78,6 +80,7 @@ public class TrackerList extends ArrayList<Tracker> {
 			case FEATURE_INVENTORIES:
 			case FEATURE_GM_BLOCKS:
 			case FEATURE_WORLD_SPLIT:
+			case LOCALE:
 				add(new NonMovingTracker(type.getName(), type));
 				break;
 			case SPECIAL:

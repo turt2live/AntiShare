@@ -23,6 +23,7 @@ public class Localization {
 
 	private final AntiShare plugin;
 	private final EnhancedConfiguration locale;
+	private final String localeFileName;
 
 	private Localization(){
 		plugin = AntiShare.getInstance();
@@ -36,6 +37,7 @@ public class Localization {
 			locale = new File(plugin.getDataFolder(), "locale" + File.separator + "locale_en_US.yml");
 		}
 		this.locale = new EnhancedConfiguration(locale, plugin);
+		this.localeFileName = locale.getName();
 		this.locale.load();
 		checkLocale(this.locale);
 	}
@@ -131,6 +133,15 @@ public class Localization {
 	 */
 	public static String getMessage(LocaleMessage message){
 		return getInstance().getLocalizedMessage(message, (String[]) null);
+	}
+
+	/**
+	 * Gets the locale file name
+	 * 
+	 * @return the locale file name
+	 */
+	public static String getLocaleFileName(){
+		return getInstance().localeFileName;
 	}
 
 }
