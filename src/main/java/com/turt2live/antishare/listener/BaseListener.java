@@ -1890,7 +1890,7 @@ public class BaseListener implements Listener {
 		}
 
 		// AntiShare tools
-		if(permissions.has(player, PermissionNodes.TOOL_USE) && !isToolEnabled(player.getName())){
+		if(plugin.getPermissions().has(player, PermissionNodes.TOOL_USE) && !plugin.isToolEnabled(player.getName())){
 			ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_DISABLE), true);
 		}
 	}
