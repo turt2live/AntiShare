@@ -14,8 +14,8 @@ import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
 
 public class Cuboid implements Cloneable, ConfigurationSerializable {
 
-	private Location minimum, maximum, point1, point2;
-	private String worldName;
+	protected Location minimum, maximum, point1, point2;
+	protected String worldName;
 
 	/**
 	 * Creates a new cuboid

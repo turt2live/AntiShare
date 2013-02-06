@@ -17,6 +17,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
+import com.turt2live.antishare.cuboid.RegionCuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
@@ -34,7 +35,7 @@ public class Region {
 
 	private static AntiShare plugin = AntiShare.getInstance();
 	private String worldName = "antishare", owner = "antishare", id = "-1", enterMessage = "You entered {name}!", exitMessage = "You left {name}!", name = "AntiShareRegion";
-	private Cuboid size = new Cuboid();
+	private RegionCuboid size = new RegionCuboid(this);
 	private boolean showEnterMessage = true, showExitMessage = true;
 	private ASInventory inventory = null;
 	private final Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
@@ -122,7 +123,7 @@ public class Region {
 	 * 
 	 * @return the <b>cloned</b> cuboid of this region
 	 */
-	public Cuboid getCuboid(){
+	public RegionCuboid getCuboid(){
 		return size.clone();
 	}
 
@@ -209,12 +210,12 @@ public class Region {
 	}
 
 	/**
-	 * Sets the area by which this region occupies, this is not verified internally for overlapping regions. <b>The Cuboid passed is cloned before being set</b>
+	 * Sets the area by which this region occupies, this is not verified internally for overlapping regions. <b>The RegionCuboid passed is cloned before being set</b>
 	 * 
 	 * @param cuboid the new region area
 	 */
 	public void setCuboid(Cuboid cuboid){
-		this.size = cuboid.clone();
+		this.size = RegionCuboid.fromCuboid(cuboid, this);
 	}
 
 	/**
@@ -501,7 +502,7 @@ public class Region {
 			List<String> players = yaml.getStringList("players");
 			region.populatePlayers(players);
 
-			Cuboid area = (Cuboid) yaml.get("cuboid");
+			RegionCuboid area = (RegionCuboid) yaml.get("cuboid");
 			region.setCuboid(area);
 
 			region.setOwner(yaml.getString("owner"));
@@ -510,7 +511,7 @@ public class Region {
 			double max = yaml.getDouble("ma-x"), may = yaml.getDouble("ma-y"), maz = yaml.getDouble("ma-z");
 			Location l1 = new Location(world, mix, miy, miz);
 			Location l2 = new Location(world, max, may, maz);
-			Cuboid cuboid = new Cuboid(l1, l2);
+			RegionCuboid cuboid = new RegionCuboid(region, l1, l2);
 			region.setCuboid(cuboid);
 			region.setID(saveFile.getName().replace(".yml", ""));
 			region.setOwner(yaml.getString("set-by"));
@@ -557,6 +558,9 @@ public class Region {
 		}
 	}
 
+	/**
+	 * Called on region creation
+	 */
 	public void onCreate(){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
@@ -569,6 +573,11 @@ public class Region {
 		}
 	}
 
+	/**
+	 * Called on region update
+	 * 
+	 * @param last the old region cuboid
+	 */
 	public void onUpdate(Cuboid last){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
@@ -583,6 +592,9 @@ public class Region {
 		}
 	}
 
+	/**
+	 * Called on region deletion
+	 */
 	public void onDelete(){
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
