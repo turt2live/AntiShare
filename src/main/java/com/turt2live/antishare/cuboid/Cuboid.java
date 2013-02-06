@@ -14,7 +14,7 @@ import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
 
 public class Cuboid implements Cloneable, ConfigurationSerializable {
 
-	private Location minimum, maximum;
+	private Location minimum, maximum, point1, point2;
 	private String worldName;
 
 	/**
@@ -24,8 +24,8 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @param l2 the second location
 	 */
 	public Cuboid(Location l1, Location l2){
-		this.minimum = l1.clone();
-		this.maximum = l2.clone();
+		this.point1 = l1.clone();
+		this.point2 = l2.clone();
 		calculate();
 	}
 
@@ -105,8 +105,8 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @param l2 the second point
 	 */
 	public void setPoints(Location l1, Location l2){
-		this.minimum = l1 != null ? l1.clone() : null;
-		this.maximum = l2 != null ? l2.clone() : null;
+		this.point1 = l1 != null ? l1.clone() : null;
+		this.point2 = l2 != null ? l2.clone() : null;
 		if(this.worldName == null && (l1 != null || l2 != null)){
 			worldName = (l1 != null ? l1 : l2).getWorld().getName();
 		}
@@ -139,8 +139,14 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		if(!isValid()){
 			return;
 		}
-		minimum.setWorld(world);
-		maximum.setWorld(world);
+		if(minimum != null)
+			minimum.setWorld(world);
+		if(maximum != null)
+			maximum.setWorld(world);
+		if(point1 != null)
+			point1.setWorld(world);
+		if(point2 != null)
+			point2.setWorld(world);
 	}
 
 	/**
@@ -152,10 +158,10 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	public void setPoint(CuboidPoint point, Location value){
 		switch (point){
 		case POINT1:
-			this.maximum = value.clone();
+			this.point1 = value.clone();
 			break;
 		case POINT2:
-			this.minimum = value.clone();
+			this.point2 = value.clone();
 			break;
 		}
 		if(!isValid()){
@@ -170,7 +176,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the world applied
 	 */
 	public World getWorld(){
-		return Bukkit.getWorld(worldName);
+		return worldName == null ? null : Bukkit.getWorld(worldName);
 	}
 
 	/**
@@ -179,7 +185,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return true if valid
 	 */
 	public boolean isValid(){
-		return minimum != null && maximum != null && worldName != null;
+		return worldName != null && point1 != null && point2 != null;
 	}
 
 	private void calculate(){
@@ -187,17 +193,17 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 			return;
 		}
 		int mix = 0, miy = 0, miz = 0, max = 0, may = 0, maz = 0;
-		if(!minimum.getWorld().getName().equals(maximum.getWorld().getName())){
+		if(!point1.getWorld().getName().equals(point2.getWorld().getName())){
 			throw new IllegalArgumentException("Worlds not equal.");
 		}
-		this.worldName = minimum.getWorld().getName();
+		this.worldName = point1.getWorld().getName();
 		World world = getWorld();
-		mix = minimum.getBlockX() < maximum.getBlockX() ? minimum.getBlockX() : maximum.getBlockX();
-		miy = minimum.getBlockY() < maximum.getBlockY() ? minimum.getBlockY() : maximum.getBlockY();
-		miz = minimum.getBlockZ() < maximum.getBlockZ() ? minimum.getBlockZ() : maximum.getBlockZ();
-		max = minimum.getBlockX() > maximum.getBlockX() ? minimum.getBlockX() : maximum.getBlockX();
-		may = minimum.getBlockY() > maximum.getBlockY() ? minimum.getBlockY() : maximum.getBlockY();
-		maz = minimum.getBlockZ() > maximum.getBlockZ() ? minimum.getBlockZ() : maximum.getBlockZ();
+		mix = point1.getBlockX() < point2.getBlockX() ? point1.getBlockX() : point2.getBlockX();
+		miy = point1.getBlockY() < point2.getBlockY() ? point1.getBlockY() : point2.getBlockY();
+		miz = point1.getBlockZ() < point2.getBlockZ() ? point1.getBlockZ() : point2.getBlockZ();
+		max = point1.getBlockX() > point2.getBlockX() ? point1.getBlockX() : point2.getBlockX();
+		may = point1.getBlockY() > point2.getBlockY() ? point1.getBlockY() : point2.getBlockY();
+		maz = point1.getBlockZ() > point2.getBlockZ() ? point1.getBlockZ() : point2.getBlockZ();
 		minimum = new Location(world, mix, miy, miz);
 		maximum = new Location(world, max, may, maz);
 	}
@@ -233,7 +239,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	@Override
 	public Cuboid clone(){
 		Cuboid cuboid = new Cuboid();
-		cuboid.setPoints(minimum != null ? minimum.clone() : null, maximum != null ? maximum.clone() : null);
+		cuboid.setPoints(point1 != null ? point1.clone() : null, point2 != null ? point2.clone() : null);
 		if(worldName != null){
 			cuboid.setWorld(Bukkit.getWorld(worldName));
 		}
