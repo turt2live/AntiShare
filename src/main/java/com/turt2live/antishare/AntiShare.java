@@ -376,21 +376,32 @@ public class AntiShare extends PluginWrapper {
 
 			@Override
 			public void run(){
-				InventoryManager inventories = (InventoryManager) sys.getManager(Manager.INVENTORY);
-				RegionManager regions = (RegionManager) sys.getManager(Manager.REGION);
+				InventoryManager inventories = null;
+				RegionManager regions = null;
+				if(sys.isEnabled(Manager.INVENTORY)){
+					inventories = (InventoryManager) sys.getManager(Manager.INVENTORY);
+				}
+				if(sys.isEnabled(Manager.REGION)){
+					regions = (RegionManager) sys.getManager(Manager.REGION);
+				}
 				for(Player player : Bukkit.getOnlinePlayers()){
-					inventories.loadPlayer(player);
-					Region playerRegion = regions.getRegion(player.getLocation());
-					if(playerRegion != null){
-						playerRegion.alertSilentEntry(player);
+					if(inventories != null)
+						inventories.loadPlayer(player);
+					if(regions != null){
+						Region playerRegion = regions.getRegion(player.getLocation());
+						if(playerRegion != null){
+							playerRegion.alertSilentEntry(player);
+						}
 					}
 					if(permissions.has(player, PermissionNodes.TOOL_USE)){
 						ASUtils.sendToPlayer(player, isToolEnabled(player.getName()) ? (ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_ENABLE)) : (ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_DISABLE)), true);
 					}
 				}
-				int loaded = inventories.getLoaded();
-				if(loaded > 0){
-					getLogger().info(Localization.getMessage(LocaleMessage.STATUS_INVENTORIES, String.valueOf(loaded)));
+				if(inventories != null){
+					int loaded = inventories.getLoaded();
+					if(loaded > 0){
+						getLogger().info(Localization.getMessage(LocaleMessage.STATUS_INVENTORIES, String.valueOf(loaded)));
+					}
 				}
 			}
 		});
