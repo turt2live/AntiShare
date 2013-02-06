@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +68,8 @@ public class SelfCompatibility {
 		REGION,
 		MESSAGES,
 		WORLD,
-		FEATURES;
+		FEATURES,
+		LOCALE;
 	}
 
 	private static final String COMPAT_NAME = "compat.antishare";
@@ -339,6 +341,7 @@ public class SelfCompatibility {
 		files.put("data" + File.separator + "regions", FileType.REGION);
 		files.put("world_configurations", FileType.WORLD);
 		files.put("features.yml", FileType.FEATURES);
+		files.put("locale", FileType.LOCALE);
 		for(String name : files.keySet()){
 			File file = new File(plugin.getDataFolder(), name);
 			if(file.isDirectory()){
@@ -466,6 +469,13 @@ public class SelfCompatibility {
 			break;
 		case FEATURES:
 			local.loadDefaults(plugin.getResource("resources/features.yml"));
+			break;
+		case LOCALE:
+			InputStream stream = plugin.getResource("locale/" + file.getName());
+			if(stream == null){
+				stream = plugin.getResource("locale/locale_en_US.yml");
+			}
+			local.loadDefaults(stream);
 			break;
 		}
 		local.save();
