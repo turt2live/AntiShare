@@ -393,8 +393,8 @@ public class AntiShare extends PluginWrapper {
 							playerRegion.alertSilentEntry(player);
 						}
 					}
-					if(permissions.has(player, PermissionNodes.TOOL_USE)){
-						ASUtils.sendToPlayer(player, isToolEnabled(player.getName()) ? (ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_ENABLE)) : (ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_DISABLE)), true);
+					if(permissions.has(player, PermissionNodes.TOOL_USE) && !isToolEnabled(player.getName())){
+						ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_DISABLE), true);
 					}
 				}
 				if(inventories != null){
