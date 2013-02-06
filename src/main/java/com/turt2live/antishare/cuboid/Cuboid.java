@@ -3,6 +3,7 @@ package com.turt2live.antishare.cuboid;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -206,6 +207,13 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		maz = point1.getBlockZ() > point2.getBlockZ() ? point1.getBlockZ() : point2.getBlockZ();
 		minimum = new Location(world, mix, miy, miz);
 		maximum = new Location(world, max, may, maz);
+		if(AntiShare.isDebug()){
+			Logger log = AntiShare.getInstance().getLogger();
+			log.info("[DEBUG] [Cuboid Calculate] MAX = " + maximum);
+			log.info("[DEBUG] [Cuboid Calculate] MIN = " + minimum);
+			log.info("[DEBUG] [Cuboid Calculate] PO1 = " + point1);
+			log.info("[DEBUG] [Cuboid Calculate] PO2 = " + point2);
+		}
 	}
 
 	public static Cuboid deserialize(Map<String, Object> map){
@@ -233,6 +241,10 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		map.put("maximum X", maximum.getBlockX());
 		map.put("maximum Y", maximum.getBlockY());
 		map.put("maximum Z", maximum.getBlockZ());
+		if(AntiShare.isDebug()){
+			Logger log = AntiShare.getInstance().getLogger();
+			log.info("[DEBUG] [Cuboid Serialize] " + map);
+		}
 		return Collections.unmodifiableMap(map);
 	}
 

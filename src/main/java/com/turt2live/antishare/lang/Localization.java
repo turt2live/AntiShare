@@ -75,6 +75,9 @@ public class Localization {
 				localeMessage = localeMessage.replaceAll(regex, arguments[i]);
 			}
 		}
+		if(AntiShare.isDebug()){
+			AntiShare.getInstance().getLogger().info("[DEBUG] [Locale] " + message + " = " + localeMessage);
+		}
 		return localeMessage;
 	}
 

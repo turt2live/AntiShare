@@ -68,6 +68,7 @@ public class AntiShare extends PluginWrapper {
 	public static final Material ANTISHARE_SET_TOOL = Material.BLAZE_POWDER;
 
 	private static AntiShare instance;
+	private static boolean debugMode = false;
 	private Permissions permissions;
 	private ItemMap itemMap;
 	private BaseListener listener;
@@ -104,7 +105,7 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Check configuration
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_CHECK_CONFIG));
 		}
 		getConfig().loadDefaults(getResource("resources/config.yml"));
@@ -112,6 +113,9 @@ public class AntiShare extends PluginWrapper {
 			getConfig().saveDefaults();
 		}
 		getConfig().load();
+
+		// Debug mode
+		debugMode = getConfig().getBoolean("other.debug");
 
 		// Get build number
 		try{
@@ -127,7 +131,7 @@ public class AntiShare extends PluginWrapper {
 		}catch(IOException e){}
 
 		// Create version string
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_VERSION_STRING));
 		}
 		String val = getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + build;
@@ -141,7 +145,7 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Get all disabled SimpleNotice users
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_SIMPLENOTICE));
 		}
 		try{
@@ -170,7 +174,7 @@ public class AntiShare extends PluginWrapper {
 				getLogger().severe("**********************");
 			}
 		}
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_SETUP, LocaleMessage.SERVICE_METRICS));
 		}
 		try{
@@ -180,85 +184,85 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Register SimpleNotice channel to AntiShare
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_REGISTER, LocaleMessage.SERVICE_SIMPLE_NOTICE));
 		}
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
 
 		// Setup folder structure
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_FOLDERS));
 		}
 		SelfCompatibility.folderSetup();
 
 		// Convert blocks
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_BLOCKS));
 		}
 		SelfCompatibility.convertBlocks();
 
 		// Migrate world configurations
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_WORLDS));
 		}
 		SelfCompatibility.migrateWorldConfigurations();
 
 		// Migrate region players (3.8.0-3.9.0)
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_PLAYERS));
 		}
 		SelfCompatibility.migratePlayerData();
 
 		// Convert inventories (3.1.3-3.2.0/Current)
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_INVENTORIES, "3.1.3"));
 		}
 		SelfCompatibility.convert313Inventories();
 
 		// Convert inventories (5.2.0/5.3.0)
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_INVENTORIES, "5.2.0"));
 		}
 		SelfCompatibility.cleanup520Inventories();
 
 		// Convert inventories (5.3.0/Current)
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_INVENTORIES, "5.3.0"));
 		}
 		SelfCompatibility.cleanup530Inventories();
 
 		// Cleanup old files
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_CLEANUP, LocaleMessage.SERVICE_INVENTORIES));
 		}
 		SelfCompatibility.cleanupOldInventories(); // Handles on/off in config internally
 
 		// Cleanup old files
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_CLEANUP, LocaleMessage.DICT_CONFIG_FILES));
 		}
 		SelfCompatibility.cleanupYAML();
 
 		// Cleanup old files
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info("[Self Compat] " + Localization.getMessage(LocaleMessage.START_COMPAT_CLEANUP, LocaleMessage.SERVICE_BLOCKS));
 		}
 		SelfCompatibility.cleanup520blocks();
 
 		// Pre-load
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_SIGNS));
 		}
 		signs = new SignList();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_PERMISSIONS));
 		}
 		permissions = new Permissions();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_ITEM_MAP));
 		}
 		itemMap = new ItemMap();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_METRICS_TRACKERS));
 		}
 		trackers = new TrackerList();
@@ -268,40 +272,40 @@ public class AntiShare extends PluginWrapper {
 		sys.load();
 
 		// Setup everything
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_LISTENER));
 		}
 		listener = new BaseListener();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_ALERTS));
 		}
 		alerts = new Alert();
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_MESSAGES));
 		}
 		messages = new Messages();
 
 		// Statistics
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_UPDATE));
 		}
 		UpdateChecker.start();
 		// mcstats.org
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_METRICS));
 		}
 		trackers.addTo(metrics);
 		metrics.start(); // Handles it's own opt-out
 
 		// Start listeners
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_REGISTER, LocaleMessage.SERVICE_LISTENER));
 		}
 		getServer().getPluginManager().registerEvents(permissions, this);
 		getServer().getPluginManager().registerEvents(listener, this);
 
 		// Command handlers
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_SETUP, LocaleMessage.SERVICE_COMMANDS));
 		}
 		getCommand("antishare").setExecutor(new CommandHandler());
@@ -310,7 +314,7 @@ public class AntiShare extends PluginWrapper {
 		// Enabled
 		getLogger().info(Localization.getMessage(LocaleMessage.ENABLED));
 
-		if(!getConfig().getBoolean("other.more-quiet-startup")){
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_SCHEDULE, LocaleMessage.SERVICE_REGION_INVENTORY_UPDATE));
 		}
 		loadPlayerInformation();
@@ -320,7 +324,7 @@ public class AntiShare extends PluginWrapper {
 	public void onDisable(){
 		// Save
 		if(metrics != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown")){
+			if(!getConfig().getBoolean("other.more-quiet-shutdown") || debugMode){
 				getLogger().info(Localization.getMessage(LocaleMessage.STOP_FLUSH, LocaleMessage.SERVICE_METRICS));
 			}
 			metrics.flush();
@@ -714,6 +718,15 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public String getBuild(){
 		return build;
+	}
+
+	/**
+	 * Determines if AntiShare is in debug mode
+	 * 
+	 * @return true if in debug mode
+	 */
+	public static boolean isDebug(){
+		return debugMode;
 	}
 
 }

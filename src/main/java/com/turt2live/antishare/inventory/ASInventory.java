@@ -77,6 +77,9 @@ public class ASInventory implements Cloneable {
 			int slot = 0;
 			for(ItemStack item : contents){
 				inventory.set(slot, item);
+				if(AntiShare.isDebug()){
+					AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate] S=" + slot + " I=" + item + " T=" + type + " P=" + player.getName() + " G=" + player.getGameMode() + " W=" + player.getWorld().getName());
+				}
 				slot++;
 			}
 		}else{
@@ -84,12 +87,18 @@ public class ASInventory implements Cloneable {
 			int slot = 0;
 			for(ItemStack item : contents){
 				inventory.set(slot, item);
+				if(AntiShare.isDebug()){
+					AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate] S=" + slot + " I=" + item + " T=" + type + " P=" + player.getName() + " G=" + player.getGameMode() + " W=" + player.getWorld().getName());
+				}
 				slot++;
 			}
 			contents = player.getInventory().getArmorContents();
 			slot = 100;
 			for(ItemStack item : contents){
 				inventory.set(slot, item);
+				if(AntiShare.isDebug()){
+					AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate] S=" + slot + " I=" + item + " T=" + type + " P=" + player.getName() + " G=" + player.getGameMode() + " W=" + player.getWorld().getName());
+				}
 				slot++;
 			}
 		}
@@ -141,6 +150,9 @@ public class ASInventory implements Cloneable {
 						Integer slot = Integer.valueOf(strSlot);
 						ItemStack item = file.getItemStack(world + "." + gamemode + "." + strSlot);
 						inventory.set(slot, item);
+						if(AntiShare.isDebug()){
+							AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate (FILE)] S=" + slot + " I=" + item + " T=" + type + " P=" + name + " G=" + gamemode + " W=" + world);
+						}
 					}
 					inventories.add(inventory);
 				}
@@ -227,6 +239,9 @@ public class ASInventory implements Cloneable {
 				inventory.put(slot, new ItemStack(Material.AIR, 1));
 				item = new ItemStack(Material.AIR, 1);
 			}
+			if(AntiShare.isDebug()){
+				AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Set] SET " + item + " SLOT " + slot + " TO " + player.getName() + " T=" + type);
+			}
 			if(slot < 100){
 				pInventory.setItem(slot, item);
 			}else{
@@ -273,6 +288,9 @@ public class ASInventory implements Cloneable {
 			ItemStack item = inventory.get(slot);
 			if(item == null || item.getType() == Material.AIR){
 				continue;
+			}
+			if(AntiShare.isDebug()){
+				AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Save] SAVE " + item + " S=" + slot + " T=" + type + " G=" + gamemode + " W=" + world + " N=" + getName());
 			}
 
 			// Save item
