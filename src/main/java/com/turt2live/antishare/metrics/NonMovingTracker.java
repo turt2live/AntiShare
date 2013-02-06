@@ -6,6 +6,9 @@ public class NonMovingTracker extends Tracker {
 
 	public NonMovingTracker(String name, TrackerType type){
 		super(name, type);
+		if(type == TrackerType.LOCALE){
+			super.value = 1;
+		}
 	}
 
 	@Override
