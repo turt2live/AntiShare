@@ -240,6 +240,7 @@
                 <includes>
                   <include>com.feildmaster.lib:EnhancedConfiguration</include>
                   <include>com.turt2live.materials:MaterialAPI</include>
+                  <include>com.turt2live.metrics:MetricsExtension</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -249,6 +250,10 @@
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.materials</pattern>
+                  <shadedPattern>com.turt2live.materials.${project.name}</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.turt2live.metrics</pattern>
                   <shadedPattern>com.turt2live.materials.${project.name}</shadedPattern>
                 </relocation>
               </relocations>
