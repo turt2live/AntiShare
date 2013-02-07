@@ -34,8 +34,7 @@ import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.listener.BaseListener;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.manager.RegionManager;
-import com.turt2live.antishare.metrics.Metrics;
-import com.turt2live.antishare.metrics.TrackerList;
+import com.turt2live.antishare.metrics.TrackerType;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -46,6 +45,9 @@ import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.generic.ItemMap;
 import com.turt2live.antishare.util.generic.SelfCompatibility;
 import com.turt2live.antishare.util.generic.UpdateChecker;
+import com.turt2live.metrics.EMetrics;
+import com.turt2live.metrics.tracker.BasicTracker;
+import com.turt2live.metrics.tracker.EnabledTracker;
 
 /**
  * AntiShare
@@ -74,8 +76,7 @@ public class AntiShare extends PluginWrapper {
 	private BaseListener listener;
 	private Alert alerts;
 	private Messages messages;
-	private Metrics metrics;
-	private TrackerList trackers;
+	private EMetrics metrics;
 	private SignList signs;
 	private final List<String> disabledSNPlayers = new ArrayList<String>();
 	private final List<String> disabledTools = new ArrayList<String>();
@@ -178,7 +179,7 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info(Localization.getMessage(LocaleMessage.START_SETUP, LocaleMessage.SERVICE_METRICS));
 		}
 		try{
-			metrics = new Metrics(this);
+			metrics = new EMetrics(this);
 		}catch(IOException e1){
 			e1.printStackTrace();
 		}
@@ -265,7 +266,24 @@ public class AntiShare extends PluginWrapper {
 		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_METRICS_TRACKERS));
 		}
-		trackers = new TrackerList();
+		for(TrackerType type : TrackerType.values()){
+			switch (type){
+			case FEATURE_FINES_REWARDS:
+			case FEATURE_SIGNS:
+			case FEATURE_REGIONS:
+			case FEATURE_INVENTORIES:
+			case FEATURE_GM_BLOCKS:
+			case FEATURE_WORLD_SPLIT:
+			case LOCALE:
+				metrics.addTracker(new EnabledTracker(type.getGraphName(), type.getName()));
+				break;
+			case SPECIAL:
+				break;
+			default:
+				metrics.addTracker(new BasicTracker(type.getGraphName(), type.getName()));
+				break;
+			}
+		}
 
 		// Startup Systems Manager
 		sys = new Systems();
@@ -294,8 +312,7 @@ public class AntiShare extends PluginWrapper {
 		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
 			getLogger().info(Localization.getMessage(LocaleMessage.START_START, LocaleMessage.SERVICE_METRICS));
 		}
-		trackers.addTo(metrics);
-		metrics.start(); // Handles it's own opt-out
+		metrics.startMetrics(); // Handles it's own opt-out
 
 		// Start listeners
 		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
@@ -323,12 +340,6 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
-		if(metrics != null){
-			if(!getConfig().getBoolean("other.more-quiet-shutdown") || debugMode){
-				getLogger().info(Localization.getMessage(LocaleMessage.STOP_FLUSH, LocaleMessage.SERVICE_METRICS));
-			}
-			metrics.flush();
-		}
 		if(sys != null){
 			sys.save();
 		}
@@ -344,7 +355,6 @@ public class AntiShare extends PluginWrapper {
 		alerts = null;
 		messages = null;
 		metrics = null;
-		trackers = null;
 		signs = null;
 		sys = null;
 
@@ -680,17 +690,8 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the metrics
 	 */
-	public Metrics getMetrics(){
+	public EMetrics getMetrics(){
 		return metrics;
-	}
-
-	/**
-	 * Gets the tracker list being used by AntiShare
-	 * 
-	 * @return the trackers
-	 */
-	public TrackerList getTrackers(){
-		return trackers;
 	}
 
 	/**

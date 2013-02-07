@@ -15,7 +15,8 @@ import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.manager.WorldConfigurationManager;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
+import com.turt2live.antishare.metrics.TrackerType;
+import com.turt2live.metrics.tracker.Tracker;
 
 public class Systems {
 
@@ -110,7 +111,10 @@ public class Systems {
 					man.load();
 					managers.put(s, man);
 					if(s.getTrackerType() != null){
-						plugin.getTrackers().getTracker(s.getTrackerType()).increment(1);
+						Tracker track = plugin.getMetrics().getTracker(s.getTrackerType().getName());
+						if(track != null){
+							track.increment(1);
+						}
 					}
 				}catch(InstantiationException e){
 					e.printStackTrace();

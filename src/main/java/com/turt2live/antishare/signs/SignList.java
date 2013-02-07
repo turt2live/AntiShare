@@ -18,7 +18,8 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
+import com.turt2live.antishare.metrics.TrackerType;
+import com.turt2live.metrics.tracker.Tracker;
 
 /**
  * Manages signs
@@ -47,7 +48,10 @@ public class SignList extends ArrayList<Sign> {
 		// Load
 		reload();
 		if(size() > 0){
-			plugin.getTrackers().getTracker(TrackerType.FEATURE_SIGNS).increment(1);
+			Tracker tracker = plugin.getMetrics().getTracker(TrackerType.FEATURE_SIGNS.getName());
+			if(tracker != null){
+				tracker.increment(1);
+			}
 		}
 	}
 

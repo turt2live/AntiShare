@@ -48,6 +48,15 @@
       <scope>compile</scope>
     </dependency>
 
+    <!-- Metrics Extension -->
+    <dependency>
+      <groupId>com.turt2live.metrics</groupId>
+      <artifactId>MetricsExtension</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
     <!-- PEX -->
     <dependency>
       <groupId>ru.tehkode</groupId>

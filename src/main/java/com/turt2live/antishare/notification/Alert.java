@@ -22,12 +22,11 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.manager.MoneyManager;
-import com.turt2live.antishare.metrics.ActionsTracker;
-import com.turt2live.antishare.metrics.Tracker;
-import com.turt2live.antishare.metrics.TrackerList.TrackerType;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.materials.MaterialAPI;
+import com.turt2live.metrics.tracker.BasicTracker;
+import com.turt2live.metrics.tracker.Tracker;
 
 /**
  * Alerts people
@@ -128,12 +127,12 @@ public class Alert {
 			case CLOSE_TO_WORLD_SPLIT:
 				break;
 			default:
-				ActionsTracker legal = new ActionsTracker(MaterialAPI.capitalize(trigger.name()), TrackerType.SPECIAL, "Legal Actions");
-				ActionsTracker illegal = new ActionsTracker(MaterialAPI.capitalize(trigger.name()), TrackerType.SPECIAL, "Illegal Actions");
+				Tracker legal = new BasicTracker("Legal Actions", MaterialAPI.capitalize(trigger.name()));
+				Tracker illegal = new BasicTracker("Illegal Actions", MaterialAPI.capitalize(trigger.name()));
 				this.legal.put(trigger, legal);
 				this.illegal.put(trigger, illegal);
-				AntiShare.getInstance().getTrackers().add(illegal);
-				AntiShare.getInstance().getTrackers().add(legal);
+				AntiShare.getInstance().getMetrics().addTracker(illegal);
+				AntiShare.getInstance().getMetrics().addTracker(legal);
 			}
 		}
 	}
