@@ -21,6 +21,7 @@ Since 5.3.0:
 - Misc. Fixes:
     - Fixed region owner names not being loaded
     - Fixed cuboids not acting as expected
+    - Fixed notifications not being accurate for animals
 Developer Additions:
     - Added 'RegionCuboids' (easy way to determine if a cuboid is for a region or not)
 
