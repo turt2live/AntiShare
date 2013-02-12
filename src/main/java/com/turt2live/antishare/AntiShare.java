@@ -136,8 +136,10 @@ public class AntiShare extends PluginWrapper {
 			getLogger().info(Localization.getMessage(LocaleMessage.START_VERSION_STRING));
 		}
 		String val = getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + build;
-		getConfig().set("error-reporting.error-string", val);
-		saveConfig();
+		if(!getConfig().getString("error-reporting.error-string", "").equalsIgnoreCase(val)){
+			getConfig().set("error-reporting.error-string", val);
+			saveConfig();
+		}
 
 		// Move SimpleNotice file
 		File oldSNFile = new File(getDataFolder(), "disabled-simplenotice-users.txt");
