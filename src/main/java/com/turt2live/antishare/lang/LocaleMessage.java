@@ -64,6 +64,7 @@ public enum LocaleMessage{
 	START_START("startup.start"),
 	START_REGISTER("startup.register"),
 	START_SCHEDULE("startup.schedule"),
+	START_PAIL("startup.pail"),
 	START_COMPAT_FOLDERS("startup.compat.folders"),
 	START_COMPAT_BLOCKS("startup.compat.blocks"),
 	START_COMPAT_WORLDS("startup.compat.worlds"),

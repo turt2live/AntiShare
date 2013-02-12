@@ -57,6 +57,15 @@
       <scope>compile</scope>
     </dependency>
 
+    <!-- Pail -->
+    <dependency>
+      <groupId>me.escapeNT</groupId>
+      <artifactId>pail</artifactId>
+      <version>0.8</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/Pail.jar</systemPath>
+    </dependency>
+
     <!-- PEX -->
     <dependency>
       <groupId>ru.tehkode</groupId>

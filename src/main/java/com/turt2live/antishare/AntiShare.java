@@ -26,6 +26,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.Systems.Manager;
@@ -37,6 +38,7 @@ import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.metrics.TrackerType;
 import com.turt2live.antishare.notification.Alert;
 import com.turt2live.antishare.notification.Messages;
+import com.turt2live.antishare.pail.PailHook;
 import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.permissions.Permissions;
 import com.turt2live.antishare.regions.Region;
@@ -329,6 +331,15 @@ public class AntiShare extends PluginWrapper {
 		}
 		getCommand("antishare").setExecutor(new CommandHandler());
 		getCommand("antishare").setTabCompleter(new TabHandler());
+
+		// Load pail
+		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
+			getLogger().info(Localization.getMessage(LocaleMessage.START_PAIL, LocaleMessage.SERVICE_COMMANDS));
+		}
+		Plugin pail = getServer().getPluginManager().getPlugin("Pail");
+		if(pail != null){
+			PailHook.start(pail);
+		}
 
 		// Enabled
 		getLogger().info(Localization.getMessage(LocaleMessage.ENABLED));

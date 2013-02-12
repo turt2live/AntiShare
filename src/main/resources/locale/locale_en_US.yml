@@ -71,6 +71,7 @@ startup:
     start: 'Starting {0}...'
     register: 'Registering {0}...'
     schedule: 'Scheduling {0}...'
+    pail: 'Looking for pail...'
     compat:
         folders: 'Setting up plugins/AntiShare...'
         blocks: 'Converting blocks...'
