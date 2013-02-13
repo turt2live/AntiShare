@@ -73,8 +73,8 @@ public class Localization {
 		String localeMessage = locale.getString(message.getConfigurationNode());
 		if(arguments != null){
 			for(int i = 0; i < arguments.length; i++){
-				String regex = "\\{" + i + "\\}";
-				localeMessage = localeMessage.replaceAll(regex, arguments[i]);
+				String replaceString = "{" + i + "}";
+				localeMessage = localeMessage.replace(replaceString, arguments[i]);
 			}
 		}
 		if(AntiShare.isDebug()){
