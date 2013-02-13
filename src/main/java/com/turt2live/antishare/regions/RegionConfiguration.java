@@ -32,9 +32,9 @@ import com.turt2live.antishare.util.events.EventList;
  */
 public class RegionConfiguration {
 
-	private EventList block_break;
-	private EventList block_place;
-	private EventList right_click;
+	private EventList blockBreak;
+	private EventList blockPlace;
+	private EventList rightClick;
 	private EventList use;
 	private EventList drop;
 	private EventList pickup;
@@ -72,12 +72,12 @@ public class RegionConfiguration {
 		regionConfig.load();
 
 		// Generate lists
-		block_place = getList("block-place", "block-place", regionConfig, false);
-		block_break = getList("block-break", "block-break", regionConfig, false);
+		blockPlace = getList("block-place", "block-place", regionConfig, false);
+		blockBreak = getList("block-break", "block-break", regionConfig, false);
 		death = getList("drop-items-on-death", "dropped-items-on-death", regionConfig, false);
 		pickup = getList("pickup-items", "picked-up-items", regionConfig, false);
 		drop = getList("drop-items", "dropped-items", regionConfig, false);
-		right_click = getList("right-click", "right-click", regionConfig, false);
+		rightClick = getList("right-click", "right-click", regionConfig, false);
 		use = getList("use-items", "use-items", regionConfig, false);
 		commands = getList("commands", "commands", regionConfig, true);
 		mobs = getList("combat-against-mobs", "mobs", regionConfig);
@@ -213,11 +213,11 @@ public class RegionConfiguration {
 	public boolean isBlocked(Material material, ListType list){
 		switch (list){
 		case BLOCK_BREAK:
-			return block_break.isBlocked(material);
+			return blockBreak.isBlocked(material);
 		case BLOCK_PLACE:
-			return block_place.isBlocked(material);
+			return blockPlace.isBlocked(material);
 		case RIGHT_CLICK:
-			return right_click.isBlocked(material);
+			return rightClick.isBlocked(material);
 		case USE:
 			return use.isBlocked(material);
 		case DROP:
@@ -243,11 +243,11 @@ public class RegionConfiguration {
 	public boolean isBlocked(Block block, ListType list){
 		switch (list){
 		case BLOCK_BREAK:
-			return block_break.isBlocked(block);
+			return blockBreak.isBlocked(block);
 		case BLOCK_PLACE:
-			return block_place.isBlocked(block);
+			return blockPlace.isBlocked(block);
 		case RIGHT_CLICK:
-			return right_click.isBlocked(block);
+			return rightClick.isBlocked(block);
 		case USE:
 			return use.isBlocked(block);
 		case DROP:

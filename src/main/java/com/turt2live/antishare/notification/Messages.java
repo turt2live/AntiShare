@@ -58,6 +58,11 @@ public class Messages {
 		return message;
 	}
 
+	/**
+	 * Gets the plugin prefix
+	 * 
+	 * @return the prefix
+	 */
 	public String getPrefix(){
 		return messages.getString("prefix");
 	}

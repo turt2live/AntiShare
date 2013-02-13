@@ -20,7 +20,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.money.Tender.TenderType;
-import com.turt2live.antishare.util.generic.MVWorlds;
+import com.turt2live.antishare.util.generic.MultiVerseWorld;
 import com.turt2live.materials.MaterialAPI;
 
 /**
@@ -30,18 +30,18 @@ import com.turt2live.materials.MaterialAPI;
  */
 public class MessageFactory {
 
-	public static final String BLOCK = "\\{BLOCK\\}";
-	public static final String PLAYER = "\\{PLAYER\\}";
-	public static final String DISPLAY_NAME = "\\{DNAME\\}";
-	public static final String WORLD = "\\{WORLD\\}";
-	public static final String MVWORLD = "\\{MVWORLD\\}";
-	public static final String FINE = "\\{FINE\\}";
-	public static final String REWARD = "\\{REWARD\\}";
-	public static final String CLICKED = "\\{CLICKED\\}";
-	public static final String AMOUNT = "\\{AMOUNT\\}";
-	public static final String COMMAND = "\\{COMMAND\\}";
-	public static final String HIT_PLAYER = "\\{HIT PLAYER\\}";
-	public static final String HIT_MOB = "\\{HIT MOB\\}";
+	public static final String BLOCK = "{BLOCK}";
+	public static final String PLAYER = "{PLAYER}";
+	public static final String DISPLAY_NAME = "{DNAME}";
+	public static final String WORLD = "{WORLD}";
+	public static final String MVWORLD = "{MVWORLD}";
+	public static final String FINE = "{FINE}";
+	public static final String REWARD = "{REWARD}";
+	public static final String CLICKED = "{CLICKED}";
+	public static final String AMOUNT = "{AMOUNT}";
+	public static final String COMMAND = "{COMMAND}";
+	public static final String HIT_PLAYER = "{HIT PLAYER}";
+	public static final String HIT_MOB = "{HIT MOB}";
 	public static final String DEFAULT_MESSAGE = "no message";
 
 	private final AntiShare plugin = AntiShare.getInstance();
@@ -75,18 +75,6 @@ public class MessageFactory {
 	}
 
 	/**
-	 * Replace a value
-	 * 
-	 * @param key the key
-	 * @param value the value
-	 * @return the active message factory
-	 */
-	public MessageFactory replace(String key, String value){
-		message = message.replace(key, value);
-		return this;
-	}
-
-	/**
 	 * Replace all of a value
 	 * 
 	 * @param key the key
@@ -94,7 +82,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory replaceAll(String key, String value){
-		message = message.replaceAll(key, value);
+		message = message.replace(key, value);
 		return this;
 	}
 
@@ -105,7 +93,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertBlock(Block block){
-		message = message.replaceAll(BLOCK, MaterialAPI.capitalize(block.getType().name()));
+		message = message.replace(BLOCK, MaterialAPI.capitalize(block.getType().name()));
 		return this;
 	}
 
@@ -116,7 +104,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertBlock(Material block){
-		message = message.replaceAll(BLOCK, MaterialAPI.capitalize(block.name()));
+		message = message.replace(BLOCK, MaterialAPI.capitalize(block.name()));
 		return this;
 	}
 
@@ -127,8 +115,8 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertPlayer(Player player){
-		message = message.replaceAll(PLAYER, player.getName());
-		message = message.replaceAll(DISPLAY_NAME, player.getDisplayName());
+		message = message.replace(PLAYER, player.getName());
+		message = message.replace(DISPLAY_NAME, player.getDisplayName());
 		return this;
 	}
 
@@ -139,8 +127,8 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertWorld(World world){
-		message = message.replaceAll(WORLD, world.getName());
-		message = message.replaceAll(MVWORLD, MVWorlds.getAlias(world));
+		message = message.replace(WORLD, world.getName());
+		message = message.replace(MVWORLD, MultiVerseWorld.getAlias(world));
 		return this;
 	}
 
@@ -151,8 +139,8 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertTender(TenderType type){
-		message = message.replaceAll(FINE, ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getFine(type).getAmount()));
-		message = message.replaceAll(REWARD, ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getReward(type).getAmount()));
+		message = message.replace(FINE, ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getFine(type).getAmount()));
+		message = message.replace(REWARD, ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getReward(type).getAmount()));
 		return this;
 	}
 
@@ -163,7 +151,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertClicked(String clicked){
-		message = message.replaceAll(CLICKED, clicked);
+		message = message.replace(CLICKED, clicked);
 		return this;
 	}
 
@@ -174,7 +162,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertAmount(int amount){
-		message = message.replaceAll(AMOUNT, String.valueOf(amount));
+		message = message.replace(AMOUNT, String.valueOf(amount));
 		return this;
 	}
 
@@ -185,7 +173,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertCommand(String command){
-		message = message.replaceAll(COMMAND, command);
+		message = message.replace(COMMAND, command);
 		return this;
 	}
 
@@ -196,7 +184,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertHitMob(String mobName){
-		message = message.replaceAll(HIT_MOB, mobName);
+		message = message.replace(HIT_MOB, mobName);
 		return this;
 	}
 
@@ -207,7 +195,7 @@ public class MessageFactory {
 	 * @return the active message factory
 	 */
 	public MessageFactory insertHitPlayer(String playerName){
-		message = message.replaceAll(HIT_PLAYER, playerName);
+		message = message.replace(HIT_PLAYER, playerName);
 		return this;
 	}
 

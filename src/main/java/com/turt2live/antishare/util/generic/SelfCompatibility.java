@@ -38,57 +38,57 @@ import com.turt2live.antishare.util.ASUtils;
  */
 public class SelfCompatibility {
 
-	private static enum Compat{
-		BLOCKS(0),
-		PLAYER_DATA(5),
-		INV_313(10),
-		WORLD_CONF(15),
+	private static enum CompatibilityType{
+		BLOCK_CONVERSION(0),
+		REGION_PLAYER_DATA_MIGRATE(5),
+		INVENTORY_313(10),
+		WORLD_CONFIGURATION_MIGRATE(15),
 		// Above is the estimated version applied in
 		// -------------------------------------------
 		// Below is the version applied in
 		@Deprecated
-		CONFIG_520(20),
+		CONFIGURATION_520(20),
 		@Deprecated
-		CONFIG_530(25),
-		INV_520(30),
-		BLOCKS_540(35),
-		INV_540(40),
-		CONFIG_540(45);
+		CONFIGURATION_530(25),
+		INVENTORY_520(30),
+		BLOCK_BUG_CLEANUP_540(35),
+		INVENTORY_540(40),
+		CONFIGURATION_540(45);
 
-		public final int BYTE_POS;
+		public final int bytePosition;
 
-		private Compat(int byt){
-			BYTE_POS = byt;
+		private CompatibilityType(int byt){
+			bytePosition = byt;
 		}
 	}
 
 	private static enum FileType{
-		CONFIG,
+		CONFIGURATION,
 		NOTIFICATIONS,
-		REGION,
+		REGION_CONFIGURATION,
 		MESSAGES,
-		WORLD,
+		WORLD_CONFIGURATION,
 		FEATURES,
 		LOCALE;
 	}
 
-	private static final String COMPAT_NAME = "compat.antishare";
+	private static final String COMPATIBILITY_FILE_NAME = "compat.antishare";
 
-	private static void noLongerNeedsUpdate(Compat compat){
+	private static void noLongerNeedsUpdate(CompatibilityType compatType){
 		RandomAccessFile file = getFile();
 		if(file != null){
 			try{
-				file.seek(compat.BYTE_POS);
+				file.seek(compatType.bytePosition);
 				file.writeBoolean(false);
 			}catch(IOException e){}
 		}
 	}
 
-	private static boolean needsUpdate(Compat compat){
+	private static boolean needsUpdate(CompatibilityType compat){
 		RandomAccessFile file = getFile();
 		if(file != null){
 			try{
-				file.seek(compat.BYTE_POS);
+				file.seek(compat.bytePosition);
 				return file.readBoolean();
 			}catch(IOException e){}
 			return true;
@@ -97,7 +97,7 @@ public class SelfCompatibility {
 	}
 
 	private static RandomAccessFile getFile(){
-		File rfile = new File(AntiShare.getInstance().getDataFolder(), "data" + File.separator + COMPAT_NAME);
+		File rfile = new File(AntiShare.getInstance().getDataFolder(), "data" + File.separator + COMPATIBILITY_FILE_NAME);
 		if(!rfile.exists()){
 			try{
 				rfile.createNewFile();
@@ -114,7 +114,7 @@ public class SelfCompatibility {
 	 * Migrates the world configurations to their own folder
 	 */
 	public static void migrateWorldConfigurations(){
-		if(!needsUpdate(Compat.WORLD_CONF)){
+		if(!needsUpdate(CompatibilityType.WORLD_CONFIGURATION_MIGRATE)){
 			return;
 		}
 		File directory = AntiShare.getInstance().getDataFolder();
@@ -122,7 +122,6 @@ public class SelfCompatibility {
 		int files = 0;
 		if(directory.listFiles() != null){
 			for(File file : directory.listFiles(new FileFilter(){
-
 				@Override
 				public boolean accept(File arg0){
 					if(arg0.getName().endsWith("_config.yml")){
@@ -139,14 +138,14 @@ public class SelfCompatibility {
 				AntiShare.getInstance().getLogger().info(Localization.getMessage(LocaleMessage.STATUS_WORLD_MIGRATE, String.valueOf(files)));
 			}
 		}
-		noLongerNeedsUpdate(Compat.WORLD_CONF);
+		noLongerNeedsUpdate(CompatibilityType.WORLD_CONFIGURATION_MIGRATE);
 	}
 
 	/**
 	 * Convert 4.4.0 to 4.4.1+ system
 	 */
 	public static void convertBlocks(){
-		if(!needsUpdate(Compat.BLOCKS)){
+		if(!needsUpdate(CompatibilityType.BLOCK_CONVERSION)){
 			return;
 		}
 		int converted = 0;
@@ -180,14 +179,14 @@ public class SelfCompatibility {
 		if(converted > 0){
 			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_BLOCKS_CONVERTED, String.valueOf(converted)));
 		}
-		noLongerNeedsUpdate(Compat.BLOCKS);
+		noLongerNeedsUpdate(CompatibilityType.BLOCK_CONVERSION);
 	}
 
 	/**
 	 * Migrates player data from region_players to data/region_players
 	 */
 	public static void migratePlayerData(){
-		if(!needsUpdate(Compat.PLAYER_DATA)){
+		if(!needsUpdate(CompatibilityType.REGION_PLAYER_DATA_MIGRATE)){
 			return;
 		}
 		AntiShare plugin = AntiShare.getInstance();
@@ -204,14 +203,14 @@ public class SelfCompatibility {
 			}
 			oldSaveFolder.delete();
 		}
-		noLongerNeedsUpdate(Compat.PLAYER_DATA);
+		noLongerNeedsUpdate(CompatibilityType.REGION_PLAYER_DATA_MIGRATE);
 	}
 
 	/**
 	 * Converts 3.1.3 inventories to 3.2.0+ style
 	 */
 	public static void convert313Inventories(){
-		if(!needsUpdate(Compat.INV_313)){
+		if(!needsUpdate(CompatibilityType.INVENTORY_313)){
 			return;
 		}
 		AntiShare plugin = AntiShare.getInstance();
@@ -267,7 +266,7 @@ public class SelfCompatibility {
 			if(files.length > 0){
 				plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_INV_CONVERT, String.valueOf(files.length)));
 			}
-			noLongerNeedsUpdate(Compat.INV_313);
+			noLongerNeedsUpdate(CompatibilityType.INVENTORY_313);
 		}
 	}
 
@@ -329,17 +328,17 @@ public class SelfCompatibility {
 	 * Cleans YAML files
 	 */
 	public static void cleanupYAML(){
-		if(!needsUpdate(Compat.CONFIG_540)){
+		if(!needsUpdate(CompatibilityType.CONFIGURATION_540)){
 			return;
 		}
 		int cleaned = 0;
 		AntiShare plugin = AntiShare.getInstance();
 		Map<String, FileType> files = new HashMap<String, FileType>();
-		files.put("config.yml", FileType.CONFIG);
+		files.put("config.yml", FileType.CONFIGURATION);
 		files.put("messages.yml", FileType.MESSAGES);
 		files.put("notifications.yml", FileType.NOTIFICATIONS);
-		files.put("data" + File.separator + "regions", FileType.REGION);
-		files.put("world_configurations", FileType.WORLD);
+		files.put("data" + File.separator + "regions", FileType.REGION_CONFIGURATION);
+		files.put("world_configurations", FileType.WORLD_CONFIGURATION);
 		files.put("features.yml", FileType.FEATURES);
 		files.put("locale", FileType.LOCALE);
 		for(String name : files.keySet()){
@@ -354,14 +353,14 @@ public class SelfCompatibility {
 		if(cleaned > 0){
 			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CLEAN, String.valueOf(cleaned)));
 		}
-		noLongerNeedsUpdate(Compat.CONFIG_540);
+		noLongerNeedsUpdate(CompatibilityType.CONFIGURATION_540);
 	}
 
 	/**
 	 * Relocates 5.2.0 inventories
 	 */
 	public static void cleanup520Inventories(){
-		if(!needsUpdate(Compat.INV_520)){
+		if(!needsUpdate(CompatibilityType.INVENTORY_520)){
 			return;
 		}
 		File data = AntiShare.getInstance().getDataFolder();
@@ -370,14 +369,14 @@ public class SelfCompatibility {
 		if(inventoryFile.exists()){
 			inventoryFile.renameTo(newFolder);
 		}
-		noLongerNeedsUpdate(Compat.INV_520);
+		noLongerNeedsUpdate(CompatibilityType.INVENTORY_520);
 	}
 
 	/**
 	 * Relocates 5.3.0 inventories
 	 */
 	public static void cleanup530Inventories(){
-		if(!needsUpdate(Compat.INV_540)){
+		if(!needsUpdate(CompatibilityType.INVENTORY_540)){
 			return;
 		}
 		File data = AntiShare.getInstance().getDataFolder();
@@ -393,14 +392,14 @@ public class SelfCompatibility {
 			}
 			inventoryFile.delete();
 		}
-		noLongerNeedsUpdate(Compat.INV_540);
+		noLongerNeedsUpdate(CompatibilityType.INVENTORY_540);
 	}
 
 	/**
 	 * Removes dead block files introduced in 5.3.0. "The 0kb bug"
 	 */
 	public static void cleanup520blocks(){
-		if(!needsUpdate(Compat.BLOCKS_540)){
+		if(!needsUpdate(CompatibilityType.BLOCK_BUG_CLEANUP_540)){
 			return;
 		}
 		long deleted = 0;
@@ -430,7 +429,7 @@ public class SelfCompatibility {
 		if(deleted > 0){
 			plugin.getLogger().info(Localization.getMessage(LocaleMessage.BUG_FILES_REMOVE, String.valueOf(deleted)));
 		}
-		noLongerNeedsUpdate(Compat.BLOCKS_540);
+		noLongerNeedsUpdate(CompatibilityType.BLOCK_BUG_CLEANUP_540);
 	}
 
 	private static int cleanFolder(File folder, FileType type){
@@ -452,7 +451,7 @@ public class SelfCompatibility {
 		temp.mkdirs();
 		EnhancedConfiguration local = new EnhancedConfiguration(new File(temp, "temp1"), plugin);
 		switch (type){
-		case CONFIG:
+		case CONFIGURATION:
 			local.loadDefaults(plugin.getResource("resources/config.yml"));
 			break;
 		case MESSAGES:
@@ -461,10 +460,10 @@ public class SelfCompatibility {
 		case NOTIFICATIONS:
 			local.loadDefaults(plugin.getResource("resources/notifications.yml"));
 			break;
-		case REGION:
+		case REGION_CONFIGURATION:
 			local.loadDefaults(plugin.getResource("resources/region.yml"));
 			break;
-		case WORLD:
+		case WORLD_CONFIGURATION:
 			local.loadDefaults(plugin.getResource("resources/world.yml"));
 			break;
 		case FEATURES:

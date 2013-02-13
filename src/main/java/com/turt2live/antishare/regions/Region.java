@@ -34,6 +34,20 @@ import com.turt2live.antishare.util.ASUtils;
 public class Region {
 
 	private static AntiShare plugin = AntiShare.getInstance();
+
+	/**
+	 * Location where region configurations are stored
+	 */
+	public static final File REGION_CONFIGURATIONS = new File(plugin.getDataFolder(), "region_configurations");
+	/**
+	 * Location where region information is stored
+	 */
+	public static final File REGION_INFORMATION = new File(plugin.getDataFolder(), "data" + File.separator + "regions");
+	/**
+	 * Region structure version
+	 */
+	public static final int REGION_VERSION = 2;
+
 	private String worldName = "antishare", owner = "antishare", id = "-1", enterMessage = "You entered {name}!", exitMessage = "You left {name}!", name = "AntiShareRegion";
 	private RegionCuboid size = new RegionCuboid(this);
 	private boolean showEnterMessage = true, showExitMessage = true;
@@ -41,10 +55,6 @@ public class Region {
 	private final Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
 	private RegionConfiguration config = new RegionConfiguration(this);
 	private GameMode gamemode = GameMode.CREATIVE;
-
-	public static final File REGION_CONFIGURATIONS = new File(plugin.getDataFolder(), "region_configurations");
-	public static final File REGION_INFORMATION = new File(plugin.getDataFolder(), "data" + File.separator + "regions");
-	public static final int REGION_VERSION = 2;
 
 	/**
 	 * Gets the name of this region

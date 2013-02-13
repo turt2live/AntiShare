@@ -51,9 +51,9 @@ public class PerWorldConfig {
 		RIGHT_CLICK_MOBS;
 	}
 
-	private EventList block_break;
-	private EventList block_place;
-	private EventList right_click;
+	private EventList blockBreak;
+	private EventList blockPlace;
+	private EventList rightClick;
 	private EventList use;
 	private EventList drop;
 	private EventList pickup;
@@ -88,12 +88,12 @@ public class PerWorldConfig {
 		worldConfig.load();
 
 		// Generate lists
-		block_place = getList("block-place", "block-place", worldConfig, false);
-		block_break = getList("block-break", "block-break", worldConfig, false);
+		blockPlace = getList("block-place", "block-place", worldConfig, false);
+		blockBreak = getList("block-break", "block-break", worldConfig, false);
 		death = getList("drop-items-on-death", "dropped-items-on-death", worldConfig, false);
 		pickup = getList("pickup-items", "picked-up-items", worldConfig, false);
 		drop = getList("drop-items", "dropped-items", worldConfig, false);
-		right_click = getList("right-click", "right-click", worldConfig, false);
+		rightClick = getList("right-click", "right-click", worldConfig, false);
 		use = getList("use-items", "use-items", worldConfig, false);
 		commands = getList("commands", "commands", worldConfig, true);
 		mobs = getList("combat-against-mobs", "mobs", worldConfig);
@@ -206,11 +206,11 @@ public class PerWorldConfig {
 	public boolean isBlocked(Material material, ListType list){
 		switch (list){
 		case BLOCK_BREAK:
-			return block_break.isBlocked(material);
+			return blockBreak.isBlocked(material);
 		case BLOCK_PLACE:
-			return block_place.isBlocked(material);
+			return blockPlace.isBlocked(material);
 		case RIGHT_CLICK:
-			return right_click.isBlocked(material);
+			return rightClick.isBlocked(material);
 		case USE:
 			return use.isBlocked(material);
 		case DROP:
@@ -236,11 +236,11 @@ public class PerWorldConfig {
 	public boolean isBlocked(Block block, ListType list){
 		switch (list){
 		case BLOCK_BREAK:
-			return block_break.isBlocked(block);
+			return blockBreak.isBlocked(block);
 		case BLOCK_PLACE:
-			return block_place.isBlocked(block);
+			return blockPlace.isBlocked(block);
 		case RIGHT_CLICK:
-			return right_click.isBlocked(block);
+			return rightClick.isBlocked(block);
 		case USE:
 			return use.isBlocked(block);
 		case DROP:

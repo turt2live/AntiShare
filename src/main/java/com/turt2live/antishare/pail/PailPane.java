@@ -17,6 +17,11 @@ public class PailPane extends JPanel {
 	private static Pail pail;
 	private AntiShare plugin = AntiShare.getInstance();
 
+	/**
+	 * Creates a new pail pane
+	 * 
+	 * @param pail the pail object
+	 */
 	public PailPane(Pail pail){
 		PailPane.pail = pail;
 		//		ConfigPane config = new ConfigPane();
@@ -35,6 +40,7 @@ public class PailPane extends JPanel {
 		//		validate();
 	}
 
+	@Override
 	public void paint(Graphics g){
 		super.paint(g);
 
@@ -47,6 +53,12 @@ public class PailPane extends JPanel {
 		g.drawImage(image, 0, 0, null);
 	}
 
+	/**
+	 * Translates text
+	 * 
+	 * @param english the english text
+	 * @return the translated text
+	 */
 	public static String translate(String english){
 		return pail.translate(english);
 	}

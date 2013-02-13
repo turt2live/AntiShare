@@ -30,9 +30,9 @@ public class MoneySaver {
 				e.printStackTrace();
 			}
 		}
-		EnhancedConfiguration efile = new EnhancedConfiguration(file, plugin);
-		efile.load();
-		return efile;
+		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
+		yamlFile.load();
+		return yamlFile;
 	}
 
 	/**
@@ -43,8 +43,8 @@ public class MoneySaver {
 	 * @return a double (balance). If not found this will return 0
 	 */
 	public static double getLevel(String player, GameMode gamemode){
-		EnhancedConfiguration file = getFile();
-		double balance = file.getDouble(player + "." + gamemode.name(), 0.0);
+		EnhancedConfiguration yaml = getFile();
+		double balance = yaml.getDouble(player + "." + gamemode.name(), 0.0);
 		return balance;
 	}
 
@@ -59,9 +59,9 @@ public class MoneySaver {
 		if(balance <= 0){
 			return;
 		}
-		EnhancedConfiguration file = getFile();
-		file.set(player + "." + gamemode.name(), balance);
-		file.save();
+		EnhancedConfiguration yaml = getFile();
+		yaml.set(player + "." + gamemode.name(), balance);
+		yaml.save();
 	}
 
 }

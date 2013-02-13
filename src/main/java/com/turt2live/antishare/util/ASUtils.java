@@ -495,7 +495,7 @@ public class ASUtils {
 		switch (pattern){
 		case SNOW_GOLEM:
 			if(SNOW_GOLEM_PATTERN == null){
-				SNOW_GOLEM_PATTERN = new MobPattern(MobPatternType.POLE, Material.SNOW_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
+				SNOW_GOLEM_PATTERN = new MobPattern(MobPatternType.I_SHAPE, Material.SNOW_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
 			}
 			return SNOW_GOLEM_PATTERN;
 		case IRON_GOLEM:

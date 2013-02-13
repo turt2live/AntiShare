@@ -8,22 +8,22 @@ import org.bukkit.command.CommandSender;
  */
 public class ErrorStringList extends StringList {
 
-	private String msg;
+	private String message;
 
 	/**
 	 * Creates a new Error String List with an error message
 	 * 
-	 * @param err the error message
-	 * @param list collection of options for the String List
+	 * @param error the error message
+	 * @param strings collection of options for the String List
 	 */
-	public ErrorStringList(String err, String... list){
-		super(list);
-		this.msg = err;
+	public ErrorStringList(String error, String... strings){
+		super(strings);
+		this.message = error;
 	}
 
 	@Override
 	public void print(CommandSender sender){
-		ASUtils.sendToPlayer(sender, ChatColor.RED + msg, true);
+		ASUtils.sendToPlayer(sender, ChatColor.RED + message, true);
 	}
 
 }

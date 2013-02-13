@@ -20,7 +20,7 @@ public class WrappedEnhancedConfiguration extends EnhancedConfiguration {
 	 */
 	public void clearFile(){
 		clearCache();
-		this.map.clear();
+		map.clear();
 	}
 
 }

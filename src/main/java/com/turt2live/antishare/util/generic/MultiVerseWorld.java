@@ -22,12 +22,12 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-public class MVWorlds {
+public class MultiVerseWorld {
 
-	private static MultiverseCore plugin;
+	private static MultiverseCore multiverse;
 
 	private static void init(Plugin plugin){
-		MVWorlds.plugin = (MultiverseCore) plugin;
+		MultiVerseWorld.multiverse = (MultiverseCore) plugin;
 	}
 
 	/**
@@ -37,14 +37,14 @@ public class MVWorlds {
 	 * @return the alias, or the world name if MultiVerse was not found
 	 */
 	public static String getAlias(World world){
-		if(plugin == null){
-			Plugin MV = AntiShare.getInstance().getServer().getPluginManager().getPlugin("MultiVerse-Core");
-			if(MV == null){
+		if(multiverse == null){
+			Plugin multiverse = AntiShare.getInstance().getServer().getPluginManager().getPlugin("MultiVerse-Core");
+			if(multiverse == null){
 				return world.getName();
 			}
-			init(MV);
+			init(multiverse);
 		}
-		MultiverseWorld mvworld = plugin.getMVWorldManager().getMVWorld(world);
+		MultiverseWorld mvworld = multiverse.getMVWorldManager().getMVWorld(world);
 		return mvworld.getAlias();
 	}
 }

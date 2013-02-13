@@ -73,8 +73,8 @@ public class Alert {
 
 		private String node;
 
-		private AlertTrigger(String node){
-			this.node = node;
+		private AlertTrigger(String configurationNode){
+			this.node = configurationNode;
 		}
 
 		/**
@@ -182,15 +182,15 @@ public class Alert {
 	 * Sends an alert
 	 * 
 	 * @param message the message
-	 * @param sender the sender
+	 * @param target the sender
 	 * @param playerMessage the player message
 	 * @param type the Alert Type
 	 * @param trigger the Alert Trigger
-	 * @param time the time between alerts
-	 * @param reward true to send rewards/fines, false to disable them
+	 * @param delay the time between alerts
+	 * @param doEconomy true to send rewards/fines, false to disable them
 	 */
-	public void alert(String message, CommandSender sender, String playerMessage, AlertType type, AlertTrigger trigger, long time, boolean reward){
-		String hashmapKey = type.name() + message + playerMessage + sender.hashCode();
+	public void alert(String message, CommandSender target, String playerMessage, AlertType type, AlertTrigger trigger, long delay, boolean doEconomy){
+		String hashmapKey = type.name() + message + playerMessage + target.hashCode();
 		boolean sendToPlayer = true;
 		boolean sendToAdmins = true;
 
@@ -206,7 +206,7 @@ public class Alert {
 		}//else ignore
 
 		// Determine if we should even send the message
-		if(!send || AntiShare.getInstance().getPermissions().has(sender, PermissionNodes.SILENT_NOTIFICATIONS)){
+		if(!send || AntiShare.getInstance().getPermissions().has(target, PermissionNodes.SILENT_NOTIFICATIONS)){
 			if(type != AlertType.REGION){
 				return;
 			}else{
@@ -242,10 +242,10 @@ public class Alert {
 			details.player_last_sent = System.currentTimeMillis();
 		}else{
 			long now = System.currentTimeMillis();
-			if((now - details.admin_last_sent) < time){
+			if((now - details.admin_last_sent) < delay){
 				sendToAdmins = false;
 			}
-			if((now - details.player_last_sent) < time){
+			if((now - details.player_last_sent) < delay){
 				sendToPlayer = false;
 			}
 		}
@@ -258,13 +258,13 @@ public class Alert {
 		// Send if needed
 		if(sendToPlayer && (type == AlertType.ILLEGAL || type == AlertType.GENERAL || type == AlertType.REGION)){
 			details.player_last_sent = System.currentTimeMillis();
-			ASUtils.sendToPlayer(sender, playerMessage, true);
+			ASUtils.sendToPlayer(target, playerMessage, true);
 		}
 		if(sendToAdmins && toPlayers && !message.equalsIgnoreCase("no message")){
 			details.admin_last_sent = System.currentTimeMillis();
 			for(Player player : Bukkit.getOnlinePlayers()){
 				if(AntiShare.getInstance().getPermissions().has(player, PermissionNodes.GET_NOTIFICATIONS)){
-					if(!player.getName().equalsIgnoreCase(sender.getName())){
+					if(!player.getName().equalsIgnoreCase(target.getName())){
 						ASUtils.sendToPlayer(player, message, true);
 					}
 				}
@@ -275,8 +275,8 @@ public class Alert {
 		}
 
 		// Send fine/reward
-		if(sender instanceof Player && reward){
-			Player player = (Player) sender;
+		if(target instanceof Player && doEconomy){
+			Player player = (Player) target;
 			((MoneyManager) AntiShare.getInstance().getSystemsManager().getManager(Manager.MONEY)).fire(trigger, type, player);
 		}
 

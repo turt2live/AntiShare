@@ -12,7 +12,7 @@ public class MobPattern {
 	 * Mob pattern type, representing shape
 	 */
 	public static enum MobPatternType{
-		POLE, T_SHAPE;
+		I_SHAPE, T_SHAPE;
 	}
 
 	public final String name, configurationNode;
@@ -74,7 +74,7 @@ public class MobPattern {
 			return false;
 		}
 		switch (type){
-		case POLE:
+		case I_SHAPE:
 			if(world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body){
 				return true;
 			}

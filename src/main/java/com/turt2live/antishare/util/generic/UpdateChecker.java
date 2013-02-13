@@ -53,8 +53,8 @@ public class UpdateChecker {
 			public void run(){
 				try{
 					if(isOutdated()){
-						String newVersion = getNewVersionString();
-						String currentVersion = getVersion();
+						String newVersion = getBukkitDevVersion();
+						String currentVersion = getCurrentVersion();
 						plugin.getLogger().warning(Localization.getMessage(LocaleMessage.UPDATE_READY, newVersion, currentVersion));
 						plugin.getLogger().warning(Localization.getMessage(LocaleMessage.UPDATE_LINK, "http://dev.bukkit.org/server-mods/antishare"));
 					}
@@ -70,8 +70,8 @@ public class UpdateChecker {
 	 * @throws NumberFormatException if the version of AntiShare is abnormal
 	 */
 	public static boolean isOutdated() throws NumberFormatException{
-		double current = Double.valueOf(getVersion().split("-")[0].replaceFirst("\\.", ""));
-		double release = Double.valueOf(getNewVersion());
+		double current = Double.valueOf(getCurrentVersion().split("-")[0].replaceFirst("\\.", ""));
+		double release = Double.valueOf(getReleasedVersion());
 		return release > current;
 	}
 
@@ -80,7 +80,7 @@ public class UpdateChecker {
 	 * 
 	 * @return the active version of AntiShare
 	 */
-	public static String getVersion(){
+	public static String getCurrentVersion(){
 		return AntiShare.getInstance().getDescription().getVersion();
 	}
 
@@ -89,8 +89,8 @@ public class UpdateChecker {
 	 * 
 	 * @return the public release version of AntiShare
 	 */
-	public static String getNewVersion(){
-		return getNewVersionString().replaceFirst("\\.", "");
+	public static String getReleasedVersion(){
+		return getBukkitDevVersion().replaceFirst("\\.", "");
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class UpdateChecker {
 	 */
 	// Borrowed from Vault, thanks Sleaker!
 	// https://github.com/MilkBowl/Vault/blob/master/src/net/milkbowl/vault/Vault.java#L520
-	public static String getNewVersionString(){
+	public static String getBukkitDevVersion(){
 		String pluginUrlString = "http://dev.bukkit.org/server-mods/antishare/files.rss";
 		try{
 			URL url = new URL(pluginUrlString);
@@ -118,6 +118,6 @@ public class UpdateChecker {
 		}catch(IOException e){} // Do not handle
 		catch(SAXException e){} // Do not handle
 		catch(ParserConfigurationException e){} // Do not handle
-		return getVersion();
+		return getCurrentVersion();
 	}
 }

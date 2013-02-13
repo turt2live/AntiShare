@@ -25,19 +25,19 @@ import com.turt2live.antishare.signs.Sign;
  */
 public class ItemMap {
 
-	private EnhancedConfiguration list;
+	private EnhancedConfiguration yaml;
 
 	/**
 	 * Creates a new Item Map
 	 */
 	public ItemMap(){
 		AntiShare plugin = AntiShare.getInstance();
-		list = new EnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
-		list.loadDefaults(plugin.getResource("resources/items.yml"));
-		if(!list.fileExists() || !list.checkDefaults()){
-			list.saveDefaults();
+		yaml = new EnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
+		yaml.loadDefaults(plugin.getResource("resources/items.yml"));
+		if(!yaml.fileExists() || !yaml.checkDefaults()){
+			yaml.saveDefaults();
 		}
-		list.load();
+		yaml.load();
 	}
 
 	/**
@@ -47,8 +47,8 @@ public class ItemMap {
 	 * @return the Material (or null if not found)
 	 */
 	public Material getItem(String name){
-		if(list.getString(name) != null){
-			return Material.getMaterial(list.getString(name));
+		if(yaml.getString(name) != null){
+			return Material.getMaterial(yaml.getString(name));
 		}
 		return Material.matchMaterial(name); // Returns null if not found
 	}
@@ -60,8 +60,8 @@ public class ItemMap {
 	 * @return the sign (or null if not found)
 	 */
 	public Sign getSign(String name){
-		if(list.getString(name) != null){
-			String[] parts = list.getString(name).split(":");
+		if(yaml.getString(name) != null){
+			String[] parts = yaml.getString(name).split(":");
 			if(parts.length == 2){
 				return AntiShare.getInstance().getSignList().getSign(parts[1]);
 			}
@@ -78,8 +78,8 @@ public class ItemMap {
 	 * @return the id:data format
 	 */
 	public String getItem(String name, boolean zero, boolean isDataNumber){
-		if(list.getString(name) != null){
-			name = list.getString(name);
+		if(yaml.getString(name) != null){
+			name = yaml.getString(name);
 		}
 		String[] parts = name.split(":");
 		Material m = Material.matchMaterial(parts[0]);
@@ -117,7 +117,7 @@ public class ItemMap {
 	 * Reloads the item map
 	 */
 	public void reload(){
-		list.load();
+		yaml.load();
 	}
 
 }
