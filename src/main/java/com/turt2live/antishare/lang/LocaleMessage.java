@@ -1,5 +1,8 @@
 package com.turt2live.antishare.lang;
 
+/**
+ * All localized messages
+ */
 public enum LocaleMessage{
 
 	UPDATE_READY("update-ready"),
@@ -187,14 +190,19 @@ public enum LocaleMessage{
 	PHRASE_REGION_ENTER("phrase.region-enter"),
 	PHRASE_REGION_LEAVE("phrase.region-leave");
 
-	private String node;
+	private String configurationNode;
 
-	private LocaleMessage(String node){
-		this.node = node;
+	private LocaleMessage(String configurationNode){
+		this.configurationNode = configurationNode;
 	}
 
+	/**
+	 * Gets the configuration node for this message
+	 * 
+	 * @return the configuration node
+	 */
 	public String getConfigurationNode(){
-		return node;
+		return configurationNode;
 	}
 
 }

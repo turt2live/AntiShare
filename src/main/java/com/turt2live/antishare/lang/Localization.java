@@ -73,6 +73,7 @@ public class Localization {
 		if(message == null){
 			return null;
 		}
+		// TODO: Warn if arguments are not being filled
 		String localeMessage = locale.getString(message.getConfigurationNode());
 		if(arguments != null){
 			for(int i = 0; i < arguments.length; i++){

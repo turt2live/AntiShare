@@ -25,9 +25,9 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LinkedInventory;
 import com.turt2live.antishare.inventory.TemporaryASInventory;
-import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.permissions.PermissionNodes;
@@ -622,7 +622,7 @@ public class InventoryManager extends AntiShareManager {
 	 * @param world the world
 	 */
 	public void fixInventory(Player player, World world){
-		ASInventory creativeInventory, survivalInventory, a, ec, es, ea;
+		ASInventory creativeInventory, survivalInventory, adventureInventory, enderCreativeInventory, enderSurvivalInventory, enderAdventureInventory;
 		switch (player.getGameMode()){
 		case CREATIVE:
 			saveCreativeInventory(player, world);
@@ -641,18 +641,18 @@ public class InventoryManager extends AntiShareManager {
 		}
 		creativeInventory = getCreativeInventory(player, world);
 		survivalInventory = getSurvivalInventory(player, world);
-		a = getAdventureInventory(player, world);
-		ec = getEnderCreativeInventory(player, world);
-		es = getEnderSurvivalInventory(player, world);
-		ea = getEnderAdventureInventory(player, world);
+		adventureInventory = getAdventureInventory(player, world);
+		enderCreativeInventory = getEnderCreativeInventory(player, world);
+		enderSurvivalInventory = getEnderSurvivalInventory(player, world);
+		enderAdventureInventory = getEnderAdventureInventory(player, world);
 		for(World w : Bukkit.getWorlds()){
 			String p = player.getName() + "." + w.getName();
 			creative.put(p, creativeInventory);
 			survival.put(p, survivalInventory);
-			adventure.put(p, a);
-			enderCreative.put(p, ec);
-			enderSurvival.put(p, es);
-			enderAdventure.put(p, ea);
+			adventure.put(p, adventureInventory);
+			enderCreative.put(p, enderCreativeInventory);
+			enderSurvival.put(p, enderSurvivalInventory);
+			enderAdventure.put(p, enderAdventureInventory);
 		}
 	}
 

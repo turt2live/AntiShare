@@ -26,6 +26,7 @@ import com.turt2live.antishare.compatibility.Towny;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
 
+// TODO: Documentation
 public class HookManager extends AntiShareManager {
 
 	private AntiShare plugin = AntiShare.getInstance();
