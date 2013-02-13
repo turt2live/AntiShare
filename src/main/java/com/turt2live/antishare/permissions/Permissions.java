@@ -26,8 +26,6 @@ import com.turt2live.antishare.AntiShare;
  */
 public class Permissions implements Listener {
 
-	private boolean useVault = false;
-	private VaultPerms vault;
 	private boolean usePEX = false;
 	private PEX pex;
 
@@ -62,9 +60,6 @@ public class Permissions implements Listener {
 		if(usePEX){
 			return pex.has(player, permission, world);
 		}
-		if(useVault){
-			return vault.has(player, permission, world);
-		}
 		return player.hasPermission(permission);
 	}
 
@@ -86,29 +81,9 @@ public class Permissions implements Listener {
 
 	private void checkPlugins(){
 		AntiShare plugin = AntiShare.getInstance();
-		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
 		Plugin pex = plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
-		if(vault != null){
-			handleVault(vault.isEnabled());
-			handlePEX(!vault.isEnabled() && pex != null);
-		}
 		if(pex != null){
 			handlePEX(pex.isEnabled());
-			handleVault(!pex.isEnabled() && vault != null);
-		}
-		if(pex == null && vault == null){
-			handlePEX(false);
-			handleVault(false);
-		}
-	}
-
-	private void handleVault(boolean use){
-		if(use){
-			vault = new VaultPerms();
-			useVault = true;
-		}else{
-			vault = null;
-			useVault = false;
 		}
 	}
 
