@@ -57,8 +57,9 @@ public class RegionConfiguration {
 	 */
 	public RegionConfiguration(Region region){
 		AntiShare plugin = AntiShare.getInstance();
-		if(plugin.getSystemsManager().isEnabled(Manager.WORLD_CONFIGS))
+		if(plugin.getSystemsManager().isEnabled(Manager.WORLD_CONFIGS)){
 			worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
+		}
 		this.world = region.getWorldName();
 		this.region = region;
 

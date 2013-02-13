@@ -412,8 +412,9 @@ public class AntiShare extends PluginWrapper {
 					regions = (RegionManager) systems.getManager(Manager.REGION);
 				}
 				for(Player player : Bukkit.getOnlinePlayers()){
-					if(inventories != null)
+					if(inventories != null){
 						inventories.loadPlayer(player);
+					}
 					if(regions != null){
 						Region playerRegion = regions.getRegion(player.getLocation());
 						if(playerRegion != null){

@@ -41,8 +41,9 @@ public class HangingListener implements Listener {
 	private WorldConfigurationManager worldConfigs = null;
 
 	public HangingListener(){
-		if(plugin.getSystemsManager().isEnabled(Manager.WORLD_CONFIGS))
+		if(plugin.getSystemsManager().isEnabled(Manager.WORLD_CONFIGS)){
 			worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
+		}
 	}
 
 	@EventHandler (priority = EventPriority.LOW)

@@ -140,14 +140,18 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		if(!isValid()){
 			return;
 		}
-		if(minimum != null)
+		if(minimum != null){
 			minimum.setWorld(world);
-		if(maximum != null)
+		}
+		if(maximum != null){
 			maximum.setWorld(world);
-		if(point1 != null)
+		}
+		if(point1 != null){
 			point1.setWorld(world);
-		if(point2 != null)
+		}
+		if(point2 != null){
 			point2.setWorld(world);
+		}
 	}
 
 	/**
