@@ -454,12 +454,14 @@ public class TestASUtils {
 	// ASUtils.giveTool(Material, Player)
 	public void testGiveTool(){
 		// TODO
+		// Also test for item meta
 	}
 
 	@Test
 	// ASUtils.giveTool(Material, Player, int)
 	public void testGiveToolWithSlot(){
 		// TODO
+		// Also test for item meta
 	}
 
 	@Test
