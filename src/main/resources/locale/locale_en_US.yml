@@ -43,9 +43,13 @@ simplenotice:
 tool:
     toggle-on: 'You can now use the AntiShare tools as tools'
     toggle-off: 'You can now use the AntiShare tools as items'
-    generic: 'With the {0} simply left or right click to see what type a block is'
-    set: 'With the {0} simply left click to SET block type, right click to REMOVE'
-    cuboid: 'With the {0} simply left click to set point 1, and right click to set point 2'
+    help-generic: 'Right click a block/player to see the Game Mode of that object'
+    help-set: 'Left click to SET the Game Mode of a block'
+    help-set-2: 'Right click to REMOVE the Game Mode of a block'
+    help-cuboid: 'Left click to set point 1'
+    help-cuboid-2: 'Right click to set point 2'
+    help-command: 'Use ''/as tools'' to use a normal item'
+    help-created: 'Created by AntiShare for {0}'
 error:
     inventories: 'Inventory tracking is not enabled.'
     no-player: 'Player not found: {0}'

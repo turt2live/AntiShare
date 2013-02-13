@@ -32,8 +32,8 @@ import org.bukkit.inventory.PlayerInventory;
 import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.CuboidManager;
@@ -422,7 +422,6 @@ public class CommandHandler implements CommandExecutor {
 									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player);
 									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.GET_TOOL, MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), true);
 								}
-								ASUtils.sendToPlayer(player, ChatColor.AQUA + Localization.getMessage(LocaleMessage.TOOL_SET, MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), true);
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NEED_INV_SPACE, String.valueOf(1)), true);
 							}
@@ -464,9 +463,6 @@ public class CommandHandler implements CommandExecutor {
 								}else{
 									ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.NO_CUBOID_TOOL), true);
 								}
-								ASUtils.sendToPlayer(player, ChatColor.YELLOW + Localization.getMessage(LocaleMessage.TOOL_GENERIC, MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name())), false);
-								ASUtils.sendToPlayer(player, ChatColor.GOLD + Localization.getMessage(LocaleMessage.TOOL_SET, MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), false);
-								ASUtils.sendToPlayer(player, ChatColor.YELLOW + Localization.getMessage(LocaleMessage.TOOL_CUBOID, MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name())), false);
 							}else{
 								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NEED_INV_SPACE, String.valueOf(3)), true);
 							}

@@ -28,10 +28,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.lang.LocaleMessage;
+import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.util.generic.ASEntity;
 import com.turt2live.antishare.util.generic.MobPattern;
 import com.turt2live.antishare.util.generic.MobPattern.MobPatternType;
@@ -415,7 +418,32 @@ public class ASUtils {
 			if(original != null){
 				original = original.clone();
 			}
-			inv.setItem(slot - 1, new ItemStack(tool));
+			ItemStack itemTool = new ItemStack(tool);
+			String title = null;
+			List<String> lore = new ArrayList<String>();
+			if(tool == AntiShare.ANTISHARE_TOOL){
+				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Tool";
+				lore.add(ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_HELP_GENERIC));
+			}else if(tool == AntiShare.ANTISHARE_SET_TOOL){
+				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Set Tool";
+				lore.add(ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_HELP_SET));
+				lore.add(ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_HELP_SET2));
+			}else if(tool == AntiShare.ANTISHARE_CUBOID_TOOL){
+				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Cuboid Tool";
+				lore.add(ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_HELP_CUBOID));
+				lore.add(ChatColor.DARK_GREEN + Localization.getMessage(LocaleMessage.TOOL_HELP_CUBOID2));
+			}
+			lore.add(Localization.getMessage(LocaleMessage.TOOL_HELP_COMMAND));
+			lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Localization.getMessage(LocaleMessage.TOOL_HELP_CREATED, player.getName()));
+			ItemMeta meta = itemTool.getItemMeta();
+			if(title != null){
+				meta.setDisplayName(title);
+			}
+			if(lore.size() > 0){
+				meta.setLore(lore);
+			}
+			itemTool.setItemMeta(meta);
+			inv.setItem(slot - 1, itemTool);
 			if(original != null){
 				inv.addItem(original);
 			}
