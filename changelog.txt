@@ -33,3 +33,5 @@ Developer Additions:
 
 Tests to be made:
 - Every class
+
+TODO: Code cleanup on com.turt2live.antishare.notification and lower

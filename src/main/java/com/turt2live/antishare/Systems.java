@@ -33,15 +33,15 @@ public class Systems {
 		MONEY(Feature.MONEY, MoneyManager.class, Localization.getMessage(LocaleMessage.SERVICE_MONEY), TrackerType.FEATURE_FINES_REWARDS),
 		HOOK(Feature.ALWAYS_ON, HookManager.class, Localization.getMessage(LocaleMessage.SERVICE_HOOKS), null);
 
-		private final Feature f;
-		private final Class<? extends AntiShareManager> m;
-		private final String name;
+		private final Feature feature;
+		private final Class<? extends AntiShareManager> manager;
+		private final String serviceName;
 		private final TrackerType tracker;
 
 		private Manager(Feature f, Class<? extends AntiShareManager> m, String name, TrackerType tracker){
-			this.f = f;
-			this.m = m;
-			this.name = name;
+			this.feature = f;
+			this.manager = m;
+			this.serviceName = name;
 			this.tracker = tracker;
 		}
 
@@ -60,7 +60,7 @@ public class Systems {
 		 * @return the name of the manager
 		 */
 		public String getName(){
-			return name;
+			return serviceName;
 		}
 
 		/**
@@ -69,11 +69,11 @@ public class Systems {
 		 * @return the feature enum
 		 */
 		public Feature getFeature(){
-			return f;
+			return feature;
 		}
 
 		protected Class<? extends AntiShareManager> getManagerClass(){
-			return m;
+			return manager;
 		}
 	}
 
@@ -89,29 +89,29 @@ public class Systems {
 	public boolean load(){
 		features = new FeatureManager();
 		features.load();
-		for(Manager s : Manager.values()){
-			if(!features.isEnabled(s.getFeature())){
+		for(Manager manager : Manager.values()){
+			if(!features.isEnabled(manager.getFeature())){
 				if(!plugin.getConfig().getBoolean("other.more-quiet-startup")){
-					plugin.getLogger().info(Localization.getMessage(LocaleMessage.NOT_ENABLED, s.getName()));
+					plugin.getLogger().info(Localization.getMessage(LocaleMessage.NOT_ENABLED, manager.getName()));
 				}
 				continue;
 			}
 			if(!plugin.getConfig().getBoolean("other.more-quiet-startup")){
-				plugin.getLogger().info(Localization.getMessage(LocaleMessage.START_START, s.getName()));
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.START_START, manager.getName()));
 			}
-			if(s == Manager.FEATURE){
-				managers.put(s, features);
+			if(manager == Manager.FEATURE){
+				managers.put(manager, features);
 			}else{
-				Class<? extends AntiShareManager> m = s.getManagerClass();
-				if(m == null){
+				Class<? extends AntiShareManager> managerClass = manager.getManagerClass();
+				if(managerClass == null){
 					continue;
 				}
 				try{
-					AntiShareManager man = m.newInstance();
-					man.load();
-					managers.put(s, man);
-					if(s.getTrackerType() != null){
-						Tracker track = plugin.getMetrics().getTracker(s.getTrackerType().getName());
+					AntiShareManager trueManager = managerClass.newInstance();
+					trueManager.load();
+					managers.put(manager, trueManager);
+					if(manager.getTrackerType() != null){
+						Tracker track = plugin.getMetrics().getTracker(manager.getTrackerType().getName());
 						if(track != null){
 							track.increment(1);
 						}
@@ -132,13 +132,13 @@ public class Systems {
 	 * @return true if successful
 	 */
 	public boolean save(){
-		for(Manager s : managers.keySet()){
+		for(Manager manager : managers.keySet()){
 			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-				plugin.getLogger().info(Localization.getMessage(LocaleMessage.STOP_SAVE, s.getName()));
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.STOP_SAVE, manager.getName()));
 			}
-			managers.get(s).save();
-			if(s.getFeature() == Feature.BLOCKS){
-				BlockManager blocks = (BlockManager) managers.get(s);
+			managers.get(manager).save();
+			if(manager.getFeature() == Feature.BLOCKS){
+				BlockManager blocks = (BlockManager) managers.get(manager);
 				waitForBlockManager(blocks);
 			}
 		}
@@ -153,16 +153,16 @@ public class Systems {
 	 */
 	public boolean reload(){
 		boolean anyFailed = false;
-		for(Manager s : managers.keySet()){
+		for(Manager manager : managers.keySet()){
 			if(!plugin.getConfig().getBoolean("other.more-quiet-shutdown")){
-				plugin.getLogger().info(Localization.getMessage(LocaleMessage.RELOAD_RELOAD, s.getName()));
+				plugin.getLogger().info(Localization.getMessage(LocaleMessage.RELOAD_RELOAD, manager.getName()));
 			}
-			boolean done = managers.get(s).reload();
+			boolean done = managers.get(manager).reload();
 			if(!done){
 				anyFailed = true;
 			}
-			if(s.getFeature() == Feature.BLOCKS){
-				BlockManager blocks = (BlockManager) managers.get(s);
+			if(manager.getFeature() == Feature.BLOCKS){
+				BlockManager blocks = (BlockManager) managers.get(manager);
 				waitForBlockManager(blocks);
 			}
 		}

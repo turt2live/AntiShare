@@ -43,9 +43,9 @@ public class CuboidManager extends AntiShareManager {
 	 * @return true if valid and complete
 	 */
 	public boolean isCuboidComplete(String player){
-		Cuboid c = getCuboid(player);
-		if(c != null){
-			return c.isValid();
+		Cuboid cuboid = getCuboid(player);
+		if(cuboid != null){
+			return cuboid.isValid();
 		}
 		return false;
 	}
@@ -58,13 +58,13 @@ public class CuboidManager extends AntiShareManager {
 	 * @param value the value
 	 */
 	public void updateCuboid(String player, CuboidPoint point, Location value){
-		Cuboid c = getCuboid(player);
-		if(c == null){
-			c = new Cuboid();
+		Cuboid cuboid = getCuboid(player);
+		if(cuboid == null){
+			cuboid = new Cuboid();
 		}
-		c.setPoint(point, value);
-		c.setWorld(value.getWorld());
-		cuboids.put(player, c.clone());
+		cuboid.setPoint(point, value);
+		cuboid.setWorld(value.getWorld());
+		cuboids.put(player, cuboid.clone());
 	}
 
 	/**
@@ -76,13 +76,13 @@ public class CuboidManager extends AntiShareManager {
 		if(file.exists()){
 			file.delete();
 		}
-		EnhancedConfiguration config = new EnhancedConfiguration(file, plugin);
-		config.load();
+		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
+		yamlFile.load();
 		for(String player : cuboids.keySet()){
 			Cuboid cuboid = cuboids.get(player);
-			config.set(player, cuboid);
+			yamlFile.set(player, cuboid);
 		}
-		config.save();
+		yamlFile.save();
 		cuboids.clear();
 		return true;
 	}
@@ -96,10 +96,10 @@ public class CuboidManager extends AntiShareManager {
 		if(!file.exists()){
 			return true;
 		}
-		EnhancedConfiguration config = new EnhancedConfiguration(file, plugin);
-		config.load();
-		for(String player : config.getKeys(false)){
-			Cuboid cuboid = (Cuboid) config.get(player);
+		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
+		yamlFile.load();
+		for(String player : yamlFile.getKeys(false)){
+			Cuboid cuboid = (Cuboid) yamlFile.get(player);
 			cuboids.put(player, cuboid);
 		}
 		if(cuboids.keySet().size() > 0){

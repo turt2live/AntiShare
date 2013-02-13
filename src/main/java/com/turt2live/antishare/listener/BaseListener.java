@@ -202,16 +202,16 @@ public class BaseListener implements Listener {
 		AlertType type = AlertType.LEGAL;
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		MobPattern snow = ASUtils.getMobPattern(EntityPattern.SNOW_GOLEM);
-		MobPattern iron = ASUtils.getMobPattern(EntityPattern.IRON_GOLEM);
-		MobPattern wither = ASUtils.getMobPattern(EntityPattern.WITHER);
+		MobPattern snowGolemPattern = ASUtils.getMobPattern(EntityPattern.SNOW_GOLEM);
+		MobPattern ironGolemPattern = ASUtils.getMobPattern(EntityPattern.IRON_GOLEM);
+		MobPattern witherPattern = ASUtils.getMobPattern(EntityPattern.WITHER);
 		MobPattern pattern = null;
-		if(snow != null && snow.exists(block)){
-			pattern = snow;
-		}else if(iron != null && iron.exists(block)){
-			pattern = iron;
-		}else if(wither != null && wither.exists(block)){
-			pattern = wither;
+		if(snowGolemPattern != null && snowGolemPattern.exists(block)){
+			pattern = snowGolemPattern;
+		}else if(ironGolemPattern != null && ironGolemPattern.exists(block)){
+			pattern = ironGolemPattern;
+		}else if(witherPattern != null && witherPattern.exists(block)){
+			pattern = witherPattern;
 		}
 		if(pattern == null){
 			return;

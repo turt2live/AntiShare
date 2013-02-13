@@ -134,8 +134,8 @@ public class ASInventory implements Cloneable {
 		List<String> removeWorlds = new ArrayList<String>();
 		for(String world : file.getKeys(false)){
 			for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
-				World worldV = Bukkit.getWorld(world);
-				if(worldV == null){
+				World bukkitWorld = Bukkit.getWorld(world);
+				if(bukkitWorld == null){
 					AntiShare.getInstance().getLogger().severe("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.");
 					if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
 						AntiShare.getInstance().getLogger().severe("=== " + Localization.getMessage(LocaleMessage.WARNING_REMOVE_WORLD) + " ===");
@@ -145,10 +145,10 @@ public class ASInventory implements Cloneable {
 					continue;
 				}
 				if(gamemode.equalsIgnoreCase("adventure") || gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival")){
-					ASInventory inventory = new ASInventory(type, name, worldV, GameMode.valueOf(gamemode));
-					for(String strSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
-						Integer slot = Integer.valueOf(strSlot);
-						ItemStack item = file.getItemStack(world + "." + gamemode + "." + strSlot);
+					ASInventory inventory = new ASInventory(type, name, bukkitWorld, GameMode.valueOf(gamemode));
+					for(String stringSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
+						Integer slot = Integer.valueOf(stringSlot);
+						ItemStack item = file.getItemStack(world + "." + gamemode + "." + stringSlot);
 						inventory.set(slot, item);
 						if(AntiShare.isDebug()){
 							AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate (FILE)] S=" + slot + " I=" + item + " T=" + type + " P=" + name + " G=" + gamemode + " W=" + world);
@@ -223,16 +223,16 @@ public class ASInventory implements Cloneable {
 	 */
 	@SuppressWarnings ("deprecation")
 	public void setTo(Player player){
-		Inventory pInventory;
+		Inventory playerInventory;
 		if(type == InventoryType.ENDER){
-			pInventory = player.getEnderChest();
+			playerInventory = player.getEnderChest();
 		}else{
-			pInventory = player.getInventory();
+			playerInventory = player.getInventory();
 			ItemStack air = new ItemStack(Material.AIR);
 			ItemStack[] armor = {air, air, air, air};
-			((PlayerInventory) pInventory).setArmorContents(armor);
+			((PlayerInventory) playerInventory).setArmorContents(armor);
 		}
-		pInventory.clear();
+		playerInventory.clear();
 		for(Integer slot : inventory.keySet()){
 			ItemStack item = inventory.get(slot);
 			if(item == null){
@@ -243,21 +243,21 @@ public class ASInventory implements Cloneable {
 				AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Set] SET " + item + " SLOT " + slot + " TO " + player.getName() + " T=" + type);
 			}
 			if(slot < 100){
-				pInventory.setItem(slot, item);
+				playerInventory.setItem(slot, item);
 			}else{
-				if(pInventory instanceof PlayerInventory){
+				if(playerInventory instanceof PlayerInventory){
 					switch (slot){
 					case 100:
-						((PlayerInventory) pInventory).setBoots(item);
+						((PlayerInventory) playerInventory).setBoots(item);
 						break;
 					case 101:
-						((PlayerInventory) pInventory).setLeggings(item);
+						((PlayerInventory) playerInventory).setLeggings(item);
 						break;
 					case 102:
-						((PlayerInventory) pInventory).setChestplate(item);
+						((PlayerInventory) playerInventory).setChestplate(item);
 						break;
 					case 103:
-						((PlayerInventory) pInventory).setHelmet(item);
+						((PlayerInventory) playerInventory).setHelmet(item);
 						break;
 					}
 				}
@@ -275,11 +275,11 @@ public class ASInventory implements Cloneable {
 			return;
 		}
 		// Setup
-		File dir = new File(plugin.getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
-		File saveFile = new File(dir, inventoryName + ".yml");
-		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, plugin);
-		file.load();
-		file.set(world.getName() + "." + gamemode.name(), null);
+		File directory = new File(plugin.getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
+		File saveFile = new File(directory, inventoryName + ".yml");
+		EnhancedConfiguration yamlFile = new EnhancedConfiguration(saveFile, plugin);
+		yamlFile.load();
+		yamlFile.set(world.getName() + "." + gamemode.name(), null);
 
 		// Save data
 		// Structure: yml:world.gamemode.slot.properties
@@ -294,9 +294,9 @@ public class ASInventory implements Cloneable {
 			}
 
 			// Save item
-			file.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), item);
+			yamlFile.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), item);
 		}
-		file.save();
+		yamlFile.save();
 	}
 
 	/**
@@ -337,11 +337,11 @@ public class ASInventory implements Cloneable {
 
 	@Override
 	public ASInventory clone(){
-		ASInventory newI = new ASInventory(this.type, this.inventoryName, this.world, this.gamemode);
+		ASInventory newInventory = new ASInventory(this.type, this.inventoryName, this.world, this.gamemode);
 		for(int slot : this.inventory.keySet()){
-			newI.set(slot, this.inventory.get(slot));
+			newInventory.set(slot, this.inventory.get(slot));
 		}
-		return newI;
+		return newInventory;
 	}
 
 	/**

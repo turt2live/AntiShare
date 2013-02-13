@@ -14,12 +14,12 @@ public class RegionCuboid extends Cuboid {
 	/**
 	 * Creates a new region cuboid
 	 * 
-	 * @param l1 the first location
-	 * @param l2 the second location
+	 * @param location1 the first location
+	 * @param location2 the second location
 	 * @param region the owning region
 	 */
-	public RegionCuboid(Region region, Location l1, Location l2){
-		super(l1, l2);
+	public RegionCuboid(Region region, Location location1, Location location2){
+		super(location1, location2);
 		this.region = region;
 	}
 

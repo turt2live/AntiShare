@@ -26,10 +26,10 @@ public abstract class AntiShareManager {
 	 * @return true if successful
 	 */
 	public final boolean reload(){
-		boolean s = false, l = false;
-		s = save();
-		l = load();
-		return s && l;
+		boolean saved = false, loaded = false;
+		saved = save();
+		loaded = load();
+		return saved && loaded;
 	}
 
 }

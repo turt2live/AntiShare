@@ -22,19 +22,19 @@ class ChunkWrapper {
 
 	private final BlockManager manager;
 	private final AntiShare plugin = AntiShare.getInstance();
-	CopyOnWriteArrayList<String> creative_blocks = new CopyOnWriteArrayList<String>();
-	CopyOnWriteArrayList<String> survival_blocks = new CopyOnWriteArrayList<String>();
-	CopyOnWriteArrayList<String> adventure_blocks = new CopyOnWriteArrayList<String>();
-	CopyOnWriteArrayList<String> creative_entities = new CopyOnWriteArrayList<String>();
-	CopyOnWriteArrayList<String> survival_entities = new CopyOnWriteArrayList<String>();
-	CopyOnWriteArrayList<String> adventure_entities = new CopyOnWriteArrayList<String>();
-	private final int cx, cz;
+	CopyOnWriteArrayList<String> creativeBlocks = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> survivalBlocks = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> adventureBlocks = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> creativeEntities = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> survivalEntities = new CopyOnWriteArrayList<String>();
+	CopyOnWriteArrayList<String> adventureEntities = new CopyOnWriteArrayList<String>();
+	private final int chunkX, chunkZ;
 	private final String world;
 
 	ChunkWrapper(BlockManager manager, Chunk chunk){
 		this.manager = manager;
-		this.cx = chunk.getX();
-		this.cz = chunk.getZ();
+		this.chunkX = chunk.getX();
+		this.chunkZ = chunk.getZ();
 		this.world = chunk.getWorld().getName();
 	}
 
@@ -51,22 +51,22 @@ class ChunkWrapper {
 	public void addBlock(GameMode type, Block block){
 		switch (type){
 		case CREATIVE:
-			if(!manager.tracked_creative.isTracked(block)){
+			if(!manager.trackedCreative.isTracked(block)){
 				break;
 			}
-			creative_blocks.add(manager.blockToString(block));
+			creativeBlocks.add(manager.blockToString(block));
 			break;
 		case SURVIVAL:
-			if(!manager.tracked_survival.isTracked(block)){
+			if(!manager.trackedSurvival.isTracked(block)){
 				break;
 			}
-			survival_blocks.add(manager.blockToString(block));
+			survivalBlocks.add(manager.blockToString(block));
 			break;
 		case ADVENTURE:
-			if(!manager.tracked_adventure.isTracked(block)){
+			if(!manager.trackedAdventure.isTracked(block)){
 				break;
 			}
-			adventure_blocks.add(manager.blockToString(block));
+			adventureBlocks.add(manager.blockToString(block));
 			break;
 		default:
 			break;
@@ -82,22 +82,22 @@ class ChunkWrapper {
 	public void addEntity(GameMode type, Entity entity){
 		switch (type){
 		case CREATIVE:
-			if(!manager.tracked_creative.isTracked(entity)){
+			if(!manager.trackedCreative.isTracked(entity)){
 				break;
 			}
-			creative_entities.add(manager.entityToString(entity));
+			creativeEntities.add(manager.entityToString(entity));
 			break;
 		case SURVIVAL:
-			if(!manager.tracked_survival.isTracked(entity)){
+			if(!manager.trackedSurvival.isTracked(entity)){
 				break;
 			}
-			survival_entities.add(manager.entityToString(entity));
+			survivalEntities.add(manager.entityToString(entity));
 			break;
 		case ADVENTURE:
-			if(!manager.tracked_adventure.isTracked(entity)){
+			if(!manager.trackedAdventure.isTracked(entity)){
 				break;
 			}
-			adventure_entities.add(manager.entityToString(entity));
+			adventureEntities.add(manager.entityToString(entity));
 			break;
 		default:
 			break;
@@ -114,22 +114,22 @@ class ChunkWrapper {
 	public void addEntity(GameMode type, Location entity, EntityType entityType){
 		switch (type){
 		case CREATIVE:
-			if(!manager.tracked_creative.isTracked(entityType)){
+			if(!manager.trackedCreative.isTracked(entityType)){
 				break;
 			}
-			creative_entities.add(manager.entityToString(entity, entityType));
+			creativeEntities.add(manager.entityToString(entity, entityType));
 			break;
 		case SURVIVAL:
-			if(!manager.tracked_survival.isTracked(entityType)){
+			if(!manager.trackedSurvival.isTracked(entityType)){
 				break;
 			}
-			survival_entities.add(manager.entityToString(entity, entityType));
+			survivalEntities.add(manager.entityToString(entity, entityType));
 			break;
 		case ADVENTURE:
-			if(!manager.tracked_adventure.isTracked(entityType)){
+			if(!manager.trackedAdventure.isTracked(entityType)){
 				break;
 			}
-			adventure_entities.add(manager.entityToString(entity, entityType));
+			adventureEntities.add(manager.entityToString(entity, entityType));
 			break;
 		default:
 			break;
@@ -149,13 +149,13 @@ class ChunkWrapper {
 			material.location = entity.getLocation();
 			switch (type){
 			case CREATIVE:
-				creative_entities.remove(manager.entityToString(entity));
+				creativeEntities.remove(manager.entityToString(entity));
 				break;
 			case SURVIVAL:
-				survival_entities.remove(manager.entityToString(entity));
+				survivalEntities.remove(manager.entityToString(entity));
 				break;
 			case ADVENTURE:
-				adventure_entities.remove(manager.entityToString(entity));
+				adventureEntities.remove(manager.entityToString(entity));
 				break;
 			default:
 				break;
@@ -176,13 +176,13 @@ class ChunkWrapper {
 			material.location = block.getLocation();
 			switch (type){
 			case CREATIVE:
-				creative_blocks.remove(manager.blockToString(block));
+				creativeBlocks.remove(manager.blockToString(block));
 				break;
 			case SURVIVAL:
-				survival_blocks.remove(manager.blockToString(block));
+				survivalBlocks.remove(manager.blockToString(block));
 				break;
 			case ADVENTURE:
-				adventure_blocks.remove(manager.blockToString(block));
+				adventureBlocks.remove(manager.blockToString(block));
 				break;
 			default:
 				break;
@@ -191,39 +191,39 @@ class ChunkWrapper {
 	}
 
 	public GameMode getType(Entity entity){
-		if(creative_entities.contains(manager.entityToString(entity))){
+		if(creativeEntities.contains(manager.entityToString(entity))){
 			return GameMode.CREATIVE;
-		}else if(survival_entities.contains(manager.entityToString(entity))){
+		}else if(survivalEntities.contains(manager.entityToString(entity))){
 			return GameMode.SURVIVAL;
-		}else if(adventure_entities.contains(manager.entityToString(entity))){
+		}else if(adventureEntities.contains(manager.entityToString(entity))){
 			return GameMode.ADVENTURE;
 		}
 		return null;
 	}
 
 	public GameMode getType(Block block){
-		if(creative_blocks.contains(manager.blockToString(block))){
+		if(creativeBlocks.contains(manager.blockToString(block))){
 			return GameMode.CREATIVE;
-		}else if(survival_blocks.contains(manager.blockToString(block))){
+		}else if(survivalBlocks.contains(manager.blockToString(block))){
 			return GameMode.SURVIVAL;
-		}else if(adventure_blocks.contains(manager.blockToString(block))){
+		}else if(adventureBlocks.contains(manager.blockToString(block))){
 			return GameMode.ADVENTURE;
 		}
 		return null;
 	}
 
 	public void save(boolean load, boolean clear, File blocksDir, File entitiesDir){
-		File blockFile = new File(blocksDir, cx + "." + cz + "." + world + ".yml");
-		File entityFile = new File(entitiesDir, cx + "." + cz + "." + world + ".yml");
+		File blockFile = new File(blocksDir, chunkX + "." + chunkZ + "." + world + ".yml");
+		File entityFile = new File(entitiesDir, chunkX + "." + chunkZ + "." + world + ".yml");
 		// Used for sane file creation
 		boolean noBlockFile = false, noEntityFile = false;
-		if(this.adventure_blocks.size() <= 0 && this.survival_blocks.size() <= 0 && this.creative_blocks.size() <= 0){
+		if(this.adventureBlocks.size() <= 0 && this.survivalBlocks.size() <= 0 && this.creativeBlocks.size() <= 0){
 			if(blockFile.exists()){
 				blockFile.delete();
 			}
 			noBlockFile = true;
 		}
-		if(this.adventure_entities.size() <= 0 && this.survival_entities.size() <= 0 && this.creative_entities.size() <= 0){
+		if(this.adventureEntities.size() <= 0 && this.survivalEntities.size() <= 0 && this.creativeEntities.size() <= 0){
 			if(entityFile.exists()){
 				entityFile.delete();
 			}
@@ -233,13 +233,13 @@ class ChunkWrapper {
 			WrappedEnhancedConfiguration blocks = new WrappedEnhancedConfiguration(blockFile, plugin);
 			blocks.load();
 			blocks.clearFile();
-			for(String s : this.adventure_blocks){
+			for(String s : this.adventureBlocks){
 				save(s, GameMode.ADVENTURE, blocks, true);
 			}
-			for(String s : this.creative_blocks){
+			for(String s : this.creativeBlocks){
 				save(s, GameMode.CREATIVE, blocks, true);
 			}
-			for(String s : this.survival_blocks){
+			for(String s : this.survivalBlocks){
 				save(s, GameMode.SURVIVAL, blocks, true);
 			}
 			blocks.save();
@@ -248,23 +248,23 @@ class ChunkWrapper {
 			WrappedEnhancedConfiguration entities = new WrappedEnhancedConfiguration(entityFile, plugin);
 			entities.load();
 			entities.clearFile();
-			for(String s : this.adventure_entities){
+			for(String s : this.adventureEntities){
 				save(s, GameMode.ADVENTURE, entities, false);
 			}
-			for(String s : this.creative_entities){
+			for(String s : this.creativeEntities){
 				save(s, GameMode.CREATIVE, entities, false);
 			}
-			for(String s : this.survival_entities){
+			for(String s : this.survivalEntities){
 				save(s, GameMode.SURVIVAL, entities, false);
 			}
 			entities.save();
 			if(clear){
-				this.adventure_blocks.clear();
-				this.adventure_entities.clear();
-				this.creative_blocks.clear();
-				this.creative_entities.clear();
-				this.survival_blocks.clear();
-				this.survival_entities.clear();
+				this.adventureBlocks.clear();
+				this.adventureEntities.clear();
+				this.creativeBlocks.clear();
+				this.creativeEntities.clear();
+				this.survivalBlocks.clear();
+				this.survivalEntities.clear();
 			}
 		}
 		if(load){
@@ -273,7 +273,7 @@ class ChunkWrapper {
 		}
 	}
 
-	private void save(String s, GameMode gm, EnhancedConfiguration c, boolean isBlock){
+	private void save(String rawString, GameMode gamemode, EnhancedConfiguration configuration, boolean isBlock){
 		/*
 		 * 0 = chunkX
 		 * 1 = chunkZ
@@ -283,13 +283,13 @@ class ChunkWrapper {
 		 * 5 = block z
 		 * 6 = (if provided) entity type as string
 		 */
-		String[] parts = s.split(";");
+		String[] parts = rawString.split(";");
 		if(parts.length < (isBlock ? 6 : 7) || parts.length > (isBlock ? 6 : 7)){
-			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, s, "gm=" + gm.name() + ":isB=" + isBlock));
+			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, rawString, "gm=" + gamemode.name() + ":isB=" + isBlock));
 		}else{
 			String key = parts[3] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2] + (isBlock ? "" : ";" + parts[6]);
-			String value = gm.name();
-			c.set(key, value);
+			String value = gamemode.name();
+			configuration.set(key, value);
 		}
 	}
 
@@ -299,16 +299,16 @@ class ChunkWrapper {
 	}
 
 	public void load(boolean isBlock, File dir){
-		File file = new File(dir, cx + "." + cz + "." + world + ".yml");
+		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".yml");
 		if(!file.exists()){
 			return;
 		}
-		String[] fparts = file.getName().split("\\.");
-		if(fparts.length < 3){
+		String[] fileParts = file.getName().split("\\.");
+		if(fileParts.length < 3){
 			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_FILE, file.getAbsolutePath()));
 			return;
 		}
-		String w = fparts[2]; // To see if world == file name world
+		String w = fileParts[2]; // To see if world == file name world
 		if(Bukkit.getWorld(w) == null){
 			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_WORLD), w));
 			return;
@@ -329,28 +329,28 @@ class ChunkWrapper {
 			if(Bukkit.getWorld(keyParts[3]) == null || location == null || location.getWorld() == null){
 				continue;
 			}
-			EntityType etype = null;
+			EntityType entityType = null;
 			if(keyParts.length > 4){
 				try{
-					etype = EntityType.fromName(keyParts[4]);
+					entityType = EntityType.fromName(keyParts[4]);
 				}catch(Exception e){ // Prevents messy consoles
-					etype = null;
+					entityType = null;
 				}
 			}
-			GameMode gm = GameMode.valueOf(blocks.getString(key));
+			GameMode gamemode = GameMode.valueOf(blocks.getString(key));
 			if(isBlock){
 				Block block = location.getBlock();
 				if(block == null){
 					location.getChunk().load();
 					block = location.getBlock();
 				}
-				addBlock(gm, block);
+				addBlock(gamemode, block);
 			}else{
-				if(etype == null){
+				if(entityType == null){
 					plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, key, file.getAbsolutePath()));
 					continue;
 				}
-				addEntity(gm, location, etype);
+				addEntity(gamemode, location, entityType);
 			}
 		}
 	}

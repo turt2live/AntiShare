@@ -41,7 +41,7 @@ public enum ASGameMode{
 	 * @return true if matches
 	 */
 	public boolean matches(GameMode gamemode){
-		if(numeric == -1 && (gamemode == GameMode.CREATIVE || gamemode == GameMode.SURVIVAL || (GamemodeAbstraction.adventureIsCreative() ? gamemode == GameMode.ADVENTURE : false))){
+		if(numeric == -1 && (gamemode == GameMode.CREATIVE || gamemode == GameMode.SURVIVAL || (GamemodeAbstraction.isAdventureCreative() ? gamemode == GameMode.ADVENTURE : false))){
 			return true;
 		}else if(numeric == 1 && gamemode == GameMode.CREATIVE){
 			return true;

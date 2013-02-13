@@ -52,18 +52,18 @@ public class TabHandler implements TabCompleter {
 
 		private StringList[] arguments;
 		private StringList valid;
-		private String errMsg;
+		private String errorMessage;
 
 		private Tab(String errMsg, StringList valid, StringList... arguments){
 			this.arguments = arguments;
 			this.valid = valid;
-			this.errMsg = errMsg;
+			this.errorMessage = errMsg;
 		}
 
 		private Tab(StringList valid, StringList... arguments){
 			this.arguments = arguments;
 			this.valid = valid;
-			this.errMsg = null;
+			this.errorMessage = null;
 		}
 
 		public StringList getArguments(int argument){
@@ -95,8 +95,8 @@ public class TabHandler implements TabCompleter {
 		}
 
 		public void error(CommandSender sender){
-			if(errMsg != null && errMsg.trim().length() > 0){
-				ASUtils.sendToPlayer(sender, ChatColor.RED + errMsg, true);
+			if(errorMessage != null && errorMessage.trim().length() > 0){
+				ASUtils.sendToPlayer(sender, ChatColor.RED + errorMessage, true);
 			}
 		}
 

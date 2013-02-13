@@ -47,20 +47,20 @@ public class InventoryManager extends AntiShareManager {
 	private final ConcurrentHashMap<String, ASInventory> enderCreative = new ConcurrentHashMap<String, ASInventory>();
 	private final ConcurrentHashMap<String, ASInventory> enderSurvival = new ConcurrentHashMap<String, ASInventory>();
 	private final ConcurrentHashMap<String, ASInventory> enderAdventure = new ConcurrentHashMap<String, ASInventory>();
-	private final ConcurrentHashMap<String, TemporaryASInventory> playerTemp = new ConcurrentHashMap<String, TemporaryASInventory>();
-	private final List<LinkedInventory> links = new ArrayList<LinkedInventory>();
+	private final ConcurrentHashMap<String, TemporaryASInventory> temporary = new ConcurrentHashMap<String, TemporaryASInventory>();
+	private final List<LinkedInventory> linkedInventories = new ArrayList<LinkedInventory>();
 
 	/**
 	 * Creates a new Inventory Manager
 	 */
 	public InventoryManager(){
 		// Prepare linked inventories
-		EnhancedConfiguration links = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
-		links.loadDefaults(plugin.getResource("resources/linked-inventories.yml"));
-		if(!links.fileExists() || !links.checkDefaults()){
-			links.saveDefaults();
+		EnhancedConfiguration linksYaml = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
+		linksYaml.loadDefaults(plugin.getResource("resources/linked-inventories.yml"));
+		if(!linksYaml.fileExists() || !linksYaml.checkDefaults()){
+			linksYaml.saveDefaults();
 		}
-		links.load();
+		linksYaml.load();
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class InventoryManager extends AntiShareManager {
 		if(list != null){
 			for(ASInventory inventory : list){
 				TemporaryASInventory spec = new TemporaryASInventory(ASInventory.generate(player, InventoryType.PLAYER), inventory);
-				playerTemp.put(player.getName(), spec);
+				temporary.put(player.getName(), spec);
 			}
 		}
 	}
@@ -296,7 +296,7 @@ public class InventoryManager extends AntiShareManager {
 
 		// Set to temp
 		TemporaryASInventory spec = new TemporaryASInventory(ASInventory.generate(player, InventoryType.PLAYER), inventory);
-		playerTemp.put(player.getName(), spec);
+		temporary.put(player.getName(), spec);
 		if(inventory == null){
 			player.getInventory().clear();
 			player.updateInventory();
@@ -311,10 +311,10 @@ public class InventoryManager extends AntiShareManager {
 	 * @param player the player
 	 */
 	public void removeFromTemporary(Player player){
-		TemporaryASInventory inventory = playerTemp.get(player.getName());
+		TemporaryASInventory inventory = temporary.get(player.getName());
 		if(inventory != null){
 			inventory.getLastInventory().setTo(player);
-			playerTemp.remove(player.getName());
+			temporary.remove(player.getName());
 		}
 	}
 
@@ -325,7 +325,7 @@ public class InventoryManager extends AntiShareManager {
 	 * @return true if they are in temporary
 	 */
 	public boolean isInTemporary(Player player){
-		return playerTemp.containsKey(player.getName());
+		return temporary.containsKey(player.getName());
 	}
 
 	/**
@@ -520,7 +520,7 @@ public class InventoryManager extends AntiShareManager {
 		enderCreative.clear();
 		enderSurvival.clear();
 		enderAdventure.clear();
-		playerTemp.clear();
+		temporary.clear();
 		// Loads regions
 		for(Region region : ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getAllRegions()){
 			String UID = region.getID();
@@ -538,7 +538,7 @@ public class InventoryManager extends AntiShareManager {
 		EnhancedConfiguration links = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
 		links.load();
 		Set<String> worlds = links.getKeys(false);
-		this.links.clear();
+		this.linkedInventories.clear();
 		if(worlds != null){
 			for(String w : worlds){
 				List<String> affectedWorlds = new ArrayList<String>();
@@ -553,7 +553,7 @@ public class InventoryManager extends AntiShareManager {
 					String[] allWorlds;
 					allWorlds = affectedWorlds.toArray(new String[affectedWorlds.size()]);
 					LinkedInventory link = new LinkedInventory(gamemode, allWorlds);
-					this.links.add(link);
+					this.linkedInventories.add(link);
 				}else{
 					AntiShare.getInstance().getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_FILE, "linked-inventories.yml"));
 				}
@@ -561,8 +561,8 @@ public class InventoryManager extends AntiShareManager {
 		}
 
 		// Status
-		if(this.links.size() > 0){
-			AntiShare.getInstance().getLogger().info(Localization.getMessage(LocaleMessage.STATUS_LINKED_INVENTORIES, String.valueOf(this.links.size())));
+		if(this.linkedInventories.size() > 0){
+			AntiShare.getInstance().getLogger().info(Localization.getMessage(LocaleMessage.STATUS_LINKED_INVENTORIES, String.valueOf(this.linkedInventories.size())));
 		}
 		return true;
 	}
@@ -612,7 +612,7 @@ public class InventoryManager extends AntiShareManager {
 	 * @return the number of loaded inventories
 	 */
 	public int getLoaded(){
-		return creative.size() + survival.size() + playerTemp.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
+		return creative.size() + survival.size() + temporary.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
 	}
 
 	/**
@@ -622,7 +622,7 @@ public class InventoryManager extends AntiShareManager {
 	 * @param world the world
 	 */
 	public void fixInventory(Player player, World world){
-		ASInventory c, s, a, ec, es, ea;
+		ASInventory creativeInventory, survivalInventory, a, ec, es, ea;
 		switch (player.getGameMode()){
 		case CREATIVE:
 			saveCreativeInventory(player, world);
@@ -639,16 +639,16 @@ public class InventoryManager extends AntiShareManager {
 		default:
 			break;
 		}
-		c = getCreativeInventory(player, world);
-		s = getSurvivalInventory(player, world);
+		creativeInventory = getCreativeInventory(player, world);
+		survivalInventory = getSurvivalInventory(player, world);
 		a = getAdventureInventory(player, world);
 		ec = getEnderCreativeInventory(player, world);
 		es = getEnderSurvivalInventory(player, world);
 		ea = getEnderAdventureInventory(player, world);
 		for(World w : Bukkit.getWorlds()){
 			String p = player.getName() + "." + w.getName();
-			creative.put(p, c);
-			survival.put(p, s);
+			creative.put(p, creativeInventory);
+			survival.put(p, survivalInventory);
 			adventure.put(p, a);
 			enderCreative.put(p, ec);
 			enderSurvival.put(p, es);
@@ -665,7 +665,7 @@ public class InventoryManager extends AntiShareManager {
 	 */
 	public void checkLinks(Player player, World to, World from){
 		GameMode gamemode = player.getGameMode();
-		for(LinkedInventory link : links){
+		for(LinkedInventory link : linkedInventories){
 			if(link.isGameModeAffected(gamemode)){
 				if(link.isWorldAffected(from)){
 					String[] allWorlds = link.getAffectedWorlds();

@@ -23,7 +23,6 @@ import com.turt2live.antishare.util.events.TrackerList;
 public class BlockManager extends AntiShareManager {
 
 	static class ASMaterial {
-
 		public Location location;
 		public GameMode gamemode;
 		public long added;
@@ -31,9 +30,9 @@ public class BlockManager extends AntiShareManager {
 
 	private final File entitiesDir;
 	private final File blocksDir;
-	TrackerList tracked_creative;
-	TrackerList tracked_survival;
-	TrackerList tracked_adventure;
+	TrackerList trackedCreative;
+	TrackerList trackedSurvival;
+	TrackerList trackedAdventure;
 	private final CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
 	private final ConcurrentMap<String, ChunkWrapper> wrappers = new ConcurrentHashMap<String, ChunkWrapper>();
 	private boolean doneSave = false;
@@ -63,9 +62,9 @@ public class BlockManager extends AntiShareManager {
 	@Override
 	public boolean load(){
 		// Setup lists
-		tracked_creative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
-		tracked_survival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
-		tracked_adventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
+		trackedCreative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
+		trackedSurvival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
+		trackedAdventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
 
 		// Load
 		wrappers.clear();
@@ -79,12 +78,12 @@ public class BlockManager extends AntiShareManager {
 		int cb = 0, ce = 0, sb = 0, se = 0, ab = 0, ae = 0;
 		for(String key : wrappers.keySet()){
 			ChunkWrapper wrapper = wrappers.get(key);
-			cb += wrapper.creative_blocks.size();
-			ce += wrapper.creative_entities.size();
-			sb += wrapper.survival_blocks.size();
-			se += wrapper.survival_entities.size();
-			ab += wrapper.adventure_blocks.size();
-			ae += wrapper.adventure_entities.size();
+			cb += wrapper.creativeBlocks.size();
+			ce += wrapper.creativeEntities.size();
+			sb += wrapper.survivalBlocks.size();
+			se += wrapper.survivalEntities.size();
+			ab += wrapper.adventureBlocks.size();
+			ae += wrapper.adventureEntities.size();
 		}
 		if(cb > 0){
 			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CREATIVE_BLOCKS, String.valueOf(cb)));
@@ -198,17 +197,17 @@ public class BlockManager extends AntiShareManager {
 	public void addBlock(GameMode type, Block block){
 		switch (type){
 		case CREATIVE:
-			if(!tracked_creative.isTracked(block)){
+			if(!trackedCreative.isTracked(block)){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if(!tracked_survival.isTracked(block)){
+			if(!trackedSurvival.isTracked(block)){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if(!tracked_adventure.isTracked(block)){
+			if(!trackedAdventure.isTracked(block)){
 				return;
 			}
 			break;
@@ -229,17 +228,17 @@ public class BlockManager extends AntiShareManager {
 	public void addEntity(GameMode type, Entity entity){
 		switch (type){
 		case CREATIVE:
-			if(!tracked_creative.isTracked(entity)){
+			if(!trackedCreative.isTracked(entity)){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if(!tracked_survival.isTracked(entity)){
+			if(!trackedSurvival.isTracked(entity)){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if(!tracked_adventure.isTracked(entity)){
+			if(!trackedAdventure.isTracked(entity)){
 				return;
 			}
 			break;
@@ -261,17 +260,17 @@ public class BlockManager extends AntiShareManager {
 	public void addEntity(GameMode type, Location entity, EntityType entityType){
 		switch (type){
 		case CREATIVE:
-			if(!tracked_creative.isTracked(entityType)){
+			if(!trackedCreative.isTracked(entityType)){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if(!tracked_survival.isTracked(entityType)){
+			if(!trackedSurvival.isTracked(entityType)){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if(!tracked_adventure.isTracked(entityType)){
+			if(!trackedAdventure.isTracked(entityType)){
 				return;
 			}
 			break;

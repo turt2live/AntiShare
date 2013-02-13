@@ -44,7 +44,7 @@ public class MoneyManager extends AntiShareManager {
 	private final List<Reward> rewards = new ArrayList<Reward>();
 	private final List<Fine> fines = new ArrayList<Fine>();
 	private boolean doRewards = false, doFines = false, tab = false, showStatusOnLogin = false;
-	private VaultEconomy econ;
+	private VaultEconomy vaultEconomy;
 	private final List<String> silentTo = new ArrayList<String>();
 	private String finesTo = "nowhere", rewardsFrom = "nowhere";
 
@@ -156,7 +156,7 @@ public class MoneyManager extends AntiShareManager {
 		// Check load state
 		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
 		if(vault != null){
-			econ = new VaultEconomy();
+			vaultEconomy = new VaultEconomy();
 		}else{
 			plugin.getLogger().severe(Localization.getMessage(LocaleMessage.ERROR_NO_VAULT));
 			return false;
@@ -191,13 +191,13 @@ public class MoneyManager extends AntiShareManager {
 	 * @return the result
 	 */
 	public TransactionResult addToAccount(Player player, double amount){
-		if(econ == null){
+		if(vaultEconomy == null){
 			return TransactionResult.NO_VAULT;
 		}
 		if(!rewardsFrom.equalsIgnoreCase("nowhere")){
-			econ.subtract(rewardsFrom, amount);
+			vaultEconomy.subtract(rewardsFrom, amount);
 		}
-		return econ.add(player.getName(), amount);
+		return vaultEconomy.add(player.getName(), amount);
 	}
 
 	/**
@@ -208,16 +208,16 @@ public class MoneyManager extends AntiShareManager {
 	 * @return the result
 	 */
 	public TransactionResult subtractFromAccount(Player player, double amount){
-		if(econ == null){
+		if(vaultEconomy == null){
 			return TransactionResult.NO_VAULT;
 		}
-		if(econ.requiresTab(player.getName()) && !tab){
+		if(vaultEconomy.requiresTab(player.getName()) && !tab){
 			return TransactionResult.NO_TAB;
 		}
 		if(!finesTo.equalsIgnoreCase("nowhere")){
-			econ.add(finesTo, amount);
+			vaultEconomy.add(finesTo, amount);
 		}
-		return econ.subtract(player.getName(), amount);
+		return vaultEconomy.subtract(player.getName(), amount);
 	}
 
 	/**
@@ -227,10 +227,10 @@ public class MoneyManager extends AntiShareManager {
 	 * @return the balance
 	 */
 	public double getBalance(Player player){
-		if(econ == null){
+		if(vaultEconomy == null){
 			return 0.0;
 		}
-		return econ.getBalance(player.getName());
+		return vaultEconomy.getBalance(player.getName());
 	}
 
 	/**
@@ -240,10 +240,10 @@ public class MoneyManager extends AntiShareManager {
 	 * @return the string of the amount
 	 */
 	public String formatAmount(double amount){
-		if(econ == null){
+		if(vaultEconomy == null){
 			return String.valueOf(amount);
 		}
-		return econ.format(amount);
+		return vaultEconomy.format(amount);
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class MoneyManager extends AntiShareManager {
 	 * @return the hook
 	 */
 	public VaultEconomy getRawEconomyHook(){
-		return econ;
+		return vaultEconomy;
 	}
 
 	/**

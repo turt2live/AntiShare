@@ -83,7 +83,7 @@ public class AntiShare extends PluginWrapper {
 	private final List<String> disabledSNPlayers = new ArrayList<String>();
 	private final List<String> disabledTools = new ArrayList<String>();
 	private String build = "Unknown build, custom?";
-	private Systems sys;
+	private Systems systems;
 
 	/**
 	 * Gets the active AntiShare instance
@@ -290,8 +290,8 @@ public class AntiShare extends PluginWrapper {
 		}
 
 		// Startup Systems Manager
-		sys = new Systems();
-		sys.load();
+		systems = new Systems();
+		systems.load();
 
 		// Setup everything
 		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
@@ -353,8 +353,8 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onDisable(){
 		// Save
-		if(sys != null){
-			sys.save();
+		if(systems != null){
+			systems.save();
 		}
 
 		// Disable
@@ -369,7 +369,7 @@ public class AntiShare extends PluginWrapper {
 		messages = null;
 		metrics = null;
 		signs = null;
-		sys = null;
+		systems = null;
 
 		// Save disabled SimpleNotice users
 		try{
@@ -389,7 +389,7 @@ public class AntiShare extends PluginWrapper {
 	 */
 	public void reload(){
 		reloadConfig();
-		sys.reload();
+		systems.reload();
 		itemMap.reload();
 		signs.reload();
 		listener.reload();
@@ -405,11 +405,11 @@ public class AntiShare extends PluginWrapper {
 			public void run(){
 				InventoryManager inventories = null;
 				RegionManager regions = null;
-				if(sys.isEnabled(Manager.INVENTORY)){
-					inventories = (InventoryManager) sys.getManager(Manager.INVENTORY);
+				if(systems.isEnabled(Manager.INVENTORY)){
+					inventories = (InventoryManager) systems.getManager(Manager.INVENTORY);
 				}
-				if(sys.isEnabled(Manager.REGION)){
-					regions = (RegionManager) sys.getManager(Manager.REGION);
+				if(systems.isEnabled(Manager.REGION)){
+					regions = (RegionManager) systems.getManager(Manager.REGION);
 				}
 				for(Player player : Bukkit.getOnlinePlayers()){
 					if(inventories != null)
@@ -440,7 +440,7 @@ public class AntiShare extends PluginWrapper {
 	 * @return the general purpose systems manager
 	 */
 	public Systems getSystemsManager(){
-		return sys;
+		return systems;
 	}
 
 	/**

@@ -92,9 +92,9 @@ public class CommandHandler implements CommandExecutor {
 								OfflinePlayer player = plugin.getServer().getPlayer(playername);
 								// Find online player first, then we look for offline players
 								if(player == null){
-									for(OfflinePlayer player2 : plugin.getServer().getOfflinePlayers()){
-										if(player2.getName().equalsIgnoreCase(playername) || player2.getName().toLowerCase().startsWith(playername.toLowerCase())){
-											player = player2;
+									for(OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()){
+										if(offlinePlayer.getName().equalsIgnoreCase(playername) || offlinePlayer.getName().toLowerCase().startsWith(playername.toLowerCase())){
+											player = offlinePlayer;
 											break;
 										}
 									}

@@ -21,12 +21,12 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	/**
 	 * Creates a new cuboid
 	 * 
-	 * @param l1 the first location
-	 * @param l2 the second location
+	 * @param location1 the first location
+	 * @param location2 the second location
 	 */
-	public Cuboid(Location l1, Location l2){
-		this.point1 = l1.clone();
-		this.point2 = l2.clone();
+	public Cuboid(Location location1, Location location2){
+		this.point1 = location1.clone();
+		this.point2 = location2.clone();
 		calculate();
 	}
 
@@ -38,17 +38,17 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	/**
 	 * Determines if a location is inside this cuboid
 	 * 
-	 * @param l the location to test
+	 * @param location the location to test
 	 * @return true if contained
 	 */
-	public boolean isContained(Location l){
+	public boolean isContained(Location location){
 		if(!isValid()){
 			return false;
 		}
-		if(l.getWorld().getName().equals(minimum.getWorld().getName())){
-			if((l.getBlockX() >= minimum.getBlockX() && l.getBlockX() <= maximum.getBlockX())
-					&& (l.getBlockY() >= minimum.getBlockY() && l.getBlockY() <= maximum.getBlockY())
-					&& (l.getBlockZ() >= minimum.getBlockZ() && l.getBlockZ() <= maximum.getBlockZ())){
+		if(location.getWorld().getName().equals(minimum.getWorld().getName())){
+			if((location.getBlockX() >= minimum.getBlockX() && location.getBlockX() <= maximum.getBlockX())
+					&& (location.getBlockY() >= minimum.getBlockY() && location.getBlockY() <= maximum.getBlockY())
+					&& (location.getBlockZ() >= minimum.getBlockZ() && location.getBlockZ() <= maximum.getBlockZ())){
 				return true;
 			}
 		}
@@ -102,14 +102,14 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	/**
 	 * Sets new points for this region
 	 * 
-	 * @param l1 the first point
-	 * @param l2 the second point
+	 * @param location1 the first point
+	 * @param location2 the second point
 	 */
-	public void setPoints(Location l1, Location l2){
-		this.point1 = l1 != null ? l1.clone() : null;
-		this.point2 = l2 != null ? l2.clone() : null;
-		if(this.worldName == null && (l1 != null || l2 != null)){
-			worldName = (l1 != null ? l1 : l2).getWorld().getName();
+	public void setPoints(Location location1, Location location2){
+		this.point1 = location1 != null ? location1.clone() : null;
+		this.point2 = location2 != null ? location2.clone() : null;
+		if(this.worldName == null && (location1 != null || location2 != null)){
+			worldName = (location1 != null ? location1 : location2).getWorld().getName();
 		}
 		setWorld(getWorld());
 		calculate();
@@ -193,20 +193,20 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		if(!isValid()){
 			return;
 		}
-		int mix = 0, miy = 0, miz = 0, max = 0, may = 0, maz = 0;
+		int minX = 0, minY = 0, minZ = 0, maxX = 0, maxY = 0, maxZ = 0;
 		if(!point1.getWorld().getName().equals(point2.getWorld().getName())){
 			throw new IllegalArgumentException("Worlds not equal.");
 		}
 		this.worldName = point1.getWorld().getName();
 		World world = getWorld();
-		mix = point1.getBlockX() < point2.getBlockX() ? point1.getBlockX() : point2.getBlockX();
-		miy = point1.getBlockY() < point2.getBlockY() ? point1.getBlockY() : point2.getBlockY();
-		miz = point1.getBlockZ() < point2.getBlockZ() ? point1.getBlockZ() : point2.getBlockZ();
-		max = point1.getBlockX() > point2.getBlockX() ? point1.getBlockX() : point2.getBlockX();
-		may = point1.getBlockY() > point2.getBlockY() ? point1.getBlockY() : point2.getBlockY();
-		maz = point1.getBlockZ() > point2.getBlockZ() ? point1.getBlockZ() : point2.getBlockZ();
-		minimum = new Location(world, mix, miy, miz);
-		maximum = new Location(world, max, may, maz);
+		minX = point1.getBlockX() < point2.getBlockX() ? point1.getBlockX() : point2.getBlockX();
+		minY = point1.getBlockY() < point2.getBlockY() ? point1.getBlockY() : point2.getBlockY();
+		minZ = point1.getBlockZ() < point2.getBlockZ() ? point1.getBlockZ() : point2.getBlockZ();
+		maxX = point1.getBlockX() > point2.getBlockX() ? point1.getBlockX() : point2.getBlockX();
+		maxY = point1.getBlockY() > point2.getBlockY() ? point1.getBlockY() : point2.getBlockY();
+		maxZ = point1.getBlockZ() > point2.getBlockZ() ? point1.getBlockZ() : point2.getBlockZ();
+		minimum = new Location(world, minX, minY, minZ);
+		maximum = new Location(world, maxX, maxY, maxZ);
 		if(AntiShare.isDebug()){
 			Logger log = AntiShare.getInstance().getLogger();
 			log.info("[DEBUG] [Cuboid Calculate] MAX = " + maximum);
