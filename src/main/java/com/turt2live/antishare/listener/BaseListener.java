@@ -1521,6 +1521,11 @@ public class BaseListener implements Listener {
 			desired.setTo(player);
 		}
 
+		// Change balance if needed
+		if(money != null && plugin.getConfig().getBoolean("enabled-features.change-balance-on-gamemode-change") && !cancel && !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
+			money.getRawEconomyHook().switchBalance(player.getName(), from, to);
+		}
+
 		// Check to see if we should even bother
 		if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
 			return cancel;
@@ -1539,6 +1544,10 @@ public class BaseListener implements Listener {
 				ASUtils.sendToPlayer(player, ChatColor.RED + "You are in a region and therefore cannot change Game Mode", true);
 				cancel = true;
 				currentLevel.setTo(player); // Restore level
+				// Restore balance if needed
+				if(money != null && plugin.getConfig().getBoolean("enabled-features.change-balance-on-gamemode-change") && !cancel && !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
+					money.getRawEconomyHook().switchBalance(player.getName(), to, from);
+				}
 				return cancel;
 			}
 		}

@@ -17,6 +17,7 @@ public enum LocaleMessage{
 	REGION_CREATED("region-created"),
 	REGION_SAVED("region-saved"),
 	REGION_REMOVED("region-removed"),
+	BALANCE_CHANGE("balance-change"),
 	HAVE_TOOL("tool-have"),
 	GET_TOOL("tool-get"),
 	NO_CUBOID_TOOL("no-cuboid-tool"),

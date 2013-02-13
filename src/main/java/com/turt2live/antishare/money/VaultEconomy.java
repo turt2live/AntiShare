@@ -14,9 +14,11 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 
+import org.bukkit.GameMode;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.util.generic.MoneySaver;
 
 /**
  * Safe-hook for Vault Economy
@@ -36,6 +38,27 @@ public class VaultEconomy {
 			return;
 		}
 		economy = rsp.getProvider();
+	}
+
+	/**
+	 * Switches the balance of a player
+	 * 
+	 * @param player the player
+	 * @param from the gamemode to
+	 * @param to the gamemode from
+	 */
+	public void switchBalance(String player, GameMode from, GameMode to){
+		if(economy.hasAccount(player)){
+			double current = economy.getBalance(player);
+			MoneySaver.saveLevel(player, from, current);
+			double balance = MoneySaver.getLevel(player, to);
+			EconomyResponse r1 = economy.withdrawPlayer(player, current);
+			EconomyResponse r2 = economy.depositPlayer(player, balance);
+			if(!r1.transactionSuccess() || !r2.transactionSuccess()){
+				Exception e = new Exception("Cannot set balance: p=" + player + " gfrom=" + from + " gto=" + to);
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**

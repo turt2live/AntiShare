@@ -18,6 +18,7 @@ Since 5.3.0:
 - Added a way to disable 'tool' function (per-player)
 - Fixed tab handler not working correctly
 - Added debug spam
+- Added a way to switch player balances on Game Mode change
 - Misc. Fixes:
     - Fixed region owner names not being loaded
     - Fixed cuboids not acting as expected

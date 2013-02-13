@@ -44,6 +44,8 @@ enabled-features:
   no-experience-for-creative: true
   # Determines if you want to create per-Game Mode experience values
   change-level-on-gamemode-change: true
+  # Determines if you want to create per-Game Mode balance values
+  change-balance-on-gamemode-change: true
   # When true, AntiShare will not let players of some gamemode use
   # and item frame placed in another gamemode.
   disable-item-frame-cross-game-mode: true
