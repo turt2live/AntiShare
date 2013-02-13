@@ -1522,8 +1522,10 @@ public class BaseListener implements Listener {
 		}
 
 		// Change balance if needed
+		boolean alert = false;
 		if(money != null && plugin.getConfig().getBoolean("enabled-features.change-balance-on-gamemode-change") && !cancel && !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
 			money.getRawEconomyHook().switchBalance(player.getName(), from, to);
+			alert = true;
 		}
 
 		// Check to see if we should even bother
@@ -1547,6 +1549,7 @@ public class BaseListener implements Listener {
 				// Restore balance if needed
 				if(money != null && plugin.getConfig().getBoolean("enabled-features.change-balance-on-gamemode-change") && !cancel && !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
 					money.getRawEconomyHook().switchBalance(player.getName(), to, from);
+					alert = false;
 				}
 				return cancel;
 			}
@@ -1605,12 +1608,17 @@ public class BaseListener implements Listener {
 		}
 
 		// Alerts
+		// TODO: Locale
 		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to Game Mode " + ChatColor.YELLOW + to.name();
 		String playerMessage = ignore ? "no message" : "Your inventory has been changed to " + ChatColor.YELLOW + to.name();
 		if(!plugin.getConfig().getBoolean("other.send-gamemode-change-message")){
 			playerMessage = "no message";
 		}
 		plugin.getAlerts().alert(message, player, playerMessage, AlertType.GENERAL, AlertTrigger.GENERAL);
+		if(alert){
+			message = Localization.getMessage(LocaleMessage.BALANCE_CHANGE, money.formatAmount(money.getBalance(player)));
+			ASUtils.sendToPlayer(player, message, true);
+		}
 		return cancel;
 	}
 

@@ -24,7 +24,7 @@ no-cuboid-tool: 'You are missing the cuboid tool: You do not have permission'
 fine-reward-toggle: 'You are now {0} fine/reward messages.'
 fine-reward: 'You are {0} fine/reward messages.'
 not-enabled: 'Service not enabled: {0}, skipping...'
-balance-change: 'Your balance was changed to ${0}'
+balance-change: 'Your balance was changed to {0}'
 fines-and-rewards:
     fine:
         failed: 'Fine Failed: {0}'

@@ -154,14 +154,12 @@ public class MoneyManager extends AntiShareManager {
 		}
 
 		// Check load state
-		if(doRewards || doFines){
-			Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
-			if(vault != null){
-				econ = new VaultEconomy();
-			}else{
-				plugin.getLogger().severe(Localization.getMessage(LocaleMessage.ERROR_NO_VAULT));
-				return false;
-			}
+		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
+		if(vault != null){
+			econ = new VaultEconomy();
+		}else{
+			plugin.getLogger().severe(Localization.getMessage(LocaleMessage.ERROR_NO_VAULT));
+			return false;
 		}
 
 		// Spam console
