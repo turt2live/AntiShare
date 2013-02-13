@@ -12,6 +12,8 @@ package com.turt2live.antishare.util.generic;
 
 import org.bukkit.GameMode;
 
+import com.turt2live.antishare.GamemodeAbstraction;
+
 /**
  * An enum to represent a Game Mode
  * 
@@ -39,7 +41,7 @@ public enum ASGameMode{
 	 * @return true if matches
 	 */
 	public boolean matches(GameMode gamemode){
-		if(numeric == -1 && (gamemode == GameMode.CREATIVE || gamemode == GameMode.SURVIVAL)){
+		if(numeric == -1 && (gamemode == GameMode.CREATIVE || gamemode == GameMode.SURVIVAL || (GamemodeAbstraction.adventureIsCreative() ? gamemode == GameMode.ADVENTURE : false))){
 			return true;
 		}else if(numeric == 1 && gamemode == GameMode.CREATIVE){
 			return true;
