@@ -40,6 +40,9 @@ public class Localization {
 		this.localeFileName = locale.getName();
 		this.locale.load();
 		checkLocale(this.locale);
+		if(!locale.getName().equalsIgnoreCase("locale_en_US.yml")){
+			plugin.getLogger().info(getMessage(LocaleMessage.LOCALE_FILE));
+		}
 	}
 
 	private void checkLocale(EnhancedConfiguration locale){

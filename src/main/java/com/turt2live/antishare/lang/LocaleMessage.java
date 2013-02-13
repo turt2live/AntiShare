@@ -22,6 +22,7 @@ public enum LocaleMessage{
 	GET_TOOL("tool-get"),
 	NO_CUBOID_TOOL("no-cuboid-tool"),
 	NOT_ENABLED("not-enabled"),
+	LOCALE_FILE("locale-file"),
 	FINE_REWARD_TOGGLE("fine-reward-toggle"),
 	FINE_REWARD("fine-reward"),
 	NEED_INV_SPACE("inv-space"),

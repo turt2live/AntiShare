@@ -20,6 +20,7 @@ Since 5.3.0:
 - Added debug spam
 - Added a way to switch player balances on Game Mode change
 - Added in-item help for AntiShare tools
+- Added a notification for non-standard locale files
 - Misc. Fixes:
     - Fixed region owner names not being loaded
     - Fixed cuboids not acting as expected
