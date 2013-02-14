@@ -26,13 +26,23 @@ import com.turt2live.antishare.compatibility.Towny;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
 
-// TODO: Documentation
+/**
+ * Manages hooks into other plugins
+ * 
+ * @author turt2live
+ */
 public class HookManager extends AntiShareManager {
 
 	private AntiShare plugin = AntiShare.getInstance();
 	private List<BlockProtection> blocks = new ArrayList<BlockProtection>();
 	private List<RegionProtection> regions = new ArrayList<RegionProtection>();
 
+	/**
+	 * Determines if there is a region at a location
+	 * 
+	 * @param location the location
+	 * @return true if a region was found, false otherwise
+	 */
 	public boolean checkForRegion(Location location){
 		for(RegionProtection protection : regions){
 			if(protection.isRegion(location)){
@@ -42,6 +52,13 @@ public class HookManager extends AntiShareManager {
 		return false;
 	}
 
+	/**
+	 * Checks for a player placing/breaking a block into a region
+	 * 
+	 * @param player the player
+	 * @param block the block
+	 * @return true if region found (not allowed), false otherwise
+	 */
 	public boolean checkForRegion(Player player, Block block){
 		for(RegionProtection protection : regions){
 			if(!protection.isAllowed(player, block)){
@@ -51,10 +68,22 @@ public class HookManager extends AntiShareManager {
 		return false;
 	}
 
+	/**
+	 * Checks a block for sign protection
+	 * 
+	 * @param block the block
+	 * @return true if a sign protection plugin claims this block protected
+	 */
 	public boolean checkForSignProtection(Block block){
 		return checkForBlockProtection(block);
 	}
 
+	/**
+	 * Checks a block for protection
+	 * 
+	 * @param block the block
+	 * @return true if a plugin claims this block protected
+	 */
 	public boolean checkForBlockProtection(Block block){
 		for(BlockProtection protection : blocks){
 			if(protection.isProtected(block)){
