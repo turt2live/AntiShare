@@ -17,6 +17,7 @@ public class FakeAntiShare {
 
 	private AntiShare mock;
 
+	// No need to test - Logic is "sound" (for now)
 	public void prepare(){
 		mock = PowerMockito.mock(AntiShare.class);
 		final File dataFolder = new File("src" + File.separator + "main" + File.separator + "resources");
