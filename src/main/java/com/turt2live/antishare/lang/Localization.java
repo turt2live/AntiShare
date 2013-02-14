@@ -85,7 +85,7 @@ public class Localization {
 			}
 			counter++;
 		}
-		if((expectedArguments > 0 && arguments == null) || (expectedArguments > arguments.length)){
+		if((expectedArguments > 0 && arguments == null) || (arguments != null && expectedArguments > arguments.length)){
 			Exception exception = new IllegalArgumentException("Too few arguments for " + message.name() + " (Expected " + expectedArguments + " got " + (arguments == null ? "null" : arguments.length) + ")");
 			exception.printStackTrace();
 		}else if(arguments != null && (arguments.length > expectedArguments)){
@@ -95,6 +95,9 @@ public class Localization {
 		if(arguments != null){
 			for(int i = 0; i < arguments.length; i++){
 				String replaceString = "{" + i + "}";
+				if(arguments[i] == null){
+					arguments[i] = "null";
+				}
 				localeMessage = localeMessage.replace(replaceString, arguments[i]);
 			}
 		}
