@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,6 +29,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 import org.junit.After;
@@ -38,13 +41,16 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.test.CraftWolf;
+import com.turt2live.antishare.test.FakeInventory;
 import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.generic.MobPattern;
 
 @SuppressWarnings ("deprecation")
 @RunWith (PowerMockRunner.class)
-@PrepareForTest ({Bukkit.class})
+@PrepareForTest ({Bukkit.class, AntiShare.class})
 public class TestASUtils {
 
 	private File testDirectory = new File("testingdirectory");
@@ -140,10 +146,20 @@ public class TestASUtils {
 			when(p.getGameMode()).thenReturn(gm);
 			players[i] = p;
 		}
+		FakeInventory fakeInventory = new FakeInventory();
+		when(player.getInventory()).thenReturn(fakeInventory);
 
 		// Class setup
+		// TODO
+		AntiShare mockedAntiShare = PowerMockito.mock(AntiShare.class);
+		PowerMockito.mockStatic(AntiShare.class);
 		PowerMockito.mockStatic(Bukkit.class);
 		when(Bukkit.getOnlinePlayers()).thenReturn(players);
+		when(AntiShare.getInstance()).thenReturn(mockedAntiShare);
+		File dataFolder = new File("src" + File.separator + "main" + File.separator + "resources");
+		EnhancedConfiguration config = new EnhancedConfiguration(new File(dataFolder, "resources" + File.separator + "config.yml"));
+		when(mockedAntiShare.getConfig()).thenReturn(config);
+		when(mockedAntiShare.getPrefix()).thenReturn("[AntiShare]");
 		stoneBlock = mock(Block.class);
 		woodBlock = mock(Block.class);
 		when(stoneBlock.getType()).thenReturn(Material.STONE);
@@ -454,15 +470,27 @@ public class TestASUtils {
 	@Test
 	// ASUtils.giveTool(Material, Player)
 	public void testGiveTool(){
-		// TODO
-		// Also test for item meta
+		assertFalse(player.getInventory().contains(AntiShare.ANTISHARE_TOOL));
+		ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player);
+		assertTrue(player.getInventory().contains(AntiShare.ANTISHARE_TOOL));
+		ItemStack stack = player.getInventory().getItem(1);
+		assertTrue(stack != null);
+		ItemMeta meta = stack.getItemMeta();
+		assertEquals("AntiShare Tool", ChatColor.stripColor(meta.getDisplayName())); // Strip color because we don't care
+		assertEquals(3, meta.getLore().size());
 	}
 
 	@Test
 	// ASUtils.giveTool(Material, Player, int)
 	public void testGiveToolWithSlot(){
-		// TODO
-		// Also test for item meta
+		assertFalse(player.getInventory().contains(AntiShare.ANTISHARE_TOOL));
+		ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player, 2);
+		assertTrue(player.getInventory().contains(AntiShare.ANTISHARE_TOOL));
+		ItemStack stack = player.getInventory().getItem(2);
+		assertTrue(stack != null);
+		ItemMeta meta = stack.getItemMeta();
+		assertEquals("AntiShare Tool", ChatColor.stripColor(meta.getDisplayName())); // Strip color because we don't care
+		assertEquals(3, meta.getLore().size());
 	}
 
 	@Test
