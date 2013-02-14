@@ -40,4 +40,8 @@ public class FakeAntiShare {
 		}
 	}
 
+	public AntiShare get(){
+		return mock;
+	}
+
 }

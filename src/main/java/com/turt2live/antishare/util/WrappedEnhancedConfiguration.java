@@ -15,6 +15,10 @@ public class WrappedEnhancedConfiguration extends EnhancedConfiguration {
 		super(file, plugin);
 	}
 
+	public WrappedEnhancedConfiguration(File file){
+		super(file);
+	}
+
 	/**
 	 * Clears the configuration. This does not save the file.
 	 */

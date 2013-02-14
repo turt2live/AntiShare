@@ -70,7 +70,6 @@ public class TestASUtils {
 	@Before
 	// Runs before EACH test
 	public void setUp() throws IOException{
-
 		testDirectory.mkdirs();
 		for(int i = 0; i < 10; i++){
 			File file = new File(testDirectory, "file" + i + ".txt");
