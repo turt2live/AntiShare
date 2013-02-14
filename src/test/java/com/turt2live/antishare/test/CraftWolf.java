@@ -1,4 +1,4 @@
-package com.turt2live.antishare.util;
+package com.turt2live.antishare.test;
 
 import java.util.List;
 import java.util.UUID;
