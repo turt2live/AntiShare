@@ -26,9 +26,7 @@
     
     <!-- Test Versions -->
     <junit.version>4.11</junit.version>
-    <powermock.version>1.4.11</powermock.version>
-    <easymock.version>3.1</easymock.version>
-    <annotations.version>9.0.4</annotations.version>
+    <powermock.version>1.5</powermock.version>
   </properties>
 
   <!-- DEPENDENCIES -->
@@ -164,29 +162,12 @@
       <scope>test</scope>
     </dependency>
 
-    <!--Easy Mock (API) -->
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-easymock</artifactId>
-      <version>${powermock.version}</version>
-      <type>jar</type>
-      <scope>test</scope>
-    </dependency>
-
     <!-- Mockito -->
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-api-mockito</artifactId>
       <version>${powermock.version}</version>
       <type>jar</type>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Easy Mock -->
-    <dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>${easymock.version}</version>
       <scope>test</scope>
     </dependency>
 
