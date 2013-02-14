@@ -6,7 +6,6 @@ import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-// TODO: Test
 public class FakeItemMetaFactory implements ItemFactory {
 
 	@Override
