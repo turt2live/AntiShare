@@ -74,7 +74,7 @@ public class FakeInventory implements PlayerInventory {
 
 	@Override
 	public int firstEmpty(){
-		for(int i = 1; i <= getSize(); i++){
+		for(int i = 0; i < getSize(); i++){
 			if(!items.containsKey(i)){
 				return i;
 			}

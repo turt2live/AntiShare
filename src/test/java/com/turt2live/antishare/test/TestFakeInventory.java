@@ -52,8 +52,8 @@ public class TestFakeInventory {
 		ItemStack item2 = new ItemStack(Material.STONE);
 		HashMap<Integer, ItemStack> left = inventory.addItem(item, item2);
 		assertEquals(0, left.size());
-		assertEquals(Material.STONE, inventory.getItem(2).getType());
-		assertEquals(Material.ANVIL, inventory.getItem(1).getType());
+		assertEquals(Material.STONE, inventory.getItem(1).getType());
+		assertEquals(Material.ANVIL, inventory.getItem(0).getType());
 		assertNull(inventory.getItem(4));
 	}
 
@@ -82,9 +82,9 @@ public class TestFakeInventory {
 	@Test
 	public void testFirstEmpty(){
 		ItemStack item = new ItemStack(Material.ANVIL);
-		assertEquals(1, inventory.firstEmpty());
+		assertEquals(0, inventory.firstEmpty());
 		inventory.addItem(item);
-		assertEquals(2, inventory.firstEmpty());
+		assertEquals(1, inventory.firstEmpty());
 		for(int i = 0; i <= inventory.getSize(); i++){
 			inventory.setItem(i, item);
 		}
@@ -96,12 +96,12 @@ public class TestFakeInventory {
 		ItemStack item = new ItemStack(Material.ANVIL);
 		inventory.addItem(item);
 		inventory.clear(4);
-		assertEquals(2, inventory.firstEmpty());
-		inventory.clear(1);
 		assertEquals(1, inventory.firstEmpty());
+		inventory.clear(0);
+		assertEquals(0, inventory.firstEmpty());
 		inventory.addItem(item);
 		inventory.clear();
-		assertEquals(1, inventory.firstEmpty());
+		assertEquals(0, inventory.firstEmpty());
 	}
 
 	@Test
