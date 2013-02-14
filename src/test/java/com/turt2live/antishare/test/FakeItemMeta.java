@@ -7,10 +7,9 @@ import java.util.Map;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 
-// TODO: Test
 public class FakeItemMeta implements Cloneable, ItemMeta {
 
-	private String name = "";
+	private String name = null;
 	private List<String> lore = new ArrayList<String>();
 
 	@Override
