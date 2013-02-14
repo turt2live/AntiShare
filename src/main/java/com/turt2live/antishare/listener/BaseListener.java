@@ -1608,9 +1608,8 @@ public class BaseListener implements Listener {
 		}
 
 		// Alerts
-		// TODO: Locale
-		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " changed to Game Mode " + ChatColor.YELLOW + to.name();
-		String playerMessage = ignore ? "no message" : "Your inventory has been changed to " + ChatColor.YELLOW + to.name();
+		String message = ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.PHRASE_CHANGE_GAMEMODE) + " " + ChatColor.YELLOW + to.name();
+		String playerMessage = ignore ? "no message" : Localization.getMessage(LocaleMessage.PHRASE_INV_CHANGE) + " " + ChatColor.YELLOW + to.name();
 		if(!plugin.getConfig().getBoolean("other.send-gamemode-change-message")){
 			playerMessage = "no message";
 		}

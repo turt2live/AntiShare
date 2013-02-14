@@ -73,8 +73,25 @@ public class Localization {
 		if(message == null){
 			return null;
 		}
-		// TODO: Warn if arguments are not being filled
 		String localeMessage = locale.getString(message.getConfigurationNode());
+		int expectedArguments = 0;
+		int counter = 0;
+		boolean moreArguments = true;
+		while (moreArguments){
+			if(!localeMessage.contains("{" + counter + "}")){
+				moreArguments = false;
+			}else{
+				expectedArguments++;
+			}
+			counter++;
+		}
+		if((expectedArguments > 0 && arguments == null) || (expectedArguments > arguments.length)){
+			Exception exception = new IllegalArgumentException("Too few arguments for " + message.name() + " (Expected " + expectedArguments + " got " + (arguments == null ? "null" : arguments.length) + ")");
+			exception.printStackTrace();
+		}else if(arguments != null && (arguments.length > expectedArguments)){
+			Exception exception = new IllegalArgumentException("Too many arguments for " + message.name() + " (Expected " + expectedArguments + " got " + (arguments == null ? "null" : arguments.length) + ")");
+			exception.printStackTrace();
+		}
 		if(arguments != null){
 			for(int i = 0; i < arguments.length; i++){
 				String replaceString = "{" + i + "}";
