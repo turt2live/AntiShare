@@ -94,6 +94,19 @@ public class AntiShare extends PluginWrapper {
 		return instance;
 	}
 
+	/**
+	 * Sets the AntiShare instance. This will throw an IllegalArgumentException if the instance is already defined
+	 * 
+	 * @param instance the instance to set
+	 */
+	public static void setInstance(AntiShare instance){
+		if(AntiShare.instance == null){
+			AntiShare.instance = instance;
+		}else{
+			throw new IllegalArgumentException("Instance already set");
+		}
+	}
+
 	@Override
 	public void onEnable(){
 		instance = this;
