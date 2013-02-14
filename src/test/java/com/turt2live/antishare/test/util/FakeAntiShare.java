@@ -1,4 +1,4 @@
-package com.turt2live.antishare.test;
+package com.turt2live.antishare.test.util;
 
 import static org.mockito.Matchers.anyString;
 

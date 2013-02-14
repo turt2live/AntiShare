@@ -13,6 +13,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.turt2live.antishare.test.util.FakeItemMeta;
+import com.turt2live.antishare.test.util.FakeItemMetaFactory;
+
 @RunWith (PowerMockRunner.class)
 public class TestFakeItemMetaFactory {
 

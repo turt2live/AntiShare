@@ -43,10 +43,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.test.CraftWolf;
-import com.turt2live.antishare.test.FakeAntiShare;
-import com.turt2live.antishare.test.FakeInventory;
-import com.turt2live.antishare.test.FakeItemMetaFactory;
+import com.turt2live.antishare.test.util.CraftWolf;
+import com.turt2live.antishare.test.util.FakeAntiShare;
+import com.turt2live.antishare.test.util.FakeInventory;
+import com.turt2live.antishare.test.util.FakeItemMetaFactory;
 import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.generic.MobPattern;
 
