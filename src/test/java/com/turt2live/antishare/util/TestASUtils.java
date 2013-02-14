@@ -218,7 +218,6 @@ public class TestASUtils {
 	@After
 	// Runs after EACH test
 	public void tearDown(){
-		fakeAS.tearDown();
 		ASUtils.wipeFolder(testDirectory, null);
 		for(FakeInventory inv : fakeInventories){
 			inv.clear();

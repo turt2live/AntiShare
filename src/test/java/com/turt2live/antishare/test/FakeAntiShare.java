@@ -39,8 +39,4 @@ public class FakeAntiShare {
 		}
 	}
 
-	public void tearDown(){
-
-	}
-
 }
