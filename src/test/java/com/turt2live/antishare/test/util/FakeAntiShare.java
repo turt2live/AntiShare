@@ -33,6 +33,7 @@ public class FakeAntiShare {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		System.out.println("----------------------");
 		list(DATA_FOLDER, 0);
 		System.out.println("----------------------");
 		list(DATA_SOURCE, 0);
