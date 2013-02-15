@@ -49,6 +49,7 @@ public class TestItemMap {
 
 	@Test
 	public void testGetSign(){
+		assertNull(map.getSign(null));
 		assertNull(map.getSign("test"));
 		yaml.set("test", "test:test");
 		yaml.save();

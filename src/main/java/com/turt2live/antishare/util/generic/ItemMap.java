@@ -63,6 +63,9 @@ public class ItemMap {
 	 * @return the sign (or null if not found)
 	 */
 	public Sign getSign(String name){
+		if(name == null){
+			return null;
+		}
 		if(yaml.getString(name) != null){
 			String[] parts = yaml.getString(name).split(":");
 			if(parts.length == 2){
