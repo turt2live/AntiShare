@@ -38,6 +38,8 @@ public class ItemMap {
 			yaml.saveDefaults();
 		}
 		yaml.load();
+		File file = new File(plugin.getDataFolder(), "items.yml");
+		System.out.println("FILE EXISTS: " + file.exists() + " PATH = " + file.getAbsolutePath());
 	}
 
 	/**

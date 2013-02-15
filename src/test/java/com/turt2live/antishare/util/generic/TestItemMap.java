@@ -38,18 +38,11 @@ public class TestItemMap {
 		fake.prepare();
 		map = new ItemMap();
 		AntiShare plugin = fake.get();
-		File file = new File(plugin.getDataFolder(), "items.yml");
-		System.out.println("FILE EXISTS: " + file.exists() + " PATH = " + file.getAbsolutePath());
-		yaml = new WrappedEnhancedConfiguration(file, plugin);
+		yaml = new WrappedEnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
 	}
 
 	@After
 	public void after(){
-		System.out.println("Print keys...");
-		for(String key : yaml.getKeys(true)){
-			System.out.println(key + " VALUE = " + yaml.getString(key));
-		}
-		System.out.println("DONE");
 		yaml.clearFile();
 		yaml.save();
 	}
