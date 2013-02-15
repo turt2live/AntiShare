@@ -1524,8 +1524,10 @@ public class BaseListener implements Listener {
 		// Change balance if needed
 		boolean alert = false;
 		if(money != null && plugin.getConfig().getBoolean("enabled-features.change-balance-on-gamemode-change") && !cancel && !plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
-			money.getRawEconomyHook().switchBalance(player.getName(), from, to);
-			alert = true;
+			if(money.getRawEconomyHook() != null){
+				money.getRawEconomyHook().switchBalance(player.getName(), from, to);
+				alert = true;
+			}
 		}
 
 		// Check to see if we should even bother
