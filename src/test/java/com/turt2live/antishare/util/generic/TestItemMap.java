@@ -39,14 +39,12 @@ public class TestItemMap {
 		map = new ItemMap();
 		AntiShare plugin = fake.get();
 		yaml = new WrappedEnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
-		yaml.clearFile();
-		yaml.save();
 	}
 
 	@After
 	public void after(){
-		//		yaml.clearFile();
-		//		yaml.save();
+		yaml.clearFile();
+		yaml.save();
 	}
 
 	@Test
