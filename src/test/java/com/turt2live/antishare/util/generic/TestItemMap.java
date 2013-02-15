@@ -39,24 +39,12 @@ public class TestItemMap {
 		map = new ItemMap();
 		AntiShare plugin = fake.get();
 		yaml = new WrappedEnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
-		File file = new File(plugin.getDataFolder(), "items.yml");
-		System.out.println("FILE EXISTS: " + file.exists() + " PATH = " + file.getAbsolutePath());
 	}
 
 	@After
 	public void after(){
 		yaml.clearFile();
 		yaml.save();
-	}
-
-	@Test
-	public void testGetSign(){
-		assertNull(map.getSign(null));
-		assertNull(map.getSign("test"));
-		yaml.set("test", "test:test");
-		yaml.save();
-		map.reload();
-		assertNotNull(map.getSign("test"));
 	}
 
 	@Test
@@ -99,6 +87,16 @@ public class TestItemMap {
 		assertEquals("1", map.getItem("test", true, true));
 		assertEquals("1:test", map.getItem("test:test", true, false));
 		assertEquals("1", map.getItem("test", true, false));
+	}
+
+	@Test
+	public void testGetSign(){
+		assertNull(map.getSign(null));
+		assertNull(map.getSign("test"));
+		yaml.set("test", "test:test");
+		yaml.save();
+		map.reload();
+		assertNotNull(map.getSign("test"));
 	}
 
 }
