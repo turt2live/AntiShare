@@ -64,7 +64,12 @@ public class TestItemMap {
 		yaml.set("test", "STONE");
 		yaml.set("test2", "stone");
 		yaml.set("test3", "1");
-		yaml.save();
+		boolean saved = yaml.save();
+		if(!saved){
+			if(yaml.getLastException() != null){
+				yaml.getLastException().printStackTrace();
+			}
+		}
 		map.reload();
 		assertEquals(Material.STONE, map.getItem("test"));
 		assertEquals(Material.STONE, map.getItem("test2"));
