@@ -45,6 +45,11 @@ public class TestItemMap {
 
 	@After
 	public void after(){
+		System.out.println("Print keys...");
+		for(String key : yaml.getKeys(true)){
+			System.out.println(key + " VALUE = " + yaml.getString(key));
+		}
+		System.out.println("DONE");
 		yaml.clearFile();
 		yaml.save();
 	}
