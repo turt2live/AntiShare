@@ -11,6 +11,8 @@
 package com.turt2live.antishare.util.generic;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Material;
 
@@ -26,12 +28,14 @@ import com.turt2live.antishare.signs.Sign;
 public class ItemMap {
 
 	private EnhancedConfiguration yaml;
+	private AntiShare plugin = AntiShare.getInstance();
+	private Map<String, String> temporaryItems = new HashMap<String, String>();
+	private Map<String, Sign> temporarySigns = new HashMap<String, Sign>();
 
 	/**
 	 * Creates a new Item Map
 	 */
 	public ItemMap(){
-		AntiShare plugin = AntiShare.getInstance();
 		yaml = new EnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
 		yaml.loadDefaults(plugin.getResource("resources/items.yml"));
 		if(!yaml.fileExists() || !yaml.checkDefaults()){
@@ -53,6 +57,9 @@ public class ItemMap {
 		if(yaml.getString(name) != null){
 			return Material.matchMaterial(yaml.getString(name));
 		}
+		if(temporaryItems.containsKey(name.toLowerCase())){
+			return Material.matchMaterial(temporaryItems.get(name.toLowerCase()));
+		}
 		return Material.matchMaterial(name); // Returns null if not found
 	}
 
@@ -63,14 +70,14 @@ public class ItemMap {
 	 * @return the sign (or null if not found)
 	 */
 	public Sign getSign(String name){
-		if(name == null){
-			return null;
-		}
 		if(yaml.getString(name) != null){
 			String[] parts = yaml.getString(name).split(":");
 			if(parts.length == 2){
-				return AntiShare.getInstance().getSignList().getSign(parts[1]);
+				return plugin.getSignList().getSign(parts[1]);
 			}
+		}
+		if(temporarySigns.containsKey(name.toLowerCase())){
+			return temporarySigns.get(name.toLowerCase());
 		}
 		return null;
 	}
@@ -90,6 +97,9 @@ public class ItemMap {
 		String[] parts = name.split(":");
 		if(yaml.getString(parts[0]) != null){
 			parts[0] = yaml.getString(parts[0]);
+		}
+		if(temporaryItems.containsKey(parts[0].toLowerCase())){
+			parts[0] = temporaryItems.get(parts[0].toLowerCase());
 		}
 		Material m = Material.matchMaterial(parts[0]);
 		if(m == null){
@@ -127,6 +137,39 @@ public class ItemMap {
 	 */
 	public void reload(){
 		yaml.load();
+		temporaryItems.clear();
+	}
+
+	/**
+	 * Adds a sign to the Item Map. <b>This is TEMPORARY and will NOT SAVE.</b><br>
+	 * <i>Signs added here <b>CANNOT</b> be reached from the Sign List</i>
+	 * 
+	 * @param name the sign name
+	 * @param sign the sign
+	 */
+	public void addTemporarySign(String name, Sign sign){
+		this.temporarySigns.put(name.toLowerCase(), sign);
+	}
+
+	/**
+	 * Adds a Material to the Item Map. <b>This is TEMPORARY and will NOT SAVE.</b>
+	 * 
+	 * @param name the sign name
+	 * @param material the material
+	 */
+	public void addTemporaryItem(String name, Material material){
+		temporaryItems.put(name.toLowerCase(), material.name());
+	}
+
+	/**
+	 * Adds a Material to the Item Map. <b>This is TEMPORARY and will NOT SAVE.</b> <br>
+	 * <i>This method will <b>NOT</b> verify the material input.</i>
+	 * 
+	 * @param name the sign name
+	 * @param material the material
+	 */
+	public void addTemporaryItem(String name, String material){
+		temporaryItems.put(name.toLowerCase(), material);
 	}
 
 }

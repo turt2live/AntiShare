@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
 
-import java.io.File;
-
 import org.bukkit.Material;
 import org.junit.After;
 import org.junit.Before;
@@ -15,18 +13,15 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.signs.Sign;
 import com.turt2live.antishare.signs.SignList;
 import com.turt2live.antishare.test.util.FakeAntiShare;
-import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
 @RunWith (PowerMockRunner.class)
 public class TestItemMap {
 
 	private FakeAntiShare fake = new FakeAntiShare();
 	private ItemMap map;
-	private WrappedEnhancedConfiguration yaml;
 
 	// Reload test is implied with other tests. If it fails, so will the test
 
@@ -37,14 +32,18 @@ public class TestItemMap {
 		fake.signs = signList;
 		fake.prepare();
 		map = new ItemMap();
-		AntiShare plugin = fake.get();
-		yaml = new WrappedEnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
 	}
 
 	@After
 	public void after(){
-		yaml.clearFile();
-		yaml.save();
+		map.reload();
+	}
+
+	@Test
+	public void testGetSign(){
+		assertNull(map.getSign("test"));
+		map.addTemporarySign("test", new Sign("testSign", new String[] {"*", "*", "*", "*"}, true, false));
+		assertNotNull(map.getSign("test"));
 	}
 
 	@Test
@@ -52,14 +51,9 @@ public class TestItemMap {
 		assertEquals(Material.STONE, map.getItem("STONE"));
 		assertNull(map.getItem("sdajkdh"));
 		assertNull(map.getItem(null));
-		yaml.set("test", "STONE");
-		yaml.set("test2", "stone");
-		yaml.set("test3", "1");
-		yaml.save();
-		map.reload();
+		map.addTemporaryItem("test", Material.STONE);
 		assertEquals(Material.STONE, map.getItem("test"));
-		assertEquals(Material.STONE, map.getItem("test2"));
-		assertEquals(Material.STONE, map.getItem("test3"));
+		assertNull(map.getItem("test2"));
 	}
 
 	@Test
@@ -76,9 +70,7 @@ public class TestItemMap {
 		assertEquals("1", map.getItem("stone", true, true));
 		assertEquals("1:test", map.getItem("stone:test", true, false));
 		assertEquals("1", map.getItem("stone", true, false));
-		yaml.set("test", "stone");
-		yaml.save();
-		map.reload();
+		map.addTemporaryItem("test", Material.STONE);
 		assertEquals("1:0", map.getItem("test:0", false, true));
 		assertEquals("1:*", map.getItem("test", false, true));
 		assertEquals("1:test", map.getItem("test:test", false, false));
@@ -87,16 +79,6 @@ public class TestItemMap {
 		assertEquals("1", map.getItem("test", true, true));
 		assertEquals("1:test", map.getItem("test:test", true, false));
 		assertEquals("1", map.getItem("test", true, false));
-	}
-
-	@Test
-	public void testGetSign(){
-		assertNull(map.getSign(null));
-		assertNull(map.getSign("test"));
-		yaml.set("test", "test:test");
-		yaml.save();
-		map.reload();
-		assertNotNull(map.getSign("test"));
 	}
 
 }
