@@ -20,7 +20,8 @@ public class CleanupAfterTest extends RunListener {
 		File[] files = new File[] {
 				new File("items.yml"),
 				new File("signs.yml"),
-				new File("locale")
+				new File("locale"),
+				new File("data")
 		};
 
 		for(File file : files){

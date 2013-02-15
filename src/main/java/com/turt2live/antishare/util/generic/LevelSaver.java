@@ -63,6 +63,7 @@ public class LevelSaver {
 		File file = new File(plugin.getDataFolder(), "data" + File.separator + "levels.yml");
 		if(!file.exists()){
 			try{
+				file.getParentFile().mkdirs();
 				file.createNewFile();
 			}catch(IOException e){
 				e.printStackTrace();
