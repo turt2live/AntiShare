@@ -23,8 +23,6 @@ public class TestItemMap {
 	private FakeAntiShare fake = new FakeAntiShare();
 	private ItemMap map;
 
-	// Reload test is implied with other tests. If it fails, so will the test
-
 	@Before
 	public void setUp(){
 		SignList signList = PowerMockito.mock(SignList.class);
