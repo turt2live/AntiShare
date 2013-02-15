@@ -77,7 +77,6 @@ com.turt2live.antishare.util.events:
     - EventList
     - TrackerList
 com.turt2live.antishare.util.generic:
-    - ItemMap
     - LevelSaver
     - MobPattern
     - MoneySaver
