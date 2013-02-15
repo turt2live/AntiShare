@@ -39,12 +39,14 @@ public class TestItemMap {
 		map = new ItemMap();
 		AntiShare plugin = fake.get();
 		yaml = new WrappedEnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
+		yaml.clearFile();
+		yaml.save();
 	}
 
 	@After
 	public void after(){
-		yaml.clearFile();
-		yaml.save();
+		//		yaml.clearFile();
+		//		yaml.save();
 	}
 
 	@Test
@@ -64,12 +66,7 @@ public class TestItemMap {
 		yaml.set("test", "STONE");
 		yaml.set("test2", "stone");
 		yaml.set("test3", "1");
-		boolean saved = yaml.save();
-		if(!saved){
-			if(yaml.getLastException() != null){
-				yaml.getLastException().printStackTrace();
-			}
-		}
+		yaml.save();
 		map.reload();
 		assertEquals(Material.STONE, map.getItem("test"));
 		assertEquals(Material.STONE, map.getItem("test2"));
