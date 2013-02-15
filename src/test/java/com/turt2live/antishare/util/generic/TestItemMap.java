@@ -32,19 +32,28 @@ public class TestItemMap {
 
 	@Before
 	public void setUp(){
+		SignList signList = PowerMockito.mock(SignList.class);
+		PowerMockito.when(signList.getSign(anyString())).thenReturn(new Sign(null, null, false, false));
+		fake.signs = signList;
 		fake.prepare();
 		map = new ItemMap();
 		AntiShare plugin = fake.get();
 		yaml = new WrappedEnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
-		SignList signList = PowerMockito.mock(SignList.class);
-		PowerMockito.when(signList.getSign(anyString())).thenReturn(new Sign(null, null, false, false));
-		PowerMockito.when(plugin.getSignList()).thenReturn(signList);
 	}
 
 	@After
 	public void after(){
 		yaml.clearFile();
 		yaml.save();
+	}
+
+	@Test
+	public void testGetSign(){
+		assertNull(map.getSign("test"));
+		yaml.set("test", "test:test");
+		yaml.save();
+		map.reload();
+		assertNotNull(map.getSign("test"));
 	}
 
 	@Test
@@ -60,15 +69,6 @@ public class TestItemMap {
 		assertEquals(Material.STONE, map.getItem("test"));
 		assertEquals(Material.STONE, map.getItem("test2"));
 		assertEquals(Material.STONE, map.getItem("test3"));
-	}
-
-	@Test
-	public void testGetSign(){
-		assertNull(map.getSign("test"));
-		yaml.set("test", "test:test");
-		yaml.save();
-		map.reload();
-		assertNotNull(map.getSign("test"));
 	}
 
 	@Test

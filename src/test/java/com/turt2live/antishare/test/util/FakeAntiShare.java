@@ -13,6 +13,7 @@ import org.powermock.api.mockito.PowerMockito;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.lang.Locale;
+import com.turt2live.antishare.signs.SignList;
 import com.turt2live.metrics.EMetrics;
 
 public class FakeAntiShare {
@@ -21,8 +22,10 @@ public class FakeAntiShare {
 	public static final File DATA_SOURCE = new File("src" + File.separator + "main" + File.separator + "resources");
 
 	private AntiShare mock;
+	public SignList signs = null;
 
 	// No need to test - Logic is "sound" (for now)
+	@SuppressWarnings ("deprecation")
 	public void prepare(){
 		mock = PowerMockito.mock(AntiShare.class);
 		try{
@@ -62,9 +65,11 @@ public class FakeAntiShare {
 		}catch(FileNotFoundException e){
 			e.printStackTrace();
 		}
-		if(AntiShare.getInstance() == null){
-			AntiShare.setInstance(mock);
+		if(signs != null){
+			PowerMockito.when(mock.getSignList()).thenReturn(signs);
 		}
+		AntiShare.setInstance(null);
+		AntiShare.setInstance(mock);
 	}
 
 	private void copy(File sourceLocation, File targetLocation) throws IOException{
