@@ -47,8 +47,11 @@ public class ItemMap {
 	 * @return the Material (or null if not found)
 	 */
 	public Material getItem(String name){
+		if(name == null){
+			return null;
+		}
 		if(yaml.getString(name) != null){
-			return Material.getMaterial(yaml.getString(name));
+			return Material.matchMaterial(yaml.getString(name));
 		}
 		return Material.matchMaterial(name); // Returns null if not found
 	}
@@ -78,10 +81,13 @@ public class ItemMap {
 	 * @return the id:data format
 	 */
 	public String getItem(String name, boolean zero, boolean isDataNumber){
-		if(yaml.getString(name) != null){
-			name = yaml.getString(name);
+		if(name == null){
+			return null;
 		}
 		String[] parts = name.split(":");
+		if(yaml.getString(parts[0]) != null){
+			parts[0] = yaml.getString(parts[0]);
+		}
 		Material m = Material.matchMaterial(parts[0]);
 		if(m == null){
 			return null;
