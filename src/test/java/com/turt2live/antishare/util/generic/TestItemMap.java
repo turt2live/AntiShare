@@ -39,6 +39,8 @@ public class TestItemMap {
 		map = new ItemMap();
 		AntiShare plugin = fake.get();
 		yaml = new WrappedEnhancedConfiguration(new File(plugin.getDataFolder(), "items.yml"), plugin);
+		File file = new File(plugin.getDataFolder(), "items.yml");
+		System.out.println("FILE EXISTS: " + file.exists() + " PATH = " + file.getAbsolutePath());
 	}
 
 	@After
