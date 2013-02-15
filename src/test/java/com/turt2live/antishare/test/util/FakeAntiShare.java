@@ -33,10 +33,6 @@ public class FakeAntiShare {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		System.out.println("----------------------");
-		list(DATA_FOLDER, 0);
-		System.out.println("----------------------");
-		list(DATA_SOURCE, 0);
 		EnhancedConfiguration config = new EnhancedConfiguration(new File(DATA_FOLDER, "resources" + File.separator + "config.yml"));
 		PowerMockito.when(mock.getConfig()).thenReturn(config);
 		PowerMockito.when(mock.getPrefix()).thenReturn("[AntiShare]");
@@ -74,26 +70,6 @@ public class FakeAntiShare {
 		}
 		AntiShare.setInstance(null);
 		AntiShare.setInstance(mock);
-	}
-
-	private void list(File directory, int spaces){
-		String space = "";
-		StringBuilder builder = new StringBuilder();
-		for(int i = 0; i < spaces; i++){
-			builder.append(" ");
-		}
-		space = builder.toString();
-		File[] files = directory.listFiles();
-		if(files != null){
-			for(File file : files){
-				if(file.isDirectory()){
-					System.out.println(space + "+ " + file.getName());
-					list(file, spaces + 1);
-				}else{
-					System.out.println(space + "- " + file.getName());
-				}
-			}
-		}
 	}
 
 	private void copy(File sourceLocation, File targetLocation) throws IOException{
