@@ -256,7 +256,7 @@
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.metrics</pattern>
-                  <shadedPattern>com.turt2live.materials.${project.name}</shadedPattern>
+                  <shadedPattern>com.turt2live.metrics.${project.name}</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>

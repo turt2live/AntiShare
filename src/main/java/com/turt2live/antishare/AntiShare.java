@@ -353,7 +353,7 @@ public class AntiShare extends PluginWrapper {
 
 		// Load pail
 		if(!getConfig().getBoolean("other.more-quiet-startup") || debugMode){
-			getLogger().info(Localization.getMessage(LocaleMessage.START_PAIL, LocaleMessage.SERVICE_COMMANDS));
+			getLogger().info(Localization.getMessage(LocaleMessage.START_PAIL));
 		}
 		Plugin pail = getServer().getPluginManager().getPlugin("Pail");
 		if(pail != null){
