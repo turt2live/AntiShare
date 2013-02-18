@@ -59,7 +59,7 @@ permissions:
             AntiShare.check: true
             AntiShare.itemframes: true
             AntiShare.cuboid: true
-            AntiShare.plugin.magicspells
+            AntiShare.plugin.magicspells: true
     AntiShare.cuboid:
         description: Allows the target to create cuboids in AntiShare
         default: op
