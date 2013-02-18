@@ -50,6 +50,7 @@ import com.turt2live.antishare.util.generic.UpdateChecker;
 import com.turt2live.metrics.EMetrics;
 import com.turt2live.metrics.tracker.BasicTracker;
 import com.turt2live.metrics.tracker.EnabledTracker;
+import com.turt2live.metrics.tracker.FixedTracker;
 
 /**
  * AntiShare
@@ -299,6 +300,10 @@ public class AntiShare extends PluginWrapper {
 			case FEATURE_WORLD_SPLIT:
 			case LOCALE:
 				metrics.addTracker(new EnabledTracker(type.getGraphName(), type.getName()));
+				break;
+			case MCMMO:
+				Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
+				metrics.addTracker(new FixedTracker(type.getGraphName(), mcmmo != null ? "Found" : "Not Found"));
 				break;
 			case SPECIAL:
 				break;

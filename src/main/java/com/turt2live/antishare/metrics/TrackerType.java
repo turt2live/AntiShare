@@ -15,7 +15,8 @@ public enum TrackerType{
 	FEATURE_GM_BLOCKS("Features Used", "GameMode Blocks"),
 	FEATURE_INVENTORIES("Features Used", "Inventories"),
 	FEATURE_WORLD_SPLIT("Features Used", "World Split"),
-	LOCALE("Locale (File Name)", Localization.getLocaleFileName());
+	LOCALE("Locale (File Name)", Localization.getLocaleFileName()),
+	MCMMO("mcMMO Servers", "default value");
 
 	private String graphname = "DEFAULT";
 	private String name = "DEFAULT";
