@@ -92,4 +92,7 @@ public class PermissionNodes {
 	public static final String MONEY_NO_FINE = "AntiShare.money.nofine";
 	public static final String MONEY_NO_REWARD = "AntiShare.money.noreward";
 
+	// Plugin-Specific Nodes
+	public static final String PLUGIN_MAGIC_SPELLS = "AntiShare.plugin.magicspells";
+
 }

@@ -25,6 +25,7 @@ import com.turt2live.antishare.compatibility.LWC;
 import com.turt2live.antishare.compatibility.Lockette;
 import com.turt2live.antishare.compatibility.LogBlock;
 import com.turt2live.antishare.compatibility.Towny;
+import com.turt2live.antishare.compatibility.other.MagicSpells;
 import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
@@ -42,6 +43,7 @@ public class HookManager extends AntiShareManager {
 	private final List<BlockProtection> blocks = new ArrayList<BlockProtection>();
 	private final List<RegionProtection> regions = new ArrayList<RegionProtection>();
 	private final List<BlockLogger> loggers = new ArrayList<BlockLogger>();
+	private MagicSpells spells;
 
 	/**
 	 * Sends a block break to all block logging plugins
@@ -142,28 +144,34 @@ public class HookManager extends AntiShareManager {
 		// Find plugins
 		Plugin chestshop = plugin.getServer().getPluginManager().getPlugin("ChestShop");
 		if(chestshop != null){
-			blocks.add(new ChestShop());
 			hooked(chestshop);
+			blocks.add(new ChestShop());
 		}
 		Plugin lwc = plugin.getServer().getPluginManager().getPlugin("LWC");
 		if(lwc != null){
-			blocks.add(new LWC());
 			hooked(lwc);
+			blocks.add(new LWC());
 		}
 		Plugin lockette = plugin.getServer().getPluginManager().getPlugin("Lockette");
 		if(lockette != null){
-			blocks.add(new Lockette());
 			hooked(lockette);
+			blocks.add(new Lockette());
 		}
 		Plugin towny = plugin.getServer().getPluginManager().getPlugin("Towny");
 		if(towny != null){
-			regions.add(new Towny());
 			hooked(towny);
+			regions.add(new Towny());
 		}
 		Plugin logblock = plugin.getServer().getPluginManager().getPlugin("LogBlock");
 		if(logblock != null){
-			loggers.add(new LogBlock());
 			hooked(logblock);
+			loggers.add(new LogBlock());
+		}
+		Plugin magicspells = plugin.getServer().getPluginManager().getPlugin("MagicSpells");
+		if(magicspells != null){
+			hooked(magicspells);
+			spells = new MagicSpells();
+			plugin.getServer().getPluginManager().registerEvents(spells, plugin);
 		}
 		return true;
 	}

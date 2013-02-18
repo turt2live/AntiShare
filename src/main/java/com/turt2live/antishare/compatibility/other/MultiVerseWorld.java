@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.util.generic;
+package com.turt2live.antishare.compatibility.other;
 
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;

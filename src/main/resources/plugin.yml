@@ -4,7 +4,7 @@ version: maven-version-number
 description: Create social awkwardness for creative-mode players
 authors: [Turt2Live, Sayshal]
 website: http://dev.bukkit.org/server-mods/antishare
-softdepend: [Vault, xMail]
+softdepend: [Vault, ChestShop, Lockette, LWC, LogBlock, MagicSpells, Pail, PermissionsEx, Towny, MultiVerse-Core]
 build: jenkins-build-number
 commands:
   antishare:
@@ -59,6 +59,7 @@ permissions:
             AntiShare.check: true
             AntiShare.itemframes: true
             AntiShare.cuboid: true
+            AntiShare.plugin.magicspells
     AntiShare.cuboid:
         description: Allows the target to create cuboids in AntiShare
         default: op
@@ -299,3 +300,11 @@ permissions:
     AntiShare.deny.hit_mobs:
         description: Denies combat with mobs (cows, creepers, etc)
         default: false
+    AntiShare.plugin.*:
+        description: Allow all AntiShare plugin integration functions
+        default: op
+        children:
+            AntiShare.plugin.magicspells: true
+    AntiShare.plugin.magicspells:
+        description: Allows the target to bypass MagicSpells integration
+        default: op

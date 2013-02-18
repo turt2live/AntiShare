@@ -18,9 +18,9 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.compatibility.other.MultiVerseWorld;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.money.Tender.TenderType;
-import com.turt2live.antishare.util.generic.MultiVerseWorld;
 import com.turt2live.materials.MaterialAPI;
 
 /**

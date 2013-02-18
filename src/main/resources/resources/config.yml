@@ -183,6 +183,9 @@ block-tracking:
   tracked-survival-blocks: all
   tracked-creative-blocks: all
   tracked-adventure-blocks: all
+# MagicSpells integration
+magicspells:
+  block-creative: true
 # Misc. stuff, generally leave this alone.
 other:
   debug: false
