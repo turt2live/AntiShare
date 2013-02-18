@@ -145,18 +145,14 @@ public class BaseListener implements Listener {
 		if(plugin.getSystemsManager().isEnabled(Manager.CUBOID)){
 			cuboids = (CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID);
 		}
-		if(plugin.getSystemsManager().isEnabled(Manager.HOOK)){
-			hooks = (HookManager) plugin.getSystemsManager().getManager(Manager.HOOK);
-		}
+		hooks = (HookManager) plugin.getSystemsManager().getManager(Manager.HOOK);
 		if(plugin.getSystemsManager().isEnabled(Manager.INVENTORY)){
 			inventories = (InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY);
 		}
 		if(plugin.getSystemsManager().isEnabled(Manager.MONEY)){
 			money = (MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY);
 		}
-		if(plugin.getSystemsManager().isEnabled(Manager.WORLD_CONFIGS)){
-			worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
-		}
+		worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
 	}
 
 	/**
