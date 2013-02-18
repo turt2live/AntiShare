@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+// TODO: Document
 public abstract class RegionProtection {
 
 	public abstract boolean isRegion(Location location);

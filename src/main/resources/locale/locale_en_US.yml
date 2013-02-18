@@ -26,6 +26,7 @@ fine-reward: 'You are {0} fine/reward messages.'
 not-enabled: 'Service not enabled: {0}, skipping...'
 balance-change: 'Your balance was changed to {0}'
 locale-file: 'You are using a non-standard locale file. Consider sending it''s contents to turt2live to be made official!'
+lb-warning: 'You have LogBlock installed! Make sure to ENABLE pre-log events to avoid incompatibilities!'
 fines-and-rewards:
     fine:
         failed: 'Fine Failed: {0}'
@@ -129,6 +130,7 @@ status:
     region-migrate: 'Player (region) information migrated: {0}'
     blocks-converted: 'Blocks Converted: {0}'
     world-migrate: 'World configurations migrated: {0}'
+    hook: 'Hooking {0}...'
 service:
     metrics: 'Metrics'
     simplenotice: 'SimpleNotice'

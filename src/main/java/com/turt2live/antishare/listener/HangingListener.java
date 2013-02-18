@@ -46,6 +46,8 @@ public class HangingListener implements Listener {
 		}
 	}
 
+	// TODO: Block logger implementation
+
 	@EventHandler (priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingBreakEvent event){
 		if(event.isCancelled() || !plugin.getConfig().getBoolean("enabled-features.no-drops-when-block-break.paintings-are-attached")){

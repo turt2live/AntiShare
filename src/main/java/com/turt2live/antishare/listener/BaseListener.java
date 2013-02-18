@@ -267,7 +267,7 @@ public class BaseListener implements Listener {
 		}
 
 		// Check hooks
-		if(hooks != null && hooks.checkForSignProtection(block)){
+		if(hooks.checkForSignProtection(block)){
 			return; // Don't handle any further, let the other plugin handle it
 		}
 
@@ -365,6 +365,8 @@ public class BaseListener implements Listener {
 
 		// Handle drops
 		if(drops != null && !deny && special){
+			block.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+			hooks.sendBlockBreak(player.getName(), block.getLocation(), block.getType(), block.getData());
 			if(drops){
 				if(blocks != null){
 					blocks.removeBlock(block);
@@ -383,6 +385,8 @@ public class BaseListener implements Listener {
 			for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 				Block rel = block.getRelative(face);
 				if(MaterialAPI.isDroppedOnBreak(rel, block, true)){
+					rel.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+					hooks.sendBlockBreak(player.getName(), rel.getLocation(), rel.getType(), rel.getData());
 					if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 						GameMode gm = blocks == null ? null : blocks.getType(rel);
 						if(gm != null){
@@ -434,12 +438,15 @@ public class BaseListener implements Listener {
 						double d2 = e.getLocation().distanceSquared(block.getLocation());
 						if(d2 < 1.65 && d2 > 1.6 || d2 > 0.5 && d2 < 0.51){
 							e.remove();
+							// TODO: BlockLogger implementation
 						}
 					}
 				}
 				for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
 					Block rel = block.getRelative(face);
 					if(MaterialAPI.isDroppedOnBreak(rel, block, true)){
+						rel.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+						hooks.sendBlockBreak(player.getName(), rel.getLocation(), rel.getType(), rel.getData());
 						if(plugin.getConfig().getBoolean("enabled-features.attached-blocks-settings.break-as-gamemode")){
 							GameMode gm = blocks == null ? null : blocks.getType(rel);
 							if(gm != null){
@@ -480,6 +487,8 @@ public class BaseListener implements Listener {
 							Block above = block.getRelative(BlockFace.UP);
 							do{
 								if(above.getType() == Material.SAND || above.getType() == Material.GRAVEL){
+									above.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+									hooks.sendBlockBreak(player.getName(), above.getLocation(), above.getType(), above.getData());
 									above.setType(Material.AIR);
 									above = above.getRelative(BlockFace.UP);
 								}else{
@@ -506,6 +515,8 @@ public class BaseListener implements Listener {
 						for(BlockFace face : BlockFace.values()){
 							Block rel = above.getRelative(face);
 							if(MaterialAPI.isDroppedOnBreak(rel, above, true)){
+								rel.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+								hooks.sendBlockBreak(player.getName(), rel.getLocation(), rel.getType(), rel.getData());
 								rel.setType(Material.AIR);
 								if(blocks != null){
 									blocks.removeBlock(rel);
@@ -526,6 +537,8 @@ public class BaseListener implements Listener {
 					do{
 						Block above = active.getRelative(BlockFace.UP);
 						if(above.getType() == Material.CACTUS){
+							above.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+							hooks.sendBlockBreak(player.getName(), above.getLocation(), above.getType(), above.getData());
 							if(blocks != null){
 								blocks.removeBlock(above);
 							}
@@ -537,6 +550,8 @@ public class BaseListener implements Listener {
 					}while (moreBlocks);
 					for(int i = breakBlocks.size() - 1; i > -1; i--){
 						Location location = breakBlocks.get(i);
+						location.getBlock().setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+						hooks.sendBlockBreak(player.getName(), location, location.getBlock().getType(), location.getBlock().getData());
 						location.getBlock().setType(Material.AIR);
 					}
 				}
@@ -549,6 +564,8 @@ public class BaseListener implements Listener {
 					do{
 						Block above = active.getRelative(BlockFace.UP);
 						if(above.getType() == Material.SUGAR_CANE_BLOCK){
+							above.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+							hooks.sendBlockBreak(player.getName(), above.getLocation(), above.getType(), above.getData());
 							if(blocks != null){
 								blocks.removeBlock(above);
 							}
@@ -560,6 +577,8 @@ public class BaseListener implements Listener {
 					}while (moreBlocks);
 					for(int i = breakBlocks.size() - 1; i > -1; i--){
 						Location location = breakBlocks.get(i);
+						location.getBlock().setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+						hooks.sendBlockBreak(player.getName(), location, location.getBlock().getType(), location.getBlock().getData());
 						location.getBlock().setType(Material.AIR);
 					}
 				}
@@ -2223,6 +2242,8 @@ public class BaseListener implements Listener {
 				if(deny){
 					event.setCancelled(true);
 				}else if(!drops){
+					to.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+					hooks.sendBlockBreak("WATERFLOW", to.getLocation(), to.getType(), to.getData());
 					to.setType(Material.AIR);
 				}
 				blocks.removeBlock(to);
@@ -2245,6 +2266,8 @@ public class BaseListener implements Listener {
 				if(deny){
 					event.blockList().remove(i);
 				}else if(!drops){
+					block.setMetadata("antishare-logblock", new FixedMetadataValue(plugin, true));
+					hooks.sendBlockBreak(event.getEntityType().name(), block.getLocation(), block.getType(), block.getData());
 					block.setType(Material.AIR);
 					event.blockList().remove(i);
 				}

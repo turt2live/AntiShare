@@ -188,8 +188,7 @@ other:
   debug: false
   more-quiet-shutdown: true
   more-quiet-startup: true
-  debug-settings:
-    force-use-tool: false
+  stop-logblock-spam: false
   send-gamemode-change-message: true
   quiet-offline-mode-warning: false
   dont-look-for-updates: false
