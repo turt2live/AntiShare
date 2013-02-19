@@ -11,6 +11,7 @@ import com.turt2live.antishare.manager.CuboidManager;
 import com.turt2live.antishare.manager.FeatureManager;
 import com.turt2live.antishare.manager.FeatureManager.Feature;
 import com.turt2live.antishare.manager.HookManager;
+import com.turt2live.antishare.manager.IOManager;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.manager.RegionManager;
@@ -31,7 +32,8 @@ public class Systems {
 		BLOCK(Feature.BLOCKS, BlockManager.class, Localization.getMessage(LocaleMessage.SERVICE_BLOCKS), TrackerType.FEATURE_GM_BLOCKS),
 		CUBOID(Feature.REGIONS, CuboidManager.class, Localization.getMessage(LocaleMessage.SERVICE_CUBOID), null),
 		MONEY(Feature.MONEY, MoneyManager.class, Localization.getMessage(LocaleMessage.SERVICE_MONEY), TrackerType.FEATURE_FINES_REWARDS),
-		HOOK(Feature.ALWAYS_ON, HookManager.class, Localization.getMessage(LocaleMessage.SERVICE_HOOKS), null);
+		HOOK(Feature.ALWAYS_ON, HookManager.class, Localization.getMessage(LocaleMessage.SERVICE_HOOKS), null),
+		IO(Feature.ALWAYS_ON, IOManager.class, Localization.getMessage(LocaleMessage.SERVICE_IO), null);
 
 		private final Feature feature;
 		private final Class<? extends AntiShareManager> manager;
@@ -198,6 +200,15 @@ public class Systems {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Method for getting the IO manager
+	 * 
+	 * @return the IO manager
+	 */
+	public IOManager getIO(){
+		return (IOManager) getManager(Manager.IO);
 	}
 
 	/**

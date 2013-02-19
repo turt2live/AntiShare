@@ -202,6 +202,8 @@ other:
   adventure-is-creative: true
   # Locale settings
   locale-file: locale_en_US.yml
+  # Save queue capacity
+  save-capacity: 100
 # For when turt2live needs a copy of your configuration
 error-reporting:
   error-string: TO BE DETERMINED

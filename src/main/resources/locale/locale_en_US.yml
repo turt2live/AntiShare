@@ -27,6 +27,9 @@ not-enabled: 'Service not enabled: {0}, skipping...'
 balance-change: 'Your balance was changed to {0}'
 locale-file: 'You are using a non-standard locale file. Consider sending it''s contents to turt2live to be made official!'
 lb-warning: 'You have LogBlock installed! Make sure to ENABLE pre-log events to avoid incompatibilities!'
+io-not-added: 'SAVE QUEUE FULL. CANNOT SAVE OBJECTS'
+io-not-saved: 'Failed to save object (requeued): {0}'
+io-not-saved2: 'Failed to save object (cannot requeue): {0}'
 fines-and-rewards:
     fine:
         failed: 'Fine Failed: {0}'
@@ -152,6 +155,7 @@ service:
     commands: 'Command Handler'
     region-inventory-update: 'inventory and region updates'
     world-configs: 'World Configurations Manager'
+    io: 'IO Manager'
 dictionary:
     directory: 'directory'
     config-files: 'configuration files'
