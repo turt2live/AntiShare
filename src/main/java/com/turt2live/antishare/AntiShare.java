@@ -298,8 +298,10 @@ public class AntiShare extends PluginWrapper {
 			case FEATURE_INVENTORIES:
 			case FEATURE_GM_BLOCKS:
 			case FEATURE_WORLD_SPLIT:
-			case LOCALE:
 				metrics.addTracker(new EnabledTracker(type.getGraphName(), type.getName()));
+				break;
+			case LOCALE:
+				metrics.addTracker(new FixedTracker(type.getGraphName(), type.getName()));
 				break;
 			case MCMMO:
 				Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
