@@ -221,7 +221,7 @@
       <url>http://repo.onarandombox.com/content/groups/public</url>
     </repository>
 
-    <!-- For Materials API -->
+    <!-- For my own stuff -->
     <repository>
       <id>turt2live-repo</id>
       <url>http://repo.turt2live.com</url>
