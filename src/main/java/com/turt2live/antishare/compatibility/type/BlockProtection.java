@@ -13,11 +13,28 @@ package com.turt2live.antishare.compatibility.type;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-// TODO: Document
+/**
+ * Abstraction for block protection plugins (like LWC)
+ * 
+ * @author turt2live
+ */
 public abstract class BlockProtection {
 
+	/**
+	 * Determines if a block is protected
+	 * 
+	 * @param block the block to check
+	 * @return true if protected, false otherwise
+	 */
 	public abstract boolean isProtected(Block block);
 
+	/**
+	 * Determines if a player can access a block
+	 * 
+	 * @param player the player
+	 * @param block the block
+	 * @return true if they can access the block, false otherwise
+	 */
 	public abstract boolean canAccess(Player player, Block block);
 
 }

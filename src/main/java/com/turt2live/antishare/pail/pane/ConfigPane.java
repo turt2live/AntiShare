@@ -9,6 +9,11 @@ import javax.swing.JPanel;
 
 import com.turt2live.antishare.AntiShare;
 
+/**
+ * Configuration pane
+ * 
+ * @author turt2live
+ */
 public class ConfigPane extends JPanel {
 
 	private static final long serialVersionUID = 1870305294715678836L;

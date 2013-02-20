@@ -53,7 +53,7 @@ import com.turt2live.metrics.tracker.EnabledTracker;
 import com.turt2live.metrics.tracker.FixedTracker;
 
 /**
- * AntiShare
+ * AntiShare - The heart
  * 
  * @author turt2live
  */

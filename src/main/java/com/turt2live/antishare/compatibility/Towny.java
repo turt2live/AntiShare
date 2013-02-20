@@ -10,6 +10,11 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
 
+/**
+ * Towny hook
+ * 
+ * @author turt2live
+ */
 public class Towny extends RegionProtection {
 
 	@Override

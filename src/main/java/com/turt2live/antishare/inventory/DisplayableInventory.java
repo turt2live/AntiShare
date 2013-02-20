@@ -14,7 +14,7 @@ import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.manager.InventoryManager;
 
 /**
- * Displays an AntiShare inventory
+ * Displayable version of an AntiShare inventory
  */
 public class DisplayableInventory implements InventoryHolder, Listener {
 

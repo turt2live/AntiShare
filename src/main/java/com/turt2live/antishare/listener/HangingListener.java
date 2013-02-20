@@ -35,15 +35,21 @@ import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.materials.MaterialAPI;
 
+/**
+ * Hanging listener - Used for paintings and item frames
+ * 
+ * @author turt2live
+ */
 public class HangingListener implements Listener {
 
 	private final AntiShare plugin = AntiShare.getInstance();
 	private WorldConfigurationManager worldConfigs = null;
 
+	/**
+	 * Creates a new hanging listener
+	 */
 	public HangingListener(){
-		if(plugin.getSystemsManager().isEnabled(Manager.WORLD_CONFIGS)){
-			worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
-		}
+		worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
 	}
 
 	// TODO: Block logger implementation

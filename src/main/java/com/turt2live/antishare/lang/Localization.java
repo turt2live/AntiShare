@@ -5,6 +5,11 @@ import java.io.File;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 
+/**
+ * Localization class - Nerve center for all localization
+ * 
+ * @author turt2live
+ */
 public class Localization {
 
 	private static Localization instance;

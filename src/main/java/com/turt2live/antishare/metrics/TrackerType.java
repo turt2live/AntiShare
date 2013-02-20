@@ -3,7 +3,7 @@ package com.turt2live.antishare.metrics;
 import com.turt2live.antishare.lang.Localization;
 
 /**
- * Tracker type
+ * Tracker type for EMetrics
  * 
  * @author turt2live
  */

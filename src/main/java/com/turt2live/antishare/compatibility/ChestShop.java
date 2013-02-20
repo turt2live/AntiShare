@@ -18,6 +18,11 @@ import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 
+/**
+ * ChestShop hook
+ * 
+ * @author turt2live
+ */
 public class ChestShop extends BlockProtection {
 
 	@Override

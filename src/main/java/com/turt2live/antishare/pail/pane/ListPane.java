@@ -8,6 +8,11 @@ import javax.swing.border.TitledBorder;
 
 import com.turt2live.antishare.pail.PailPane;
 
+/**
+ * List pane
+ * 
+ * @author turt2live
+ */
 public class ListPane extends JPanel {
 
 	private static final long serialVersionUID = -2224535013410395664L;

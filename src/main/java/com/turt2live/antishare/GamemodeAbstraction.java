@@ -2,6 +2,11 @@ package com.turt2live.antishare;
 
 import org.bukkit.GameMode;
 
+/**
+ * Class to determine GameMode similarities
+ * 
+ * @author turt2live
+ */
 public class GamemodeAbstraction {
 
 	/**

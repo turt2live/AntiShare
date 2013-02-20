@@ -13,6 +13,11 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
 
+/**
+ * An AntiShare cuboid
+ * 
+ * @author turt2live
+ */
 public class Cuboid implements Cloneable, ConfigurationSerializable {
 
 	protected Location minimum, maximum, point1, point2;
@@ -215,6 +220,13 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		}
 	}
 
+	/**
+	 * Attempts to deserialize the cuboid from a map
+	 * 
+	 * @param map the map
+	 * @return the cuboid
+	 * @throws IllegalArgumentException if the map is invalid in any way
+	 */
 	public static Cuboid deserialize(Map<String, Object> map){
 		String world = (String) map.get("world");
 		int mix = (Integer) map.get("minimum X"), miy = (Integer) map.get("minimum Y"), miz = (Integer) map.get("minimum Z"), max = (Integer) map.get("maximum X"), may = (Integer) map.get("maximum Y"), maz = (Integer) map.get("maximum Z");

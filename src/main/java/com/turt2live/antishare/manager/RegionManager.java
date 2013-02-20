@@ -27,6 +27,11 @@ import com.turt2live.antishare.regions.RegionConfiguration;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.util.ASUtils;
 
+/**
+ * Handles region related information
+ * 
+ * @author turt2live
+ */
 public class RegionManager extends AntiShareManager {
 
 	private final Map<String, Set<Region>> regions = new HashMap<String, Set<Region>>();

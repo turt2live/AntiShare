@@ -11,6 +11,11 @@ import org.bukkit.event.world.WorldUnloadEvent;
 
 import com.turt2live.antishare.regions.PerWorldConfig;
 
+/**
+ * Handles world configurations
+ * 
+ * @author turt2live
+ */
 public class WorldConfigurationManager extends AntiShareManager implements Listener {
 
 	private HashMap<String, PerWorldConfig> config = new HashMap<String, PerWorldConfig>();

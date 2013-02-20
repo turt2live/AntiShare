@@ -5,6 +5,11 @@ import org.bukkit.Location;
 
 import com.turt2live.antishare.regions.Region;
 
+/**
+ * RegionCuboid - simple class to better tell what cuboid AntiShare is passing around
+ * 
+ * @author turt2live
+ */
 public class RegionCuboid extends Cuboid {
 
 	public static final RegionCuboid NO_REGION_CUBOID = new RegionCuboid(null);

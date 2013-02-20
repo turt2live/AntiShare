@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.compatibility.other.PEX;
 
 /**
  * Permissions handler for AntiShare

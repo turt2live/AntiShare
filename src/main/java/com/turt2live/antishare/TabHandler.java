@@ -27,12 +27,17 @@ import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ErrorStringList;
 import com.turt2live.antishare.util.StringList;
 
+/**
+ * Tab command handing
+ * 
+ * @author turt2live
+ */
 public class TabHandler implements TabCompleter {
 
 	private static ErrorStringList REGION_NAME = new ErrorStringList(Localization.getMessage(LocaleMessage.TAB_REGION_NAME));
 	private static ErrorStringList PLAYER_NAME = new ErrorStringList(Localization.getMessage(LocaleMessage.TAB_PLAYER_NAME));
 
-	protected enum Tab{
+	enum Tab{
 		REGION(Localization.getMessage(LocaleMessage.TAB_REGION), new StringList("region"), new StringList("creative", "survival", "adventure")),
 		RELOAD(Localization.getMessage(LocaleMessage.TAB_NONE), new StringList("reload", "rl")),
 		RMREGION(Localization.getMessage(LocaleMessage.TAB_REMOVE_REGION), new StringList("rmregion")),

@@ -10,7 +10,13 @@ import org.bukkit.Material;
  */
 public abstract class BlockLogger {
 
+	/**
+	 * Default player name to inject into Block Loggers
+	 */
 	public static final String PLAYER_NAME = "AntiSharePlugin";
+	/**
+	 * Default data byte
+	 */
 	public static final byte DEFAULT_DATA = 0;
 
 	/**

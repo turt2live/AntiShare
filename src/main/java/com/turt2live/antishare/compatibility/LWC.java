@@ -15,6 +15,11 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 
+/**
+ * LWC hook
+ * 
+ * @author turt2live
+ */
 public class LWC extends BlockProtection {
 
 	private com.griefcraft.lwc.LWC lwc;

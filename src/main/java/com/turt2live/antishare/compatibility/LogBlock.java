@@ -16,6 +16,11 @@ import com.turt2live.antishare.lang.Localization;
 import de.diddiz.LogBlock.Consumer;
 import de.diddiz.LogBlock.events.BlockChangePreLogEvent;
 
+/**
+ * LogBlock hook
+ * 
+ * @author turt2live
+ */
 public class LogBlock extends BlockLogger implements Listener {
 
 	private Consumer lb;

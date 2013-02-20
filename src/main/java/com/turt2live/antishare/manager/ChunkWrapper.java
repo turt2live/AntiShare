@@ -18,6 +18,11 @@ import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
+/**
+ * Used to load/save data per-chunk
+ * 
+ * @author turt2live
+ */
 class ChunkWrapper {
 
 	private final BlockManager manager;
@@ -38,6 +43,11 @@ class ChunkWrapper {
 		this.world = chunk.getWorld().getName();
 	}
 
+	/**
+	 * Gets the world name for this chunk
+	 * 
+	 * @return the world name
+	 */
 	public String getWorldName(){
 		return world;
 	}
@@ -190,6 +200,12 @@ class ChunkWrapper {
 		}
 	}
 
+	/**
+	 * Gets the game mode of an entity
+	 * 
+	 * @param entity the entity
+	 * @return the gamemode, or null if not found, of the entity
+	 */
 	public GameMode getType(Entity entity){
 		if(creativeEntities.contains(manager.entityToString(entity))){
 			return GameMode.CREATIVE;
@@ -201,6 +217,12 @@ class ChunkWrapper {
 		return null;
 	}
 
+	/**
+	 * Gets the game mode of a block
+	 * 
+	 * @param block the entity
+	 * @return the gamemode, or null if not found, of the block
+	 */
 	public GameMode getType(Block block){
 		if(creativeBlocks.contains(manager.blockToString(block))){
 			return GameMode.CREATIVE;
@@ -212,6 +234,14 @@ class ChunkWrapper {
 		return null;
 	}
 
+	/**
+	 * Saves the chunk information
+	 * 
+	 * @param load set to true to load data after saving
+	 * @param clear set to true to clear self after saving
+	 * @param blocksDir the blocks data directory
+	 * @param entitiesDir the entities data directory
+	 */
 	public void save(boolean load, boolean clear, File blocksDir, File entitiesDir){
 		File blockFile = new File(blocksDir, chunkX + "." + chunkZ + "." + world + ".yml");
 		File entityFile = new File(entitiesDir, chunkX + "." + chunkZ + "." + world + ".yml");
@@ -293,11 +323,23 @@ class ChunkWrapper {
 		}
 	}
 
+	/**
+	 * Loads data for this chunk
+	 * 
+	 * @param blocks the blocks data directory
+	 * @param entity the entities data directory
+	 */
 	public void load(File blocks, File entity){
 		load(true, blocks);
 		load(false, entity);
 	}
 
+	/**
+	 * Loads a specific directory
+	 * 
+	 * @param isBlock set to true if loading block information
+	 * @param dir the directory to load
+	 */
 	public void load(boolean isBlock, File dir){
 		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".yml");
 		if(!file.exists()){

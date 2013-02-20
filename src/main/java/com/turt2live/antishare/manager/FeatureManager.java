@@ -4,6 +4,11 @@ import java.io.File;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
+/**
+ * Feature Manager - Handles all toggles for features
+ * 
+ * @author turt2live
+ */
 public class FeatureManager extends AntiShareManager {
 
 	/**

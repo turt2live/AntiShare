@@ -23,13 +23,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.compatibility.other.VaultEconomy;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.money.Fine;
 import com.turt2live.antishare.money.Reward;
 import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.money.TransactionResult;
-import com.turt2live.antishare.money.VaultEconomy;
 import com.turt2live.antishare.notification.Alert.AlertTrigger;
 import com.turt2live.antishare.notification.Alert.AlertType;
 import com.turt2live.antishare.util.generic.ASGameMode;

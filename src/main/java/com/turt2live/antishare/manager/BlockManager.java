@@ -20,6 +20,11 @@ import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.util.events.TrackerList;
 
+/**
+ * Block Manager
+ * 
+ * @author turt2live
+ */
 public class BlockManager extends AntiShareManager {
 
 	static class ASMaterial {
@@ -38,6 +43,9 @@ public class BlockManager extends AntiShareManager {
 	private boolean doneSave = false;
 	private int percent = 0;
 
+	/**
+	 * Creates a new Block Manager
+	 */
 	public BlockManager(){
 		// Setup files
 		entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
@@ -390,6 +398,11 @@ public class BlockManager extends AntiShareManager {
 		return entity.getChunk().getX() + ";" + entity.getChunk().getZ() + ";" + entity.getWorld().getName() + ";" + entity.getX() + ";" + entity.getY() + ";" + entity.getZ() + ";" + type.name();
 	}
 
+	/**
+	 * Gets the percentage of the save done
+	 * 
+	 * @return the percentage done
+	 */
 	public int percentSaveDone(){
 		if(isSaveDone()){
 			return 100;
@@ -397,6 +410,11 @@ public class BlockManager extends AntiShareManager {
 		return percent;
 	}
 
+	/**
+	 * Determines if the save has been completed
+	 * 
+	 * @return true if completed, false otherwise
+	 */
 	public boolean isSaveDone(){
 		return this.doneSave;
 	}

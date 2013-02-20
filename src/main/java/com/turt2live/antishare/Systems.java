@@ -18,6 +18,11 @@ import com.turt2live.antishare.manager.WorldConfigurationManager;
 import com.turt2live.antishare.metrics.TrackerType;
 import com.turt2live.metrics.tracker.Tracker;
 
+/**
+ * Systems manager - Central location for all managers to run through
+ * 
+ * @author turt2live
+ */
 public class Systems {
 
 	/**

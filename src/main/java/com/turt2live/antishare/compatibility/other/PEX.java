@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.permissions;
+package com.turt2live.antishare.compatibility.other;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -19,6 +19,7 @@ import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.permissions.PermissionNodes;
 
 /**
  * Special handling of PermissionsEx

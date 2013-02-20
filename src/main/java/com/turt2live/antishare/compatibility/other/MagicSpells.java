@@ -10,7 +10,11 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.permissions.PermissionNodes;
 
-// TODO: Document
+/**
+ * MagicSpells hook
+ * 
+ * @author turt2live
+ */
 public class MagicSpells implements Listener {
 
 	private boolean enabled = false;

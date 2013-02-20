@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.money;
+package com.turt2live.antishare.compatibility.other;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -18,6 +18,7 @@ import org.bukkit.GameMode;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.money.TransactionResult;
 import com.turt2live.antishare.util.generic.MoneySaver;
 
 /**

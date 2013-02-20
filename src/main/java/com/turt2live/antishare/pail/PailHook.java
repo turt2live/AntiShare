@@ -4,6 +4,11 @@ import me.escapeNT.pail.Pail;
 
 import org.bukkit.plugin.Plugin;
 
+/**
+ * A class to isolate Pail code from AntiShare code
+ * 
+ * @author turt2live
+ */
 public class PailHook {
 
 	/**

@@ -15,6 +15,11 @@ import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 
+/**
+ * Lockette hook
+ * 
+ * @author turt2live
+ */
 public class Lockette extends BlockProtection {
 
 	@Override

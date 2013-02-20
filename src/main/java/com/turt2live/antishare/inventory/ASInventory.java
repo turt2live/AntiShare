@@ -193,6 +193,11 @@ public class ASInventory implements Cloneable {
 		this.gamemode = gamemode;
 	}
 
+	/**
+	 * Determines if the inventory is empty
+	 * 
+	 * @return true if empty, false otherwise
+	 */
 	public boolean isEmpty(){
 		for(Integer slot : inventory.keySet()){
 			ItemStack stack = inventory.get(slot);

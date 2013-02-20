@@ -51,6 +51,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
+// TODO: Split out commands
 public class CommandHandler implements CommandExecutor {
 
 	private final AntiShare plugin = AntiShare.getInstance();

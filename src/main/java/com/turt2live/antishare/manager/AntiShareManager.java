@@ -2,6 +2,11 @@ package com.turt2live.antishare.manager;
 
 import com.turt2live.antishare.AntiShare;
 
+/**
+ * AntiShare manager abstract class
+ * 
+ * @author turt2live
+ */
 public abstract class AntiShareManager {
 
 	protected AntiShare plugin = AntiShare.getInstance();

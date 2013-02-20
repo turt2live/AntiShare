@@ -11,6 +11,11 @@ import me.escapeNT.pail.Pail;
 
 import com.turt2live.antishare.AntiShare;
 
+/**
+ * The actual Pail pane
+ * 
+ * @author turt2live
+ */
 public class PailPane extends JPanel {
 
 	private static final long serialVersionUID = 3497861298959219768L;
