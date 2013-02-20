@@ -149,14 +149,12 @@ public class ASUtils {
 			return null;
 		}
 		String typeId = "";
-		String data = "";
+		String data = "0";
 		typeId = Integer.toString(block.getTypeId());
 		if(block.getType().getMaxDurability() > 0){
 			data = "0";
 		}else if(block.getData() > 0){
 			data = Byte.toString(block.getData());
-		}else{
-			data = "0";
 		}
 		return typeId + (data.equals("0") && zero ? "" : ":" + data);
 	}
