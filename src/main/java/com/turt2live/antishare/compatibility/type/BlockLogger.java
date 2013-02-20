@@ -39,4 +39,24 @@ public abstract class BlockLogger {
 	 */
 	public abstract void placeBlock(String playerName, Location location, Material after, byte data);
 
+	/**
+	 * Breaks an entity as the AntiShare player
+	 * 
+	 * @param playerName the player name involved, or null for no associated player
+	 * @param location the location
+	 * @param before the previous material
+	 * @param data the previous data
+	 */
+	public abstract void breakHanging(String playerName, Location location, Material before, byte data);
+
+	/**
+	 * Places an entity as the AntiShare player
+	 * 
+	 * @param playerName the player name involved, or null for no associated player
+	 * @param location the location
+	 * @param after the new material
+	 * @param data the previous data
+	 */
+	public abstract void placeHanging(String playerName, Location location, Material after, byte data);
+
 }

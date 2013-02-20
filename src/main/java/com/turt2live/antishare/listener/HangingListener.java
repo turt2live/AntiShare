@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hanging;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,9 +21,11 @@ import org.bukkit.inventory.ItemStack;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager;
+import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.manager.WorldConfigurationManager;
 import com.turt2live.antishare.money.Tender.TenderType;
@@ -44,15 +47,15 @@ public class HangingListener implements Listener {
 
 	private final AntiShare plugin = AntiShare.getInstance();
 	private WorldConfigurationManager worldConfigs = null;
+	private HookManager hooks = null;
 
 	/**
 	 * Creates a new hanging listener
 	 */
 	public HangingListener(){
 		worldConfigs = (WorldConfigurationManager) plugin.getSystemsManager().getManager(Manager.WORLD_CONFIGS);
+		hooks = (HookManager) plugin.getSystemsManager().getManager(Manager.HOOK);
 	}
-
-	// TODO: Block logger implementation
 
 	@EventHandler (priority = EventPriority.LOW)
 	public void onPaintingBreak(HangingBreakEvent event){
@@ -68,6 +71,7 @@ public class HangingListener implements Listener {
 				GameMode gamemode = blocks.getRecentBreak(block);
 				if(gamemode != null && gamemode == GameMode.CREATIVE){
 					event.setCancelled(true);
+					hooks.sendEntityBreak(null, hanging.getLocation(), hanging instanceof ItemFrame ? Material.ITEM_FRAME : Material.PAINTING, BlockLogger.DEFAULT_DATA);
 					hanging.remove();
 					blocks.removeEntity(hanging);
 				}
@@ -242,7 +246,6 @@ public class HangingListener implements Listener {
 			}else{
 				if(blocks != null){
 					blocks.removeEntity(hanging);
-
 				}
 			}
 
@@ -273,6 +276,7 @@ public class HangingListener implements Listener {
 
 			// Handle drops
 			if(drops != null && !deny && special && blocks != null){
+				hooks.sendEntityBreak(player.getName(), hanging.getLocation(), item, BlockLogger.DEFAULT_DATA);
 				if(drops){
 					blocks.removeEntity(hanging);
 					hanging.getWorld().dropItemNaturally(hanging.getLocation(), new ItemStack(item));

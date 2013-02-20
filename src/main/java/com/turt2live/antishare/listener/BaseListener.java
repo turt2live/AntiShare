@@ -86,6 +86,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.GamemodeAbstraction;
 import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.lang.LocaleMessage;
 import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.manager.BlockManager;
@@ -437,8 +438,8 @@ public class BaseListener implements Listener {
 					if(e instanceof ItemFrame){
 						double d2 = e.getLocation().distanceSquared(block.getLocation());
 						if(d2 < 1.65 && d2 > 1.6 || d2 > 0.5 && d2 < 0.51){
+							hooks.sendEntityBreak(player.getName(), e.getLocation(), Material.ITEM_FRAME, BlockLogger.DEFAULT_DATA);
 							e.remove();
-							// TODO: BlockLogger implementation
 						}
 					}
 				}

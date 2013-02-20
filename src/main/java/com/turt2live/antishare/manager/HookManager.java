@@ -74,6 +74,34 @@ public class HookManager extends AntiShareManager {
 	}
 
 	/**
+	 * Sends an entity break to all block logging plugins
+	 * 
+	 * @param playerName the player name involved, or null for no associated player
+	 * @param location the location
+	 * @param before the material before the break
+	 * @param data the data before the break
+	 */
+	public void sendEntityBreak(String playerName, Location location, Material before, byte data){
+		for(BlockLogger logger : loggers){
+			logger.breakHanging(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, before, data);
+		}
+	}
+
+	/**
+	 * Sends an entity place to all block logging plugins
+	 * 
+	 * @param playerName the player name involved, or null for no associated player
+	 * @param location the location
+	 * @param after the material after the break
+	 * @param data the data after the break
+	 */
+	public void sendEntityPlace(String playerName, Location location, Material after, byte data){
+		for(BlockLogger logger : loggers){
+			logger.placeHanging(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, after, data);
+		}
+	}
+
+	/**
 	 * Determines if there is a region at a location
 	 * 
 	 * @param location the location

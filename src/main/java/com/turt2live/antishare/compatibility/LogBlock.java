@@ -60,4 +60,10 @@ public class LogBlock extends BlockLogger implements Listener {
 		}
 	}
 
+	@Override
+	public void breakHanging(String playerName, Location location, Material before, byte data){}
+
+	@Override
+	public void placeHanging(String playerName, Location location, Material after, byte data){}
+
 }
