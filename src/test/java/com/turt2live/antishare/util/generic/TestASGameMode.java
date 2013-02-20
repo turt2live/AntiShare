@@ -33,13 +33,7 @@ public class TestASGameMode {
 		// Expected results
 		boolean[][] expected = {
 				// Test creative, survival, adventure
-				new boolean[] {true, false, false},
-				new boolean[] {false, true, false},
-				new boolean[] {false, false, true},
-				new boolean[] {true, true, true},
-				new boolean[] {true, true, true},
-				new boolean[] {false, false, false}
-		};
+				new boolean[] {true, false, false}, new boolean[] {false, true, false}, new boolean[] {false, false, true}, new boolean[] {true, true, true}, new boolean[] {true, true, true}, new boolean[] {false, false, false}};
 
 		ASGameMode[] values = ASGameMode.values();
 
@@ -58,13 +52,7 @@ public class TestASGameMode {
 		// Expected results
 		expected = new boolean[][] {
 				// Test creative, survival, adventure
-				new boolean[] {true, false, false},
-				new boolean[] {false, true, false},
-				new boolean[] {false, false, true},
-				new boolean[] {true, true, true},
-				new boolean[] {true, true, false},
-				new boolean[] {false, false, false}
-		};
+				new boolean[] {true, false, false}, new boolean[] {false, true, false}, new boolean[] {false, false, true}, new boolean[] {true, true, true}, new boolean[] {true, true, false}, new boolean[] {false, false, false}};
 
 		for(int i = 0; i < values.length; i++){
 			boolean[] expectedResults = expected[i];
@@ -74,7 +62,7 @@ public class TestASGameMode {
 			assertEquals(expectedResults[2], value.matches(adventure));
 		}
 
-		// Revert 
+		// Revert
 		fake.get().getConfig().set("other.adventure-is-creative", original);
 	}
 

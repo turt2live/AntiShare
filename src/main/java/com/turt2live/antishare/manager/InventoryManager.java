@@ -416,8 +416,8 @@ public class InventoryManager extends AntiShareManager {
 	 * Gets a player's creative inventory
 	 * 
 	 * @param player the player
-	 * @return the inventory
 	 * @param world the world
+	 * @return the inventory
 	 */
 	public ASInventory getCreativeInventory(Player player, World world){
 		ASInventory inventory = creative.get(player.getName() + "." + world.getName());
@@ -432,8 +432,8 @@ public class InventoryManager extends AntiShareManager {
 	 * Gets a player's creative ender chest inventory
 	 * 
 	 * @param player the player
-	 * @return the inventory
 	 * @param world the world
+	 * @return the inventory
 	 */
 	public ASInventory getEnderCreativeInventory(Player player, World world){
 		ASInventory inventory = enderCreative.get(player.getName() + "." + world.getName());
@@ -448,8 +448,8 @@ public class InventoryManager extends AntiShareManager {
 	 * Gets a player's survival inventory
 	 * 
 	 * @param player the player
-	 * @return the inventory
 	 * @param world the world
+	 * @return the inventory
 	 */
 	public ASInventory getSurvivalInventory(Player player, World world){
 		ASInventory inventory = survival.get(player.getName() + "." + world.getName());
@@ -464,8 +464,8 @@ public class InventoryManager extends AntiShareManager {
 	 * Gets a player's survival ender chest inventory
 	 * 
 	 * @param player the player
-	 * @return the inventory
 	 * @param world the world
+	 * @return the inventory
 	 */
 	public ASInventory getEnderSurvivalInventory(Player player, World world){
 		ASInventory inventory = enderSurvival.get(player.getName() + "." + world.getName());
@@ -480,8 +480,8 @@ public class InventoryManager extends AntiShareManager {
 	 * Gets a player's adventure inventory
 	 * 
 	 * @param player the player
-	 * @return the inventory
 	 * @param world the world
+	 * @return the inventory
 	 */
 	public ASInventory getAdventureInventory(Player player, World world){
 		ASInventory inventory = adventure.get(player.getName() + "." + world.getName());
@@ -496,8 +496,8 @@ public class InventoryManager extends AntiShareManager {
 	 * Gets a player's adventure ender chest inventory
 	 * 
 	 * @param player the player
-	 * @return the inventory
 	 * @param world the world
+	 * @return the inventory
 	 */
 	public ASInventory getEnderAdventureInventory(Player player, World world){
 		ASInventory inventory = enderAdventure.get(player.getName() + "." + world.getName());

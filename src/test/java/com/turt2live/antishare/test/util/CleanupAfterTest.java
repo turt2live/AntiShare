@@ -17,12 +17,7 @@ public class CleanupAfterTest extends RunListener {
 	public void testRunFinished(Result result){
 
 		// Cleanup files
-		File[] files = new File[] {
-				new File("items.yml"),
-				new File("signs.yml"),
-				new File("locale"),
-				new File("data")
-		};
+		File[] files = new File[] {new File("items.yml"), new File("signs.yml"), new File("locale"), new File("data")};
 
 		for(File file : files){
 			if(file.exists()){

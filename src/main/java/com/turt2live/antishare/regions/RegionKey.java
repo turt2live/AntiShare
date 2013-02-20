@@ -41,14 +41,7 @@ public class RegionKey {
 	 * @return true if it is a key
 	 */
 	public static boolean isKey(String key){
-		if(key.equalsIgnoreCase("name")
-				|| key.equalsIgnoreCase("ShowEnterMessage")
-				|| key.equalsIgnoreCase("ShowExitMessage")
-				|| key.equalsIgnoreCase("inventory")
-				|| key.equalsIgnoreCase("area")
-				|| key.equalsIgnoreCase("gamemode")
-				|| key.equalsIgnoreCase("EnterMessage")
-				|| key.equalsIgnoreCase("ExitMessage")){
+		if(key.equalsIgnoreCase("name") || key.equalsIgnoreCase("ShowEnterMessage") || key.equalsIgnoreCase("ShowExitMessage") || key.equalsIgnoreCase("inventory") || key.equalsIgnoreCase("area") || key.equalsIgnoreCase("gamemode") || key.equalsIgnoreCase("EnterMessage") || key.equalsIgnoreCase("ExitMessage")){
 			return true;
 		}
 		return false;

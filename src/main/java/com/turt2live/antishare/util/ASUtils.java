@@ -69,11 +69,7 @@ public class ASUtils {
 	 * @param useSimpleNotice set to true if this method should use SimpleNotice if available
 	 */
 	public static void sendToPlayer(CommandSender target, String message, boolean useSimpleNotice){
-		if(!message.equalsIgnoreCase("nomsg")
-				&& !message.equalsIgnoreCase("no message")
-				&& !message.equalsIgnoreCase("none")
-				&& !message.equalsIgnoreCase("noshow")
-				&& !message.equalsIgnoreCase("no show")){
+		if(!message.equalsIgnoreCase("nomsg") && !message.equalsIgnoreCase("no message") && !message.equalsIgnoreCase("none") && !message.equalsIgnoreCase("noshow") && !message.equalsIgnoreCase("no show")){
 			message = ChatColor.translateAlternateColorCodes('&', message);
 			String prefix = "[AntiShare]";
 			try{
@@ -88,9 +84,7 @@ public class ASUtils {
 			 * modified by turt2live for AntiShare.
 			 */
 			if(target instanceof Player){
-				if(((Player) target).getListeningPluginChannels().contains("SimpleNotice")
-						&& useSimpleNotice
-						&& AntiShare.getInstance().isSimpleNoticeEnabled(target.getName())){
+				if(((Player) target).getListeningPluginChannels().contains("SimpleNotice") && useSimpleNotice && AntiShare.getInstance().isSimpleNoticeEnabled(target.getName())){
 					((Player) target).sendPluginMessage(AntiShare.getInstance(), "SimpleNotice", message.getBytes(java.nio.charset.Charset.forName("UTF-8")));
 				}else{
 					target.sendMessage(message);
@@ -111,11 +105,9 @@ public class ASUtils {
 		if(value == null || value.trim().length() == 0){
 			return null;
 		}
-		if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("on")
-				|| value.equalsIgnoreCase("active") || value.equalsIgnoreCase("1")){
+		if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("on") || value.equalsIgnoreCase("active") || value.equalsIgnoreCase("1")){
 			return true;
-		}else if(value.equalsIgnoreCase("false") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("off")
-				|| value.equalsIgnoreCase("inactive") || value.equalsIgnoreCase("0")){
+		}else if(value.equalsIgnoreCase("false") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("off") || value.equalsIgnoreCase("inactive") || value.equalsIgnoreCase("0")){
 			return false;
 		}
 		return null;

@@ -130,7 +130,7 @@ public class WorldSplit {
 		double value = axis.equals(Axis.X) ? player.getLocation().getX() : player.getLocation().getZ();
 		GameMode gamemode = getGameMode(value, player.getGameMode());
 
-		// Sanity 
+		// Sanity
 		if(player.getGameMode().equals(gamemode)){
 			return;
 		}

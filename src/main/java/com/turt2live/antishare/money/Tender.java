@@ -27,7 +27,6 @@ public abstract class Tender {
 	 * An enum to represent tender type
 	 * 
 	 * @author turt2live
-	 * 
 	 */
 	public static enum TenderType{
 		BLOCK_BREAK("actions.block-break", "Block Break"),

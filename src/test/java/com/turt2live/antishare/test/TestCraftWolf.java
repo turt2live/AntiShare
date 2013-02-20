@@ -19,8 +19,7 @@ public class TestCraftWolf {
 		Method[] methods = CraftWolf.class.getMethods();
 		for(Method method : methods){
 			// Remove Java methods
-			if(method.getName().equalsIgnoreCase("equals") || method.getName().equalsIgnoreCase("toString")
-					|| method.getName().equalsIgnoreCase("hashcode") || method.getName().equalsIgnoreCase("getClass")){
+			if(method.getName().equalsIgnoreCase("equals") || method.getName().equalsIgnoreCase("toString") || method.getName().equalsIgnoreCase("hashcode") || method.getName().equalsIgnoreCase("getClass")){
 				continue;
 			}
 			try{

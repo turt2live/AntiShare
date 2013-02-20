@@ -46,9 +46,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 			return false;
 		}
 		if(location.getWorld().getName().equals(minimum.getWorld().getName())){
-			if((location.getBlockX() >= minimum.getBlockX() && location.getBlockX() <= maximum.getBlockX())
-					&& (location.getBlockY() >= minimum.getBlockY() && location.getBlockY() <= maximum.getBlockY())
-					&& (location.getBlockZ() >= minimum.getBlockZ() && location.getBlockZ() <= maximum.getBlockZ())){
+			if((location.getBlockX() >= minimum.getBlockX() && location.getBlockX() <= maximum.getBlockX()) && (location.getBlockY() >= minimum.getBlockY() && location.getBlockY() <= maximum.getBlockY()) && (location.getBlockZ() >= minimum.getBlockZ() && location.getBlockZ() <= maximum.getBlockZ())){
 				return true;
 			}
 		}
@@ -67,14 +65,11 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		}
 		// Thanks to Sleaker for letting me use this code :D
 		// Modified from: https://github.com/MilkBowl/LocalShops/blob/master/src/net/milkbowl/localshops/ShopManager.java#L216
-		if(cuboid.getMaximumPoint().getBlockX() < getMinimumPoint().getBlockX()
-				|| cuboid.getMinimumPoint().getBlockX() > getMaximumPoint().getBlockX()){
+		if(cuboid.getMaximumPoint().getBlockX() < getMinimumPoint().getBlockX() || cuboid.getMinimumPoint().getBlockX() > getMaximumPoint().getBlockX()){
 			return false;
-		}else if(cuboid.getMaximumPoint().getBlockZ() < getMinimumPoint().getBlockZ()
-				|| cuboid.getMinimumPoint().getBlockZ() > getMaximumPoint().getBlockZ()){
+		}else if(cuboid.getMaximumPoint().getBlockZ() < getMinimumPoint().getBlockZ() || cuboid.getMinimumPoint().getBlockZ() > getMaximumPoint().getBlockZ()){
 			return false;
-		}else if(cuboid.getMaximumPoint().getBlockY() < getMinimumPoint().getBlockY()
-				|| cuboid.getMinimumPoint().getBlockY() > getMaximumPoint().getBlockY()){
+		}else if(cuboid.getMaximumPoint().getBlockY() < getMinimumPoint().getBlockY() || cuboid.getMinimumPoint().getBlockY() > getMaximumPoint().getBlockY()){
 			return false;
 		}else{
 			return true; // All 3 planes meet, therefore regions are in contact

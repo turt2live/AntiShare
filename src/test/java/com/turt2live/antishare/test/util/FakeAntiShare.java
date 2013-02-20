@@ -80,8 +80,7 @@ public class FakeAntiShare {
 
 			String[] children = sourceLocation.list();
 			for(int i = 0; i < children.length; i++){
-				copy(new File(sourceLocation, children[i]),
-						new File(targetLocation, children[i]));
+				copy(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
 			}
 		}else{
 

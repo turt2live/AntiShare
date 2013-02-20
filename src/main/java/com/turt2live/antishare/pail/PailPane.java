@@ -26,7 +26,7 @@ public class PailPane extends JPanel {
 		PailPane.pail = pail;
 		//		ConfigPane config = new ConfigPane();
 		//		ListPane blockLists = new ListPane();
-		//		
+		//
 		//		setLayout(new BorderLayout(0, 0));
 		//
 		//		JTabbedPane tabs = new JTabbedPane();
