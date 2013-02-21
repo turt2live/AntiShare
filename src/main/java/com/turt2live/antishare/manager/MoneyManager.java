@@ -23,23 +23,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.compatibility.other.VaultEconomy;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.money.Fine;
 import com.turt2live.antishare.money.Reward;
-import com.turt2live.antishare.money.Tender.TenderType;
 import com.turt2live.antishare.money.TransactionResult;
-import com.turt2live.antishare.notification.Alert.AlertTrigger;
-import com.turt2live.antishare.notification.Alert.AlertType;
-import com.turt2live.antishare.util.generic.ASGameMode;
+import com.turt2live.antishare.util.ASGameMode;
+import com.turt2live.antishare.util.Action;
 
 /**
  * Manages rewards and fines
  * 
  * @author turt2live
  */
-public class MoneyManager extends AntiShareManager {
+public class MoneyManager {
 
 	private final List<Reward> rewards = new ArrayList<Reward>();
 	private final List<Fine> fines = new ArrayList<Fine>();
@@ -47,12 +44,12 @@ public class MoneyManager extends AntiShareManager {
 	private VaultEconomy vaultEconomy;
 	private final List<String> silentTo = new ArrayList<String>();
 	private String finesTo = "nowhere", rewardsFrom = "nowhere";
+	private AntiShare plugin = AntiShare.p;
 
 	/**
 	 * Saves the Money Manager
 	 */
-	@Override
-	public boolean save(){
+	public void save(){
 		File silent = new File(plugin.getDataFolder() + File.separator + "data", "money-silent.txt");
 		try{
 			silent.getParentFile().mkdirs();
@@ -64,14 +61,12 @@ public class MoneyManager extends AntiShareManager {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		return true;
 	}
 
 	/**
 	 * Loads the Money Manager
 	 */
-	@Override
-	public boolean load(){
+	public void load(){
 		silentTo.clear();
 		File silent = new File(plugin.getDataFolder() + File.separator + "data", "money-silent.txt");
 		try{
@@ -87,9 +82,14 @@ public class MoneyManager extends AntiShareManager {
 			e.printStackTrace();
 		}
 
+		// Quit if we have to
+		if(!plugin.settings().features.fines){
+			return;
+		}
+
 		// Load config
 		EnhancedConfiguration money = new EnhancedConfiguration(new File(plugin.getDataFolder(), "fines.yml"), plugin);
-		money.loadDefaults(plugin.getResource("resources/fines.yml"));
+		money.loadDefaults(plugin.getResource("fines.yml"));
 		if(money.needsUpdate()){
 			money.saveDefaults();
 		}
@@ -110,19 +110,21 @@ public class MoneyManager extends AntiShareManager {
 		// Load tender
 		int finesLoaded = 0;
 		int rewardsLoaded = 0;
-		for(TenderType type : TenderType.values()){
-			String path = type.getConfigurationKey();
-			boolean doFine = money.getBoolean(path + ".do-fine");
-			boolean doReward = money.getBoolean(path + ".do-reward");
-			double fine = money.getDouble(path + ".fine");
-			double reward = money.getDouble(path + ".reward");
-			double noMoney = money.getString(path + ".no-money").equalsIgnoreCase("default") ? fine : money.getDouble(path + ".no-money");
-			ASGameMode affect = ASGameMode.match(money.getString(path + ".give-to"));
+		for(Action type : Action.values()){
+			String path = type.name();
+			if(money.getConfigurationSection(path) == null){
+				continue;
+			}
+			boolean doFine = money.getBoolean(path + ".do-fine", false);
+			boolean doReward = money.getBoolean(path + ".do-reward", false);
+			double fine = money.getDouble(path + ".fine", 0);
+			double reward = money.getDouble(path + ".reward", 0);
+			double noMoney = money.getString(path + ".no-money", "default").equalsIgnoreCase("default") ? fine : money.getDouble(path + ".no-money");
+			ASGameMode affect = ASGameMode.match(money.getString(path + ".give-to", "none"));
 
 			// Sanity
 			if(affect == null){
-				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_KEY, path + ".give-to", "fines.yml"));
-				plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_ASSUME, Localization.getMessage(LocaleMessage.DICT_VALUE), money.getString(path + ".give-to"), "NONE"));
+				plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-fine-reward", money.getString(path + ".give-to"), "NONE"));
 				affect = ASGameMode.NONE;
 			}
 
@@ -158,18 +160,17 @@ public class MoneyManager extends AntiShareManager {
 		if(vault != null){
 			vaultEconomy = new VaultEconomy();
 		}else{
-			plugin.getLogger().severe(Localization.getMessage(LocaleMessage.ERROR_NO_VAULT));
-			return false;
+			plugin.getLogger().info(plugin.getMessages().getMessage("cannot-load-fines-rewards"));
+			return;
 		}
 
 		// Spam console
 		if(finesLoaded > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_FINES, String.valueOf(finesLoaded)));
+			plugin.getLogger().info(plugin.getMessages().getMessage("fines-loaded", String.valueOf(finesLoaded)));
 		}
 		if(rewardsLoaded > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_REWARDS, String.valueOf(rewardsLoaded)));
+			plugin.getLogger().info(plugin.getMessages().getMessage("rewards-loaded", String.valueOf(rewardsLoaded)));
 		}
-		return true;
 	}
 
 	/**
@@ -289,7 +290,7 @@ public class MoneyManager extends AntiShareManager {
 	 * @param type the type
 	 * @return the fine, or null if not found
 	 */
-	public Fine getFine(TenderType type){
+	public Fine getFine(Action type){
 		for(Fine fine : fines){
 			if(fine.getType() == type){
 				return fine;
@@ -304,7 +305,7 @@ public class MoneyManager extends AntiShareManager {
 	 * @param type the type
 	 * @return the reward, or null if not found
 	 */
-	public Reward getReward(TenderType type){
+	public Reward getReward(Action type){
 		for(Reward reward : rewards){
 			if(reward.getType() == type){
 				return reward;
@@ -317,64 +318,19 @@ public class MoneyManager extends AntiShareManager {
 	 * Fires for an reward or fine. <br>
 	 * Permission checks are done internally from here on in.
 	 * 
-	 * @param trigger the event trigger
-	 * @param type the type
+	 * @param action the action to fine/reward
+	 * @param illegal true if the action is illegal
 	 * @param player the person to apply this to
 	 */
-	public void fire(AlertTrigger trigger, AlertType type, Player player){
-		if(type == AlertType.GENERAL || type == AlertType.REGION){
+	public void fire(Action action, boolean illegal, Player player){
+		if(vaultEconomy == null){
 			return;
 		}
-		boolean fine = type == AlertType.ILLEGAL;
-
-		// Find tender
-		TenderType tender = null;
-		switch (trigger){
-		case BLOCK_BREAK:
-			tender = TenderType.BLOCK_BREAK;
-			break;
-		case BLOCK_PLACE:
-			tender = TenderType.BLOCK_PLACE;
-			break;
-		case PLAYER_DEATH:
-			tender = TenderType.DEATH;
-			break;
-		case ITEM_DROP:
-			tender = TenderType.ITEM_DROP;
-			break;
-		case ITEM_PICKUP:
-			tender = TenderType.ITEM_PICKUP;
-			break;
-		case RIGHT_CLICK:
-			tender = TenderType.RIGHT_CLICK;
-			break;
-		case USE_ITEM:
-			tender = TenderType.USE;
-			break;
-		case CREATIVE_BLOCK:
-			tender = TenderType.CREATIVE_BLOCK;
-			break;
-		case SURVIVAL_BLOCK:
-			tender = TenderType.SURVIVAL_BLOCK;
-			break;
-		case HIT_PLAYER:
-			tender = TenderType.HIT_PLAYER;
-			break;
-		case HIT_MOB:
-			tender = TenderType.HIT_MOB;
-			break;
-		case COMMAND:
-			tender = TenderType.COMMAND;
-			break;
-		default:
-			return; // No need to handle it
-		}
-
 		// Apply reward/fine
-		if(fine){
-			getFine(tender).apply(player);
+		if(illegal){
+			getFine(action).apply(player);
 		}else{
-			getReward(tender).apply(player);
+			getReward(action).apply(player);
 		}
 	}
 

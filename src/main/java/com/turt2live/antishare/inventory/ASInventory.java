@@ -26,14 +26,13 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
 
 /**
  * AntiShare Inventory
  * 
  * @author turt2live
  */
+// TODO: Schedule for rewrite
 public class ASInventory implements Cloneable {
 
 	/**
@@ -77,9 +76,6 @@ public class ASInventory implements Cloneable {
 			int slot = 0;
 			for(ItemStack item : contents){
 				inventory.set(slot, item);
-				if(AntiShare.isDebug()){
-					AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate] S=" + slot + " I=" + item + " T=" + type + " P=" + player.getName() + " G=" + player.getGameMode() + " W=" + player.getWorld().getName());
-				}
 				slot++;
 			}
 		}else{
@@ -87,18 +83,12 @@ public class ASInventory implements Cloneable {
 			int slot = 0;
 			for(ItemStack item : contents){
 				inventory.set(slot, item);
-				if(AntiShare.isDebug()){
-					AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate] S=" + slot + " I=" + item + " T=" + type + " P=" + player.getName() + " G=" + player.getGameMode() + " W=" + player.getWorld().getName());
-				}
 				slot++;
 			}
 			contents = player.getInventory().getArmorContents();
 			slot = 100;
 			for(ItemStack item : contents){
 				inventory.set(slot, item);
-				if(AntiShare.isDebug()){
-					AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate] S=" + slot + " I=" + item + " T=" + type + " P=" + player.getName() + " G=" + player.getGameMode() + " W=" + player.getWorld().getName());
-				}
 				slot++;
 			}
 		}
@@ -117,16 +107,16 @@ public class ASInventory implements Cloneable {
 		List<ASInventory> inventories = new ArrayList<ASInventory>();
 
 		// Configuration check
-		if(!AntiShare.getInstance().getConfig().getBoolean("handled-actions.gamemode-inventories")){
+		if(!AntiShare.p.settings().features.inventories){
 			return inventories;
 		}
 		// Setup
-		File dir = new File(AntiShare.getInstance().getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
+		File dir = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
 		File saveFile = new File(dir, name + ".yml");
 		if(!saveFile.exists()){
 			return inventories;
 		}
-		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, AntiShare.getInstance());
+		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, AntiShare.p);
 		file.load();
 
 		// Load data
@@ -136,10 +126,10 @@ public class ASInventory implements Cloneable {
 			for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
 				World bukkitWorld = Bukkit.getWorld(world);
 				if(bukkitWorld == null){
-					AntiShare.getInstance().getLogger().severe("World '" + world + "' does not exist (Inventory: " + type.name() + ", " + name + ".yml) AntiShare is ignoring this world.");
-					if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){
-						AntiShare.getInstance().getLogger().severe("=== " + Localization.getMessage(LocaleMessage.WARNING_REMOVE_WORLD) + " ===");
-						AntiShare.getInstance().getLogger().severe(Localization.getMessage(LocaleMessage.WARNING_REMOVE_WORLD2));
+					AntiShare.p.getLogger().severe(AntiShare.p.getMessages().getMessage("world-missing", world, type.name(), name));
+					if(AntiShare.p.settings().inventoryCleanupSettings.removeOldWorlds){
+						AntiShare.p.getLogger().severe("=== " + AntiShare.p.getMessages().getMessage("remove-world-1") + " ===");
+						AntiShare.p.getLogger().severe(AntiShare.p.getMessages().getMessage("remove-world-2"));
 						removeWorlds.add(world);
 					}
 					continue;
@@ -150,16 +140,13 @@ public class ASInventory implements Cloneable {
 						Integer slot = Integer.valueOf(stringSlot);
 						ItemStack item = file.getItemStack(world + "." + gamemode + "." + stringSlot);
 						inventory.set(slot, item);
-						if(AntiShare.isDebug()){
-							AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Generate (FILE)] S=" + slot + " I=" + item + " T=" + type + " P=" + name + " G=" + gamemode + " W=" + world);
-						}
 					}
 					inventories.add(inventory);
 				}
 			}
 		}
 		// Remove old worlds
-		if(AntiShare.getInstance().getConfig().getBoolean("settings.remove-old-inventories")){ // Safe-guard check
+		if(AntiShare.p.settings().inventoryCleanupSettings.removeOldWorlds){ // Safe-guard check
 			for(String world : removeWorlds){
 				file.set(world, null);
 			}
@@ -186,7 +173,7 @@ public class ASInventory implements Cloneable {
 	 * @param gamemode the gamemode
 	 */
 	public ASInventory(InventoryType type, String inventoryName, World world, GameMode gamemode){
-		plugin = AntiShare.getInstance();
+		plugin = AntiShare.p;
 		this.type = type;
 		this.inventoryName = inventoryName;
 		this.world = world;
@@ -244,9 +231,6 @@ public class ASInventory implements Cloneable {
 				inventory.put(slot, new ItemStack(Material.AIR, 1));
 				item = new ItemStack(Material.AIR, 1);
 			}
-			if(AntiShare.isDebug()){
-				AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Set] SET " + item + " SLOT " + slot + " TO " + player.getName() + " T=" + type);
-			}
 			if(slot < 100){
 				playerInventory.setItem(slot, item);
 			}else{
@@ -276,7 +260,7 @@ public class ASInventory implements Cloneable {
 	 */
 	public void save(){
 		// Configuration check
-		if(!AntiShare.getInstance().getConfig().getBoolean("handled-actions.gamemode-inventories")){
+		if(!plugin.settings().features.inventories){
 			return;
 		}
 		// Setup
@@ -293,9 +277,6 @@ public class ASInventory implements Cloneable {
 			ItemStack item = inventory.get(slot);
 			if(item == null || item.getType() == Material.AIR){
 				continue;
-			}
-			if(AntiShare.isDebug()){
-				AntiShare.getInstance().getLogger().info("[DEBUG] [ASInventory Save] SAVE " + item + " S=" + slot + " T=" + type + " G=" + gamemode + " W=" + world + " N=" + getName());
 			}
 
 			// Save item

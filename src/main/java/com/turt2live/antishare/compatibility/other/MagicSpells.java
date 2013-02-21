@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import com.nisovin.magicspells.events.SpellCastEvent;
 import com.nisovin.magicspells.events.SpellTargetEvent;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.GamemodeAbstraction;
-import com.turt2live.antishare.permissions.PermissionNodes;
+import com.turt2live.antishare.util.GamemodeAbstraction;
+import com.turt2live.antishare.util.PermissionNodes;
 
 /**
  * MagicSpells hook
@@ -18,10 +18,9 @@ import com.turt2live.antishare.permissions.PermissionNodes;
 public class MagicSpells implements Listener {
 
 	private boolean enabled = false;
-	private AntiShare plugin = AntiShare.getInstance();
 
 	public MagicSpells(){
-		enabled = plugin.getConfig().getBoolean("magicspells.block-creative");
+		enabled = AntiShare.p.settings().magicSpells;
 	}
 
 	@EventHandler
@@ -30,7 +29,7 @@ public class MagicSpells implements Listener {
 			return;
 		}
 		Player player = event.getCaster();
-		if(!plugin.getPermissions().has(player, PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+		if(!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
 			event.setCancelled(true);
 		}
 	}
@@ -41,7 +40,7 @@ public class MagicSpells implements Listener {
 			return;
 		}
 		Player player = event.getCaster();
-		if(!plugin.getPermissions().has(player, PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+		if(!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
 			event.setCancelled(true);
 		}
 	}

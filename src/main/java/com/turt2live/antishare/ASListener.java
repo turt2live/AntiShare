@@ -1,0 +1,1798 @@
+package com.turt2live.antishare;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Jukebox;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.EnderSignal;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Hanging;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Minecart;
+import org.bukkit.entity.Painting;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.PoweredMinecart;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Snowball;
+import org.bukkit.entity.StorageMinecart;
+import org.bukkit.entity.ThrownExpBottle;
+import org.bukkit.entity.ThrownPotion;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.ExpBottleEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
+import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.event.vehicle.VehicleDestroyEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+
+import com.turt2live.antishare.compatibility.type.BlockLogger;
+import com.turt2live.antishare.config.ASConfig;
+import com.turt2live.antishare.config.ASConfig.InteractionSettings;
+import com.turt2live.antishare.cuboid.Cuboid;
+import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
+import com.turt2live.antishare.regions.Region;
+import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.ASUtils.EntityPattern;
+import com.turt2live.antishare.util.Action;
+import com.turt2live.antishare.util.GamemodeAbstraction;
+import com.turt2live.antishare.util.LevelSaver;
+import com.turt2live.antishare.util.LevelSaver.Level;
+import com.turt2live.antishare.util.MobPattern;
+import com.turt2live.antishare.util.PermissionNodes;
+import com.turt2live.materials.MaterialAPI;
+
+/**
+ * AntiShare listener
+ * 
+ * @author turt2live
+ */
+public class ASListener implements Listener {
+
+	private static AntiShare plugin = AntiShare.p;
+
+	public static final String LOGBLOCK_METADATA_KEY = "antishare-logblock";
+	public static final FixedMetadataValue EMPTY_METADATA = new FixedMetadataValue(plugin, true);
+	private final Map<String, Long> gamemodeCooldowns = new HashMap<String, Long>();
+
+	private boolean hasMobCatcher;
+
+	public ASListener(){
+		hasMobCatcher = plugin.getServer().getPluginManager().getPlugin("MobCatcher") != null;
+	}
+
+	private ASConfig configFor(Location location){
+		if(plugin.getRegionManager().isRegion(location)){
+			return plugin.getRegionManager().getRegion(location).getConfig();
+		}
+		return plugin.getWorldConfigs().getConfig(location.getWorld());
+	}
+
+	private InteractionSettings configFor(GameMode gamemode1, GameMode gamemode2, Location location){
+		ASConfig c = configFor(location);
+		switch (gamemode1){
+		case ADVENTURE:
+			switch (gamemode2){
+			case CREATIVE:
+				return c.adventureBreakCreative;
+			case SURVIVAL:
+				return c.adventureBreakSurvival;
+			}
+			break;
+		case SURVIVAL:
+			switch (gamemode2){
+			case ADVENTURE:
+				return c.survivalBreakAdventure;
+			case CREATIVE:
+				return c.survivalBreakCreative;
+			}
+			break;
+		case CREATIVE:
+			switch (gamemode2){
+			case ADVENTURE:
+				return c.creativeBreakAdventure;
+			case SURVIVAL:
+				return c.creativeBreakSurvival;
+			}
+			break;
+		}
+		return null;
+	}
+
+	private void breakBlock(Block block, GameMode playerGamemode, ASConfig config, boolean isAttachment, boolean water){
+		GameMode breakAs = playerGamemode;
+		if(isAttachment ? config.naturalSettings.breakAsAttached : water ? config.naturalSettings.breakAsWater : config.naturalSettings.breakAsPiston){
+			breakAs = plugin.getBlockManager().getType(block);
+			if(breakAs == null){
+				breakAs = playerGamemode;
+			}
+		}
+		if(breakAs == null){
+			block.breakNaturally();
+		}else{
+			switch (breakAs){
+			case CREATIVE:
+				block.setType(Material.AIR);
+				break;
+			case ADVENTURE:
+				if(GamemodeAbstraction.isAdventureCreative()){
+					block.setType(Material.AIR);
+				}else{
+					block.breakNaturally();
+				}
+				break;
+			case SURVIVAL:
+				block.breakNaturally();
+				break;
+			}
+		}
+		plugin.getBlockManager().removeBlock(block);
+	}
+
+	private void breakBlock(Block block, GameMode playerGamemode, ASConfig config, boolean isAttachment){
+		breakBlock(block, playerGamemode, config, isAttachment, false);
+	}
+
+	private boolean doGameModeChange(Player player, GameMode from, GameMode to){
+		boolean ignore = true;
+		boolean checkRegion = true;
+		boolean cancel = false;
+
+		// Automatically close all open windows
+		InventoryView active = player.getOpenInventory();
+		if(active != null){
+			active.close();
+		}
+
+		// Implement cooldown if needed
+		if(plugin.settings().cooldownSettings.enabled && !player.hasPermission(PermissionNodes.NO_GAMEMODE_COOLDOWN)){
+			long time = (long) Math.abs(plugin.settings().cooldownSettings.seconds) * 1000;
+			long now = System.currentTimeMillis();
+			if(time > 0){
+				if(gamemodeCooldowns.containsKey(player.getName())){
+					long lastUsed = gamemodeCooldowns.get(player.getName());
+					if(now - lastUsed > time){
+						// Allow
+						gamemodeCooldowns.put(player.getName(), now);
+					}else{
+						// Deny
+						cancel = true;
+						int seconds = (int) (time - (now - lastUsed)) / 1000;
+						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("gamemode-wait", String.valueOf(seconds)), true); //ASUtils.sendToPlayer(player, ChatColor.RED + "You must wait at least " + seconds + " more second" + s + " before changing Game Modes.", true);
+						return cancel;
+					}
+				}else{
+					gamemodeCooldowns.put(player.getName(), now);
+				}
+			}
+		}
+
+		// Change level if needed
+		Level currentLevel = new Level(player.getLevel(), player.getExp());
+		if(plugin.settings().gamemodeChangeSettings.changeLevel && !player.hasPermission(PermissionNodes.NO_SWAP)){
+			Level desired = LevelSaver.getLevel(player.getName(), to);
+			LevelSaver.saveLevel(player.getName(), player.getGameMode(), currentLevel);
+			desired.setTo(player);
+		}
+
+		// Change balance if needed
+		boolean alert = false;
+		if(plugin.settings().gamemodeChangeSettings.changeBalance && !player.hasPermission(PermissionNodes.NO_SWAP)){
+			if(plugin.getMoneyManager().getRawEconomyHook() != null){
+				plugin.getMoneyManager().getRawEconomyHook().switchBalance(player.getName(), from, to);
+				alert = true;
+			}
+		}
+
+		// Check to see if we should even bother
+		if(!plugin.settings().features.inventories){
+			return cancel;
+		}
+
+		// Tag check
+		if(player.hasMetadata("antishare-regionleave")){
+			player.removeMetadata("antishare-regionleave", plugin);
+			checkRegion = false;
+		}
+
+		// Region Check
+		if(!player.hasPermission(PermissionNodes.REGION_ROAM) && checkRegion){
+			Region region = plugin.getRegionManager().getRegion(player.getLocation());
+			if(region != null){
+				plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("region-gamemode"), true);
+				cancel = true;
+				currentLevel.setTo(player); // Restore level
+				// Restore balance if needed
+				if(plugin.settings().gamemodeChangeSettings.changeBalance && !player.hasPermission(PermissionNodes.NO_SWAP)){
+					if(plugin.getMoneyManager().getRawEconomyHook() != null){
+						plugin.getMoneyManager().getRawEconomyHook().switchBalance(player.getName(), to, from);
+					}
+				}
+				return cancel;
+			}
+		}
+
+		// Check temp
+		if(plugin.getInventoryManager().isInTemporary(player)){
+			plugin.getInventoryManager().removeFromTemporary(player);
+		}
+
+		if(!player.hasPermission(PermissionNodes.NO_SWAP)){
+			// Check for open inventories and stuff
+			player.closeInventory();
+
+			// Save from
+			switch (from){
+			case CREATIVE:
+				plugin.getInventoryManager().saveCreativeInventory(player, player.getWorld());
+				plugin.getInventoryManager().saveEnderCreativeInventory(player, player.getWorld());
+				break;
+			case SURVIVAL:
+				plugin.getInventoryManager().saveSurvivalInventory(player, player.getWorld());
+				plugin.getInventoryManager().saveEnderSurvivalInventory(player, player.getWorld());
+				break;
+			case ADVENTURE:
+				plugin.getInventoryManager().saveAdventureInventory(player, player.getWorld());
+				plugin.getInventoryManager().saveEnderAdventureInventory(player, player.getWorld());
+				break;
+			default:
+				break;
+			}
+
+			// Update plugin.getInventoryManager()
+			plugin.getInventoryManager().refreshInventories(player, true);
+
+			// Set to
+			switch (to){
+			case CREATIVE:
+				plugin.getInventoryManager().getCreativeInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getEnderCreativeInventory(player, player.getWorld()).setTo(player);
+				break;
+			case SURVIVAL:
+				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
+				break;
+			case ADVENTURE:
+				plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getEnderAdventureInventory(player, player.getWorld()).setTo(player);
+				break;
+			default:
+				break;
+			}
+
+			// For alerts
+			ignore = false;
+		}
+
+		if(alert){
+			if(plugin.getMoneyManager().getRawEconomyHook() != null){
+				String formatted = plugin.getMoneyManager().getRawEconomyHook().format(plugin.getMoneyManager().getBalance(player));
+				plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("balance-change", formatted), true);
+			}
+		}
+		if(!ignore){
+			plugin.getMessages().notifyParties(player, Action.GAMEMODE_CHANGE, false, MaterialAPI.capitalize(to.name()));
+		}
+
+		return cancel;
+	}
+
+	private void scheduleGameModeChange(PlayerGameModeChangeEvent event){
+		final Player player = event.getPlayer();
+		final GameMode from = player.getGameMode();
+		final GameMode to = event.getNewGameMode();
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+			@Override
+			public void run(){
+				doGameModeChange(player, from, to);
+			}
+		}, 2);
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onChunkLoad(ChunkLoadEvent event){
+		plugin.getBlockManager().loadChunk(event.getChunk());
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onChunkUnload(ChunkUnloadEvent event){
+		plugin.getBlockManager().unloadChunk(event.getChunk());
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onWorldLoad(WorldLoadEvent event){
+		plugin.getRegionManager().loadWorld(event.getWorld().getName());
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onEntityMake(BlockPlaceEvent event){
+		Block block = event.getBlock();
+		Player player = event.getPlayer();
+		boolean illegal = false;
+		MobPattern snowGolemPattern = ASUtils.getMobPattern(EntityPattern.SNOW_GOLEM);
+		MobPattern ironGolemPattern = ASUtils.getMobPattern(EntityPattern.IRON_GOLEM);
+		MobPattern witherPattern = ASUtils.getMobPattern(EntityPattern.WITHER);
+		MobPattern pattern = null;
+		if(snowGolemPattern != null && snowGolemPattern.exists(block)){
+			pattern = snowGolemPattern;
+		}else if(ironGolemPattern != null && ironGolemPattern.exists(block)){
+			pattern = ironGolemPattern;
+		}else if(witherPattern != null && witherPattern.exists(block)){
+			pattern = witherPattern;
+		}
+		if(pattern == null){
+			return;
+		}
+		String mobName = pattern.name;
+		if(configFor(block.getLocation()).craftedMobs.contains(pattern.entityType)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_MOB_CREATION, PermissionNodes.DENY_MOB_CREATION, (Material) null)){
+			illegal = false;
+		}
+		plugin.getMessages().notifyParties(player, Action.CRAFTED_MOB, illegal, mobName);
+		if(illegal){
+			event.setCancelled(true);
+			pattern.scheduleUpdate(block);
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onBlockBreak(BlockBreakEvent event){
+		Block block = event.getBlock();
+		if(plugin.getHookManager().checkForSignProtection(block)){
+			return; // Let them deal with it
+		}
+		Player player = event.getPlayer();
+		Location blockLocation = block.getLocation();
+		GameMode blockGamemode = null, attachedGamemode = null;
+		boolean isRegion = false, isAttached = false, isGamemode = false;
+		boolean illegal = false;
+		InteractionSettings interaction = null;
+		Material attachedMaterial = Material.AIR;
+		ASConfig c = configFor(blockLocation);
+
+		if(c.blockBreak.contains(block.getType())){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getType())){
+			illegal = false;
+		}
+
+		if(!player.hasPermission(PermissionNodes.FREE_PLACE)){
+			blockGamemode = plugin.getBlockManager().getType(block);
+			if(blockGamemode != null){
+				if(!GamemodeAbstraction.isMatch(blockGamemode, player.getGameMode())){
+					isGamemode = true;
+					interaction = configFor(player.getGameMode(), blockGamemode, blockLocation);
+				}else if(!c.naturalSettings.allowMismatchedGM){
+					for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
+						Block rel = block.getRelative(face);
+						if(MaterialAPI.isDroppedOnBreak(rel, block, true)){
+							attachedGamemode = plugin.getBlockManager().getType(rel);
+							if(attachedGamemode != null){
+								if(!GamemodeAbstraction.isMatch(blockGamemode, attachedGamemode)){
+									isAttached = true;
+									interaction = configFor(player.getGameMode(), attachedGamemode, blockLocation);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
+		if(!player.hasPermission(PermissionNodes.REGION_BREAK)){
+			if(playerRegion != blockRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(!illegal && interaction != null){
+			illegal = interaction.deny;
+		}
+		if(illegal){
+			event.setCancelled(true);
+		}else{
+			plugin.getBlockManager().removeBlock(block);
+		}
+
+		Action action = Action.BLOCK_BREAK;
+		String[] extras = null;
+		if(isRegion){
+			action = Action.REGION_BLOCK_BREAK;
+			extras = new String[] {blockRegion == null ? plugin.getMessages().getMessage("wilderness") : blockRegion.getName()};
+		}else{
+			if(isGamemode || isAttached){
+				action = Action.GAMEMODE_BLOCK_BREAK;
+				extras = new String[] {MaterialAPI.capitalize((isGamemode ? blockGamemode : attachedGamemode).name())};
+			}
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, isAttached ? attachedMaterial : block.getType(), extras);
+
+		if(interaction != null && !interaction.deny){
+			block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+			plugin.getHookManager().sendBlockBreak(player.getName(), block.getLocation(), block.getType(), block.getData());
+			plugin.getBlockManager().removeBlock(block);
+			if(interaction.drop){
+				block.breakNaturally();
+			}else{
+				block.setType(Material.AIR);
+			}
+		}
+
+		if(event.isCancelled() || player.hasPermission(PermissionNodes.BREAK_ANYTHING)){
+			return;
+		}
+
+		if(GamemodeAbstraction.isCreative(player.getGameMode())){
+			if(c.naturalSettings.emptyInventories){
+				if(block.getState() instanceof Chest){
+					Chest state = (Chest) block.getState();
+					state.getBlockInventory().clear();
+				}else if(block.getState() instanceof Jukebox){
+					Jukebox state = (Jukebox) block.getState();
+					state.setPlaying(null);
+				}else if(block.getState() instanceof InventoryHolder){
+					InventoryHolder state = (InventoryHolder) block.getState();
+					state.getInventory().clear();
+				}
+			}
+		}
+
+		if(c.naturalSettings.removeAttached){
+			for(Entity e : block.getChunk().getEntities()){
+				if(e instanceof ItemFrame){
+					double d2 = e.getLocation().distanceSquared(block.getLocation());
+					if(d2 < 1.65 && d2 > 1.6 || d2 > 0.5 && d2 < 0.51){
+						plugin.getHookManager().sendEntityBreak(player.getName(), e.getLocation(), Material.ITEM_FRAME, BlockLogger.DEFAULT_DATA);
+						e.remove();
+					}
+				}
+			}
+			for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
+				Block rel = block.getRelative(face);
+				if(MaterialAPI.isDroppedOnBreak(rel, block, true)){
+					rel.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+					plugin.getHookManager().sendBlockBreak(player.getName(), rel.getLocation(), rel.getType(), rel.getData());
+					breakBlock(rel, player.getGameMode(), c, true);
+				}
+			}
+
+			// Check for falling sand/gravel exploit
+			boolean moreBlocks = true;
+			Block active = block;
+			if(MaterialAPI.isAffectedByGravity(active.getType()) || MaterialAPI.isAffectedByGravity(active.getRelative(BlockFace.UP).getType())){
+				do{
+					Block below = active.getRelative(BlockFace.DOWN);
+					active = below;
+					if(below.getType() == Material.AIR){
+						continue;
+					}
+					if(MaterialAPI.canBreakFallingBlock(below.getType())){
+						// Remove all sand/gravel above this block
+						boolean checkMoreBlocks = true;
+						Block above = block.getRelative(BlockFace.UP);
+						do{
+							for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
+								Block side = above.getRelative(face);
+								if(MaterialAPI.isDroppedOnBreak(side, above, true)){
+									side.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+									plugin.getHookManager().sendBlockBreak(player.getName(), side.getLocation(), side.getType(), side.getData());
+									breakBlock(side, player.getGameMode(), c, true);
+								}
+							}
+							if(MaterialAPI.isAffectedByGravity(above.getType())){
+								above.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+								plugin.getHookManager().sendBlockBreak(player.getName(), above.getLocation(), above.getType(), above.getData());
+								breakBlock(above, player.getGameMode(), c, true);
+								above = above.getRelative(BlockFace.UP);
+							}else{
+								checkMoreBlocks = false;
+							}
+						}while (checkMoreBlocks);
+						moreBlocks = false;
+					}else{
+						moreBlocks = false;
+					}
+				}while (moreBlocks);
+			}
+
+			// Cacti/Sugar Cane check
+			active = block;
+			if(block.getType() == Material.CACTUS || block.getType() == Material.SUGAR_CANE_BLOCK){
+				moreBlocks = true;
+				List<Location> breakBlocks = new ArrayList<Location>();
+				do{
+					Block above = active.getRelative(BlockFace.UP);
+					if(above.getType() == Material.CACTUS || above.getType() == Material.SUGAR_CANE_BLOCK){
+						breakBlocks.add(above.getLocation());
+					}else{
+						moreBlocks = false;
+					}
+					active = above;
+				}while (moreBlocks);
+				for(int i = breakBlocks.size() - 1; i > -1; i--){
+					Location location = breakBlocks.get(i);
+					Block toBreak = location.getBlock();
+					toBreak.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+					plugin.getHookManager().sendBlockBreak(player.getName(), location, toBreak.getType(), toBreak.getData());
+					breakBlock(toBreak, player.getGameMode(), c, true);
+				}
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onBlockPlace(BlockPlaceEvent event){
+		Block block = event.getBlock();
+		Player player = event.getPlayer();
+		Location blockLocation = block.getLocation();
+		boolean isRegion = false, isAttach = false;
+		boolean illegal = false;
+		GameMode existing = null;
+		ASConfig c = configFor(blockLocation);
+
+		if(c.blockPlace.contains(block.getType())){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getType())){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
+		if(!player.hasPermission(PermissionNodes.REGION_PLACE)){
+			if(playerRegion != blockRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(!illegal && !c.naturalSettings.allowMismatchedGM){
+			Block source = event.getBlockAgainst();
+			Block relative = event.getBlockPlaced();
+			if(!player.hasPermission(PermissionNodes.FREE_PLACE)){
+				GameMode potentialNewGM = player.getGameMode();
+				if(MaterialAPI.isDroppedOnBreak(relative, source, true)){
+					existing = plugin.getBlockManager().getType(source);
+					if(existing != null){
+						if(existing != potentialNewGM){
+							illegal = true;
+							isAttach = true;
+						}
+					}
+				}
+			}
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}else{
+			if(!player.hasPermission(PermissionNodes.FREE_PLACE)){
+				plugin.getBlockManager().addBlock(player.getGameMode(), block);
+			}
+		}
+
+		Action action = Action.BLOCK_PLACE;
+		String[] extra = null;
+		if(isRegion){
+			action = Action.REGION_BLOCK_PLACE;
+			extra = new String[] {blockRegion == null ? plugin.getMessages().getMessage("wilderness") : blockRegion.getName()};
+		}else if(isAttach){
+			action = Action.PLACE_GAMEMODE_ATTACHMENT;
+			extra = new String[] {MaterialAPI.capitalize(existing.name())};
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, block.getType(), extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onInteractPotionHand(PlayerInteractEvent event){
+		if(event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR){
+			Player player = event.getPlayer();
+			boolean illegal = false;
+			boolean isPotion = false, isThrownPotion = false;
+			ASConfig c = configFor(player.getLocation());
+			ItemStack hand = player.getItemInHand();
+
+			if(hand == null){
+				hand = new ItemStack(Material.AIR);
+			}
+
+			if(hand.getType() == Material.POTION){
+				isPotion = true;
+				if(hand.getDurability() > 32000){
+					isThrownPotion = true;
+				}
+			}
+
+			if(c.use.contains(hand.getType())){
+				illegal = true;
+			}
+			if(isThrownPotion && c.thrownPotions){
+				illegal = true;
+			}else if(isPotion && c.potions){
+				illegal = true;
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
+				illegal = false;
+			}
+
+			if(illegal){
+				event.setCancelled(true);
+				if(hasMobCatcher){
+					ItemStack trueHand = player.getItemInHand();
+					if(trueHand != null){
+						if(trueHand.getType() == Material.EGG || trueHand.getType() == Material.MONSTER_EGG){
+							trueHand.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
+						}
+					}
+				}
+			}
+
+			Action eventAction = Action.USE_SOMETHING;
+			String[] extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
+			plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType(), extra);
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onInteract(PlayerInteractEvent event){
+		org.bukkit.event.block.Action action = event.getAction();
+		switch (action){
+		case LEFT_CLICK_AIR:
+		case RIGHT_CLICK_AIR:
+			return;
+		}
+		Player player = event.getPlayer();
+		Block block = event.getClickedBlock();
+		boolean illegal = false;
+		boolean isPotion = false, isThrownPotion = false, isRegion = false;
+		Location blockLocation = block.getLocation();
+		ASConfig c = configFor(blockLocation);
+		ItemStack hand = player.getItemInHand();
+		if(hand == null){
+			hand = new ItemStack(Material.AIR);
+		}
+
+		if(player.hasPermission(PermissionNodes.TOOL_USE) && plugin.isToolEnabled(player.getName())){
+			String blockName = MaterialAPI.capitalize(block.getType().name());
+			if(hand.getType() == AntiShare.ANTISHARE_TOOL){
+				GameMode type = plugin.getBlockManager().getType(block);
+				if(type == null){
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-natural", blockName), true);
+				}else{
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-type", blockName, MaterialAPI.capitalize(type.name())), true);
+				}
+				event.setCancelled(true);
+				return;
+			}else if(hand.getType() == AntiShare.ANTISHARE_SET_TOOL){
+				GameMode gamemode = plugin.getBlockManager().getType(block);
+				plugin.getBlockManager().removeBlock(block);
+				switch (action){
+				case RIGHT_CLICK_BLOCK:
+					if(gamemode == null){
+						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-removed-natural"), true);
+					}else{
+						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-removed", MaterialAPI.capitalize(gamemode.name())), true);
+					}
+					break;
+				case LEFT_CLICK_BLOCK:
+					plugin.getBlockManager().addBlock(player.getGameMode(), block);
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-set", MaterialAPI.capitalize(player.getGameMode().name())), true);
+					break;
+				}
+				event.setCancelled(true);
+				return;
+			}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && player.hasPermission(PermissionNodes.CREATE_CUBOID)){
+				CuboidPoint point = null;
+				switch (action){
+				case RIGHT_CLICK_BLOCK:
+					point = CuboidPoint.POINT2;
+					break;
+				case LEFT_CLICK_BLOCK:
+					point = CuboidPoint.POINT1;
+					break;
+				}
+				plugin.getCuboidManager().updateCuboid(player.getName(), point, block.getLocation());
+				Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
+				int volume = cuboid == null ? 0 : cuboid.getVolume();
+				String pointName = point == CuboidPoint.POINT1 ? "1" : "2";
+				plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("cuboid-updated", pointName, String.valueOf(volume)), true);
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		if(hand.getType() == Material.POTION){
+			isPotion = true;
+			if(hand.getDurability() > 32000){
+				isThrownPotion = true;
+			}
+		}
+
+		if(c.use.contains(block.getType()) || c.use.contains(hand.getType())){
+			illegal = true;
+		}
+		if(isThrownPotion && c.thrownPotions){
+			illegal = true;
+		}else if(isPotion && c.potions){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getType())
+				&& !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region blockRegion = plugin.getRegionManager().getRegion(blockLocation);
+		if(!player.hasPermission(PermissionNodes.REGION_USE)){
+			if(playerRegion != blockRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+			if(hasMobCatcher){
+				ItemStack trueHand = player.getItemInHand();
+				if(trueHand != null){
+					if(trueHand.getType() == Material.EGG || trueHand.getType() == Material.MONSTER_EGG){
+						trueHand.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
+					}
+				}
+			}
+		}
+
+		Action eventAction = Action.USE_SOMETHING;
+		String[] extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
+		if(isRegion){
+			eventAction = Action.REGION_USE_SOMETHING;
+			extra = new String[] {MaterialAPI.capitalize(hand.getType().name()), blockRegion == null ? plugin.getMessages().getMessage("wilderness") : blockRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, eventAction, illegal, block.getType(), extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onVechicleDestroy(VehicleDestroyEvent event){
+		Entity attacker = event.getAttacker();
+		if(!(attacker instanceof Player)){
+			return;
+		}
+		Player player = (Player) attacker;
+		boolean illegal = false;
+		Material item = Material.AIR;
+		boolean isRegion = false;
+		ASConfig c = configFor(event.getVehicle().getLocation());
+		if(event.getVehicle() instanceof StorageMinecart){
+			item = Material.STORAGE_MINECART;
+		}else if(event.getVehicle() instanceof PoweredMinecart){
+			item = Material.POWERED_MINECART;
+		}else if(event.getVehicle() instanceof Boat){
+			item = Material.BOAT;
+		}else if(event.getVehicle() instanceof Minecart){
+			item = Material.MINECART;
+		}
+		if(item == Material.AIR){
+			return;
+		}
+
+		if(c.blockBreak.contains(item)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, item)){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region vehicleRegion = plugin.getRegionManager().getRegion(event.getVehicle().getLocation());
+		if(!player.hasPermission(PermissionNodes.REGION_USE)){
+			if(playerRegion != vehicleRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}else{
+			if(c.naturalSettings.removeAttached && !player.hasPermission(PermissionNodes.BREAK_ANYTHING)){
+				event.setCancelled(true);
+				event.getVehicle().remove();
+			}else{
+				if(event.getVehicle() instanceof StorageMinecart
+						&& c.naturalSettings.emptyInventories
+						&& GamemodeAbstraction.isCreative(player.getGameMode())
+						&& !player.hasPermission(PermissionNodes.BREAK_ANYTHING)){
+					StorageMinecart m = (StorageMinecart) event.getVehicle();
+					m.getInventory().clear();
+				}
+			}
+		}
+
+		Action action = Action.BLOCK_BREAK;
+		String[] extra = null;
+		if(isRegion){
+			action = Action.REGION_BLOCK_BREAK;
+			extra = new String[] {vehicleRegion == null ? plugin.getMessages().getMessage("wilderness") : vehicleRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, item, extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onEntityInteract(PlayerInteractEntityEvent event){
+		Player player = event.getPlayer();
+		ItemStack hand = player.getItemInHand();
+		boolean illegal = false;
+		boolean isRegion = false, isItemFrame = false, isInteract = false;
+		ASConfig c = configFor(event.getRightClicked().getLocation());
+		Entity entity = event.getRightClicked();
+		GameMode gamemode = plugin.getBlockManager().getType(entity);
+		if(hand == null){
+			hand = new ItemStack(Material.AIR);
+		}
+		Material rightClicked = Material.AIR;
+		if(entity instanceof StorageMinecart){
+			rightClicked = Material.STORAGE_MINECART;
+		}else if(entity instanceof PoweredMinecart){
+			rightClicked = Material.POWERED_MINECART;
+		}else if(entity instanceof Boat){
+			rightClicked = Material.BOAT;
+		}else if(entity instanceof Minecart){
+			rightClicked = Material.MINECART;
+		}else if(entity instanceof Painting){
+			rightClicked = Material.PAINTING;
+		}else if(entity instanceof ItemFrame){
+			rightClicked = Material.ITEM_FRAME;
+		}
+
+		if(plugin.isToolEnabled(player.getName()) && player.hasPermission(PermissionNodes.TOOL_USE) && rightClicked != Material.AIR){
+			if(hand.getType() == AntiShare.ANTISHARE_TOOL){
+				if(gamemode == null){
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-natural", MaterialAPI.capitalize(rightClicked.name())), true);
+				}else{
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-type", MaterialAPI.capitalize(rightClicked.name()), MaterialAPI.capitalize(gamemode.name())), true);
+				}
+				event.setCancelled(true);
+				return;
+			}else if(hand.getType() == AntiShare.ANTISHARE_SET_TOOL){
+				plugin.getBlockManager().removeEntity(entity);
+				if(gamemode == null){
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-removed-natural"), true);
+				}else{
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-removed", MaterialAPI.capitalize(gamemode.name())), true);
+				}
+				event.setCancelled(true);
+				return;
+			}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && player.hasPermission(PermissionNodes.CREATE_CUBOID)){
+				plugin.getCuboidManager().updateCuboid(player.getName(), CuboidPoint.POINT2, entity.getLocation());
+				Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
+				int volume = cuboid == null ? 0 : cuboid.getVolume();
+				plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("cuboid-updated", "2", String.valueOf(volume)), true);
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		String regionPermission = PermissionNodes.REGION_USE;
+		if(rightClicked == Material.ITEM_FRAME && !c.naturalSettings.allowMismatchedGM){
+			isItemFrame = true;
+			if(!GamemodeAbstraction.isMatch(gamemode, player.getGameMode())){
+				illegal = true;
+			}
+			if(gamemode == null || player.hasPermission(PermissionNodes.ITEM_FRAMES)){
+				illegal = false;
+			}
+		}else if(rightClicked == Material.AIR){
+			isInteract = true;
+			regionPermission = PermissionNodes.REGION_ATTACK_MOBS;
+			if(c.interactMobs.contains(entity.getType())){
+				illegal = true;
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, entity.getType().getName())){
+				illegal = false;
+			}
+		}else{
+			if(c.use.contains(rightClicked)){
+				illegal = true;
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, rightClicked)){
+				illegal = false;
+			}
+			if(!illegal && hand.getType() != Material.AIR){
+				if(c.use.contains(hand.getType())){
+					illegal = true;
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
+					illegal = false;
+				}
+			}
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region entityRegion = plugin.getRegionManager().getRegion(entity.getLocation());
+		if(!player.hasPermission(regionPermission)){
+			if(playerRegion != entityRegion){
+				illegal = true;
+				isRegion = true;
+			}
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}
+
+		Action action = Action.USE_SOMETHING;
+		String[] extra = null;
+		String main = MaterialAPI.capitalize(rightClicked.name());
+		if(isRegion){
+			action = Action.REGION_INTERACT_MOB;
+			extra = new String[] {entityRegion == null ? plugin.getMessages().getMessage("wilderness") : entityRegion.getName()};
+			if(isInteract){
+				main = entity.getType().getName();
+			}else if(!isItemFrame){
+				action = Action.REGION_USE_SOMETHING;
+				extra = new String[] {MaterialAPI.capitalize(hand.getType().name()),
+						entityRegion == null ? plugin.getMessages().getMessage("wilderness") : entityRegion.getName()};
+			}
+		}else{
+			action = Action.INTERACT_MOB;
+			if(isInteract){
+				main = entity.getType().getName();
+			}else if(!isItemFrame){
+				extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
+			}
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, main, extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onEggThrow(PlayerEggThrowEvent event){
+		if(!event.isHatching()){
+			return;
+		}
+		Player player = event.getPlayer();
+		boolean illegal = false;
+		boolean isRegion = false;
+		Egg egg = event.getEgg();
+		Material material = Material.EGG;
+		ASConfig c = configFor(egg.getLocation());
+
+		if(c.drop.contains(material)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, material)){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region eggRegion = plugin.getRegionManager().getRegion(egg.getLocation());
+		if(!player.hasPermission(PermissionNodes.REGION_USE)){
+			if(playerRegion != eggRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(illegal){
+			event.setHatching(false);
+		}
+
+		Action action = Action.ITEM_THROW;
+		String[] extra = null;
+		if(isRegion){
+			action = Action.REGION_ITEM_THROW;
+			extra = new String[] {eggRegion == null ? plugin.getMessages().getMessage("wilderness") : eggRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, material, extra);
+	}
+
+	@EventHandler (priority = EventPriority.NORMAL)
+	public void onExpBottle(ExpBottleEvent event){
+		ThrownExpBottle bottle = event.getEntity();
+		LivingEntity shooter = bottle.getShooter();
+		if(event.getExperience() == 0 || !(shooter instanceof Player)){
+			return;
+		}
+
+		Player player = (Player) shooter;
+		boolean illegal = false;
+		boolean isRegion = false;
+		Material item = Material.EXP_BOTTLE;
+		ASConfig c = configFor(bottle.getLocation());
+
+		if(c.drop.contains(item)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, item)){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region bottleRegion = plugin.getRegionManager().getRegion(bottle.getLocation());
+		if(!player.hasPermission(PermissionNodes.REGION_THROW)){
+			if(playerRegion != bottleRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(illegal){
+			event.setExperience(0);
+			event.setShowEffect(false);
+		}
+
+		Action action = Action.ITEM_THROW;
+		String[] extra = null;
+		if(isRegion){
+			action = Action.REGION_ITEM_THROW;
+			extra = new String[] {bottleRegion == null ? plugin.getMessages().getMessage("wilderness") : bottleRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, item, extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onThrow(PlayerDropItemEvent event){
+		Player player = event.getPlayer();
+		boolean illegal = false;
+		boolean isRegion = false;
+		Item drop = event.getItemDrop();
+		Material item = event.getItemDrop().getItemStack().getType();
+		ASConfig c = configFor(drop.getLocation());
+
+		if(c.drop.contains(item)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, item)){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region dropRegion = plugin.getRegionManager().getRegion(drop.getLocation());
+		if(!player.hasPermission(PermissionNodes.REGION_THROW)){
+			if(playerRegion != dropRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}
+
+		Action action = Action.ITEM_THROW;
+		String[] extra = null;
+		if(isRegion){
+			action = Action.REGION_ITEM_THROW;
+			extra = new String[] {dropRegion == null ? plugin.getMessages().getMessage("wilderness") : dropRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, item, extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPickup(PlayerPickupItemEvent event){
+		Player player = event.getPlayer();
+		boolean illegal = false;
+		boolean isRegion = false;
+		Item drop = event.getItem();
+		Material item = event.getItem().getItemStack().getType();
+		ASConfig c = configFor(drop.getLocation());
+
+		if(c.pickup.contains(item)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, item)){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region dropRegion = plugin.getRegionManager().getRegion(drop.getLocation());
+		if(!player.hasPermission(PermissionNodes.REGION_PICKUP)){
+			if(playerRegion != dropRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}
+
+		Action action = Action.ITEM_PICKUP;
+		String[] extra = null;
+		if(isRegion){
+			action = Action.REGION_ITEM_PICKUP;
+			extra = new String[] {dropRegion == null ? plugin.getMessages().getMessage("wilderness") : dropRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, item, extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOW)
+	public void onDeath(PlayerDeathEvent event){
+		Player player = event.getEntity();
+		List<ItemStack> drops = event.getDrops();
+		int illegalItems = 0, amount = 0;
+		ASConfig c = configFor(player.getLocation());
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		if(playerRegion != null){
+			playerRegion.alertExit(player);
+		}
+
+		List<ItemStack> r = new ArrayList<ItemStack>();
+		for(ItemStack item : drops){
+			boolean remove = false;
+			if(c.death.contains(item.getType())){
+				remove = true;
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, item.getType())){
+				remove = false;
+			}
+			if(remove){
+				r.add(item);
+				illegalItems++;
+				amount += item.getAmount();
+			}
+		}
+		for(ItemStack remove : r){
+			drops.remove(remove);
+		}
+
+		plugin.getMessages().notifyParties(player, Action.ITEM_THROW_DEATH, illegalItems > 0, String.valueOf(illegalItems), String.valueOf(amount));
+	}
+
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onCommand(PlayerCommandPreprocessEvent event){
+		Player player = event.getPlayer();
+		String command = event.getMessage().substring(1).toLowerCase(); // Cut off the slash
+		boolean illegal = false;
+		ASConfig c = configFor(player.getLocation());
+
+		String[] arguments = command.split(" ");
+		if(arguments.length == 0){
+			return;
+		}
+
+		StringBuilder current = new StringBuilder();
+		current.append(arguments[0]).append(" ");
+		for(int i = 0; i < arguments.length; i++){
+			if(c.commands.contains(current.toString().trim())){
+				illegal = true;
+				break;
+			}
+			if(i + 1 < arguments.length){
+				current.append(arguments[i + 1]).append(" ");
+			}
+		}
+
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, (Material) null)){
+			illegal = false;
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}
+
+		plugin.getMessages().notifyParties(player, Action.COMMAND_USED, illegal, "/" + command);
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onMove(PlayerMoveEvent event){
+		if(event.getTo().getBlock().equals(event.getPlayer().getLocation().getBlock())){
+			return;
+		}
+
+		Player player = event.getPlayer();
+		Region currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
+		Region toRegion = plugin.getRegionManager().getRegion(event.getTo());
+		if(currentRegion != toRegion){
+			if(currentRegion != null){
+				currentRegion.alertExit(player);
+			}
+			if(toRegion != null){
+				toRegion.alertEntry(player);
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onGameModeChange(PlayerGameModeChangeEvent event){
+		Player player = event.getPlayer();
+		if(player.hasMetadata("antishare-joined")){
+			scheduleGameModeChange(event);
+		}else{
+			GameMode from = player.getGameMode();
+			GameMode to = event.getNewGameMode();
+			boolean cancel = doGameModeChange(player, from, to);
+			if(cancel){
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onCombat(EntityDamageByEntityEvent event){
+		DamageCause cause = event.getCause();
+		Entity attacker = event.getDamager();
+		Entity target = event.getEntity();
+		boolean illegal = false;
+		boolean isRegion = false, isPlayerCombat = false;
+		Player playerAttacker = null;
+		ASConfig c = configFor(target.getLocation());
+
+		switch (cause){
+		case ENTITY_ATTACK:
+			// attacker = entity
+			if(attacker instanceof Player){
+				playerAttacker = (Player) attacker;
+			}else{
+				return;
+			}
+			break;
+		case PROJECTILE:
+			// attacker = Projectile
+			Projectile projectile = (Projectile) attacker;
+			LivingEntity shooter = projectile.getShooter();
+			if(shooter instanceof Player){
+				playerAttacker = (Player) shooter;
+			}else{
+				return;
+			}
+			break;
+		default:
+			return;
+		}
+
+		String allow = PermissionNodes.ALLOW_COMBAT_MOBS, deny = PermissionNodes.DENY_COMBAT_MOBS;
+		if(target instanceof Player){
+			isPlayerCombat = true;
+			allow = PermissionNodes.ALLOW_COMBAT_PLAYERS;
+			deny = PermissionNodes.DENY_COMBAT_PLAYERS;
+		}
+
+		if(c.attackMobs.contains(target.getType())){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(playerAttacker, allow, deny, target.getType().getName())){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(playerAttacker.getLocation());
+		Region entityRegion = plugin.getRegionManager().getRegion(target.getLocation());
+		if(!playerAttacker.hasPermission(isPlayerCombat ? PermissionNodes.REGION_ATTACK_PLAYERS : PermissionNodes.REGION_ATTACK_MOBS)){
+			if(playerRegion != entityRegion){
+				isRegion = true;
+				illegal = true;
+			}
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}
+
+		Action action = isPlayerCombat ? Action.HIT_PLAYER : Action.HIT_MOB;
+		String name = target instanceof Player ? ((Player) target).getName() : MaterialAPI.capitalize(target.getType().getName());
+		String[] extra = null;
+		if(isRegion){
+			action = isPlayerCombat ? Action.REGION_HIT_PLAYER : Action.REGION_HIT_MOB;
+			extra = new String[] {entityRegion == null ? plugin.getMessages().getMessage("wilderness") : entityRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(playerAttacker, action, illegal, name, extra);
+	}
+
+	// TODO: Fix exploits with pistons
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPistonExtend(BlockPistonExtendEvent event){
+		for(Block block : event.getBlocks()){
+			GameMode type = plugin.getBlockManager().getType(block);
+			if(type == null){
+				continue;
+			}
+			Location oldLocation = block.getLocation();
+			Location newLocation = block.getRelative(event.getDirection()).getLocation();
+			plugin.getBlockManager().moveBlock(oldLocation, newLocation);
+		}
+		ASConfig c = configFor(event.getBlock().getLocation());
+		if(c.naturalSettings.breakAsPiston){
+			int dest = event.getLength() + 1; // Destination block
+			Block block = event.getBlock().getRelative(event.getDirection(), dest);
+			if(MaterialAPI.canPistonBreak(block.getType())){
+				block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+				plugin.getHookManager().sendBlockBreak("PISTON", block.getLocation(), block.getType(), block.getData());
+				breakBlock(block, plugin.getBlockManager().getType(block), c, false);
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPistonRetract(BlockPistonRetractEvent event){
+		if(!event.isSticky()){
+			return;
+		}
+		Block block = event.getBlock().getRelative(event.getDirection()).getRelative(event.getDirection());
+		GameMode type = plugin.getBlockManager().getType(block);
+		if(type == null){
+			return;
+		}
+		Location oldLocation = block.getLocation();
+		Location newLocation = block.getRelative(event.getDirection().getOppositeFace()).getLocation();
+		plugin.getBlockManager().moveBlock(oldLocation, newLocation);
+	}
+
+	@EventHandler (priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onBlockFlow(BlockFromToEvent event){
+		Block to = event.getToBlock();
+		if(MaterialAPI.canBeBrokenByWater(to.getType())){
+			to.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+			plugin.getHookManager().sendBlockBreak("WATER", to.getLocation(), to.getType(), to.getData());
+			breakBlock(to, plugin.getBlockManager().getType(to), configFor(to.getLocation()), false, true);
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onProjectileLaunch(ProjectileLaunchEvent event){
+		Projectile projectile = event.getEntity();
+		LivingEntity shooter = projectile.getShooter();
+		if(!(shooter instanceof Player)){
+			return;
+		}
+		Player player = (Player) shooter;
+		boolean illegal = false;
+		Material item = Material.AIR;
+		ASConfig c = configFor(player.getLocation());
+
+		if(projectile instanceof EnderPearl){
+			item = Material.ENDER_PEARL;
+		}else if(projectile instanceof EnderSignal){
+			item = Material.EYE_OF_ENDER;
+		}else if(projectile instanceof Snowball){
+			item = Material.SNOW_BALL;
+		}
+
+		if(item == Material.AIR){
+			return;
+		}
+
+		if(c.drop.contains(item)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, item)){
+			illegal = false;
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}
+
+		plugin.getMessages().notifyParties(player, Action.ITEM_THROW, illegal, item);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPotionSplash(PotionSplashEvent event){
+		ThrownPotion projectile = event.getEntity();
+		LivingEntity shooter = projectile.getShooter();
+		if(!(shooter instanceof Player)){
+			return;
+		}
+
+		Player player = (Player) shooter;
+		boolean illegal = false;
+		Material item = Material.POTION;
+		ASConfig c = configFor(projectile.getLocation());
+
+		if(c.thrownPotions){
+			illegal = true;
+		}
+		if(c.drop.contains(item)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, item)){
+			illegal = false;
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}
+
+		plugin.getMessages().notifyParties(player, Action.ITEM_THROW, illegal, item);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onCrafting(CraftItemEvent event){
+		if(event.getWhoClicked() instanceof Player){
+			boolean illegal = false;
+			Player player = (Player) event.getWhoClicked();
+			ASConfig c = configFor(player.getLocation());
+			if(GamemodeAbstraction.isCreative(player.getGameMode())){
+				if(c.craft.contains(event.getRecipe().getResult().getType())){
+					illegal = true;
+				}
+				if(!plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, null, event.getRecipe().getResult().getType())){
+					illegal = false;
+				}
+			}
+			if(illegal){
+				event.setCancelled(true);
+			}
+			plugin.getMessages().notifyParties(player, Action.CRAFTED_ITEM, illegal, MaterialAPI.capitalize(event.getRecipe().getResult().getType().name()));
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onHangingBreak(HangingBreakEvent event){
+		if(event.getCause() == RemoveCause.PHYSICS){
+			Hanging hanging = event.getEntity();
+			Location block = hanging.getLocation().getBlock().getRelative(hanging.getAttachedFace()).getLocation();
+			GameMode gamemode = plugin.getBlockManager().getRecentBreak(block);
+			if(gamemode != null && gamemode == GameMode.CREATIVE){
+				event.setCancelled(true);
+				plugin.getHookManager().sendEntityBreak(null, hanging.getLocation(), hanging instanceof ItemFrame ? Material.ITEM_FRAME : Material.PAINTING, BlockLogger.DEFAULT_DATA);
+				hanging.remove();
+				plugin.getBlockManager().removeEntity(hanging);
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onHangingPlace(HangingPlaceEvent event){
+		Player player = event.getPlayer();
+		Hanging hanging = event.getEntity();
+		Material item = Material.PAINTING;
+		boolean illegal = false;
+		boolean isRegion = false;
+		ASConfig c = configFor(hanging.getLocation());
+		if(hanging instanceof ItemFrame){
+			item = Material.ITEM_FRAME;
+		}
+
+		if(c.blockPlace.contains(item)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, item)){
+			illegal = false;
+		}
+
+		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+		Region hangingRegion = plugin.getRegionManager().getRegion(hanging.getLocation());
+		if(!player.hasPermission(PermissionNodes.REGION_PLACE)){
+			if(playerRegion != hangingRegion){
+				illegal = true;
+				isRegion = true;
+			}
+		}
+
+		if(illegal){
+			event.setCancelled(true);
+		}else{
+			plugin.getBlockManager().addEntity(player.getGameMode(), hanging);
+		}
+
+		Action action = Action.BLOCK_PLACE;
+		String[] extra = null;
+		if(isRegion){
+			action = Action.REGION_BLOCK_PLACE;
+			extra = new String[] {hangingRegion == null ? plugin.getMessages().getMessage("wilderness") : hangingRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, action, illegal, item, extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onHangingBreak(HangingBreakByEntityEvent event){
+		Entity remover = event.getRemover();
+		Hanging hanging = event.getEntity();
+		Material item = Material.PAINTING;
+		GameMode hangingGamemode = plugin.getBlockManager().getType(hanging);
+		boolean illegal = false;
+		boolean isRegion = false, isGameMode = false;
+		if(hanging instanceof ItemFrame){
+			item = Material.ITEM_FRAME;
+		}
+		if(remover instanceof Player){
+			Player player = (Player) remover;
+			ItemStack hand = player.getItemInHand();
+			ASConfig c = configFor(hanging.getLocation());
+			if(hand == null){
+				hand = new ItemStack(Material.AIR);
+			}
+
+			if(player.hasPermission(PermissionNodes.TOOL_USE)){
+				if(hand.getType() == AntiShare.ANTISHARE_TOOL){
+					if(hangingGamemode == null){
+						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-natural", MaterialAPI.capitalize(item.name())), true);
+					}else{
+						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-type", MaterialAPI.capitalize(item.name()), MaterialAPI.capitalize(hangingGamemode.name())), true);
+					}
+					event.setCancelled(true);
+					return;
+				}else if(hand.getType() == AntiShare.ANTISHARE_SET_TOOL){
+					plugin.getBlockManager().removeEntity(hanging);
+					plugin.getBlockManager().addEntity(player.getGameMode(), hanging);
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-set", MaterialAPI.capitalize(player.getGameMode().name())), true);
+					event.setCancelled(true);
+					return;
+				}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && player.hasPermission(PermissionNodes.CREATE_CUBOID)){
+					plugin.getCuboidManager().updateCuboid(player.getName(), CuboidPoint.POINT1, hanging.getLocation());
+					Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
+					int volume = cuboid == null ? 0 : cuboid.getVolume();
+					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("cuboid-updated", "1", String.valueOf(volume)), true);
+					event.setCancelled(true);
+					return;
+				}
+			}
+
+			if(c.blockBreak.contains(item)){
+				illegal = true;
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, item)){
+				illegal = false;
+			}
+
+			InteractionSettings i = null;
+			if(hangingGamemode != null && !player.hasPermission(PermissionNodes.FREE_PLACE)){
+				if(!GamemodeAbstraction.isMatch(hangingGamemode, player.getGameMode())){
+					i = configFor(player.getGameMode(), hangingGamemode, hanging.getLocation());
+					isGameMode = true;
+				}
+			}
+
+			Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
+			Region hangingRegion = plugin.getRegionManager().getRegion(hanging.getLocation());
+			if(!player.hasPermission(PermissionNodes.REGION_BREAK)){
+				if(playerRegion != hangingRegion){
+					isRegion = true;
+					illegal = true;
+				}
+			}
+
+			if(!illegal && i != null){
+				illegal = i.deny;
+			}
+
+			if(illegal){
+				event.setCancelled(true);
+			}else{
+				plugin.getBlockManager().removeEntity(hanging);
+			}
+
+			Action action = Action.BLOCK_BREAK;
+			String[] extra = null;
+			if(isRegion){
+				action = Action.REGION_BLOCK_BREAK;
+				extra = new String[] {hangingRegion == null ? plugin.getMessages().getMessage("wilderness") : hangingRegion.getName()};
+			}else if(isGameMode){
+				action = Action.GAMEMODE_BLOCK_BREAK;
+				extra = new String[] {MaterialAPI.capitalize(hangingGamemode.name())};
+			}
+			plugin.getMessages().notifyParties(player, action, illegal, item, extra);
+
+			if(i != null && !event.isCancelled() && isGameMode){
+				plugin.getHookManager().sendEntityBreak(player.getName(), hanging.getLocation(), item, BlockLogger.DEFAULT_DATA);
+				if(i.drop){
+					hanging.getWorld().dropItemNaturally(hanging.getLocation(), new ItemStack(item));
+					if(hanging instanceof ItemFrame){
+						ItemFrame frame = (ItemFrame) hanging;
+						hanging.getWorld().dropItemNaturally(hanging.getLocation(), frame.getItem());
+					}
+				}
+				plugin.getBlockManager().removeEntity(hanging);
+				hanging.remove();
+			}
+		}else{
+			if(GamemodeAbstraction.isCreative(hangingGamemode)){
+				event.setCancelled(true);
+				hanging.remove();
+				plugin.getBlockManager().removeEntity(hanging);
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onJoin(PlayerJoinEvent event){
+		Player player = event.getPlayer();
+		player.setMetadata("antishare-joined", new FixedMetadataValue(plugin, true));
+
+		// Tell the inventory manager to prepare this player
+		plugin.getInventoryManager().loadPlayer(player);
+
+		// Check region
+		Region region = plugin.getRegionManager().getRegion(player.getLocation());
+		if(region != null){
+			// Add join key
+			player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
+
+			// Alert entry
+			region.alertSilentEntry(player); // Sets inventory and Game Mode
+			// This must be done because when the inventory manager releases
+			// a player it resets the inventory to "non-temp"
+		}
+
+		// Money (fines/rewards) status
+		plugin.getMoneyManager().showStatusOnLogin(player);
+
+		// AntiShare tools
+		if(player.hasPermission(PermissionNodes.TOOL_USE) && !plugin.isToolEnabled(player.getName())){
+			plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("tool-disabled"), true);
+		}
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onQuit(PlayerQuitEvent event){
+		Player player = event.getPlayer();
+		player.removeMetadata("antishare-joined", plugin);
+
+		// Remove from regions
+		Region region = plugin.getRegionManager().getRegion(player.getLocation());
+		if(region != null){
+			region.alertExit(player);
+		}
+
+		// Tell the inventory manager to release this player
+		plugin.getInventoryManager().releasePlayer(player);
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onWorldChange(PlayerChangedWorldEvent event){
+		Player player = event.getPlayer();
+		World to = player.getWorld();
+		World from = event.getFrom();
+		boolean ignore = true;
+
+		// Check to see if we should even bother checking
+		if(!plugin.settings().perWorldInventories){
+			// Fix up inventories
+			plugin.getInventoryManager().fixInventory(player, event.getFrom());
+			return;
+		}
+
+		// Check temp
+		if(plugin.getInventoryManager().isInTemporary(player)){
+			plugin.getInventoryManager().removeFromTemporary(player);
+		}
+
+		// Inventory check
+		if(!player.hasPermission(PermissionNodes.NO_SWAP)){
+			// Save from
+			switch (player.getGameMode()){
+			case CREATIVE:
+				plugin.getInventoryManager().saveCreativeInventory(player, from);
+				plugin.getInventoryManager().saveEnderCreativeInventory(player, from);
+				break;
+			case SURVIVAL:
+				plugin.getInventoryManager().saveSurvivalInventory(player, from);
+				plugin.getInventoryManager().saveEnderSurvivalInventory(player, from);
+				break;
+			case ADVENTURE:
+				plugin.getInventoryManager().saveAdventureInventory(player, from);
+				plugin.getInventoryManager().saveEnderAdventureInventory(player, from);
+			default:
+				break;
+			}
+
+			// Check for linked inventories
+			plugin.getInventoryManager().checkLinks(player, to, from);
+
+			// Update the inventories (check for merges)
+			plugin.getInventoryManager().refreshInventories(player, true);
+
+			// Set to
+			switch (player.getGameMode()){
+			case CREATIVE:
+				plugin.getInventoryManager().getCreativeInventory(player, to).setTo(player);
+				plugin.getInventoryManager().getEnderCreativeInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				break;
+			case SURVIVAL:
+				plugin.getInventoryManager().getSurvivalInventory(player, to).setTo(player);
+				plugin.getInventoryManager().getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				break;
+			case ADVENTURE:
+				plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player);
+				plugin.getInventoryManager().getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				break;
+			default:
+				break;
+			}
+
+			// For alerts
+			ignore = false;
+		}
+
+		// Alerts
+		if(!ignore){
+			plugin.getMessages().notifyParties(player, Action.WORLD_CHANGE, false, to.getName());
+		}
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerTeleport(PlayerTeleportEvent event){
+		Player player = event.getPlayer();
+		Region currentRegion = plugin.getRegionManager().getRegion(event.getFrom());
+		Region toRegion = plugin.getRegionManager().getRegion(event.getTo());
+		boolean illegal = false;
+		ASConfig c = configFor(event.getFrom());
+
+		// Check teleport cause for ender pearl
+		Material pearl = Material.ENDER_PEARL;
+		if(event.getCause() == TeleportCause.ENDER_PEARL){
+			if(c.use.contains(pearl)){
+				illegal = true;
+			}
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, pearl)){
+				illegal = false;
+			}
+		}
+
+		// Check type
+		if(illegal){
+			event.setCancelled(true);
+
+			plugin.getMessages().notifyParties(player, Action.USE_SOMETHING, illegal, pearl, MaterialAPI.capitalize(pearl.name()));
+
+			// Kill off before region check
+			return;
+		}
+
+		// Check regions
+		if(currentRegion != toRegion){
+			if(currentRegion != null){
+				currentRegion.alertExit(player);
+			}
+			if(toRegion != null){
+				toRegion.alertEntry(player);
+			}
+		}
+	}
+
+}

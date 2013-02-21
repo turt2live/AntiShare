@@ -9,19 +9,18 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
-import com.turt2live.antishare.manager.InventoryManager;
 
 /**
  * Displayable version of an AntiShare inventory
  */
+//TODO: Schedule for rewrite
 public class DisplayableInventory implements InventoryHolder, Listener {
 
 	private ASInventory asinventory;
 	private Inventory inventory;
 	private long uid = System.nanoTime();
-	private AntiShare plugin = AntiShare.getInstance();
+	private AntiShare plugin = AntiShare.p;
 	private String title = "AntiShare Inventory";
 	private boolean useEvent = true;
 
@@ -79,7 +78,7 @@ public class DisplayableInventory implements InventoryHolder, Listener {
 						}
 					}
 				}
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).inject(asinventory); // Force-save the inventory into the manager
+				plugin.getInventoryManager().inject(asinventory); // Force-save the inventory into the manager
 				event.getInventory().clear(); // Sanitary
 				inventory = null; // Sanitary
 				useEvent = false;

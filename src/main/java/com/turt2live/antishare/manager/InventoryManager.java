@@ -23,23 +23,21 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LinkedInventory;
 import com.turt2live.antishare.inventory.TemporaryASInventory;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.PermissionNodes;
 
 /**
  * Manages inventories within AntiShare
  * 
  * @author turt2live
  */
-public class InventoryManager extends AntiShareManager {
+//TODO: Schedule for rewrite
+public class InventoryManager {
 
 	private final ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
 	private final ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
@@ -49,6 +47,7 @@ public class InventoryManager extends AntiShareManager {
 	private final ConcurrentHashMap<String, ASInventory> enderAdventure = new ConcurrentHashMap<String, ASInventory>();
 	private final ConcurrentHashMap<String, TemporaryASInventory> temporary = new ConcurrentHashMap<String, TemporaryASInventory>();
 	private final List<LinkedInventory> linkedInventories = new ArrayList<LinkedInventory>();
+	private AntiShare plugin = AntiShare.p;
 
 	/**
 	 * Creates a new Inventory Manager
@@ -56,7 +55,7 @@ public class InventoryManager extends AntiShareManager {
 	public InventoryManager(){
 		// Prepare linked inventories
 		EnhancedConfiguration linksYaml = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
-		linksYaml.loadDefaults(plugin.getResource("resources/linked-inventories.yml"));
+		linksYaml.loadDefaults(plugin.getResource("linked-inventories.yml"));
 		if(!linksYaml.fileExists() || !linksYaml.checkDefaults()){
 			linksYaml.saveDefaults();
 		}
@@ -208,7 +207,7 @@ public class InventoryManager extends AntiShareManager {
 	 * @param alreadySaved set to true to bypass saving
 	 */
 	public void refreshInventories(Player player, boolean alreadySaved){
-		if(!plugin.getPermissions().has(player, PermissionNodes.NO_SWAP)){
+		if(!player.hasPermission(PermissionNodes.NO_SWAP)){
 			return;
 		}
 		// Save
@@ -511,8 +510,7 @@ public class InventoryManager extends AntiShareManager {
 	/**
 	 * Loads the inventory manager
 	 */
-	@Override
-	public boolean load(){
+	public void load(){
 		// Clear
 		creative.clear();
 		survival.clear();
@@ -522,7 +520,7 @@ public class InventoryManager extends AntiShareManager {
 		enderAdventure.clear();
 		temporary.clear();
 		// Loads regions
-		for(Region region : ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getAllRegions()){
+		for(Region region : plugin.getRegionManager().getAllRegions()){
 			String UID = region.getID();
 			List<ASInventory> inventory = ASInventory.generateInventory(UID, InventoryType.REGION);
 			if(inventory != null){
@@ -555,23 +553,21 @@ public class InventoryManager extends AntiShareManager {
 					LinkedInventory link = new LinkedInventory(gamemode, allWorlds);
 					this.linkedInventories.add(link);
 				}else{
-					AntiShare.getInstance().getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_BAD_FILE, "linked-inventories.yml"));
+					plugin.getLogger().warning(plugin.getMessages().getMessage("bad-file", "linked-inventories.yml"));
 				}
 			}
 		}
 
 		// Status
 		if(this.linkedInventories.size() > 0){
-			AntiShare.getInstance().getLogger().info(Localization.getMessage(LocaleMessage.STATUS_LINKED_INVENTORIES, String.valueOf(this.linkedInventories.size())));
+			plugin.getLogger().info(plugin.getMessages().getMessage("linked-inventories-loaded", String.valueOf(this.linkedInventories.size())));
 		}
-		return true;
 	}
 
 	/**
 	 * Saves the inventory manager
 	 */
-	@Override
-	public boolean save(){
+	public void save(){
 		// Save players
 		if(Bukkit.getOnlinePlayers() != null){
 			for(Player player : Bukkit.getOnlinePlayers()){
@@ -598,12 +594,11 @@ public class InventoryManager extends AntiShareManager {
 		for(String key : enderAdventure.keySet()){
 			enderAdventure.get(key).save();
 		}
-		for(Region region : ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getAllRegions()){
+		for(Region region : plugin.getRegionManager().getAllRegions()){
 			if(region.getInventory() != null){
 				region.getInventory().save();
 			}
 		}
-		return true;
 	}
 
 	/**
@@ -758,5 +753,13 @@ public class InventoryManager extends AntiShareManager {
 				enderAdventure.get(name + "." + world).save();
 			}
 		}
+	}
+
+	/**
+	 * Reloads the inventory manager
+	 */
+	public void reload(){
+		save();
+		load();
 	}
 }

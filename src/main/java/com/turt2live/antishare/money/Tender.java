@@ -14,67 +14,22 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.util.generic.ASGameMode;
+import com.turt2live.antishare.util.ASGameMode;
+import com.turt2live.antishare.util.Action;
 
 /**
  * A class for money (Reward or Fine)
  * 
  * @author turt2live
  */
+//TODO: Schedule for rewrite
 public abstract class Tender {
 
-	/**
-	 * An enum to represent tender type
-	 * 
-	 * @author turt2live
-	 */
-	public static enum TenderType{
-		BLOCK_BREAK("actions.block-break", "Block Break"),
-		BLOCK_PLACE("actions.block-place", "Block Place"),
-		ITEM_DROP("actions.item-drop", "Item Drop"),
-		ITEM_PICKUP("actions.item-pickup", "Item Pickup"),
-		DEATH("actions.player-death", "Player Death"),
-		RIGHT_CLICK("actions.right-click", "Right Click"),
-		USE("actions.use", "Use"),
-		COMMAND("actions.command", "Command"),
-		HIT_PLAYER("actions.player-hit-player", "Player Hit Player"),
-		HIT_MOB("actions.player-hit-mob", "Player Hit Mob"),
-		MOB_MAKE("actions.create-mob", "Player Create Mob"),
-		CREATIVE_BLOCK("actions.creative-block-break", "Creative Block Break"),
-		SURVIVAL_BLOCK("actions.survival-block-break", "Survival Block Break"),
-		ADVENTURE_BLOCK("actions.adventure-block-break", "Adventure Block Break");
-
-		private String key, name;
-
-		private TenderType(String key, String name){
-			this.key = key;
-			this.name = name;
-		}
-
-		/**
-		 * Gets the configuration key from root in the fines.yml
-		 * 
-		 * @return the configuration path
-		 */
-		public String getConfigurationKey(){
-			return key;
-		}
-
-		/**
-		 * Gets the name of the action. Used by trackers
-		 * 
-		 * @return the name
-		 */
-		public String getName(){
-			return name;
-		}
-	}
-
 	private double amount;
-	private TenderType type;
+	private Action type;
 	private boolean enabled;
 	private ASGameMode affect;
-	protected AntiShare plugin = AntiShare.getInstance();
+	protected AntiShare plugin = AntiShare.p;
 
 	/**
 	 * Creates a new Tender
@@ -84,7 +39,7 @@ public abstract class Tender {
 	 * @param enabled true to enable
 	 * @param affect the Game Mode(s) to affect
 	 */
-	public Tender(TenderType type, double amount, boolean enabled, ASGameMode affect){
+	public Tender(Action type, double amount, boolean enabled, ASGameMode affect){
 		this.type = type;
 		this.amount = amount;
 		this.enabled = enabled;
@@ -117,7 +72,7 @@ public abstract class Tender {
 	 * 
 	 * @return the type
 	 */
-	public TenderType getType(){
+	public Action getType(){
 		return type;
 	}
 

@@ -19,7 +19,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.money.TransactionResult;
-import com.turt2live.antishare.util.generic.MoneySaver;
+import com.turt2live.antishare.util.MoneySaver;
 
 /**
  * Safe-hook for Vault Economy
@@ -34,7 +34,7 @@ public class VaultEconomy {
 	 * Creates a new Vault Economy instance
 	 */
 	public VaultEconomy(){
-		RegisteredServiceProvider<Economy> rsp = AntiShare.getInstance().getServer().getServicesManager().getRegistration(Economy.class);
+		RegisteredServiceProvider<Economy> rsp = AntiShare.p.getServer().getServicesManager().getRegistration(Economy.class);
 		if(rsp == null){
 			return;
 		}

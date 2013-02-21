@@ -1,0 +1,157 @@
+# AntiShare Configuration
+# 
+# Help Resources:
+# 
+# WIKI -        https://github.com/turt2live/AntiShare/wiki
+# IRC -         http://webchat.esper.net/?nick=as...&channels=turt2live
+#               or on EsperNet (#turt2live)
+# BUKKITDEV -   http://dev.bukkit.org/server-mods/antishare/
+# 
+# A fully commented configuration can be found within the plugin jar.
+lists:
+    # Block potions for creative players?
+    no-potions: true
+    no-thrown-potions: true
+    # Block break list. These items are DENIED
+    break:
+    - bedrock
+    # Block place list. These items are DENIED
+    place:
+    - diamond block
+    - gold block
+    - iron block
+    - bedrock
+    - tnt
+    - emerald block
+    # Items creative players cannot die with
+    death: 
+    - all
+    # Items creative players cannot pickup
+    pickup:
+    - all
+    # Items creative players cannot drop
+    drop:
+    - all
+    # Items/blocks creative players cannot use/interact with
+    use:
+    - storage minecart
+    - powered minecart 
+    - chest
+    - furnace
+    - dispenser
+    - jukebox
+    - anvil
+    - enchantment table
+    - sign
+    - flint and steel
+    - exp bottle
+    - monster egg
+    - lava bucket
+    - water bucket
+    - fireball
+    - item frame
+    # Commands creative players cannot use. These do NOT start with /
+    commands:
+    - command1
+    - command2
+    # Mobs creative players cannot attack. 'players' means players
+    attack-mobs:
+    - all
+    # Mobs creative players cannot interact with
+    interact-mobs:
+    - all
+    # Items creative players cannot craft
+    crafting:
+    - all
+    # Mobs creative players cannot create. Currently supports: 'iron golem', 'snow golem', and 'wither'
+    craft-mob:
+    - iron golem
+    - snow golem
+    - wither
+# Block tracking
+tracking:
+    creative:
+    - all
+    survival:
+    - all
+    adventure:
+    - none
+# Settings for all of AntiShare
+settings:
+    # Treat adventure mode like creative mode?
+    adventure-is-creative: true
+    # Cleanup settings
+    cleanup:
+        inventories:
+            enabled: true
+            # Choices: 'archive' or 'delete'
+            method: archive
+            # Number of days to wait
+            after: 120
+            remove-old-worlds: true
+    # GameMode cooldown
+    cooldown:
+        enabled: false
+        wait-time-seconds: 5
+    # Natural protection settings
+    natural-protection:
+        # Should we allow cross-gamemode protection?
+        # Example: Creative player places a torch on a survival block (default: deny)
+        allow-mismatch-gamemode: false
+        remove-attached-blocks: true
+        # If true, when a creative player breaks an inventory-holding block, the inventory will be cleared
+        empty-inventories: true
+        break-as-gamemode:
+            pistons: true
+            # If this is true, then blocks will be broken according to their gamemode (if attached, such as a torch on a falling sand block)
+            attached-blocks: true
+            water: true
+    # Stuff to do on GameMode change
+    gamemode-change:
+        change-level: true
+        # Requires Vault!
+        change-economy-balance: true
+        change-inventory: true
+        change-ender-chest: true
+    # Use per world inventories?
+    use-per-world-inventories: false
+    # Feature handling
+    features:
+        use-inventories: true
+        use-fines-rewards: false
+    # Alert settings
+    notify:
+        use: true
+        # Permission = AntiShare.getNotification
+        with-permission: true
+        console: false
+# Plugin hooks
+hooks:
+    magicspells:
+        block-creative: true
+    logblock:
+        stop-spam: false
+# Advanced interaction settings, 'drop-items' only takes effect if 'deny' is false
+interaction:
+    survival-breaking-creative:
+        deny: true
+        drop-items: false
+    creative-breaking-survival:
+        deny: true
+        drop-items: false
+    survival-breaking-adventure:
+        deny: true
+        drop-items: false
+    creative-breaking-adventure:
+        deny: true
+        drop-items: false
+    adventure-breaking-survival:
+        deny: true
+        drop-items: false
+    adventure-breaking-creative:
+        deny: true
+        drop-items: false
+# Misc. Settings
+other:
+    ignore-updates: false
+    version_string: Not set

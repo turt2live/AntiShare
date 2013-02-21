@@ -10,18 +10,18 @@
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
+import com.turt2live.antishare.AntiShare;
 
 /**
  * For easy returning
  * 
  * @author turt2live
  */
+//TODO: Schedule for rewrite
 public class TransactionResult {
 
-	public static final TransactionResult NO_VAULT = new TransactionResult(Localization.getMessage(LocaleMessage.ERROR_NO_MONEY_VAULT), false);
-	public static final TransactionResult NO_TAB = new TransactionResult(Localization.getMessage(LocaleMessage.ERROR_NO_MONEY_TAB), false);
+	public static final TransactionResult NO_VAULT = new TransactionResult(AntiShare.p.getMessages().getMessage("vault-not-enabled"), false);
+	public static final TransactionResult NO_TAB = new TransactionResult(AntiShare.p.getMessages().getMessage("tab-not-enabled"), false);
 
 	/**
 	 * Message applied to the result

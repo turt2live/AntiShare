@@ -29,17 +29,15 @@ import com.turt2live.antishare.compatibility.other.MagicSpells;
 import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
 
 /**
  * Manages hooks into other plugins
  * 
  * @author turt2live
  */
-public class HookManager extends AntiShareManager {
+public class HookManager {
 
-	private AntiShare plugin = AntiShare.getInstance();
+	private AntiShare plugin = AntiShare.p;
 	private final List<BlockProtection> blocks = new ArrayList<BlockProtection>();
 	private final List<RegionProtection> regions = new ArrayList<RegionProtection>();
 	private final List<BlockLogger> loggers = new ArrayList<BlockLogger>();
@@ -158,16 +156,29 @@ public class HookManager extends AntiShareManager {
 	}
 
 	private void hooked(Plugin hook){
-		if(!plugin.getConfig().getBoolean("other.more-quiet-startup") || AntiShare.isDebug()){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_HOOKING, hook.getName()));
-		}
+		plugin.getLogger().info(plugin.getMessages().getMessage("hooked", hook.getName()));
 	}
 
-	@Override
-	public boolean load(){
+	/**
+	 * Reloads the hook manager
+	 */
+	public void reload(){
+		blocks.clear();
+		loggers.clear();
+		regions.clear();
+		spells = null;
+		load();
+	}
+
+	/**
+	 * Loads all the hooks for AntiShare
+	 */
+	public void load(){
 		// Clear
 		blocks.clear();
+		loggers.clear();
 		regions.clear();
+		spells = null;
 
 		// Find plugins
 		Plugin chestshop = plugin.getServer().getPluginManager().getPlugin("ChestShop");
@@ -201,12 +212,6 @@ public class HookManager extends AntiShareManager {
 			spells = new MagicSpells();
 			plugin.getServer().getPluginManager().registerEvents(spells, plugin);
 		}
-		return true;
-	}
-
-	@Override
-	public boolean save(){
-		return true;
 	}
 
 }

@@ -29,21 +29,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.turt2live.antishare.Systems.Manager;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.manager.CuboidManager;
-import com.turt2live.antishare.manager.InventoryManager;
-import com.turt2live.antishare.manager.MoneyManager;
-import com.turt2live.antishare.manager.RegionManager;
-import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.PermissionNodes;
 import com.turt2live.materials.MaterialAPI;
 
 /**
@@ -51,10 +44,11 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-// TODO: Split out commands
 public class CommandHandler implements CommandExecutor {
 
-	private final AntiShare plugin = AntiShare.getInstance();
+	private final AntiShare plugin = AntiShare.p;
+	private String noPermission = plugin.getMessages().getMessage("no-permission");
+	private String notPlayer = plugin.getMessages().getMessage("not-a-player");
 
 	@Override
 	public boolean onCommand(final CommandSender sender, Command command, String label, String[] args){
@@ -64,29 +58,30 @@ public class CommandHandler implements CommandExecutor {
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("version")){
-					ASUtils.sendToPlayer(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
+					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
 					return true;
 				}else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.RELOAD)){
-						ASUtils.sendToPlayer(sender, Localization.getMessage(LocaleMessage.RELOADING), true);
+					if(sender.hasPermission(PermissionNodes.RELOAD)){
+						plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("reloading"), true);
 						plugin.reload();
-						ASUtils.sendToPlayer(sender, ChatColor.GREEN + Localization.getMessage(LocaleMessage.RELOADED), true);
+						plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("reloaded"), true);
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("mirror")){
 					// Sanity Check
 					if(!(sender instanceof Player)){
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
+						plugin.getMessages().sendTo(sender, notPlayer, true);
 					}else{
-						if(plugin.getPermissions().has(sender, PermissionNodes.MIRROR)){
+						if(sender.hasPermission(PermissionNodes.MIRROR)){
 							if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
-								ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.ERROR_INVENTORIES), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("inventories-not-enabled"), true);
 								return true;
 							}
 							if(args.length < 2){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as mirror <player> [enderchest/normal] [gamemode] [world]"), true);
+								//plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as mirror <player> [enderchest/normal] [gamemode] [world]"), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as mirror <player> [enderchest/normal] [gamemode] [world]"), true);
 							}else{
 								// Setup
 								String playername = args[1];
@@ -103,7 +98,7 @@ public class CommandHandler implements CommandExecutor {
 
 								// Sanity check
 								if(player == null){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_NO_PLAYER, playername), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("player-not-found", playername), true);
 									return true;
 								}
 
@@ -116,7 +111,7 @@ public class CommandHandler implements CommandExecutor {
 										isEnder = false;
 									}else{
 										isEnder = false;
-										ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_ASSUME, Localization.getMessage(LocaleMessage.DICT_INVENTORY), args[2], "normal"), true);
+										plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("assume-normal-inventory", args[2]), true);
 									}
 								}
 
@@ -127,7 +122,7 @@ public class CommandHandler implements CommandExecutor {
 									if(temp != null){
 										gamemode = temp;
 									}else{
-										ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_ASSUME, "Game Mode", args[3], gamemode.name().toLowerCase()), true);
+										plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("assume-gamemode", "Game Mode", args[3], MaterialAPI.capitalize(gamemode.name())), true);
 									}
 								}
 
@@ -136,7 +131,7 @@ public class CommandHandler implements CommandExecutor {
 								if(args.length > 4){
 									World temp = Bukkit.getWorld(args[4]);
 									if(temp == null){
-										ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_ASSUME, Localization.getMessage(LocaleMessage.DICT_WORLD), args[4], world.getName()), true);
+										plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("assume-world", args[4], world.getName()), true);
 									}else{
 										world = temp;
 									}
@@ -145,7 +140,7 @@ public class CommandHandler implements CommandExecutor {
 								// Load all inventories
 								if(player.isOnline()){
 									Player p = (Player) player;
-									((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).savePlayer(p);
+									plugin.getInventoryManager().savePlayer(p);
 								}
 								ASInventory chosen = null;
 								List<ASInventory> inventories = ASInventory.generateInventory(player.getName(), isEnder ? InventoryType.ENDER : InventoryType.PLAYER);
@@ -160,7 +155,7 @@ public class CommandHandler implements CommandExecutor {
 									}
 								}
 								if(chosen == null){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_INV_MISSING), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("inventory-not-found"), true);
 									return true;
 								}
 
@@ -172,97 +167,97 @@ public class CommandHandler implements CommandExecutor {
 
 								// Show inventory
 								if(isEnder){
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + Localization.getMessage(LocaleMessage.MIRROR_WELCOME_ENDER, player.getName()), true);
-									ASUtils.sendToPlayer(sender, Localization.getMessage(LocaleMessage.MIRROR_EDIT), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("mirror-ender-welcome", player.getName()), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("mirror-edit"), true);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.GREEN + Localization.getMessage(LocaleMessage.MIRROR_WELCOME, player.getName()), true);
-									ASUtils.sendToPlayer(sender, Localization.getMessage(LocaleMessage.MIRROR_EDIT), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("mirror-welcome", player.getName()), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("mirror-edit"), true);
 								}
 								((Player) sender).openInventory(display.getInventory()); // Creates the "live editing" window
 							}
 						}else{
-							ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+							plugin.getMessages().sendTo(sender, noPermission, true);
 						}
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("region")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_CREATE)){
+					if(sender.hasPermission(PermissionNodes.REGION_CREATE)){
 						// Sanity Check
 						if(sender instanceof Player){
 							Player player = (Player) sender;
 							if(args.length < 3){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as region <gamemode> <name>"), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as region <gamemode> <name>"), true);
 							}else{
 								String regionName = args[2];
 								GameMode gamemode = ASUtils.getGameMode(args[1]);
 								if(gamemode != null){
-									if(!((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).isRegionNameTaken(regionName)){
-										if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).isCuboidComplete(player.getName())){
-											Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName());
-											((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).addRegion(cuboid, player.getName(), regionName, gamemode);
-											ASUtils.sendToPlayer(sender, ChatColor.GREEN + Localization.getMessage(LocaleMessage.REGION_CREATED), true);
+									if(!plugin.getRegionManager().isRegionNameTaken(regionName)){
+										if(plugin.getCuboidManager().isCuboidComplete(player.getName())){
+											Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
+											plugin.getRegionManager().addRegion(cuboid, player.getName(), regionName, gamemode);
+											plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("region-created"), true);
 										}else{
-											ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_NO_CUBOID_TOOL), true);
+											plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("missing-cuboid"), true);
 										}
 									}else{
-										ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_NAME_IN_USE), true);
+										plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("name-in-use"), true);
 									}
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, "Game Mode", args[1]), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("unknown-gamemode", args[1]), true);
 								}
 							}
 						}else{
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
+							plugin.getMessages().sendTo(sender, notPlayer, true);
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion") || args[0].equalsIgnoreCase("removeregion")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_DELETE)){
+					if(sender.hasPermission(PermissionNodes.REGION_DELETE)){
 						// Sanity check
 						if(sender instanceof Player){
 							// Remove region
 							if(args.length == 1){
 								Location location = ((Player) sender).getLocation();
-								Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(location);
+								Region region = plugin.getRegionManager().getRegion(location);
 								if(region != null){
-									((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).removeRegion(region.getName());
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.REGION_REMOVED), true);
+									plugin.getRegionManager().removeRegion(region.getName());
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("region-remove"), true);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_REGION_STAND_MISSING), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("no-foot-region"), true);
 								}
 							}else{
 								String regionName = args[1];
-								Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(regionName);
+								Region region = plugin.getRegionManager().getRegion(regionName);
 								if(region != null){
-									((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).removeRegion(region.getName());
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.REGION_REMOVED), true);
+									plugin.getRegionManager().removeRegion(region.getName());
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("region-remove"), true);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_REGION_MISSING), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("unknown-region", regionName), true);
 								}
 							}
 						}else{
 							// Remove region
 							if(args.length > 1){
 								String regionName = args[1];
-								Region region = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(regionName);
+								Region region = plugin.getRegionManager().getRegion(regionName);
 								if(region != null){
-									((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).removeRegion(region.getName());
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.REGION_REMOVED), true);
+									plugin.getRegionManager().removeRegion(region.getName());
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("region-remove"), true);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_REGION_MISSING), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("unknown-region", regionName), true);
 								}
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as rmregion <name>"), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as rmregion <name>"), true);
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("editregion")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_EDIT)){
+					if(sender.hasPermission(PermissionNodes.REGION_EDIT)){
 						// Check validity of key
 						boolean valid = false;
 						if(args.length >= 3){
@@ -279,26 +274,26 @@ public class CommandHandler implements CommandExecutor {
 							// Show help
 							if(args.length >= 2){
 								if(args[1].equalsIgnoreCase("help")){
-									String key = Localization.getMessage(LocaleMessage.DICT_KEY).toLowerCase();
-									String value = Localization.getMessage(LocaleMessage.DICT_VALUE).toLowerCase();
+									String key = plugin.getMessages().getMessage("key").toLowerCase();
+									String value = plugin.getMessages().getMessage("value").toLowerCase();
 									key = key.substring(0, 1).toUpperCase() + key.substring(1);
 									value = value.substring(0, 1).toUpperCase() + value.substring(1);
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "/as editregion <name> <key> <value>", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "name " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "<any name>", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "true/false", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "true/false", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "EnterMessage " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "<enter message>", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "ExitMessage " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "<exit message>", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "'none'/'set'", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "survival/creative", false);
-									ASUtils.sendToPlayer(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "area " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "No Value", false);
+									plugin.getMessages().sendTo(sender, ChatColor.GOLD + "/as editregion <name> <key> <value>", false);
+									plugin.getMessages().sendTo(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "name " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "<any name>", false);
+									plugin.getMessages().sendTo(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "ShowEnterMessage " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "true/false", false);
+									plugin.getMessages().sendTo(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "ShowExitMessage " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "true/false", false);
+									plugin.getMessages().sendTo(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "EnterMessage " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "<enter message>", false);
+									plugin.getMessages().sendTo(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "ExitMessage " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "<exit message>", false);
+									plugin.getMessages().sendTo(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "inventory " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "'none'/'set'", false);
+									plugin.getMessages().sendTo(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "gamemode " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "survival/creative", false);
+									plugin.getMessages().sendTo(sender, ChatColor.AQUA + key + ": " + ChatColor.WHITE + "area " + ChatColor.AQUA + value + ": " + ChatColor.WHITE + "No Value", false);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as editregion <name> <key> <value>"), true);
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.EXTENDED_HELP, "/as editregion help"), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as editregion <name> <key> <value>"), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("extra-help", "/as editregion help"), true);
 								}
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as editregion <name> <key> <value>"), true);
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.EXTENDED_HELP, "/as editregion help"), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as editregion <name> <key> <value>"), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("extra-help", "/as editregion help"), true);
 							}
 						}else{
 							// Setup
@@ -315,31 +310,31 @@ public class CommandHandler implements CommandExecutor {
 							}
 
 							// Check region
-							if(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(name) == null){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_REGION_MISSING), true);
+							if(plugin.getRegionManager().getRegion(name) == null){
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("unknown-region", name), true);
 							}else{
 								// Update region if needed
 								if(RegionKey.isKey(key)){
-									((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).updateRegion(((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getRegion(name), RegionKey.getKey(key), value, sender);
+									plugin.getRegionManager().updateRegion(plugin.getRegionManager().getRegion(name), RegionKey.getKey(key), value, sender);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_KEY), key), true);
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.EXTENDED_HELP, "/as editregion help"), true);
+									plugin.getMessages().sendTo(sender, ChatColor.DARK_RED + plugin.getMessages().getMessage("unknown-key", key), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("extra-help", "/as editregion help"), true);
 								}
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("listregions")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.REGION_LIST)){
+					if(sender.hasPermission(PermissionNodes.REGION_LIST)){
 						// Sanity check on page number
 						int page = 1;
 						if(args.length >= 2){
 							try{
 								page = Integer.parseInt(args[1]);
 							}catch(NumberFormatException e){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_NUMBER), args[1]), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("unknown-value", args[1]), true);
 								return true;
 							}
 						}
@@ -347,13 +342,13 @@ public class CommandHandler implements CommandExecutor {
 						// Setup
 						page = Math.abs(page);
 						int resultsPerPage = 6; // Put as a variable for ease of changing
-						Set<Region> set = ((RegionManager) plugin.getSystemsManager().getManager(Manager.REGION)).getAllRegions();
+						Set<Region> set = plugin.getRegionManager().getAllRegions();
 						List<Region> regions = new ArrayList<Region>();
 						regions.addAll(set);
 
 						// Check for empty list
 						if(regions.size() <= 0){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NO_REGIONS), true);
+							plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("no-regions"), true);
 							return true;
 						}
 
@@ -364,26 +359,26 @@ public class CommandHandler implements CommandExecutor {
 						}
 						int maxPages = maxPagesD.intValue();
 						if(maxPagesD < page){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_NO_PAGE, String.valueOf(page), String.valueOf(maxPages)), true);
+							plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("page-not-found", String.valueOf(page), String.valueOf(maxPages)), true);
 							return true;
 						}
 
 						// Generate pages
-						String pagenation = ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "AntiShare " + Localization.getMessage(LocaleMessage.DICT_REGIONS) + " " + ChatColor.DARK_GREEN + "|" + ChatColor.GREEN + " Page " + page + "/" + maxPages + ChatColor.DARK_GREEN + " ]=======";
-						ASUtils.sendToPlayer(sender, pagenation, false);
+						String pagenation = ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "AntiShare Regions " + ChatColor.DARK_GREEN + "|" + ChatColor.GREEN + " Page " + page + "/" + maxPages + ChatColor.DARK_GREEN + " ]=======";
+						plugin.getMessages().sendTo(sender, pagenation, false);
 						for(int i = (page - 1) * resultsPerPage; i < (resultsPerPage < regions.size() ? resultsPerPage * page : regions.size()); i++){
-							ASUtils.sendToPlayer(sender, ChatColor.DARK_AQUA + "#" + (i + 1) + " " + ChatColor.GOLD + regions.get(i).getName() + ChatColor.YELLOW + " Creator: " + ChatColor.AQUA + regions.get(i).getOwner() + ChatColor.YELLOW + " World: " + ChatColor.AQUA + regions.get(i).getWorldName(), false);
+							plugin.getMessages().sendTo(sender, ChatColor.DARK_AQUA + "#" + (i + 1) + " " + ChatColor.GOLD + regions.get(i).getName() + ChatColor.YELLOW + " Creator: " + ChatColor.AQUA + regions.get(i).getOwner() + ChatColor.YELLOW + " World: " + ChatColor.AQUA + regions.get(i).getWorldName(), false);
 						}
-						ASUtils.sendToPlayer(sender, pagenation, false);
+						plugin.getMessages().sendTo(sender, pagenation, false);
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("tool")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_GET)){
+					if(sender.hasPermission(PermissionNodes.TOOL_GET)){
 						// Sanity check
 						if(!(sender instanceof Player)){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
+							plugin.getMessages().sendTo(sender, notPlayer, true);
 						}else{
 							// Setup
 							Player player = (Player) sender;
@@ -392,24 +387,24 @@ public class CommandHandler implements CommandExecutor {
 							// Check inventory
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 								if(inventory.contains(AntiShare.ANTISHARE_TOOL)){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.HAVE_TOOL, MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name())), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name())), true);
 								}else{
 									ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player);
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.GET_TOOL, MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name())), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("get-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name())), true);
 								}
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NEED_INV_SPACE, String.valueOf(1)), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("no-space", String.valueOf(1)), true);
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("settool")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_GET)){
+					if(sender.hasPermission(PermissionNodes.TOOL_GET)){
 						// Sanity check
 						if(!(sender instanceof Player)){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
+							plugin.getMessages().sendTo(sender, notPlayer, true);
 						}else{
 							// Setup
 							Player player = (Player) sender;
@@ -418,24 +413,24 @@ public class CommandHandler implements CommandExecutor {
 							// Check inventory
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 								if(inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.HAVE_TOOL, MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), true);
 								}else{
 									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player);
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.GET_TOOL, MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("get-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), true);
 								}
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NEED_INV_SPACE, String.valueOf(1)), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("no-space", String.valueOf(1)), true);
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("toolbox")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_GET)){
+					if(sender.hasPermission(PermissionNodes.TOOL_GET)){
 						// Sanity check
 						if(!(sender instanceof Player)){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
+							plugin.getMessages().sendTo(sender, notPlayer, true);
 						}else{
 							// Setup
 							Player player = (Player) sender;
@@ -457,44 +452,40 @@ public class CommandHandler implements CommandExecutor {
 								if(!inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
 									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player, 2);
 								}
-								if(plugin.getPermissions().has(sender, PermissionNodes.CREATE_CUBOID)){
+								if(sender.hasPermission(PermissionNodes.CREATE_CUBOID)){
 									if(!inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
 										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player, 3);
 									}
 								}else{
-									ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.NO_CUBOID_TOOL), true);
+									plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("cannot-have-cuboid"), true);
 								}
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NEED_INV_SPACE, String.valueOf(3)), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("no-space", String.valueOf(3)), true);
 							}
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("money")){
 					if(args.length < 2){
-						ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as money <on/off/status>"), true);
+						plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as money <on/off/status>"), true);
 					}else{
 						if(args[1].equalsIgnoreCase("status") || args[1].equalsIgnoreCase("state")){
-							String state = !((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).isSilent(sender.getName()) ? ChatColor.GREEN + Localization.getMessage(LocaleMessage.DICT_GETTING) : ChatColor.RED + Localization.getMessage(LocaleMessage.DICT_NOT_GETTING);
-							state = state + ChatColor.WHITE;
-							ASUtils.sendToPlayer(sender, Localization.getMessage(LocaleMessage.FINE_REWARD_TOGGLE, state), true);
+							plugin.getMessages().sendTo(sender, plugin.getMoneyManager().isSilent(sender.getName()) ? plugin.getMessages().getMessage("fines-not-getting") : plugin.getMessages().getMessage("fines-getting"), true);
 							return true;
 						}
 						if(ASUtils.getBoolean(args[1]) == null){
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as money <on/off/status>"), true);
+							plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as money <on/off/status>"), true);
 							return true;
 						}
 						boolean silent = !ASUtils.getBoolean(args[1]);
 						if(silent){
-							((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).addToSilentList(sender.getName());
+							plugin.getMoneyManager().addToSilentList(sender.getName());
 						}else{
-							((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).removeFromSilentList(sender.getName());
+							plugin.getMoneyManager().removeFromSilentList(sender.getName());
 						}
-						String state = !silent ? ChatColor.GREEN + Localization.getMessage(LocaleMessage.DICT_GETTING) : ChatColor.RED + Localization.getMessage(LocaleMessage.DICT_NOT_GETTING);
-						state = state + ChatColor.WHITE;
-						ASUtils.sendToPlayer(sender, Localization.getMessage(LocaleMessage.FINE_REWARD, state), true);
+						plugin.getMessages().sendTo(sender, silent ? plugin.getMessages().getMessage("fines-not-getting") : plugin.getMessages().getMessage("fines-getting"), true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("simplenotice") || args[0].equalsIgnoreCase("sn")){
@@ -503,29 +494,29 @@ public class CommandHandler implements CommandExecutor {
 						if(player.getListeningPluginChannels().contains("SimpleNotice")){
 							if(plugin.isSimpleNoticeEnabled(player.getName())){
 								plugin.disableSimpleNotice(player.getName());
-								ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.SN_OFF), false);
+								plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("simplenotice-off"), false);
 							}else{
 								plugin.enableSimpleNotice(player.getName());
-								ASUtils.sendToPlayer(player, ChatColor.GREEN + Localization.getMessage(LocaleMessage.SN_ON), false);
+								plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("simplenotice-on"), false);
 							}
 						}else{
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SN_MISSING), false);
+							plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("simplenotice-missing"), false);
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
+						plugin.getMessages().sendTo(sender, notPlayer, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("gamemode") || args[0].equalsIgnoreCase("gm")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.CHECK)){
+					if(sender.hasPermission(PermissionNodes.CHECK)){
 						GameMode gm = null;
 						if(args.length > 1 && !args[1].equalsIgnoreCase("all")){
 							gm = ASUtils.getGameMode(args[1]);
 							if(gm == null){
 								Player player = plugin.getServer().getPlayer(args[1]);
 								if(player != null){
-									ASUtils.sendToPlayer(sender, ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.DICT_IS_IN) + " " + ChatColor.GOLD + player.getGameMode().name(), false);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("check", player.getName(), MaterialAPI.capitalize(player.getGameMode().name())), false);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, "Game Mode", args[1]), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("player-not-found", args[1]), true);
 								}
 								return true;
 							}
@@ -533,20 +524,20 @@ public class CommandHandler implements CommandExecutor {
 						if(gm == null){
 							for(GameMode gamemode : GameMode.values()){
 								if(ASUtils.findGameModePlayers(gamemode).size() > 0){
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + gamemode.name() + ": " + ChatColor.YELLOW + ASUtils.commas(ASUtils.findGameModePlayers(gamemode)), false);
+									plugin.getMessages().sendTo(sender, ChatColor.GOLD + gamemode.name() + ": " + ChatColor.YELLOW + ASUtils.commas(ASUtils.findGameModePlayers(gamemode)), false);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + gamemode.name() + ": " + ChatColor.YELLOW + Localization.getMessage(LocaleMessage.DICT_NO_ONE), false);
+									plugin.getMessages().sendTo(sender, ChatColor.GOLD + gamemode.name() + ": " + ChatColor.YELLOW + "no one", false);
 								}
 							}
 						}else{
-							ASUtils.sendToPlayer(sender, ChatColor.GOLD + gm.name() + ": " + ChatColor.YELLOW + ASUtils.commas(ASUtils.findGameModePlayers(gm)), false);
+							plugin.getMessages().sendTo(sender, ChatColor.GOLD + gm.name() + ": " + ChatColor.YELLOW + ASUtils.commas(ASUtils.findGameModePlayers(gm)), false);
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("tools")){
-					if(plugin.getPermissions().has(sender, PermissionNodes.TOOL_USE)){
+					if(sender.hasPermission(PermissionNodes.TOOL_USE)){
 						boolean on = false;
 						if(plugin.isToolEnabled(sender.getName())){
 							plugin.disableTools(sender.getName());
@@ -554,27 +545,27 @@ public class CommandHandler implements CommandExecutor {
 							plugin.enableTools(sender.getName());
 							on = true;
 						}
-						ASUtils.sendToPlayer(sender, on ? (ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_ENABLE)) : (ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_DISABLE)), true);
+						plugin.getMessages().sendTo(sender, on ? plugin.getMessages().getMessage("tool-enabled") : plugin.getMessages().getMessage("tool-disabled"), true);
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("cuboid")){
-					if(!plugin.getPermissions().has(sender, PermissionNodes.CREATE_CUBOID)){
-						ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NO_PERMISSION), true);
+					if(!sender.hasPermission(PermissionNodes.CREATE_CUBOID)){
+						plugin.getMessages().sendTo(sender, noPermission, true);
 						return true;
 					}
 					if(args.length > 1){
 						if(args[1].equalsIgnoreCase("clear")){
-							if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).isCuboidComplete(sender.getName())){
-								((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).removeCuboid(sender.getName());
-								ASUtils.sendToPlayer(sender, ChatColor.GREEN + Localization.getMessage(LocaleMessage.CUBOID_REMOVED), true);
+							if(plugin.getCuboidManager().isCuboidComplete(sender.getName())){
+								plugin.getCuboidManager().removeCuboid(sender.getName());
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("cuboid-removed"), true);
 							}else{
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.CUBOID_MISSING), true);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("missing-cuboid"), true);
 							}
 						}else if(args[1].equalsIgnoreCase("tool")){
 							if(!(sender instanceof Player)){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
+								plugin.getMessages().sendTo(sender, notPlayer, true);
 							}else{
 								// Setup
 								Player player = (Player) sender;
@@ -583,38 +574,38 @@ public class CommandHandler implements CommandExecutor {
 								// Check inventory
 								if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 									if(inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
-										ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.HAVE_TOOL, MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name())), true);
+										plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name())), true);
 									}else{
 										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player);
-										ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.GET_TOOL, MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name())), true);
+										plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("get-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name())), true);
 									}
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.NEED_INV_SPACE, String.valueOf(1)), true);
+									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("no-space", String.valueOf(1)), true);
 								}
 							}
 						}else if(args[1].equalsIgnoreCase("status")){
-							Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(sender.getName());
+							Cuboid cuboid = plugin.getCuboidManager().getCuboid(sender.getName());
 							if(cuboid == null){
-								ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.CUBOID_MISSING), false);
+								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("missing-cuboid"), false);
 							}else{
-								Location min = cuboid.getMinimumPoint();
-								Location max = cuboid.getMaximumPoint();
+								Location min = cuboid.isValid() ? cuboid.getMinimumPoint() : cuboid.getPoint1();
+								Location max = cuboid.isValid() ? cuboid.getMaximumPoint() : cuboid.getPoint2();
 								if(min != null){
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "A: " + ChatColor.YELLOW + "(" + min.getBlockX() + ", " + min.getBlockY() + ", " + min.getBlockZ() + ", " + min.getWorld().getName() + ")", false);
+									plugin.getMessages().sendTo(sender, ChatColor.GOLD + "1: " + ChatColor.YELLOW + "(" + min.getBlockX() + ", " + min.getBlockY() + ", " + min.getBlockZ() + ", " + min.getWorld().getName() + ")", false);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "A: " + ChatColor.YELLOW + Localization.getMessage(LocaleMessage.DICT_NOT_SET), false);
+									plugin.getMessages().sendTo(sender, ChatColor.GOLD + "1: " + ChatColor.YELLOW + "not set", false);
 								}
 								if(max != null){
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "B: " + ChatColor.YELLOW + "(" + max.getBlockX() + ", " + max.getBlockY() + ", " + max.getBlockZ() + ", " + max.getWorld().getName() + ")", false);
+									plugin.getMessages().sendTo(sender, ChatColor.GOLD + "2: " + ChatColor.YELLOW + "(" + max.getBlockX() + ", " + max.getBlockY() + ", " + max.getBlockZ() + ", " + max.getWorld().getName() + ")", false);
 								}else{
-									ASUtils.sendToPlayer(sender, ChatColor.GOLD + "B: " + ChatColor.YELLOW + Localization.getMessage(LocaleMessage.DICT_NOT_SET), false);
+									plugin.getMessages().sendTo(sender, ChatColor.GOLD + "2: " + ChatColor.YELLOW + "not set", false);
 								}
 							}
 						}else{
-							ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as cuboid <clear | tool | status>"), true);
+							plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as cuboid <clear | tool | status>"), true);
 						}
 					}else{
-						ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.SYNTAX, "/as cuboid <clear | tool | status>"), true);
+						plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as cuboid <clear | tool | status>"), true);
 					}
 					return true;
 				}else{

@@ -23,8 +23,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -33,11 +31,7 @@ import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.util.generic.ASEntity;
-import com.turt2live.antishare.util.generic.MobPattern;
-import com.turt2live.antishare.util.generic.MobPattern.MobPatternType;
+import com.turt2live.antishare.util.MobPattern.MobPatternType;
 
 /**
  * Utilities
@@ -55,45 +49,9 @@ public class ASUtils {
 	 * Array of true block faces (none of the SOUTH_WEST-like ones)
 	 */
 	public static final List<BlockFace> TRUE_BLOCK_FACES = Collections.unmodifiableList(Arrays.asList(new BlockFace[] {BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH, BlockFace.UP}));
-	private static final List<ASEntity> ENTITY_NAMES = new ArrayList<ASEntity>();
 	private static MobPattern SNOW_GOLEM_PATTERN;
 	private static MobPattern IRON_GOLEM_PATTERN;
 	private static MobPattern WITHER_PATTERN;
-
-	/**
-	 * Sends a message to a player.<br>
-	 * This will prefix "[AntiShare]" to the message and not send if the message is simply "no message".
-	 * 
-	 * @param target the player to send to
-	 * @param message the message to send
-	 * @param useSimpleNotice set to true if this method should use SimpleNotice if available
-	 */
-	public static void sendToPlayer(CommandSender target, String message, boolean useSimpleNotice){
-		if(!message.equalsIgnoreCase("nomsg") && !message.equalsIgnoreCase("no message") && !message.equalsIgnoreCase("none") && !message.equalsIgnoreCase("noshow") && !message.equalsIgnoreCase("no show")){
-			message = ChatColor.translateAlternateColorCodes('&', message);
-			String prefix = "[AntiShare]";
-			try{
-				prefix = AntiShare.getInstance().getPrefix();
-			}catch(NullPointerException e){}
-			prefix = ChatColor.translateAlternateColorCodes('&', prefix);
-			if(!ChatColor.stripColor(message).startsWith(ChatColor.stripColor(prefix))){
-				message = ChatColor.GRAY + prefix + " " + ChatColor.WHITE + message;
-			}
-			/* SimpleNotice support provided by feildmaster.
-			 * Support adapted by krinsdeath and further
-			 * modified by turt2live for AntiShare.
-			 */
-			if(target instanceof Player){
-				if(((Player) target).getListeningPluginChannels().contains("SimpleNotice") && useSimpleNotice && AntiShare.getInstance().isSimpleNoticeEnabled(target.getName())){
-					((Player) target).sendPluginMessage(AntiShare.getInstance(), "SimpleNotice", message.getBytes(java.nio.charset.Charset.forName("UTF-8")));
-				}else{
-					target.sendMessage(message);
-				}
-			}else{
-				target.sendMessage(message);
-			}
-		}
-	}
 
 	/**
 	 * Gets a boolean from a String
@@ -222,87 +180,6 @@ public class ASUtils {
 	}
 
 	/**
-	 * Gets an entity name from an entity object
-	 * 
-	 * @param entity the entity
-	 * @return the name, or null if invalid
-	 */
-	public static String getEntityName(Entity entity){
-		if(entity == null){
-			return null;
-		}
-		return getEntityName(entity.getClass().getSimpleName().replace("Craft", ""));
-	}
-
-	/**
-	 * Determines if the passed name is valid
-	 * 
-	 * @param entity the potential entity
-	 * @return the name, or null if invalid
-	 */
-	public static String getEntityName(String entity){
-		for(ASEntity asentity : allEntities()){
-			if(asentity.getProperName().equalsIgnoreCase(entity) || asentity.getGivenName().equalsIgnoreCase(entity)){
-				return asentity.getProperName();
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Gets a list of all entities AntiShare can handle
-	 * 
-	 * @return a list of entities
-	 */
-	public static List<ASEntity> allEntities(){
-		if(ENTITY_NAMES.size() <= 0){
-			ENTITY_NAMES.add(new ASEntity("blaze", "blaze"));
-			ENTITY_NAMES.add(new ASEntity("cavespider", "cave spider"));
-			ENTITY_NAMES.add(new ASEntity("cave spider", "cave spider"));
-			ENTITY_NAMES.add(new ASEntity("chicken", "chicken"));
-			ENTITY_NAMES.add(new ASEntity("cow", "cow"));
-			ENTITY_NAMES.add(new ASEntity("creeper", "creeper"));
-			ENTITY_NAMES.add(new ASEntity("enderdragon", "ender dragon"));
-			ENTITY_NAMES.add(new ASEntity("ender dragon", "ender dragon"));
-			ENTITY_NAMES.add(new ASEntity("enderman", "enderman"));
-			ENTITY_NAMES.add(new ASEntity("ghast", "ghast"));
-			ENTITY_NAMES.add(new ASEntity("giant", "giant"));
-			ENTITY_NAMES.add(new ASEntity("irongolem", "iron golem"));
-			ENTITY_NAMES.add(new ASEntity("iron golem", "iron golem"));
-			ENTITY_NAMES.add(new ASEntity("mushroomcow", "mooshroom"));
-			ENTITY_NAMES.add(new ASEntity("mushroom cow", "mooshroom"));
-			ENTITY_NAMES.add(new ASEntity("mooshroom", "mooshroom"));
-			ENTITY_NAMES.add(new ASEntity("ocelot", "ocelot"));
-			ENTITY_NAMES.add(new ASEntity("cat", "ocelot"));
-			ENTITY_NAMES.add(new ASEntity("pig", "pig"));
-			ENTITY_NAMES.add(new ASEntity("pigzombie", "pigman"));
-			ENTITY_NAMES.add(new ASEntity("zombiepigman", "pigman"));
-			ENTITY_NAMES.add(new ASEntity("pig zombie", "pigman"));
-			ENTITY_NAMES.add(new ASEntity("zombie pigman", "pigman"));
-			ENTITY_NAMES.add(new ASEntity("pigman", "pigman"));
-			ENTITY_NAMES.add(new ASEntity("sheep", "sheep"));
-			ENTITY_NAMES.add(new ASEntity("silverfish", "silverfish"));
-			ENTITY_NAMES.add(new ASEntity("skeleton", "skeleton"));
-			ENTITY_NAMES.add(new ASEntity("slime", "slime"));
-			ENTITY_NAMES.add(new ASEntity("magmacube", "magma cube"));
-			ENTITY_NAMES.add(new ASEntity("magma cube", "magma cube"));
-			ENTITY_NAMES.add(new ASEntity("spider", "spider"));
-			ENTITY_NAMES.add(new ASEntity("snowman", "snowman"));
-			ENTITY_NAMES.add(new ASEntity("squid", "squid"));
-			ENTITY_NAMES.add(new ASEntity("villager", "villager"));
-			ENTITY_NAMES.add(new ASEntity("testificate", "villager"));
-			ENTITY_NAMES.add(new ASEntity("wolf", "wolf"));
-			ENTITY_NAMES.add(new ASEntity("zombie", "zombie"));
-			ENTITY_NAMES.add(new ASEntity("witch", "witch"));
-			ENTITY_NAMES.add(new ASEntity("wither", "wither boss"));
-			ENTITY_NAMES.add(new ASEntity("witherboss", "wither boss"));
-			ENTITY_NAMES.add(new ASEntity("wither boss", "wither boss"));
-			ENTITY_NAMES.add(new ASEntity("bat", "bat"));
-		}
-		return ENTITY_NAMES;
-	}
-
-	/**
 	 * Gets a list of online players with a defined Game Mode
 	 * 
 	 * @param gamemode the Game Mode
@@ -411,20 +288,21 @@ public class ASUtils {
 			ItemStack itemTool = new ItemStack(tool);
 			String title = null;
 			List<String> lore = new ArrayList<String>();
+			AntiShare p = AntiShare.p;
 			if(tool == AntiShare.ANTISHARE_TOOL){
 				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Tool";
-				lore.add(ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_HELP_GENERIC));
+				lore.add(ChatColor.GREEN + p.getMessages().getMessage("tool-meta.generic-tool"));
 			}else if(tool == AntiShare.ANTISHARE_SET_TOOL){
 				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Set Tool";
-				lore.add(ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_HELP_SET));
-				lore.add(ChatColor.RED + Localization.getMessage(LocaleMessage.TOOL_HELP_SET2));
+				lore.add(ChatColor.GREEN + p.getMessages().getMessage("tool-meta.set-tool-1"));
+				lore.add(ChatColor.RED + p.getMessages().getMessage("tool-meta.set-tool-2"));
 			}else if(tool == AntiShare.ANTISHARE_CUBOID_TOOL){
 				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Cuboid Tool";
-				lore.add(ChatColor.GREEN + Localization.getMessage(LocaleMessage.TOOL_HELP_CUBOID));
-				lore.add(ChatColor.DARK_GREEN + Localization.getMessage(LocaleMessage.TOOL_HELP_CUBOID2));
+				lore.add(ChatColor.GREEN + p.getMessages().getMessage("tool-meta.cuboid-tool-1"));
+				lore.add(ChatColor.DARK_GREEN + p.getMessages().getMessage("tool-meta.cuboid-tool-2"));
 			}
-			lore.add(Localization.getMessage(LocaleMessage.TOOL_HELP_COMMAND));
-			lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Localization.getMessage(LocaleMessage.TOOL_HELP_CREATED, player.getName()));
+			lore.add(p.getMessages().getMessage("tool-meta.all"));
+			lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + p.getMessages().getMessage("tool-meta.created-for", player.getName()));
 			ItemMeta meta = itemTool.getItemMeta();
 			if(title != null){
 				meta.setDisplayName(title);

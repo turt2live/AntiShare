@@ -16,16 +16,16 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.util.events.TrackerList;
+import com.turt2live.antishare.AntiShare;
+import com.turt2live.materials.MaterialAPI;
 
 /**
  * Block Manager
  * 
  * @author turt2live
  */
-public class BlockManager extends AntiShareManager {
+//TODO: Schedule for rewrite
+public class BlockManager {
 
 	static class ASMaterial {
 		public Location location;
@@ -35,13 +35,11 @@ public class BlockManager extends AntiShareManager {
 
 	private final File entitiesDir;
 	private final File blocksDir;
-	TrackerList trackedCreative;
-	TrackerList trackedSurvival;
-	TrackerList trackedAdventure;
 	private final CopyOnWriteArrayList<ASMaterial> recentlyRemoved = new CopyOnWriteArrayList<ASMaterial>();
 	private final ConcurrentMap<String, ChunkWrapper> wrappers = new ConcurrentHashMap<String, ChunkWrapper>();
 	private boolean doneSave = false;
 	private int percent = 0;
+	private AntiShare plugin = AntiShare.p;
 
 	/**
 	 * Creates a new Block Manager
@@ -67,13 +65,10 @@ public class BlockManager extends AntiShareManager {
 		}, 0, 20 * 5);
 	}
 
-	@Override
-	public boolean load(){
-		// Setup lists
-		trackedCreative = new TrackerList("config.yml", "block-tracking.tracked-creative-blocks", plugin.getConfig().getString("block-tracking.tracked-creative-blocks").split(","));
-		trackedSurvival = new TrackerList("config.yml", "block-tracking.tracked-survival-blocks", plugin.getConfig().getString("block-tracking.tracked-survival-blocks").split(","));
-		trackedAdventure = new TrackerList("config.yml", "block-tracking.tracked-adventure-blocks", plugin.getConfig().getString("block-tracking.tracked-adventure-blocks").split(","));
-
+	/**
+	 * Loads the block manager
+	 */
+	public void load(){
 		// Load
 		wrappers.clear();
 		for(World world : plugin.getServer().getWorlds()){
@@ -94,28 +89,30 @@ public class BlockManager extends AntiShareManager {
 			ae += wrapper.adventureEntities.size();
 		}
 		if(cb > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CREATIVE_BLOCKS, String.valueOf(cb)));
+			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Creative", "Blocks", String.valueOf(cb)));
 		}
 		if(sb > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_SURVIVAL_BLOCKS, String.valueOf(sb)));
+			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Survival", "Blocks", String.valueOf(sb)));
 		}
 		if(ab > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_ADVENTURE_BLOCKS, String.valueOf(ab)));
+			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Adventure", "Blocks", String.valueOf(ab)));
 		}
 		if(ce > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CREATIVE_ENTITIES, String.valueOf(ce)));
+			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Creative", "Entities", String.valueOf(ce)));
 		}
 		if(se > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_SURVIVAL_ENTITIES, String.valueOf(se)));
+			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Survival", "Entities", String.valueOf(se)));
 		}
 		if(ae > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_ADVENTURE_ENTITIES, String.valueOf(ae)));
+			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Adventure", "Entities", String.valueOf(ae)));
 		}
-		return true;
+		return;
 	}
 
-	@Override
-	public boolean save(){
+	/**
+	 * Saves the block manager
+	 */
+	public void save(){
 		doneSave = false;
 		Double max = ((Integer) wrappers.size()).doubleValue();
 		Double done = 0.0;
@@ -127,7 +124,6 @@ public class BlockManager extends AntiShareManager {
 		}
 		wrappers.clear();
 		doneSave = true;
-		return true;
 	}
 
 	/**
@@ -205,17 +201,17 @@ public class BlockManager extends AntiShareManager {
 	public void addBlock(GameMode type, Block block){
 		switch (type){
 		case CREATIVE:
-			if(!trackedCreative.isTracked(block)){
+			if(!plugin.settings().trackedCreative.contains(block.getType())){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if(!trackedSurvival.isTracked(block)){
+			if(!plugin.settings().trackedSurvival.contains(block.getType())){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if(!trackedAdventure.isTracked(block)){
+			if(!plugin.settings().trackedAdventure.contains(block.getType())){
 				return;
 			}
 			break;
@@ -234,19 +230,23 @@ public class BlockManager extends AntiShareManager {
 	 * @param entity the entity
 	 */
 	public void addEntity(GameMode type, Entity entity){
+		Material material = MaterialAPI.getMaterialForEntity(entity);
+		if(material == null){
+			return;
+		}
 		switch (type){
 		case CREATIVE:
-			if(!trackedCreative.isTracked(entity)){
+			if(!plugin.settings().trackedCreative.contains(material)){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if(!trackedSurvival.isTracked(entity)){
+			if(!plugin.settings().trackedSurvival.contains(material)){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if(!trackedAdventure.isTracked(entity)){
+			if(!plugin.settings().trackedAdventure.contains(material)){
 				return;
 			}
 			break;
@@ -256,38 +256,6 @@ public class BlockManager extends AntiShareManager {
 		String c = chunkToString(entity.getLocation().getChunk());
 		ChunkWrapper wrapper = wrappers.get(c);
 		wrapper.addEntity(type, entity);
-	}
-
-	/**
-	 * Adds an entity to the database
-	 * 
-	 * @param type the entity gamemode
-	 * @param entityType the entity type
-	 * @param entity the entity
-	 */
-	public void addEntity(GameMode type, Location entity, EntityType entityType){
-		switch (type){
-		case CREATIVE:
-			if(!trackedCreative.isTracked(entityType)){
-				return;
-			}
-			break;
-		case SURVIVAL:
-			if(!trackedSurvival.isTracked(entityType)){
-				return;
-			}
-			break;
-		case ADVENTURE:
-			if(!trackedAdventure.isTracked(entityType)){
-				return;
-			}
-			break;
-		default:
-			break;
-		}
-		String c = chunkToString(entity.getChunk());
-		ChunkWrapper wrapper = wrappers.get(c);
-		wrapper.addEntity(type, entity, entityType);
 	}
 
 	/**
@@ -375,7 +343,7 @@ public class BlockManager extends AntiShareManager {
 
 				// Warn if not updated
 				if(!updated){
-					plugin.getLogger().severe(Localization.getMessage(LocaleMessage.WARNING_MOVE_BLOCK, String.valueOf(delay * maxRuns)));
+					plugin.getLogger().severe(plugin.getMessages().getMessage("failed-to-update", String.valueOf(delay * maxRuns)));
 				}
 			}
 		});
@@ -417,6 +385,14 @@ public class BlockManager extends AntiShareManager {
 	 */
 	public boolean isSaveDone(){
 		return this.doneSave;
+	}
+
+	/**
+	 * Reloads the block manager
+	 */
+	public void reload(){
+		save();
+		load();
 	}
 
 }

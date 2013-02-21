@@ -13,19 +13,16 @@ package com.turt2live.antishare.money;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.Systems.Manager;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.manager.MoneyManager;
-import com.turt2live.antishare.permissions.PermissionNodes;
-import com.turt2live.antishare.util.ASUtils;
-import com.turt2live.antishare.util.generic.ASGameMode;
+import com.turt2live.antishare.util.ASGameMode;
+import com.turt2live.antishare.util.Action;
+import com.turt2live.antishare.util.PermissionNodes;
 
 /**
  * Fine for doing something
  * 
  * @author turt2live
  */
+//TODO: Schedule for rewrite
 public class Fine extends Tender {
 
 	private final double overcharge;
@@ -39,7 +36,7 @@ public class Fine extends Tender {
 	 * @param overcharge the amount to charge if the account has less than or equal to zero
 	 * @param affect the Game Mode(s) to affect
 	 */
-	public Fine(TenderType type, double amount, boolean enabled, double overcharge, ASGameMode affect){
+	public Fine(Action type, double amount, boolean enabled, double overcharge, ASGameMode affect){
 		super(type, amount, enabled, affect);
 		this.overcharge = overcharge;
 	}
@@ -55,26 +52,26 @@ public class Fine extends Tender {
 
 	@Override
 	public void apply(Player player){
-		if(!isEnabled() || plugin.getPermissions().has(player, PermissionNodes.MONEY_NO_FINE) || !super.affect(player.getGameMode())){
+		if(!isEnabled() || player.hasPermission(PermissionNodes.MONEY_NO_FINE) || !super.affect(player.getGameMode())){
 			return;
 		}
 
 		// Apply to account
 		double amount = getAmount();
-		if(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getRawEconomyHook().requiresTab(player.getName())){
+		if(plugin.getMoneyManager().getRawEconomyHook().requiresTab(player.getName())){
 			amount = overcharge;
 		}
-		TransactionResult result = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).subtractFromAccount(player, amount);
+		TransactionResult result = plugin.getMoneyManager().subtractFromAccount(player, amount);
 		if(!result.completed){
-			ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.FINES_REWARDS_FINE_FAILED, result.message), true);
-			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.FINES_REWARDS_FINE_FAILED, result.message) + "  (" + player.getName() + ")");
+			plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("fine-failed", result.message), true);
+			plugin.getLogger().warning(plugin.getMessages().getMessage("fine-failed", result.message) + "  (" + player.getName() + ")");
 			return;
 		}else{
-			String formatted = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(getAmount());
-			String balance = ((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).formatAmount(((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).getBalance(player));
-			if(!((MoneyManager) plugin.getSystemsManager().getManager(Manager.MONEY)).isSilent(player.getName())){
-				ASUtils.sendToPlayer(player, ChatColor.RED + Localization.getMessage(LocaleMessage.FINES_REWARDS_FINE_SUCCESS, formatted), true);
-				ASUtils.sendToPlayer(player, Localization.getMessage(LocaleMessage.FINES_REWARDS_BALANCE, balance), true);
+			String formatted = plugin.getMoneyManager().formatAmount(getAmount());
+			String balance = plugin.getMoneyManager().formatAmount(plugin.getMoneyManager().getBalance(player));
+			if(!plugin.getMoneyManager().isSilent(player.getName())){
+				plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("fine-success", formatted), true);
+				plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("new-balance", balance), true);
 			}
 		}
 	}

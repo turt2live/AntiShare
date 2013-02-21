@@ -136,18 +136,6 @@ permissions:
     AntiShare.affect.adventure:
         description: The target is affected when in Adventure
         default: false
-    AntiShare.worldsplit.*:
-        description: The target will not be affected by either side of a world split
-        default: op
-        children:
-            AntiShare.worldsplit.creative: true
-            AntiShare.worldsplit.survival: true
-    AntiShare.worldsplit.creative:
-        description: The target will not be affected by the creative side of a world split
-        default: op
-    AntiShare.worldsplit.survival:
-        description: The target will not be affected by the survival side of a world split
-        default: op
     AntiShare.inventories.*:
         description: Allow all AntiShare inventory functions
         default: op
@@ -174,6 +162,14 @@ permissions:
             AntiShare.regions.break: true
             AntiShare.regions.use_item: true
             AntiShare.regions.list: true
+            AntiShare.regions.attack_mobs: true
+            AntiShare.regions.attack_players: true
+    AntiShare.regions.attack_mobs:
+        description: Allows the target to attack mobs in any region
+        default: op
+    AntiShare.regions.attack_players:
+        description: Allows the target to attack players in any region
+        default: op
     AntiShare.regions.create:
         description: Allows the target to create AntiShare regions
         default: op
@@ -210,7 +206,6 @@ permissions:
         children:
             AntiShare.allow.block_place: true
             AntiShare.allow.block_break: true
-            AntiShare.allow.right_click: true
             AntiShare.allow.use_item: true
             AntiShare.allow.commands: true
             AntiShare.allow.pickup_item: true
@@ -227,9 +222,6 @@ permissions:
         default: op
     AntiShare.allow.block_break:
         description: Allows block break
-        default: op
-    AntiShare.allow.right_click:
-        description: Allows right clicking
         default: op
     AntiShare.allow.use_item:
         description: Allows item use
@@ -258,7 +250,6 @@ permissions:
         children:
             AntiShare.deny.block_place: true
             AntiShare.deny.block_break: true
-            AntiShare.deny.right_click: true
             AntiShare.deny.use_item: true
             AntiShare.deny.commands: true
             AntiShare.deny.pickup_item: true
@@ -275,9 +266,6 @@ permissions:
         default: false
     AntiShare.deny.block_break:
         description: Denies block break
-        default: false
-    AntiShare.deny.right_click:
-        description: Denies right clicking
         default: false
     AntiShare.deny.use_item:
         description: Denies item use

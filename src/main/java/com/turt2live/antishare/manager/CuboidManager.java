@@ -7,14 +7,13 @@ import java.util.Map;
 import org.bukkit.Location;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.cuboid.Cuboid;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
 
 /**
  * Cuboid manager
  */
-public class CuboidManager extends AntiShareManager {
+public class CuboidManager {
 
 	/**
 	 * A cuboid point
@@ -25,6 +24,7 @@ public class CuboidManager extends AntiShareManager {
 	}
 
 	private final Map<String, Cuboid> cuboids = new HashMap<String, Cuboid>();
+	private AntiShare plugin = AntiShare.p;
 
 	/**
 	 * Gets the cuboid for a player
@@ -70,8 +70,7 @@ public class CuboidManager extends AntiShareManager {
 	/**
 	 * Saves all the cuboids to disk for loading later
 	 */
-	@Override
-	public boolean save(){
+	public void save(){
 		File file = new File(plugin.getDataFolder(), "data" + File.separator + "cuboids.yml");
 		if(file.exists()){
 			file.delete();
@@ -84,17 +83,15 @@ public class CuboidManager extends AntiShareManager {
 		}
 		yamlFile.save();
 		cuboids.clear();
-		return true;
 	}
 
 	/**
 	 * Loads all cuboids
 	 */
-	@Override
-	public boolean load(){
+	public void load(){
 		File file = new File(plugin.getDataFolder(), "data" + File.separator + "cuboids.yml");
 		if(!file.exists()){
-			return true;
+			return;
 		}
 		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
 		yamlFile.load();
@@ -103,9 +100,16 @@ public class CuboidManager extends AntiShareManager {
 			cuboids.put(player, cuboid);
 		}
 		if(cuboids.keySet().size() > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_CUBOIDS, String.valueOf(cuboids.keySet().size())));
+			plugin.getLogger().info(plugin.getMessages().getMessage("cuboids-loaded", String.valueOf(this.cuboids.keySet().size())));
 		}
-		return true;
+	}
+
+	/**
+	 * Reloads the cuboid manager
+	 */
+	public void reload(){
+		save();
+		load();
 	}
 
 	/**

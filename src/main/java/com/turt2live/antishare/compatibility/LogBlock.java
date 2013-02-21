@@ -10,8 +10,6 @@ import org.bukkit.plugin.Plugin;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.compatibility.type.BlockLogger;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
 
 import de.diddiz.LogBlock.Consumer;
 import de.diddiz.LogBlock.events.BlockChangePreLogEvent;
@@ -24,16 +22,16 @@ import de.diddiz.LogBlock.events.BlockChangePreLogEvent;
 public class LogBlock extends BlockLogger implements Listener {
 
 	private Consumer lb;
-	private AntiShare as = AntiShare.getInstance();
+	private AntiShare as = AntiShare.p;
 
 	public LogBlock(){
 		Plugin logblock = as.getServer().getPluginManager().getPlugin("LogBlock");
 		de.diddiz.LogBlock.LogBlock lbp = (de.diddiz.LogBlock.LogBlock) logblock;
 		lb = lbp.getConsumer();
 		as.getServer().getPluginManager().registerEvents(this, as);
-		if(!as.getConfig().getBoolean("other.stop-logblock-spam")){
+		if(!as.settings().logBlockSpam){
 			as.getLogger().warning("************************");
-			as.getLogger().warning(Localization.getMessage(LocaleMessage.LOG_BLOCK_WARNING));
+			as.getLogger().warning(as.getMessages().getMessage("logblock"));
 			as.getLogger().warning("************************");
 		}
 	}

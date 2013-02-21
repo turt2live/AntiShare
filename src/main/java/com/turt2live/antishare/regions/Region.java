@@ -15,17 +15,13 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.config.RegionConfiguration;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.cuboid.RegionCuboid;
 import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
-import com.turt2live.antishare.manager.InventoryManager;
-import com.turt2live.antishare.notification.Alert.AlertTrigger;
-import com.turt2live.antishare.notification.Alert.AlertType;
-import com.turt2live.antishare.permissions.PermissionNodes;
 import com.turt2live.antishare.regions.RegionWall.Wall;
+import com.turt2live.antishare.util.Action;
+import com.turt2live.antishare.util.PermissionNodes;
 import com.turt2live.antishare.util.ASUtils;
 
 /**
@@ -33,7 +29,7 @@ import com.turt2live.antishare.util.ASUtils;
  */
 public class Region {
 
-	private static AntiShare plugin = AntiShare.getInstance();
+	private static AntiShare plugin = AntiShare.p;
 
 	/**
 	 * Location where region configurations are stored
@@ -53,7 +49,7 @@ public class Region {
 	private boolean showEnterMessage = true, showExitMessage = true;
 	private ASInventory inventory = null;
 	private final Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
-	private RegionConfiguration config = new RegionConfiguration(this);
+	private RegionConfiguration config = RegionConfiguration.getConfig(this);
 	private GameMode gamemode = GameMode.CREATIVE;
 
 	/**
@@ -398,16 +394,17 @@ public class Region {
 		if(showEnterMessage){
 			playerMessage = ChatColor.GOLD + enterMessage.replaceAll("\\{name\\}", name);
 		}
-		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.PHRASE_REGION_ENTER) + " " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
+		plugin.getMessages().sendTo(player, playerMessage, true);
+		plugin.getMessages().notifyParties(player, Action.ENTER_REGION, false, getName()); // Player name is applied because player message is ignored
 
 		// Set the player
-		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
+		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
 			gamemodes.put(player.getName(), player.getGameMode());
 			if(player.getGameMode() != gamemode){
 				player.setGameMode(gamemode);
 			}
 			if(inventory != null){
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).setToTemporary(player, inventory);
+				plugin.getInventoryManager().setToTemporary(player, inventory);
 			}
 		}
 	}
@@ -420,13 +417,13 @@ public class Region {
 	 */
 	public void alertSilentEntry(Player player){
 		// Set the player
-		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
+		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
 			gamemodes.put(player.getName(), player.getGameMode());
 			if(player.getGameMode() != gamemode){
 				player.setGameMode(gamemode);
 			}
 			if(inventory != null){
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).setToTemporary(player, inventory);
+				plugin.getInventoryManager().setToTemporary(player, inventory);
 			}
 		}
 	}
@@ -444,15 +441,16 @@ public class Region {
 		if(showExitMessage){
 			playerMessage = ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name);
 		}
-		plugin.getAlerts().alert(ChatColor.YELLOW + player.getName() + ChatColor.WHITE + " " + Localization.getMessage(LocaleMessage.PHRASE_REGION_LEAVE) + " " + ChatColor.YELLOW + name, player, playerMessage, AlertType.REGION, AlertTrigger.GENERAL);
+		plugin.getMessages().sendTo(player, playerMessage, true);
+		plugin.getMessages().notifyParties(player, Action.EXIT_REGION, false, getName()); // Player name is applied because player message is ignored
 
 		// Tag the player so the Game Mode listener knows to ignore them
 		player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
 
 		// Reset the player
-		if(!plugin.getPermissions().has(player, PermissionNodes.REGION_ROAM)){
+		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
 			if(inventory != null){
-				((InventoryManager) plugin.getSystemsManager().getManager(Manager.INVENTORY)).removeFromTemporary(player);
+				plugin.getInventoryManager().removeFromTemporary(player);
 			}
 			player.setGameMode(gamemodes.get(player.getName()) == null ? player.getGameMode() : gamemodes.get(player.getName()));
 		}
@@ -491,13 +489,13 @@ public class Region {
 	 */
 	public static Region fromFile(File saveFile){
 		Region region = new Region();
-		AntiShare plugin = AntiShare.getInstance();
+		AntiShare plugin = AntiShare.p;
 		EnhancedConfiguration yaml = new EnhancedConfiguration(saveFile, plugin);
 		yaml.load();
 		region.setName(yaml.getString("name"));
 		World world = plugin.getServer().getWorld(yaml.getString("worldName"));
 		if(world == null){
-			plugin.getLogger().warning(Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_WORLD), yaml.getString("worldName")) + " (" + region.getName() + ")");
+			plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-world", yaml.getString("worldName")));
 			return null;
 		}
 		region.setEnterMessage(yaml.getString("enterMessage"));
@@ -507,7 +505,7 @@ public class Region {
 		region.setID(yaml.getString("id"));
 		region.setGameMode(GameMode.valueOf(yaml.getString("gamemode")));
 		region.setWorld(world);
-		region.setConfig(new RegionConfiguration(region));
+		region.setConfig(RegionConfiguration.getConfig(region));
 		if(yaml.getInt("version", 0) == REGION_VERSION){
 			List<String> players = yaml.getStringList("players");
 			region.populatePlayers(players);

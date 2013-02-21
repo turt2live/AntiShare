@@ -3,7 +3,6 @@ package com.turt2live.antishare.cuboid;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -211,13 +210,6 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		maxZ = point1.getBlockZ() > point2.getBlockZ() ? point1.getBlockZ() : point2.getBlockZ();
 		minimum = new Location(world, minX, minY, minZ);
 		maximum = new Location(world, maxX, maxY, maxZ);
-		if(AntiShare.isDebug()){
-			Logger log = AntiShare.getInstance().getLogger();
-			log.info("[DEBUG] [Cuboid Calculate] MAX = " + maximum);
-			log.info("[DEBUG] [Cuboid Calculate] MIN = " + minimum);
-			log.info("[DEBUG] [Cuboid Calculate] PO1 = " + point1);
-			log.info("[DEBUG] [Cuboid Calculate] PO2 = " + point2);
-		}
 	}
 
 	/**
@@ -233,7 +225,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		if(world == null){
 			throw new IllegalArgumentException("World not found: " + world);
 		}
-		World matching = AntiShare.getInstance().getServer().getWorld(world);
+		World matching = AntiShare.p.getServer().getWorld(world);
 		if(matching == null){
 			throw new IllegalArgumentException("World not found: " + world);
 		}
@@ -252,10 +244,6 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		map.put("maximum X", maximum.getBlockX());
 		map.put("maximum Y", maximum.getBlockY());
 		map.put("maximum Z", maximum.getBlockZ());
-		if(AntiShare.isDebug()){
-			Logger log = AntiShare.getInstance().getLogger();
-			log.info("[DEBUG] [Cuboid Serialize] " + map);
-		}
 		return Collections.unmodifiableMap(map);
 	}
 
@@ -267,6 +255,24 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 			cuboid.setWorld(Bukkit.getWorld(worldName));
 		}
 		return cuboid;
+	}
+
+	/**
+	 * Gets the first point
+	 * 
+	 * @return the first point
+	 */
+	public Location getPoint1(){
+		return point1.clone();
+	}
+
+	/**
+	 * Gets the second point
+	 * 
+	 * @return the second point
+	 */
+	public Location getPoint2(){
+		return point2.clone();
 	}
 
 }

@@ -38,7 +38,7 @@ public class MultiVerseWorld {
 	 */
 	public static String getAlias(World world){
 		if(multiverse == null){
-			Plugin multiverse = AntiShare.getInstance().getServer().getPluginManager().getPlugin("MultiVerse-Core");
+			Plugin multiverse = AntiShare.p.getServer().getPluginManager().getPlugin("MultiVerse-Core");
 			if(multiverse == null){
 				return world.getName();
 			}

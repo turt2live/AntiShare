@@ -16,14 +16,12 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.turt2live.antishare.Systems.Manager;
+import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.config.RegionConfiguration;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
-import com.turt2live.antishare.lang.LocaleMessage;
-import com.turt2live.antishare.lang.Localization;
 import com.turt2live.antishare.regions.Region;
-import com.turt2live.antishare.regions.RegionConfiguration;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.util.ASUtils;
 
@@ -32,9 +30,10 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
-public class RegionManager extends AntiShareManager {
+public class RegionManager {
 
 	private final Map<String, Set<Region>> regions = new HashMap<String, Set<Region>>();
+	private AntiShare plugin = AntiShare.p;
 
 	/**
 	 * Loads regions into memory for a specific world name
@@ -63,15 +62,14 @@ public class RegionManager extends AntiShareManager {
 			}
 		}
 		if(regions.keySet().size() > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_REGIONS, String.valueOf(regions.keySet().size())));
+			plugin.getLogger().info(plugin.getMessages().getMessage("regions-loaded", String.valueOf(this.regions.keySet().size())));
 		}
 	}
 
 	/**
 	 * Loads all reachable regions into memory
 	 */
-	@Override
-	public boolean load(){
+	public void load(){
 		File path = Region.REGION_INFORMATION;
 		if(!path.exists()){
 			path.mkdirs();
@@ -93,16 +91,14 @@ public class RegionManager extends AntiShareManager {
 			}
 		}
 		if(regions.keySet().size() > 0){
-			plugin.getLogger().info(Localization.getMessage(LocaleMessage.STATUS_REGIONS, String.valueOf(regions.keySet().size())));
+			plugin.getLogger().info(plugin.getMessages().getMessage("regions-loaded", String.valueOf(this.regions.keySet().size())));
 		}
-		return true;
 	}
 
 	/**
 	 * Saves all loaded regions to disk, this overwrites (and deletes unloaded regions) any regions in the save folders
 	 */
-	@Override
-	public boolean save(){
+	public void save(){
 		ASUtils.wipeFolder(Region.REGION_CONFIGURATIONS, null);
 		ASUtils.wipeFolder(Region.REGION_INFORMATION, null);
 		for(String world : regions.keySet()){
@@ -112,7 +108,6 @@ public class RegionManager extends AntiShareManager {
 			}
 		}
 		regions.clear();
-		return true;
 	}
 
 	/**
@@ -190,7 +185,7 @@ public class RegionManager extends AntiShareManager {
 		region.setOwner(owner);
 		region.setName(name);
 		region.setGameMode(gamemode);
-		region.setConfig(new RegionConfiguration(region));
+		region.setConfig(RegionConfiguration.getConfig(region));
 		region.setID(String.valueOf(System.nanoTime()));
 		Set<Region> regions = new HashSet<Region>();
 		if(this.regions.containsKey(cuboid.getWorld().getName())){
@@ -304,7 +299,7 @@ public class RegionManager extends AntiShareManager {
 		switch (key){
 		case NAME:
 			if(isRegionNameTaken(value)){
-				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_NAME_IN_USE), true);
+				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("name-in-use"), true);
 			}else{
 				region.setName(value);
 				changed = true;
@@ -315,7 +310,7 @@ public class RegionManager extends AntiShareManager {
 				region.setShowEnterMessage(ASUtils.getBoolean(value));
 				changed = true;
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_VALUE), value), true);
+				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("unknown-value", value), true);
 			}
 			break;
 		case EXIT_MESSAGE_SHOW:
@@ -323,7 +318,7 @@ public class RegionManager extends AntiShareManager {
 				region.setShowExitMessage(ASUtils.getBoolean(value));
 				changed = true;
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_VALUE), value), true);
+				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("unknown-value", value), true);
 			}
 			break;
 		case INVENTORY:
@@ -335,24 +330,24 @@ public class RegionManager extends AntiShareManager {
 					region.setInventory(ASInventory.generate((Player) sender, InventoryType.REGION));
 					changed = true;
 				}else{
-					ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_ONLY_CLEAR), true);
+					plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("console"), true);
 				}
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, Localization.getMessage(LocaleMessage.DICT_VALUE), value), true);
+				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("unknown-value", value), true);
 			}
 			break;
 		case SELECTION_AREA:
 			if(!(sender instanceof Player)){
-				ASUtils.sendToPlayer(sender, ChatColor.DARK_RED + Localization.getMessage(LocaleMessage.NOT_A_PLAYER), true);
+				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("console"), true);
 				break;
 			}
 			Player player = (Player) sender;
-			if(((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).isCuboidComplete(player.getName())){
-				Cuboid cuboid = ((CuboidManager) plugin.getSystemsManager().getManager(Manager.CUBOID)).getCuboid(player.getName());
+			if(plugin.getCuboidManager().isCuboidComplete(player.getName())){
+				Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
 				region.setCuboid(cuboid);
 				changed = true;
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_NO_CUBOID_TOOL), true);
+				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("missing-cuboid"), true);
 			}
 			break;
 		case GAMEMODE:
@@ -363,7 +358,7 @@ public class RegionManager extends AntiShareManager {
 				region.setGameMode(GameMode.SURVIVAL);
 				changed = true;
 			}else{
-				ASUtils.sendToPlayer(sender, ChatColor.RED + Localization.getMessage(LocaleMessage.ERROR_UNKNOWN, "Game Mode", value), true);
+				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("unknown-gamemode", value), true);
 			}
 			break;
 		case ENTER_MESSAGE:
@@ -379,8 +374,16 @@ public class RegionManager extends AntiShareManager {
 		}
 		if(changed){
 			region.onUpdate(last);
-			ASUtils.sendToPlayer(sender, ChatColor.GREEN + Localization.getMessage(LocaleMessage.REGION_SAVED), true);
+			plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("region-saved"), true);
 		}
+	}
+
+	/**
+	 * Reloads the region manager
+	 */
+	public void reload(){
+		save();
+		load();
 	}
 
 }

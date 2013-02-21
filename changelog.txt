@@ -4,7 +4,6 @@ Since 5.3.0:
 - Fixed issue with removing regions
 - Fixed ender pearl issues
 - Fix minor communication errors
-- Fixed unsafe item frame/painting code
 - Fixed 0kb bug
 - Fixed piston duplication bug
 - Fix wrong file path for inventories
@@ -12,17 +11,18 @@ Since 5.3.0:
 - Fix region issues
 - Added locale support
 - Removed conflict spam, conflicts may still be present although they can be fixed
-- Reverted listener code to be more sane
-- Added localization
+- Updated listener code to be more sane
 - Fixed multiworld plugin compatibility issues
 - Added a way to disable 'tool' function (per-player)
 - Fixed tab handler not working correctly
-- Added debug spam
 - Added a way to switch player balances on Game Mode change
 - Added in-item help for AntiShare tools
-- Added a notification for non-standard locale files
 - Added LogBlock support (names will show up as "AntiSharePlugin_PLAYERNAME", eg: "AntiSharePlugin_turt2live" if it can (else just AntiSharePlugin))
 - Added MagicSpells support
+- Removed specific sign support
+- Removed world split 
+- [BREAKING] Chicken eggs are now handled as part of the THROW lists
+- [BREAKING] Exp Bottles are not handled as part of the THROW lists
 - Misc. Fixes:
     - Fixed region owner names not being loaded
     - Fixed cuboids not acting as expected
