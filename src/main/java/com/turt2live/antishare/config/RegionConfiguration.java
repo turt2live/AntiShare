@@ -35,7 +35,7 @@ public class RegionConfiguration extends ASConfig {
 	 */
 	public static RegionConfiguration getConfig(Region region){
 		File path = Region.REGION_CONFIGURATIONS;
-		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(path, ASUtils.fileSafeName(region.getName() + ".yml")), plugin);
+		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(path, ASUtils.fileSafeName(region.getName()) + ".yml"), plugin);
 		regionConfig.loadDefaults(plugin.getResource("world.yml"));
 		if(regionConfig.needsUpdate()){
 			regionConfig.saveDefaults();

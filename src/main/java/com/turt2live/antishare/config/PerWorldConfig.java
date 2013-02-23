@@ -39,7 +39,7 @@ public class PerWorldConfig extends ASConfig {
 	 */
 	public static PerWorldConfig getConfig(String world){
 		File path = WORLD_CONFIGURATIONS;
-		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(path, ASUtils.fileSafeName(world + ".yml")), plugin);
+		EnhancedConfiguration worldConfig = new EnhancedConfiguration(new File(path, ASUtils.fileSafeName(world) + ".yml"), plugin);
 		worldConfig.loadDefaults(plugin.getResource("world.yml"));
 		if(worldConfig.needsUpdate()){
 			worldConfig.saveDefaults();

@@ -84,6 +84,9 @@ public class AntiShare extends PluginWrapper {
 	public File generalDataDirectory;
 	public File inventoriesDirectory;
 	public File blocksDirectory;
+	public File entitiesDirectory;
+	public File worldConfigurations;
+	public File regionConfigurations;
 
 	// Files
 	private File simpleNoticeFile;
@@ -110,7 +113,10 @@ public class AntiShare extends PluginWrapper {
 		// Create folder structure
 		generalDataDirectory = new File(getDataFolder(), "data");
 		inventoriesDirectory = new File(generalDataDirectory, "inventories");
-		blocksDirectory = new File(generalDataDirectory, "block_information");
+		blocksDirectory = new File(generalDataDirectory, "blocks");
+		entitiesDirectory = new File(generalDataDirectory, "entities");
+		worldConfigurations = new File(getDataFolder(), "world_configurations");
+		regionConfigurations = new File(getDataFolder(), "region_configurations");
 		if(!getDataFolder().exists()){
 			getDataFolder().mkdirs();
 		}
@@ -122,6 +128,15 @@ public class AntiShare extends PluginWrapper {
 		}
 		if(!blocksDirectory.exists()){
 			blocksDirectory.mkdirs();
+		}
+		if(!entitiesDirectory.exists()){
+			entitiesDirectory.mkdirs();
+		}
+		if(!worldConfigurations.exists()){
+			worldConfigurations.mkdirs();
+		}
+		if(!regionConfigurations.exists()){
+			regionConfigurations.mkdirs();
 		}
 
 		// Setup files
@@ -255,9 +270,9 @@ public class AntiShare extends PluginWrapper {
 		// Save managers
 		blocks.save();
 		cuboids.save();
+		regions.save();
 		inventories.save();
 		money.save();
-		regions.save();
 
 		// Save disabled SimpleNotice users
 		try{
@@ -295,7 +310,6 @@ public class AntiShare extends PluginWrapper {
 
 	private void loadPlayerInformation(){
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
-
 			@Override
 			public void run(){
 				for(Player player : getServer().getOnlinePlayers()){
