@@ -281,6 +281,7 @@ public class AntiShare extends PluginWrapper {
 	 * Reload AntiShare
 	 */
 	public void reload(){
+		reloadConfig();
 		config = new ASConfig(getConfig());
 		messages.reload();
 		hooks.reload();
