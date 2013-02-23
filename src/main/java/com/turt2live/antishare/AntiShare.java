@@ -68,7 +68,8 @@ public class AntiShare extends PluginWrapper {
 	public static final PieTracker<Action> ILLEGAL_ACTIONS = new PieTracker<Action>("5.4.0 Illegal Actions", Action.values());
 	public static final PieTracker<Material> TRACKED_MATERIALS = new PieTracker<Material>("5.4.0 Tracked Materials", Material.values());
 
-	AntiShare(){
+	@Override
+	public void onLoad(){
 		for(Material material : Material.values()){
 			DonutTracker mainTracker = new DonutTracker(TRACKED_MATERIALS.getGraphName(), material.name());
 			EnabledDonutWedge creative = new EnabledDonutWedge("Creative"), survival = new EnabledDonutWedge("Survival"), adventure = new EnabledDonutWedge("Adventure");
