@@ -182,22 +182,6 @@ public class AntiShare extends PluginWrapper {
 		// Start update checker - internal enabled state
 		UpdateChecker.start();
 
-		// Start metrics
-		try{
-			metrics = new EMetrics(this);
-			metrics.addTracker(LEGAL_ACTIONS);
-			metrics.addTracker(ILLEGAL_ACTIONS);
-			Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
-			metrics.addTracker(new FixedTracker("mcMMO Servers", mcmmo != null ? "Found" : "Not Found"));
-			// The PieTracker in this case is just the container
-			for(Tracker tracker : TRACKED_MATERIALS.getAllTrackers()){
-				metrics.addTracker(tracker);
-			}
-			metrics.startMetrics();
-		}catch(IOException e){ // Metrics error
-			e.printStackTrace();
-		}
-
 		// Pre-load
 		blocks = new BlockManager();
 		blocks.load();
@@ -248,6 +232,22 @@ public class AntiShare extends PluginWrapper {
 
 		// Load player information
 		loadPlayerInformation();
+
+		// Start metrics
+		try{
+			metrics = new EMetrics(this);
+			metrics.addTracker(LEGAL_ACTIONS);
+			metrics.addTracker(ILLEGAL_ACTIONS);
+			Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
+			metrics.addTracker(new FixedTracker("mcMMO Servers", mcmmo != null ? "Found" : "Not Found"));
+			// The PieTracker in this case is just the container
+			for(Tracker tracker : TRACKED_MATERIALS.getAllTrackers()){
+				metrics.addTracker(tracker);
+			}
+			metrics.startMetrics();
+		}catch(IOException e){ // Metrics error
+			e.printStackTrace();
+		}
 	}
 
 	@Override
