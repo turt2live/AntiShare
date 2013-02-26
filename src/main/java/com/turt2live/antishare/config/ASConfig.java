@@ -9,8 +9,6 @@ import org.bukkit.entity.EntityType;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.metrics.tracker.DonutTracker;
-import com.turt2live.metrics.tracker.Tracker;
 
 /**
  * AntiShare configuration
@@ -170,26 +168,6 @@ public class ASConfig {
 				config.getBoolean("settings.notify.console", p.getConfig().getBoolean("settings.notify.console")));
 		features = new FeatureSettings(config.getBoolean("settings.features.use-inventories", p.getConfig().getBoolean("settings.features.use-inventories")),
 				config.getBoolean("settings.features.use-fines-rewards", p.getConfig().getBoolean("settings.features.use-fines-rewards")));
-
-		// Update trackers
-		for(Material material : trackedCreative){
-			// We know all of these casts
-			DonutTracker tracker = (DonutTracker) AntiShare.TRACKED_MATERIALS.getTracker(material);
-			Tracker wedge = tracker.getMinorWedge("creative");
-			wedge.increment();
-		}
-		for(Material material : trackedSurvival){
-			// We know all of these casts
-			DonutTracker tracker = (DonutTracker) AntiShare.TRACKED_MATERIALS.getTracker(material);
-			Tracker wedge = tracker.getMinorWedge("survival");
-			wedge.increment();
-		}
-		for(Material material : trackedAdventure){
-			// We know all of these casts
-			DonutTracker tracker = (DonutTracker) AntiShare.TRACKED_MATERIALS.getTracker(material);
-			Tracker wedge = tracker.getMinorWedge("adventure");
-			wedge.increment();
-		}
 	}
 
 	private List<String> toStringList(List<?> list){

@@ -33,11 +33,8 @@ import com.turt2live.antishare.util.PermissionNodes;
 import com.turt2live.antishare.util.SelfCompatibility;
 import com.turt2live.antishare.util.UpdateChecker;
 import com.turt2live.metrics.EMetrics;
-import com.turt2live.metrics.tracker.DonutTracker;
 import com.turt2live.metrics.tracker.FixedTracker;
 import com.turt2live.metrics.tracker.PieTracker;
-import com.turt2live.metrics.tracker.Tracker;
-import com.turt2live.metrics.tracker.wedge.EnabledDonutWedge;
 
 /**
  * AntiShare plugin class
@@ -66,19 +63,6 @@ public class AntiShare extends PluginWrapper {
 	// Trackers
 	public static final PieTracker<Action> LEGAL_ACTIONS = new PieTracker<Action>("5.4.0 Legal Actions", Action.values());
 	public static final PieTracker<Action> ILLEGAL_ACTIONS = new PieTracker<Action>("5.4.0 Illegal Actions", Action.values());
-	public static final PieTracker<Material> TRACKED_MATERIALS = new PieTracker<Material>("5.4.0 Tracked Materials", Material.values());
-
-	@Override
-	public void onLoad(){
-		for(Material material : Material.values()){
-			DonutTracker mainTracker = new DonutTracker(TRACKED_MATERIALS.getGraphName(), material.name());
-			EnabledDonutWedge creative = new EnabledDonutWedge("Creative"), survival = new EnabledDonutWedge("Survival"), adventure = new EnabledDonutWedge("Adventure");
-			mainTracker.addWedge(creative);
-			mainTracker.addWedge(survival);
-			mainTracker.addWedge(adventure);
-			TRACKED_MATERIALS.replaceTracker(material, mainTracker);
-		}
-	}
 
 	// Folder locations
 	public File generalDataDirectory;
@@ -255,10 +239,6 @@ public class AntiShare extends PluginWrapper {
 			metrics.addTracker(ILLEGAL_ACTIONS);
 			Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
 			metrics.addTracker(new FixedTracker("mcMMO Servers", mcmmo != null ? "Found" : "Not Found"));
-			// The PieTracker in this case is just the container
-			for(Tracker tracker : TRACKED_MATERIALS.getAllTrackers()){
-				metrics.addTracker(tracker);
-			}
 			metrics.startMetrics();
 		}catch(IOException e){ // Metrics error
 			e.printStackTrace();
