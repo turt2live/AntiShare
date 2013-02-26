@@ -51,10 +51,8 @@ permissions:
             AntiShare.inventories.*: true
             AntiShare.worldsplit.*: true
             AntiShare.reload: true
-            AntiShare.convert: true
             AntiShare.affect.*: false
             AntiShare.money.*: true
-            AntiShare.xmail: true
             AntiShare.cooldownbypass: true
             AntiShare.check: true
             AntiShare.itemframes: true
@@ -68,9 +66,6 @@ permissions:
         default: op
     AntiShare.check:
         description: Allows the target to see who is in a defined Game Mode
-        default: op
-    AntiShare.convert:
-        description: Allows the target to convert the storage system for AntiShare
         default: op
     AntiShare.reload:
         description: Allows the target to reload AntiShare
@@ -89,9 +84,6 @@ permissions:
         default: op
     AntiShare.free_place:
         description: Allows the player to place blocks without the block ending up in the tracker. Can also break creative/survival/natural blocks regardless of restriction
-        default: op
-    AntiShare.xmail:
-        description: Allows the player to send xMail messages with items despite settings
         default: op
     AntiShare.cooldownbypass:
         description: Allows the player to bypass the Game Mode Cooldown
