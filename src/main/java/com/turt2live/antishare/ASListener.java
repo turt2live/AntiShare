@@ -14,6 +14,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Jukebox;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EnderPearl;
@@ -31,6 +32,7 @@ import org.bukkit.entity.PoweredMinecart;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.StorageMinecart;
+import org.bukkit.entity.Tameable;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
@@ -43,7 +45,6 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -340,6 +341,24 @@ public class ASListener implements Listener {
 				doGameModeChange(player, from, to);
 			}
 		}, 2);
+	}
+
+	// Code used from feildmaster's gist on recursive player fetching
+	// https://gist.github.com/feildmaster/6e8f6bfa0aa55cbab208
+	private Player getPlayer(final Entity damager){
+		if(damager == null){
+			return null;
+		}else if(damager instanceof Player){
+			return (Player) damager;
+		}else if(damager instanceof Tameable){
+			AnimalTamer tamer = ((Tameable) damager).getOwner();
+			if(tamer instanceof Entity){
+				return getPlayer((Entity) tamer);
+			}
+		}else if(damager instanceof Projectile){
+			return getPlayer(((Projectile) damager).getShooter());
+		}
+		return null;
 	}
 
 	@EventHandler (priority = EventPriority.MONITOR)
@@ -1254,34 +1273,14 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCombat(EntityDamageByEntityEvent event){
-		DamageCause cause = event.getCause();
 		Entity attacker = event.getDamager();
 		Entity target = event.getEntity();
 		boolean illegal = false;
 		boolean isRegion = false, isPlayerCombat = false;
-		Player playerAttacker = null;
+		Player playerAttacker = getPlayer(attacker);
 		ASConfig c = configFor(target.getLocation());
 
-		switch (cause){
-		case ENTITY_ATTACK:
-			// attacker = entity
-			if(attacker instanceof Player){
-				playerAttacker = (Player) attacker;
-			}else{
-				return;
-			}
-			break;
-		case PROJECTILE:
-			// attacker = Projectile
-			Projectile projectile = (Projectile) attacker;
-			LivingEntity shooter = projectile.getShooter();
-			if(shooter instanceof Player){
-				playerAttacker = (Player) shooter;
-			}else{
-				return;
-			}
-			break;
-		default:
+		if(playerAttacker == null){
 			return;
 		}
 
