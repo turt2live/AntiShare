@@ -1,8 +1,14 @@
 package com.turt2live.antishare.cuboid;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 
+import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.regions.Region;
 
 /**
@@ -73,6 +79,9 @@ public class RegionCuboid extends Cuboid {
 	 * @return the new region cuboid
 	 */
 	public static RegionCuboid fromCuboid(Cuboid cuboid, Region region){
+		if(cuboid == null || region == null){
+			throw new IllegalArgumentException("Null arguments are bad!");
+		}
 		if(cuboid instanceof RegionCuboid){
 			RegionCuboid rcuboid = (RegionCuboid) cuboid.clone();
 			rcuboid.setRegion(region);
@@ -92,6 +101,44 @@ public class RegionCuboid extends Cuboid {
 			cuboid.setWorld(Bukkit.getWorld(worldName));
 		}
 		return cuboid;
+	}
+
+	/**
+	 * Attempts to deserialize the cuboid from a map
+	 * 
+	 * @param map the map
+	 * @return the cuboid
+	 * @throws IllegalArgumentException if the map is invalid in any way
+	 */
+	public static Cuboid deserialize(Map<String, Object> map){
+		String world = (String) map.get("world");
+		int mix = (Integer) map.get("minimum X"), miy = (Integer) map.get("minimum Y"), miz = (Integer) map.get("minimum Z"), max = (Integer) map.get("maximum X"), may = (Integer) map.get("maximum Y"), maz = (Integer) map.get("maximum Z");
+		if(world == null){
+			throw new IllegalArgumentException("World not found: " + world);
+		}
+		World matching = AntiShare.p.getServer().getWorld(world);
+		if(matching == null){
+			throw new IllegalArgumentException("World not found: " + world);
+		}
+		Location mi = new Location(matching, mix, miy, miz);
+		Location ma = new Location(matching, max, may, maz);
+		Cuboid cuboid = new Cuboid(mi, ma);
+		cuboid.setWorld(matching);
+		return cuboid;
+	}
+
+	@Override
+	public Map<String, Object> serialize(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("world", worldName);
+		map.put("minimum X", minimum.getBlockX());
+		map.put("minimum Y", minimum.getBlockY());
+		map.put("minimum Z", minimum.getBlockZ());
+		map.put("maximum X", maximum.getBlockX());
+		map.put("maximum Y", maximum.getBlockY());
+		map.put("maximum Z", maximum.getBlockZ());
+		map.put("region-cuboid", true);
+		return Collections.unmodifiableMap(map);
 	}
 
 }

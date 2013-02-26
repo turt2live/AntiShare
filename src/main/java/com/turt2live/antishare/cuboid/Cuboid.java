@@ -231,7 +231,9 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 		}
 		Location mi = new Location(matching, mix, miy, miz);
 		Location ma = new Location(matching, max, may, maz);
-		return new Cuboid(mi, ma);
+		Cuboid cuboid = new Cuboid(mi, ma);
+		cuboid.setWorld(matching);
+		return cuboid;
 	}
 
 	@Override

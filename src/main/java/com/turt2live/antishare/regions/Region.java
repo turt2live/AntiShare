@@ -1,6 +1,7 @@
 package com.turt2live.antishare.regions;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +21,9 @@ import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.cuboid.RegionCuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.regions.RegionWall.Wall;
+import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.Action;
 import com.turt2live.antishare.util.PermissionNodes;
-import com.turt2live.antishare.util.ASUtils;
 
 /**
  * An AntiShare Region
@@ -464,6 +465,13 @@ public class Region {
 			REGION_INFORMATION.mkdirs();
 		}
 		File saveFile = new File(REGION_INFORMATION, ASUtils.fileSafeName(name) + ".yml");
+		if(!saveFile.exists()){
+			try{
+				saveFile.createNewFile();
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		}
 		EnhancedConfiguration yaml = new EnhancedConfiguration(saveFile, plugin);
 		yaml.load();
 		yaml.set("name", getName());
@@ -510,7 +518,7 @@ public class Region {
 			List<String> players = yaml.getStringList("players");
 			region.populatePlayers(players);
 
-			RegionCuboid area = (RegionCuboid) yaml.get("cuboid");
+			Cuboid area = (Cuboid) yaml.get("cuboid");
 			region.setCuboid(area);
 
 			region.setOwner(yaml.getString("owner"));
