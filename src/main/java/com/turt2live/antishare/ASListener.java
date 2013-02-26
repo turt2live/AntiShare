@@ -45,6 +45,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ExpBottleEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -391,6 +392,24 @@ public class ASListener implements Listener {
 		}
 	}
 
+	@EventHandler (priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onItemSpawn(ItemSpawnEvent event){
+		Block block = event.getLocation().getBlock();
+		if(block.getType() != Material.AIR && block.getType() != event.getEntity().getItemStack().getType()){
+			return;
+		}
+		ASConfig c = configFor(event.getLocation());
+		if(c.naturalSettings.breakAsAttached){
+			GameMode type = plugin.getBlockManager().getType(block);
+			if(GamemodeAbstraction.isCreative(type)){
+				event.setCancelled(true);
+			}
+			block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+			plugin.getHookManager().sendBlockBreak(null, block.getLocation(), block.getType(), block.getData());
+			plugin.getBlockManager().removeBlock(block);
+		}
+	}
+
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityMake(BlockPlaceEvent event){
 		Block block = event.getBlock();
@@ -538,42 +557,8 @@ public class ASListener implements Listener {
 					if(d2 < 1.65 && d2 > 1.6 || d2 > 0.5 && d2 < 0.51){
 						plugin.getHookManager().sendEntityBreak(player.getName(), e.getLocation(), Material.ITEM_FRAME, BlockLogger.DEFAULT_DATA);
 						e.remove();
+						// TODO: Test if this is still needed, or can be removed
 					}
-				}
-			}
-			for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
-				Block rel = block.getRelative(face);
-				if(MaterialAPI.isDroppedOnBreak(rel, block, true)){
-					rel.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
-					plugin.getHookManager().sendBlockBreak(player.getName(), rel.getLocation(), rel.getType(), rel.getData());
-					breakBlock(rel, player.getGameMode(), c, true);
-				}
-			}
-
-			// Check for falling sand/gravel exploit
-			boolean moreBlocks = true;
-			Block active = block;
-
-			// Cacti/Sugar Cane check
-			active = block;
-			if(block.getType() == Material.CACTUS || block.getType() == Material.SUGAR_CANE_BLOCK){
-				moreBlocks = true;
-				List<Location> breakBlocks = new ArrayList<Location>();
-				do{
-					Block above = active.getRelative(BlockFace.UP);
-					if(above.getType() == Material.CACTUS || above.getType() == Material.SUGAR_CANE_BLOCK){
-						breakBlocks.add(above.getLocation());
-					}else{
-						moreBlocks = false;
-					}
-					active = above;
-				}while (moreBlocks);
-				for(int i = breakBlocks.size() - 1; i > -1; i--){
-					Location location = breakBlocks.get(i);
-					Block toBreak = location.getBlock();
-					toBreak.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
-					plugin.getHookManager().sendBlockBreak(player.getName(), location, toBreak.getType(), toBreak.getData());
-					breakBlock(toBreak, player.getGameMode(), c, true);
 				}
 			}
 		}
