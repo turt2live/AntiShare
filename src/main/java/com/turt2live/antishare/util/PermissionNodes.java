@@ -17,6 +17,21 @@ package com.turt2live.antishare.util;
  */
 public class PermissionNodes {
 
+	/**
+	 * Holds multiple permissions for illegal/legal checks
+	 * 
+	 * @author turt2live
+	 */
+	public static class PermissionPackage {
+		public final String allow, deny, region;
+
+		PermissionPackage(String allow, String deny, String region){
+			this.allow = allow;
+			this.deny = deny;
+			this.region = region;
+		}
+	}
+
 	// CONFIGURATION NODES
 	public static final String CONFIG_ALLOW_NODE_START = "AntiShare.allow";
 	public static final String CONFIG_DENY_NODE_START = "AntiShare.deny";
@@ -94,5 +109,17 @@ public class PermissionNodes {
 
 	// Plugin-Specific Nodes
 	public static final String PLUGIN_MAGIC_SPELLS = "AntiShare.plugin.magicspells";
+
+	// PACKAGES
+	public static final PermissionPackage PACK_BLOCK_BREAK = new PermissionPackage(ALLOW_BLOCK_BREAK, DENY_BLOCK_BREAK, REGION_BREAK);
+	public static final PermissionPackage PACK_BLOCK_PLACE = new PermissionPackage(ALLOW_BLOCK_PLACE, DENY_BLOCK_PLACE, REGION_PLACE);
+	public static final PermissionPackage PACK_DEATH = new PermissionPackage(ALLOW_DEATH, DENY_DEATH, null);
+	public static final PermissionPackage PACK_PICKUP = new PermissionPackage(ALLOW_PICKUP, DENY_PICKUP, REGION_PICKUP);
+	public static final PermissionPackage PACK_DROP = new PermissionPackage(ALLOW_DROP, DENY_DROP, REGION_THROW);
+	public static final PermissionPackage PACK_USE = new PermissionPackage(ALLOW_USE, DENY_USE, REGION_USE);
+	public static final PermissionPackage PACK_COMMANDS = new PermissionPackage(ALLOW_COMMANDS, DENY_COMMANDS, null);
+	public static final PermissionPackage PACK_COMBAT_PLAYERS = new PermissionPackage(ALLOW_COMBAT_PLAYERS, DENY_COMBAT_PLAYERS, REGION_ATTACK_PLAYERS);
+	public static final PermissionPackage PACK_COMBAT_MOBS = new PermissionPackage(ALLOW_COMBAT_MOBS, DENY_COMBAT_MOBS, REGION_ATTACK_MOBS);
+	public static final PermissionPackage PACK_MOB_MAKE = new PermissionPackage(ALLOW_MOB_CREATION, DENY_MOB_CREATION, null);
 
 }

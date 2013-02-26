@@ -20,9 +20,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +33,9 @@ import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.MobPattern.MobPatternType;
+import com.turt2live.antishare.util.PermissionNodes.PermissionPackage;
 
 /**
  * Utilities
@@ -380,4 +384,59 @@ public class ASUtils {
 		return null;
 	}
 
+	/**
+	 * Used to determine if something is blocked
+	 * 
+	 * @param player the player, this is the source location
+	 * @param target the target location
+	 * @param list the list to check
+	 * @param object the object to check
+	 * @param permissions the permissions to use
+	 * @return protection information
+	 */
+	public static ProtectionInformation isBlocked(Player player, Location target, List<Material> list, Material object, PermissionPackage permissions){
+		if(player == null || list == null || object == null || permissions == null){
+			throw new IllegalArgumentException("Null arguments are not allowed");
+		}
+		boolean illegal = false, region = false;
+		AntiShare p = AntiShare.p;
+		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
+		Region targetRegion = p.getRegionManager().getRegion(target);
+		if(list.contains(object)){
+			illegal = true;
+		}
+		if(!p.isBlocked(player, permissions.allow, permissions.deny, object)){
+			illegal = false;
+		}
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
+			if(sourceRegion != targetRegion){
+				illegal = true;
+				region = true;
+			}
+		}
+		return new ProtectionInformation(illegal, region, sourceRegion, targetRegion);
+	}
+
+	public static ProtectionInformation isBlocked(Player player, Location target, List<EntityType> list, EntityType object, PermissionPackage permissions){
+		if(player == null || list == null || object == null || permissions == null){
+			throw new IllegalArgumentException("Null arguments are not allowed");
+		}
+		boolean illegal = false, region = false;
+		AntiShare p = AntiShare.p;
+		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
+		Region targetRegion = p.getRegionManager().getRegion(target);
+		if(list.contains(object)){
+			illegal = true;
+		}
+		if(!p.isBlocked(player, permissions.allow, permissions.deny, object.getName())){
+			illegal = false;
+		}
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
+			if(sourceRegion != targetRegion){
+				illegal = true;
+				region = true;
+			}
+		}
+		return new ProtectionInformation(illegal, region, sourceRegion, targetRegion);
+	}
 }

@@ -137,6 +137,9 @@ public class RegionManager {
 	 * @return the region, or null if not found
 	 */
 	public Region getRegion(Location location){
+		if(location == null){
+			return null;
+		}
 		String worldname = location.getWorld().getName();
 		if(!regions.containsKey(worldname)){
 			return null;

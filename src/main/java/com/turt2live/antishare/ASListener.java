@@ -92,6 +92,7 @@ import com.turt2live.antishare.util.LevelSaver;
 import com.turt2live.antishare.util.LevelSaver.Level;
 import com.turt2live.antishare.util.MobPattern;
 import com.turt2live.antishare.util.PermissionNodes;
+import com.turt2live.antishare.util.ProtectionInformation;
 import com.turt2live.materials.MaterialAPI;
 
 /**
@@ -434,6 +435,7 @@ public class ASListener implements Listener {
 		Block block = event.getBlock();
 		Player player = event.getPlayer();
 		boolean illegal = false;
+		ASConfig c = configFor(block.getLocation());
 		MobPattern snowGolemPattern = ASUtils.getMobPattern(EntityPattern.SNOW_GOLEM);
 		MobPattern ironGolemPattern = ASUtils.getMobPattern(EntityPattern.IRON_GOLEM);
 		MobPattern witherPattern = ASUtils.getMobPattern(EntityPattern.WITHER);
@@ -449,12 +451,10 @@ public class ASListener implements Listener {
 			return;
 		}
 		String mobName = pattern.name;
-		if(configFor(block.getLocation()).craftedMobs.contains(pattern.entityType)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_MOB_CREATION, PermissionNodes.DENY_MOB_CREATION, (Material) null)){
-			illegal = false;
-		}
+
+		ProtectionInformation info = ASUtils.isBlocked(player, null, c.craftedMobs, pattern.entityType, PermissionNodes.PACK_MOB_MAKE);
+		illegal = info.illegal;
+
 		plugin.getMessages().notifyParties(player, Action.CRAFTED_MOB, illegal, mobName);
 		if(illegal){
 			event.setCancelled(true);
@@ -477,12 +477,10 @@ public class ASListener implements Listener {
 		Material attachedMaterial = Material.AIR;
 		ASConfig c = configFor(blockLocation);
 
-		if(c.blockBreak.contains(block.getType())){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, block.getType())){
-			illegal = false;
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, blockLocation, c.blockBreak, block.getType(), PermissionNodes.PACK_BLOCK_BREAK);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region blockRegion = info.targetRegion;
 
 		if(!player.hasPermission(PermissionNodes.FREE_PLACE)){
 			blockGamemode = plugin.getBlockManager().getType(block);
@@ -505,15 +503,6 @@ public class ASListener implements Listener {
 						}
 					}
 				}
-			}
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
-		if(!player.hasPermission(PermissionNodes.REGION_BREAK)){
-			if(playerRegion != blockRegion){
-				isRegion = true;
-				illegal = true;
 			}
 		}
 
@@ -593,21 +582,10 @@ public class ASListener implements Listener {
 		GameMode existing = null;
 		ASConfig c = configFor(blockLocation);
 
-		if(c.blockPlace.contains(block.getType())){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, block.getType())){
-			illegal = false;
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region blockRegion = plugin.getRegionManager().getRegion(block.getLocation());
-		if(!player.hasPermission(PermissionNodes.REGION_PLACE)){
-			if(playerRegion != blockRegion){
-				isRegion = true;
-				illegal = true;
-			}
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, blockLocation, c.blockPlace, block.getType(), PermissionNodes.PACK_BLOCK_PLACE);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region blockRegion = info.targetRegion;
 
 		if(!illegal && !c.naturalSettings.allowMismatchedGM){
 			Block source = event.getBlockAgainst();
@@ -666,6 +644,7 @@ public class ASListener implements Listener {
 				}
 			}
 
+			// TODO: Logic split
 			if(c.use.contains(hand.getType())){
 				illegal = true;
 			}
@@ -771,6 +750,7 @@ public class ASListener implements Listener {
 			}
 		}
 
+		// TODO: Logic split
 		if(c.use.contains(block.getType()) || c.use.contains(hand.getType())){
 			illegal = true;
 		}
@@ -838,21 +818,10 @@ public class ASListener implements Listener {
 			return;
 		}
 
-		if(c.blockBreak.contains(item)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, item)){
-			illegal = false;
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region vehicleRegion = plugin.getRegionManager().getRegion(event.getVehicle().getLocation());
-		if(!player.hasPermission(PermissionNodes.REGION_USE)){
-			if(playerRegion != vehicleRegion){
-				isRegion = true;
-				illegal = true;
-			}
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, event.getVehicle().getLocation(), c.blockBreak, item, PermissionNodes.PACK_BLOCK_BREAK);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region vehicleRegion = info.targetRegion;
 
 		if(illegal){
 			event.setCancelled(true);
@@ -935,6 +904,7 @@ public class ASListener implements Listener {
 			}
 		}
 
+		// TODO: Logic split
 		String regionPermission = PermissionNodes.REGION_USE;
 		if(rightClicked == Material.ITEM_FRAME && !c.naturalSettings.allowMismatchedGM){
 			isItemFrame = true;
@@ -1019,21 +989,10 @@ public class ASListener implements Listener {
 		Material material = Material.EGG;
 		ASConfig c = configFor(egg.getLocation());
 
-		if(c.drop.contains(material)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, material)){
-			illegal = false;
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region eggRegion = plugin.getRegionManager().getRegion(egg.getLocation());
-		if(!player.hasPermission(PermissionNodes.REGION_USE)){
-			if(playerRegion != eggRegion){
-				isRegion = true;
-				illegal = true;
-			}
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, egg.getLocation(), c.drop, material, PermissionNodes.PACK_DROP);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region eggRegion = info.targetRegion;
 
 		if(illegal){
 			event.setHatching(false);
@@ -1062,21 +1021,10 @@ public class ASListener implements Listener {
 		Material item = Material.EXP_BOTTLE;
 		ASConfig c = configFor(bottle.getLocation());
 
-		if(c.drop.contains(item)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, item)){
-			illegal = false;
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region bottleRegion = plugin.getRegionManager().getRegion(bottle.getLocation());
-		if(!player.hasPermission(PermissionNodes.REGION_THROW)){
-			if(playerRegion != bottleRegion){
-				isRegion = true;
-				illegal = true;
-			}
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, bottle.getLocation(), c.drop, item, PermissionNodes.PACK_DROP);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region bottleRegion = info.targetRegion;
 
 		if(illegal){
 			event.setExperience(0);
@@ -1139,21 +1087,10 @@ public class ASListener implements Listener {
 		Material item = event.getItem().getItemStack().getType();
 		ASConfig c = configFor(drop.getLocation());
 
-		if(c.pickup.contains(item)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_PICKUP, PermissionNodes.DENY_PICKUP, item)){
-			illegal = false;
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region dropRegion = plugin.getRegionManager().getRegion(drop.getLocation());
-		if(!player.hasPermission(PermissionNodes.REGION_PICKUP)){
-			if(playerRegion != dropRegion){
-				isRegion = true;
-				illegal = true;
-			}
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, drop.getLocation(), c.pickup, item, PermissionNodes.PACK_PICKUP);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region dropRegion = info.targetRegion;
 
 		if(illegal){
 			event.setCancelled(true);
@@ -1183,12 +1120,8 @@ public class ASListener implements Listener {
 		List<ItemStack> r = new ArrayList<ItemStack>();
 		for(ItemStack item : drops){
 			boolean remove = false;
-			if(c.death.contains(item.getType())){
-				remove = true;
-			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DEATH, PermissionNodes.DENY_DEATH, item.getType())){
-				remove = false;
-			}
+			ProtectionInformation info = ASUtils.isBlocked(player, null, c.death, item.getType(), PermissionNodes.PACK_DEATH);
+			remove = info.illegal;
 			if(remove){
 				r.add(item);
 				illegalItems++;
@@ -1214,6 +1147,7 @@ public class ASListener implements Listener {
 			return;
 		}
 
+		// TODO: Logic split
 		StringBuilder current = new StringBuilder();
 		current.append(arguments[0]).append(" ");
 		for(int i = 0; i < arguments.length; i++){
@@ -1284,28 +1218,14 @@ public class ASListener implements Listener {
 			return;
 		}
 
-		String allow = PermissionNodes.ALLOW_COMBAT_MOBS, deny = PermissionNodes.DENY_COMBAT_MOBS;
 		if(target instanceof Player){
 			isPlayerCombat = true;
-			allow = PermissionNodes.ALLOW_COMBAT_PLAYERS;
-			deny = PermissionNodes.DENY_COMBAT_PLAYERS;
 		}
 
-		if(c.attackMobs.contains(target.getType())){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(playerAttacker, allow, deny, target.getType().getName())){
-			illegal = false;
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(playerAttacker.getLocation());
-		Region entityRegion = plugin.getRegionManager().getRegion(target.getLocation());
-		if(!playerAttacker.hasPermission(isPlayerCombat ? PermissionNodes.REGION_ATTACK_PLAYERS : PermissionNodes.REGION_ATTACK_MOBS)){
-			if(playerRegion != entityRegion){
-				isRegion = true;
-				illegal = true;
-			}
-		}
+		ProtectionInformation info = ASUtils.isBlocked(playerAttacker, target.getLocation(), c.attackMobs, target.getType(), isPlayerCombat ? PermissionNodes.PACK_COMBAT_PLAYERS : PermissionNodes.PACK_COMBAT_MOBS);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region entityRegion = info.targetRegion;
 
 		if(illegal){
 			event.setCancelled(true);
@@ -1395,12 +1315,8 @@ public class ASListener implements Listener {
 			return;
 		}
 
-		if(c.drop.contains(item)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, item)){
-			illegal = false;
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, null, c.drop, item, PermissionNodes.PACK_DROP);
+		illegal = info.illegal;
 
 		if(illegal){
 			event.setCancelled(true);
@@ -1425,12 +1341,9 @@ public class ASListener implements Listener {
 		if(c.thrownPotions){
 			illegal = true;
 		}
-		if(c.drop.contains(item)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, item)){
-			illegal = false;
-		}
+
+		ProtectionInformation info = ASUtils.isBlocked(player, null, c.drop, item, PermissionNodes.PACK_DROP);
+		illegal = info.illegal;
 
 		if(illegal){
 			event.setCancelled(true);
@@ -1446,6 +1359,7 @@ public class ASListener implements Listener {
 			Player player = (Player) event.getWhoClicked();
 			ASConfig c = configFor(player.getLocation());
 			if(GamemodeAbstraction.isCreative(player.getGameMode())){
+				// TODO: Split logic
 				if(c.craft.contains(event.getRecipe().getResult().getType())){
 					illegal = true;
 				}
@@ -1487,21 +1401,10 @@ public class ASListener implements Listener {
 			item = Material.ITEM_FRAME;
 		}
 
-		if(c.blockPlace.contains(item)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_PLACE, PermissionNodes.DENY_BLOCK_PLACE, item)){
-			illegal = false;
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region hangingRegion = plugin.getRegionManager().getRegion(hanging.getLocation());
-		if(!player.hasPermission(PermissionNodes.REGION_PLACE)){
-			if(playerRegion != hangingRegion){
-				illegal = true;
-				isRegion = true;
-			}
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, hanging.getLocation(), c.blockPlace, item, PermissionNodes.PACK_BLOCK_PLACE);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region hangingRegion = info.targetRegion;
 
 		if(illegal){
 			event.setCancelled(true);
@@ -1562,27 +1465,16 @@ public class ASListener implements Listener {
 				}
 			}
 
-			if(c.blockBreak.contains(item)){
-				illegal = true;
-			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_BLOCK_BREAK, PermissionNodes.DENY_BLOCK_BREAK, item)){
-				illegal = false;
-			}
+			ProtectionInformation info = ASUtils.isBlocked(player, hanging.getLocation(), c.blockBreak, item, PermissionNodes.PACK_BLOCK_BREAK);
+			illegal = info.illegal;
+			isRegion = info.isRegion;
+			Region hangingRegion = info.targetRegion;
 
 			InteractionSettings i = null;
 			if(hangingGamemode != null && !player.hasPermission(PermissionNodes.FREE_PLACE)){
 				if(!GamemodeAbstraction.isMatch(hangingGamemode, player.getGameMode())){
 					i = configFor(player.getGameMode(), hangingGamemode, hanging.getLocation());
 					isGameMode = true;
-				}
-			}
-
-			Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-			Region hangingRegion = plugin.getRegionManager().getRegion(hanging.getLocation());
-			if(!player.hasPermission(PermissionNodes.REGION_BREAK)){
-				if(playerRegion != hangingRegion){
-					isRegion = true;
-					illegal = true;
 				}
 			}
 
