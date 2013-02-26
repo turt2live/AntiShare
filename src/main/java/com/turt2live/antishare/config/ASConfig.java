@@ -46,14 +46,16 @@ public class ASConfig {
 		public final boolean breakAsPiston, breakAsAttached, breakAsWater;
 		public final boolean emptyInventories;
 		public final boolean removeAttached;
+		public final boolean breakSand;
 
-		NaturalSettings(boolean mismatch, boolean piston, boolean attached, boolean water, boolean empty, boolean removeAttached){
+		NaturalSettings(boolean mismatch, boolean piston, boolean attached, boolean water, boolean empty, boolean removeAttached, boolean breakSand){
 			this.allowMismatchedGM = mismatch;
 			this.breakAsPiston = piston;
 			this.breakAsAttached = attached;
 			this.breakAsWater = water;
 			this.emptyInventories = empty;
 			this.removeAttached = removeAttached;
+			this.breakSand = breakSand;
 		}
 	}
 
@@ -145,7 +147,8 @@ public class ASConfig {
 				config.getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks")),
 				config.getBoolean("settings.natural-protection.break-as-gamemode.water", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.water")),
 				config.getBoolean("settings.natural-protection.empty-inventories", p.getConfig().getBoolean("settings.natural-protection.empty-inventories")),
-				config.getBoolean("settings.natural-protection.remove-attached-blocks", p.getConfig().getBoolean("settings.natural-protection.remove-attached-blocks")));
+				config.getBoolean("settings.natural-protection.remove-attached-blocks", p.getConfig().getBoolean("settings.natural-protection.remove-attached-blocks")),
+				config.getBoolean("settings.natural-protection.break-as-gamemode.falling-blocks", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.falling-blocks")));
 		survivalBreakCreative = new InteractionSettings(config.getBoolean("interaction.survival-breaking-creative.deny", p.getConfig().getBoolean("interaction.survival-breaking-creative.deny")),
 				config.getBoolean("interaction.survival-breaking-creative.drop-items", p.getConfig().getBoolean("interaction.survival-breaking-creative.drop-items")));
 		creativeBreakSurvival = new InteractionSettings(config.getBoolean("interaction.creative-breaking-survival.deny", p.getConfig().getBoolean("interaction.creative-breaking-survival.deny")),

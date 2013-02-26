@@ -19,6 +19,7 @@ import org.bukkit.entity.Egg;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
@@ -40,6 +41,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ExpBottleEvent;
@@ -72,6 +74,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.config.ASConfig;
@@ -98,8 +101,10 @@ public class ASListener implements Listener {
 
 	private static AntiShare plugin = AntiShare.p;
 
+	public static final String FALLING_METADATA_KEY = "antishare-falling-original-gamemode";
 	public static final String LOGBLOCK_METADATA_KEY = "antishare-logblock";
 	public static final FixedMetadataValue EMPTY_METADATA = new FixedMetadataValue(plugin, true);
+
 	private final Map<String, Long> gamemodeCooldowns = new HashMap<String, Long>();
 
 	private boolean hasMobCatcher;
@@ -351,6 +356,41 @@ public class ASListener implements Listener {
 		plugin.getRegionManager().loadWorld(event.getWorld().getName());
 	}
 
+	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockFall(EntityChangeBlockEvent event){
+		if(event.getEntity() instanceof FallingBlock){
+			boolean falling = event.getTo() == Material.AIR;
+			FallingBlock sand = (FallingBlock) event.getEntity(); // May not be sand
+			Location location = sand.getLocation();
+			location.setY(location.getY() + sand.getFallDistance()); // For lag. In testing sand.getFallDistance() did not exceed 0.04
+			Block block = location.getBlock();
+			ASConfig c = configFor(location);
+			if(falling){
+				if(c.naturalSettings.breakSand && sand.getDropItem()){
+					GameMode type = plugin.getBlockManager().getType(block);
+					if(GamemodeAbstraction.isCreative(type)){
+						sand.setDropItem(false);
+					}
+					if(type != null){
+						sand.setMetadata(FALLING_METADATA_KEY, new FixedMetadataValue(plugin, type));
+					}
+				}
+				plugin.getBlockManager().removeBlock(block);
+			}else if(sand.hasMetadata(FALLING_METADATA_KEY)){
+				List<MetadataValue> meta = sand.getMetadata(FALLING_METADATA_KEY);
+				GameMode type = null;
+				for(MetadataValue v : meta){
+					if(v.getOwningPlugin().getName().equalsIgnoreCase("AntiShare") && v.value() instanceof GameMode){
+						type = (GameMode) v.value();
+					}
+				}
+				if(type != null){
+					plugin.getBlockManager().addBlock(type, block);
+				}
+			}
+		}
+	}
+
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityMake(BlockPlaceEvent event){
 		Block block = event.getBlock();
@@ -513,41 +553,6 @@ public class ASListener implements Listener {
 			// Check for falling sand/gravel exploit
 			boolean moreBlocks = true;
 			Block active = block;
-			if(MaterialAPI.isAffectedByGravity(active.getType()) || MaterialAPI.isAffectedByGravity(active.getRelative(BlockFace.UP).getType())){
-				do{
-					Block below = active.getRelative(BlockFace.DOWN);
-					active = below;
-					if(below.getType() == Material.AIR){
-						continue;
-					}
-					if(MaterialAPI.canBreakFallingBlock(below.getType())){
-						// Remove all sand/gravel above this block
-						boolean checkMoreBlocks = true;
-						Block above = block.getRelative(BlockFace.UP);
-						do{
-							for(BlockFace face : ASUtils.TRUE_BLOCK_FACES){
-								Block side = above.getRelative(face);
-								if(MaterialAPI.isDroppedOnBreak(side, above, true)){
-									side.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
-									plugin.getHookManager().sendBlockBreak(player.getName(), side.getLocation(), side.getType(), side.getData());
-									breakBlock(side, player.getGameMode(), c, true);
-								}
-							}
-							if(MaterialAPI.isAffectedByGravity(above.getType())){
-								above.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
-								plugin.getHookManager().sendBlockBreak(player.getName(), above.getLocation(), above.getType(), above.getData());
-								breakBlock(above, player.getGameMode(), c, true);
-								above = above.getRelative(BlockFace.UP);
-							}else{
-								checkMoreBlocks = false;
-							}
-						}while (checkMoreBlocks);
-						moreBlocks = false;
-					}else{
-						moreBlocks = false;
-					}
-				}while (moreBlocks);
-			}
 
 			// Cacti/Sugar Cane check
 			active = block;

@@ -106,6 +106,7 @@ settings:
             # If this is true, then blocks will be broken according to their gamemode (if attached, such as a torch on a falling sand block)
             attached-blocks: true
             water: true
+            falling-blocks: true
     # Stuff to do on GameMode change
     gamemode-change:
         change-level: true
