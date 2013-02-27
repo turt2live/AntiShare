@@ -66,6 +66,7 @@
             <version>${metricsextension.version}</version>
             <type>jar</type>
             <scope>compile</scope>
+            <!--<classifier>DEBUG</classifier>-->
         </dependency>
 
         <!-- Configuration Library -->
