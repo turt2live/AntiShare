@@ -1241,8 +1241,6 @@ public class ASListener implements Listener {
 		plugin.getMessages().notifyParties(playerAttacker, action, illegal, name, extra);
 	}
 
-	// TODO: Fix exploits with pistons
-
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPistonExtend(BlockPistonExtendEvent event){
 		for(Block block : event.getBlocks()){
