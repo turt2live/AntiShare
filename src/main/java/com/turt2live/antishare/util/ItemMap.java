@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
@@ -48,6 +49,7 @@ public class ItemMap {
 			if(real != null){
 				asm = new ASMaterial();
 				asm.id = real.getId();
+				asm.name = name;
 				short d = -1;
 				if(customData != null && MaterialAPI.hasData(real)){
 					try{
@@ -62,47 +64,75 @@ public class ItemMap {
 
 	private static void load() throws IOException{
 		AntiShare p = AntiShare.p;
-		// TODO: Auto update
 		File items = new File(p.getDataFolder(), "items.csv");
 		if(!items.exists()){
 			createFile(items, p);
 		}
+		listing = read(items);
+		List<ASMaterial> add = SelfCompatibility.updateItemMap(listing);
+		for(ASMaterial a : add){
+			listing.put(a.name.trim().toLowerCase(), a);
+		}
+	}
+
+	/**
+	 * Reads a file for all ASMaterials
+	 * 
+	 * @param items the file
+	 * @return a map of pointers
+	 * @throws IOException thrown if something goes wrong
+	 */
+	public static Map<String, ASMaterial> read(File items) throws IOException{
+		Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 		BufferedReader in = new BufferedReader(new FileReader(items));
 		String line;
 		while ((line = in.readLine()) != null){
 			if(line.startsWith("#")){
 				continue;
 			}
-			String[] parts = line.split(",");
-			if(parts.length < 3 || parts.length > 3){
-				continue;
-			}
-			// 0 = item name
-			// 1 = id
-			// 2 = meta, * = any
-			String name = parts[0].trim().toLowerCase();
-			int id = 0;
-			short data = 0;
-			try{
-				id = Integer.parseInt(parts[1].trim());
-				String d = parts[2].trim();
-				if(d.equalsIgnoreCase("*") || !MaterialAPI.hasData(id)){
-					data = -1;
-				}else{
-					data = Short.parseShort(d);
-				}
-			}catch(NumberFormatException e){
-				continue;
-			}
-			ASMaterial asMaterial = new ASMaterial();
-			asMaterial.id = id;
-			asMaterial.data = data;
-			listing.put(name, asMaterial);
+			ASMaterial asMaterial = generate(line);
+			listing.put(asMaterial.name.trim().toLowerCase(), asMaterial);
 		}
 		in.close();
+		return listing;
 	}
 
-	private static void createFile(File items, AntiShare p) throws IOException{
+	/**
+	 * Generates an ASMaterial from a CSV line
+	 * 
+	 * @param line the CSV line
+	 * @return the AS Material or null if invalid
+	 */
+	public static ASMaterial generate(String line){
+		String[] parts = line.split(",");
+		if(parts.length < 3 || parts.length > 3){
+			return null;
+		}
+		// 0 = item name
+		// 1 = id
+		// 2 = meta, * = any
+		String name = parts[0].trim().toLowerCase();
+		int id = 0;
+		short data = 0;
+		try{
+			id = Integer.parseInt(parts[1].trim());
+			String d = parts[2].trim();
+			if(d.equalsIgnoreCase("*") || !MaterialAPI.hasData(id)){
+				data = -1;
+			}else{
+				data = Short.parseShort(d);
+			}
+		}catch(NumberFormatException e){
+			return null;
+		}
+		ASMaterial asMaterial = new ASMaterial();
+		asMaterial.id = id;
+		asMaterial.data = data;
+		asMaterial.name = name;
+		return asMaterial;
+	}
+
+	static void createFile(File items, AntiShare p) throws IOException{
 		InputStream input = p.getResource("items.csv");
 		FileOutputStream out = new FileOutputStream(items);
 		byte[] buf = new byte[1024];

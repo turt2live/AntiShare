@@ -19,8 +19,9 @@ import com.turt2live.antishare.AntiShare;
 public class ASMaterialList {
 
 	public static class ASMaterial {
-		int id;
-		short data; // -1 = any
+		int id = 0;
+		short data = -1; // -1 = any
+		String name = "Unknown";
 	}
 
 	private Map<Integer, List<ASMaterial>> listing = new HashMap<Integer, List<ASMaterial>>();
@@ -49,6 +50,7 @@ public class ASMaterialList {
 					ASMaterial asm = new ASMaterial();
 					asm.id = m.getId();
 					asm.data = -1;
+					asm.name = m.name();
 					add(asm, negate);
 				}
 				continue;
@@ -124,6 +126,7 @@ public class ASMaterialList {
 		ASMaterial asm = new ASMaterial();
 		asm.id = m.getId();
 		asm.data = -1;
+		asm.name = m.name();
 		add(asm, negate);
 	}
 

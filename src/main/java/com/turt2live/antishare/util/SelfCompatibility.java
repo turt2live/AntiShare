@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 
 /**
  * Compatibility class for other AntiShare versions
@@ -49,7 +51,8 @@ public class SelfCompatibility {
 		INVENTORY_540_BETA(40),
 		@Deprecated
 		CONFIGURATION_540_BETA(45),
-		CONFIGURATION_540(50);
+		CONFIGURATION_540(50),
+		ITEM_MAP_540(55);
 
 		public final int bytePosition;
 
@@ -102,6 +105,45 @@ public class SelfCompatibility {
 			return file;
 		}catch(FileNotFoundException e){}
 		return null;
+	}
+
+	static List<ASMaterial> updateItemMap(Map<String, ASMaterial> listing) throws IOException{
+		List<ASMaterial> r = new ArrayList<ASMaterial>();
+		if(!needsUpdate(CompatibilityType.ITEM_MAP_540)){
+			return r;
+		}
+		AntiShare p = AntiShare.p;
+		File items = new File(p.getDataFolder(), "items.temp");
+		ItemMap.createFile(items, p);
+		BufferedReader in = new BufferedReader(new FileReader(items));
+		BufferedWriter out = new BufferedWriter(new FileWriter(new File(p.getDataFolder(), "items.csv"), true));
+		boolean updated = false;
+		String line;
+		while ((line = in.readLine()) != null){
+			if(line.startsWith("#")){
+				continue;
+			}
+			ASMaterial asMaterial = ItemMap.generate(line);
+			if(asMaterial == null){
+				continue;
+			}
+			String name = asMaterial.name.trim().toLowerCase();
+			if(!listing.containsKey(name)){
+				r.add(asMaterial);
+				if(!updated){
+					out.newLine();
+					out.write("# AntiShare v" + p.getDescription().getVersion() + " (Build " + p.getBuild() + ") updates below this line");
+					updated = true;
+				}
+				out.newLine();
+				out.write(line);
+			}
+		}
+		in.close();
+		out.close();
+		items.delete();
+		noLongerNeedsUpdate(CompatibilityType.ITEM_MAP_540);
+		return r;
 	}
 
 	/**
