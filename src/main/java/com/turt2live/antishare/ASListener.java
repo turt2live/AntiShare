@@ -477,7 +477,7 @@ public class ASListener implements Listener {
 		Material attachedMaterial = Material.AIR;
 		ASConfig c = configFor(blockLocation);
 
-		ProtectionInformation info = ASUtils.isBlocked(player, blockLocation, c.blockBreak, block.getType(), PermissionNodes.PACK_BLOCK_BREAK);
+		ProtectionInformation info = ASUtils.isBlocked(player, block, c.blockBreak, PermissionNodes.PACK_BLOCK_BREAK);
 		illegal = info.illegal;
 		isRegion = info.isRegion;
 		Region blockRegion = info.targetRegion;
@@ -582,7 +582,7 @@ public class ASListener implements Listener {
 		GameMode existing = null;
 		ASConfig c = configFor(blockLocation);
 
-		ProtectionInformation info = ASUtils.isBlocked(player, blockLocation, c.blockPlace, block.getType(), PermissionNodes.PACK_BLOCK_PLACE);
+		ProtectionInformation info = ASUtils.isBlocked(player, block, c.blockPlace, PermissionNodes.PACK_BLOCK_PLACE);
 		illegal = info.illegal;
 		isRegion = info.isRegion;
 		Region blockRegion = info.targetRegion;
@@ -645,7 +645,7 @@ public class ASListener implements Listener {
 			}
 
 			// TODO: Logic split
-			if(c.use.contains(hand.getType())){
+			if(c.use.has(hand)){
 				illegal = true;
 			}
 			if(isThrownPotion && c.thrownPotions){
@@ -751,7 +751,7 @@ public class ASListener implements Listener {
 		}
 
 		// TODO: Logic split
-		if(c.use.contains(block.getType()) || c.use.contains(hand.getType())){
+		if(c.use.has(block) || c.use.has(hand)){
 			illegal = true;
 		}
 		if(isThrownPotion && c.thrownPotions){
@@ -924,14 +924,14 @@ public class ASListener implements Listener {
 				illegal = false;
 			}
 		}else{
-			if(c.use.contains(rightClicked)){
+			if(c.use.has(rightClicked)){
 				illegal = true;
 			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, rightClicked)){
 				illegal = false;
 			}
 			if(!illegal && hand.getType() != Material.AIR){
-				if(c.use.contains(hand.getType())){
+				if(c.use.has(hand)){
 					illegal = true;
 				}
 				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
@@ -1049,21 +1049,10 @@ public class ASListener implements Listener {
 		Material item = event.getItemDrop().getItemStack().getType();
 		ASConfig c = configFor(drop.getLocation());
 
-		if(c.drop.contains(item)){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_DROP, PermissionNodes.DENY_DROP, item)){
-			illegal = false;
-		}
-
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region dropRegion = plugin.getRegionManager().getRegion(drop.getLocation());
-		if(!player.hasPermission(PermissionNodes.REGION_THROW)){
-			if(playerRegion != dropRegion){
-				isRegion = true;
-				illegal = true;
-			}
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, drop.getItemStack(), drop.getLocation(), c.drop, PermissionNodes.PACK_DROP);
+		illegal = info.illegal;
+		isRegion = info.isRegion;
+		Region dropRegion = info.targetRegion;
 
 		if(illegal){
 			event.setCancelled(true);
@@ -1087,7 +1076,7 @@ public class ASListener implements Listener {
 		Material item = event.getItem().getItemStack().getType();
 		ASConfig c = configFor(drop.getLocation());
 
-		ProtectionInformation info = ASUtils.isBlocked(player, drop.getLocation(), c.pickup, item, PermissionNodes.PACK_PICKUP);
+		ProtectionInformation info = ASUtils.isBlocked(player, drop.getItemStack(), drop.getLocation(), c.pickup, PermissionNodes.PACK_PICKUP);
 		illegal = info.illegal;
 		isRegion = info.isRegion;
 		Region dropRegion = info.targetRegion;
@@ -1120,7 +1109,7 @@ public class ASListener implements Listener {
 		List<ItemStack> r = new ArrayList<ItemStack>();
 		for(ItemStack item : drops){
 			boolean remove = false;
-			ProtectionInformation info = ASUtils.isBlocked(player, null, c.death, item.getType(), PermissionNodes.PACK_DEATH);
+			ProtectionInformation info = ASUtils.isBlocked(player, item, player.getLocation(), c.death, PermissionNodes.PACK_DEATH);
 			remove = info.illegal;
 			if(remove){
 				r.add(item);
@@ -1358,7 +1347,7 @@ public class ASListener implements Listener {
 			ASConfig c = configFor(player.getLocation());
 			if(GamemodeAbstraction.isCreative(player.getGameMode())){
 				// TODO: Split logic
-				if(c.craft.contains(event.getRecipe().getResult().getType())){
+				if(c.craft.has(event.getRecipe().getResult())){
 					illegal = true;
 				}
 				if(!plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, null, event.getRecipe().getResult().getType())){
@@ -1645,7 +1634,7 @@ public class ASListener implements Listener {
 		// Check teleport cause for ender pearl
 		Material pearl = Material.ENDER_PEARL;
 		if(event.getCause() == TeleportCause.ENDER_PEARL){
-			if(c.use.contains(pearl)){
+			if(c.use.has(pearl)){
 				illegal = true;
 			}
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, pearl)){

@@ -388,24 +388,23 @@ public class ASUtils {
 	 * Used to determine if something is blocked
 	 * 
 	 * @param player the player, this is the source location
-	 * @param target the target location
+	 * @param target the target block
 	 * @param list the list to check
-	 * @param object the object to check
 	 * @param permissions the permissions to use
 	 * @return protection information
 	 */
-	public static ProtectionInformation isBlocked(Player player, Location target, List<Material> list, Material object, PermissionPackage permissions){
-		if(player == null || list == null || object == null || permissions == null){
+	public static ProtectionInformation isBlocked(Player player, Block target, ASMaterialList list, PermissionPackage permissions){
+		if(player == null || list == null || permissions == null){
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		boolean illegal = false, region = false;
 		AntiShare p = AntiShare.p;
 		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
-		Region targetRegion = p.getRegionManager().getRegion(target);
-		if(list.contains(object)){
+		Region targetRegion = p.getRegionManager().getRegion(target.getLocation());
+		if(list.has(target)){
 			illegal = true;
 		}
-		if(!p.isBlocked(player, permissions.allow, permissions.deny, object)){
+		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
 			illegal = false;
 		}
 		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
@@ -417,6 +416,82 @@ public class ASUtils {
 		return new ProtectionInformation(illegal, region, sourceRegion, targetRegion);
 	}
 
+	/**
+	 * Used to determine if something is blocked
+	 * 
+	 * @param player the player, this is the source location
+	 * @param item the item in question
+	 * @param target the target block
+	 * @param list the list to check
+	 * @param permissions the permissions to use
+	 * @return protection information
+	 */
+	public static ProtectionInformation isBlocked(Player player, ItemStack item, Location target, ASMaterialList list, PermissionPackage permissions){
+		if(player == null || list == null || permissions == null){
+			throw new IllegalArgumentException("Null arguments are not allowed");
+		}
+		boolean illegal = false, region = false;
+		AntiShare p = AntiShare.p;
+		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
+		Region targetRegion = p.getRegionManager().getRegion(target);
+		if(list.has(item)){
+			illegal = true;
+		}
+		if(!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())){
+			illegal = false;
+		}
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
+			if(sourceRegion != targetRegion){
+				illegal = true;
+				region = true;
+			}
+		}
+		return new ProtectionInformation(illegal, region, sourceRegion, targetRegion);
+	}
+
+	/**
+	 * Used to determine if something is blocked
+	 * 
+	 * @param player the player, this is the source location
+	 * @param target the target location
+	 * @param list the list to check
+	 * @param object the object to check
+	 * @param permissions the permissions to use
+	 * @return protection information
+	 */
+	public static ProtectionInformation isBlocked(Player player, Location target, ASMaterialList list, Object object, PermissionPackage permissions){
+		if(player == null || list == null || permissions == null){
+			throw new IllegalArgumentException("Null arguments are not allowed");
+		}
+		boolean illegal = false, region = false;
+		AntiShare p = AntiShare.p;
+		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
+		Region targetRegion = p.getRegionManager().getRegion(target);
+		if(object instanceof Material && list.has((Material) object)){
+			illegal = true;
+		}
+		if(!p.isBlocked(player, permissions.allow, permissions.deny, object instanceof Material ? (Material) object : null)){
+			illegal = false;
+		}
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
+			if(sourceRegion != targetRegion){
+				illegal = true;
+				region = true;
+			}
+		}
+		return new ProtectionInformation(illegal, region, sourceRegion, targetRegion);
+	}
+
+	/**
+	 * Used to determine if something is blocked
+	 * 
+	 * @param player the player
+	 * @param target the target location
+	 * @param list the list to check
+	 * @param object the object to check for
+	 * @param permissions the permission package
+	 * @return protection information
+	 */
 	public static ProtectionInformation isBlocked(Player player, Location target, List<EntityType> list, EntityType object, PermissionPackage permissions){
 		if(player == null || list == null || object == null || permissions == null){
 			throw new IllegalArgumentException("Null arguments are not allowed");

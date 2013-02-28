@@ -201,17 +201,17 @@ public class BlockManager {
 	public void addBlock(GameMode type, Block block){
 		switch (type){
 		case CREATIVE:
-			if(!plugin.settings().trackedCreative.contains(block.getType())){
+			if(!plugin.settings().trackedCreative.has(block)){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if(!plugin.settings().trackedSurvival.contains(block.getType())){
+			if(!plugin.settings().trackedSurvival.has(block)){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if(!plugin.settings().trackedAdventure.contains(block.getType())){
+			if(!plugin.settings().trackedAdventure.has(block)){
 				return;
 			}
 			break;
@@ -236,17 +236,17 @@ public class BlockManager {
 		}
 		switch (type){
 		case CREATIVE:
-			if(!plugin.settings().trackedCreative.contains(material)){
+			if(!plugin.settings().trackedCreative.has(material)){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if(!plugin.settings().trackedSurvival.contains(material)){
+			if(!plugin.settings().trackedSurvival.has(material)){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if(!plugin.settings().trackedAdventure.contains(material)){
+			if(!plugin.settings().trackedAdventure.has(material)){
 				return;
 			}
 			break;

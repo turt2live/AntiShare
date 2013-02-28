@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.util.ASMaterialList;
 
 /**
  * AntiShare configuration
@@ -96,7 +96,7 @@ public class ASConfig {
 		}
 	}
 
-	public final List<Material> blockBreak, blockPlace, death, pickup, drop, use, craft, trackedCreative, trackedSurvival, trackedAdventure;
+	public final ASMaterialList blockBreak, blockPlace, death, pickup, drop, use, craft, trackedCreative, trackedSurvival, trackedAdventure;
 	public final List<String> commands;
 	public final List<EntityType> interactMobs, attackMobs, craftedMobs;
 	public final boolean adventureEqCreative, perWorldInventories, updateChecker, magicSpells, logBlockSpam, potions, thrownPotions;
@@ -115,16 +115,16 @@ public class ASConfig {
 		rawConfiguration = config;
 		potions = config.getBoolean("lists.no-potions", p.getConfig().getBoolean("lists.no-potions"));
 		thrownPotions = config.getBoolean("lists.no-thrown-potions", p.getConfig().getBoolean("lists.no-thrown-potions"));
-		blockBreak = stringToMaterialList(config.getList("lists.break", p.getConfig().getList("lists.break")));
-		blockPlace = stringToMaterialList(config.getList("lists.place", p.getConfig().getList("lists.place")));
-		death = stringToMaterialList(config.getList("lists.death", p.getConfig().getList("lists.death")));
-		pickup = stringToMaterialList(config.getList("lists.pickup", p.getConfig().getList("lists.pickup")));
-		drop = stringToMaterialList(config.getList("lists.drop", p.getConfig().getList("lists.drop")));
-		use = stringToMaterialList(config.getList("lists.use", p.getConfig().getList("lists.use")));
-		craft = stringToMaterialList(config.getList("lists.crafting", p.getConfig().getList("lists.crafting")));
-		trackedCreative = stringToMaterialList(config.getList("tracking.creative", p.getConfig().getList("tracking.creative")));
-		trackedSurvival = stringToMaterialList(config.getList("tracking.survival", p.getConfig().getList("tracking.survival")));
-		trackedAdventure = stringToMaterialList(config.getList("tracking.adventure", p.getConfig().getList("tracking.adventure")));
+		blockBreak = new ASMaterialList(config.getList("lists.break", p.getConfig().getList("lists.break")));
+		blockPlace = new ASMaterialList(config.getList("lists.place", p.getConfig().getList("lists.place")));
+		death = new ASMaterialList(config.getList("lists.death", p.getConfig().getList("lists.death")));
+		pickup = new ASMaterialList(config.getList("lists.pickup", p.getConfig().getList("lists.pickup")));
+		drop = new ASMaterialList(config.getList("lists.drop", p.getConfig().getList("lists.drop")));
+		use = new ASMaterialList(config.getList("lists.use", p.getConfig().getList("lists.use")));
+		craft = new ASMaterialList(config.getList("lists.crafting", p.getConfig().getList("lists.crafting")));
+		trackedCreative = new ASMaterialList(config.getList("tracking.creative", p.getConfig().getList("tracking.creative")));
+		trackedSurvival = new ASMaterialList(config.getList("tracking.survival", p.getConfig().getList("tracking.survival")));
+		trackedAdventure = new ASMaterialList(config.getList("tracking.adventure", p.getConfig().getList("tracking.adventure")));
 		commands = toStringList(config.getList("lists.commands", p.getConfig().getList("lists.commands")));
 		interactMobs = stringToEntityList(config.getList("lists.interact-mobs", p.getConfig().getList("lists.interact-mobs")));
 		attackMobs = stringToEntityList(config.getList("lists.attack-mobs", p.getConfig().getList("lists.attack-mobs")));
@@ -222,67 +222,6 @@ public class ASConfig {
 			entities.add(entity);
 		}
 		return Collections.unmodifiableList(entities);
-	}
-
-	private List<Material> stringToMaterialList(List<?> list){
-		List<Material> materials = new ArrayList<Material>();
-		for(Object o : list){
-			if(!(o instanceof String)){
-				continue;
-			}
-			String string = (String) o;
-			string = string.trim();
-			String testString = string.replace(" ", "");
-			if(string.equalsIgnoreCase("all")){
-				materials.clear();
-				for(Material m : Material.values()){
-					materials.add(m);
-				}
-				break;
-			}else if(string.equalsIgnoreCase("none")){
-				materials.clear();
-				break;
-			}else if(testString.equalsIgnoreCase("furnace") || testString.equalsIgnoreCase("burningfurnace")
-					|| testString.equalsIgnoreCase(String.valueOf(Material.FURNACE.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))){
-				materials.add(Material.FURNACE);
-				materials.add(Material.BURNING_FURNACE);
-				continue;
-			}else if(testString.equalsIgnoreCase("sign") || testString.equalsIgnoreCase("wallsign") || testString.equalsIgnoreCase("signpost")
-					|| testString.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
-				materials.add(Material.SIGN);
-				materials.add(Material.WALL_SIGN);
-				materials.add(Material.SIGN_POST);
-				continue;
-			}else if(testString.equalsIgnoreCase("brewingstand") || testString.equalsIgnoreCase("brewingstanditem")
-					|| testString.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))){
-				materials.add(Material.BREWING_STAND);
-				materials.add(Material.BREWING_STAND_ITEM);
-				continue;
-			}else if(testString.equalsIgnoreCase("enderportal") || testString.equalsIgnoreCase("enderportalframe")
-					|| testString.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL_FRAME.getId()))){
-				materials.add(Material.ENDER_PORTAL);
-				materials.add(Material.ENDER_PORTAL_FRAME);
-				continue;
-			}else if(testString.equalsIgnoreCase("skull") || testString.equalsIgnoreCase("skullitem") || testString.equalsIgnoreCase("mobskull")
-					|| testString.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
-				materials.add(Material.SKULL);
-				materials.add(Material.SKULL_ITEM);
-				continue;
-			}
-			Material material = Material.matchMaterial(string);
-			if(material == null){
-				p.getLogger().warning(p.getMessages().getMessage("unknown-material", string));
-				continue;
-			}
-			materials.add(material);
-		}
-		return Collections.unmodifiableList(materials);
 	}
 
 }

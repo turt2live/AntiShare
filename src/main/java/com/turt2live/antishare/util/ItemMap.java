@@ -9,8 +9,11 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Material;
+
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
+import com.turt2live.materials.MaterialAPI;
 
 /**
  * Item map from a CSV file
@@ -32,11 +35,34 @@ public class ItemMap {
 		if(string == null){
 			return null;
 		}
-		return listing.get(string.toLowerCase());
+		string = string.trim().toLowerCase();
+		String[] parts = string.split(":");
+		String customData = null;
+		String name = parts[0];
+		if(parts.length >= 2){
+			customData = parts[1];
+		}
+		ASMaterial asm = listing.get(string);
+		if(asm == null){
+			Material real = Material.matchMaterial(name);
+			if(real != null){
+				asm = new ASMaterial();
+				asm.id = real.getId();
+				short d = -1;
+				if(customData != null && MaterialAPI.hasData(real)){
+					try{
+						d = Short.parseShort(customData);
+					}catch(NumberFormatException e){}
+				}
+				asm.data = d;
+			}
+		}
+		return asm;
 	}
 
 	private static void load() throws IOException{
 		AntiShare p = AntiShare.p;
+		// TODO: Auto update
 		File items = new File(p.getDataFolder(), "items.csv");
 		if(!items.exists()){
 			createFile(items, p);
@@ -60,7 +86,7 @@ public class ItemMap {
 			try{
 				id = Integer.parseInt(parts[1].trim());
 				String d = parts[2].trim();
-				if(d.equalsIgnoreCase("*")){
+				if(d.equalsIgnoreCase("*") || !MaterialAPI.hasData(id)){
 					data = -1;
 				}else{
 					data = Short.parseShort(d);

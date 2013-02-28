@@ -62,19 +62,19 @@ class ChunkWrapper {
 	public void addBlock(GameMode type, Block block){
 		switch (type){
 		case CREATIVE:
-			if(!plugin.settings().trackedCreative.contains(block.getType())){
+			if(!plugin.settings().trackedCreative.has(block)){
 				break;
 			}
 			creativeBlocks.add(manager.blockToString(block));
 			break;
 		case SURVIVAL:
-			if(!plugin.settings().trackedSurvival.contains(block.getType())){
+			if(!plugin.settings().trackedSurvival.has(block)){
 				break;
 			}
 			survivalBlocks.add(manager.blockToString(block));
 			break;
 		case ADVENTURE:
-			if(!plugin.settings().trackedAdventure.contains(block.getType())){
+			if(!plugin.settings().trackedAdventure.has(block)){
 				break;
 			}
 			adventureBlocks.add(manager.blockToString(block));
@@ -97,19 +97,19 @@ class ChunkWrapper {
 		}
 		switch (type){
 		case CREATIVE:
-			if(!plugin.settings().trackedCreative.contains(material)){
+			if(!plugin.settings().trackedCreative.has(material)){
 				break;
 			}
 			creativeEntities.add(manager.entityToString(entity));
 			break;
 		case SURVIVAL:
-			if(!plugin.settings().trackedSurvival.contains(material)){
+			if(!plugin.settings().trackedSurvival.has(material)){
 				break;
 			}
 			survivalEntities.add(manager.entityToString(entity));
 			break;
 		case ADVENTURE:
-			if(!plugin.settings().trackedAdventure.contains(material)){
+			if(!plugin.settings().trackedAdventure.has(material)){
 				break;
 			}
 			adventureEntities.add(manager.entityToString(entity));
@@ -133,19 +133,19 @@ class ChunkWrapper {
 		}
 		switch (type){
 		case CREATIVE:
-			if(!plugin.settings().trackedCreative.contains(material)){
+			if(!plugin.settings().trackedCreative.has(material)){
 				break;
 			}
 			creativeEntities.add(manager.entityToString(location, entity));
 			break;
 		case SURVIVAL:
-			if(!plugin.settings().trackedSurvival.contains(material)){
+			if(!plugin.settings().trackedSurvival.has(material)){
 				break;
 			}
 			survivalEntities.add(manager.entityToString(location, entity));
 			break;
 		case ADVENTURE:
-			if(!plugin.settings().trackedAdventure.contains(material)){
+			if(!plugin.settings().trackedAdventure.has(material)){
 				break;
 			}
 			adventureEntities.add(manager.entityToString(location, entity));
