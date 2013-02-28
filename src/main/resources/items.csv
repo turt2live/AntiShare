@@ -1,8 +1,13 @@
-#version: AntiShare
-#If you change this file, it may not be updated perfectly for the next release.
-#Original File Source: http://pastebin.com/k3CUCadR    Thanks Necrodoom!
-#This file supports * as a metadata. A * means "any".
-#For items like stone, use a 0 for metadata or *.
+# version: AntiShare
+# 
+# If you change this file, it may not be updated perfectly for the next release.
+# 
+# Original File Source: http://pastebin.com/k3CUCadR    Thanks Necrodoom!
+# Edited for use by AntiShare with permission
+# 
+# This file supports * as a metadata. A * means "any".
+# For items like stone, use a 0 for metadata or *.
+# 
 #item,id,metadata
 stone,1,0
 sstone,1,0
