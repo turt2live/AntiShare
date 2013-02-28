@@ -18,6 +18,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.config.ASConfig;
+import com.turt2live.antishare.config.ConfigConvert;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.CuboidManager;
 import com.turt2live.antishare.manager.HookManager;
@@ -141,6 +142,9 @@ public class AntiShare extends PluginWrapper {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+
+		// Do configuration conversion before cleaning it up
+		ConfigConvert.doConvert();
 
 		// Check configuration
 		getConfig().loadDefaults(getResource("config.yml"));
