@@ -100,6 +100,7 @@ cannot-have-cuboid: '{DARK_RED}You do not have permission to make cuboids'
 page-not-found: '{RED}Page not found {0}. Maximum page is {1}'
 no-regions: 'No regions to list'
 extra-help: 'For extended help type: {0}'
+configuration-update: 'Your configuration has been updated. Please review the update to ensure your configuration is still how you desire'
 key: 'Key'
 value: 'Value'
 tool-meta:

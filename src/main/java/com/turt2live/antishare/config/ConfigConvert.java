@@ -23,7 +23,7 @@ public class ConfigConvert {
 		EnhancedConfiguration c = p.getConfig();
 
 		if(c.getString("other.version_string") != null){
-			//return; // Already converted!
+			return; // Already converted!
 		}
 
 		// Load block lists
@@ -102,7 +102,9 @@ public class ConfigConvert {
 
 		c.save();
 
-		// TODO: Display 'edited' message
+		p.getLogger().warning("=========================");
+		p.getLogger().warning(p.getMessages().getMessage("configuration-update"));
+		p.getLogger().warning("=========================");
 	}
 
 	private static List<String> merge(String s1, String s2){

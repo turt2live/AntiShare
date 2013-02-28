@@ -143,6 +143,9 @@ public class AntiShare extends PluginWrapper {
 			e.printStackTrace();
 		}
 
+		// Start messages
+		messages = new Messages();
+
 		// Do configuration conversion before cleaning it up
 		ConfigConvert.doConvert();
 
@@ -172,9 +175,6 @@ public class AntiShare extends PluginWrapper {
 			getConfig().set("other.version_string", val);
 			saveConfig();
 		}
-
-		// Start messages
-		messages = new Messages();
 
 		// Start configuration
 		config = new ASConfig(getConfig());
