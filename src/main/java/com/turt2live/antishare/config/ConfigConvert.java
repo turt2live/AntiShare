@@ -108,6 +108,9 @@ public class ConfigConvert {
 	}
 
 	private static List<String> merge(String s1, String s2){
+		if(s1 == null || s2 == null){
+			return null;
+		}
 		List<String> l = new ArrayList<String>();
 		l.addAll(convertList(s1));
 		l.addAll(convertList(s2));
@@ -116,6 +119,9 @@ public class ConfigConvert {
 
 	private static List<String> convertList(String raw){
 		List<String> l = new ArrayList<String>();
+		if(raw == null){
+			return null;
+		}
 		String[] parts = raw.split(",");
 		for(String s : parts){
 			s = s.trim();
