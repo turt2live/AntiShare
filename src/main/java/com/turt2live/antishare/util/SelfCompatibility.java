@@ -155,8 +155,6 @@ public class SelfCompatibility {
 			return;
 		}
 		AntiShare p = AntiShare.p;
-		File backupFolder = new File(p.getDataFolder(), "5_3_0_Backup");
-		backupFolder.mkdirs();
 
 		File[] files = new File[] {
 				new File(p.getDataFolder(), "features.yml"),
@@ -167,8 +165,15 @@ public class SelfCompatibility {
 				new File(p.getDataFolder(), "fines.yml")
 		};
 
+		File backupFolder = new File(p.getDataFolder(), "5_3_0_Backup");
+
 		for(File f : files){
-			f.renameTo(new File(backupFolder, f.getName()));
+			if(f.exists()){
+				if(!backupFolder.exists()){
+					backupFolder.mkdirs();
+				}
+				f.renameTo(new File(backupFolder, f.getName()));
+			}
 		}
 
 		noLongerNeedsUpdate(CompatibilityType.FILES_AND_FOLDERS_540);
