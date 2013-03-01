@@ -197,9 +197,9 @@ public class AntiShare extends PluginWrapper {
 		SelfCompatibility.cleanup520Inventories();
 		SelfCompatibility.cleanup530Inventories();
 		SelfCompatibility.cleanupOldInventories();
-		SelfCompatibility.cleanupYAML();
 		SelfCompatibility.cleanup520blocks();
 		SelfCompatibility.cleanup530FileStructure();
+		SelfCompatibility.cleanupYAML();
 
 		// Start managers
 		hooks = new HookManager();

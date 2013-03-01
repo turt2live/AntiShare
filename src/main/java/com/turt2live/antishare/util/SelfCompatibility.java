@@ -163,7 +163,8 @@ public class SelfCompatibility {
 				new File(p.getDataFolder(), "items.yml"),
 				new File(p.getDataFolder(), "messages.yml"),
 				new File(p.getDataFolder(), "notifications.yml"),
-				new File(p.getDataFolder(), "signs.yml")
+				new File(p.getDataFolder(), "signs.yml"),
+				new File(p.getDataFolder(), "fines.yml")
 		};
 
 		for(File f : files){
@@ -545,7 +546,7 @@ public class SelfCompatibility {
 			local.loadDefaults(plugin.getResource("locale.yml"));
 			break;
 		}
-		local.save();
+		local.saveDefaults();
 		EnhancedConfiguration actual = new EnhancedConfiguration(file, plugin);
 		actual.load();
 		for(String key : actual.getKeys(true)){
