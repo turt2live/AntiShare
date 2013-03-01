@@ -52,7 +52,8 @@ public class SelfCompatibility {
 		@Deprecated
 		CONFIGURATION_540_BETA(45),
 		CONFIGURATION_540(50),
-		ITEM_MAP_540(55);
+		ITEM_MAP_540(55),
+		FILES_AND_FOLDERS_540(60);
 
 		public final int bytePosition;
 
@@ -144,6 +145,32 @@ public class SelfCompatibility {
 		items.delete();
 		noLongerNeedsUpdate(CompatibilityType.ITEM_MAP_540);
 		return r;
+	}
+
+	/**
+	 * Cleans the 5.3.0 file structure
+	 */
+	public static void cleanup530FileStructure(){
+		if(!needsUpdate(CompatibilityType.FILES_AND_FOLDERS_540)){
+			return;
+		}
+		AntiShare p = AntiShare.p;
+		File backupFolder = new File(p.getDataFolder(), "5_3_0_Backup");
+		backupFolder.mkdirs();
+
+		File[] files = new File[] {
+				new File(p.getDataFolder(), "features.yml"),
+				new File(p.getDataFolder(), "items.yml"),
+				new File(p.getDataFolder(), "messages.yml"),
+				new File(p.getDataFolder(), "notifications.yml"),
+				new File(p.getDataFolder(), "signs.yml")
+		};
+
+		for(File f : files){
+			f.renameTo(new File(backupFolder, f.getName()));
+		}
+
+		noLongerNeedsUpdate(CompatibilityType.FILES_AND_FOLDERS_540);
 	}
 
 	/**
