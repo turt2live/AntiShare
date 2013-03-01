@@ -11,6 +11,10 @@
 package com.turt2live.antishare.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -514,4 +518,33 @@ public class ASUtils {
 		}
 		return new ProtectionInformation(illegal, region, sourceRegion, targetRegion);
 	}
+
+	/**
+	 * Copies a file
+	 * 
+	 * @param source source file
+	 * @param destination destination file
+	 * @throws IOException thrown if something goes wrong
+	 */
+	public static void copyFile(File source, File destination) throws IOException{
+		if(source == null || destination == null){
+			throw new IllegalArgumentException("Null files are not allowed");
+		}
+		if(!source.exists()){
+			throw new IllegalArgumentException("Source file not found");
+		}
+		if(!destination.exists()){
+			destination.createNewFile();
+		}
+		InputStream input = new FileInputStream(source);
+		FileOutputStream out = new FileOutputStream(destination);
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = input.read(buf)) > 0){
+			out.write(buf, 0, len);
+		}
+		out.close();
+		input.close();
+	}
+
 }

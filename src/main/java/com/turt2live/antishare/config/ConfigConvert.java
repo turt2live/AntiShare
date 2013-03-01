@@ -1,10 +1,13 @@
 package com.turt2live.antishare.config;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.util.ASUtils;
 
 /**
  * Converts a 5.3.0 configuration to a 5.4.0 configuration
@@ -19,6 +22,19 @@ public class ConfigConvert {
 	 */
 	public static void doConvert(){
 		AntiShare p = AntiShare.p;
+
+		File config = new File(p.getDataFolder(), "config.yml");
+
+		if(!config.exists()){
+			return; // Fresh install
+		}
+
+		try{
+			ASUtils.copyFile(config, new File(p.getDataFolder(), "config-5.3.0-backup.yml"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+
 		// Note: AntiShare#onEnable() will automatically clean up the mess left here
 		EnhancedConfiguration c = p.getConfig();
 
