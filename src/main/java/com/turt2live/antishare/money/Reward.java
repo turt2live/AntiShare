@@ -22,7 +22,6 @@ import com.turt2live.antishare.util.PermissionNodes;
  * 
  * @author turt2live
  */
-//TODO: Schedule for rewrite
 public class Reward extends Tender {
 
 	/**

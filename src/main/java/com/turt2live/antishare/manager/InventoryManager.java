@@ -36,7 +36,6 @@ import com.turt2live.antishare.util.PermissionNodes;
  * 
  * @author turt2live
  */
-//TODO: Schedule for rewrite
 public class InventoryManager {
 
 	private final ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();

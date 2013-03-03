@@ -15,7 +15,6 @@ package com.turt2live.antishare.inventory;
  * 
  * @author turt2live
  */
-//TODO: Schedule for rewrite
 public class TemporaryASInventory {
 
 	private ASInventory lastInventory;

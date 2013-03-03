@@ -22,7 +22,6 @@ import com.turt2live.antishare.util.Action;
  * 
  * @author turt2live
  */
-//TODO: Schedule for rewrite
 public abstract class Tender {
 
 	private double amount;

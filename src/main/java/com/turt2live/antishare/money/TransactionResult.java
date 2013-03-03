@@ -17,7 +17,6 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-//TODO: Schedule for rewrite
 public class TransactionResult {
 
 	public static final TransactionResult NO_VAULT = new TransactionResult(AntiShare.p.getMessages().getMessage("vault-not-enabled"), false);

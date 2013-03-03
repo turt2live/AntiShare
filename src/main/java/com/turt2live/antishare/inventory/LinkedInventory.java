@@ -16,7 +16,6 @@ import org.bukkit.World;
 /**
  * Linked Inventory
  */
-//TODO: Schedule for rewrite
 public class LinkedInventory {
 
 	private String[] worlds;
