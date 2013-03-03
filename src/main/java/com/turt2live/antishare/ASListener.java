@@ -629,29 +629,11 @@ public class ASListener implements Listener {
 	public void onEat(PlayerItemConsumeEvent event){
 		Player player = event.getPlayer();
 		boolean illegal = false;
-		boolean isPotion = false, isThrownPotion = false;
 		ASConfig c = configFor(player.getLocation());
 		ItemStack hand = event.getItem();
 
-		if(hand.getType() == Material.POTION){
-			isPotion = true;
-			if(hand.getDurability() > 32000){
-				isThrownPotion = true;
-			}
-		}
-
-		// TODO: Logic split
-		if(c.eat.has(hand)){
-			illegal = true;
-		}
-		if(isThrownPotion && c.thrownPotions){
-			illegal = true;
-		}else if(isPotion && c.potions){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_EAT, PermissionNodes.DENY_EAT, hand.getType())){
-			illegal = false;
-		}
+		ProtectionInformation info = ASUtils.isBlocked(player, hand, c.eat, PermissionNodes.PACK_EAT, c);
+		illegal = info.illegal;
 
 		if(illegal){
 			event.setCancelled(true);

@@ -37,6 +37,7 @@ import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.config.ASConfig;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.MobPattern.MobPatternType;
 import com.turt2live.antishare.util.PermissionNodes.PermissionPackage;
@@ -389,6 +390,42 @@ public class ASUtils {
 	}
 
 	/**
+	 * Used to determine if something is blocked. This method will not check regions.
+	 * 
+	 * @param player the player, this is the source location
+	 * @param target the target item stack
+	 * @param list the list to check
+	 * @param permissions the permissions to use
+	 * @param configuration the configuration to use
+	 * @return protection information
+	 */
+	public static ProtectionInformation isBlocked(Player player, ItemStack target, ASMaterialList list, PermissionPackage permissions, ASConfig configuration){
+		if(player == null || list == null || permissions == null){
+			throw new IllegalArgumentException("Null arguments are not allowed");
+		}
+		boolean illegal = false, isPotion = false, isThrownPotion = false;
+		if(target.getType() == Material.POTION){
+			isPotion = true;
+			if(target.getDurability() > 32000){
+				isThrownPotion = true;
+			}
+		}
+		AntiShare p = AntiShare.p;
+		if(list.has(target)){
+			illegal = true;
+		}
+		if(isThrownPotion && configuration.thrownPotions){
+			illegal = true;
+		}else if(isPotion && configuration.potions){
+			illegal = true;
+		}
+		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
+			illegal = false;
+		}
+		return new ProtectionInformation(illegal, false, null, null);
+	}
+
+	/**
 	 * Used to determine if something is blocked
 	 * 
 	 * @param player the player, this is the source location
@@ -441,6 +478,7 @@ public class ASUtils {
 		if(list.has(item)){
 			illegal = true;
 		}
+
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())){
 			illegal = false;
 		}
