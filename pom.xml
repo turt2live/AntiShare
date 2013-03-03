@@ -9,7 +9,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- Dependency Versions -->
-    <bukkit.version>1.4.7-R1.0</bukkit.version>
+    <bukkit.version>1.4.7-R1.1-SNAPSHOT</bukkit.version>
     <vault.version>1.2.24-SNAPSHOT</vault.version>
     <materialapi.version>0.0.1-SNAPSHOT</materialapi.version>
     <metricsextension.version>0.0.2-SNAPSHOT</metricsextension.version>
