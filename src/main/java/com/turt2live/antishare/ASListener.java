@@ -566,7 +566,6 @@ public class ASListener implements Listener {
 					if(d2 < 1.65 && d2 > 1.6 || d2 > 0.5 && d2 < 0.51){
 						plugin.getHookManager().sendEntityBreak(player.getName(), e.getLocation(), Material.ITEM_FRAME, BlockLogger.DEFAULT_DATA);
 						e.remove();
-						// TODO: Test if this is still needed, or can be removed
 					}
 				}
 			}
