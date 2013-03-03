@@ -62,6 +62,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -624,57 +625,54 @@ public class ASListener implements Listener {
 		plugin.getMessages().notifyParties(player, action, illegal, block.getType(), extra);
 	}
 
-	@EventHandler (priority = EventPriority.LOWEST)
-	public void onInteractPotionHand(PlayerInteractEvent event){
-		if(event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR){
-			Player player = event.getPlayer();
-			boolean illegal = false;
-			boolean isPotion = false, isThrownPotion = false;
-			ASConfig c = configFor(player.getLocation());
-			ItemStack hand = player.getItemInHand();
+	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEat(PlayerItemConsumeEvent event){
+		Player player = event.getPlayer();
+		boolean illegal = false;
+		boolean isPotion = false, isThrownPotion = false;
+		ASConfig c = configFor(player.getLocation());
+		ItemStack hand = event.getItem();
 
-			if(hand == null){
-				hand = new ItemStack(Material.AIR);
-			}
+		// TODO: Add eat list
 
-			if(hand.getType() == Material.POTION){
-				isPotion = true;
-				if(hand.getDurability() > 32000){
-					isThrownPotion = true;
-				}
+		if(hand.getType() == Material.POTION){
+			isPotion = true;
+			if(hand.getDurability() > 32000){
+				isThrownPotion = true;
 			}
+		}
 
-			// TODO: Logic split
-			if(c.use.has(hand)){
-				illegal = true;
-			}
-			if(isThrownPotion && c.thrownPotions){
-				illegal = true;
-			}else if(isPotion && c.potions){
-				illegal = true;
-			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
-				illegal = false;
-			}
+		// TODO: Logic split
+		if(c.use.has(hand)){
+			illegal = true;
+		}
+		if(isThrownPotion && c.thrownPotions){
+			illegal = true;
+		}else if(isPotion && c.potions){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
+			illegal = false;
+		}
 
-			if(illegal){
-				event.setCancelled(true);
-				if(hasMobCatcher){
-					ItemStack trueHand = player.getItemInHand();
-					if(trueHand != null){
-						if(trueHand.getType() == Material.EGG || trueHand.getType() == Material.MONSTER_EGG){
-							trueHand.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
-						}
+		if(illegal){
+			event.setCancelled(true);
+			if(hasMobCatcher){
+				ItemStack trueHand = player.getItemInHand();
+				if(trueHand != null){
+					if(trueHand.getType() == Material.EGG || trueHand.getType() == Material.MONSTER_EGG){
+						trueHand.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
 					}
 				}
 			}
-
-			Action eventAction = Action.USE_SOMETHING;
-			String[] extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
-			plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType(), extra);
 		}
+
+		Action eventAction = Action.USE_SOMETHING;
+		String[] extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
+		plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType(), extra);
 	}
 
+	// TODO: Rework logic
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent event){
 		org.bukkit.event.block.Action action = event.getAction();
