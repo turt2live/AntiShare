@@ -52,6 +52,9 @@ lists:
     - water bucket
     - fireball
     - item frame
+    # Items creative players cannot eat (potions, food, etc)
+    eat:
+    - all
     # Commands creative players cannot use. These do NOT start with /
     commands:
     - command1

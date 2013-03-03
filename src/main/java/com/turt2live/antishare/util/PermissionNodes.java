@@ -47,6 +47,7 @@ public class PermissionNodes {
 	public static final String ALLOW_COMBAT_PLAYERS = "AntiShare.allow.hit_players";
 	public static final String ALLOW_COMBAT_MOBS = "AntiShare.allow.hit_mobs";
 	public static final String ALLOW_MOB_CREATION = "AntiShare.allow.create";
+	public static final String ALLOW_EAT = "AntiShare.allow.eat";
 
 	// Deny Nodes
 	public static final String DENY_BLOCK_PLACE = "AntiShare.deny.block_place";
@@ -59,6 +60,7 @@ public class PermissionNodes {
 	public static final String DENY_COMBAT_PLAYERS = "AntiShare.deny.hit_players";
 	public static final String DENY_COMBAT_MOBS = "AntiShare.deny.hit_mobs";
 	public static final String DENY_MOB_CREATION = "AntiShare.deny.create";
+	public static final String DENY_EAT = "AntiShare.deny.eat";
 
 	// Admin Nodes
 	public static final String GET_NOTIFICATIONS = "AntiShare.getNotifications";
@@ -121,5 +123,6 @@ public class PermissionNodes {
 	public static final PermissionPackage PACK_COMBAT_PLAYERS = new PermissionPackage(ALLOW_COMBAT_PLAYERS, DENY_COMBAT_PLAYERS, REGION_ATTACK_PLAYERS);
 	public static final PermissionPackage PACK_COMBAT_MOBS = new PermissionPackage(ALLOW_COMBAT_MOBS, DENY_COMBAT_MOBS, REGION_ATTACK_MOBS);
 	public static final PermissionPackage PACK_MOB_MAKE = new PermissionPackage(ALLOW_MOB_CREATION, DENY_MOB_CREATION, null);
+	public static final PermissionPackage PACK_EAT = new PermissionPackage(ALLOW_EAT, DENY_EAT, null);
 
 }

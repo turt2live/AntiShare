@@ -148,6 +148,7 @@ permissions:
             AntiShare.regions.delete: true
             AntiShare.regions.edit: true
             AntiShare.regions.roam: true
+            AntiShare.regions.eat: true
             AntiShare.regions.throw_item: true
             AntiShare.regions.pickup_item: true
             AntiShare.regions.place: true
@@ -206,6 +207,10 @@ permissions:
             AntiShare.allow.hit_mobs: true
             AntiShare.allow.death: true
             AntiShare.allow.create: true
+            AntiShare.allow.eat: true
+    AntiShare.allow.eat:
+        description: Allows food
+        default: op
     AntiShare.allow.create:
         description: Allows mob creation
         default: op
@@ -250,6 +255,10 @@ permissions:
             AntiShare.deny.hit_mobs: true
             AntiShare.deny.death: true
             AntiShare.deny.create: true
+            AntiShare.deny.eat: true
+    AntiShare.deny.eat:
+        description: Denies food
+        default: op
     AntiShare.deny.create:
         description: Denies mob creation
         default: op

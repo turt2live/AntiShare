@@ -633,8 +633,6 @@ public class ASListener implements Listener {
 		ASConfig c = configFor(player.getLocation());
 		ItemStack hand = event.getItem();
 
-		// TODO: Add eat list
-
 		if(hand.getType() == Material.POTION){
 			isPotion = true;
 			if(hand.getDurability() > 32000){
@@ -643,7 +641,7 @@ public class ASListener implements Listener {
 		}
 
 		// TODO: Logic split
-		if(c.use.has(hand)){
+		if(c.eat.has(hand)){
 			illegal = true;
 		}
 		if(isThrownPotion && c.thrownPotions){
@@ -651,25 +649,16 @@ public class ASListener implements Listener {
 		}else if(isPotion && c.potions){
 			illegal = true;
 		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_EAT, PermissionNodes.DENY_EAT, hand.getType())){
 			illegal = false;
 		}
 
 		if(illegal){
 			event.setCancelled(true);
-			if(hasMobCatcher){
-				ItemStack trueHand = player.getItemInHand();
-				if(trueHand != null){
-					if(trueHand.getType() == Material.EGG || trueHand.getType() == Material.MONSTER_EGG){
-						trueHand.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
-					}
-				}
-			}
 		}
 
-		Action eventAction = Action.USE_SOMETHING;
-		String[] extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
-		plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType(), extra);
+		Action eventAction = Action.EAT_SOMETHING;
+		plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType());
 	}
 
 	// TODO: Rework logic
