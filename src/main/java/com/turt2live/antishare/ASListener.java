@@ -874,7 +874,6 @@ public class ASListener implements Listener {
 			}
 		}
 
-		// TODO: Logic split
 		String regionPermission = PermissionNodes.REGION_USE;
 		if(rightClicked == Material.ITEM_FRAME && !c.naturalSettings.allowMismatchedGM){
 			isItemFrame = true;
@@ -1106,7 +1105,6 @@ public class ASListener implements Listener {
 			return;
 		}
 
-		// TODO: Logic split
 		StringBuilder current = new StringBuilder();
 		current.append(arguments[0]).append(" ");
 		for(int i = 0; i < arguments.length; i++){
@@ -1316,7 +1314,6 @@ public class ASListener implements Listener {
 			Player player = (Player) event.getWhoClicked();
 			ASConfig c = configFor(player.getLocation());
 			if(GamemodeAbstraction.isCreative(player.getGameMode())){
-				// TODO: Split logic
 				if(c.craft.has(event.getRecipe().getResult())){
 					illegal = true;
 				}
