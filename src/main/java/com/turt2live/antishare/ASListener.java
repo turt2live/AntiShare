@@ -872,6 +872,8 @@ public class ASListener implements Listener {
 			rightClicked = Material.PAINTING;
 		}else if(entity instanceof ItemFrame){
 			rightClicked = Material.ITEM_FRAME;
+		}else if(entity instanceof Player){
+			return; // We don't need to protect against right clicking players
 		}
 
 		if(plugin.isToolEnabled(player.getName()) && player.hasPermission(PermissionNodes.TOOL_USE) && rightClicked != Material.AIR){
