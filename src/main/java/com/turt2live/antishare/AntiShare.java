@@ -34,8 +34,8 @@ import com.turt2live.antishare.util.PermissionNodes;
 import com.turt2live.antishare.util.SelfCompatibility;
 import com.turt2live.antishare.util.UpdateChecker;
 import com.turt2live.metrics.EMetrics;
+import com.turt2live.metrics.graph.PieGraph;
 import com.turt2live.metrics.tracker.FixedTracker;
-import com.turt2live.metrics.tracker.PieTracker;
 
 /**
  * AntiShare plugin class
@@ -62,8 +62,8 @@ public class AntiShare extends PluginWrapper {
 	public static final Material ANTISHARE_SET_TOOL = Material.BLAZE_POWDER;
 
 	// Trackers
-	public static final PieTracker<Action> LEGAL_ACTIONS = new PieTracker<Action>("5.4.0 Legal Actions", Action.values());
-	public static final PieTracker<Action> ILLEGAL_ACTIONS = new PieTracker<Action>("5.4.0 Illegal Actions", Action.values());
+	public static final PieGraph<Action> LEGAL_ACTIONS = new PieGraph<Action>("5.4.0 Legal Actions");
+	public static final PieGraph<Action> ILLEGAL_ACTIONS = new PieGraph<Action>("5.4.0 Illegal Actions");
 
 	// Folder locations
 	public File generalDataDirectory;
@@ -94,6 +94,12 @@ public class AntiShare extends PluginWrapper {
 	@Override
 	public void onEnable(){
 		p = this;
+
+		// Setup graphs
+		for(Action action : Action.values()){
+			ILLEGAL_ACTIONS.addSlice(action, action.name());
+			LEGAL_ACTIONS.addSlice(action, action.name());
+		}
 
 		// Create folder structure
 		generalDataDirectory = new File(getDataFolder(), "data");
@@ -240,8 +246,8 @@ public class AntiShare extends PluginWrapper {
 		// Start metrics
 		try{
 			metrics = new EMetrics(this);
-			metrics.addTracker(LEGAL_ACTIONS);
-			metrics.addTracker(ILLEGAL_ACTIONS);
+			metrics.addGraph(LEGAL_ACTIONS);
+			metrics.addGraph(ILLEGAL_ACTIONS);
 			Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
 			metrics.addTracker(new FixedTracker("mcMMO Servers", mcmmo != null ? "Found" : "Not Found"));
 			metrics.startMetrics();
