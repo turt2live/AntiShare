@@ -41,12 +41,12 @@ public class ASConfig {
 
 	public static class NaturalSettings {
 		public final boolean allowMismatchedGM;
-		public final boolean breakAsPiston, breakAsAttached, breakAsWater;
+		public final boolean breakAsPiston, breakAsAttached, breakAsWater, breakAsBomb;
 		public final boolean emptyInventories;
 		public final boolean removeAttached;
 		public final boolean breakSand;
 
-		NaturalSettings(boolean mismatch, boolean piston, boolean attached, boolean water, boolean empty, boolean removeAttached, boolean breakSand){
+		NaturalSettings(boolean mismatch, boolean piston, boolean attached, boolean water, boolean bombs, boolean empty, boolean removeAttached, boolean breakSand){
 			this.allowMismatchedGM = mismatch;
 			this.breakAsPiston = piston;
 			this.breakAsAttached = attached;
@@ -54,6 +54,7 @@ public class ASConfig {
 			this.emptyInventories = empty;
 			this.removeAttached = removeAttached;
 			this.breakSand = breakSand;
+			this.breakAsBomb = bombs;
 		}
 	}
 
@@ -145,6 +146,7 @@ public class ASConfig {
 				config.getBoolean("settings.natural-protection.break-as-gamemode.pistons", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.pistons")),
 				config.getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks")),
 				config.getBoolean("settings.natural-protection.break-as-gamemode.water", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.water")),
+				config.getBoolean("settings.natural-protection.break-as-gamemode.blown-up", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.blown-up")),
 				config.getBoolean("settings.natural-protection.empty-inventories", p.getConfig().getBoolean("settings.natural-protection.empty-inventories")),
 				config.getBoolean("settings.natural-protection.remove-attached-blocks", p.getConfig().getBoolean("settings.natural-protection.remove-attached-blocks")),
 				config.getBoolean("settings.natural-protection.break-as-gamemode.falling-blocks", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.falling-blocks")));

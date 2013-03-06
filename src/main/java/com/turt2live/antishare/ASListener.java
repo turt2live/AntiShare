@@ -2,6 +2,7 @@ package com.turt2live.antishare;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -409,6 +411,27 @@ public class ASListener implements Listener {
 				if(type != null){
 					plugin.getBlockManager().addBlock(type, block);
 				}
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onExplode(EntityExplodeEvent event){
+		ASConfig c = configFor(event.getLocation());
+		List<Block> list = new ArrayList<Block>();
+		list.addAll(event.blockList());
+		Iterator<Block> iterate = list.iterator();
+		while (iterate.hasNext()){
+			Block block = iterate.next();
+			GameMode type = plugin.getBlockManager().getType(block);
+			if(GamemodeAbstraction.isCreative(type)){
+				if(c.naturalSettings.breakAsBomb){
+					block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+					plugin.getHookManager().sendBlockBreak("EXPLOSION", block.getLocation(), block.getType(), block.getData());
+					plugin.getBlockManager().removeBlock(block);
+					block.setType(Material.AIR);
+				}
+				event.blockList().remove(block);
 			}
 		}
 	}

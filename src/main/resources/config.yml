@@ -110,6 +110,7 @@ settings:
             attached-blocks: true
             water: true
             falling-blocks: true
+            blown-up: true
     # Stuff to do on GameMode change
     gamemode-change:
         change-level: true
