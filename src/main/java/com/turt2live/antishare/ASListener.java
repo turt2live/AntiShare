@@ -415,8 +415,8 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onItemSpawn(ItemSpawnEvent event){
-		Block block = event.getLocation().getBlock();
-		if(block.getType() != Material.AIR && block.getType() != event.getEntity().getItemStack().getType()){
+		final Block block = event.getLocation().getBlock();
+		if(block.getType() != Material.AIR && !MaterialAPI.isSimilar(block.getType(), event.getEntity().getItemStack().getType())){
 			return;
 		}
 		ASConfig c = configFor(event.getLocation());
@@ -425,10 +425,15 @@ public class ASListener implements Listener {
 			if(GamemodeAbstraction.isCreative(type)){
 				event.setCancelled(true);
 			}
-			block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
-			plugin.getHookManager().sendBlockBreak(null, block.getLocation(), block.getType(), block.getData());
-			plugin.getBlockManager().removeBlock(block);
 		}
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+			@Override
+			public void run(){
+				block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+				plugin.getHookManager().sendBlockBreak(null, block.getLocation(), block.getType(), block.getData());
+				plugin.getBlockManager().removeBlock(block);
+			}
+		}, 2);
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
