@@ -32,7 +32,6 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-// TODO: Schedule for rewrite
 public class ASInventory implements Cloneable {
 
 	/**
