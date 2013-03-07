@@ -17,7 +17,8 @@ POM Information:
 <dependency>
     <groupId>com.turt2live.antishare</groupId>
     <artifactId>AntiShare</artifactId>
-    <version>LATEST</version>
+    <!-- Please tell turt2live if this is out of date -->
+    <version>5.4.0</version>
     <type>jar</type>
     <scope>compile</scope>
 </dependency>
@@ -37,7 +38,7 @@ AntiShare requires Maven 3 to compile.
 Other Information
 -----------------
 
-Released under GNU GPL v3.0
+Released under GNU LGPL v2.1
 
 Thanks feildmaster for your Enhanced Configuration! 
 [Link to his library](https://github.com/feildmaster/Configuration-Library)
