@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2012 turt2live (Travis Ralston).
+ * Copyright (c) 2013 Travis Ralston.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
+ * are made available under the terms of the GNU Lesser Public License v2.1
  * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- * turt2live (Travis Ralston) - initial API and implementation
+ *     turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare;
 
@@ -31,8 +31,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;

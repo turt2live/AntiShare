@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2012 turt2live (Travis Ralston).
+ * Copyright (c) 2013 Travis Ralston.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Public License v3.0
+ * are made available under the terms of the GNU Lesser Public License v2.1
  * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/gpl.html
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- * turt2live (Travis Ralston) - initial API and implementation
+ *     turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
@@ -417,6 +417,31 @@ public class ASUtils {
 		if(isThrownPotion && configuration.thrownPotions){
 			illegal = true;
 		}else if(isPotion && configuration.potions){
+			illegal = true;
+		}
+		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
+			illegal = false;
+		}
+		return new ProtectionInformation(illegal, false, null, null);
+	}
+
+	/**
+	 * Used to determine if something is blocked. This method will not check regions.
+	 * 
+	 * @param player the player, this is the source location
+	 * @param target the target item stack
+	 * @param list the list to check
+	 * @param permissions the permissions to use
+	 * @param configuration the configuration to use
+	 * @return protection information
+	 */
+	public static ProtectionInformation isBlocked(Player player, Block target, ASMaterialList list, PermissionPackage permissions, ASConfig configuration){
+		if(player == null || list == null || permissions == null){
+			throw new IllegalArgumentException("Null arguments are not allowed");
+		}
+		boolean illegal = false;
+		AntiShare p = AntiShare.p;
+		if(list.has(target)){
 			illegal = true;
 		}
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
