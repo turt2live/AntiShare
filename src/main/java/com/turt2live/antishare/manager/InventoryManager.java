@@ -24,9 +24,9 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LinkedInventory;
 import com.turt2live.antishare.inventory.TemporaryASInventory;
-import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.PermissionNodes;
@@ -641,12 +641,12 @@ public class InventoryManager {
 		enderAdventureInventory = getEnderAdventureInventory(player, world);
 		for(World w : Bukkit.getWorlds()){
 			String p = player.getName() + "." + w.getName();
-			creative.put(p, creativeInventory);
-			survival.put(p, survivalInventory);
-			adventure.put(p, adventureInventory);
-			enderCreative.put(p, enderCreativeInventory);
-			enderSurvival.put(p, enderSurvivalInventory);
-			enderAdventure.put(p, enderAdventureInventory);
+			creative.put(p, creativeInventory.clone());
+			survival.put(p, survivalInventory.clone());
+			adventure.put(p, adventureInventory.clone());
+			enderCreative.put(p, enderCreativeInventory.clone());
+			enderSurvival.put(p, enderSurvivalInventory.clone());
+			enderAdventure.put(p, enderAdventureInventory.clone());
 		}
 	}
 
