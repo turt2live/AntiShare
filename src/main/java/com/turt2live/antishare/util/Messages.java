@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.materials.MaterialAPI;
+import com.turt2live.simplenotice.SNAPI;
 
 /**
  * Messages class
@@ -42,6 +43,7 @@ public class Messages{
 	private AntiShare plugin = AntiShare.p;
 	private Map<String, AlertDetails> alerts = new HashMap<String, AlertDetails>();
 	private final int messageDelay = 1000; // Milliseconds
+	private SNAPI sn = new SNAPI(plugin);
 
 	public Messages(){
 		yaml = new EnhancedConfiguration(new File(plugin.getDataFolder(), "locale.yml"), plugin);
@@ -246,9 +248,11 @@ public class Messages{
 		 */
 		if(target instanceof Player){
 			Player player = (Player) target;
-			if(useSimpleNotice && plugin.isSimpleNoticeEnabled(player.getName()) && player.getListeningPluginChannels().contains("SimpleNotice")){
-				player.sendPluginMessage(plugin, "SimpleNotice", message.getBytes(java.nio.charset.Charset.forName("UTF-8")));
-			}else{
+			boolean sentBySN = false;
+			if(useSimpleNotice && plugin.isSimpleNoticeEnabled(player.getName())){
+				sentBySN = sn.send(player, message);
+			}
+			if(!sentBySN){
 				player.sendMessage(message);
 			}
 		}else{

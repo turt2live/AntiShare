@@ -195,9 +195,6 @@ public class AntiShare extends PluginWrapper{
 		// Start configuration
 		config = new ASConfig(getConfig());
 
-		// Start SimpleNotice
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "SimpleNotice");
-
 		// Start update checker - internal enabled state
 		UpdateChecker.start();
 

@@ -14,6 +14,7 @@
     <materialapi.version>0.0.1-SNAPSHOT</materialapi.version>
     <metricsextension.version>0.0.4-SNAPSHOT</metricsextension.version>
     <configurationlib.version>1.1.3</configurationlib.version>
+    <snapi.version>0.0.1-SNAPSHOT</snapi.version>
 
     <!-- JAR Versions -->
     <logblock.version>1.70</logblock.version>
@@ -46,6 +47,15 @@
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
       <version>${vault.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- SimpleNotice API -->
+    <dependency>
+      <groupId>com.turt2live.simplenotice</groupId>
+      <artifactId>SimpleNoticeAPI</artifactId>
+      <version>${snapi.version}</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
@@ -260,6 +270,7 @@
                   <include>com.feildmaster.lib:EnhancedConfiguration</include>
                   <include>com.turt2live.materials:MaterialAPI</include>
                   <include>com.turt2live.metrics:MetricsExtension</include>
+                  <include>com.turt2live.simplenotice:SimpleNoticeAPI</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -274,6 +285,10 @@
                 <relocation>
                   <pattern>com.turt2live.metrics</pattern>
                   <shadedPattern>com.turt2live.metrics.${project.name}</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.turt2live.simplenotice</pattern>
+                  <shadedPattern>com.turt2live.simplenotice.${project.name}</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
