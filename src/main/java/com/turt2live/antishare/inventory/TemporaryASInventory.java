@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.inventory;
 
@@ -26,7 +26,7 @@ public class TemporaryASInventory {
 	 * @param last the last used inventory
 	 * @param temp the temporary inventory
 	 */
-	public TemporaryASInventory(ASInventory last, ASInventory temp){
+	public TemporaryASInventory(ASInventory last, ASInventory temp) {
 		this.lastInventory = last;
 		this.tempInventory = temp;
 	}
@@ -36,7 +36,7 @@ public class TemporaryASInventory {
 	 * 
 	 * @return the last used inventory
 	 */
-	public ASInventory getLastInventory(){
+	public ASInventory getLastInventory() {
 		return lastInventory;
 	}
 
@@ -45,7 +45,7 @@ public class TemporaryASInventory {
 	 * 
 	 * @return the temporary inventory
 	 */
-	public ASInventory getTempInventory(){
+	public ASInventory getTempInventory() {
 		return tempInventory;
 	}
 

@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
@@ -43,10 +43,10 @@ public class Messages {
 	private Map<String, AlertDetails> alerts = new HashMap<String, AlertDetails>();
 	private final int messageDelay = 1000; // Milliseconds
 
-	public Messages(){
+	public Messages() {
 		yaml = new EnhancedConfiguration(new File(plugin.getDataFolder(), "locale.yml"), plugin);
 		yaml.loadDefaults(plugin.getResource("locale.yml"));
-		if(yaml.needsUpdate()){
+		if (yaml.needsUpdate()) {
 			yaml.saveDefaults();
 		}
 		yaml.load();
@@ -59,36 +59,36 @@ public class Messages {
 	 * @param arguments arguments to insert
 	 * @return the message, or null if not found
 	 */
-	public String getMessage(String path, String... arguments){
+	public String getMessage(String path, String... arguments) {
 		String message = yaml.getString(path, "no message");
 		int expectedArguments = 0;
 		int counter = 0;
 		boolean moreArguments = true;
-		while (moreArguments){
-			if(!message.contains("{" + counter + "}")){
+		while (moreArguments) {
+			if (!message.contains("{" + counter + "}")) {
 				moreArguments = false;
-			}else{
+			} else {
 				expectedArguments++;
 			}
 			counter++;
 		}
-		if((expectedArguments > 0 && arguments == null) || (arguments != null && expectedArguments > arguments.length)){
+		if ((expectedArguments > 0 && arguments == null) || (arguments != null && expectedArguments > arguments.length)) {
 			Exception exception = new IllegalArgumentException("Too few arguments for " + path + " (Expected " + expectedArguments + " got " + (arguments == null ? "null" : arguments.length) + ")");
 			exception.printStackTrace();
-		}else if(arguments != null && (arguments.length > expectedArguments)){
+		} else if (arguments != null && (arguments.length > expectedArguments)) {
 			Exception exception = new IllegalArgumentException("Too many arguments for " + path + " (Expected " + expectedArguments + " got " + (arguments == null ? "null" : arguments.length) + ")");
 			exception.printStackTrace();
 		}
-		if(arguments != null){
-			for(int i = 0; i < arguments.length; i++){
+		if (arguments != null) {
+			for (int i = 0; i < arguments.length; i++) {
 				String replaceString = "{" + i + "}";
-				if(arguments[i] == null){
+				if (arguments[i] == null) {
 					arguments[i] = "null";
 				}
 				message = message.replace(replaceString, arguments[i]);
 			}
 		}
-		for(ChatColor color : ChatColor.values()){
+		for (ChatColor color : ChatColor.values()) {
 			message = message.replace("{" + color.name() + "}", color + "");
 		}
 		return message;
@@ -97,7 +97,7 @@ public class Messages {
 	/**
 	 * Reloads the messages
 	 */
-	public void reload(){
+	public void reload() {
 		yaml.load();
 	}
 
@@ -110,7 +110,7 @@ public class Messages {
 	 * @param material the material involved (Eg: thrown)
 	 * @param extraVariables any extra variables (Eg: GameMode)
 	 */
-	public void notifyParties(Player player, Action action, boolean illegal, Material material, String... extraVariables){
+	public void notifyParties(Player player, Action action, boolean illegal, Material material, String... extraVariables) {
 		notifyParties(player, action, illegal, MaterialAPI.capitalize(material.name()), extraVariables);
 	}
 
@@ -123,7 +123,7 @@ public class Messages {
 	 * @param entity the Entity involved (Eg: attacked)
 	 * @param extraVariables any extra variables (Eg: GameMode)
 	 */
-	public void notifyParties(Player player, Action action, boolean illegal, EntityType entity, String... extraVariables){
+	public void notifyParties(Player player, Action action, boolean illegal, EntityType entity, String... extraVariables) {
 		notifyParties(player, action, illegal, MaterialAPI.capitalize(entity.getName()), extraVariables);
 	}
 
@@ -136,8 +136,8 @@ public class Messages {
 	 * @param string the applicable string (Eg: Material, Entity)
 	 * @param extraVariables any extra variables (Eg: GameMode)
 	 */
-	public void notifyParties(Player player, Action action, boolean illegal, String string, String... extraVariables){
-		if(player == null || action == null || string == null){
+	public void notifyParties(Player player, Action action, boolean illegal, String string, String... extraVariables) {
+		if (player == null || action == null || string == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 
@@ -145,20 +145,20 @@ public class Messages {
 				|| action == Action.GAMEMODE_CHANGE || action == Action.WORLD_CHANGE;
 
 		// Metrics
-		if(!ignoredAction){
-			if(illegal){
+		if (!ignoredAction) {
+			if (illegal) {
 				AntiShare.ILLEGAL_ACTIONS.increment(action);
-			}else{
+			} else {
 				AntiShare.LEGAL_ACTIONS.increment(action);
 			}
 		}
 
 		// We don't care
-		if(!illegal){
+		if (!illegal) {
 			return;
 		}
 
-		if(extraVariables == null){
+		if (extraVariables == null) {
 			extraVariables = new String[0];
 		}
 		String[] playerStrings = new String[1 + extraVariables.length];
@@ -166,7 +166,7 @@ public class Messages {
 		playerStrings[0] = string;
 		notifyStrings[0] = player.getName();
 		notifyStrings[1] = string;
-		for(int i = 0; i < extraVariables.length; i++){
+		for (int i = 0; i < extraVariables.length; i++) {
 			playerStrings[i + 1] = extraVariables[i];
 			notifyStrings[i + 2] = extraVariables[i];
 		}
@@ -184,38 +184,38 @@ public class Messages {
 
 		// Check last alert, if any
 		AlertDetails details = alerts.get(mapKey);
-		if(details == null){
+		if (details == null) {
 			details = new AlertDetails();
 			details.admin_last_sent = System.currentTimeMillis();
 			details.player_last_sent = System.currentTimeMillis();
 			details.console_last_sent = System.currentTimeMillis();
-		}else{
+		} else {
 			long now = System.currentTimeMillis();
-			if((now - details.admin_last_sent) < messageDelay){
+			if ((now - details.admin_last_sent) < messageDelay) {
 				toAdmin = false;
 			}
-			if((now - details.player_last_sent) < messageDelay){
+			if ((now - details.player_last_sent) < messageDelay) {
 				toPlayer = false;
 			}
-			if((now - details.console_last_sent) < messageDelay){
+			if ((now - details.console_last_sent) < messageDelay) {
 				toConsole = false;
 			}
 		}
 
 		// Alert
-		if(toPlayer){
+		if (toPlayer) {
 			sendTo(player, playerMessage, true);
 			details.player_last_sent = System.currentTimeMillis();
 		}
-		if(toAdmin){
+		if (toAdmin) {
 			details.admin_last_sent = System.currentTimeMillis();
-			for(Player potentialAdmin : plugin.getServer().getOnlinePlayers()){
-				if(potentialAdmin.hasPermission(PermissionNodes.GET_NOTIFICATIONS)){
+			for (Player potentialAdmin : plugin.getServer().getOnlinePlayers()) {
+				if (potentialAdmin.hasPermission(PermissionNodes.GET_NOTIFICATIONS)) {
 					sendTo(potentialAdmin, adminMessage, true);
 				}
 			}
 		}
-		if(toConsole){
+		if (toConsole) {
 			details.console_last_sent = System.currentTimeMillis();
 			sendTo(Bukkit.getConsoleSender(), adminMessage, false);
 		}
@@ -231,11 +231,11 @@ public class Messages {
 	 * @param message the message ("no message" to not send). This should already be converted for ChatColors
 	 * @param useSimpleNotice true to use SimpleNotice. Toggles are handled internally
 	 */
-	public void sendTo(CommandSender target, String message, boolean useSimpleNotice){
-		if(target == null || message == null){
+	public void sendTo(CommandSender target, String message, boolean useSimpleNotice) {
+		if (target == null || message == null) {
 			throw new IllegalArgumentException("Cannot use null arguments");
 		}
-		if(ChatColor.stripColor(message).trim().equalsIgnoreCase("no message")){
+		if (ChatColor.stripColor(message).trim().equalsIgnoreCase("no message")) {
 			return;
 		}
 		String prefix = plugin.getPrefix() == null || plugin.getPrefix().equalsIgnoreCase("no message") ? "[AntiShare]" : plugin.getPrefix();
@@ -244,14 +244,14 @@ public class Messages {
 		 * Support adapted by krinsdeath and further
 		 * modified by turt2live for AntiShare.
 		 */
-		if(target instanceof Player){
+		if (target instanceof Player) {
 			Player player = (Player) target;
-			if(useSimpleNotice && plugin.isSimpleNoticeEnabled(player.getName()) && player.getListeningPluginChannels().contains("SimpleNotice")){
+			if (useSimpleNotice && plugin.isSimpleNoticeEnabled(player.getName()) && player.getListeningPluginChannels().contains("SimpleNotice")) {
 				player.sendPluginMessage(plugin, "SimpleNotice", message.getBytes(java.nio.charset.Charset.forName("UTF-8")));
-			}else{
+			} else {
 				player.sendMessage(message);
 			}
-		}else{
+		} else {
 			target.sendMessage(message);
 		}
 	}

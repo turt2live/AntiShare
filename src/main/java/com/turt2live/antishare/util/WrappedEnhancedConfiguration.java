@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
@@ -21,18 +21,18 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
  */
 public class WrappedEnhancedConfiguration extends EnhancedConfiguration {
 
-	public WrappedEnhancedConfiguration(File file, Plugin plugin){
+	public WrappedEnhancedConfiguration(File file, Plugin plugin) {
 		super(file, plugin);
 	}
 
-	public WrappedEnhancedConfiguration(File file){
+	public WrappedEnhancedConfiguration(File file) {
 		super(file);
 	}
 
 	/**
 	 * Clears the configuration. This does not save the file.
 	 */
-	public void clearFile(){
+	public void clearFile() {
 		clearCache();
 		map.clear();
 	}

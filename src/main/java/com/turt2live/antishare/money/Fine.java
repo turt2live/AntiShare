@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
@@ -35,7 +35,7 @@ public class Fine extends Tender {
 	 * @param overcharge the amount to charge if the account has less than or equal to zero
 	 * @param affect the Game Mode(s) to affect
 	 */
-	public Fine(Action type, double amount, boolean enabled, double overcharge, ASGameMode affect){
+	public Fine(Action type, double amount, boolean enabled, double overcharge, ASGameMode affect) {
 		super(type, amount, enabled, affect);
 		this.overcharge = overcharge;
 	}
@@ -45,30 +45,30 @@ public class Fine extends Tender {
 	 * 
 	 * @return the overcharge value
 	 */
-	public double getOverCharge(){
+	public double getOverCharge() {
 		return overcharge;
 	}
 
 	@Override
-	public void apply(Player player){
-		if(!isEnabled() || player.hasPermission(PermissionNodes.MONEY_NO_FINE) || !super.affect(player.getGameMode())){
+	public void apply(Player player) {
+		if (!isEnabled() || player.hasPermission(PermissionNodes.MONEY_NO_FINE) || !super.affect(player.getGameMode())) {
 			return;
 		}
 
 		// Apply to account
 		double amount = getAmount();
-		if(plugin.getMoneyManager().getRawEconomyHook().requiresTab(player.getName())){
+		if (plugin.getMoneyManager().getRawEconomyHook().requiresTab(player.getName())) {
 			amount = overcharge;
 		}
 		TransactionResult result = plugin.getMoneyManager().subtractFromAccount(player, amount);
-		if(!result.completed){
+		if (!result.completed) {
 			plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("fine-failed", result.message), true);
 			plugin.getLogger().warning(plugin.getMessages().getMessage("fine-failed", result.message) + "  (" + player.getName() + ")");
 			return;
-		}else{
+		} else {
 			String formatted = plugin.getMoneyManager().formatAmount(getAmount());
 			String balance = plugin.getMoneyManager().formatAmount(plugin.getMoneyManager().getBalance(player));
-			if(!plugin.getMoneyManager().isSilent(player.getName())){
+			if (!plugin.getMoneyManager().isSilent(player.getName())) {
 				plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("fine-success", formatted), true);
 				plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("new-balance", balance), true);
 			}

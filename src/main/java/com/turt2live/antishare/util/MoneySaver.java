@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
@@ -20,13 +20,13 @@ import com.turt2live.antishare.AntiShare;
 
 public class MoneySaver {
 
-	private static EnhancedConfiguration getFile(){
+	private static EnhancedConfiguration getFile() {
 		AntiShare plugin = AntiShare.p;
 		File file = new File(plugin.getDataFolder(), "data" + File.separator + "balance.yml");
-		if(!file.exists()){
-			try{
+		if (!file.exists()) {
+			try {
 				file.createNewFile();
-			}catch(IOException e){
+			} catch(IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -42,7 +42,7 @@ public class MoneySaver {
 	 * @param gamemode the gamemode to get the balance for
 	 * @return a double (balance). If not found this will return 0
 	 */
-	public static double getLevel(String player, GameMode gamemode){
+	public static double getLevel(String player, GameMode gamemode) {
 		EnhancedConfiguration yaml = getFile();
 		double balance = yaml.getDouble(player + "." + gamemode.name(), 0.0);
 		return balance;
@@ -55,8 +55,8 @@ public class MoneySaver {
 	 * @param gamemode the gamemode to save as
 	 * @param balance the balance to save
 	 */
-	public static void saveLevel(String player, GameMode gamemode, double balance){
-		if(balance <= 0){
+	public static void saveLevel(String player, GameMode gamemode, double balance) {
+		if (balance <= 0) {
 			return;
 		}
 		EnhancedConfiguration yaml = getFile();

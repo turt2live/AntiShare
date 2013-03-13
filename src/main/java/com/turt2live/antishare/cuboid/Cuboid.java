@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.cuboid;
 
@@ -38,7 +38,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @param location1 the first location
 	 * @param location2 the second location
 	 */
-	public Cuboid(Location location1, Location location2){
+	public Cuboid(Location location1, Location location2) {
 		this.point1 = location1.clone();
 		this.point2 = location2.clone();
 		calculate();
@@ -47,7 +47,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	/**
 	 * Creates a blank Cuboid
 	 */
-	public Cuboid(){}
+	public Cuboid() {}
 
 	/**
 	 * Determines if a location is inside this cuboid
@@ -55,12 +55,12 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @param location the location to test
 	 * @return true if contained
 	 */
-	public boolean isContained(Location location){
-		if(!isValid()){
+	public boolean isContained(Location location) {
+		if (!isValid()) {
 			return false;
 		}
-		if(location.getWorld().getName().equals(minimum.getWorld().getName())){
-			if((location.getBlockX() >= minimum.getBlockX() && location.getBlockX() <= maximum.getBlockX()) && (location.getBlockY() >= minimum.getBlockY() && location.getBlockY() <= maximum.getBlockY()) && (location.getBlockZ() >= minimum.getBlockZ() && location.getBlockZ() <= maximum.getBlockZ())){
+		if (location.getWorld().getName().equals(minimum.getWorld().getName())) {
+			if ((location.getBlockX() >= minimum.getBlockX() && location.getBlockX() <= maximum.getBlockX()) && (location.getBlockY() >= minimum.getBlockY() && location.getBlockY() <= maximum.getBlockY()) && (location.getBlockZ() >= minimum.getBlockZ() && location.getBlockZ() <= maximum.getBlockZ())) {
 				return true;
 			}
 		}
@@ -73,19 +73,19 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @param cuboid the other cuboid
 	 * @return true if overlapping
 	 */
-	public boolean isOverlapping(Cuboid cuboid){
-		if(!isValid()){
+	public boolean isOverlapping(Cuboid cuboid) {
+		if (!isValid()) {
 			return false;
 		}
 		// Thanks to Sleaker for letting me use this code :D
 		// Modified from: https://github.com/MilkBowl/LocalShops/blob/master/src/net/milkbowl/localshops/ShopManager.java#L216
-		if(cuboid.getMaximumPoint().getBlockX() < getMinimumPoint().getBlockX() || cuboid.getMinimumPoint().getBlockX() > getMaximumPoint().getBlockX()){
+		if (cuboid.getMaximumPoint().getBlockX() < getMinimumPoint().getBlockX() || cuboid.getMinimumPoint().getBlockX() > getMaximumPoint().getBlockX()) {
 			return false;
-		}else if(cuboid.getMaximumPoint().getBlockZ() < getMinimumPoint().getBlockZ() || cuboid.getMinimumPoint().getBlockZ() > getMaximumPoint().getBlockZ()){
+		} else if (cuboid.getMaximumPoint().getBlockZ() < getMinimumPoint().getBlockZ() || cuboid.getMinimumPoint().getBlockZ() > getMaximumPoint().getBlockZ()) {
 			return false;
-		}else if(cuboid.getMaximumPoint().getBlockY() < getMinimumPoint().getBlockY() || cuboid.getMinimumPoint().getBlockY() > getMaximumPoint().getBlockY()){
+		} else if (cuboid.getMaximumPoint().getBlockY() < getMinimumPoint().getBlockY() || cuboid.getMinimumPoint().getBlockY() > getMaximumPoint().getBlockY()) {
 			return false;
-		}else{
+		} else {
 			return true; // All 3 planes meet, therefore regions are in contact
 		}
 	}
@@ -95,7 +95,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @return the smallest coordinate
 	 */
-	public Location getMinimumPoint(){
+	public Location getMinimumPoint() {
 		return minimum == null ? null : minimum.clone();
 	}
 
@@ -104,7 +104,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @return the largest coordinate
 	 */
-	public Location getMaximumPoint(){
+	public Location getMaximumPoint() {
 		return maximum == null ? null : maximum.clone();
 	}
 
@@ -114,10 +114,10 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @param location1 the first point
 	 * @param location2 the second point
 	 */
-	public void setPoints(Location location1, Location location2){
+	public void setPoints(Location location1, Location location2) {
 		this.point1 = location1 != null ? location1.clone() : null;
 		this.point2 = location2 != null ? location2.clone() : null;
-		if(this.worldName == null && (location1 != null || location2 != null)){
+		if (this.worldName == null && (location1 != null || location2 != null)) {
 			worldName = (location1 != null ? location1 : location2).getWorld().getName();
 		}
 		setWorld(getWorld());
@@ -129,8 +129,8 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @return the volume
 	 */
-	public int getVolume(){
-		if(!isValid()){
+	public int getVolume() {
+		if (!isValid()) {
 			return 0;
 		}
 		int w = maximum.getBlockX() - minimum.getBlockX();
@@ -144,21 +144,21 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @param world the new world
 	 */
-	public void setWorld(World world){
+	public void setWorld(World world) {
 		this.worldName = world.getName();
-		if(!isValid()){
+		if (!isValid()) {
 			return;
 		}
-		if(minimum != null){
+		if (minimum != null) {
 			minimum.setWorld(world);
 		}
-		if(maximum != null){
+		if (maximum != null) {
 			maximum.setWorld(world);
 		}
-		if(point1 != null){
+		if (point1 != null) {
 			point1.setWorld(world);
 		}
-		if(point2 != null){
+		if (point2 != null) {
 			point2.setWorld(world);
 		}
 	}
@@ -169,7 +169,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @param point the point
 	 * @param value the value
 	 */
-	public void setPoint(CuboidPoint point, Location value){
+	public void setPoint(CuboidPoint point, Location value) {
 		switch (point){
 		case POINT1:
 			this.point1 = value.clone();
@@ -178,7 +178,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 			this.point2 = value.clone();
 			break;
 		}
-		if(!isValid()){
+		if (!isValid()) {
 			return;
 		}
 		calculate();
@@ -189,7 +189,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @return the world applied
 	 */
-	public World getWorld(){
+	public World getWorld() {
 		return worldName == null ? null : Bukkit.getWorld(worldName);
 	}
 
@@ -198,16 +198,16 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @return true if valid
 	 */
-	public boolean isValid(){
+	public boolean isValid() {
 		return worldName != null && point1 != null && point2 != null;
 	}
 
-	private void calculate(){
-		if(!isValid()){
+	private void calculate() {
+		if (!isValid()) {
 			return;
 		}
 		int minX = 0, minY = 0, minZ = 0, maxX = 0, maxY = 0, maxZ = 0;
-		if(!point1.getWorld().getName().equals(point2.getWorld().getName())){
+		if (!point1.getWorld().getName().equals(point2.getWorld().getName())) {
 			throw new IllegalArgumentException("Worlds not equal.");
 		}
 		this.worldName = point1.getWorld().getName();
@@ -229,14 +229,14 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * @return the cuboid
 	 * @throws IllegalArgumentException if the map is invalid in any way
 	 */
-	public static Cuboid deserialize(Map<String, Object> map){
+	public static Cuboid deserialize(Map<String, Object> map) {
 		String world = (String) map.get("world");
 		int mix = (Integer) map.get("minimum X"), miy = (Integer) map.get("minimum Y"), miz = (Integer) map.get("minimum Z"), max = (Integer) map.get("maximum X"), may = (Integer) map.get("maximum Y"), maz = (Integer) map.get("maximum Z");
-		if(world == null){
+		if (world == null) {
 			throw new IllegalArgumentException("World not found: " + world);
 		}
 		World matching = AntiShare.p.getServer().getWorld(world);
-		if(matching == null){
+		if (matching == null) {
 			throw new IllegalArgumentException("World not found: " + world);
 		}
 		Location mi = new Location(matching, mix, miy, miz);
@@ -247,7 +247,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	}
 
 	@Override
-	public Map<String, Object> serialize(){
+	public Map<String, Object> serialize() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("world", worldName);
 		map.put("minimum X", minimum.getBlockX());
@@ -260,10 +260,10 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	}
 
 	@Override
-	public Cuboid clone(){
+	public Cuboid clone() {
 		Cuboid cuboid = new Cuboid();
 		cuboid.setPoints(point1 != null ? point1.clone() : null, point2 != null ? point2.clone() : null);
-		if(worldName != null){
+		if (worldName != null) {
 			cuboid.setWorld(Bukkit.getWorld(worldName));
 		}
 		return cuboid;
@@ -274,7 +274,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @return the first point
 	 */
-	public Location getPoint1(){
+	public Location getPoint1() {
 		return point1.clone();
 	}
 
@@ -283,7 +283,7 @@ public class Cuboid implements Cloneable, ConfigurationSerializable {
 	 * 
 	 * @return the second point
 	 */
-	public Location getPoint2(){
+	public Location getPoint2() {
 		return point2.clone();
 	}
 

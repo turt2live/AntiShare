@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.manager;
 
@@ -49,16 +49,16 @@ public class MoneyManager {
 	/**
 	 * Saves the Money Manager
 	 */
-	public void save(){
+	public void save() {
 		File silent = new File(plugin.getDataFolder() + File.separator + "data", "money-silent.txt");
-		try{
+		try {
 			silent.getParentFile().mkdirs();
 			BufferedWriter out = new BufferedWriter(new FileWriter(silent, false));
-			for(String player : silentTo){
+			for (String player : silentTo) {
 				out.write(player + "\r\n");
 			}
 			out.close();
-		}catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -66,31 +66,31 @@ public class MoneyManager {
 	/**
 	 * Loads the Money Manager
 	 */
-	public void load(){
+	public void load() {
 		silentTo.clear();
 		File silent = new File(plugin.getDataFolder() + File.separator + "data", "money-silent.txt");
-		try{
-			if(silent.exists()){
+		try {
+			if (silent.exists()) {
 				BufferedReader in = new BufferedReader(new FileReader(silent));
 				String line;
-				while ((line = in.readLine()) != null){
+				while ((line = in.readLine()) != null) {
 					silentTo.add(line);
 				}
 				in.close();
 			}
-		}catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 
 		// Quit if we have to
-		if(!plugin.settings().features.fines){
+		if (!plugin.settings().features.fines) {
 			return;
 		}
 
 		// Load config
 		EnhancedConfiguration money = new EnhancedConfiguration(new File(plugin.getDataFolder(), "fines.yml"), plugin);
 		money.loadDefaults(plugin.getResource("fines.yml"));
-		if(money.needsUpdate()){
+		if (money.needsUpdate()) {
 			money.saveDefaults();
 		}
 		money.load();
@@ -110,9 +110,9 @@ public class MoneyManager {
 		// Load tender
 		int finesLoaded = 0;
 		int rewardsLoaded = 0;
-		for(Action type : Action.values()){
+		for (Action type : Action.values()) {
 			String path = type.name();
-			if(money.getConfigurationSection(path) == null){
+			if (money.getConfigurationSection(path) == null) {
 				continue;
 			}
 			boolean doFine = money.getBoolean(path + ".do-fine", false);
@@ -123,19 +123,19 @@ public class MoneyManager {
 			ASGameMode affect = ASGameMode.match(money.getString(path + ".give-to", "none"));
 
 			// Sanity
-			if(affect == null){
+			if (affect == null) {
 				plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-fine-reward", money.getString(path + ".give-to"), "NONE"));
 				affect = ASGameMode.NONE;
 			}
 
 			// Check enabled state
-			if(!doRewards && doReward){
+			if (!doRewards && doReward) {
 				doReward = false;
 			}
-			if(!doFines && doFine){
+			if (!doFines && doFine) {
 				doFine = false;
 			}
-			if(affect == ASGameMode.NONE){
+			if (affect == ASGameMode.NONE) {
 				doFine = false;
 				doReward = false;
 			}
@@ -147,28 +147,28 @@ public class MoneyManager {
 			fines.add(f);
 
 			// Record stats
-			if(doFine){
+			if (doFine) {
 				finesLoaded++;
 			}
-			if(doReward){
+			if (doReward) {
 				rewardsLoaded++;
 			}
 		}
 
 		// Check load state
 		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
-		if(vault != null){
+		if (vault != null) {
 			vaultEconomy = new VaultEconomy();
-		}else{
+		} else {
 			plugin.getLogger().info(plugin.getMessages().getMessage("cannot-load-fines-rewards"));
 			return;
 		}
 
 		// Spam console
-		if(finesLoaded > 0){
+		if (finesLoaded > 0) {
 			plugin.getLogger().info(plugin.getMessages().getMessage("fines-loaded", String.valueOf(finesLoaded)));
 		}
-		if(rewardsLoaded > 0){
+		if (rewardsLoaded > 0) {
 			plugin.getLogger().info(plugin.getMessages().getMessage("rewards-loaded", String.valueOf(rewardsLoaded)));
 		}
 	}
@@ -178,8 +178,8 @@ public class MoneyManager {
 	 * 
 	 * @param player the player
 	 */
-	public void showStatusOnLogin(Player player){
-		if(isSilent(player.getName()) && showStatusOnLogin){
+	public void showStatusOnLogin(Player player) {
+		if (isSilent(player.getName()) && showStatusOnLogin) {
 			player.performCommand("as money status");
 		}
 	}
@@ -191,11 +191,11 @@ public class MoneyManager {
 	 * @param amount the amount
 	 * @return the result
 	 */
-	public TransactionResult addToAccount(Player player, double amount){
-		if(vaultEconomy == null){
+	public TransactionResult addToAccount(Player player, double amount) {
+		if (vaultEconomy == null) {
 			return TransactionResult.NO_VAULT;
 		}
-		if(!rewardsFrom.equalsIgnoreCase("nowhere")){
+		if (!rewardsFrom.equalsIgnoreCase("nowhere")) {
 			vaultEconomy.subtract(rewardsFrom, amount);
 		}
 		return vaultEconomy.add(player.getName(), amount);
@@ -208,14 +208,14 @@ public class MoneyManager {
 	 * @param amount the amount
 	 * @return the result
 	 */
-	public TransactionResult subtractFromAccount(Player player, double amount){
-		if(vaultEconomy == null){
+	public TransactionResult subtractFromAccount(Player player, double amount) {
+		if (vaultEconomy == null) {
 			return TransactionResult.NO_VAULT;
 		}
-		if(vaultEconomy.requiresTab(player.getName()) && !tab){
+		if (vaultEconomy.requiresTab(player.getName()) && !tab) {
 			return TransactionResult.NO_TAB;
 		}
-		if(!finesTo.equalsIgnoreCase("nowhere")){
+		if (!finesTo.equalsIgnoreCase("nowhere")) {
 			vaultEconomy.add(finesTo, amount);
 		}
 		return vaultEconomy.subtract(player.getName(), amount);
@@ -227,8 +227,8 @@ public class MoneyManager {
 	 * @param player the player
 	 * @return the balance
 	 */
-	public double getBalance(Player player){
-		if(vaultEconomy == null){
+	public double getBalance(Player player) {
+		if (vaultEconomy == null) {
 			return 0.0;
 		}
 		return vaultEconomy.getBalance(player.getName());
@@ -240,8 +240,8 @@ public class MoneyManager {
 	 * @param amount the amount
 	 * @return the string of the amount
 	 */
-	public String formatAmount(double amount){
-		if(vaultEconomy == null){
+	public String formatAmount(double amount) {
+		if (vaultEconomy == null) {
 			return String.valueOf(amount);
 		}
 		return vaultEconomy.format(amount);
@@ -252,7 +252,7 @@ public class MoneyManager {
 	 * 
 	 * @return the hook
 	 */
-	public VaultEconomy getRawEconomyHook(){
+	public VaultEconomy getRawEconomyHook() {
 		return vaultEconomy;
 	}
 
@@ -261,7 +261,7 @@ public class MoneyManager {
 	 * 
 	 * @param playername the player name
 	 */
-	public void addToSilentList(String playername){
+	public void addToSilentList(String playername) {
 		silentTo.add(playername);
 	}
 
@@ -270,7 +270,7 @@ public class MoneyManager {
 	 * 
 	 * @param playername the player name
 	 */
-	public void removeFromSilentList(String playername){
+	public void removeFromSilentList(String playername) {
 		silentTo.remove(playername);
 	}
 
@@ -280,7 +280,7 @@ public class MoneyManager {
 	 * @param playername the player name
 	 * @return true if the Money Manager should be silent to this player
 	 */
-	public boolean isSilent(String playername){
+	public boolean isSilent(String playername) {
 		return silentTo.contains(playername);
 	}
 
@@ -290,9 +290,9 @@ public class MoneyManager {
 	 * @param type the type
 	 * @return the fine, or null if not found
 	 */
-	public Fine getFine(Action type){
-		for(Fine fine : fines){
-			if(fine.getType() == type){
+	public Fine getFine(Action type) {
+		for (Fine fine : fines) {
+			if (fine.getType() == type) {
 				return fine;
 			}
 		}
@@ -305,9 +305,9 @@ public class MoneyManager {
 	 * @param type the type
 	 * @return the reward, or null if not found
 	 */
-	public Reward getReward(Action type){
-		for(Reward reward : rewards){
-			if(reward.getType() == type){
+	public Reward getReward(Action type) {
+		for (Reward reward : rewards) {
+			if (reward.getType() == type) {
 				return reward;
 			}
 		}
@@ -322,14 +322,14 @@ public class MoneyManager {
 	 * @param illegal true if the action is illegal
 	 * @param player the person to apply this to
 	 */
-	public void fire(Action action, boolean illegal, Player player){
-		if(vaultEconomy == null){
+	public void fire(Action action, boolean illegal, Player player) {
+		if (vaultEconomy == null) {
 			return;
 		}
 		// Apply reward/fine
-		if(illegal){
+		if (illegal) {
 			getFine(action).apply(player);
-		}else{
+		} else {
 			getReward(action).apply(player);
 		}
 	}

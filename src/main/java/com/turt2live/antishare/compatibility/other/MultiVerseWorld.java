@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.compatibility.other;
 
@@ -26,7 +26,7 @@ public class MultiVerseWorld {
 
 	private static MultiverseCore multiverse;
 
-	private static void init(Plugin plugin){
+	private static void init(Plugin plugin) {
 		MultiVerseWorld.multiverse = (MultiverseCore) plugin;
 	}
 
@@ -36,10 +36,10 @@ public class MultiVerseWorld {
 	 * @param world the world
 	 * @return the alias, or the world name if MultiVerse was not found
 	 */
-	public static String getAlias(World world){
-		if(multiverse == null){
+	public static String getAlias(World world) {
+		if (multiverse == null) {
 			Plugin multiverse = AntiShare.p.getServer().getPluginManager().getPlugin("MultiVerse-Core");
-			if(multiverse == null){
+			if (multiverse == null) {
 				return world.getName();
 			}
 			init(multiverse);

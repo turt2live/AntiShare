@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.inventory;
 
@@ -27,7 +27,7 @@ public class LinkedInventory {
 	 * @param affectedGameMode the gamemode
 	 * @param worlds the worlds to link
 	 */
-	public LinkedInventory(GameMode affectedGameMode, String... worlds){
+	public LinkedInventory(GameMode affectedGameMode, String... worlds) {
 		this.gamemode = affectedGameMode;
 		this.worlds = worlds;
 	}
@@ -38,9 +38,9 @@ public class LinkedInventory {
 	 * @param world the world
 	 * @return true if affected, false otherwise
 	 */
-	public boolean isWorldAffected(World world){
-		for(String w : worlds){
-			if(world.getName().equalsIgnoreCase(w)){
+	public boolean isWorldAffected(World world) {
+		for (String w : worlds) {
+			if (world.getName().equalsIgnoreCase(w)) {
 				return true;
 			}
 		}
@@ -53,7 +53,7 @@ public class LinkedInventory {
 	 * @param gamemode the game mode to test
 	 * @return true if this linked inventory applies to this gamemode, false otherwise
 	 */
-	public boolean isGameModeAffected(GameMode gamemode){
+	public boolean isGameModeAffected(GameMode gamemode) {
 		return gamemode == this.gamemode;
 	}
 
@@ -62,7 +62,7 @@ public class LinkedInventory {
 	 * 
 	 * @return a cloned array of affected worlds
 	 */
-	public String[] getAffectedWorlds(){
+	public String[] getAffectedWorlds() {
 		return worlds.clone();
 	}
 

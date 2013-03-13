@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.config;
 
@@ -33,23 +33,23 @@ public class RegionConfiguration extends ASConfig {
 	 * @param region the region
 	 * @return the region configuration
 	 */
-	public static RegionConfiguration getConfig(Region region){
+	public static RegionConfiguration getConfig(Region region) {
 		File path = Region.REGION_CONFIGURATIONS;
 		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(path, ASUtils.fileSafeName(region.getName()) + ".yml"), plugin);
 		regionConfig.loadDefaults(plugin.getResource("world.yml"));
-		if(regionConfig.needsUpdate()){
+		if (regionConfig.needsUpdate()) {
 			regionConfig.saveDefaults();
 		}
 		regionConfig.load();
-		if(regionConfig.getBoolean("use-global")){
+		if (regionConfig.getBoolean("use-global")) {
 			regionConfig = plugin.getConfig();
-		}else if(regionConfig.getBoolean("use-world")){
+		} else if (regionConfig.getBoolean("use-world")) {
 			regionConfig = plugin.getWorldConfigs().getConfig(region.getWorldName()).rawConfiguration;
 		}
 		return new RegionConfiguration(region, regionConfig);
 	}
 
-	RegionConfiguration(Region region, EnhancedConfiguration config){
+	RegionConfiguration(Region region, EnhancedConfiguration config) {
 		super(config);
 		this.region = region;
 	}
@@ -59,7 +59,7 @@ public class RegionConfiguration extends ASConfig {
 	 * 
 	 * @return the region for this configuration
 	 */
-	public Region getRegion(){
+	public Region getRegion() {
 		return region;
 	}
 

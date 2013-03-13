@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.compatibility;
 
@@ -28,28 +28,28 @@ import com.turt2live.antishare.compatibility.type.RegionProtection;
 public class Towny extends RegionProtection {
 
 	@Override
-	public boolean isRegion(Location location){
+	public boolean isRegion(Location location) {
 		return !TownyUniverse.isWilderness(location.getBlock());
 	}
 
 	@Override
-	public boolean isAllowed(Player player, Block block){
-		if(!isRegion(block.getLocation())){
+	public boolean isAllowed(Player player, Block block) {
+		if (!isRegion(block.getLocation())) {
 			return true;
 		}
 		TownBlock tblock = TownyUniverse.getTownBlock(block.getLocation());
-		if(tblock == null){
+		if (tblock == null) {
 			return true;
 		}
-		try{
+		try {
 			Town town = tblock.getTown();
-			if(town == null){
+			if (town == null) {
 				return true;
 			}
-			if(town.hasResident(player.getName()) || town.getMayor().getName().equalsIgnoreCase(player.getName())){
+			if (town.hasResident(player.getName()) || town.getMayor().getName().equalsIgnoreCase(player.getName())) {
 				return true;
 			}
-		}catch(NotRegisteredException e){
+		} catch(NotRegisteredException e) {
 			return true;
 		}
 		return false;

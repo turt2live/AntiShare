@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.inventory;
 
@@ -38,7 +38,7 @@ public class DisplayableInventory implements InventoryHolder, Listener {
 	 * 
 	 * @param inventory the inventory
 	 */
-	public DisplayableInventory(ASInventory inventory){
+	public DisplayableInventory(ASInventory inventory) {
 		this(inventory, "AntiShare Inventory");
 	}
 
@@ -48,40 +48,40 @@ public class DisplayableInventory implements InventoryHolder, Listener {
 	 * @param inventory the inventory
 	 * @param title the inventory title to show
 	 */
-	public DisplayableInventory(ASInventory inventory, String title){
+	public DisplayableInventory(ASInventory inventory, String title) {
 		this.asinventory = inventory;
 		this.title = title;
-		if(this.title == null){
+		if (this.title == null) {
 			this.title = "AntiShare Inventory";
 		}
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-		if(this.title.length() > 31){ // Maximum title length is 31
+		if (this.title.length() > 31) { // Maximum title length is 31
 			this.title = this.title.substring(0, 28) + "...";
 		}
 	}
 
-	private void createInventory(){
+	private void createInventory() {
 		inventory = plugin.getServer().createInventory(this, asinventory.getSize(), title);
 		asinventory.populateOtherInventory(inventory);
 	}
 
 	@EventHandler (priority = EventPriority.MONITOR)
-	public void onClose(InventoryCloseEvent event){
-		if(!useEvent || event.getInventory().getHolder() == null){
+	public void onClose(InventoryCloseEvent event) {
+		if (!useEvent || event.getInventory().getHolder() == null) {
 			return;
 		}
-		if(event.getInventory().getHolder() instanceof DisplayableInventory){
+		if (event.getInventory().getHolder() instanceof DisplayableInventory) {
 			DisplayableInventory display = (DisplayableInventory) event.getInventory().getHolder();
-			if(display.uid == this.uid){
+			if (display.uid == this.uid) {
 				// It's us!
 				asinventory.populateSelf(event.getInventory());
 				asinventory.save();
 				String name = asinventory.getName();
-				if(asinventory.getType() == InventoryType.PLAYER || asinventory.getType() == InventoryType.ENDER){
+				if (asinventory.getType() == InventoryType.PLAYER || asinventory.getType() == InventoryType.ENDER) {
 					Player player = plugin.getServer().getPlayerExact(name);
-					if(player != null){
-						if(player.getGameMode() == asinventory.getGameMode()){
-							if(player.getWorld().getName().equals(asinventory.getWorld().getName())){
+					if (player != null) {
+						if (player.getGameMode() == asinventory.getGameMode()) {
+							if (player.getWorld().getName().equals(asinventory.getWorld().getName())) {
 								asinventory.setTo(player);
 							}
 						}
@@ -96,8 +96,8 @@ public class DisplayableInventory implements InventoryHolder, Listener {
 	}
 
 	@Override
-	public Inventory getInventory(){
-		if(inventory == null){
+	public Inventory getInventory() {
+		if (inventory == null) {
 			createInventory();
 		}
 		return inventory;

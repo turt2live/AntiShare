@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.regions;
 
@@ -24,7 +24,7 @@ public class RegionWall {
 	 * 
 	 * @author turt2live
 	 */
-	public static enum Wall{
+	public static enum Wall {
 		NORTH,
 		SOUTH,
 		EAST,
@@ -42,7 +42,7 @@ public class RegionWall {
 	 * @param location the wall type
 	 * @param point the point
 	 */
-	public RegionWall(Wall location, Location point){
+	public RegionWall(Wall location, Location point) {
 		this.location = location;
 		this.point = point;
 	}
@@ -53,7 +53,7 @@ public class RegionWall {
 	 * @param amount the amount to add (absolute)
 	 * @return the new region wall
 	 */
-	public RegionWall add(double amount){
+	public RegionWall add(double amount) {
 		amount = Math.abs(amount);
 		switch (location){
 		case NORTH:
@@ -83,7 +83,7 @@ public class RegionWall {
 	 * 
 	 * @return the point
 	 */
-	public Location getPoint(){
+	public Location getPoint() {
 		return point;
 	}
 
@@ -92,7 +92,7 @@ public class RegionWall {
 	 * 
 	 * @return the wall type
 	 */
-	public Wall getType(){
+	public Wall getType() {
 		return location;
 	}
 }

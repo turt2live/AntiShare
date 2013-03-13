@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.compatibility.other;
 
@@ -29,28 +29,28 @@ public class MagicSpells implements Listener {
 
 	private boolean enabled = false;
 
-	public MagicSpells(){
+	public MagicSpells() {
 		enabled = AntiShare.p.settings().magicSpells;
 	}
 
 	@EventHandler
-	public void onTarget(SpellTargetEvent event){
-		if(event.isCancelled() || !enabled){
+	public void onTarget(SpellTargetEvent event) {
+		if (event.isCancelled() || !enabled) {
 			return;
 		}
 		Player player = event.getCaster();
-		if(!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+		if (!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
-	public void onTarget(SpellCastEvent event){
-		if(event.isCancelled() || !enabled){
+	public void onTarget(SpellCastEvent event) {
+		if (event.isCancelled() || !enabled) {
 			return;
 		}
 		Player player = event.getCaster();
-		if(!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+		if (!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())) {
 			event.setCancelled(true);
 		}
 	}

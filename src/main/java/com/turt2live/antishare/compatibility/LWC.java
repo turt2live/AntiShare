@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.compatibility;
 
@@ -24,17 +24,17 @@ public class LWC extends BlockProtection {
 
 	private com.griefcraft.lwc.LWC lwc;
 
-	public LWC(){
+	public LWC() {
 		lwc = com.griefcraft.lwc.LWC.getInstance();
 	}
 
 	@Override
-	public boolean isProtected(Block block){
+	public boolean isProtected(Block block) {
 		return lwc.findProtection(block) != null;
 	}
 
 	@Override
-	public boolean canAccess(Player player, Block block){
+	public boolean canAccess(Player player, Block block) {
 		return lwc.canAccessProtection(player, block);
 	}
 

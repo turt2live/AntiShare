@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
@@ -28,8 +28,8 @@ public class GamemodeAbstraction {
 	 * @param gm2 second gamemode
 	 * @return true if AntiShare sees gm1 and gm2 as the same
 	 */
-	public static boolean isMatch(GameMode gm1, GameMode gm2){
-		if(isCreative(gm1) && isCreative(gm2)){
+	public static boolean isMatch(GameMode gm1, GameMode gm2) {
+		if (isCreative(gm1) && isCreative(gm2)) {
 			return true;
 		}
 		return gm1 == gm2;
@@ -41,11 +41,11 @@ public class GamemodeAbstraction {
 	 * @param gamemode the gamemode
 	 * @return true if AntiShare sees gm1 as Creative Mode
 	 */
-	public static boolean isCreative(GameMode gamemode){
-		if(gamemode == null){
+	public static boolean isCreative(GameMode gamemode) {
+		if (gamemode == null) {
 			return false;
 		}
-		if(!isAdventureCreative()){
+		if (!isAdventureCreative()) {
 			return gamemode == GameMode.CREATIVE;
 		}
 		return gamemode == GameMode.CREATIVE || gamemode == GameMode.ADVENTURE;
@@ -56,7 +56,7 @@ public class GamemodeAbstraction {
 	 * 
 	 * @return true if Adventure and Creative mode are the same (to AntiShare)
 	 */
-	public static boolean isAdventureCreative(){
+	public static boolean isAdventureCreative() {
 		AntiShare plugin = AntiShare.p;
 		return plugin.settings().adventureEqCreative;
 	}

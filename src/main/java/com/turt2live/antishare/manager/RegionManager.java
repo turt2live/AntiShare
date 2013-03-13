@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.manager;
 
@@ -50,19 +50,19 @@ public class RegionManager {
 	 * 
 	 * @param worldname the world
 	 */
-	public void loadWorld(String worldname){
+	public void loadWorld(String worldname) {
 		File path = Region.REGION_INFORMATION;
-		if(!path.exists()){
+		if (!path.exists()) {
 			path.mkdirs();
 		}
 		File[] list = path.listFiles();
-		if(list != null){
-			for(File file : list){
-				if(file.getName().endsWith(".yml")){
+		if (list != null) {
+			for (File file : list) {
+				if (file.getName().endsWith(".yml")) {
 					Region region = Region.fromFile(file);
-					if(region != null && region.getWorldName().equals(worldname)){
+					if (region != null && region.getWorldName().equals(worldname)) {
 						Set<Region> set = new HashSet<Region>();
-						if(regions.containsKey(region.getWorldName())){
+						if (regions.containsKey(region.getWorldName())) {
 							set.addAll(regions.get(region.getWorldName()));
 						}
 						set.add(region);
@@ -71,7 +71,7 @@ public class RegionManager {
 				}
 			}
 		}
-		if(regions.keySet().size() > 0){
+		if (regions.keySet().size() > 0) {
 			plugin.getLogger().info(plugin.getMessages().getMessage("regions-loaded", String.valueOf(this.regions.keySet().size())));
 		}
 	}
@@ -79,19 +79,19 @@ public class RegionManager {
 	/**
 	 * Loads all reachable regions into memory
 	 */
-	public void load(){
+	public void load() {
 		File path = Region.REGION_INFORMATION;
-		if(!path.exists()){
+		if (!path.exists()) {
 			path.mkdirs();
 		}
 		File[] list = path.listFiles();
-		if(list != null){
-			for(File file : list){
-				if(file.getName().endsWith(".yml")){
+		if (list != null) {
+			for (File file : list) {
+				if (file.getName().endsWith(".yml")) {
 					Region region = Region.fromFile(file);
-					if(region != null){
+					if (region != null) {
 						Set<Region> set = new HashSet<Region>();
-						if(regions.containsKey(region.getWorldName())){
+						if (regions.containsKey(region.getWorldName())) {
 							set.addAll(regions.get(region.getWorldName()));
 						}
 						set.add(region);
@@ -100,7 +100,7 @@ public class RegionManager {
 				}
 			}
 		}
-		if(regions.keySet().size() > 0){
+		if (regions.keySet().size() > 0) {
 			plugin.getLogger().info(plugin.getMessages().getMessage("regions-loaded", String.valueOf(this.regions.keySet().size())));
 		}
 	}
@@ -108,12 +108,12 @@ public class RegionManager {
 	/**
 	 * Saves all loaded regions to disk, this overwrites (and deletes unloaded regions) any regions in the save folders
 	 */
-	public void save(){
+	public void save() {
 		ASUtils.wipeFolder(Region.REGION_CONFIGURATIONS, null);
 		ASUtils.wipeFolder(Region.REGION_INFORMATION, null);
-		for(String world : regions.keySet()){
+		for (String world : regions.keySet()) {
 			Set<Region> regions = this.regions.get(world);
-			for(Region region : regions){
+			for (Region region : regions) {
 				region.save();
 			}
 		}
@@ -126,14 +126,14 @@ public class RegionManager {
 	 * @param location the location
 	 * @return true if contained in a region
 	 */
-	public boolean isRegion(Location location){
+	public boolean isRegion(Location location) {
 		String worldname = location.getWorld().getName();
-		if(!regions.containsKey(worldname)){
+		if (!regions.containsKey(worldname)) {
 			return false;
 		}
 		Set<Region> regions = this.regions.get(worldname);
-		for(Region region : regions){
-			if(region.getCuboid().isContained(location)){
+		for (Region region : regions) {
+			if (region.getCuboid().isContained(location)) {
 				return true;
 			}
 		}
@@ -146,17 +146,17 @@ public class RegionManager {
 	 * @param location the location
 	 * @return the region, or null if not found
 	 */
-	public Region getRegion(Location location){
-		if(location == null){
+	public Region getRegion(Location location) {
+		if (location == null) {
 			return null;
 		}
 		String worldname = location.getWorld().getName();
-		if(!regions.containsKey(worldname)){
+		if (!regions.containsKey(worldname)) {
 			return null;
 		}
 		Set<Region> regions = this.regions.get(worldname);
-		for(Region region : regions){
-			if(region.getCuboid().isContained(location)){
+		for (Region region : regions) {
+			if (region.getCuboid().isContained(location)) {
 				return region;
 			}
 		}
@@ -169,12 +169,12 @@ public class RegionManager {
 	 * @param name the region name
 	 * @return the region, or null if not found
 	 */
-	public Region getRegion(String name){
-		for(World world : plugin.getServer().getWorlds()){
-			if(regions.containsKey(world.getName())){
+	public Region getRegion(String name) {
+		for (World world : plugin.getServer().getWorlds()) {
+			if (regions.containsKey(world.getName())) {
 				Set<Region> regions = this.regions.get(world.getName());
-				for(Region region : regions){
-					if(region.getName().equalsIgnoreCase(name)){
+				for (Region region : regions) {
+					if (region.getName().equalsIgnoreCase(name)) {
 						return region;
 					}
 				}
@@ -191,7 +191,7 @@ public class RegionManager {
 	 * @param name the region name
 	 * @param gamemode the region's Game Mode
 	 */
-	public void addRegion(Cuboid cuboid, String owner, String name, GameMode gamemode){
+	public void addRegion(Cuboid cuboid, String owner, String name, GameMode gamemode) {
 		Region region = new Region();
 		region.setCuboid(cuboid);
 		region.setWorld(cuboid.getWorld());
@@ -201,7 +201,7 @@ public class RegionManager {
 		region.setConfig(RegionConfiguration.getConfig(region));
 		region.setID(String.valueOf(System.nanoTime()));
 		Set<Region> regions = new HashSet<Region>();
-		if(this.regions.containsKey(cuboid.getWorld().getName())){
+		if (this.regions.containsKey(cuboid.getWorld().getName())) {
 			regions.addAll(this.regions.get(cuboid.getWorld().getName()));
 		}
 		regions.add(region);
@@ -209,9 +209,9 @@ public class RegionManager {
 		this.regions.put(cuboid.getWorld().getName(), regions);
 	}
 
-	void inject(Region region){
+	void inject(Region region) {
 		Set<Region> regions = new HashSet<Region>();
-		if(this.regions.containsKey(region.getWorldName())){
+		if (this.regions.containsKey(region.getWorldName())) {
 			regions.addAll(this.regions.get(region.getWorldName()));
 		}
 		regions.add(region);
@@ -224,19 +224,19 @@ public class RegionManager {
 	 * 
 	 * @param name the region name.
 	 */
-	public void removeRegion(String name){
-		for(World world : plugin.getServer().getWorlds()){
-			if(regions.containsKey(world.getName())){
+	public void removeRegion(String name) {
+		for (World world : plugin.getServer().getWorlds()) {
+			if (regions.containsKey(world.getName())) {
 				Set<Region> regions = this.regions.get(world.getName());
 				Iterator<Region> iterator = regions.iterator();
 				List<Region> remove = new ArrayList<Region>();
-				while (iterator.hasNext()){
+				while (iterator.hasNext()) {
 					Region region = iterator.next();
-					if(region.getName().equalsIgnoreCase(name)){
+					if (region.getName().equalsIgnoreCase(name)) {
 						remove.add(region);
 					}
 				}
-				for(Region region : remove){
+				for (Region region : remove) {
 					region.onDelete();
 					regions.remove(region);
 				}
@@ -251,7 +251,7 @@ public class RegionManager {
 	 * @param name the region name
 	 * @return true if in use
 	 */
-	public boolean isRegionNameTaken(String name){
+	public boolean isRegionNameTaken(String name) {
 		return getRegion(name) != null;
 	}
 
@@ -261,9 +261,9 @@ public class RegionManager {
 	 * @param world the world
 	 * @return a set of regions, this will NEVER be null
 	 */
-	public Set<Region> getAllRegions(World world){
+	public Set<Region> getAllRegions(World world) {
 		Set<Region> returnableRegions = new HashSet<Region>();
-		if(regions.containsKey(world.getName())){
+		if (regions.containsKey(world.getName())) {
 			returnableRegions.addAll(regions.get(world.getName()));
 		}
 		return returnableRegions;
@@ -274,9 +274,9 @@ public class RegionManager {
 	 * 
 	 * @return a set of regions, this will NEVER be null
 	 */
-	public Set<Region> getAllRegions(){
+	public Set<Region> getAllRegions() {
 		Set<Region> returnableRegions = new HashSet<Region>();
-		for(World world : plugin.getServer().getWorlds()){
+		for (World world : plugin.getServer().getWorlds()) {
 			returnableRegions.addAll(getAllRegions(world));
 		}
 		return returnableRegions;
@@ -288,10 +288,10 @@ public class RegionManager {
 	 * @param gamemode the game mode to search
 	 * @return a set of regions, this will NEVER be null
 	 */
-	public Set<Region> getAllRegions(GameMode gamemode){
+	public Set<Region> getAllRegions(GameMode gamemode) {
 		Set<Region> returnableRegions = new HashSet<Region>();
-		for(Region region : getAllRegions()){
-			if(region.getGameMode() == gamemode){
+		for (Region region : getAllRegions()) {
+			if (region.getGameMode() == gamemode) {
 				returnableRegions.add(region);
 			}
 		}
@@ -306,71 +306,71 @@ public class RegionManager {
 	 * @param value the value of the change
 	 * @param sender the command sender applying the change
 	 */
-	public void updateRegion(Region region, RegionKeyType key, String value, CommandSender sender){
+	public void updateRegion(Region region, RegionKeyType key, String value, CommandSender sender) {
 		boolean changed = false;
 		Cuboid last = region.getCuboid(); // Pre-cloned
 		switch (key){
 		case NAME:
-			if(isRegionNameTaken(value)){
+			if (isRegionNameTaken(value)) {
 				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("name-in-use"), true);
-			}else{
+			} else {
 				region.setName(value);
 				changed = true;
 			}
 			break;
 		case ENTER_MESSAGE_SHOW:
-			if(ASUtils.getBoolean(value) != null){
+			if (ASUtils.getBoolean(value) != null) {
 				region.setShowEnterMessage(ASUtils.getBoolean(value));
 				changed = true;
-			}else{
+			} else {
 				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("unknown-value", value), true);
 			}
 			break;
 		case EXIT_MESSAGE_SHOW:
-			if(ASUtils.getBoolean(value) != null){
+			if (ASUtils.getBoolean(value) != null) {
 				region.setShowExitMessage(ASUtils.getBoolean(value));
 				changed = true;
-			}else{
+			} else {
 				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("unknown-value", value), true);
 			}
 			break;
 		case INVENTORY:
-			if(value.equalsIgnoreCase("none")){
+			if (value.equalsIgnoreCase("none")) {
 				region.setInventory(null);
 				changed = true;
-			}else if(value.equalsIgnoreCase("set")){
-				if(sender instanceof Player){
+			} else if (value.equalsIgnoreCase("set")) {
+				if (sender instanceof Player) {
 					region.setInventory(ASInventory.generate((Player) sender, InventoryType.REGION));
 					changed = true;
-				}else{
+				} else {
 					plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("console"), true);
 				}
-			}else{
+			} else {
 				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("unknown-value", value), true);
 			}
 			break;
 		case SELECTION_AREA:
-			if(!(sender instanceof Player)){
+			if (!(sender instanceof Player)) {
 				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("console"), true);
 				break;
 			}
 			Player player = (Player) sender;
-			if(plugin.getCuboidManager().isCuboidComplete(player.getName())){
+			if (plugin.getCuboidManager().isCuboidComplete(player.getName())) {
 				Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
 				region.setCuboid(cuboid);
 				changed = true;
-			}else{
+			} else {
 				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("missing-cuboid"), true);
 			}
 			break;
 		case GAMEMODE:
-			if(value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")){
+			if (value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")) {
 				region.setGameMode(GameMode.CREATIVE);
 				changed = true;
-			}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")){
+			} else if (value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")) {
 				region.setGameMode(GameMode.SURVIVAL);
 				changed = true;
-			}else{
+			} else {
 				plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("unknown-gamemode", value), true);
 			}
 			break;
@@ -385,7 +385,7 @@ public class RegionManager {
 		default:
 			break;
 		}
-		if(changed){
+		if (changed) {
 			region.onUpdate(last);
 			plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("region-saved"), true);
 		}
@@ -394,7 +394,7 @@ public class RegionManager {
 	/**
 	 * Reloads the region manager
 	 */
-	public void reload(){
+	public void reload() {
 		save();
 		load();
 	}

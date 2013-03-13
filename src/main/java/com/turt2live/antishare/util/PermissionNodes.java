@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
@@ -25,7 +25,7 @@ public class PermissionNodes {
 	public static class PermissionPackage {
 		public final String allow, deny, region;
 
-		PermissionPackage(String allow, String deny, String region){
+		PermissionPackage(String allow, String deny, String region) {
 			this.allow = allow;
 			this.deny = deny;
 			this.region = region;

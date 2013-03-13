@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
@@ -15,7 +15,7 @@ package com.turt2live.antishare.util;
  * 
  * @author turt2live
  */
-public enum Action{
+public enum Action {
 
 	GAMEMODE_CHANGE,
 	WORLD_CHANGE,

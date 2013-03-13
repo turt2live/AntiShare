@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.util;
 
@@ -22,7 +22,7 @@ public class ProtectionInformation {
 	public final boolean illegal, isRegion;
 	public final Region sourceRegion, targetRegion;
 
-	public ProtectionInformation(boolean illegal, boolean isRegion, Region source, Region target){
+	public ProtectionInformation(boolean illegal, boolean isRegion, Region source, Region target) {
 		this.illegal = illegal;
 		this.isRegion = isRegion;
 		this.sourceRegion = source;

@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare.money;
 
@@ -37,7 +37,7 @@ public class TransactionResult {
 	 * @param message the message
 	 * @param completed true if completed
 	 */
-	public TransactionResult(String message, boolean completed){
+	public TransactionResult(String message, boolean completed) {
 		this.message = message;
 		this.completed = completed;
 	}

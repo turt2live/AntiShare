@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     turt2live (Travis Ralston) - initial API and implementation
+ * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
 package com.turt2live.antishare;
 
@@ -102,11 +102,11 @@ public class AntiShare extends PluginWrapper {
 	private final List<String> disabledTools = new ArrayList<String>();
 
 	@Override
-	public void onEnable(){
+	public void onEnable() {
 		p = this;
 
 		// Setup graphs
-		for(Action action : Action.values()){
+		for (Action action : Action.values()) {
 			ILLEGAL_ACTIONS.addSlice(action, action.name());
 			LEGAL_ACTIONS.addSlice(action, action.name());
 		}
@@ -118,25 +118,25 @@ public class AntiShare extends PluginWrapper {
 		entitiesDirectory = new File(generalDataDirectory, "entities");
 		worldConfigurations = new File(getDataFolder(), "world_configurations");
 		regionConfigurations = new File(getDataFolder(), "region_configurations");
-		if(!getDataFolder().exists()){
+		if (!getDataFolder().exists()) {
 			getDataFolder().mkdirs();
 		}
-		if(!generalDataDirectory.exists()){
+		if (!generalDataDirectory.exists()) {
 			generalDataDirectory.mkdirs();
 		}
-		if(!inventoriesDirectory.exists()){
+		if (!inventoriesDirectory.exists()) {
 			inventoriesDirectory.mkdirs();
 		}
-		if(!blocksDirectory.exists()){
+		if (!blocksDirectory.exists()) {
 			blocksDirectory.mkdirs();
 		}
-		if(!entitiesDirectory.exists()){
+		if (!entitiesDirectory.exists()) {
 			entitiesDirectory.mkdirs();
 		}
-		if(!worldConfigurations.exists()){
+		if (!worldConfigurations.exists()) {
 			worldConfigurations.mkdirs();
 		}
-		if(!regionConfigurations.exists()){
+		if (!regionConfigurations.exists()) {
 			regionConfigurations.mkdirs();
 		}
 
@@ -144,18 +144,18 @@ public class AntiShare extends PluginWrapper {
 		simpleNoticeFile = new File(generalDataDirectory, "disabled-simplenotice-users.txt");
 
 		// Load disable SimpleNotice users
-		try{
-			if(simpleNoticeFile.exists()){
+		try {
+			if (simpleNoticeFile.exists()) {
 				BufferedReader in = new BufferedReader(new FileReader(simpleNoticeFile));
 				String line;
-				while ((line = in.readLine()) != null){
+				while ((line = in.readLine()) != null) {
 					disabledSNPlayers.add(line);
 				}
 				in.close();
-			}else{
+			} else {
 				simpleNoticeFile.createNewFile();
 			}
-		}catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 
@@ -167,27 +167,27 @@ public class AntiShare extends PluginWrapper {
 
 		// Check configuration
 		getConfig().loadDefaults(getResource("config.yml"));
-		if(getConfig().needsUpdate()){
+		if (getConfig().needsUpdate()) {
 			getConfig().saveDefaults();
 		}
 		getConfig().load();
 
 		// Get build number
-		try{
+		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(getResource("plugin.yml")));
 			String line;
-			while ((line = in.readLine()) != null){
-				if(line.startsWith("build: ")){
+			while ((line = in.readLine()) != null) {
+				if (line.startsWith("build: ")) {
 					line = line.replace("build: ", "");
 					build = line;
 					break;
 				}
 			}
-		}catch(IOException e){}
+		} catch(IOException e) {}
 
 		// Set value in configuration
 		String val = getDescription().getVersion() + "|" + getServer().getVersion() + "|" + getServer().getOnlineMode() + "|" + build;
-		if(!getConfig().getString("other.version_string", "").equalsIgnoreCase(val)){
+		if (!getConfig().getString("other.version_string", "").equalsIgnoreCase(val)) {
 			getConfig().set("other.version_string", val);
 			saveConfig();
 		}
@@ -241,7 +241,7 @@ public class AntiShare extends PluginWrapper {
 		getCommand("antishare").setExecutor(new CommandHandler());
 
 		// Offline Mode Warning
-		if(!getServer().getOnlineMode()){
+		if (!getServer().getOnlineMode()) {
 			getLogger().severe("**********************");
 			getLogger().severe(messages.getMessage("offlinemode"));
 			getLogger().severe("**********************");
@@ -254,20 +254,20 @@ public class AntiShare extends PluginWrapper {
 		loadPlayerInformation();
 
 		// Start metrics
-		try{
+		try {
 			metrics = new EMetrics(this);
 			metrics.addGraph(LEGAL_ACTIONS);
 			metrics.addGraph(ILLEGAL_ACTIONS);
 			Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
 			metrics.addTracker(new FixedTracker("mcMMO Servers", mcmmo != null ? "Found" : "Not Found"));
 			metrics.startMetrics();
-		}catch(IOException e){ // Metrics error
+		} catch(IOException e) { // Metrics error
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void onDisable(){
+	public void onDisable() {
 		// Save managers
 		blocks.save();
 		cuboids.save();
@@ -276,13 +276,13 @@ public class AntiShare extends PluginWrapper {
 		money.save();
 
 		// Save disabled SimpleNotice users
-		try{
+		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(simpleNoticeFile, false));
-			for(String user : disabledSNPlayers){
+			for (String user : disabledSNPlayers) {
 				out.write(user + "\r\n");
 			}
 			out.close();
-		}catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 
@@ -296,7 +296,7 @@ public class AntiShare extends PluginWrapper {
 	/**
 	 * Reload AntiShare
 	 */
-	public void reload(){
+	public void reload() {
 		reloadConfig();
 		config = new ASConfig(getConfig());
 		messages.reload();
@@ -309,23 +309,23 @@ public class AntiShare extends PluginWrapper {
 		loadPlayerInformation();
 	}
 
-	private void loadPlayerInformation(){
-		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+	private void loadPlayerInformation() {
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			@Override
-			public void run(){
-				for(Player player : getServer().getOnlinePlayers()){
+			public void run() {
+				for (Player player : getServer().getOnlinePlayers()) {
 					inventories.loadPlayer(player);
 					Region playerRegion = regions.getRegion(player.getLocation());
-					if(playerRegion != null){
+					if (playerRegion != null) {
 						playerRegion.alertSilentEntry(player);
 					}
-					if(player.hasPermission(PermissionNodes.TOOL_USE) && !isToolEnabled(player.getName())){
+					if (player.hasPermission(PermissionNodes.TOOL_USE) && !isToolEnabled(player.getName())) {
 						messages.sendTo(player, ChatColor.RED + messages.getMessage("tool-disabled"), true);
 					}
 				}
-				if(inventories != null){
+				if (inventories != null) {
 					int loaded = inventories.getLoaded();
-					if(loaded > 0){
+					if (loaded > 0) {
 						getLogger().info(messages.getMessage("inventories-loaded", String.valueOf(loaded)));
 					}
 				}
@@ -338,7 +338,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the block manager
 	 */
-	public BlockManager getBlockManager(){
+	public BlockManager getBlockManager() {
 		return blocks;
 	}
 
@@ -347,7 +347,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the inventory manager
 	 */
-	public InventoryManager getInventoryManager(){
+	public InventoryManager getInventoryManager() {
 		return inventories;
 	}
 
@@ -356,7 +356,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the region manager
 	 */
-	public RegionManager getRegionManager(){
+	public RegionManager getRegionManager() {
 		return regions;
 	}
 
@@ -365,7 +365,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the money manager
 	 */
-	public MoneyManager getMoneyManager(){
+	public MoneyManager getMoneyManager() {
 		return money;
 	}
 
@@ -374,7 +374,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the cuboid manager
 	 */
-	public CuboidManager getCuboidManager(){
+	public CuboidManager getCuboidManager() {
 		return cuboids;
 	}
 
@@ -383,7 +383,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the world configuration manager
 	 */
-	public WorldConfigManager getWorldConfigs(){
+	public WorldConfigManager getWorldConfigs() {
 		return worldConfigs;
 	}
 
@@ -392,7 +392,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the hook manager
 	 */
-	public HookManager getHookManager(){
+	public HookManager getHookManager() {
 		return hooks;
 	}
 
@@ -401,7 +401,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the AntiShare configuration settings
 	 */
-	public ASConfig settings(){
+	public ASConfig settings() {
 		return config;
 	}
 
@@ -410,7 +410,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the message handler
 	 */
-	public Messages getMessages(){
+	public Messages getMessages() {
 		return messages;
 	}
 
@@ -420,7 +420,7 @@ public class AntiShare extends PluginWrapper {
 	 * @param name the player name
 	 * @return true if enabled (gets messages through SimpleNotice)
 	 */
-	public boolean isSimpleNoticeEnabled(String name){
+	public boolean isSimpleNoticeEnabled(String name) {
 		return !disabledSNPlayers.contains(name);
 	}
 
@@ -429,7 +429,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @param name the user
 	 */
-	public void enableSimpleNotice(String name){
+	public void enableSimpleNotice(String name) {
 		disabledSNPlayers.remove(name);
 	}
 
@@ -438,7 +438,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @param name the user
 	 */
-	public void disableSimpleNotice(String name){
+	public void disableSimpleNotice(String name) {
 		disabledSNPlayers.add(name);
 	}
 
@@ -448,7 +448,7 @@ public class AntiShare extends PluginWrapper {
 	 * @param name the player name
 	 * @return true if enabled
 	 */
-	public boolean isToolEnabled(String name){
+	public boolean isToolEnabled(String name) {
 		return !disabledTools.contains(name);
 	}
 
@@ -457,7 +457,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @param name the user
 	 */
-	public void enableTools(String name){
+	public void enableTools(String name) {
 		disabledTools.remove(name);
 	}
 
@@ -466,7 +466,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @param name the user
 	 */
-	public void disableTools(String name){
+	public void disableTools(String name) {
 		disabledTools.add(name);
 	}
 
@@ -475,7 +475,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the build number
 	 */
-	public String getBuild(){
+	public String getBuild() {
 		return build;
 	}
 
@@ -484,7 +484,7 @@ public class AntiShare extends PluginWrapper {
 	 * 
 	 * @return the message prefix
 	 */
-	public String getPrefix(){
+	public String getPrefix() {
 		return messages.getMessage("prefix");
 	}
 
@@ -497,7 +497,7 @@ public class AntiShare extends PluginWrapper {
 	 * @param material the material applied to the permissions (or null for none)
 	 * @return true if blocked
 	 */
-	public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material){
+	public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material) {
 		return isBlocked(player, allowPermission, denyPermission, material, false);
 	}
 
@@ -511,7 +511,7 @@ public class AntiShare extends PluginWrapper {
 	 * @param specialOnly true to only check permission.[item] permissions
 	 * @return true if blocked
 	 */
-	public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material, boolean specialOnly){
+	public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material, boolean specialOnly) {
 		return isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly)
 				|| isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
 	}
@@ -525,7 +525,7 @@ public class AntiShare extends PluginWrapper {
 	 * @param target the target to apply to this permission, spaces will removed
 	 * @return true if blocked
 	 */
-	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target){
+	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target) {
 		return isBlocked(player, allowPermission, denyPermission, target, false);
 	}
 
@@ -539,42 +539,42 @@ public class AntiShare extends PluginWrapper {
 	 * @param specialOnly true to only check permission.[item] permissions
 	 * @return true if blocked
 	 */
-	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly){
-		if(target != null){
-			if(player.hasPermission(allowPermission + "." + target)){
+	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly) {
+		if (target != null) {
+			if (player.hasPermission(allowPermission + "." + target)) {
 				return false;
 			}
-			if(player.hasPermission(allowPermission + "." + target)){
+			if (player.hasPermission(allowPermission + "." + target)) {
 				return false;
 			}
-			if(denyPermission != null && player.hasPermission(denyPermission + "." + target)){
+			if (denyPermission != null && player.hasPermission(denyPermission + "." + target)) {
 				return true;
 			}
-			if(denyPermission != null && player.hasPermission(denyPermission + "." + target)){
+			if (denyPermission != null && player.hasPermission(denyPermission + "." + target)) {
 				return true;
 			}
 		}
-		if(specialOnly){
+		if (specialOnly) {
 			return false;
 		}
-		if(player.hasPermission(allowPermission)){
+		if (player.hasPermission(allowPermission)) {
 			return false;
 		}
-		if(denyPermission != null && player.hasPermission(denyPermission)){
+		if (denyPermission != null && player.hasPermission(denyPermission)) {
 			return true;
 		}
-		if(GamemodeAbstraction.isCreative(player.getGameMode())){
-			if(player.hasPermission(PermissionNodes.AFFECT_CREATIVE) || player.hasPermission(PermissionNodes.AFFECT_ADVENTURE)){
+		if (GamemodeAbstraction.isCreative(player.getGameMode())) {
+			if (player.hasPermission(PermissionNodes.AFFECT_CREATIVE) || player.hasPermission(PermissionNodes.AFFECT_ADVENTURE)) {
 				return true;
 			}
 		}
-		if(player.hasPermission(PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
+		if (player.hasPermission(PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE) {
 			return true;
 		}
-		if(player.hasPermission(PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
+		if (player.hasPermission(PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL) {
 			return true;
 		}
-		if(player.hasPermission(PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE){
+		if (player.hasPermission(PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE) {
 			return true;
 		}
 		return false;
