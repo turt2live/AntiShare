@@ -26,7 +26,7 @@ import com.turt2live.antishare.regions.Region;
  * 
  * @author turt2live
  */
-public class RegionCuboid extends Cuboid {
+public class RegionCuboid extends Cuboid{
 
 	public static final RegionCuboid NO_REGION_CUBOID = new RegionCuboid(null);
 
@@ -39,7 +39,7 @@ public class RegionCuboid extends Cuboid {
 	 * @param location2 the second location
 	 * @param region the owning region
 	 */
-	public RegionCuboid(Region region, Location location1, Location location2) {
+	public RegionCuboid(Region region, Location location1, Location location2){
 		super(location1, location2);
 		this.region = region;
 	}
@@ -49,7 +49,7 @@ public class RegionCuboid extends Cuboid {
 	 * 
 	 * @param region the owning region
 	 */
-	public RegionCuboid(Region region) {
+	public RegionCuboid(Region region){
 		super();
 		this.region = region;
 	}
@@ -59,7 +59,7 @@ public class RegionCuboid extends Cuboid {
 	 * 
 	 * @return the owning region
 	 */
-	public Region getRegion() {
+	public Region getRegion(){
 		return region;
 	}
 
@@ -68,7 +68,7 @@ public class RegionCuboid extends Cuboid {
 	 * 
 	 * @return true if a valid region is attached
 	 */
-	public boolean hasRegion() {
+	public boolean hasRegion(){
 		return region == null;
 	}
 
@@ -77,7 +77,7 @@ public class RegionCuboid extends Cuboid {
 	 * 
 	 * @param region the region
 	 */
-	public void setRegion(Region region) {
+	public void setRegion(Region region){
 		this.region = region;
 	}
 
@@ -88,11 +88,11 @@ public class RegionCuboid extends Cuboid {
 	 * @param region the region to assign
 	 * @return the new region cuboid
 	 */
-	public static RegionCuboid fromCuboid(Cuboid cuboid, Region region) {
-		if (cuboid == null || region == null) {
+	public static RegionCuboid fromCuboid(Cuboid cuboid, Region region){
+		if(cuboid == null || region == null){
 			throw new IllegalArgumentException("Null arguments are bad!");
 		}
-		if (cuboid instanceof RegionCuboid) {
+		if(cuboid instanceof RegionCuboid){
 			RegionCuboid rcuboid = (RegionCuboid) cuboid.clone();
 			rcuboid.setRegion(region);
 			return rcuboid;
@@ -104,10 +104,10 @@ public class RegionCuboid extends Cuboid {
 	}
 
 	@Override
-	public RegionCuboid clone() {
+	public RegionCuboid clone(){
 		RegionCuboid cuboid = new RegionCuboid(region);
 		cuboid.setPoints(point1 != null ? point1.clone() : null, point2 != null ? point2.clone() : null);
-		if (worldName != null) {
+		if(worldName != null){
 			cuboid.setWorld(Bukkit.getWorld(worldName));
 		}
 		return cuboid;
@@ -120,14 +120,14 @@ public class RegionCuboid extends Cuboid {
 	 * @return the cuboid
 	 * @throws IllegalArgumentException if the map is invalid in any way
 	 */
-	public static Cuboid deserialize(Map<String, Object> map) {
+	public static Cuboid deserialize(Map<String, Object> map){
 		String world = (String) map.get("world");
 		int mix = (Integer) map.get("minimum X"), miy = (Integer) map.get("minimum Y"), miz = (Integer) map.get("minimum Z"), max = (Integer) map.get("maximum X"), may = (Integer) map.get("maximum Y"), maz = (Integer) map.get("maximum Z");
-		if (world == null) {
+		if(world == null){
 			throw new IllegalArgumentException("World not found: " + world);
 		}
 		World matching = AntiShare.p.getServer().getWorld(world);
-		if (matching == null) {
+		if(matching == null){
 			throw new IllegalArgumentException("World not found: " + world);
 		}
 		Location mi = new Location(matching, mix, miy, miz);
@@ -138,7 +138,7 @@ public class RegionCuboid extends Cuboid {
 	}
 
 	@Override
-	public Map<String, Object> serialize() {
+	public Map<String, Object> serialize(){
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("world", worldName);
 		map.put("minimum X", minimum.getBlockX());

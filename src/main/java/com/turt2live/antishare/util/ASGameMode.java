@@ -17,7 +17,7 @@ import org.bukkit.GameMode;
  * 
  * @author turt2live
  */
-public enum ASGameMode {
+public enum ASGameMode{
 
 	CREATIVE(1),
 	SURVIVAL(0),
@@ -28,7 +28,7 @@ public enum ASGameMode {
 
 	private int numeric;
 
-	private ASGameMode(int numeric) {
+	private ASGameMode(int numeric){
 		this.numeric = numeric;
 	}
 
@@ -38,16 +38,16 @@ public enum ASGameMode {
 	 * @param gamemode the gamemode
 	 * @return true if matches
 	 */
-	public boolean matches(GameMode gamemode) {
-		if (numeric == -1 && (gamemode == GameMode.CREATIVE || gamemode == GameMode.SURVIVAL || (GamemodeAbstraction.isAdventureCreative() ? gamemode == GameMode.ADVENTURE : false))) {
+	public boolean matches(GameMode gamemode){
+		if(numeric == -1 && (gamemode == GameMode.CREATIVE || gamemode == GameMode.SURVIVAL || (GamemodeAbstraction.isAdventureCreative() ? gamemode == GameMode.ADVENTURE : false))){
 			return true;
-		} else if (numeric == 1 && gamemode == GameMode.CREATIVE) {
+		}else if(numeric == 1 && gamemode == GameMode.CREATIVE){
 			return true;
-		} else if (numeric == 0 && gamemode == GameMode.SURVIVAL) {
+		}else if(numeric == 0 && gamemode == GameMode.SURVIVAL){
 			return true;
-		} else if (numeric == -3) {
+		}else if(numeric == -3){
 			return true;
-		} else if (numeric == 2 && gamemode == GameMode.ADVENTURE) {
+		}else if(numeric == 2 && gamemode == GameMode.ADVENTURE){
 			return true;
 		}
 		return false; // Covers 'NONE'
@@ -59,19 +59,19 @@ public enum ASGameMode {
 	 * @param string the string
 	 * @return the ASGameMode, or null if not found
 	 */
-	public static ASGameMode match(String string) {
+	public static ASGameMode match(String string){
 		string = string.trim();
-		if (string.equalsIgnoreCase("creative")) {
+		if(string.equalsIgnoreCase("creative")){
 			return ASGameMode.CREATIVE;
-		} else if (string.equalsIgnoreCase("survival")) {
+		}else if(string.equalsIgnoreCase("survival")){
 			return ASGameMode.SURVIVAL;
-		} else if (string.equalsIgnoreCase("adventure")) {
+		}else if(string.equalsIgnoreCase("adventure")){
 			return ASGameMode.ADVENTURE;
-		} else if (string.equalsIgnoreCase("all")) {
+		}else if(string.equalsIgnoreCase("all")){
 			return ASGameMode.ALL;
-		} else if (string.equalsIgnoreCase("both")) {
+		}else if(string.equalsIgnoreCase("both")){
 			return ASGameMode.BOTH;
-		} else if (string.equalsIgnoreCase("none")) {
+		}else if(string.equalsIgnoreCase("none")){
 			return ASGameMode.NONE;
 		}
 		return null;

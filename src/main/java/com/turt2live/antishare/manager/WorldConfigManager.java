@@ -26,16 +26,16 @@ import com.turt2live.antishare.config.PerWorldConfig;
  * 
  * @author turt2live
  */
-public class WorldConfigManager implements Listener {
+public class WorldConfigManager implements Listener{
 
 	private HashMap<String, PerWorldConfig> config = new HashMap<String, PerWorldConfig>();
 
 	/**
 	 * Loads all world configurations
 	 */
-	public void load() {
+	public void load(){
 		config.clear();
-		for (World world : Bukkit.getWorlds()) {
+		for(World world : Bukkit.getWorlds()){
 			config.put(world.getName(), PerWorldConfig.getConfig(world.getName()));
 		}
 	}
@@ -43,7 +43,7 @@ public class WorldConfigManager implements Listener {
 	/**
 	 * Reloads the configuration manager
 	 */
-	public void reload() {
+	public void reload(){
 		load();
 	}
 
@@ -53,8 +53,8 @@ public class WorldConfigManager implements Listener {
 	 * @param world the world
 	 * @return the configuration
 	 */
-	public PerWorldConfig getConfig(String world) {
-		if (!config.containsKey(world)) {
+	public PerWorldConfig getConfig(String world){
+		if(!config.containsKey(world)){
 			config.put(world, PerWorldConfig.getConfig(world));
 		}
 		return config.get(world);
@@ -66,18 +66,18 @@ public class WorldConfigManager implements Listener {
 	 * @param world the world
 	 * @return the configuration
 	 */
-	public PerWorldConfig getConfig(World world) {
+	public PerWorldConfig getConfig(World world){
 		return getConfig(world.getName());
 	}
 
 	@EventHandler
-	public void onWorldLoad(WorldLoadEvent event) {
+	public void onWorldLoad(WorldLoadEvent event){
 		config.put(event.getWorld().getName(), PerWorldConfig.getConfig(event.getWorld().getName()));
 	}
 
 	@EventHandler
-	public void onWorldUnload(WorldUnloadEvent event) {
-		if (event.isCancelled()) {
+	public void onWorldUnload(WorldUnloadEvent event){
+		if(event.isCancelled()){
 			return;
 		}
 		World world = event.getWorld();

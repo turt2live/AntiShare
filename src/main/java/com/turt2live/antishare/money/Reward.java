@@ -22,7 +22,7 @@ import com.turt2live.antishare.util.PermissionNodes;
  * 
  * @author turt2live
  */
-public class Reward extends Tender {
+public class Reward extends Tender{
 
 	/**
 	 * Creates a new reward
@@ -32,26 +32,26 @@ public class Reward extends Tender {
 	 * @param enabled true to enable
 	 * @param affect the Game Mode(s) to affect
 	 */
-	public Reward(Action type, double amount, boolean enabled, ASGameMode affect) {
+	public Reward(Action type, double amount, boolean enabled, ASGameMode affect){
 		super(type, amount, enabled, affect);
 	}
 
 	@Override
-	public void apply(Player player) {
-		if (!isEnabled() || player.hasPermission(PermissionNodes.MONEY_NO_REWARD) || !super.affect(player.getGameMode())) {
+	public void apply(Player player){
+		if(!isEnabled() || player.hasPermission(PermissionNodes.MONEY_NO_REWARD) || !super.affect(player.getGameMode())){
 			return;
 		}
 
 		// Apply to account
 		TransactionResult result = plugin.getMoneyManager().addToAccount(player, getAmount());
-		if (!result.completed) {
+		if(!result.completed){
 			plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("reward-failed", result.message), true);
 			plugin.getLogger().warning(plugin.getMessages().getMessage("reward-failed", result.message) + "  (" + player.getName() + ")");
 			return;
-		} else {
+		}else{
 			String formatted = plugin.getMoneyManager().formatAmount(getAmount());
 			String balance = plugin.getMoneyManager().formatAmount(plugin.getMoneyManager().getBalance(player));
-			if (!plugin.getMoneyManager().isSilent(player.getName())) {
+			if(!plugin.getMoneyManager().isSilent(player.getName())){
 				plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("reward-success", formatted), true);
 				plugin.getMessages().sendTo(player, ChatColor.RED + plugin.getMessages().getMessage("new-balance", balance), true);
 			}

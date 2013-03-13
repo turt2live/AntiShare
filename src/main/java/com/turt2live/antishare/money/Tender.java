@@ -22,7 +22,7 @@ import com.turt2live.antishare.util.Action;
  * 
  * @author turt2live
  */
-public abstract class Tender {
+public abstract class Tender{
 
 	private double amount;
 	private Action type;
@@ -38,7 +38,7 @@ public abstract class Tender {
 	 * @param enabled true to enable
 	 * @param affect the Game Mode(s) to affect
 	 */
-	public Tender(Action type, double amount, boolean enabled, ASGameMode affect) {
+	public Tender(Action type, double amount, boolean enabled, ASGameMode affect){
 		this.type = type;
 		this.amount = amount;
 		this.enabled = enabled;
@@ -50,7 +50,7 @@ public abstract class Tender {
 	 * 
 	 * @return true if enabled
 	 */
-	public boolean isEnabled() {
+	public boolean isEnabled(){
 		return enabled;
 	}
 
@@ -59,8 +59,8 @@ public abstract class Tender {
 	 * 
 	 * @return the amount
 	 */
-	public double getAmount() {
-		if (!enabled) {
+	public double getAmount(){
+		if(!enabled){
 			return 0;
 		}
 		return amount;
@@ -71,7 +71,7 @@ public abstract class Tender {
 	 * 
 	 * @return the type
 	 */
-	public Action getType() {
+	public Action getType(){
 		return type;
 	}
 
@@ -80,7 +80,7 @@ public abstract class Tender {
 	 * 
 	 * @return the Game Mode(s)
 	 */
-	public ASGameMode getAffectedGameMode() {
+	public ASGameMode getAffectedGameMode(){
 		return affect;
 	}
 
@@ -90,7 +90,7 @@ public abstract class Tender {
 	 * @param gamemode the Game Mode
 	 * @return true if this tender should affect this Game Mode
 	 */
-	public boolean affect(GameMode gamemode) {
+	public boolean affect(GameMode gamemode){
 		return affect.matches(gamemode);
 	}
 

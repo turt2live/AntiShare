@@ -35,9 +35,9 @@ import com.turt2live.materials.MaterialAPI;
  * @author turt2live
  */
 //TODO: Schedule for rewrite
-public class BlockManager {
+public class BlockManager{
 
-	static class ASMaterial {
+	static class ASMaterial{
 		public Location location;
 		public GameMode gamemode;
 		public long added;
@@ -54,7 +54,7 @@ public class BlockManager {
 	/**
 	 * Creates a new Block Manager
 	 */
-	public BlockManager() {
+	public BlockManager(){
 		// Setup files
 		entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
 		blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
@@ -63,10 +63,10 @@ public class BlockManager {
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 
 			@Override
-			public void run() {
+			public void run(){
 				List<ASMaterial> r = new ArrayList<ASMaterial>();
-				for (ASMaterial m : recentlyRemoved) {
-					if (System.currentTimeMillis() - m.added >= 1000) {
+				for(ASMaterial m : recentlyRemoved){
+					if(System.currentTimeMillis() - m.added >= 1000){
 						r.add(m);
 					}
 				}
@@ -78,18 +78,18 @@ public class BlockManager {
 	/**
 	 * Loads the block manager
 	 */
-	public void load() {
+	public void load(){
 		// Load
 		wrappers.clear();
-		for (World world : plugin.getServer().getWorlds()) {
-			for (Chunk chunk : world.getLoadedChunks()) {
+		for(World world : plugin.getServer().getWorlds()){
+			for(Chunk chunk : world.getLoadedChunks()){
 				loadChunk(chunk);
 			}
 		}
 
 		// Tell console what we loaded
 		int cb = 0, ce = 0, sb = 0, se = 0, ab = 0, ae = 0;
-		for (String key : wrappers.keySet()) {
+		for(String key : wrappers.keySet()){
 			ChunkWrapper wrapper = wrappers.get(key);
 			cb += wrapper.creativeBlocks.size();
 			ce += wrapper.creativeEntities.size();
@@ -98,22 +98,22 @@ public class BlockManager {
 			ab += wrapper.adventureBlocks.size();
 			ae += wrapper.adventureEntities.size();
 		}
-		if (cb > 0) {
+		if(cb > 0){
 			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Creative", "Blocks", String.valueOf(cb)));
 		}
-		if (sb > 0) {
+		if(sb > 0){
 			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Survival", "Blocks", String.valueOf(sb)));
 		}
-		if (ab > 0) {
+		if(ab > 0){
 			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Adventure", "Blocks", String.valueOf(ab)));
 		}
-		if (ce > 0) {
+		if(ce > 0){
 			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Creative", "Entities", String.valueOf(ce)));
 		}
-		if (se > 0) {
+		if(se > 0){
 			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Survival", "Entities", String.valueOf(se)));
 		}
-		if (ae > 0) {
+		if(ae > 0){
 			plugin.getLogger().info(plugin.getMessages().getMessage("block-manager-load", "Adventure", "Entities", String.valueOf(ae)));
 		}
 		return;
@@ -122,11 +122,11 @@ public class BlockManager {
 	/**
 	 * Saves the block manager
 	 */
-	public void save() {
+	public void save(){
 		doneSave = false;
 		Double max = ((Integer) wrappers.size()).doubleValue();
 		Double done = 0.0;
-		for (String key : wrappers.keySet()) {
+		for(String key : wrappers.keySet()){
 			ChunkWrapper w = wrappers.get(key);
 			w.save(false, true, blocksDir, entitiesDir);
 			done++;
@@ -141,7 +141,7 @@ public class BlockManager {
 	 * 
 	 * @param chunk the chunk to load
 	 */
-	public void loadChunk(Chunk chunk) {
+	public void loadChunk(Chunk chunk){
 		String str = chunkToString(chunk);
 		ChunkWrapper wrapper = new ChunkWrapper(this, chunk);
 		wrapper.load(blocksDir, entitiesDir);
@@ -153,10 +153,10 @@ public class BlockManager {
 	 * 
 	 * @param chunk the chunk to unload
 	 */
-	public void unloadChunk(Chunk chunk) {
+	public void unloadChunk(Chunk chunk){
 		String key = chunkToString(chunk);
 		ChunkWrapper wrapper = wrappers.get(key);
-		if (wrapper != null) {
+		if(wrapper != null){
 			wrapper.save(false, false, blocksDir, entitiesDir);
 			wrappers.remove(wrapper);
 		}
@@ -168,10 +168,10 @@ public class BlockManager {
 	 * @param location the location
 	 * @return the Game Mode (or null if not applicable)
 	 */
-	public GameMode getRecentBreak(Location location) {
-		for (ASMaterial material : recentlyRemoved) {
+	public GameMode getRecentBreak(Location location){
+		for(ASMaterial material : recentlyRemoved){
 			Location l = material.location;
-			if (Math.floor(l.getX()) == Math.floor(location.getX()) && Math.floor(l.getY()) == Math.floor(location.getY()) && Math.floor(l.getZ()) == Math.floor(location.getZ()) && l.getWorld().getName().equalsIgnoreCase(location.getWorld().getName())) {
+			if(Math.floor(l.getX()) == Math.floor(location.getX()) && Math.floor(l.getY()) == Math.floor(location.getY()) && Math.floor(l.getZ()) == Math.floor(location.getZ()) && l.getWorld().getName().equalsIgnoreCase(location.getWorld().getName())){
 				return material.gamemode;
 			}
 		}
@@ -184,7 +184,7 @@ public class BlockManager {
 	 * @param block the block
 	 * @return the gamemode, or null if no assignment
 	 */
-	public GameMode getType(Block block) {
+	public GameMode getType(Block block){
 		String c = chunkToString(block.getChunk());
 		ChunkWrapper wrapper = wrappers.get(c);
 		return wrapper.getType(block);
@@ -196,7 +196,7 @@ public class BlockManager {
 	 * @param entity the entity
 	 * @return the gamemode, or null if no assignment
 	 */
-	public GameMode getType(Entity entity) {
+	public GameMode getType(Entity entity){
 		String c = chunkToString(entity.getLocation().getChunk());
 		ChunkWrapper wrapper = wrappers.get(c);
 		return wrapper.getType(entity);
@@ -208,20 +208,20 @@ public class BlockManager {
 	 * @param type the block type
 	 * @param block the block
 	 */
-	public void addBlock(GameMode type, Block block) {
+	public void addBlock(GameMode type, Block block){
 		switch (type){
 		case CREATIVE:
-			if (!plugin.settings().trackedCreative.has(block)) {
+			if(!plugin.settings().trackedCreative.has(block)){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if (!plugin.settings().trackedSurvival.has(block)) {
+			if(!plugin.settings().trackedSurvival.has(block)){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if (!plugin.settings().trackedAdventure.has(block)) {
+			if(!plugin.settings().trackedAdventure.has(block)){
 				return;
 			}
 			break;
@@ -239,24 +239,24 @@ public class BlockManager {
 	 * @param type the entity type
 	 * @param entity the entity
 	 */
-	public void addEntity(GameMode type, Entity entity) {
+	public void addEntity(GameMode type, Entity entity){
 		Material material = MaterialAPI.getMaterialForEntity(entity);
-		if (material == null) {
+		if(material == null){
 			return;
 		}
 		switch (type){
 		case CREATIVE:
-			if (!plugin.settings().trackedCreative.has(material)) {
+			if(!plugin.settings().trackedCreative.has(material)){
 				return;
 			}
 			break;
 		case SURVIVAL:
-			if (!plugin.settings().trackedSurvival.has(material)) {
+			if(!plugin.settings().trackedSurvival.has(material)){
 				return;
 			}
 			break;
 		case ADVENTURE:
-			if (!plugin.settings().trackedAdventure.has(material)) {
+			if(!plugin.settings().trackedAdventure.has(material)){
 				return;
 			}
 			break;
@@ -273,9 +273,9 @@ public class BlockManager {
 	 * 
 	 * @param entity the entity
 	 */
-	public void removeEntity(Entity entity) {
+	public void removeEntity(Entity entity){
 		GameMode type = getType(entity);
-		if (type != null) {
+		if(type != null){
 			ASMaterial material = new ASMaterial();
 			material.gamemode = type;
 			material.location = entity.getLocation();
@@ -291,9 +291,9 @@ public class BlockManager {
 	 * 
 	 * @param block the block
 	 */
-	public void removeBlock(Block block) {
+	public void removeBlock(Block block){
 		GameMode type = getType(block);
-		if (type != null) {
+		if(type != null){
 			ASMaterial material = new ASMaterial();
 			material.gamemode = type;
 			material.location = block.getLocation();
@@ -310,11 +310,11 @@ public class BlockManager {
 	 * @param oldLocation the old location
 	 * @param newLocation the new location
 	 */
-	public void moveBlock(Location oldLocation, final Location newLocation) {
+	public void moveBlock(Location oldLocation, final Location newLocation){
 		final GameMode type = getType(oldLocation.getBlock());
 		Block oldBlock = oldLocation.getBlock();
 
-		if (type == null) {
+		if(type == null){
 			return;
 		}
 
@@ -326,7 +326,7 @@ public class BlockManager {
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
 			@Override
-			public void run() {
+			public void run(){
 				// Setup vars
 				int runs = 0;
 				int maxRuns = 10;
@@ -334,45 +334,45 @@ public class BlockManager {
 				boolean updated = false;
 
 				// Loop
-				while (runs <= maxRuns && !updated) {
+				while(runs <= maxRuns && !updated){
 					// Check block
 					Block newBlock = newLocation.getBlock();
-					if (newBlock.getType() == oldType) {
+					if(newBlock.getType() == oldType){
 						addBlock(type, newBlock);
 						updated = true;
 					}
 
 					// Count and wait
 					runs++;
-					try {
+					try{
 						Thread.sleep(delay);
-					} catch(InterruptedException e) {
+					}catch(InterruptedException e){
 						e.printStackTrace();
 					}
 				}
 
 				// Warn if not updated
-				if (!updated) {
+				if(!updated){
 					plugin.getLogger().severe(plugin.getMessages().getMessage("failed-to-update", String.valueOf(delay * maxRuns)));
 				}
 			}
 		});
 	}
 
-	String chunkToString(Chunk chunk) {
+	String chunkToString(Chunk chunk){
 		return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
 	}
 
-	String blockToString(Block block) {
+	String blockToString(Block block){
 		return block.getChunk().getX() + ";" + block.getChunk().getZ() + ";" + block.getWorld().getName() + ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
 	}
 
-	String entityToString(Entity entity) {
+	String entityToString(Entity entity){
 		Location location = entity.getLocation();
 		return location.getChunk().getX() + ";" + location.getChunk().getZ() + ";" + location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + entity.getType().name();
 	}
 
-	String entityToString(Location entity, EntityType type) {
+	String entityToString(Location entity, EntityType type){
 		return entity.getChunk().getX() + ";" + entity.getChunk().getZ() + ";" + entity.getWorld().getName() + ";" + entity.getX() + ";" + entity.getY() + ";" + entity.getZ() + ";" + type.name();
 	}
 
@@ -381,8 +381,8 @@ public class BlockManager {
 	 * 
 	 * @return the percentage done
 	 */
-	public int percentSaveDone() {
-		if (isSaveDone()) {
+	public int percentSaveDone(){
+		if(isSaveDone()){
 			return 100;
 		}
 		return percent;
@@ -393,14 +393,14 @@ public class BlockManager {
 	 * 
 	 * @return true if completed, false otherwise
 	 */
-	public boolean isSaveDone() {
+	public boolean isSaveDone(){
 		return this.doneSave;
 	}
 
 	/**
 	 * Reloads the block manager
 	 */
-	public void reload() {
+	public void reload(){
 		save();
 		load();
 	}

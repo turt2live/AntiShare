@@ -15,17 +15,17 @@ package com.turt2live.antishare.util;
  * 
  * @author turt2live
  */
-public class PermissionNodes {
+public class PermissionNodes{
 
 	/**
 	 * Holds multiple permissions for illegal/legal checks
 	 * 
 	 * @author turt2live
 	 */
-	public static class PermissionPackage {
+	public static class PermissionPackage{
 		public final String allow, deny, region;
 
-		PermissionPackage(String allow, String deny, String region) {
+		PermissionPackage(String allow, String deny, String region){
 			this.allow = allow;
 			this.deny = deny;
 			this.region = region;

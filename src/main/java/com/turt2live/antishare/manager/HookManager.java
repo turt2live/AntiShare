@@ -35,7 +35,7 @@ import com.turt2live.antishare.compatibility.type.RegionProtection;
  * 
  * @author turt2live
  */
-public class HookManager {
+public class HookManager{
 
 	private AntiShare plugin = AntiShare.p;
 	private final List<BlockProtection> blocks = new ArrayList<BlockProtection>();
@@ -51,8 +51,8 @@ public class HookManager {
 	 * @param before the material before the break
 	 * @param data the data before the break
 	 */
-	public void sendBlockBreak(String playerName, Location location, Material before, byte data) {
-		for (BlockLogger logger : loggers) {
+	public void sendBlockBreak(String playerName, Location location, Material before, byte data){
+		for(BlockLogger logger : loggers){
 			logger.breakBlock(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, before, data);
 		}
 	}
@@ -65,8 +65,8 @@ public class HookManager {
 	 * @param after the material after the break
 	 * @param data the data after the break
 	 */
-	public void sendBlockPlace(String playerName, Location location, Material after, byte data) {
-		for (BlockLogger logger : loggers) {
+	public void sendBlockPlace(String playerName, Location location, Material after, byte data){
+		for(BlockLogger logger : loggers){
 			logger.placeBlock(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, after, data);
 		}
 	}
@@ -79,8 +79,8 @@ public class HookManager {
 	 * @param before the material before the break
 	 * @param data the data before the break
 	 */
-	public void sendEntityBreak(String playerName, Location location, Material before, byte data) {
-		for (BlockLogger logger : loggers) {
+	public void sendEntityBreak(String playerName, Location location, Material before, byte data){
+		for(BlockLogger logger : loggers){
 			logger.breakHanging(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, before, data);
 		}
 	}
@@ -93,8 +93,8 @@ public class HookManager {
 	 * @param after the material after the break
 	 * @param data the data after the break
 	 */
-	public void sendEntityPlace(String playerName, Location location, Material after, byte data) {
-		for (BlockLogger logger : loggers) {
+	public void sendEntityPlace(String playerName, Location location, Material after, byte data){
+		for(BlockLogger logger : loggers){
 			logger.placeHanging(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, after, data);
 		}
 	}
@@ -105,9 +105,9 @@ public class HookManager {
 	 * @param location the location
 	 * @return true if a region was found, false otherwise
 	 */
-	public boolean checkForRegion(Location location) {
-		for (RegionProtection protection : regions) {
-			if (protection.isRegion(location)) {
+	public boolean checkForRegion(Location location){
+		for(RegionProtection protection : regions){
+			if(protection.isRegion(location)){
 				return true;
 			}
 		}
@@ -121,9 +121,9 @@ public class HookManager {
 	 * @param block the block
 	 * @return true if region found (not allowed), false otherwise
 	 */
-	public boolean checkForRegion(Player player, Block block) {
-		for (RegionProtection protection : regions) {
-			if (!protection.isAllowed(player, block)) {
+	public boolean checkForRegion(Player player, Block block){
+		for(RegionProtection protection : regions){
+			if(!protection.isAllowed(player, block)){
 				return true;
 			}
 		}
@@ -136,7 +136,7 @@ public class HookManager {
 	 * @param block the block
 	 * @return true if a sign protection plugin claims this block protected
 	 */
-	public boolean checkForSignProtection(Block block) {
+	public boolean checkForSignProtection(Block block){
 		return checkForBlockProtection(block);
 	}
 
@@ -146,23 +146,23 @@ public class HookManager {
 	 * @param block the block
 	 * @return true if a plugin claims this block protected
 	 */
-	public boolean checkForBlockProtection(Block block) {
-		for (BlockProtection protection : blocks) {
-			if (protection.isProtected(block)) {
+	public boolean checkForBlockProtection(Block block){
+		for(BlockProtection protection : blocks){
+			if(protection.isProtected(block)){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private void hooked(Plugin hook) {
+	private void hooked(Plugin hook){
 		plugin.getLogger().info(plugin.getMessages().getMessage("hooked", hook.getName()));
 	}
 
 	/**
 	 * Reloads the hook manager
 	 */
-	public void reload() {
+	public void reload(){
 		blocks.clear();
 		loggers.clear();
 		regions.clear();
@@ -173,7 +173,7 @@ public class HookManager {
 	/**
 	 * Loads all the hooks for AntiShare
 	 */
-	public void load() {
+	public void load(){
 		// Clear
 		blocks.clear();
 		loggers.clear();
@@ -182,32 +182,32 @@ public class HookManager {
 
 		// Find plugins
 		Plugin chestshop = plugin.getServer().getPluginManager().getPlugin("ChestShop");
-		if (chestshop != null) {
+		if(chestshop != null){
 			hooked(chestshop);
 			blocks.add(new ChestShop());
 		}
 		Plugin lwc = plugin.getServer().getPluginManager().getPlugin("LWC");
-		if (lwc != null) {
+		if(lwc != null){
 			hooked(lwc);
 			blocks.add(new LWC());
 		}
 		Plugin lockette = plugin.getServer().getPluginManager().getPlugin("Lockette");
-		if (lockette != null) {
+		if(lockette != null){
 			hooked(lockette);
 			blocks.add(new Lockette());
 		}
 		Plugin towny = plugin.getServer().getPluginManager().getPlugin("Towny");
-		if (towny != null) {
+		if(towny != null){
 			hooked(towny);
 			regions.add(new Towny());
 		}
 		Plugin logblock = plugin.getServer().getPluginManager().getPlugin("LogBlock");
-		if (logblock != null) {
+		if(logblock != null){
 			hooked(logblock);
 			loggers.add(new LogBlock());
 		}
 		Plugin magicspells = plugin.getServer().getPluginManager().getPlugin("MagicSpells");
-		if (magicspells != null) {
+		if(magicspells != null){
 			hooked(magicspells);
 			spells = new MagicSpells();
 			plugin.getServer().getPluginManager().registerEvents(spells, plugin);

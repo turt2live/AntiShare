@@ -29,17 +29,17 @@ import de.diddiz.LogBlock.events.BlockChangePreLogEvent;
  * 
  * @author turt2live
  */
-public class LogBlock extends BlockLogger implements Listener {
+public class LogBlock extends BlockLogger implements Listener{
 
 	private Consumer lb;
 	private AntiShare as = AntiShare.p;
 
-	public LogBlock() {
+	public LogBlock(){
 		Plugin logblock = as.getServer().getPluginManager().getPlugin("LogBlock");
 		de.diddiz.LogBlock.LogBlock lbp = (de.diddiz.LogBlock.LogBlock) logblock;
 		lb = lbp.getConsumer();
 		as.getServer().getPluginManager().registerEvents(this, as);
-		if (!as.settings().logBlockSpam) {
+		if(!as.settings().logBlockSpam){
 			as.getLogger().warning("************************");
 			as.getLogger().warning(as.getMessages().getMessage("logblock"));
 			as.getLogger().warning("************************");
@@ -47,31 +47,31 @@ public class LogBlock extends BlockLogger implements Listener {
 	}
 
 	@Override
-	public void breakBlock(String playerName, Location location, Material before, byte data) {
+	public void breakBlock(String playerName, Location location, Material before, byte data){
 		lb.queueBlockBreak(playerName, location, before.getId(), data);
 	}
 
 	@Override
-	public void placeBlock(String playerName, Location location, Material after, byte data) {
+	public void placeBlock(String playerName, Location location, Material after, byte data){
 		lb.queueBlockPlace(playerName, location, after.getId(), data);
 	}
 
 	@EventHandler (priority = EventPriority.HIGHEST)
-	public void onBlockChange(BlockChangePreLogEvent event) {
-		if (event.isCancelled() || event.getOwner().startsWith(PLAYER_NAME)) {
+	public void onBlockChange(BlockChangePreLogEvent event){
+		if(event.isCancelled() || event.getOwner().startsWith(PLAYER_NAME)){
 			return;
 		}
 		Block block = event.getLocation().getBlock();
-		if (block.hasMetadata("antishare-logblock")) {
+		if(block.hasMetadata("antishare-logblock")){
 			event.setCancelled(true);
 			block.removeMetadata("antishare-logblock", as);
 		}
 	}
 
 	@Override
-	public void breakHanging(String playerName, Location location, Material before, byte data) {}
+	public void breakHanging(String playerName, Location location, Material before, byte data){}
 
 	@Override
-	public void placeHanging(String playerName, Location location, Material after, byte data) {}
+	public void placeHanging(String playerName, Location location, Material after, byte data){}
 
 }

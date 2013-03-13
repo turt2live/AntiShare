@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  * 
  * @author turt2live
  */
-public abstract class BlockProtection {
+public abstract class BlockProtection{
 
 	/**
 	 * Determines if a block is protected

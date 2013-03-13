@@ -22,7 +22,7 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
-public class RegionConfiguration extends ASConfig {
+public class RegionConfiguration extends ASConfig{
 
 	private static AntiShare plugin = AntiShare.p;
 	private Region region;
@@ -33,23 +33,23 @@ public class RegionConfiguration extends ASConfig {
 	 * @param region the region
 	 * @return the region configuration
 	 */
-	public static RegionConfiguration getConfig(Region region) {
+	public static RegionConfiguration getConfig(Region region){
 		File path = Region.REGION_CONFIGURATIONS;
 		EnhancedConfiguration regionConfig = new EnhancedConfiguration(new File(path, ASUtils.fileSafeName(region.getName()) + ".yml"), plugin);
 		regionConfig.loadDefaults(plugin.getResource("world.yml"));
-		if (regionConfig.needsUpdate()) {
+		if(regionConfig.needsUpdate()){
 			regionConfig.saveDefaults();
 		}
 		regionConfig.load();
-		if (regionConfig.getBoolean("use-global")) {
+		if(regionConfig.getBoolean("use-global")){
 			regionConfig = plugin.getConfig();
-		} else if (regionConfig.getBoolean("use-world")) {
+		}else if(regionConfig.getBoolean("use-world")){
 			regionConfig = plugin.getWorldConfigs().getConfig(region.getWorldName()).rawConfiguration;
 		}
 		return new RegionConfiguration(region, regionConfig);
 	}
 
-	RegionConfiguration(Region region, EnhancedConfiguration config) {
+	RegionConfiguration(Region region, EnhancedConfiguration config){
 		super(config);
 		this.region = region;
 	}
@@ -59,7 +59,7 @@ public class RegionConfiguration extends ASConfig {
 	 * 
 	 * @return the region for this configuration
 	 */
-	public Region getRegion() {
+	public Region getRegion(){
 		return region;
 	}
 

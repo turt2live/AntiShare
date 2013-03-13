@@ -20,21 +20,21 @@ import com.turt2live.antishare.compatibility.type.BlockProtection;
  * 
  * @author turt2live
  */
-public class LWC extends BlockProtection {
+public class LWC extends BlockProtection{
 
 	private com.griefcraft.lwc.LWC lwc;
 
-	public LWC() {
+	public LWC(){
 		lwc = com.griefcraft.lwc.LWC.getInstance();
 	}
 
 	@Override
-	public boolean isProtected(Block block) {
+	public boolean isProtected(Block block){
 		return lwc.findProtection(block) != null;
 	}
 
 	@Override
-	public boolean canAccess(Player player, Block block) {
+	public boolean canAccess(Player player, Block block){
 		return lwc.canAccessProtection(player, block);
 	}
 

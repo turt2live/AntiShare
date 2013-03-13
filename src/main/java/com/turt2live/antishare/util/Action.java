@@ -15,7 +15,7 @@ package com.turt2live.antishare.util;
  * 
  * @author turt2live
  */
-public enum Action {
+public enum Action{
 
 	GAMEMODE_CHANGE,
 	WORLD_CHANGE,

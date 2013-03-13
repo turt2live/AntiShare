@@ -20,9 +20,9 @@ import com.turt2live.antishare.config.ConfigConvert;
  * 
  * @author turt2live
  */
-public class ASConfigSection extends MemorySection {
+public class ASConfigSection extends MemorySection{
 
-	public ASConfigSection(ConfigurationSection s, String p) {
+	public ASConfigSection(ConfigurationSection s, String p){
 		super(s, p);
 	}
 

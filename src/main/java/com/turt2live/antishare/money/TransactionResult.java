@@ -17,7 +17,7 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-public class TransactionResult {
+public class TransactionResult{
 
 	public static final TransactionResult NO_VAULT = new TransactionResult(AntiShare.p.getMessages().getMessage("vault-not-enabled"), false);
 	public static final TransactionResult NO_TAB = new TransactionResult(AntiShare.p.getMessages().getMessage("tab-not-enabled"), false);
@@ -37,7 +37,7 @@ public class TransactionResult {
 	 * @param message the message
 	 * @param completed true if completed
 	 */
-	public TransactionResult(String message, boolean completed) {
+	public TransactionResult(String message, boolean completed){
 		this.message = message;
 		this.completed = completed;
 	}

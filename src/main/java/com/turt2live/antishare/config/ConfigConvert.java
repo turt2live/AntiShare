@@ -24,31 +24,31 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
-public class ConfigConvert {
+public class ConfigConvert{
 
 	/**
 	 * Does the actual conversion.<br>
 	 * <i>This does attempt to look for 5.4.0-BETA keys that may exist</i>
 	 */
-	public static void doConvert() {
+	public static void doConvert(){
 		AntiShare p = AntiShare.p;
 
 		File config = new File(p.getDataFolder(), "config.yml");
 
-		if (!config.exists()) {
+		if(!config.exists()){
 			return; // Fresh install
 		}
 
-		try {
+		try{
 			ASUtils.copyFile(config, new File(p.getDataFolder(), "config-5.3.0-backup.yml"));
-		} catch(IOException e) {
+		}catch(IOException e){
 			e.printStackTrace();
 		}
 
 		// Note: AntiShare#onEnable() will automatically clean up the mess left here
 		EnhancedConfiguration c = p.getConfig();
 
-		if (c.getString("other.version_string") != null) {
+		if(c.getString("other.version_string") != null){
 			return; // Already converted!
 		}
 
@@ -71,13 +71,13 @@ public class ConfigConvert {
 
 		// Convert crafted mobs
 		List<String> mobs = new ArrayList<String>();
-		if (c.getBoolean("enabled-features.mob-creation.allow-snow-golems")) {
+		if(c.getBoolean("enabled-features.mob-creation.allow-snow-golems")){
 			mobs.add("snow golem");
 		}
-		if (c.getBoolean("enabled-features.mob-creation.allow-iron-golems")) {
+		if(c.getBoolean("enabled-features.mob-creation.allow-iron-golems")){
 			mobs.add("iron golem");
 		}
-		if (c.getBoolean("enabled-features.mob-creation.allow-wither")) {
+		if(c.getBoolean("enabled-features.mob-creation.allow-wither")){
 			mobs.add("wither");
 		}
 		c.set("lists.craft-mob", mobs);
@@ -133,8 +133,8 @@ public class ConfigConvert {
 		p.getLogger().warning("=========================");
 	}
 
-	private static List<String> merge(String s1, String s2) {
-		if (s1 == null || s2 == null) {
+	private static List<String> merge(String s1, String s2){
+		if(s1 == null || s2 == null){
 			return null;
 		}
 		List<String> l = new ArrayList<String>();
@@ -143,13 +143,13 @@ public class ConfigConvert {
 		return l;
 	}
 
-	private static List<String> convertList(String raw) {
+	private static List<String> convertList(String raw){
 		List<String> l = new ArrayList<String>();
-		if (raw == null) {
+		if(raw == null){
 			return null;
 		}
 		String[] parts = raw.split(",");
-		for (String s : parts) {
+		for(String s : parts){
 			s = s.trim();
 			l.add(s);
 		}

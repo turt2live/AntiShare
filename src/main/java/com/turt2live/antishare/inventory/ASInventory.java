@@ -33,14 +33,14 @@ import com.turt2live.antishare.AntiShare;
  * @author turt2live
  */
 // TODO: Cleanup
-public class ASInventory implements Cloneable {
+public class ASInventory implements Cloneable{
 
 	/**
 	 * An enum to represent inventory types
 	 * 
 	 * @author turt2live
 	 */
-	public static enum InventoryType {
+	public static enum InventoryType{
 		PLAYER("players"),
 		REGION("regions"),
 		TEMPORARY("temporary"),
@@ -48,7 +48,7 @@ public class ASInventory implements Cloneable {
 
 		private String relativeFolderName;
 
-		private InventoryType(String relativeFolderName) {
+		private InventoryType(String relativeFolderName){
 			this.relativeFolderName = relativeFolderName;
 		}
 
@@ -57,7 +57,7 @@ public class ASInventory implements Cloneable {
 		 * 
 		 * @return the folder
 		 */
-		public String getRelativeFolderName() {
+		public String getRelativeFolderName(){
 			return relativeFolderName;
 		}
 	}
@@ -69,25 +69,25 @@ public class ASInventory implements Cloneable {
 	 * @param type the inventory type to generate
 	 * @return the inventory
 	 */
-	public static ASInventory generate(Player player, InventoryType type) {
+	public static ASInventory generate(Player player, InventoryType type){
 		ASInventory inventory = new ASInventory(type, player.getName(), player.getWorld(), player.getGameMode());
-		if (type == InventoryType.ENDER) {
+		if(type == InventoryType.ENDER){
 			ItemStack[] contents = player.getEnderChest().getContents();
 			int slot = 0;
-			for (ItemStack item : contents) {
+			for(ItemStack item : contents){
 				inventory.set(slot, item);
 				slot++;
 			}
-		} else {
+		}else{
 			ItemStack[] contents = player.getInventory().getContents();
 			int slot = 0;
-			for (ItemStack item : contents) {
+			for(ItemStack item : contents){
 				inventory.set(slot, item);
 				slot++;
 			}
 			contents = player.getInventory().getArmorContents();
 			slot = 100;
-			for (ItemStack item : contents) {
+			for(ItemStack item : contents){
 				inventory.set(slot, item);
 				slot++;
 			}
@@ -102,18 +102,18 @@ public class ASInventory implements Cloneable {
 	 * @param type the Inventory Type
 	 * @return the inventories
 	 */
-	public static List<ASInventory> generateInventory(String name, InventoryType type) {
+	public static List<ASInventory> generateInventory(String name, InventoryType type){
 		// Setup
 		List<ASInventory> inventories = new ArrayList<ASInventory>();
 
 		// Configuration check
-		if (!AntiShare.p.settings().features.inventories) {
+		if(!AntiShare.p.settings().features.inventories){
 			return inventories;
 		}
 		// Setup
 		File dir = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
 		File saveFile = new File(dir, name + ".yml");
-		if (!saveFile.exists()) {
+		if(!saveFile.exists()){
 			return inventories;
 		}
 		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, AntiShare.p);
@@ -122,21 +122,21 @@ public class ASInventory implements Cloneable {
 		// Load data
 		// Structure: yml:world.gamemode.slot.properties
 		List<String> removeWorlds = new ArrayList<String>();
-		for (String world : file.getKeys(false)) {
-			for (String gamemode : file.getConfigurationSection(world).getKeys(false)) {
+		for(String world : file.getKeys(false)){
+			for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
 				World bukkitWorld = Bukkit.getWorld(world);
-				if (bukkitWorld == null) {
+				if(bukkitWorld == null){
 					AntiShare.p.getLogger().severe(AntiShare.p.getMessages().getMessage("world-missing", world, type.name(), name));
-					if (AntiShare.p.settings().inventoryCleanupSettings.removeOldWorlds) {
+					if(AntiShare.p.settings().inventoryCleanupSettings.removeOldWorlds){
 						AntiShare.p.getLogger().severe("=== " + AntiShare.p.getMessages().getMessage("remove-world-1") + " ===");
 						AntiShare.p.getLogger().severe(AntiShare.p.getMessages().getMessage("remove-world-2"));
 						removeWorlds.add(world);
 					}
 					continue;
 				}
-				if (gamemode.equalsIgnoreCase("adventure") || gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival")) {
+				if(gamemode.equalsIgnoreCase("adventure") || gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival")){
 					ASInventory inventory = new ASInventory(type, name, bukkitWorld, GameMode.valueOf(gamemode));
-					for (String stringSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)) {
+					for(String stringSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
 						Integer slot = Integer.valueOf(stringSlot);
 						ItemStack item = file.getItemStack(world + "." + gamemode + "." + stringSlot);
 						inventory.set(slot, item);
@@ -146,8 +146,8 @@ public class ASInventory implements Cloneable {
 			}
 		}
 		// Remove old worlds
-		if (AntiShare.p.settings().inventoryCleanupSettings.removeOldWorlds) { // Safe-guard check
-			for (String world : removeWorlds) {
+		if(AntiShare.p.settings().inventoryCleanupSettings.removeOldWorlds){ // Safe-guard check
+			for(String world : removeWorlds){
 				file.set(world, null);
 			}
 			file.save();
@@ -172,7 +172,7 @@ public class ASInventory implements Cloneable {
 	 * @param world the world
 	 * @param gamemode the gamemode
 	 */
-	public ASInventory(InventoryType type, String inventoryName, World world, GameMode gamemode) {
+	public ASInventory(InventoryType type, String inventoryName, World world, GameMode gamemode){
 		plugin = AntiShare.p;
 		this.type = type;
 		this.inventoryName = inventoryName;
@@ -185,10 +185,10 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @return true if empty, false otherwise
 	 */
-	public boolean isEmpty() {
-		for (Integer slot : inventory.keySet()) {
+	public boolean isEmpty(){
+		for(Integer slot : inventory.keySet()){
 			ItemStack stack = inventory.get(slot);
-			if (stack != null && stack.getType() != Material.AIR) {
+			if(stack != null && stack.getType() != Material.AIR){
 				return false;
 			}
 		}
@@ -201,8 +201,8 @@ public class ASInventory implements Cloneable {
 	 * @param slot the slot
 	 * @param item the item
 	 */
-	public void set(int slot, ItemStack item) {
-		if (item == null) {
+	public void set(int slot, ItemStack item){
+		if(item == null){
 			item = new ItemStack(Material.AIR, 1);
 		}
 		inventory.put(slot, item);
@@ -214,27 +214,27 @@ public class ASInventory implements Cloneable {
 	 * @param player the player
 	 */
 	@SuppressWarnings ("deprecation")
-	public void setTo(Player player) {
+	public void setTo(Player player){
 		Inventory playerInventory;
-		if (type == InventoryType.ENDER) {
+		if(type == InventoryType.ENDER){
 			playerInventory = player.getEnderChest();
-		} else {
+		}else{
 			playerInventory = player.getInventory();
 			ItemStack air = new ItemStack(Material.AIR);
 			ItemStack[] armor = {air, air, air, air};
 			((PlayerInventory) playerInventory).setArmorContents(armor);
 		}
 		playerInventory.clear();
-		for (Integer slot : inventory.keySet()) {
+		for(Integer slot : inventory.keySet()){
 			ItemStack item = inventory.get(slot);
-			if (item == null) {
+			if(item == null){
 				inventory.put(slot, new ItemStack(Material.AIR, 1));
 				item = new ItemStack(Material.AIR, 1);
 			}
-			if (slot < 100) {
+			if(slot < 100){
 				playerInventory.setItem(slot, item);
-			} else {
-				if (playerInventory instanceof PlayerInventory) {
+			}else{
+				if(playerInventory instanceof PlayerInventory){
 					switch (slot){
 					case 100:
 						((PlayerInventory) playerInventory).setBoots(item);
@@ -258,9 +258,9 @@ public class ASInventory implements Cloneable {
 	/**
 	 * Saves the inventory to disk
 	 */
-	public void save() {
+	public void save(){
 		// Configuration check
-		if (!plugin.settings().features.inventories) {
+		if(!plugin.settings().features.inventories){
 			return;
 		}
 		// Setup
@@ -272,10 +272,10 @@ public class ASInventory implements Cloneable {
 
 		// Save data
 		// Structure: yml:world.gamemode.slot.properties
-		for (Integer slot : inventory.keySet()) {
+		for(Integer slot : inventory.keySet()){
 			// Don't save AIR
 			ItemStack item = inventory.get(slot);
-			if (item == null || item.getType() == Material.AIR) {
+			if(item == null || item.getType() == Material.AIR){
 				continue;
 			}
 
@@ -290,7 +290,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @return the world
 	 */
-	public World getWorld() {
+	public World getWorld(){
 		return world;
 	}
 
@@ -299,7 +299,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @return the game mode
 	 */
-	public GameMode getGameMode() {
+	public GameMode getGameMode(){
 		return gamemode;
 	}
 
@@ -308,7 +308,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @param type the new type
 	 */
-	public void setType(InventoryType type) {
+	public void setType(InventoryType type){
 		this.type = type;
 	}
 
@@ -317,14 +317,14 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @return the type
 	 */
-	public InventoryType getType() {
+	public InventoryType getType(){
 		return type;
 	}
 
 	@Override
-	public ASInventory clone() {
+	public ASInventory clone(){
 		ASInventory newInventory = new ASInventory(this.type, this.inventoryName, this.world, this.gamemode);
-		for (int slot : this.inventory.keySet()) {
+		for(int slot : this.inventory.keySet()){
 			newInventory.set(slot, this.inventory.get(slot));
 		}
 		return newInventory;
@@ -335,7 +335,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @param gamemode the game mode
 	 */
-	public void setGamemode(GameMode gamemode) {
+	public void setGamemode(GameMode gamemode){
 		this.gamemode = gamemode;
 	}
 
@@ -344,7 +344,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @param world the world
 	 */
-	public void setWorld(World world) {
+	public void setWorld(World world){
 		this.world = world;
 	}
 
@@ -353,7 +353,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @return inventory size
 	 */
-	public int getSize() {
+	public int getSize(){
 		switch (this.type){
 		case ENDER:
 			return 27;
@@ -365,17 +365,17 @@ public class ASInventory implements Cloneable {
 		}
 	}
 
-	void populateOtherInventory(Inventory inventory) {
+	void populateOtherInventory(Inventory inventory){
 		inventory.clear();
-		for (Integer slot : this.inventory.keySet()) {
+		for(Integer slot : this.inventory.keySet()){
 			inventory.setItem(slot, this.inventory.get(slot));
 		}
 	}
 
-	void populateSelf(Inventory inventory) {
-		for (int i = 0; i < inventory.getSize(); i++) {
+	void populateSelf(Inventory inventory){
+		for(int i = 0; i < inventory.getSize(); i++){
 			ItemStack item = inventory.getItem(i);
-			if (item == null || item.getType() == Material.AIR) {
+			if(item == null || item.getType() == Material.AIR){
 				continue;
 			}
 			set(i, item);
@@ -388,7 +388,7 @@ public class ASInventory implements Cloneable {
 	 * 
 	 * @return the inventory name
 	 */
-	public String getName() {
+	public String getName(){
 		return inventoryName;
 	}
 
