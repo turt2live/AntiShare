@@ -23,6 +23,8 @@ lists:
     - bedrock
     - tnt
     - emerald block
+    - quartz block
+    - redstone block
     # Items creative players cannot die with
     death: 
     - all
@@ -36,9 +38,14 @@ lists:
     use:
     - storage minecart
     - powered minecart 
+    - tnt minecart
+    - hopper minecart
+    - hopper
     - chest
+    - trapped chest
     - furnace
     - dispenser
+    - dropper
     - jukebox
     - anvil
     - enchantment table
