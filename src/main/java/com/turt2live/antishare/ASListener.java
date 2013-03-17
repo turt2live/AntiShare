@@ -39,13 +39,15 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.PoweredMinecart;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
-import org.bukkit.entity.StorageMinecart;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.minecart.ExplosiveMinecart;
+import org.bukkit.entity.minecart.HopperMinecart;
+import org.bukkit.entity.minecart.PoweredMinecart;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -815,6 +817,10 @@ public class ASListener implements Listener{
 			item = Material.STORAGE_MINECART;
 		}else if(event.getVehicle() instanceof PoweredMinecart){
 			item = Material.POWERED_MINECART;
+		}else if(event.getVehicle() instanceof ExplosiveMinecart){
+			item = Material.EXPLOSIVE_MINECART;
+		}else if(event.getVehicle() instanceof HopperMinecart){
+			item = Material.HOPPER_MINECART;
 		}else if(event.getVehicle() instanceof Boat){
 			item = Material.BOAT;
 		}else if(event.getVehicle() instanceof Minecart){
