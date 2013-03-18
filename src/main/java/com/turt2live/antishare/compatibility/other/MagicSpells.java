@@ -39,7 +39,7 @@ public class MagicSpells implements Listener{
 			return;
 		}
 		Player player = event.getCaster();
-		if(!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+		if(!AntiShare.hasPermission(player, PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
 			event.setCancelled(true);
 		}
 	}
@@ -50,7 +50,7 @@ public class MagicSpells implements Listener{
 			return;
 		}
 		Player player = event.getCaster();
-		if(!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+		if(!AntiShare.hasPermission(player, PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
 			event.setCancelled(true);
 		}
 	}

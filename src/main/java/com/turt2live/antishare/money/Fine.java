@@ -13,6 +13,7 @@ package com.turt2live.antishare.money;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.util.ASGameMode;
 import com.turt2live.antishare.util.Action;
 import com.turt2live.antishare.util.PermissionNodes;
@@ -51,7 +52,7 @@ public class Fine extends Tender{
 
 	@Override
 	public void apply(Player player){
-		if(!isEnabled() || player.hasPermission(PermissionNodes.MONEY_NO_FINE) || !super.affect(player.getGameMode())){
+		if(!isEnabled() || AntiShare.hasPermission(player, PermissionNodes.MONEY_NO_FINE) || !super.affect(player.getGameMode())){
 			return;
 		}
 

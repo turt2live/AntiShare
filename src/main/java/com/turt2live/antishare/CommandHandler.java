@@ -61,7 +61,7 @@ public class CommandHandler implements CommandExecutor{
 					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
 					return true;
 				}else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
-					if(sender.hasPermission(PermissionNodes.RELOAD)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.RELOAD)){
 						plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("reloading"), true);
 						plugin.reload();
 						plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("reloaded"), true);
@@ -74,7 +74,7 @@ public class CommandHandler implements CommandExecutor{
 					if(!(sender instanceof Player)){
 						plugin.getMessages().sendTo(sender, notPlayer, true);
 					}else{
-						if(sender.hasPermission(PermissionNodes.MIRROR)){
+						if(AntiShare.hasPermission(sender, PermissionNodes.MIRROR)){
 							if(!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")){
 								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("inventories-not-enabled"), true);
 								return true;
@@ -181,7 +181,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("region")){
-					if(sender.hasPermission(PermissionNodes.REGION_CREATE)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.REGION_CREATE)){
 						// Sanity Check
 						if(sender instanceof Player){
 							Player player = (Player) sender;
@@ -214,7 +214,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("rmregion") || args[0].equalsIgnoreCase("removeregion")){
-					if(sender.hasPermission(PermissionNodes.REGION_DELETE)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.REGION_DELETE)){
 						// Sanity check
 						if(sender instanceof Player){
 							// Remove region
@@ -257,7 +257,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("editregion")){
-					if(sender.hasPermission(PermissionNodes.REGION_EDIT)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.REGION_EDIT)){
 						// Check validity of key
 						boolean valid = false;
 						if(args.length >= 3){
@@ -327,7 +327,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("listregions")){
-					if(sender.hasPermission(PermissionNodes.REGION_LIST)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.REGION_LIST)){
 						// Sanity check on page number
 						int page = 1;
 						if(args.length >= 2){
@@ -375,7 +375,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("tool")){
-					if(sender.hasPermission(PermissionNodes.TOOL_GET)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.TOOL_GET)){
 						// Sanity check
 						if(!(sender instanceof Player)){
 							plugin.getMessages().sendTo(sender, notPlayer, true);
@@ -401,7 +401,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("settool")){
-					if(sender.hasPermission(PermissionNodes.TOOL_GET)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.TOOL_GET)){
 						// Sanity check
 						if(!(sender instanceof Player)){
 							plugin.getMessages().sendTo(sender, notPlayer, true);
@@ -427,7 +427,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("toolbox")){
-					if(sender.hasPermission(PermissionNodes.TOOL_GET)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.TOOL_GET)){
 						// Sanity check
 						if(!(sender instanceof Player)){
 							plugin.getMessages().sendTo(sender, notPlayer, true);
@@ -452,7 +452,7 @@ public class CommandHandler implements CommandExecutor{
 								if(!inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
 									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player, 2);
 								}
-								if(sender.hasPermission(PermissionNodes.CREATE_CUBOID)){
+								if(AntiShare.hasPermission(sender, PermissionNodes.CREATE_CUBOID)){
 									if(!inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
 										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player, 3);
 									}
@@ -507,7 +507,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("gamemode") || args[0].equalsIgnoreCase("gm")){
-					if(sender.hasPermission(PermissionNodes.CHECK)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.CHECK)){
 						GameMode gm = null;
 						if(args.length > 1 && !args[1].equalsIgnoreCase("all")){
 							gm = ASUtils.getGameMode(args[1]);
@@ -537,7 +537,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("tools")){
-					if(sender.hasPermission(PermissionNodes.TOOL_USE)){
+					if(AntiShare.hasPermission(sender, PermissionNodes.TOOL_USE)){
 						boolean on = false;
 						if(plugin.isToolEnabled(sender.getName())){
 							plugin.disableTools(sender.getName());
@@ -551,7 +551,7 @@ public class CommandHandler implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("cuboid")){
-					if(!sender.hasPermission(PermissionNodes.CREATE_CUBOID)){
+					if(!AntiShare.hasPermission(sender, PermissionNodes.CREATE_CUBOID)){
 						plugin.getMessages().sendTo(sender, noPermission, true);
 						return true;
 					}

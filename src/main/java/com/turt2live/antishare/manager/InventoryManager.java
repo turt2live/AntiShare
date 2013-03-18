@@ -207,7 +207,7 @@ public class InventoryManager{
 	 * @param alreadySaved set to true to bypass saving
 	 */
 	public void refreshInventories(Player player, boolean alreadySaved){
-		if(!player.hasPermission(PermissionNodes.NO_SWAP)){
+		if(!AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
 			return;
 		}
 		// Save

@@ -23,10 +23,12 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
+import com.turt2live.antishare.compatibility.other.PEX;
 import com.turt2live.antishare.config.ASConfig;
 import com.turt2live.antishare.config.ConfigConvert;
 import com.turt2live.antishare.manager.BlockManager;
@@ -100,10 +102,14 @@ public class AntiShare extends PluginWrapper{
 	private RegionManager regions;
 	private final List<String> disabledSNPlayers = new ArrayList<String>();
 	private final List<String> disabledTools = new ArrayList<String>();
+	private static PEX pex;
 
 	@Override
 	public void onEnable(){
 		p = this;
+
+		// Start PEX
+		pex = new PEX();
 
 		// Setup graphs
 		for(Action action : Action.values()){
@@ -316,7 +322,7 @@ public class AntiShare extends PluginWrapper{
 					if(playerRegion != null){
 						playerRegion.alertSilentEntry(player);
 					}
-					if(player.hasPermission(PermissionNodes.TOOL_USE) && !isToolEnabled(player.getName())){
+					if(hasPermission(player, PermissionNodes.TOOL_USE) && !isToolEnabled(player.getName())){
 						messages.sendTo(player, ChatColor.RED + messages.getMessage("tool-disabled"), true);
 					}
 				}
@@ -486,6 +492,15 @@ public class AntiShare extends PluginWrapper{
 	}
 
 	/**
+	 * Gets the active PEX compatibility instance, this will never be null
+	 * 
+	 * @return the active PEX compatibility instance
+	 */
+	public PEX getPEX(){
+		return pex;
+	}
+
+	/**
 	 * Determines if a player is blocked from doing something
 	 * 
 	 * @param player the player
@@ -538,43 +553,60 @@ public class AntiShare extends PluginWrapper{
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly){
 		if(target != null){
-			if(player.hasPermission(allowPermission + "." + target)){
+			if(hasPermission(player, allowPermission + "." + target)){
 				return false;
 			}
-			if(player.hasPermission(allowPermission + "." + target)){
+			if(hasPermission(player, allowPermission + "." + target)){
 				return false;
 			}
-			if(denyPermission != null && player.hasPermission(denyPermission + "." + target)){
+			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
 				return true;
 			}
-			if(denyPermission != null && player.hasPermission(denyPermission + "." + target)){
+			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
 				return true;
 			}
 		}
 		if(specialOnly){
 			return false;
 		}
-		if(player.hasPermission(allowPermission)){
+		if(hasPermission(player, allowPermission)){
 			return false;
 		}
-		if(denyPermission != null && player.hasPermission(denyPermission)){
+		if(denyPermission != null && hasPermission(player, denyPermission)){
 			return true;
 		}
 		if(GamemodeAbstraction.isCreative(player.getGameMode())){
-			if(player.hasPermission(PermissionNodes.AFFECT_CREATIVE) || player.hasPermission(PermissionNodes.AFFECT_ADVENTURE)){
+			if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) || hasPermission(player, PermissionNodes.AFFECT_ADVENTURE)){
 				return true;
 			}
 		}
-		if(player.hasPermission(PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
+		if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
 			return true;
 		}
-		if(player.hasPermission(PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
+		if(hasPermission(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
 			return true;
 		}
-		if(player.hasPermission(PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE){
+		if(hasPermission(player, PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE){
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Determines if the target has a permission
+	 * 
+	 * @param target the target
+	 * @param permission the permission
+	 * @return true if they have the permission
+	 */
+	public static boolean hasPermission(CommandSender target, String permission){
+		if(!(target instanceof Player)){
+			return target.hasPermission(permission);
+		}
+		Player player = (Player) target;
+		if(pex.hasPEX()){
+			return pex.getAbstract().has(player, permission, player.getWorld());
+		}
+		return hasPermission(player, permission);
+	}
 }
