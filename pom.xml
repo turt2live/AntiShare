@@ -113,7 +113,7 @@
       <systemPath>${basedir}/lib/LogBlock.jar</systemPath>
     </dependency>
 
-    <!-- MagicSpells -->
+    <!-- PermissionsEx -->
     <dependency>
       <groupId>ru.tehkode.permissions</groupId>
       <artifactId>PermissionsEx</artifactId>
