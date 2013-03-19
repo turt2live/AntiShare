@@ -607,6 +607,6 @@ public class AntiShare extends PluginWrapper{
 		if(pex.hasPEX()){
 			return pex.getAbstract().has(player, permission, player.getWorld());
 		}
-		return hasPermission(player, permission);
+		return player.hasPermission(permission);
 	}
 }
