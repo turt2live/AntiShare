@@ -111,6 +111,8 @@ settings:
         remove-attached-blocks: true
         # If true, when a creative player breaks an inventory-holding block, the inventory will be cleared
         empty-inventories: true
+        # Set to true to enable use of "Game Mode Spreading" (such as a creative mushroom spreads making the newly grown mushroom creative as well)
+        gamemode-spreading: true
         break-as-gamemode:
             pistons: true
             # If this is true, then blocks will be broken according to their gamemode (if attached, such as a torch on a falling sand block)

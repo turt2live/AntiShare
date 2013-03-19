@@ -52,10 +52,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -1672,6 +1676,33 @@ public class ASListener implements Listener{
 			if(toRegion != null){
 				toRegion.alertEntry(player);
 			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBurn(BlockBurnEvent event){
+		plugin.getBlockManager().removeBlock(event.getBlock());
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onFade(BlockFadeEvent event){
+		plugin.getBlockManager().removeBlock(event.getBlock());
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onDecay(LeavesDecayEvent event){
+		plugin.getBlockManager().removeBlock(event.getBlock());
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onSpread(BlockSpreadEvent event){
+		if(!configFor(event.getBlock().getLocation()).naturalSettings.spreading){
+			return;
+		}
+		Block source = event.getSource();
+		GameMode sourceGamemode = plugin.getBlockManager().getType(source);
+		if(sourceGamemode != null){
+			plugin.getBlockManager().addBlock(sourceGamemode, event.getBlock());
 		}
 	}
 

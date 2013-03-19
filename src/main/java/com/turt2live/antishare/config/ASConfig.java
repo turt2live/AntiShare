@@ -55,8 +55,10 @@ public class ASConfig{
 		public final boolean emptyInventories;
 		public final boolean removeAttached;
 		public final boolean breakSand;
+		public final boolean spreading;
 
-		NaturalSettings(boolean mismatch, boolean piston, boolean attached, boolean water, boolean bombs, boolean empty, boolean removeAttached, boolean breakSand){
+		NaturalSettings(boolean spreading, boolean mismatch, boolean piston, boolean attached, boolean water, boolean bombs,
+				boolean empty, boolean removeAttached, boolean breakSand){
 			this.allowMismatchedGM = mismatch;
 			this.breakAsPiston = piston;
 			this.breakAsAttached = attached;
@@ -65,6 +67,7 @@ public class ASConfig{
 			this.removeAttached = removeAttached;
 			this.breakSand = breakSand;
 			this.breakAsBomb = bombs;
+			this.spreading = spreading;
 		}
 	}
 
@@ -152,7 +155,8 @@ public class ASConfig{
 				config.getBoolean("settings.cleanup.inventories.remove-old-worlds", p.getConfig().getBoolean("settings.cleanup.inventories.remove-old-worlds")));
 		cooldownSettings = new CooldownSettings(config.getBoolean("settings.cooldown.enabled", p.getConfig().getBoolean("settings.cooldown.enabled")),
 				config.getInt("settings.cooldown.wait-time-seconds", p.getConfig().getInt("settings.cooldown.wait-time-seconds")));
-		naturalSettings = new NaturalSettings(config.getBoolean("settings.natural-protection.allow-mismatch-gamemode", p.getConfig().getBoolean("settings.natural-protection.allow-mismatch-gamemode")),
+		naturalSettings = new NaturalSettings(config.getBoolean("settings.natural-protection.gamemode-spreading", p.getConfig().getBoolean("settings.natural-protection.gamemode-spreading")),
+				config.getBoolean("settings.natural-protection.allow-mismatch-gamemode", p.getConfig().getBoolean("settings.natural-protection.allow-mismatch-gamemode")),
 				config.getBoolean("settings.natural-protection.break-as-gamemode.pistons", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.pistons")),
 				config.getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks")),
 				config.getBoolean("settings.natural-protection.break-as-gamemode.water", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.water")),
