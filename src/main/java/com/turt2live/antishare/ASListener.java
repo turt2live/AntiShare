@@ -1196,6 +1196,7 @@ public class ASListener implements Listener{
 		Player player = event.getPlayer();
 		if(player.hasMetadata("antishare-joined")){
 			scheduleGameModeChange(event);
+			player.removeMetadata("antishare-joined", plugin);
 		}else{
 			GameMode from = player.getGameMode();
 			GameMode to = event.getNewGameMode();
