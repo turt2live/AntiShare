@@ -705,6 +705,7 @@ public class ASListener implements Listener{
 		ItemStack hand = player.getItemInHand();
 		if(hand == null){
 			hand = new ItemStack(Material.AIR);
+		}
 
 		if(AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
 			String blockName = MaterialAPI.capitalize(block.getType().name());
