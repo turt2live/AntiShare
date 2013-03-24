@@ -46,7 +46,7 @@ public class ItemMap{
 		if(string == null){
 			return null;
 		}
-		string = string.trim().toLowerCase();
+		string = string.trim().toLowerCase().replace(" ", "");
 		String[] parts = string.split(":");
 		String customData = null;
 		String name = parts[0];
