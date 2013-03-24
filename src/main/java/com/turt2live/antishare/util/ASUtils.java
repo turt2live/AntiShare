@@ -28,9 +28,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Bed;
@@ -608,6 +611,23 @@ public class ASUtils{
 		}
 		out.close();
 		input.close();
+	}
+
+	/**
+	 * Gets the location of the inventory holder.
+	 * 
+	 * @param holder the inventory holder
+	 * @return the location, or null if not found
+	 */
+	public static Location getLocation(InventoryHolder holder){
+		if(holder instanceof BlockState){
+			BlockState state = (BlockState) holder;
+			return state.getLocation();
+		}else if(holder instanceof Entity){
+			Location entity = ((Entity) holder).getLocation();
+			return entity;
+		}
+		return null;
 	}
 
 }

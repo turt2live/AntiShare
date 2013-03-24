@@ -22,7 +22,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Jukebox;
 import org.bukkit.enchantments.Enchantment;
@@ -1712,18 +1711,17 @@ public class ASListener implements Listener{
 	public void onItemMove(InventoryMoveItemEvent event){
 		InventoryHolder holderSource = event.getSource().getHolder();
 		InventoryHolder holderDestination = event.getDestination().getHolder();
-		if(holderSource instanceof BlockState && holderDestination instanceof BlockState){
-			BlockState stateSource = (BlockState) holderSource;
-			BlockState stateDestination = (BlockState) holderDestination;
-
-			GameMode source = plugin.getBlockManager().getType(stateSource.getBlock());
-			GameMode destination = plugin.getBlockManager().getType(stateDestination.getBlock());
-
-			ASConfig config = configFor(stateSource.getLocation());
-			if(config.naturalSettings.spreading){
-				if(!GamemodeAbstraction.isMatch(source, destination) && source != null && destination != null){
-					event.setCancelled(true);
-				}
+		Location sourceLocation = ASUtils.getLocation(holderSource);
+		Location destinationLocation = ASUtils.getLocation(holderDestination);
+		if(sourceLocation == null || destinationLocation == null){
+			return;
+		}
+		GameMode source = plugin.getBlockManager().getType(sourceLocation.getBlock());
+		GameMode destination = plugin.getBlockManager().getType(destinationLocation.getBlock());
+		ASConfig config = configFor(sourceLocation);
+		if(config != null && config.naturalSettings.spreading){
+			if(source != null && destination != null && !GamemodeAbstraction.isMatch(source, destination)){
+				event.setCancelled(true);
 			}
 		}
 	}
