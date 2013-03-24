@@ -1722,7 +1722,7 @@ public class ASListener implements Listener{
 
 				ASConfig config = configFor(stateSource.getLocation());
 				if(config.naturalSettings.spreading){
-					if(!GamemodeAbstraction.isMatch(source, destination)){
+					if(!GamemodeAbstraction.isMatch(source, destination) && source != null && destination != null){
 						event.setCancelled(true);
 					}
 				}
