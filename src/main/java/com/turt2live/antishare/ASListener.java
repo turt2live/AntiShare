@@ -1712,19 +1712,17 @@ public class ASListener implements Listener{
 	public void onItemMove(InventoryMoveItemEvent event){
 		InventoryHolder holderSource = event.getSource().getHolder();
 		InventoryHolder holderDestination = event.getDestination().getHolder();
-		if(holderSource != null && holderDestination != null){
-			if(holderSource instanceof BlockState && holderDestination instanceof BlockState){
-				BlockState stateSource = (BlockState) holderSource;
-				BlockState stateDestination = (BlockState) holderDestination;
+		if(holderSource instanceof BlockState && holderDestination instanceof BlockState){
+			BlockState stateSource = (BlockState) holderSource;
+			BlockState stateDestination = (BlockState) holderDestination;
 
-				GameMode source = plugin.getBlockManager().getType(stateSource.getBlock());
-				GameMode destination = plugin.getBlockManager().getType(stateDestination.getBlock());
+			GameMode source = plugin.getBlockManager().getType(stateSource.getBlock());
+			GameMode destination = plugin.getBlockManager().getType(stateDestination.getBlock());
 
-				ASConfig config = configFor(stateSource.getLocation());
-				if(config.naturalSettings.spreading){
-					if(!GamemodeAbstraction.isMatch(source, destination) && source != null && destination != null){
-						event.setCancelled(true);
-					}
+			ASConfig config = configFor(stateSource.getLocation());
+			if(config.naturalSettings.spreading){
+				if(!GamemodeAbstraction.isMatch(source, destination) && source != null && destination != null){
+					event.setCancelled(true);
 				}
 			}
 		}
