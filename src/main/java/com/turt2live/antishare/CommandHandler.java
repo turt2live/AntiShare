@@ -460,6 +460,7 @@ public class CommandHandler implements CommandExecutor{
 									plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("cannot-have-cuboid"), true);
 								}
 								plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("tools-give"), true);
+								player.getInventory().setHeldItemSlot(1);
 							}else{
 								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("no-space", String.valueOf(3)), true);
 							}

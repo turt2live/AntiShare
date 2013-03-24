@@ -329,6 +329,7 @@ public class ASUtils{
 				inv.addItem(original);
 			}
 			player.updateInventory();
+			player.getInventory().setHeldItemSlot(slot);
 		}
 	}
 
