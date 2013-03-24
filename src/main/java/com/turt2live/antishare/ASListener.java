@@ -22,6 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Jukebox;
 import org.bukkit.enchantments.Enchantment;
@@ -73,6 +74,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -1703,6 +1705,28 @@ public class ASListener implements Listener{
 		GameMode sourceGamemode = plugin.getBlockManager().getType(source);
 		if(sourceGamemode != null){
 			plugin.getBlockManager().addBlock(sourceGamemode, event.getBlock());
+		}
+	}
+
+	@EventHandler (priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onItemMove(InventoryMoveItemEvent event){
+		InventoryHolder holderSource = event.getSource().getHolder();
+		InventoryHolder holderDestination = event.getDestination().getHolder();
+		if(holderSource != null && holderDestination != null){
+			if(holderSource instanceof BlockState && holderDestination instanceof BlockState){
+				BlockState stateSource = (BlockState) holderSource;
+				BlockState stateDestination = (BlockState) holderDestination;
+
+				GameMode source = plugin.getBlockManager().getType(stateSource.getBlock());
+				GameMode destination = plugin.getBlockManager().getType(stateDestination.getBlock());
+
+				ASConfig config = configFor(stateSource.getLocation());
+				if(config.naturalSettings.spreading){
+					if(!GamemodeAbstraction.isMatch(source, destination)){
+						event.setCancelled(true);
+					}
+				}
+			}
 		}
 	}
 

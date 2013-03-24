@@ -112,6 +112,8 @@ settings:
         # If true, when a creative player breaks an inventory-holding block, the inventory will be cleared
         empty-inventories: true
         # Set to true to enable use of "Game Mode Spreading" (such as a creative mushroom spreads making the newly grown mushroom creative as well)
+        # This also affects chest (and etc) interactions with hoppers. This means that if true, AntiShare will stop items from a Creative chest
+        # from spreading to a survival hopper (for example).
         gamemode-spreading: true
         break-as-gamemode:
             pistons: true
