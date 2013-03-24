@@ -298,6 +298,7 @@ public class ASUtils{
 				original = original.clone();
 			}
 			ItemStack itemTool = new ItemStack(tool);
+			itemTool.setDurability(AntiShare.ANTISHARE_TOOL_DATA);
 			String title = null;
 			List<String> lore = new ArrayList<String>();
 			AntiShare p = AntiShare.p;

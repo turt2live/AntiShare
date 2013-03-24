@@ -705,9 +705,8 @@ public class ASListener implements Listener{
 		ItemStack hand = player.getItemInHand();
 		if(hand == null){
 			hand = new ItemStack(Material.AIR);
-		}
 
-		if(AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && plugin.isToolEnabled(player.getName())){
+		if(AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
 			String blockName = MaterialAPI.capitalize(block.getType().name());
 			if(hand.getType() == AntiShare.ANTISHARE_TOOL){
 				GameMode type = plugin.getBlockManager().getType(block);
@@ -895,7 +894,7 @@ public class ASListener implements Listener{
 			return; // We don't need to protect against right clicking players
 		}
 
-		if(plugin.isToolEnabled(player.getName()) && AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && rightClicked != Material.AIR){
+		if(hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA && AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && rightClicked != Material.AIR){
 			if(hand.getType() == AntiShare.ANTISHARE_TOOL){
 				if(gamemode == null){
 					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-natural", MaterialAPI.capitalize(rightClicked.name())), true);
@@ -1444,7 +1443,7 @@ public class ASListener implements Listener{
 				hand = new ItemStack(Material.AIR);
 			}
 
-			if(AntiShare.hasPermission(player, PermissionNodes.TOOL_USE)){
+			if(AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
 				if(hand.getType() == AntiShare.ANTISHARE_TOOL){
 					if(hangingGamemode == null){
 						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-natural", MaterialAPI.capitalize(item.name())), true);
@@ -1546,11 +1545,6 @@ public class ASListener implements Listener{
 
 		// Money (fines/rewards) status
 		plugin.getMoneyManager().showStatusOnLogin(player);
-
-		// AntiShare tools
-		if(AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && !plugin.isToolEnabled(player.getName())){
-			plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("tool-disabled"), true);
-		}
 	}
 
 	@EventHandler (priority = EventPriority.MONITOR)

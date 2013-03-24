@@ -20,7 +20,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -72,6 +71,10 @@ public class AntiShare extends PluginWrapper{
 	 * Used to force-set a block
 	 */
 	public static final Material ANTISHARE_SET_TOOL = Material.BLAZE_POWDER;
+	/**
+	 * AntiShare tool data value. This is to avoid competition with general actions
+	 */
+	public static final short ANTISHARE_TOOL_DATA = 1;
 
 	// Trackers
 	public static final PieGraph<Action> LEGAL_ACTIONS = new PieGraph<Action>("5.4.0 Legal Actions");
@@ -101,7 +104,6 @@ public class AntiShare extends PluginWrapper{
 	private InventoryManager inventories;
 	private RegionManager regions;
 	private final List<String> disabledSNPlayers = new ArrayList<String>();
-	private final List<String> disabledTools = new ArrayList<String>();
 	private static PEX pex;
 
 	@Override
@@ -322,9 +324,6 @@ public class AntiShare extends PluginWrapper{
 					if(playerRegion != null){
 						playerRegion.alertSilentEntry(player);
 					}
-					if(hasPermission(player, PermissionNodes.TOOL_USE) && !isToolEnabled(player.getName())){
-						messages.sendTo(player, ChatColor.RED + messages.getMessage("tool-disabled"), true);
-					}
 				}
 				if(inventories != null){
 					int loaded = inventories.getLoaded();
@@ -443,34 +442,6 @@ public class AntiShare extends PluginWrapper{
 	 */
 	public void disableSimpleNotice(String name){
 		disabledSNPlayers.add(name);
-	}
-
-	/**
-	 * Determines if a player decided to turn off tool support
-	 * 
-	 * @param name the player name
-	 * @return true if enabled
-	 */
-	public boolean isToolEnabled(String name){
-		return !disabledTools.contains(name);
-	}
-
-	/**
-	 * Enables tool support for a user
-	 * 
-	 * @param name the user
-	 */
-	public void enableTools(String name){
-		disabledTools.remove(name);
-	}
-
-	/**
-	 * Disables tool support for a user
-	 * 
-	 * @param name the user
-	 */
-	public void disableTools(String name){
-		disabledTools.add(name);
 	}
 
 	/**

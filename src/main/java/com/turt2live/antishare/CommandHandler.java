@@ -385,6 +385,7 @@ public class CommandHandler implements CommandExecutor{
 							PlayerInventory inventory = player.getInventory();
 
 							// Check inventory
+							// TODO: ASUtils.hasTool(TYPE)
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 								if(inventory.contains(AntiShare.ANTISHARE_TOOL)){
 									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name())), true);
@@ -411,6 +412,7 @@ public class CommandHandler implements CommandExecutor{
 							PlayerInventory inventory = player.getInventory();
 
 							// Check inventory
+							// TODO: ASUtils.hasTool(TYPE)
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 								if(inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
 									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), true);
@@ -446,6 +448,7 @@ public class CommandHandler implements CommandExecutor{
 
 							// Check inventory
 							if(clearSpots >= 3){
+								// TODO: ASUtils.hasTool(TYPE)
 								if(!inventory.contains(AntiShare.ANTISHARE_TOOL)){
 									ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player, 1);
 								}
@@ -536,20 +539,6 @@ public class CommandHandler implements CommandExecutor{
 						plugin.getMessages().sendTo(sender, noPermission, true);
 					}
 					return true;
-				}else if(args[0].equalsIgnoreCase("tools")){
-					if(AntiShare.hasPermission(sender, PermissionNodes.TOOL_USE)){
-						boolean on = false;
-						if(plugin.isToolEnabled(sender.getName())){
-							plugin.disableTools(sender.getName());
-						}else{
-							plugin.enableTools(sender.getName());
-							on = true;
-						}
-						plugin.getMessages().sendTo(sender, on ? plugin.getMessages().getMessage("tool-enabled") : plugin.getMessages().getMessage("tool-disabled"), true);
-					}else{
-						plugin.getMessages().sendTo(sender, noPermission, true);
-					}
-					return true;
 				}else if(args[0].equalsIgnoreCase("cuboid")){
 					if(!AntiShare.hasPermission(sender, PermissionNodes.CREATE_CUBOID)){
 						plugin.getMessages().sendTo(sender, noPermission, true);
@@ -572,6 +561,7 @@ public class CommandHandler implements CommandExecutor{
 								PlayerInventory inventory = player.getInventory();
 
 								// Check inventory
+								// TODO: ASUtils.hasTool(TYPE)
 								if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
 									if(inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
 										plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name())), true);
