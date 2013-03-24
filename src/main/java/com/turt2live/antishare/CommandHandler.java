@@ -385,9 +385,8 @@ public class CommandHandler implements CommandExecutor{
 							PlayerInventory inventory = player.getInventory();
 
 							// Check inventory
-							// TODO: ASUtils.hasTool(TYPE)
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
-								if(inventory.contains(AntiShare.ANTISHARE_TOOL)){
+								if(ASUtils.hasTool(AntiShare.ANTISHARE_TOOL, player)){
 									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_TOOL.name())), true);
 								}else{
 									ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player);
@@ -412,9 +411,8 @@ public class CommandHandler implements CommandExecutor{
 							PlayerInventory inventory = player.getInventory();
 
 							// Check inventory
-							// TODO: ASUtils.hasTool(TYPE)
 							if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
-								if(inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
+								if(ASUtils.hasTool(AntiShare.ANTISHARE_SET_TOOL, player)){
 									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_SET_TOOL.name())), true);
 								}else{
 									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player);
@@ -448,20 +446,20 @@ public class CommandHandler implements CommandExecutor{
 
 							// Check inventory
 							if(clearSpots >= 3){
-								// TODO: ASUtils.hasTool(TYPE)
-								if(!inventory.contains(AntiShare.ANTISHARE_TOOL)){
+								if(!ASUtils.hasTool(AntiShare.ANTISHARE_TOOL, player)){
 									ASUtils.giveTool(AntiShare.ANTISHARE_TOOL, player, 1);
 								}
-								if(!inventory.contains(AntiShare.ANTISHARE_SET_TOOL)){
+								if(!ASUtils.hasTool(AntiShare.ANTISHARE_SET_TOOL, player)){
 									ASUtils.giveTool(AntiShare.ANTISHARE_SET_TOOL, player, 2);
 								}
 								if(AntiShare.hasPermission(sender, PermissionNodes.CREATE_CUBOID)){
-									if(!inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
+									if(!ASUtils.hasTool(AntiShare.ANTISHARE_CUBOID_TOOL, player)){
 										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player, 3);
 									}
 								}else{
 									plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("cannot-have-cuboid"), true);
 								}
+								plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("tools-give"), true);
 							}else{
 								plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("no-space", String.valueOf(3)), true);
 							}
@@ -561,9 +559,8 @@ public class CommandHandler implements CommandExecutor{
 								PlayerInventory inventory = player.getInventory();
 
 								// Check inventory
-								// TODO: ASUtils.hasTool(TYPE)
 								if(inventory.firstEmpty() != -1 && inventory.firstEmpty() <= inventory.getSize()){
-									if(inventory.contains(AntiShare.ANTISHARE_CUBOID_TOOL)){
+									if(ASUtils.hasTool(AntiShare.ANTISHARE_CUBOID_TOOL, player)){
 										plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("have-tool", MaterialAPI.capitalize(AntiShare.ANTISHARE_CUBOID_TOOL.name())), true);
 									}else{
 										ASUtils.giveTool(AntiShare.ANTISHARE_CUBOID_TOOL, player);

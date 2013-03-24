@@ -333,6 +333,23 @@ public class ASUtils{
 	}
 
 	/**
+	 * Determines if the player has a tool already
+	 * 
+	 * @param material the material
+	 * @param player the player
+	 * @return true if found, false otherwise
+	 */
+	public static boolean hasTool(Material material, Player player){
+		for(ItemStack item : player.getInventory().getContents()){
+			if(item == null)
+				continue;
+			if(item.getType() == material && item.getDurability() == AntiShare.ANTISHARE_TOOL_DATA)
+				return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Determines the second block to a source block (like a bed)
 	 * 
 	 * @param block the source
