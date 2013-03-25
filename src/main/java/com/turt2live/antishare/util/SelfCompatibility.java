@@ -35,8 +35,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.inventory.OASI;
+import com.turt2live.antishare.inventory.OASI.InventoryType;
 import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 
 /**
@@ -317,11 +317,11 @@ public class SelfCompatibility{
 				if(world == null){
 					continue;
 				}
-				List<ASInventory> list = ASInventory.generateInventory(playerName, InventoryType.PLAYER);
+				List<OASI> list = OASI.generateInventory(playerName, InventoryType.PLAYER);
 				if(list.size() > 0){
 					continue;
 				}
-				ASInventory newi = new ASInventory(InventoryType.PLAYER, playerName, world, gamemode);
+				OASI newi = new OASI(InventoryType.PLAYER, playerName, world, gamemode);
 				for(String key : inventory.getKeys(false)){
 					ItemStack item = inventory.getItemStack(key);
 					int slot = -1;

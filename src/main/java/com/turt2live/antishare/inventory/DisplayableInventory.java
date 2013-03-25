@@ -19,14 +19,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.inventory.OASI.InventoryType;
 
 /**
  * Displayable version of an AntiShare inventory
  */
 public class DisplayableInventory implements InventoryHolder, Listener{
 
-	private ASInventory asinventory;
+	private OASI asinventory;
 	private Inventory inventory;
 	private long uid = System.nanoTime();
 	private AntiShare plugin = AntiShare.p;
@@ -38,7 +38,7 @@ public class DisplayableInventory implements InventoryHolder, Listener{
 	 * 
 	 * @param inventory the inventory
 	 */
-	public DisplayableInventory(ASInventory inventory){
+	public DisplayableInventory(OASI inventory){
 		this(inventory, "AntiShare Inventory");
 	}
 
@@ -48,7 +48,7 @@ public class DisplayableInventory implements InventoryHolder, Listener{
 	 * @param inventory the inventory
 	 * @param title the inventory title to show
 	 */
-	public DisplayableInventory(ASInventory inventory, String title){
+	public DisplayableInventory(OASI inventory, String title){
 		this.asinventory = inventory;
 		this.title = title;
 		if(this.title == null){

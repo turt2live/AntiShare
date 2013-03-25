@@ -1,42 +1,29 @@
-/*******************************************************************************
- * Copyright (c) 2013 Travis Ralston.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v2.1
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * 
- * Contributors:
- * turt2live (Travis Ralston) - initial API and implementation
- ******************************************************************************/
 package com.turt2live.antishare.inventory;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
 /**
  * AntiShare Inventory
  * 
  * @author turt2live
  */
-// TODO: Cleanup
-public class ASInventory implements Cloneable{
+public class ASInventory{
 
 	/**
-	 * An enum to represent inventory types
+	 * Inventory type
 	 * 
 	 * @author turt2live
 	 */
@@ -62,334 +49,203 @@ public class ASInventory implements Cloneable{
 		}
 	}
 
-	/**
-	 * Generates an AntiShare Inventory from a player
-	 * 
-	 * @param player the player
-	 * @param type the inventory type to generate
-	 * @return the inventory
-	 */
-	public static ASInventory generate(Player player, InventoryType type){
-		ASInventory inventory = new ASInventory(type, player.getName(), player.getWorld(), player.getGameMode());
-		if(type == InventoryType.ENDER){
-			ItemStack[] contents = player.getEnderChest().getContents();
-			int slot = 0;
-			for(ItemStack item : contents){
-				inventory.set(slot, item);
-				slot++;
-			}
-		}else{
-			ItemStack[] contents = player.getInventory().getContents();
-			int slot = 0;
-			for(ItemStack item : contents){
-				inventory.set(slot, item);
-				slot++;
-			}
-			contents = player.getInventory().getArmorContents();
-			slot = 100;
-			for(ItemStack item : contents){
-				inventory.set(slot, item);
-				slot++;
-			}
-		}
-		return inventory;
+	public static final File DATA_FOLDER = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories");
+	public static final int SIZE = (9 * 4) + 4;
+	public static final ItemStack AIR = new ItemStack(Material.AIR);
+	public static final String VERSION = "2";
+	public static final ASInventory EMPTY = null;
+
+	final GameMode gamemode;
+	final String owner;
+	final String world;
+	final InventoryType type;
+	final Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
+
+	// TODO: Make invisible
+	public ASInventory(GameMode gamemode, String owner, String world, InventoryType type){
+		this.gamemode = gamemode;
+		this.owner = owner;
+		this.world = world;
+		this.type = type;
 	}
 
 	/**
-	 * Generates an inventory list
+	 * Gets the contents of this Inventory. No null items will be found, only AIR. <br>
+	 * Shortcut for {@link #getContents(boolean, boolean)} as (true, true)
 	 * 
-	 * @param name inventory name
-	 * @param type the Inventory Type
-	 * @return the inventories
+	 * @return the contents as an array
 	 */
-	public static List<ASInventory> generateInventory(String name, InventoryType type){
-		// Setup
-		List<ASInventory> inventories = new ArrayList<ASInventory>();
+	public ItemStack[] getContents(){
+		return getContents(true, true);
+	}
 
-		// Configuration check
-		if(!AntiShare.p.settings().features.inventories){
-			return inventories;
-		}
-		// Setup
-		File dir = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
-		File saveFile = new File(dir, name + ".yml");
-		if(!saveFile.exists()){
-			return inventories;
-		}
-		EnhancedConfiguration file = new EnhancedConfiguration(saveFile, AntiShare.p);
-		file.load();
-
-		// Load data
-		// Structure: yml:world.gamemode.slot.properties
-		List<String> removeWorlds = new ArrayList<String>();
-		for(String world : file.getKeys(false)){
-			for(String gamemode : file.getConfigurationSection(world).getKeys(false)){
-				World bukkitWorld = Bukkit.getWorld(world);
-				if(bukkitWorld == null){
-					AntiShare.p.getLogger().severe(AntiShare.p.getMessages().getMessage("world-missing", world, type.name(), name));
-					if(AntiShare.p.settings().inventoryCleanupSettings.removeOldWorlds){
-						AntiShare.p.getLogger().severe("=== " + AntiShare.p.getMessages().getMessage("remove-world-1") + " ===");
-						AntiShare.p.getLogger().severe(AntiShare.p.getMessages().getMessage("remove-world-2"));
-						removeWorlds.add(world);
-					}
+	/**
+	 * Gets the contents of this Inventory. No null items will be found, only AIR.
+	 * 
+	 * @param core set as true to include "core" slots
+	 * @param armor set as true to include "armor" slots
+	 * 
+	 * @return the contents as an array
+	 */
+	public ItemStack[] getContents(boolean core, boolean armor){
+		ItemStack[] array = new ItemStack[SIZE];
+		if(core && armor){
+			for(Integer slot : items.keySet()){
+				array[slot] = items.get(slot);
+			}
+		}else if(core && !armor){
+			array = new ItemStack[SIZE - 4];
+			for(Integer slot : items.keySet()){
+				if(slot >= SIZE - 4){
 					continue;
 				}
-				if(gamemode.equalsIgnoreCase("adventure") || gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("survival")){
-					ASInventory inventory = new ASInventory(type, name, bukkitWorld, GameMode.valueOf(gamemode));
-					for(String stringSlot : file.getConfigurationSection(world + "." + gamemode).getKeys(false)){
-						Integer slot = Integer.valueOf(stringSlot);
-						ItemStack item = file.getItemStack(world + "." + gamemode + "." + stringSlot);
-						inventory.set(slot, item);
-					}
-					inventories.add(inventory);
+				array[slot] = items.get(slot);
+			}
+		}else if(!core && armor){
+			array = new ItemStack[4];
+			for(Integer slot : items.keySet()){
+				if(slot < SIZE - 4){
+					continue;
 				}
+				array[slot - (SIZE - 4)] = items.get(slot);
 			}
 		}
-		// Remove old worlds
-		if(AntiShare.p.settings().inventoryCleanupSettings.removeOldWorlds){ // Safe-guard check
-			for(String world : removeWorlds){
-				file.set(world, null);
-			}
-			file.save();
-		}
-
-		// return
-		return inventories;
+		return array;
 	}
 
-	private final HashMap<Integer, ItemStack> inventory = new HashMap<Integer, ItemStack>();
-	private final AntiShare plugin;
-	private InventoryType type = InventoryType.PLAYER;
-	private String inventoryName = "UNKNOWN";
-	private World world;
-	private GameMode gamemode;
-
 	/**
-	 * Creates a new AntiShare Inventory
+	 * Sets the contents of this inventory. This can be any size. (Extra items are ignored)
 	 * 
-	 * @param type the type
-	 * @param inventoryName the name
-	 * @param world the world
-	 * @param gamemode the gamemode
+	 * @param items the items
 	 */
-	public ASInventory(InventoryType type, String inventoryName, World world, GameMode gamemode){
-		plugin = AntiShare.p;
-		this.type = type;
-		this.inventoryName = inventoryName;
-		this.world = world;
-		this.gamemode = gamemode;
-	}
-
-	/**
-	 * Determines if the inventory is empty
-	 * 
-	 * @return true if empty, false otherwise
-	 */
-	public boolean isEmpty(){
-		for(Integer slot : inventory.keySet()){
-			ItemStack stack = inventory.get(slot);
-			if(stack != null && stack.getType() != Material.AIR){
-				return false;
-			}
+	public void setContents(ItemStack[] items){
+		for(int i = 0; i < items.length; i++){
+			set(i, items[i]);
 		}
-		return true;
 	}
 
 	/**
-	 * Sets a slot to an item
+	 * Sets a slot in the inventory
 	 * 
-	 * @param slot the slot
+	 * @param slot the slot (any number, outside of 36+4 is ignored)
 	 * @param item the item
 	 */
 	public void set(int slot, ItemStack item){
-		if(item == null){
-			item = new ItemStack(Material.AIR, 1);
-		}
-		inventory.put(slot, item);
+		items.put(slot, item);
 	}
 
 	/**
-	 * Sets the player's inventory to this inventory
+	 * Clones an inventory into this inventory
 	 * 
-	 * @param player the player
+	 * @param inventory the inventory to clone
 	 */
-	@SuppressWarnings ("deprecation")
-	public void setTo(Player player){
-		Inventory playerInventory;
-		if(type == InventoryType.ENDER){
-			playerInventory = player.getEnderChest();
-		}else{
-			playerInventory = player.getInventory();
-			ItemStack air = new ItemStack(Material.AIR);
-			ItemStack[] armor = {air, air, air, air};
-			((PlayerInventory) playerInventory).setArmorContents(armor);
-		}
-		playerInventory.clear();
-		for(Integer slot : inventory.keySet()){
-			ItemStack item = inventory.get(slot);
-			if(item == null){
-				inventory.put(slot, new ItemStack(Material.AIR, 1));
-				item = new ItemStack(Material.AIR, 1);
+	public void clone(Inventory inventory){
+		items.clear();
+		if(inventory instanceof PlayerInventory){
+			PlayerInventory playerInv = (PlayerInventory) inventory;
+			ItemStack[] armor = playerInv.getArmorContents();
+			for(int i = 0; i < armor.length; i++){
+				set(36 + i, armor[i]);
 			}
-			if(slot < 100){
-				playerInventory.setItem(slot, item);
+		}
+		ItemStack[] contents = inventory.getContents();
+		for(int i = 0; i < contents.length; i++){
+			set(i, contents[i]);
+		}
+	}
+
+	/**
+	 * Clones an inventory into this inventory
+	 * 
+	 * @param inventory the inventory to clone
+	 */
+	public void clone(ASInventory inventory){
+		items.clear();
+		if(inventory instanceof PlayerInventory){
+			PlayerInventory playerInv = (PlayerInventory) inventory;
+			ItemStack[] armor = playerInv.getArmorContents();
+			for(int i = 0; i < armor.length; i++){
+				set(36 + i, armor[i]);
+			}
+		}
+		ItemStack[] contents = inventory.getContents();
+		for(int i = 0; i < contents.length; i++){
+			set(i, contents[i]);
+		}
+	}
+
+	/**
+	 * Fills the entire inventory with the same item
+	 * 
+	 * @param item the item
+	 */
+	public void fill(ItemStack item){
+		for(int i = 0; i < SIZE; i++){
+			set(i, item.clone());
+		}
+	}
+
+	/**
+	 * Sets the inventory to a specified inventory. This can be a player inventory or another inventory. 36 slots minimum.
+	 * 
+	 * @param inventory the inventory to set to
+	 */
+	public void setTo(Inventory inventory){
+		ItemStack[] armor = getContents(false, true);
+		ItemStack[] contents = getContents(true, false);
+		inventory.setContents(contents);
+		if(inventory instanceof PlayerInventory){
+			((PlayerInventory) inventory).setArmorContents(armor);
+		}
+	}
+
+	/**
+	 * Saves the inventory
+	 */
+	public void save(){
+		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".yml");
+		WrappedEnhancedConfiguration yaml = new WrappedEnhancedConfiguration(file, AntiShare.p);
+		yaml.load();
+		yaml.set(world + "." + gamemode.name(), getContents());
+		yaml.set(world + "." + gamemode.name() + "_version", VERSION);
+		yaml.save();
+	}
+
+	/**
+	 * Loads an inventory. This will always return an inventory, however it may be empty.
+	 * 
+	 * @param player the player to load (player name)
+	 * @param gamemode the game mode to load
+	 * @param type the inventory type to load
+	 * @param world the world name to load
+	 * @return the loaded inventory. Will never be null.
+	 */
+	public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world){
+		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".yml");
+		EnhancedConfiguration yaml = new EnhancedConfiguration(file, AntiShare.p);
+		yaml.load();
+		ASInventory inventory = new ASInventory(gamemode, player, world, type);
+		String version = yaml.getString(world + "." + gamemode.name() + "_version");
+		if(version == null){
+			ASInventory legacy = LegacyInventory.load(player, gamemode, type, world);
+			if(legacy == null){
+				inventory.fill(AIR);
 			}else{
-				if(playerInventory instanceof PlayerInventory){
-					switch (slot){
-					case 100:
-						((PlayerInventory) playerInventory).setBoots(item);
-						break;
-					case 101:
-						((PlayerInventory) playerInventory).setLeggings(item);
-						break;
-					case 102:
-						((PlayerInventory) playerInventory).setChestplate(item);
-						break;
-					case 103:
-						((PlayerInventory) playerInventory).setHelmet(item);
-						break;
+				inventory.setContents(legacy.getContents());
+			}
+		}else if(version.equalsIgnoreCase("2")){
+			Object something = yaml.get(world + "." + gamemode.name());
+			if(something instanceof List){
+				List<?> objects = (List<?>) something;
+				for(int i = 0; i < objects.size(); i++){
+					Object entry = objects.get(i);
+					if(entry instanceof ItemStack){
+						inventory.set(i, (ItemStack) entry);
 					}
 				}
 			}
 		}
-		player.updateInventory();
-	}
-
-	/**
-	 * Saves the inventory to disk
-	 */
-	public void save(){
-		// Configuration check
-		if(!plugin.settings().features.inventories){
-			return;
-		}
-		// Setup
-		File directory = new File(plugin.getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
-		File saveFile = new File(directory, inventoryName + ".yml");
-		EnhancedConfiguration yamlFile = new EnhancedConfiguration(saveFile, plugin);
-		yamlFile.load();
-		yamlFile.set(world.getName() + "." + gamemode.name(), null);
-
-		// Save data
-		// Structure: yml:world.gamemode.slot.properties
-		for(Integer slot : inventory.keySet()){
-			// Don't save AIR
-			ItemStack item = inventory.get(slot);
-			if(item == null || item.getType() == Material.AIR){
-				continue;
-			}
-
-			// Save item
-			yamlFile.set(world.getName() + "." + gamemode.name() + "." + String.valueOf(slot), item);
-		}
-		yamlFile.save();
-	}
-
-	/**
-	 * Gets the world of this inventory
-	 * 
-	 * @return the world
-	 */
-	public World getWorld(){
-		return world;
-	}
-
-	/**
-	 * Gets the game mode of this inventory
-	 * 
-	 * @return the game mode
-	 */
-	public GameMode getGameMode(){
-		return gamemode;
-	}
-
-	/**
-	 * Changes the type of this inventory
-	 * 
-	 * @param type the new type
-	 */
-	public void setType(InventoryType type){
-		this.type = type;
-	}
-
-	/**
-	 * Gets the inventory type
-	 * 
-	 * @return the type
-	 */
-	public InventoryType getType(){
-		return type;
-	}
-
-	@Override
-	public ASInventory clone(){
-		ASInventory newInventory = new ASInventory(this.type, this.inventoryName, this.world, this.gamemode);
-		for(int slot : this.inventory.keySet()){
-			newInventory.set(slot, this.inventory.get(slot));
-		}
-		return newInventory;
-	}
-
-	/**
-	 * Sets the gamemode of the inventory
-	 * 
-	 * @param gamemode the game mode
-	 */
-	public void setGamemode(GameMode gamemode){
-		this.gamemode = gamemode;
-	}
-
-	/**
-	 * Set the world this inventory is bound to
-	 * 
-	 * @param world the world
-	 */
-	public void setWorld(World world){
-		this.world = world;
-	}
-
-	/**
-	 * Gets the size of this inventory
-	 * 
-	 * @return inventory size
-	 */
-	public int getSize(){
-		switch (this.type){
-		case ENDER:
-			return 27;
-		case PLAYER:
-		case REGION:
-		case TEMPORARY:
-		default:
-			return 36;
-		}
-	}
-
-	void populateOtherInventory(Inventory inventory){
-		inventory.clear();
-		for(Integer slot : this.inventory.keySet()){
-			inventory.setItem(slot, this.inventory.get(slot));
-		}
-	}
-
-	void populateSelf(Inventory inventory){
-		for(int i = 0; i < inventory.getSize(); i++){
-			ItemStack item = inventory.getItem(i);
-			if(item == null || item.getType() == Material.AIR){
-				continue;
-			}
-			set(i, item);
-		}
-		inventory.clear();
-	}
-
-	/**
-	 * Gets the name of this inventory
-	 * 
-	 * @return the inventory name
-	 */
-	public String getName(){
-		return inventoryName;
+		return inventory;
 	}
 
 }

@@ -29,8 +29,8 @@ import org.bukkit.entity.Player;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.config.RegionConfiguration;
 import com.turt2live.antishare.cuboid.Cuboid;
-import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.inventory.OASI;
+import com.turt2live.antishare.inventory.OASI.InventoryType;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey.RegionKeyType;
 import com.turt2live.antishare.util.ASUtils;
@@ -340,7 +340,7 @@ public class RegionManager{
 				changed = true;
 			}else if(value.equalsIgnoreCase("set")){
 				if(sender instanceof Player){
-					region.setInventory(ASInventory.generate((Player) sender, InventoryType.REGION));
+					region.setInventory(OASI.generate((Player) sender, InventoryType.REGION));
 					changed = true;
 				}else{
 					plugin.getMessages().sendTo(sender, ChatColor.RED + plugin.getMessages().getMessage("console"), true);

@@ -31,8 +31,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
+import com.turt2live.antishare.inventory.OASI;
+import com.turt2live.antishare.inventory.OASI.InventoryType;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;
@@ -59,6 +60,19 @@ public class CommandHandler implements CommandExecutor{
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("version")){
 					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
+					return true;
+				}else if(args[0].equalsIgnoreCase("test")){
+					Player p = (Player) sender;
+					ASInventory i = null;
+					if(args.length > 1){
+						i = ASInventory.load(p.getName(), GameMode.ADVENTURE, com.turt2live.antishare.inventory.ASInventory.InventoryType.PLAYER, "world5");
+						i.setTo(p.getInventory());
+						p.updateInventory();
+					}else{
+						i = new ASInventory(GameMode.ADVENTURE, p.getName(), "world5", com.turt2live.antishare.inventory.ASInventory.InventoryType.PLAYER);
+						i.clone(p.getInventory());
+						i.save();
+					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(AntiShare.hasPermission(sender, PermissionNodes.RELOAD)){
@@ -142,10 +156,10 @@ public class CommandHandler implements CommandExecutor{
 									Player p = (Player) player;
 									plugin.getInventoryManager().savePlayer(p);
 								}
-								ASInventory chosen = null;
-								List<ASInventory> inventories = ASInventory.generateInventory(player.getName(), isEnder ? InventoryType.ENDER : InventoryType.PLAYER);
+								OASI chosen = null;
+								List<OASI> inventories = OASI.generateInventory(player.getName(), isEnder ? InventoryType.ENDER : InventoryType.PLAYER);
 								if(inventories != null){
-									for(ASInventory inventory : inventories){
+									for(OASI inventory : inventories){
 										if(inventory.getGameMode() == gamemode){
 											if(inventory.getWorld().getName().equals(world.getName())){
 												chosen = inventory;
