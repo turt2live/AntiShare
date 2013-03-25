@@ -989,6 +989,7 @@ public class ASListener implements Listener{
 			if(isInteract){
 				main = entity.getType().getName();
 			}else if(!isItemFrame){
+				action = Action.USE_SOMETHING;
 				extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
 			}
 		}
