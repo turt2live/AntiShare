@@ -44,7 +44,7 @@ import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 /**
  * Compatibility class for other AntiShare versions
  */
-public class SelfCompatibility{
+public class SelfCompatibility {
 
 	private static enum CompatibilityType{
 		BLOCK_CONVERSION(0),
@@ -75,7 +75,12 @@ public class SelfCompatibility{
 		}
 	}
 
-	private static enum FileType{
+	/**
+	 * File type
+	 * 
+	 * @author turt2live
+	 */
+	public static enum FileType{
 		CONFIGURATION,
 		REGION_CONFIGURATION,
 		WORLD_CONFIGURATION,
@@ -133,7 +138,7 @@ public class SelfCompatibility{
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(p.getDataFolder(), "items.csv"), true));
 		boolean updated = false;
 		String line;
-		while((line = in.readLine()) != null){
+		while ((line = in.readLine()) != null){
 			if(line.startsWith("#")){
 				continue;
 			}
@@ -203,7 +208,7 @@ public class SelfCompatibility{
 		File newDir = new File(directory, "world_configurations");
 		int files = 0;
 		if(directory.listFiles() != null){
-			for(File file : directory.listFiles(new FileFilter() {
+			for(File file : directory.listFiles(new FileFilter(){
 				@Override
 				public boolean accept(File arg0){
 					if(arg0.getName().endsWith("_config.yml")){
@@ -428,7 +433,7 @@ public class SelfCompatibility{
 				BufferedReader reader = new BufferedReader(new FileReader(config));
 				BufferedWriter writer = new BufferedWriter(new FileWriter(backup));
 				String line;
-				while((line = reader.readLine()) != null){
+				while ((line = reader.readLine()) != null){
 					writer.write(line);
 					writer.newLine();
 				}
@@ -571,7 +576,13 @@ public class SelfCompatibility{
 		return cleaned;
 	}
 
-	private static void cleanFile(File file, FileType type){
+	/**
+	 * Cleans a file
+	 * 
+	 * @param file the file
+	 * @param type the file type
+	 */
+	public static void cleanFile(File file, FileType type){
 		AntiShare plugin = AntiShare.p;
 		File temp = new File(plugin.getDataFolder(), "temp");
 		temp.mkdirs();

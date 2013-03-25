@@ -18,13 +18,15 @@ import java.util.List;
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.SelfCompatibility;
+import com.turt2live.antishare.util.SelfCompatibility.FileType;
 
 /**
  * Converts a 5.3.0 configuration to a 5.4.0 configuration
  * 
  * @author turt2live
  */
-public class ConfigConvert{
+public class ConfigConvert {
 
 	/**
 	 * Does the actual conversion.<br>
@@ -127,6 +129,8 @@ public class ConfigConvert{
 		c.set("settings.use-per-world-inventories", c.get("handled-actions.world-transfers"));
 
 		c.save();
+
+		SelfCompatibility.cleanFile(config, FileType.CONFIGURATION);
 
 		p.getLogger().warning("=========================");
 		p.getLogger().warning(p.getMessages().getMessage("configuration-update"));
