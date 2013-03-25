@@ -56,7 +56,7 @@
 
     <!-- JSONConfiguration -->
     <dependency>
-      <groupId>com.dumptruckman.bukkit</groupId>
+      <groupId>com.dumptruckman.minecraft</groupId>
       <artifactId>JsonConfiguration</artifactId>
       <version>${jsonconfig.version}</version>
       <type>jar</type>
@@ -301,7 +301,7 @@
                   <include>com.turt2live.materials:MaterialAPI</include>
                   <include>com.turt2live.metrics:MetricsExtension</include>
                   <include>com.turt2live.simplenotice:SimpleNoticeAPI</include>
-                  <include>com.dumptruckman.bukkit:JsonConfiguration</include>
+                  <include>com.dumptruckman.minecraft:JsonConfiguration</include>
                   <include>net.minidev:json-smart</include>
                 </includes>
               </artifactSet>
@@ -315,8 +315,8 @@
                   <shadedPattern>net.minidev.json.${project.name}</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>com.dumptruckman.bukkit.configuration</pattern>
-                  <shadedPattern>com.dumptruckman.bukkit.configuration.${project.name}</shadedPattern>
+                  <pattern>com.dumptruckman.minecraft.configuration</pattern>
+                  <shadedPattern>com.dumptruckman.minecraft.configuration.${project.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.materials</pattern>

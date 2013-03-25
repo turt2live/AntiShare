@@ -2,7 +2,6 @@ package com.turt2live.antishare.inventory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -212,12 +211,7 @@ public class ASInventory{
 				file.createNewFile();
 			}
 			yaml.load(file);
-			// TODO: Temporary hack for JSONConfiguration
-			List<ItemStack> list = new ArrayList<ItemStack>();
-			for(ItemStack i : getContents()){
-				list.add(i);
-			}
-			yaml.set(world + "." + gamemode.name(), list);
+			yaml.set(world + "." + gamemode.name(), getContents());
 			yaml.set(world + "." + gamemode.name() + "_version", VERSION);
 			yaml.save(file);
 		}catch(IOException e){
