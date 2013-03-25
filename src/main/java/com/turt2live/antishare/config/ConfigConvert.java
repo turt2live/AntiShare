@@ -20,6 +20,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.SelfCompatibility;
 import com.turt2live.antishare.util.SelfCompatibility.FileType;
+import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
 /**
  * Converts a 5.3.0 configuration to a 5.4.0 configuration
@@ -41,96 +42,109 @@ public class ConfigConvert {
 			return; // Fresh install
 		}
 
+		File original = new File(p.getDataFolder(), "config-backup-temp.yml");
+
+		System.out.println(config.getAbsolutePath());
+
 		try{
 			ASUtils.copyFile(config, new File(p.getDataFolder(), "config-5.3.0-backup.yml"));
+			ASUtils.copyFile(config, original);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 
-		// Note: AntiShare#onEnable() will automatically clean up the mess left here
-		EnhancedConfiguration c = p.getConfig();
+		WrappedEnhancedConfiguration c = new WrappedEnhancedConfiguration(config, p);
+		EnhancedConfiguration o = new EnhancedConfiguration(original, p);
 
-		if(c.getString("other.version_string") != null){
+		c.load();
+		o.load();
+
+		if(o.getString("other.version_string") != null){
 			return; // Already converted!
 		}
 
+		c.clearFile();
+		c.save();
+
 		// Load block lists
-		c.set("lists.break", convertList(c.getString("blocked-lists.block-break")));
-		c.set("lists.place", convertList(c.getString("blocked-lists.block-place")));
-		c.set("lists.death", convertList(c.getString("blocked-lists.dropped-items-on-death")));
-		c.set("lists.pickup", convertList(c.getString("blocked-lists.picked-up-items")));
-		c.set("lists.drop", convertList(c.getString("blocked-lists.dropped-items")));
-		c.set("lists.use", merge(c.getString("blocked-lists.right-click"), c.getString("blocked-lists.use-items")));
-		c.set("lists.commands", convertList(c.getString("blocked-lists.commands")));
-		c.set("lists.attack-mobs", convertList(c.getString("blocked-lists.mobs")));
-		c.set("lists.interact-mobs", convertList(c.getString("blocked-lists.right-click-mobs")));
-		c.set("lists.crafting", convertList(c.getString("blocked-lists.crafting-recipes")));
+		c.set("lists.break", convertList(o.getString("blocked-lists.block-break")));
+		c.set("lists.place", convertList(o.getString("blocked-lists.block-place")));
+		c.set("lists.death", convertList(o.getString("blocked-lists.dropped-items-on-death")));
+		c.set("lists.pickup", convertList(o.getString("blocked-lists.picked-up-items")));
+		c.set("lists.drop", convertList(o.getString("blocked-lists.dropped-items")));
+		c.set("lists.use", merge(o.getString("blocked-lists.right-click"), o.getString("blocked-lists.use-items")));
+		c.set("lists.commands", convertList(o.getString("blocked-lists.commands")));
+		c.set("lists.attack-mobs", convertList(o.getString("blocked-lists.mobs")));
+		c.set("lists.interact-mobs", convertList(o.getString("blocked-lists.right-click-mobs")));
+		c.set("lists.crafting", convertList(o.getString("blocked-lists.crafting-recipes")));
 
 		// Load tracked lists
-		c.set("tracking.creative", convertList(c.getString("block-tracking.tracked-creative-blocks")));
-		c.set("tracking.survival", convertList(c.getString("block-tracking.tracked-survival-blocks")));
-		c.set("tracking.adventure", convertList(c.getString("block-tracking.tracked-adventure-blocks")));
+		c.set("tracking.creative", convertList(o.getString("block-tracking.tracked-creative-blocks")));
+		c.set("tracking.survival", convertList(o.getString("block-tracking.tracked-survival-blocks")));
+		c.set("tracking.adventure", convertList(o.getString("block-tracking.tracked-adventure-blocks")));
 
 		// Convert crafted mobs
 		List<String> mobs = new ArrayList<String>();
-		if(c.getBoolean("enabled-features.mob-creation.allow-snow-golems")){
+		if(o.getBoolean("enabled-features.mob-creation.allow-snow-golems")){
 			mobs.add("snow golem");
 		}
-		if(c.getBoolean("enabled-features.mob-creation.allow-iron-golems")){
+		if(o.getBoolean("enabled-features.mob-creation.allow-iron-golems")){
 			mobs.add("iron golem");
 		}
-		if(c.getBoolean("enabled-features.mob-creation.allow-wither")){
+		if(o.getBoolean("enabled-features.mob-creation.allow-wither")){
 			mobs.add("wither");
 		}
 		c.set("lists.craft-mob", mobs);
 
 		// Interaction settings
-		c.set("interaction.survival-breaking-creative.deny", c.get("settings.survival-breaking-creative-blocks.deny"));
-		c.set("interaction.creative-breaking-survival.deny", c.get("settings.creative-breaking-survival-blocks.deny"));
-		c.set("interaction.survival-breaking-adventure.deny", c.get("settings.survival-breaking-adventure-blocks.deny"));
-		c.set("interaction.creative-breaking-adventure.deny", c.get("settings.creative-breaking-adventure-blocks.deny"));
-		c.set("interaction.adventure-breaking-survival.deny", c.get("settings.adventure-breaking-survival-blocks.deny"));
-		c.set("interaction.adventure-breaking-creative.deny", c.get("settings.adventure-breaking-creative-blocks.deny"));
-		c.set("interaction.survival-breaking-creative.drop-items", c.get("settings.survival-breaking-creative-blocks.block-drops"));
-		c.set("interaction.creative-breaking-survival.drop-items", c.get("settings.creative-breaking-survival-blocks.block-drops"));
-		c.set("interaction.survival-breaking-adventure.drop-items", c.get("settings.survival-breaking-adventure-blocks.block-drops"));
-		c.set("interaction.creative-breaking-adventure.drop-items", c.get("settings.creative-breaking-adventure-blocks.block-drops"));
-		c.set("interaction.adventure-breaking-survival.drop-items", c.get("settings.adventure-breaking-survival-blocks.block-drops"));
-		c.set("interaction.adventure-breaking-creative.drop-items", c.get("settings.adventure-breaking-creative-blocks.block-drops"));
+		c.set("interaction.survival-breaking-creative.deny", o.get("settings.survival-breaking-creative-blocks.deny"));
+		c.set("interaction.creative-breaking-survival.deny", o.get("settings.creative-breaking-survival-blocks.deny"));
+		c.set("interaction.survival-breaking-adventure.deny", o.get("settings.survival-breaking-adventure-blocks.deny"));
+		c.set("interaction.creative-breaking-adventure.deny", o.get("settings.creative-breaking-adventure-blocks.deny"));
+		c.set("interaction.adventure-breaking-survival.deny", o.get("settings.adventure-breaking-survival-blocks.deny"));
+		c.set("interaction.adventure-breaking-creative.deny", o.get("settings.adventure-breaking-creative-blocks.deny"));
+		c.set("interaction.survival-breaking-creative.drop-items", o.get("settings.survival-breaking-creative-blocks.block-drops"));
+		c.set("interaction.creative-breaking-survival.drop-items", o.get("settings.creative-breaking-survival-blocks.block-drops"));
+		c.set("interaction.survival-breaking-adventure.drop-items", o.get("settings.survival-breaking-adventure-blocks.block-drops"));
+		c.set("interaction.creative-breaking-adventure.drop-items", o.get("settings.creative-breaking-adventure-blocks.block-drops"));
+		c.set("interaction.adventure-breaking-survival.drop-items", o.get("settings.adventure-breaking-survival-blocks.block-drops"));
+		c.set("interaction.adventure-breaking-creative.drop-items", o.get("settings.adventure-breaking-creative-blocks.block-drops"));
 
 		// Cleanup functions
-		c.set("settings.cleanup.inventories.enabled", c.get("settings.cleanup.use"));
-		c.set("settings.cleanup.inventories.method", c.get("settings.cleanup.method"));
-		c.set("settings.cleanup.inventories.after", c.get("settings.cleanup.after"));
-		c.set("settings.cleanup.inventories.remove-old-worlds", c.get("settings.remove-old-inventories"));
+		c.set("settings.cleanup.inventories.enabled", o.get("settings.cleanup.use"));
+		c.set("settings.cleanup.inventories.method", o.get("settings.cleanup.method"));
+		c.set("settings.cleanup.inventories.after", o.get("settings.cleanup.after"));
+		c.set("settings.cleanup.inventories.remove-old-worlds", o.get("settings.remove-old-inventories"));
 
 		// Gamemode cooldown
-		c.set("settings.cooldown.enabled", c.get("gamemode-change-cooldown.use"));
-		c.set("settings.cooldown.wait-time-seconds", c.get("gamemode-change-cooldown.time-in-seconds"));
+		c.set("settings.cooldown.enabled", o.get("gamemode-change-cooldown.use"));
+		c.set("settings.cooldown.wait-time-seconds", o.get("gamemode-change-cooldown.time-in-seconds"));
 
 		// Natural protection
-		c.set("settings.natural-protection.allow-mismatch-gamemode", c.get("settings.similar-gamemode-allow"));
-		c.set("settings.natural-protection.remove-attached-blocks", c.get("settings.enabled-features.no-drops-when-block-break.attached-blocks"));
-		c.set("settings.natural-protection.empty-inventories", c.get("settings.enabled-features.no-drops-when-block-break.inventories"));
+		c.set("settings.natural-protection.allow-mismatch-gamemode", o.get("settings.similar-gamemode-allow"));
+		c.set("settings.natural-protection.remove-attached-blocks", o.get("settings.enabled-features.no-drops-when-block-break.attached-blocks"));
+		c.set("settings.natural-protection.empty-inventories", o.get("settings.enabled-features.no-drops-when-block-break.inventories"));
 
 		// Gamemode change settings
-		c.set("settings.gamemode-change.change-level", c.get("enabled-features.change-level-on-gamemode-change"));
-		c.set("settings.gamemode-change.change-economy-balance", c.get("enabled-features.change-balance-on-gamemode-change"));
-		c.set("settings.gamemode-change.change-inventory", c.get("handled-actions.gamemode-inventories"));
-		c.set("settings.gamemode-change.change-ender-chest", c.get("handled-actions.gamemode-ender-chests"));
+		c.set("settings.gamemode-change.change-level", o.get("enabled-features.change-level-on-gamemode-change"));
+		c.set("settings.gamemode-change.change-economy-balance", o.get("enabled-features.change-balance-on-gamemode-change"));
+		c.set("settings.gamemode-change.change-inventory", o.get("handled-actions.gamemode-inventories"));
+		c.set("settings.gamemode-change.change-ender-chest", o.get("handled-actions.gamemode-ender-chests"));
 
 		// Hook settings
-		c.set("hooks.magicspells.block-creative", c.get("magicspells.block-creative"));
-		c.set("hooks.logblock.stop-spam", c.get("other.stop-logblock-spam"));
+		c.set("hooks.magicspells.block-creative", o.get("magicspells.block-creative"));
+		c.set("hooks.logblock.stop-spam", o.get("other.stop-logblock-spam"));
 
 		// Other settings
-		c.set("other.ignore-updates", c.get("other.dont-look-for-updates"));
-		c.set("settings.adventure-is-creative", c.get("other.adventure-is-creative"));
-		c.set("settings.use-per-world-inventories", c.get("handled-actions.world-transfers"));
+		c.set("other.ignore-updates", o.get("other.dont-look-for-updates"));
+		c.set("settings.adventure-is-creative", o.get("other.adventure-is-creative"));
+		c.set("settings.use-per-world-inventories", o.get("handled-actions.world-transfers"));
 
 		c.save();
 
 		SelfCompatibility.cleanFile(config, FileType.CONFIGURATION);
+
+		original.delete();
 
 		p.getLogger().warning("=========================");
 		p.getLogger().warning(p.getMessages().getMessage("configuration-update"));

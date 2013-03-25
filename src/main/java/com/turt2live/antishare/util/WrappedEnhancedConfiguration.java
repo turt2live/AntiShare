@@ -19,7 +19,7 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 /**
  * Temporary fix for missing methods
  */
-public class WrappedEnhancedConfiguration extends EnhancedConfiguration{
+public class WrappedEnhancedConfiguration extends EnhancedConfiguration {
 
 	public WrappedEnhancedConfiguration(File file, Plugin plugin){
 		super(file, plugin);
