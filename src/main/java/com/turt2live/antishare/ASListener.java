@@ -120,7 +120,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class ASListener implements Listener{
+public class ASListener implements Listener {
 
 	private static AntiShare plugin = AntiShare.p;
 
@@ -356,7 +356,7 @@ public class ASListener implements Listener{
 		final Player player = event.getPlayer();
 		final GameMode from = player.getGameMode();
 		final GameMode to = event.getNewGameMode();
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				doGameModeChange(player, from, to);
@@ -438,7 +438,7 @@ public class ASListener implements Listener{
 		List<Block> list = new ArrayList<Block>();
 		list.addAll(event.blockList());
 		Iterator<Block> iterate = list.iterator();
-		while(iterate.hasNext()){
+		while (iterate.hasNext()){
 			Block block = iterate.next();
 			GameMode type = plugin.getBlockManager().getType(block);
 			if(GamemodeAbstraction.isCreative(type)){
@@ -466,7 +466,7 @@ public class ASListener implements Listener{
 				event.setCancelled(true);
 			}
 		}
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
@@ -843,17 +843,12 @@ public class ASListener implements Listener{
 		if(illegal){
 			event.setCancelled(true);
 		}else{
-			if(c.naturalSettings.removeAttached && !AntiShare.hasPermission(player, PermissionNodes.BREAK_ANYTHING)){
-				event.setCancelled(true);
-				event.getVehicle().remove();
-			}else{
-				if(event.getVehicle() instanceof StorageMinecart
-						&& c.naturalSettings.emptyInventories
-						&& GamemodeAbstraction.isCreative(player.getGameMode())
-						&& !AntiShare.hasPermission(player, PermissionNodes.BREAK_ANYTHING)){
-					StorageMinecart m = (StorageMinecart) event.getVehicle();
-					m.getInventory().clear();
-				}
+			if(event.getVehicle() instanceof StorageMinecart
+					&& c.naturalSettings.emptyInventories
+					&& GamemodeAbstraction.isCreative(player.getGameMode())
+					&& !AntiShare.hasPermission(player, PermissionNodes.BREAK_ANYTHING)){
+				StorageMinecart m = (StorageMinecart) event.getVehicle();
+				m.getInventory().clear();
 			}
 		}
 
