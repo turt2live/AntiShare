@@ -1,19 +1,21 @@
 package com.turt2live.antishare.inventory;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.feildmaster.lib.configuration.EnhancedConfiguration;
+import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
 /**
  * AntiShare Inventory
@@ -203,12 +205,26 @@ public class ASInventory{
 	 * Saves the inventory
 	 */
 	public void save(){
-		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".yml");
-		WrappedEnhancedConfiguration yaml = new WrappedEnhancedConfiguration(file, AntiShare.p);
-		yaml.load();
-		yaml.set(world + "." + gamemode.name(), getContents());
-		yaml.set(world + "." + gamemode.name() + "_version", VERSION);
-		yaml.save();
+		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".json");
+		JsonConfiguration yaml = new JsonConfiguration();
+		try{
+			if(!file.exists()){
+				file.createNewFile();
+			}
+			yaml.load(file);
+			// TODO: Temporary hack for JSONConfiguration
+			List<ItemStack> list = new ArrayList<ItemStack>();
+			for(ItemStack i : getContents()){
+				list.add(i);
+			}
+			yaml.set(world + "." + gamemode.name(), list);
+			yaml.set(world + "." + gamemode.name() + "_version", VERSION);
+			yaml.save(file);
+		}catch(IOException e){
+			e.printStackTrace();
+		}catch(InvalidConfigurationException e){
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -221,29 +237,39 @@ public class ASInventory{
 	 * @return the loaded inventory. Will never be null.
 	 */
 	public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world){
-		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".yml");
-		EnhancedConfiguration yaml = new EnhancedConfiguration(file, AntiShare.p);
-		yaml.load();
+		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".json");
 		ASInventory inventory = new ASInventory(gamemode, player, world, type);
-		String version = yaml.getString(world + "." + gamemode.name() + "_version");
-		if(version == null){
-			ASInventory legacy = LegacyInventory.load(player, gamemode, type, world);
-			if(legacy == null){
-				inventory.fill(AIR);
-			}else{
-				inventory.setContents(legacy.getContents());
+		JsonConfiguration yaml = new JsonConfiguration();
+		try{
+			if(!file.exists()){
+				file.createNewFile();
 			}
-		}else if(version.equalsIgnoreCase("2")){
-			Object something = yaml.get(world + "." + gamemode.name());
-			if(something instanceof List){
-				List<?> objects = (List<?>) something;
-				for(int i = 0; i < objects.size(); i++){
-					Object entry = objects.get(i);
-					if(entry instanceof ItemStack){
-						inventory.set(i, (ItemStack) entry);
+			yaml.load(file);
+			String version = yaml.getString(world + "." + gamemode.name() + "_version");
+			// TODO: Self compat
+			/*if(version == null){
+				ASInventory legacy = LegacyInventory.load(player, gamemode, type, world);
+				if(legacy == null){
+					inventory.fill(AIR);
+				}else{
+					inventory.setContents(legacy.getContents());
+				}
+			}else */if(version.equalsIgnoreCase("2")){
+				Object something = yaml.get(world + "." + gamemode.name());
+				if(something instanceof List){
+					List<?> objects = (List<?>) something;
+					for(int i = 0; i < objects.size(); i++){
+						Object entry = objects.get(i);
+						if(entry instanceof ItemStack){
+							inventory.set(i, (ItemStack) entry);
+						}
 					}
 				}
 			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}catch(InvalidConfigurationException e){
+			e.printStackTrace();
 		}
 		return inventory;
 	}

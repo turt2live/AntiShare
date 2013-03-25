@@ -15,6 +15,8 @@
     <metricsextension.version>0.0.4-SNAPSHOT</metricsextension.version>
     <configurationlib.version>1.1.3</configurationlib.version>
     <snapi.version>0.0.1-SNAPSHOT</snapi.version>
+    <jsonconfig.version>1.0-SNAPSHOT</jsonconfig.version>
+    <json.version>1.1.1</json.version>
 
     <!-- JAR Versions -->
     <logblock.version>1.70</logblock.version>
@@ -48,6 +50,24 @@
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
       <version>${vault.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- JSONConfiguration -->
+    <dependency>
+      <groupId>com.dumptruckman.bukkit</groupId>
+      <artifactId>JsonConfiguration</artifactId>
+      <version>${jsonconfig.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- JSON Library for JSONConfiguration -->
+    <dependency>
+      <groupId>net.minidev</groupId>
+      <artifactId>json-smart</artifactId>
+      <version>${json.version}</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
@@ -226,7 +246,7 @@
       <url>http://repo.bukkit.org/content/groups/public</url>
     </repository>
 
-    <!-- For MultiVerse -->
+    <!-- For MultiVerse and JSONConfiguration -->
     <repository>
       <id>onarandombox-repo</id>
       <url>http://repo.onarandombox.com/content/groups/public</url>
@@ -281,12 +301,22 @@
                   <include>com.turt2live.materials:MaterialAPI</include>
                   <include>com.turt2live.metrics:MetricsExtension</include>
                   <include>com.turt2live.simplenotice:SimpleNoticeAPI</include>
+                  <include>com.dumptruckman.bukkit:JsonConfiguration</include>
+                  <include>net.minidev:json-smart</include>
                 </includes>
               </artifactSet>
               <relocations>
                 <relocation>
                   <pattern>com.feildmaster.lib.configuration</pattern>
                   <shadedPattern>com.feildmaster.lib.configuration.${project.name}</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>net.minidev.json</pattern>
+                  <shadedPattern>net.minidev.json.${project.name}</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.dumptruckman.bukkit.configuration</pattern>
+                  <shadedPattern>com.dumptruckman.bukkit.configuration.${project.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.materials</pattern>
