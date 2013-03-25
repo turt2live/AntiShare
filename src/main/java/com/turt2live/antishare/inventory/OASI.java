@@ -26,6 +26,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 
 /**
  * AntiShare Inventory
@@ -34,33 +35,6 @@ import com.turt2live.antishare.AntiShare;
  */
 // TODO: Cleanup
 public class OASI implements Cloneable{
-
-	/**
-	 * An enum to represent inventory types
-	 * 
-	 * @author turt2live
-	 */
-	public static enum InventoryType{
-		PLAYER("players"),
-		REGION("regions"),
-		TEMPORARY("temporary"),
-		ENDER("ender");
-
-		private String relativeFolderName;
-
-		private InventoryType(String relativeFolderName){
-			this.relativeFolderName = relativeFolderName;
-		}
-
-		/**
-		 * Gets the relative folder name
-		 * 
-		 * @return the folder
-		 */
-		public String getRelativeFolderName(){
-			return relativeFolderName;
-		}
-	}
 
 	/**
 	 * Generates an AntiShare Inventory from a player

@@ -19,7 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.inventory.OASI.InventoryType;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 
 /**
  * Displayable version of an AntiShare inventory

@@ -31,9 +31,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.inventory.OASI;
-import com.turt2live.antishare.inventory.OASI.InventoryType;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;

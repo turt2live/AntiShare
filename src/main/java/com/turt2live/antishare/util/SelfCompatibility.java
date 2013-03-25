@@ -35,8 +35,10 @@ import org.bukkit.inventory.ItemStack;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
+import com.turt2live.antishare.inventory.LegacyInventory;
 import com.turt2live.antishare.inventory.OASI;
-import com.turt2live.antishare.inventory.OASI.InventoryType;
 import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 
 /**
@@ -63,7 +65,8 @@ public class SelfCompatibility{
 		CONFIGURATION_540_BETA(45),
 		CONFIGURATION_540(50),
 		ITEM_MAP_540(55),
-		FILES_AND_FOLDERS_540(60);
+		FILES_AND_FOLDERS_540(60),
+		INVENTORY_UPDATE_540(65);
 
 		public final int bytePosition;
 
@@ -524,6 +527,35 @@ public class SelfCompatibility{
 			AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("bugged-remove", String.valueOf(deleted)));
 		}
 		noLongerNeedsUpdate(CompatibilityType.BLOCK_BUG_CLEANUP_540_BETA);
+	}
+
+	/**
+	 * Converts inventories to 5.4.0 format (JSON)
+	 */
+	public static void convertTo540Inventories(){
+		if(!needsUpdate(CompatibilityType.INVENTORY_UPDATE_540)){
+			return;
+		}
+		int resolved = 0;
+		for(InventoryType type : InventoryType.values()){
+			File[] files = new File(ASInventory.DATA_FOLDER, type.getRelativeFolderName()).listFiles();
+			if(files != null){
+				for(File file : files){
+					if(file.getName().toLowerCase().endsWith(".yml")){
+						List<ASInventory> list = LegacyInventory.load(file.getName().split("\\.")[0], type);
+						for(ASInventory inv : list){
+							inv.save();
+						}
+						file.delete();
+						resolved++;
+					}
+				}
+			}
+		}
+		if(resolved > 0){
+			AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("inventories-to-540-converted", String.valueOf(resolved)));
+		}
+		noLongerNeedsUpdate(CompatibilityType.INVENTORY_UPDATE_540);
 	}
 
 	private static int cleanFolder(File folder, FileType type){

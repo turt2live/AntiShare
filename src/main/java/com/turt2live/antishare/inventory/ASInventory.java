@@ -205,7 +205,7 @@ public class ASInventory{
 	 * Saves the inventory
 	 */
 	public void save(){
-		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".json");
+		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".asinventory");
 		JsonConfiguration yaml = new JsonConfiguration();
 		try{
 			if(!file.exists()){
@@ -237,7 +237,7 @@ public class ASInventory{
 	 * @return the loaded inventory. Will never be null.
 	 */
 	public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world){
-		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".json");
+		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".asinventory");
 		ASInventory inventory = new ASInventory(gamemode, player, world, type);
 		JsonConfiguration yaml = new JsonConfiguration();
 		try{
@@ -246,15 +246,7 @@ public class ASInventory{
 			}
 			yaml.load(file);
 			String version = yaml.getString(world + "." + gamemode.name() + "_version");
-			// TODO: Self compat
-			/*if(version == null){
-				ASInventory legacy = LegacyInventory.load(player, gamemode, type, world);
-				if(legacy == null){
-					inventory.fill(AIR);
-				}else{
-					inventory.setContents(legacy.getContents());
-				}
-			}else */if(version.equalsIgnoreCase("2")){
+			if(version.equalsIgnoreCase("2")){
 				Object something = yaml.get(world + "." + gamemode.name());
 				if(something instanceof List){
 					List<?> objects = (List<?>) something;
