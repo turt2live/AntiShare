@@ -13,9 +13,22 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 
-// TODO Document
+/**
+ * Legacy inventory (5.3.0)
+ * 
+ * @author turt2live
+ */
 public class LegacyInventory{
 
+	/**
+	 * Loads a single inventory
+	 * 
+	 * @param player the player
+	 * @param gamemode the gamemode
+	 * @param type the type
+	 * @param world the world
+	 * @return the inventory, never null
+	 */
 	public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world){
 		// Setup
 		File dir = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories" + File.separator + type.getRelativeFolderName());
@@ -38,6 +51,13 @@ public class LegacyInventory{
 		return inventory;
 	}
 
+	/**
+	 * Loads all inventories related to the player
+	 * 
+	 * @param player the player
+	 * @param type the type
+	 * @return a list of inventories, never null
+	 */
 	public static List<ASInventory> load(String player, InventoryType type){
 		// Setup
 		List<ASInventory> inventories = new ArrayList<ASInventory>();
