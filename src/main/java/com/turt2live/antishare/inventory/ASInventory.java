@@ -98,9 +98,10 @@ public class ASInventory implements Cloneable{
 				array[slot] = items.get(slot);
 			}
 		}else if(core && !armor){
-			array = new ItemStack[SIZE - 4];
+			int size = type == InventoryType.ENDER ? 27 : SIZE - 4;
+			array = new ItemStack[size];
 			for(Integer slot : items.keySet()){
-				if(slot >= SIZE - 4){
+				if(slot >= size){
 					continue;
 				}
 				array[slot] = items.get(slot);
@@ -195,6 +196,7 @@ public class ASInventory implements Cloneable{
 	 * @param inventory the inventory to set to
 	 */
 	public void setTo(Inventory inventory){
+		inventory.clear();
 		ItemStack[] armor = getContents(false, true);
 		ItemStack[] contents = getContents(true, false);
 		inventory.setContents(contents);

@@ -305,8 +305,11 @@ public class InventoryManager{
 			player.getInventory().clear();
 			player.updateInventory();
 		}else{
-			// TODO: Ender checks
-			inventory.setTo(player.getInventory());
+			if(inventory.type == InventoryType.ENDER){
+				inventory.setTo(player.getEnderChest());
+			}else{
+				inventory.setTo(player.getInventory());
+			}
 		}
 	}
 
@@ -318,8 +321,11 @@ public class InventoryManager{
 	public void removeFromTemporary(Player player){
 		TemporaryASInventory inventory = temporary.get(player.getName());
 		if(inventory != null){
-			// TODO: Ender checks
-			inventory.getLastInventory().setTo(player.getInventory());
+			if(inventory.getLastInventory().type == InventoryType.ENDER){
+				inventory.getLastInventory().setTo(player.getEnderChest());
+			}else{
+				inventory.getLastInventory().setTo(player.getInventory());
+			}
 			temporary.remove(player.getName());
 		}
 	}
