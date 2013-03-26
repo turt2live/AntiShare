@@ -2,12 +2,14 @@ package com.turt2live.antishare.inventory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +23,7 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-public class ASInventory{
+public class ASInventory implements Cloneable{
 
 	/**
 	 * Inventory type
@@ -52,14 +54,15 @@ public class ASInventory{
 
 	public static final File DATA_FOLDER = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories");
 	public static final int SIZE = (9 * 4) + 4;
+	public static final int SIZE_HIGH_9 = (9 * 4) + 9;
 	public static final ItemStack AIR = new ItemStack(Material.AIR);
 	public static final String VERSION = "2";
 	public static final ASInventory EMPTY = null;
 
-	final GameMode gamemode;
-	final String owner;
-	final String world;
-	final InventoryType type;
+	public GameMode gamemode;
+	public final String owner;
+	public final String world;
+	public final InventoryType type;
 	final Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
 
 	// TODO: Make invisible
@@ -257,6 +260,39 @@ public class ASInventory{
 		}catch(InvalidConfigurationException e){
 			e.printStackTrace();
 		}
+		return inventory;
+	}
+
+	/**
+	 * Gets a list of all inventories for a player of a specified type
+	 * 
+	 * @param playerName the player name
+	 * @param type the type
+	 * @return a list of inventories, never null
+	 */
+	public static List<ASInventory> getAll(String playerName, InventoryType type){
+		List<ASInventory> invs = new ArrayList<ASInventory>();
+		ASInventory i = null;
+		for(World world : AntiShare.p.getServer().getWorlds()){
+			for(GameMode gamemode : GameMode.values()){
+				i = load(playerName, gamemode, type, world.getName());
+				if(i != null){
+					invs.add(i);
+				}
+			}
+		}
+		return invs;
+	}
+
+	@Override
+	public String toString(){
+		return "ASInventory [gamemode=" + gamemode + ", owner=" + owner + ", world=" + world + ", type=" + type + ", items=" + items + "]";
+	}
+
+	@Override
+	public ASInventory clone(){
+		ASInventory inventory = new ASInventory(gamemode, owner, world, type);
+		inventory.setContents(getContents());
 		return inventory;
 	}
 

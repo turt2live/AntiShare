@@ -318,18 +318,19 @@ public class ASListener implements Listener{
 			plugin.getInventoryManager().refreshInventories(player, true);
 
 			// Set to
+			// TODO: Ender checks
 			switch (to){
 			case CREATIVE:
-				plugin.getInventoryManager().getCreativeInventory(player, player.getWorld()).setTo(player);
-				plugin.getInventoryManager().getEnderCreativeInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getCreativeInventory(player, player.getWorld()).setTo(player.getInventory());
+				plugin.getInventoryManager().getEnderCreativeInventory(player, player.getWorld()).setTo(player.getInventory());
 				break;
 			case SURVIVAL:
-				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player);
-				plugin.getInventoryManager().getEnderSurvivalInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player.getInventory());
+				plugin.getInventoryManager().getEnderSurvivalInventory(player, player.getWorld()).setTo(player.getInventory());
 				break;
 			case ADVENTURE:
-				plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player);
-				plugin.getInventoryManager().getEnderAdventureInventory(player, player.getWorld()).setTo(player);
+				plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player.getInventory());
+				plugin.getInventoryManager().getEnderAdventureInventory(player, player.getWorld()).setTo(player.getInventory());
 				break;
 			default:
 				break;
@@ -1604,18 +1605,19 @@ public class ASListener implements Listener{
 			plugin.getInventoryManager().refreshInventories(player, true);
 
 			// Set to
+			// TODO: Ender checks
 			switch (player.getGameMode()){
 			case CREATIVE:
-				plugin.getInventoryManager().getCreativeInventory(player, to).setTo(player);
-				plugin.getInventoryManager().getEnderCreativeInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				plugin.getInventoryManager().getCreativeInventory(player, to).setTo(player.getInventory());
+				plugin.getInventoryManager().getEnderCreativeInventory(player, to).setTo(player.getInventory()); // Sets to the ender chest, not the player
 				break;
 			case SURVIVAL:
-				plugin.getInventoryManager().getSurvivalInventory(player, to).setTo(player);
-				plugin.getInventoryManager().getEnderSurvivalInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				plugin.getInventoryManager().getSurvivalInventory(player, to).setTo(player.getInventory());
+				plugin.getInventoryManager().getEnderSurvivalInventory(player, to).setTo(player.getInventory()); // Sets to the ender chest, not the player
 				break;
 			case ADVENTURE:
-				plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player);
-				plugin.getInventoryManager().getEnderAdventureInventory(player, to).setTo(player); // Sets to the ender chest, not the player
+				plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player.getInventory());
+				plugin.getInventoryManager().getEnderAdventureInventory(player, to).setTo(player.getInventory()); // Sets to the ender chest, not the player
 				break;
 			default:
 				break;

@@ -26,7 +26,7 @@ import com.turt2live.antishare.inventory.ASInventory.InventoryType;
  */
 public class DisplayableInventory implements InventoryHolder, Listener{
 
-	private OASI asinventory;
+	private ASInventory asinventory;
 	private Inventory inventory;
 	private long uid = System.nanoTime();
 	private AntiShare plugin = AntiShare.p;
@@ -38,7 +38,7 @@ public class DisplayableInventory implements InventoryHolder, Listener{
 	 * 
 	 * @param inventory the inventory
 	 */
-	public DisplayableInventory(OASI inventory){
+	public DisplayableInventory(ASInventory inventory){
 		this(inventory, "AntiShare Inventory");
 	}
 
@@ -48,7 +48,7 @@ public class DisplayableInventory implements InventoryHolder, Listener{
 	 * @param inventory the inventory
 	 * @param title the inventory title to show
 	 */
-	public DisplayableInventory(OASI inventory, String title){
+	public DisplayableInventory(ASInventory inventory, String title){
 		this.asinventory = inventory;
 		this.title = title;
 		if(this.title == null){
@@ -61,8 +61,8 @@ public class DisplayableInventory implements InventoryHolder, Listener{
 	}
 
 	private void createInventory(){
-		inventory = plugin.getServer().createInventory(this, asinventory.getSize(), title);
-		asinventory.populateOtherInventory(inventory);
+		inventory = plugin.getServer().createInventory(this, ASInventory.SIZE_HIGH_9, title);
+		asinventory.clone(inventory);
 	}
 
 	@EventHandler (priority = EventPriority.MONITOR)
@@ -74,15 +74,15 @@ public class DisplayableInventory implements InventoryHolder, Listener{
 			DisplayableInventory display = (DisplayableInventory) event.getInventory().getHolder();
 			if(display.uid == this.uid){
 				// It's us!
-				asinventory.populateSelf(event.getInventory());
+				asinventory.clone(event.getInventory());
 				asinventory.save();
-				String name = asinventory.getName();
-				if(asinventory.getType() == InventoryType.PLAYER || asinventory.getType() == InventoryType.ENDER){
+				String name = asinventory.owner;
+				if(asinventory.type == InventoryType.PLAYER || asinventory.type == InventoryType.ENDER){
 					Player player = plugin.getServer().getPlayerExact(name);
 					if(player != null){
-						if(player.getGameMode() == asinventory.getGameMode()){
-							if(player.getWorld().getName().equals(asinventory.getWorld().getName())){
-								asinventory.setTo(player);
+						if(player.getGameMode() == asinventory.gamemode){
+							if(player.getWorld().getName().equals(asinventory.world)){
+								asinventory.setTo(asinventory.type == InventoryType.PLAYER ? player.getInventory() : player.getEnderChest());
 							}
 						}
 					}

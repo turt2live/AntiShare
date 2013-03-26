@@ -33,7 +33,6 @@ import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
-import com.turt2live.antishare.inventory.OASI;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;
@@ -156,18 +155,7 @@ public class CommandHandler implements CommandExecutor{
 									Player p = (Player) player;
 									plugin.getInventoryManager().savePlayer(p);
 								}
-								OASI chosen = null;
-								List<OASI> inventories = OASI.generateInventory(player.getName(), isEnder ? InventoryType.ENDER : InventoryType.PLAYER);
-								if(inventories != null){
-									for(OASI inventory : inventories){
-										if(inventory.getGameMode() == gamemode){
-											if(inventory.getWorld().getName().equals(world.getName())){
-												chosen = inventory;
-												break;
-											}
-										}
-									}
-								}
+								ASInventory chosen = ASInventory.load(playername, gamemode, isEnder ? InventoryType.ENDER : InventoryType.PLAYER, world.getName());
 								if(chosen == null){
 									plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("inventory-not-found"), true);
 									return true;

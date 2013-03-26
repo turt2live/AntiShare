@@ -23,9 +23,9 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LinkedInventory;
-import com.turt2live.antishare.inventory.OASI;
 import com.turt2live.antishare.inventory.TemporaryASInventory;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
@@ -39,12 +39,12 @@ import com.turt2live.antishare.util.PermissionNodes;
 // TODO: Schedule for rewrite
 public class InventoryManager{
 
-	private final ConcurrentHashMap<String, OASI> creative = new ConcurrentHashMap<String, OASI>();
-	private final ConcurrentHashMap<String, OASI> survival = new ConcurrentHashMap<String, OASI>();
-	private final ConcurrentHashMap<String, OASI> adventure = new ConcurrentHashMap<String, OASI>();
-	private final ConcurrentHashMap<String, OASI> enderCreative = new ConcurrentHashMap<String, OASI>();
-	private final ConcurrentHashMap<String, OASI> enderSurvival = new ConcurrentHashMap<String, OASI>();
-	private final ConcurrentHashMap<String, OASI> enderAdventure = new ConcurrentHashMap<String, OASI>();
+	private final ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> adventure = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> enderCreative = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> enderSurvival = new ConcurrentHashMap<String, ASInventory>();
+	private final ConcurrentHashMap<String, ASInventory> enderAdventure = new ConcurrentHashMap<String, ASInventory>();
 	private final ConcurrentHashMap<String, TemporaryASInventory> temporary = new ConcurrentHashMap<String, TemporaryASInventory>();
 	private final List<LinkedInventory> linkedInventories = new ArrayList<LinkedInventory>();
 	private AntiShare plugin = AntiShare.p;
@@ -80,13 +80,13 @@ public class InventoryManager{
 		}
 
 		// Standard inventories
-		List<OASI> list = OASI.generateInventory(player.getName(), InventoryType.PLAYER);
+		List<ASInventory> list = ASInventory.getAll(player.getName(), InventoryType.PLAYER);
 
 		// Null check
 		if(list != null){
-			for(OASI inventory : list){
-				World world = inventory.getWorld();
-				GameMode gamemode = inventory.getGameMode();
+			for(ASInventory inventory : list){
+				World world = plugin.getServer().getWorld(inventory.world);
+				GameMode gamemode = inventory.gamemode;
 				switch (gamemode){
 				case CREATIVE:
 					creative.put(player.getName() + "." + world.getName(), inventory);
@@ -104,13 +104,13 @@ public class InventoryManager{
 		}
 
 		// Ender inventories
-		list = OASI.generateInventory(player.getName(), InventoryType.ENDER);
+		list = ASInventory.getAll(player.getName(), InventoryType.ENDER);
 
 		// Null check
 		if(list != null){
-			for(OASI inventory : list){
-				World world = inventory.getWorld();
-				GameMode gamemode = inventory.getGameMode();
+			for(ASInventory inventory : list){
+				World world = plugin.getServer().getWorld(inventory.world);
+				GameMode gamemode = inventory.gamemode;
 				switch (gamemode){
 				case CREATIVE:
 					enderCreative.put(player.getName() + "." + world.getName(), inventory);
@@ -128,12 +128,13 @@ public class InventoryManager{
 		}
 
 		// Temporary inventories
-		list = OASI.generateInventory(player.getName(), InventoryType.TEMPORARY);
+		list = ASInventory.getAll(player.getName(), InventoryType.TEMPORARY);
 
 		// Null check
 		if(list != null){
-			for(OASI inventory : list){
-				TemporaryASInventory spec = new TemporaryASInventory(OASI.generate(player, InventoryType.PLAYER), inventory);
+			ASInventory current = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
+			for(ASInventory inventory : list){
+				TemporaryASInventory spec = new TemporaryASInventory(current, inventory);
 				temporary.put(player.getName(), spec);
 			}
 		}
@@ -161,12 +162,12 @@ public class InventoryManager{
 		enderAdventure.remove(name + "." + world);
 	}
 
-	public void inject(OASI inventory){
+	public void inject(ASInventory inventory){
 		// player.world = key
-		String key = inventory.getName() + "." + inventory.getWorld().getName();
-		switch (inventory.getType()){
+		String key = inventory.owner + "." + inventory.world;
+		switch (inventory.type){
 		case PLAYER:
-			switch (inventory.getGameMode()){
+			switch (inventory.gamemode){
 			case CREATIVE:
 				creative.put(key, inventory);
 				break;
@@ -181,7 +182,7 @@ public class InventoryManager{
 			}
 			break;
 		case ENDER:
-			switch (inventory.getGameMode()){
+			switch (inventory.gamemode){
 			case CREATIVE:
 				enderCreative.put(key, inventory);
 				break;
@@ -211,8 +212,10 @@ public class InventoryManager{
 			return;
 		}
 		// Save
-		OASI premerge = OASI.generate(player, InventoryType.PLAYER);
-		OASI enderPremerge = OASI.generate(player, InventoryType.ENDER);
+		ASInventory premerge = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
+		ASInventory enderPremerge = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.ENDER);
+		premerge.clone(player.getInventory());
+		enderPremerge.clone(player.getEnderChest());
 		switch (player.getGameMode()){
 		case CREATIVE:
 			if(!alreadySaved){
@@ -249,19 +252,19 @@ public class InventoryManager{
 		}
 
 		// Merge all inventories if needed
-		OASI merge = premerge.clone();
-		OASI enderMerge = enderPremerge.clone();
+		ASInventory merge = premerge.clone();
+		ASInventory enderMerge = enderPremerge.clone();
 		for(World world : Bukkit.getWorlds()){
-			merge.setGamemode(GameMode.CREATIVE);
-			enderMerge.setGamemode(GameMode.CREATIVE);
+			merge.gamemode = GameMode.CREATIVE;
+			enderMerge.gamemode = GameMode.CREATIVE;
 			creative.put(player.getName() + "." + world.getName(), merge);
 			enderCreative.put(player.getName() + "." + world.getName(), enderMerge);
-			merge.setGamemode(GameMode.SURVIVAL);
-			enderMerge.setGamemode(GameMode.SURVIVAL);
+			merge.gamemode = GameMode.SURVIVAL;
+			enderMerge.gamemode = GameMode.SURVIVAL;
 			survival.put(player.getName() + "." + world.getName(), merge);
 			enderSurvival.put(player.getName() + "." + world.getName(), enderMerge);
-			merge.setGamemode(GameMode.ADVENTURE);
-			enderMerge.setGamemode(GameMode.ADVENTURE);
+			merge.gamemode = GameMode.ADVENTURE;
+			enderMerge.gamemode = GameMode.ADVENTURE;
 			adventure.put(player.getName() + "." + world.getName(), merge);
 			enderAdventure.put(player.getName() + "." + world.getName(), enderMerge);
 		}
@@ -274,7 +277,7 @@ public class InventoryManager{
 	 * @param inventory the temporary inventory
 	 */
 	@SuppressWarnings ("deprecation")
-	public void setToTemporary(Player player, OASI inventory){
+	public void setToTemporary(Player player, ASInventory inventory){
 		// Save current inventory
 		switch (player.getGameMode()){
 		case CREATIVE:
@@ -294,13 +297,16 @@ public class InventoryManager{
 		}
 
 		// Set to temp
-		TemporaryASInventory spec = new TemporaryASInventory(OASI.generate(player, InventoryType.PLAYER), inventory);
+		ASInventory current = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
+		current.clone(player.getInventory());
+		TemporaryASInventory spec = new TemporaryASInventory(current, inventory);
 		temporary.put(player.getName(), spec);
 		if(inventory == null){
 			player.getInventory().clear();
 			player.updateInventory();
 		}else{
-			inventory.setTo(player);
+			// TODO: Ender checks
+			inventory.setTo(player.getInventory());
 		}
 	}
 
@@ -312,7 +318,8 @@ public class InventoryManager{
 	public void removeFromTemporary(Player player){
 		TemporaryASInventory inventory = temporary.get(player.getName());
 		if(inventory != null){
-			inventory.getLastInventory().setTo(player);
+			// TODO: Ender checks
+			inventory.getLastInventory().setTo(player.getInventory());
 			temporary.remove(player.getName());
 		}
 	}
@@ -334,9 +341,8 @@ public class InventoryManager{
 	 * @param world the world
 	 */
 	public void saveCreativeInventory(Player player, World world){
-		OASI inventory = OASI.generate(player, InventoryType.PLAYER);
-		inventory.setWorld(world);
-		inventory.setGamemode(GameMode.CREATIVE);
+		ASInventory inventory = new ASInventory(GameMode.CREATIVE, player.getName(), world.getName(), InventoryType.PLAYER);
+		inventory.clone(player.getInventory());
 		creative.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -348,9 +354,8 @@ public class InventoryManager{
 	 * @param world the world
 	 */
 	public void saveEnderCreativeInventory(Player player, World world){
-		OASI inventory = OASI.generate(player, InventoryType.ENDER);
-		inventory.setWorld(world);
-		inventory.setGamemode(GameMode.CREATIVE);
+		ASInventory inventory = new ASInventory(GameMode.CREATIVE, player.getName(), world.getName(), InventoryType.ENDER);
+		inventory.clone(player.getEnderChest());
 		enderCreative.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -362,9 +367,8 @@ public class InventoryManager{
 	 * @param world the world
 	 */
 	public void saveSurvivalInventory(Player player, World world){
-		OASI inventory = OASI.generate(player, InventoryType.PLAYER);
-		inventory.setWorld(world);
-		inventory.setGamemode(GameMode.SURVIVAL);
+		ASInventory inventory = new ASInventory(GameMode.SURVIVAL, player.getName(), world.getName(), InventoryType.PLAYER);
+		inventory.clone(player.getInventory());
 		survival.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -376,9 +380,8 @@ public class InventoryManager{
 	 * @param world the world
 	 */
 	public void saveEnderSurvivalInventory(Player player, World world){
-		OASI inventory = OASI.generate(player, InventoryType.ENDER);
-		inventory.setWorld(world);
-		inventory.setGamemode(GameMode.SURVIVAL);
+		ASInventory inventory = new ASInventory(GameMode.SURVIVAL, player.getName(), world.getName(), InventoryType.ENDER);
+		inventory.clone(player.getEnderChest());
 		enderSurvival.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -390,9 +393,8 @@ public class InventoryManager{
 	 * @param world the world
 	 */
 	public void saveAdventureInventory(Player player, World world){
-		OASI inventory = OASI.generate(player, InventoryType.PLAYER);
-		inventory.setWorld(world);
-		inventory.setGamemode(GameMode.ADVENTURE);
+		ASInventory inventory = new ASInventory(GameMode.ADVENTURE, player.getName(), world.getName(), InventoryType.PLAYER);
+		inventory.clone(player.getInventory());
 		adventure.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -404,9 +406,8 @@ public class InventoryManager{
 	 * @param world the world
 	 */
 	public void saveEnderAdventureInventory(Player player, World world){
-		OASI inventory = OASI.generate(player, InventoryType.ENDER);
-		inventory.setWorld(world);
-		inventory.setGamemode(GameMode.ADVENTURE);
+		ASInventory inventory = new ASInventory(GameMode.ADVENTURE, player.getName(), world.getName(), InventoryType.ENDER);
+		inventory.clone(player.getEnderChest());
 		enderAdventure.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
 	}
@@ -418,10 +419,10 @@ public class InventoryManager{
 	 * @param world the world
 	 * @return the inventory
 	 */
-	public OASI getCreativeInventory(Player player, World world){
-		OASI inventory = creative.get(player.getName() + "." + world.getName());
+	public ASInventory getCreativeInventory(Player player, World world){
+		ASInventory inventory = creative.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new OASI(InventoryType.PLAYER, player.getName(), world, player.getGameMode());
+			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
 			creative.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -434,10 +435,10 @@ public class InventoryManager{
 	 * @param world the world
 	 * @return the inventory
 	 */
-	public OASI getEnderCreativeInventory(Player player, World world){
-		OASI inventory = enderCreative.get(player.getName() + "." + world.getName());
+	public ASInventory getEnderCreativeInventory(Player player, World world){
+		ASInventory inventory = enderCreative.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new OASI(InventoryType.ENDER, player.getName(), world, player.getGameMode());
+			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
 			enderCreative.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -450,10 +451,10 @@ public class InventoryManager{
 	 * @param world the world
 	 * @return the inventory
 	 */
-	public OASI getSurvivalInventory(Player player, World world){
-		OASI inventory = survival.get(player.getName() + "." + world.getName());
+	public ASInventory getSurvivalInventory(Player player, World world){
+		ASInventory inventory = survival.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new OASI(InventoryType.PLAYER, player.getName(), world, player.getGameMode());
+			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
 			survival.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -466,10 +467,10 @@ public class InventoryManager{
 	 * @param world the world
 	 * @return the inventory
 	 */
-	public OASI getEnderSurvivalInventory(Player player, World world){
-		OASI inventory = enderSurvival.get(player.getName() + "." + world.getName());
+	public ASInventory getEnderSurvivalInventory(Player player, World world){
+		ASInventory inventory = enderSurvival.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new OASI(InventoryType.ENDER, player.getName(), world, player.getGameMode());
+			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
 			enderSurvival.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -482,10 +483,10 @@ public class InventoryManager{
 	 * @param world the world
 	 * @return the inventory
 	 */
-	public OASI getAdventureInventory(Player player, World world){
-		OASI inventory = adventure.get(player.getName() + "." + world.getName());
+	public ASInventory getAdventureInventory(Player player, World world){
+		ASInventory inventory = adventure.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new OASI(InventoryType.PLAYER, player.getName(), world, player.getGameMode());
+			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
 			adventure.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -498,10 +499,10 @@ public class InventoryManager{
 	 * @param world the world
 	 * @return the inventory
 	 */
-	public OASI getEnderAdventureInventory(Player player, World world){
-		OASI inventory = enderAdventure.get(player.getName() + "." + world.getName());
+	public ASInventory getEnderAdventureInventory(Player player, World world){
+		ASInventory inventory = enderAdventure.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new OASI(InventoryType.ENDER, player.getName(), world, player.getGameMode());
+			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
 			enderAdventure.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -522,7 +523,7 @@ public class InventoryManager{
 		// Loads regions
 		for(Region region : plugin.getRegionManager().getAllRegions()){
 			String UID = region.getID();
-			List<OASI> inventory = OASI.generateInventory(UID, InventoryType.REGION);
+			List<ASInventory> inventory = ASInventory.getAll(UID, InventoryType.REGION);
 			if(inventory != null){
 				if(inventory.size() >= 1){
 					region.setInventory(inventory.get(0));
@@ -617,7 +618,7 @@ public class InventoryManager{
 	 * @param world the world
 	 */
 	public void fixInventory(Player player, World world){
-		OASI creativeInventory, survivalInventory, adventureInventory, enderCreativeInventory, enderSurvivalInventory, enderAdventureInventory;
+		ASInventory creativeInventory, survivalInventory, adventureInventory, enderCreativeInventory, enderSurvivalInventory, enderAdventureInventory;
 		switch (player.getGameMode()){
 		case CREATIVE:
 			saveCreativeInventory(player, world);
@@ -664,8 +665,8 @@ public class InventoryManager{
 			if(link.isGameModeAffected(gamemode)){
 				if(link.isWorldAffected(from)){
 					String[] allWorlds = link.getAffectedWorlds();
-					OASI inventory = null;
-					OASI enderInventory = null;
+					ASInventory inventory = null;
+					ASInventory enderInventory = null;
 					switch (gamemode){
 					case SURVIVAL:
 						inventory = getSurvivalInventory(player, from);

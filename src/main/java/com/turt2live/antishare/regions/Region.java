@@ -29,7 +29,7 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.config.RegionConfiguration;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.cuboid.RegionCuboid;
-import com.turt2live.antishare.inventory.OASI;
+import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.regions.RegionWall.Wall;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.Action;
@@ -58,7 +58,7 @@ public class Region{
 	private String worldName = "antishare", owner = "antishare", id = "-1", enterMessage = "You entered {name}!", exitMessage = "You left {name}!", name = "AntiShareRegion";
 	private RegionCuboid size = new RegionCuboid(this);
 	private boolean showEnterMessage = true, showExitMessage = true;
-	private OASI inventory = null;
+	private ASInventory inventory = null;
 	private final Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
 	private RegionConfiguration config = RegionConfiguration.getConfig(this);
 	private GameMode gamemode = GameMode.CREATIVE;
@@ -149,7 +149,7 @@ public class Region{
 	 * 
 	 * @return null for no inventory, otherwise a <b>cloned</b> inventory
 	 */
-	public OASI getInventory(){
+	public ASInventory getInventory(){
 		return inventory == null ? null : inventory.clone();
 	}
 
@@ -256,10 +256,10 @@ public class Region{
 	/**
 	 * Sets the inventory for this region. This can be null for no inventory. <b>The inventory is cloned before being set internally</b>
 	 * 
-	 * @param inventory
+	 * @param asInventory
 	 */
-	public void setInventory(OASI inventory){
-		this.inventory = inventory != null ? inventory.clone() : null;
+	public void setInventory(ASInventory asInventory){
+		this.inventory = asInventory != null ? asInventory.clone() : null;
 	}
 
 	/**
