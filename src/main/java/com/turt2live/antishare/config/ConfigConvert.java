@@ -27,7 +27,7 @@ import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
  * 
  * @author turt2live
  */
-public class ConfigConvert {
+public class ConfigConvert{
 
 	/**
 	 * Does the actual conversion.<br>
