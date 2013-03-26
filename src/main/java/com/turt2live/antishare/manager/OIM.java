@@ -37,7 +37,7 @@ import com.turt2live.antishare.util.PermissionNodes;
  * @author turt2live
  */
 // TODO: Schedule for rewrite
-public class InventoryManager{
+public class OIM{
 
 	private final ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
 	private final ConcurrentHashMap<String, ASInventory> survival = new ConcurrentHashMap<String, ASInventory>();
@@ -52,7 +52,7 @@ public class InventoryManager{
 	/**
 	 * Creates a new Inventory Manager
 	 */
-	public InventoryManager(){
+	public OIM(){
 		// Prepare linked inventories
 		EnhancedConfiguration linksYaml = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
 		linksYaml.loadDefaults(plugin.getResource("linked-inventories.yml"));

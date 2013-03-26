@@ -33,7 +33,7 @@ import com.turt2live.antishare.config.ConfigConvert;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.CuboidManager;
 import com.turt2live.antishare.manager.HookManager;
-import com.turt2live.antishare.manager.InventoryManager;
+import com.turt2live.antishare.manager.OIM;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.manager.WorldConfigManager;
@@ -101,7 +101,7 @@ public class AntiShare extends PluginWrapper{
 	private MoneyManager money;
 	private CuboidManager cuboids;
 	private BlockManager blocks;
-	private InventoryManager inventories;
+	private OIM inventories;
 	private RegionManager regions;
 	private final List<String> disabledSNPlayers = new ArrayList<String>();
 	private static PEX pex;
@@ -226,7 +226,7 @@ public class AntiShare extends PluginWrapper{
 		worldConfigs = new WorldConfigManager();
 		money = new MoneyManager();
 		cuboids = new CuboidManager();
-		inventories = new InventoryManager();
+		inventories = new OIM();
 		regions = new RegionManager();
 
 		// Load managers
@@ -348,7 +348,7 @@ public class AntiShare extends PluginWrapper{
 	 * 
 	 * @return the inventory manager
 	 */
-	public InventoryManager getInventoryManager(){
+	public OIM getInventoryManager(){
 		return inventories;
 	}
 
