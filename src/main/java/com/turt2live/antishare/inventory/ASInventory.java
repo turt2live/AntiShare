@@ -65,8 +65,7 @@ public class ASInventory implements Cloneable{
 	public final InventoryType type;
 	final Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
 
-	// TODO: Make invisible
-	public ASInventory(GameMode gamemode, String owner, String world, InventoryType type){
+	ASInventory(GameMode gamemode, String owner, String world, InventoryType type){
 		this.gamemode = gamemode;
 		this.owner = owner;
 		this.world = world;

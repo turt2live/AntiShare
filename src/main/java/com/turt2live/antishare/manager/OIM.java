@@ -132,7 +132,7 @@ public class OIM{
 
 		// Null check
 		if(list != null){
-			ASInventory current = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
+			ASInventory current = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
 			for(ASInventory inventory : list){
 				TemporaryASInventory spec = new TemporaryASInventory(current, inventory);
 				temporary.put(player.getName(), spec);
@@ -212,8 +212,8 @@ public class OIM{
 			return;
 		}
 		// Save
-		ASInventory premerge = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
-		ASInventory enderPremerge = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.ENDER);
+		ASInventory premerge = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
+		ASInventory enderPremerge = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.ENDER);
 		premerge.clone(player.getInventory());
 		enderPremerge.clone(player.getEnderChest());
 		switch (player.getGameMode()){
@@ -297,7 +297,7 @@ public class OIM{
 		}
 
 		// Set to temp
-		ASInventory current = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
+		ASInventory current = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.PLAYER);
 		current.clone(player.getInventory());
 		TemporaryASInventory spec = new TemporaryASInventory(current, inventory);
 		temporary.put(player.getName(), spec);
@@ -347,7 +347,7 @@ public class OIM{
 	 * @param world the world
 	 */
 	public void saveCreativeInventory(Player player, World world){
-		ASInventory inventory = new ASInventory(GameMode.CREATIVE, player.getName(), world.getName(), InventoryType.PLAYER);
+		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(GameMode.CREATIVE, player.getName(), world.getName(), InventoryType.PLAYER);
 		inventory.clone(player.getInventory());
 		creative.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -360,7 +360,7 @@ public class OIM{
 	 * @param world the world
 	 */
 	public void saveEnderCreativeInventory(Player player, World world){
-		ASInventory inventory = new ASInventory(GameMode.CREATIVE, player.getName(), world.getName(), InventoryType.ENDER);
+		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(GameMode.CREATIVE, player.getName(), world.getName(), InventoryType.ENDER);
 		inventory.clone(player.getEnderChest());
 		enderCreative.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -373,7 +373,7 @@ public class OIM{
 	 * @param world the world
 	 */
 	public void saveSurvivalInventory(Player player, World world){
-		ASInventory inventory = new ASInventory(GameMode.SURVIVAL, player.getName(), world.getName(), InventoryType.PLAYER);
+		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(GameMode.SURVIVAL, player.getName(), world.getName(), InventoryType.PLAYER);
 		inventory.clone(player.getInventory());
 		survival.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -386,7 +386,7 @@ public class OIM{
 	 * @param world the world
 	 */
 	public void saveEnderSurvivalInventory(Player player, World world){
-		ASInventory inventory = new ASInventory(GameMode.SURVIVAL, player.getName(), world.getName(), InventoryType.ENDER);
+		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(GameMode.SURVIVAL, player.getName(), world.getName(), InventoryType.ENDER);
 		inventory.clone(player.getEnderChest());
 		enderSurvival.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -399,7 +399,7 @@ public class OIM{
 	 * @param world the world
 	 */
 	public void saveAdventureInventory(Player player, World world){
-		ASInventory inventory = new ASInventory(GameMode.ADVENTURE, player.getName(), world.getName(), InventoryType.PLAYER);
+		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(GameMode.ADVENTURE, player.getName(), world.getName(), InventoryType.PLAYER);
 		inventory.clone(player.getInventory());
 		adventure.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -412,7 +412,7 @@ public class OIM{
 	 * @param world the world
 	 */
 	public void saveEnderAdventureInventory(Player player, World world){
-		ASInventory inventory = new ASInventory(GameMode.ADVENTURE, player.getName(), world.getName(), InventoryType.ENDER);
+		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(GameMode.ADVENTURE, player.getName(), world.getName(), InventoryType.ENDER);
 		inventory.clone(player.getEnderChest());
 		enderAdventure.put(player.getName() + "." + world.getName(), inventory);
 		inventory.save();
@@ -428,7 +428,7 @@ public class OIM{
 	public ASInventory getCreativeInventory(Player player, World world){
 		ASInventory inventory = creative.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
+			inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
 			creative.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -444,7 +444,7 @@ public class OIM{
 	public ASInventory getEnderCreativeInventory(Player player, World world){
 		ASInventory inventory = enderCreative.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
+			inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
 			enderCreative.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -460,7 +460,7 @@ public class OIM{
 	public ASInventory getSurvivalInventory(Player player, World world){
 		ASInventory inventory = survival.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
+			inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
 			survival.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -476,7 +476,7 @@ public class OIM{
 	public ASInventory getEnderSurvivalInventory(Player player, World world){
 		ASInventory inventory = enderSurvival.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
+			inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
 			enderSurvival.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -492,7 +492,7 @@ public class OIM{
 	public ASInventory getAdventureInventory(Player player, World world){
 		ASInventory inventory = adventure.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
+			inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), world.getName(), InventoryType.PLAYER);
 			adventure.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;
@@ -508,7 +508,7 @@ public class OIM{
 	public ASInventory getEnderAdventureInventory(Player player, World world){
 		ASInventory inventory = enderAdventure.get(player.getName() + "." + world.getName());
 		if(inventory == null){
-			inventory = new ASInventory(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
+			inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), player.getGameMode(), InventoryType.PLAYER);//(player.getGameMode(), player.getName(), world.getName(), InventoryType.ENDER);
 			enderAdventure.put(player.getName() + "." + world.getName(), inventory);
 		}
 		return inventory;

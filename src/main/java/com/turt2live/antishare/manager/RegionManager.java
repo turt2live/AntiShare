@@ -341,7 +341,7 @@ public class RegionManager{
 			}else if(value.equalsIgnoreCase("set")){
 				if(sender instanceof Player){
 					Player player = (Player) sender;
-					ASInventory inv = new ASInventory(player.getGameMode(), player.getName(), player.getWorld().getName(), InventoryType.REGION);
+					ASInventory inv = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), player.getGameMode(), InventoryType.REGION);
 					inv.clone(player.getInventory());
 					region.setInventory(inv);
 					changed = true;
