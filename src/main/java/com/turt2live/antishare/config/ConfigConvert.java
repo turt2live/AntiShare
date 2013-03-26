@@ -44,8 +44,6 @@ public class ConfigConvert{
 
 		File original = new File(p.getDataFolder(), "config-backup-temp.yml");
 
-		System.out.println(config.getAbsolutePath());
-
 		try{
 			ASUtils.copyFile(config, new File(p.getDataFolder(), "config-5.3.0-backup.yml"));
 			ASUtils.copyFile(config, original);

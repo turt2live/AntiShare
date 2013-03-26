@@ -52,7 +52,7 @@ public class ASInventory implements Cloneable{
 		}
 	}
 
-	public static final File DATA_FOLDER = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories");
+	private static File DATA_FOLDER = null;
 	public static final int SIZE = (9 * 4) + 4;
 	public static final int SIZE_HIGH_9 = (9 * 4) + 9;
 	public static final ItemStack AIR = new ItemStack(Material.AIR);
@@ -207,6 +207,7 @@ public class ASInventory implements Cloneable{
 	 * Saves the inventory
 	 */
 	public void save(){
+		checkDataFolder();
 		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".asinventory");
 		JsonConfiguration yaml = new JsonConfiguration();
 		try{
@@ -234,6 +235,7 @@ public class ASInventory implements Cloneable{
 	 * @return the loaded inventory. Will never be null.
 	 */
 	public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world){
+		checkDataFolder();
 		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".asinventory");
 		ASInventory inventory = new ASInventory(gamemode, player, world, type);
 		JsonConfiguration yaml = new JsonConfiguration();
@@ -243,7 +245,9 @@ public class ASInventory implements Cloneable{
 			}
 			yaml.load(file);
 			String version = yaml.getString(world + "." + gamemode.name() + "_version");
-			if(version.equalsIgnoreCase("2")){
+			if(version == null){
+				return inventory; // Empty inventory
+			}else if(version.equalsIgnoreCase("2")){
 				Object something = yaml.get(world + "." + gamemode.name());
 				if(something instanceof List){
 					List<?> objects = (List<?>) something;
@@ -282,6 +286,31 @@ public class ASInventory implements Cloneable{
 			}
 		}
 		return invs;
+	}
+
+	/**
+	 * Gets the data folder for AntiShare inventories
+	 * 
+	 * @return the data folder
+	 */
+	public static File getDataFolder(){
+		checkDataFolder();
+		return DATA_FOLDER;
+	}
+
+	private static void checkDataFolder(){
+		if(DATA_FOLDER == null){
+			DATA_FOLDER = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories");
+		}
+		if(!DATA_FOLDER.exists()){
+			DATA_FOLDER.mkdirs();
+		}
+		for(InventoryType type : InventoryType.values()){
+			File f = new File(DATA_FOLDER, type.getRelativeFolderName());
+			if(!f.exists()){
+				f.mkdirs();
+			}
+		}
 	}
 
 	@Override

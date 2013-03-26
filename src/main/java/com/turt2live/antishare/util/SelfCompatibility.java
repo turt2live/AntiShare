@@ -543,7 +543,7 @@ public class SelfCompatibility{
 		}
 		int resolved = 0;
 		for(InventoryType type : InventoryType.values()){
-			File[] files = new File(ASInventory.DATA_FOLDER, type.getRelativeFolderName()).listFiles();
+			File[] files = new File(ASInventory.getDataFolder(), type.getRelativeFolderName()).listFiles();
 			if(files != null){
 				for(File file : files){
 					if(file.getName().toLowerCase().endsWith(".yml")){
