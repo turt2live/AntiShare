@@ -211,10 +211,8 @@ public class AntiShare extends PluginWrapper{
 		blocks.load();
 
 		// Cleanup / Compatibility
-		SelfCompatibility.convertBlocks();
 		SelfCompatibility.migrateWorldConfigurations();
 		SelfCompatibility.migratePlayerData();
-		SelfCompatibility.convert313Inventories();
 		SelfCompatibility.cleanup520Inventories();
 		SelfCompatibility.cleanup530Inventories();
 		SelfCompatibility.cleanupOldInventories();
