@@ -296,44 +296,7 @@ public class ASListener implements Listener{
 			// Check for open inventories and stuff
 			player.closeInventory();
 
-			// Save from
-			switch (from){
-			case CREATIVE:
-				plugin.getInventoryManager().saveCreativeInventory(player, player.getWorld());
-				plugin.getInventoryManager().saveEnderCreativeInventory(player, player.getWorld());
-				break;
-			case SURVIVAL:
-				plugin.getInventoryManager().saveSurvivalInventory(player, player.getWorld());
-				plugin.getInventoryManager().saveEnderSurvivalInventory(player, player.getWorld());
-				break;
-			case ADVENTURE:
-				plugin.getInventoryManager().saveAdventureInventory(player, player.getWorld());
-				plugin.getInventoryManager().saveEnderAdventureInventory(player, player.getWorld());
-				break;
-			default:
-				break;
-			}
-
-			// Update plugin.getInventoryManager()
-			plugin.getInventoryManager().refreshInventories(player, true);
-
-			// Set to
-			switch (to){
-			case CREATIVE:
-				plugin.getInventoryManager().getCreativeInventory(player, player.getWorld()).setTo(player.getInventory());
-				plugin.getInventoryManager().getEnderCreativeInventory(player, player.getWorld()).setTo(player.getEnderChest());
-				break;
-			case SURVIVAL:
-				plugin.getInventoryManager().getSurvivalInventory(player, player.getWorld()).setTo(player.getInventory());
-				plugin.getInventoryManager().getEnderSurvivalInventory(player, player.getWorld()).setTo(player.getEnderChest());
-				break;
-			case ADVENTURE:
-				plugin.getInventoryManager().getAdventureInventory(player, player.getWorld()).setTo(player.getInventory());
-				plugin.getInventoryManager().getEnderAdventureInventory(player, player.getWorld()).setTo(player.getEnderChest());
-				break;
-			default:
-				break;
-			}
+			plugin.getInventoryManager().onGameModeChange(player, to);
 
 			// For alerts
 			ignore = false;
@@ -1526,7 +1489,7 @@ public class ASListener implements Listener{
 		player.setMetadata("antishare-joined", new FixedMetadataValue(plugin, true));
 
 		// Tell the inventory manager to prepare this player
-		plugin.getInventoryManager().loadPlayer(player);
+		plugin.getInventoryManager().loadPlayer(player.getName());
 
 		// Check region
 		Region region = plugin.getRegionManager().getRegion(player.getLocation());
@@ -1556,7 +1519,7 @@ public class ASListener implements Listener{
 		}
 
 		// Tell the inventory manager to release this player
-		plugin.getInventoryManager().releasePlayer(player);
+		plugin.getInventoryManager().unloadPlayer(player);
 	}
 
 	@EventHandler (priority = EventPriority.MONITOR)
@@ -1569,7 +1532,8 @@ public class ASListener implements Listener{
 		// Check to see if we should even bother checking
 		if(!plugin.settings().perWorldInventories){
 			// Fix up inventories
-			plugin.getInventoryManager().fixInventory(player, event.getFrom());
+			//plugin.getInventoryManager().fixInventory(player, event.getFrom());
+			// TODO ^
 			return;
 		}
 
@@ -1580,46 +1544,7 @@ public class ASListener implements Listener{
 
 		// Inventory check
 		if(!AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
-			// Save from
-			switch (player.getGameMode()){
-			case CREATIVE:
-				plugin.getInventoryManager().saveCreativeInventory(player, from);
-				plugin.getInventoryManager().saveEnderCreativeInventory(player, from);
-				break;
-			case SURVIVAL:
-				plugin.getInventoryManager().saveSurvivalInventory(player, from);
-				plugin.getInventoryManager().saveEnderSurvivalInventory(player, from);
-				break;
-			case ADVENTURE:
-				plugin.getInventoryManager().saveAdventureInventory(player, from);
-				plugin.getInventoryManager().saveEnderAdventureInventory(player, from);
-			default:
-				break;
-			}
-
-			// Check for linked inventories
-			plugin.getInventoryManager().checkLinks(player, to, from);
-
-			// Update the inventories (check for merges)
-			plugin.getInventoryManager().refreshInventories(player, true);
-
-			// Set to
-			switch (player.getGameMode()){
-			case CREATIVE:
-				plugin.getInventoryManager().getCreativeInventory(player, to).setTo(player.getInventory());
-				plugin.getInventoryManager().getEnderCreativeInventory(player, to).setTo(player.getEnderChest());
-				break;
-			case SURVIVAL:
-				plugin.getInventoryManager().getSurvivalInventory(player, to).setTo(player.getInventory());
-				plugin.getInventoryManager().getEnderSurvivalInventory(player, to).setTo(player.getEnderChest());
-				break;
-			case ADVENTURE:
-				plugin.getInventoryManager().getAdventureInventory(player, to).setTo(player.getInventory());
-				plugin.getInventoryManager().getEnderAdventureInventory(player, to).setTo(player.getEnderChest());
-				break;
-			default:
-				break;
-			}
+			plugin.getInventoryManager().onWorldChange(player, to);
 
 			// For alerts
 			ignore = false;

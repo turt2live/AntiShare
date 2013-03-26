@@ -68,7 +68,7 @@ public class CommandHandler implements CommandExecutor{
 						i.setTo(p.getInventory());
 						p.updateInventory();
 					}else{
-						i = new ASInventory(GameMode.ADVENTURE, p.getName(), "world5", com.turt2live.antishare.inventory.ASInventory.InventoryType.PLAYER);
+						i = ASInventory.createEmptyInventory(p.getName(), "world5", p.getGameMode(), InventoryType.PLAYER);
 						i.clone(p.getInventory());
 						i.save();
 					}

@@ -291,6 +291,19 @@ public class ASInventory implements Cloneable{
 	}
 
 	/**
+	 * Creates an empty inventory
+	 * 
+	 * @param playerName the player name
+	 * @param worldName the world name
+	 * @param gamemode the gamemode
+	 * @param type the inventory type
+	 * @return an empty inventory
+	 */
+	public static ASInventory createEmptyInventory(String playerName, String worldName, GameMode gamemode, InventoryType type){
+		return new ASInventory(gamemode, playerName, worldName, type);
+	}
+
+	/**
 	 * Gets the data folder for AntiShare inventories
 	 * 
 	 * @return the data folder
