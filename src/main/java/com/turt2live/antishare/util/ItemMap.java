@@ -83,6 +83,12 @@ public class ItemMap{
 		for(ASMaterial a : add){
 			listing.put(a.name.trim().toLowerCase(), a);
 		}
+		for(Material material : Material.values()){
+			String name = String.valueOf(material.getId()); // Use the ID
+			if(!listing.containsKey(name)){
+				listing.put(name, generate(name + "," + name + ",*"));
+			}
+		}
 	}
 
 	/**
