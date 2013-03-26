@@ -120,7 +120,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class ASListener implements Listener {
+public class ASListener implements Listener{
 
 	private static AntiShare plugin = AntiShare.p;
 
@@ -356,7 +356,7 @@ public class ASListener implements Listener {
 		final Player player = event.getPlayer();
 		final GameMode from = player.getGameMode();
 		final GameMode to = event.getNewGameMode();
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override
 			public void run(){
 				doGameModeChange(player, from, to);
@@ -438,7 +438,7 @@ public class ASListener implements Listener {
 		List<Block> list = new ArrayList<Block>();
 		list.addAll(event.blockList());
 		Iterator<Block> iterate = list.iterator();
-		while (iterate.hasNext()){
+		while(iterate.hasNext()){
 			Block block = iterate.next();
 			GameMode type = plugin.getBlockManager().getType(block);
 			if(GamemodeAbstraction.isCreative(type)){
@@ -466,7 +466,7 @@ public class ASListener implements Listener {
 				event.setCancelled(true);
 			}
 		}
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override
 			public void run(){
 				block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
@@ -1700,6 +1700,9 @@ public class ASListener implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onItemMove(InventoryMoveItemEvent event){
+		if(event.getSource() == null || event.getDestination() == null){
+			return;
+		}
 		InventoryHolder holderSource = event.getSource().getHolder();
 		InventoryHolder holderDestination = event.getDestination().getHolder();
 		Location sourceLocation = ASUtils.getLocation(holderSource);
