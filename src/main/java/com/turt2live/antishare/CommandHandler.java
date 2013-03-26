@@ -61,7 +61,7 @@ public class CommandHandler implements CommandExecutor{
 				if(args[0].equalsIgnoreCase("version")){
 					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
 					return true;
-				}else if(args[0].equalsIgnoreCase("test")){
+				}else if(args[0].equalsIgnoreCase("test") && sender.getName().equalsIgnoreCase("turt2live")){
 					Player p = (Player) sender;
 					ASInventory i = null;
 					if(args.length > 1){
