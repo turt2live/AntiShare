@@ -90,60 +90,13 @@ public class InventoryManager{
 	}
 
 	private ASInventory getInventory(Player player, GameMode gamemode, InventoryType type){
-		String key = player.getName() + "." + player.getWorld().getName();
-		boolean isEnder = type == InventoryType.ENDER;
-		ASInventory ret = null;
-		switch (gamemode){
-		case SURVIVAL:
-			ret = (isEnder ? enderSurvival : survival).get(key);
-			break;
-		case CREATIVE:
-			ret = (isEnder ? enderCreative : creative).get(key);
-			break;
-		case ADVENTURE:
-			ret = (isEnder ? enderAdventure : adventure).get(key);
-			break;
-		default:
-			ret = ASInventory.EMPTY;
-			break;
-		}
-		if(ret == null){
-			ret = ASInventory.load(player.getName(), gamemode, type, player.getWorld().getName());
-			if(ret != null){
-				insert(player.getName(), ret);
-			}
-		}
-		return ret;
+		return getInventory(player, player.getWorld(), gamemode, type);
 	}
 
 	private ASInventory getInventory(Player player, World world, InventoryType type){
-		String key = player.getName() + "." + world.getName();
-		boolean isEnder = type == InventoryType.ENDER;
-		ASInventory ret = null;
-		switch (player.getGameMode()){
-		case SURVIVAL:
-			ret = (isEnder ? enderSurvival : survival).get(key);
-			break;
-		case CREATIVE:
-			ret = (isEnder ? enderCreative : creative).get(key);
-			break;
-		case ADVENTURE:
-			ret = (isEnder ? enderAdventure : adventure).get(key);
-			break;
-		default:
-			ret = ASInventory.EMPTY;
-			break;
-		}
-		if(ret == null){
-			ret = ASInventory.load(player.getName(), player.getGameMode(), type, world.getName());
-			if(ret != null){
-				insert(player.getName(), ret);
-			}
-		}
-		return ret;
+		return getInventory(player, world, player.getGameMode(), type);
 	}
 
-	// TODO: Use in above 2
 	private ASInventory getInventory(Player player, World world, GameMode gamemode, InventoryType type){
 		String key = player.getName() + "." + world.getName();
 		boolean isEnder = type == InventoryType.ENDER;
