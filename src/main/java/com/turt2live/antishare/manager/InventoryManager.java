@@ -72,6 +72,9 @@ public class InventoryManager{
 	}
 
 	private void saveInventory(Player player, GameMode gamemode){
+		if(!plugin.settings().features.inventories){
+			return; // Don't bother
+		}
 		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), gamemode, InventoryType.PLAYER);
 		inventory.clone(player.getInventory());
 		insert(player.getName(), inventory.clone());
@@ -113,6 +116,9 @@ public class InventoryManager{
 	 * @param player the player to save
 	 */
 	public void savePlayer(Player player){
+		if(!plugin.settings().features.inventories){
+			return; // Don't bother
+		}
 		saveInventory(player, player.getGameMode());
 		String name = player.getName();
 		for(World w : plugin.getServer().getWorlds()){
@@ -197,6 +203,9 @@ public class InventoryManager{
 	 * @param from the gamemode travelling from
 	 */
 	public void onGameModeChange(Player player, GameMode to, GameMode from){
+		if(!plugin.settings().features.inventories){
+			return; // Don't bother
+		}
 		saveInventory(player, from);
 		ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
 		if(regular != null && !regular.isEmpty()){
@@ -219,6 +228,9 @@ public class InventoryManager{
 	 * @param to the world heading to
 	 */
 	public void onWorldChange(Player player, World to){
+		if(!plugin.settings().features.inventories){
+			return; // Don't bother
+		}
 		// TODO
 	}
 
@@ -252,6 +264,10 @@ public class InventoryManager{
 	 * @param player the player name to load
 	 */
 	public void loadPlayer(String player){
+		if(!plugin.settings().features.inventories){
+			return; // Don't bother
+		}
+
 		// Check archive first
 		File expected = new File(plugin.getDataFolder(), "data" + File.separator + "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player + ".json");
 		File archive = new File(plugin.getDataFolder(), "archive" + File.separator + "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player + ".json");
