@@ -61,7 +61,7 @@ public class ASInventory implements Cloneable{
 
 	public GameMode gamemode;
 	public final String owner;
-	public final String world;
+	public String world;
 	public final InventoryType type;
 	final Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
 

@@ -19,6 +19,7 @@ import com.turt2live.antishare.inventory.LinkedInventory;
 import com.turt2live.antishare.inventory.TemporaryASInventory;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.PermissionNodes;
 
 /**
  * AntiShare Inventory Manager - Entry point for all inventory stuff
@@ -51,6 +52,11 @@ public class InventoryManager{
 	}
 
 	private void insert(String playername, ASInventory inventory){
+		insertNoCheck(playername, inventory);
+		checkLinksAndWorlds(playername, inventory);
+	}
+
+	private void insertNoCheck(String playername, ASInventory inventory){
 		if(!(inventory.type == InventoryType.PLAYER || inventory.type == InventoryType.ENDER)){
 			return;
 		}
@@ -108,6 +114,25 @@ public class InventoryManager{
 			}
 		}
 		return ret;
+	}
+
+	private void checkLinksAndWorlds(String player, ASInventory inventory){
+		ASInventory clone = inventory.clone();
+		if(!plugin.settings().perWorldInventories){
+			for(World world : Bukkit.getWorlds()){
+				clone.world = world.getName();
+				insertNoCheck(player, clone);
+			}
+		}else{
+			for(World world : Bukkit.getWorlds()){
+				for(LinkedInventory link : linkedInventories){
+					if(link.isGameModeAffected(inventory.gamemode) && link.isWorldAffected(world)){
+						clone.world = world.getName();
+						insertNoCheck(player, clone);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -203,7 +228,7 @@ public class InventoryManager{
 	 * @param from the gamemode travelling from
 	 */
 	public void onGameModeChange(Player player, GameMode to, GameMode from){
-		if(!plugin.settings().features.inventories){
+		if(!plugin.settings().features.inventories || AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
 			return; // Don't bother
 		}
 		saveInventory(player, from);
@@ -228,7 +253,7 @@ public class InventoryManager{
 	 * @param to the world heading to
 	 */
 	public void onWorldChange(Player player, World to){
-		if(!plugin.settings().features.inventories){
+		if(!plugin.settings().features.inventories || AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
 			return; // Don't bother
 		}
 		// TODO
