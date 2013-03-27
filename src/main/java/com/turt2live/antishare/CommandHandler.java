@@ -10,8 +10,15 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -46,6 +53,21 @@ import com.turt2live.materials.MaterialAPI;
  */
 public class CommandHandler implements CommandExecutor{
 
+	private static class Test implements Serializable{
+		private static final long serialVersionUID = -3722397059231053474L;
+		int id = 0;
+
+		public void writeObject(ObjectOutputStream stream) throws IOException{
+			//stream.defaultWriteObject();
+			stream.write(id);
+		}
+
+		public void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException{
+			//stream.defaultReadObject();
+			id = stream.read();
+		}
+	}
+
 	private final AntiShare plugin = AntiShare.p;
 	private String noPermission = plugin.getMessages().getMessage("no-permission");
 	private String notPlayer = plugin.getMessages().getMessage("not-a-player");
@@ -59,6 +81,60 @@ public class CommandHandler implements CommandExecutor{
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("version")){
 					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
+					return true;
+				}else if(args[0].equalsIgnoreCase("test")){
+					try{
+						String out = "";
+						Random r = new Random();
+						int size = 2;
+						int[][][] ints = new int[size][size][size];
+						for(int i = 0; i < size; i++){
+							for(int j = 0; j < size; j++){
+								for(int k = 0; k < size; k++){
+									ints[i][j][k] = r.nextInt();
+									out += String.valueOf(ints[i][j][k]) + ", ";
+								}
+							}
+						}
+						sender.sendMessage(out);
+						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("temp.dat", false));
+						oos.writeObject(ints);
+						oos.close();
+						//Read objects or arrays from binary file "o.dat":
+						ObjectInputStream ois = new ObjectInputStream(new FileInputStream("temp.dat"));
+						int[][][] ia = (int[][][]) (ois.readObject());
+						out = "";
+						for(int i = 0; i < size; i++){
+							for(int j = 0; j < size; j++){
+								for(int k = 0; k < size; k++){
+									out += String.valueOf(ia[i][j][k]) + ", ";
+								}
+							}
+						}
+						sender.sendMessage(ChatColor.YELLOW + out);
+						ois.close();
+					}catch(IOException e){
+						e.printStackTrace();
+					}catch(ClassNotFoundException e){
+						e.printStackTrace();
+					}
+					try{
+						Test test = new Test();
+						test.id = 123;
+						sender.sendMessage(test.id + "");
+						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("temp.dat", false));
+						oos.writeObject(test);
+						oos.close();
+						//Read objects or arrays from binary file "o.dat":
+						ObjectInputStream ois = new ObjectInputStream(new FileInputStream("temp.dat"));
+						Test te = (Test) ois.readObject();
+						sender.sendMessage(ChatColor.YELLOW + "" + te.id);
+						ois.close();
+					}catch(IOException e){
+						e.printStackTrace();
+					}catch(ClassNotFoundException e){
+						e.printStackTrace();
+					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(AntiShare.hasPermission(sender, PermissionNodes.RELOAD)){
