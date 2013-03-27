@@ -205,10 +205,28 @@ public class ASInventory implements Cloneable{
 	}
 
 	/**
+	 * Determines if this inventory is empty or not.
+	 * 
+	 * @return true if empty
+	 */
+	public boolean isEmpty(){
+		for(int slot : items.keySet()){
+			ItemStack item = items.get(slot);
+			if(!(item == null || item.getType() == Material.AIR)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Saves the inventory
 	 */
 	public void save(){
 		checkDataFolder();
+		if(isEmpty()){
+			return; // Don't save empty things
+		}
 		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".json");
 		JsonConfiguration yaml = new JsonConfiguration();
 		try{
@@ -313,14 +331,22 @@ public class ASInventory implements Cloneable{
 	}
 
 	private static void checkDataFolder(){
+		File archiveFolder = new File(AntiShare.p.getDataFolder(), "archive" + File.separator + "inventories");
 		if(DATA_FOLDER == null){
 			DATA_FOLDER = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories");
 		}
 		if(!DATA_FOLDER.exists()){
 			DATA_FOLDER.mkdirs();
 		}
+		if(!archiveFolder.exists()){
+			archiveFolder.mkdirs();
+		}
 		for(InventoryType type : InventoryType.values()){
 			File f = new File(DATA_FOLDER, type.getRelativeFolderName());
+			if(!f.exists()){
+				f.mkdirs();
+			}
+			f = new File(archiveFolder, type.getRelativeFolderName());
 			if(!f.exists()){
 				f.mkdirs();
 			}

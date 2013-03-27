@@ -247,7 +247,7 @@ public class InventoryManager{
 	public void loadPlayer(String player){
 		// Check archive first
 		File expected = new File(plugin.getDataFolder(), "data" + File.separator + "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player + ".json");
-		File archive = new File(plugin.getDataFolder(), "data" + File.separator + "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player + ".json");
+		File archive = new File(plugin.getDataFolder(), "archive" + File.separator + "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player + ".json");
 		if(!expected.exists()){
 			// Check archive
 			if(archive.exists()){
