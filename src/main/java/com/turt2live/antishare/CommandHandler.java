@@ -15,7 +15,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -40,6 +39,8 @@ import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
+import com.turt2live.antishare.manager.BlockSaver;
+import com.turt2live.antishare.manager.BlockSaver.BlockInfo;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;
@@ -51,22 +52,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class CommandHandler implements CommandExecutor{
-
-	private static class Test implements Serializable{
-		private static final long serialVersionUID = -3722397059231053474L;
-		int id = 0;
-
-		public void writeObject(ObjectOutputStream stream) throws IOException{
-			//stream.defaultWriteObject();
-			stream.write(id);
-		}
-
-		public void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException{
-			//stream.defaultReadObject();
-			id = stream.read();
-		}
-	}
+public class CommandHandler implements CommandExecutor {
 
 	private final AntiShare plugin = AntiShare.p;
 	private String noPermission = plugin.getMessages().getMessage("no-permission");
@@ -86,53 +72,28 @@ public class CommandHandler implements CommandExecutor{
 					try{
 						String out = "";
 						Random r = new Random();
-						int size = 2;
-						int[][][] ints = new int[size][size][size];
-						for(int i = 0; i < size; i++){
-							for(int j = 0; j < size; j++){
-								for(int k = 0; k < size; k++){
-									ints[i][j][k] = r.nextInt();
-									out += String.valueOf(ints[i][j][k]) + ", ";
-								}
-							}
-						}
 						sender.sendMessage(out);
 						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("temp.dat", false));
-						oos.writeObject(ints);
+						for(int i = 0; i < 2; i++){
+							Location l = new Location(Bukkit.getWorlds().get(0), r.nextInt(), r.nextInt(), r.nextInt());
+							GameMode gm = GameMode.values()[r.nextInt(3)];
+							BlockSaver.save(oos, l, gm);
+							out += l.toString() + " " + gm.name() + " " + BlockSaver.fromGameMode(gm) + " | ";
+						}
 						oos.close();
+						sender.sendMessage(out);
 						//Read objects or arrays from binary file "o.dat":
 						ObjectInputStream ois = new ObjectInputStream(new FileInputStream("temp.dat"));
-						int[][][] ia = (int[][][]) (ois.readObject());
+						List<BlockInfo> info = new ArrayList<BlockInfo>();
 						out = "";
-						for(int i = 0; i < size; i++){
-							for(int j = 0; j < size; j++){
-								for(int k = 0; k < size; k++){
-									out += String.valueOf(ia[i][j][k]) + ", ";
-								}
-							}
+						while (ois.available() > 0){
+							BlockInfo i = BlockSaver.getNext(ois);
+							info.add(i);
+							out += i.location.toString() + " " + i.gamemode + " " + i.raw + " | ";
 						}
 						sender.sendMessage(ChatColor.YELLOW + out);
 						ois.close();
 					}catch(IOException e){
-						e.printStackTrace();
-					}catch(ClassNotFoundException e){
-						e.printStackTrace();
-					}
-					try{
-						Test test = new Test();
-						test.id = 123;
-						sender.sendMessage(test.id + "");
-						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("temp.dat", false));
-						oos.writeObject(test);
-						oos.close();
-						//Read objects or arrays from binary file "o.dat":
-						ObjectInputStream ois = new ObjectInputStream(new FileInputStream("temp.dat"));
-						Test te = (Test) ois.readObject();
-						sender.sendMessage(ChatColor.YELLOW + "" + te.id);
-						ois.close();
-					}catch(IOException e){
-						e.printStackTrace();
-					}catch(ClassNotFoundException e){
 						e.printStackTrace();
 					}
 					return true;
