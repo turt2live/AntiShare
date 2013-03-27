@@ -71,11 +71,11 @@ public class InventoryManager{
 		}
 	}
 
-	private void saveInventory(Player player){
-		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), player.getGameMode(), InventoryType.PLAYER);
+	private void saveInventory(Player player, GameMode gamemode){
+		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), gamemode, InventoryType.PLAYER);
 		inventory.clone(player.getInventory());
 		insert(player.getName(), inventory.clone());
-		inventory = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), player.getGameMode(), InventoryType.ENDER);
+		inventory = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), gamemode, InventoryType.ENDER);
 		inventory.clone(player.getEnderChest());
 		insert(player.getName(), inventory.clone());
 	}
@@ -113,7 +113,7 @@ public class InventoryManager{
 	 * @param player the player to save
 	 */
 	public void savePlayer(Player player){
-		saveInventory(player);
+		saveInventory(player, player.getGameMode());
 		String name = player.getName();
 		for(World w : plugin.getServer().getWorlds()){
 			String world = w.getName();
@@ -147,7 +147,7 @@ public class InventoryManager{
 	@SuppressWarnings ("deprecation")
 	public void setToTemporary(Player player, ASInventory inventory){
 		// Save current inventory
-		saveInventory(player);
+		saveInventory(player, player.getGameMode());
 
 		// Set to temp
 		ASInventory current = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), player.getGameMode(), InventoryType.PLAYER);
@@ -194,15 +194,22 @@ public class InventoryManager{
 	 * 
 	 * @param player the player
 	 * @param to the gamemode the player is changing to
+	 * @param from the gamemode travelling from
 	 */
-	public void onGameModeChange(Player player, GameMode to){
-		saveInventory(player);
+	public void onGameModeChange(Player player, GameMode to, GameMode from){
+		saveInventory(player, from);
 		ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
-		if(regular != null)
+		if(regular != null && !regular.isEmpty()){
 			regular.setTo(player.getInventory());
+		}else{
+			player.getInventory().clear();
+		}
 		ASInventory ender = getInventory(player, to, InventoryType.ENDER);
-		if(ender != null)
+		if(ender != null && !ender.isEmpty()){
 			ender.setTo(player.getEnderChest());
+		}else{
+			player.getEnderChest().clear();
+		}
 	}
 
 	/**

@@ -296,7 +296,7 @@ public class ASListener implements Listener{
 			// Check for open inventories and stuff
 			player.closeInventory();
 
-			plugin.getInventoryManager().onGameModeChange(player, to);
+			plugin.getInventoryManager().onGameModeChange(player, to, from);
 
 			// For alerts
 			ignore = false;
