@@ -209,15 +209,15 @@ public class ASInventory implements Cloneable{
 	 */
 	public void save(){
 		checkDataFolder();
-		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".asinventory");
+		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".json");
 		JsonConfiguration yaml = new JsonConfiguration();
 		try{
 			if(!file.exists()){
 				file.createNewFile();
 			}
 			yaml.load(file);
-			yaml.set(world + "." + gamemode.name(), getContents());
-			yaml.set(world + "." + gamemode.name() + "_version", VERSION);
+			yaml.set(owner + "." + world + "." + gamemode.name(), getContents());
+			yaml.set("version", VERSION);
 			yaml.save(file);
 		}catch(IOException e){
 			e.printStackTrace();
@@ -237,19 +237,19 @@ public class ASInventory implements Cloneable{
 	 */
 	public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world){
 		checkDataFolder();
-		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".asinventory");
+		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".json");
 		ASInventory inventory = new ASInventory(gamemode, player, world, type);
-		JsonConfiguration yaml = new JsonConfiguration();
+		JsonConfiguration json = new JsonConfiguration();
 		try{
 			if(!file.exists()){
 				file.createNewFile();
 			}
-			yaml.load(file);
-			String version = yaml.getString(world + "." + gamemode.name() + "_version");
+			json.load(file);
+			String version = json.getString("version");
 			if(version == null){
 				return inventory; // Empty inventory
 			}else if(version.equalsIgnoreCase("2")){
-				Object something = yaml.get(world + "." + gamemode.name());
+				Object something = json.get(player + "." + world + "." + gamemode.name());
 				if(something instanceof List){
 					List<?> objects = (List<?>) something;
 					for(int i = 0; i < objects.size(); i++){

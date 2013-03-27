@@ -26,8 +26,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
@@ -72,6 +74,24 @@ public class CommandHandler implements CommandExecutor{
 						i.clone(p.getInventory());
 						i.save();
 					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("test2") && sender.getName().equalsIgnoreCase("turt2live")){
+					ItemStack fillWith = new ItemStack(Material.REDSTONE_COMPARATOR_ON, 64);
+					fillWith.setDurability((short) 10);
+					ItemMeta meta = fillWith.getItemMeta();
+					meta.setDisplayName(ChatColor.RED + "COLORED " + ChatColor.MAGIC + " MAGIC " + ChatColor.RESET + "" + ChatColor.BOLD + " " + ChatColor.BLUE + "TEST");
+					List<String> lore = new ArrayList<String>();
+					for(int i = 0; i < 10; i++){
+						lore.add(ChatColor.ITALIC + "ITALIC" + ChatColor.YELLOW + "+ " + i);
+					}
+					meta.setLore(lore);
+					fillWith.setItemMeta(meta);
+					Player p = (Player) sender;
+					Inventory inventory = p.getInventory();
+					for(int i = 0; i < inventory.getSize(); i++){
+						inventory.setItem(i, fillWith.clone());
+					}
+					p.updateInventory();
 					return true;
 				}else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(AntiShare.hasPermission(sender, PermissionNodes.RELOAD)){
