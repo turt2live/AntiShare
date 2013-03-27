@@ -83,16 +83,28 @@ public class InventoryManager{
 	private ASInventory getInventory(Player player, GameMode gamemode, InventoryType type){
 		String key = player.getName() + "." + player.getWorld().getName();
 		boolean isEnder = type == InventoryType.ENDER;
+		ASInventory ret = null;
 		switch (gamemode){
 		case SURVIVAL:
-			return (isEnder ? enderSurvival : survival).get(key);
+			ret = (isEnder ? enderSurvival : survival).get(key);
+			break;
 		case CREATIVE:
-			return (isEnder ? enderCreative : creative).get(key);
+			ret = (isEnder ? enderCreative : creative).get(key);
+			break;
 		case ADVENTURE:
-			return (isEnder ? enderAdventure : adventure).get(key);
+			ret = (isEnder ? enderAdventure : adventure).get(key);
+			break;
 		default:
-			return ASInventory.EMPTY;
+			ret = ASInventory.EMPTY;
+			break;
 		}
+		if(ret == null){
+			ret = ASInventory.load(player.getName(), gamemode, type, player.getWorld().getName());
+			if(ret != null){
+				insert(player.getName(), ret);
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -186,9 +198,11 @@ public class InventoryManager{
 	public void onGameModeChange(Player player, GameMode to){
 		saveInventory(player);
 		ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
-		regular.setTo(player.getInventory());
+		if(regular != null)
+			regular.setTo(player.getInventory());
 		ASInventory ender = getInventory(player, to, InventoryType.ENDER);
-		ender.setTo(player.getEnderChest());
+		if(ender != null)
+			ender.setTo(player.getEnderChest());
 	}
 
 	/**
