@@ -1532,8 +1532,7 @@ public class ASListener implements Listener{
 		// Check to see if we should even bother checking
 		if(!plugin.settings().perWorldInventories){
 			// Fix up inventories
-			//plugin.getInventoryManager().fixInventory(player, event.getFrom());
-			// TODO ^
+			plugin.getInventoryManager().mergeAllWorlds(player, from);
 			return;
 		}
 

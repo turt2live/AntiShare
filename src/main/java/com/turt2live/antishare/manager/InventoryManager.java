@@ -116,6 +116,61 @@ public class InventoryManager{
 		return ret;
 	}
 
+	private ASInventory getInventory(Player player, World world, InventoryType type){
+		String key = player.getName() + "." + world.getName();
+		boolean isEnder = type == InventoryType.ENDER;
+		ASInventory ret = null;
+		switch (player.getGameMode()){
+		case SURVIVAL:
+			ret = (isEnder ? enderSurvival : survival).get(key);
+			break;
+		case CREATIVE:
+			ret = (isEnder ? enderCreative : creative).get(key);
+			break;
+		case ADVENTURE:
+			ret = (isEnder ? enderAdventure : adventure).get(key);
+			break;
+		default:
+			ret = ASInventory.EMPTY;
+			break;
+		}
+		if(ret == null){
+			ret = ASInventory.load(player.getName(), player.getGameMode(), type, world.getName());
+			if(ret != null){
+				insert(player.getName(), ret);
+			}
+		}
+		return ret;
+	}
+
+	// TODO: Use in above 2
+	private ASInventory getInventory(Player player, World world, GameMode gamemode, InventoryType type){
+		String key = player.getName() + "." + world.getName();
+		boolean isEnder = type == InventoryType.ENDER;
+		ASInventory ret = null;
+		switch (gamemode){
+		case SURVIVAL:
+			ret = (isEnder ? enderSurvival : survival).get(key);
+			break;
+		case CREATIVE:
+			ret = (isEnder ? enderCreative : creative).get(key);
+			break;
+		case ADVENTURE:
+			ret = (isEnder ? enderAdventure : adventure).get(key);
+			break;
+		default:
+			ret = ASInventory.EMPTY;
+			break;
+		}
+		if(ret == null){
+			ret = ASInventory.load(player.getName(), gamemode, type, world.getName());
+			if(ret != null){
+				insert(player.getName(), ret);
+			}
+		}
+		return ret;
+	}
+
 	private void checkLinksAndWorlds(String player, ASInventory inventory){
 		ASInventory clone = inventory.clone();
 		if(!plugin.settings().perWorldInventories){
@@ -130,6 +185,28 @@ public class InventoryManager{
 						clone.world = world.getName();
 						insertNoCheck(player, clone);
 					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Takes the source ("from") world and copies it to all worlds
+	 * 
+	 * @param player the player to affect
+	 * @param from the "old" world
+	 */
+	public void mergeAllWorlds(Player player, World from){
+		saveInventory(player, player.getGameMode());
+		for(GameMode gamemode : GameMode.values()){
+			for(World world : Bukkit.getWorlds()){
+				if(!world.getName().equalsIgnoreCase(from.getName())){
+					ASInventory inventory = getInventory(player, from, gamemode, InventoryType.PLAYER);
+					inventory.world = world.getName(); // Do this after so we load the correct inventory first
+					insertNoCheck(player.getName(), inventory.clone());
+					inventory = getInventory(player, from, gamemode, InventoryType.ENDER);
+					inventory.world = world.getName(); // Do this after so we load the correct inventory first
+					insertNoCheck(player.getName(), inventory.clone());
 				}
 			}
 		}
@@ -256,7 +333,19 @@ public class InventoryManager{
 		if(!plugin.settings().features.inventories || AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
 			return; // Don't bother
 		}
-		// TODO
+		saveInventory(player, player.getGameMode());
+		ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
+		if(regular != null && !regular.isEmpty()){
+			regular.setTo(player.getInventory());
+		}else{
+			player.getInventory().clear();
+		}
+		ASInventory ender = getInventory(player, to, InventoryType.ENDER);
+		if(ender != null && !ender.isEmpty()){
+			ender.setTo(player.getEnderChest());
+		}else{
+			player.getEnderChest().clear();
+		}
 	}
 
 	/**
