@@ -11,6 +11,7 @@
 package com.turt2live.antishare.manager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.Bukkit;
@@ -18,12 +19,14 @@ import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.blocks.io.ASRegion;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 import com.turt2live.materials.MaterialAPI;
@@ -34,7 +37,7 @@ import com.turt2live.materials.MaterialAPI;
  * @author turt2live
  */
 //TODO: Schedule for rewrite
-class ChunkWrapper{
+class ChunkWrapper {
 
 	private final BlockManager manager;
 	private final AntiShare plugin = AntiShare.p;
@@ -278,33 +281,40 @@ class ChunkWrapper{
 			}
 			noEntityFile = true;
 		}
+		World world = plugin.getServer().getWorld(this.world);
 		if(!noBlockFile){
-			WrappedEnhancedConfiguration blocks = new WrappedEnhancedConfiguration(blockFile, plugin);
-			blocks.load();
-			blocks.clearFile();
-			for(String s : this.adventureBlocks){
-				save(s, GameMode.ADVENTURE, blocks, true);
+			ASRegion region = new ASRegion();
+			try{
+				region.prepare(blockFile, true);
+				for(String string : creativeBlocks){
+					Location location = LegacyBlockIO.locationFromString(world, string);
+					region.write(location, GameMode.CREATIVE);
+				}
+				for(String string : survivalBlocks){
+					Location location = LegacyBlockIO.locationFromString(world, string);
+					region.write(location, GameMode.SURVIVAL);
+				}
+				for(String string : adventureBlocks){
+					Location location = LegacyBlockIO.locationFromString(world, string);
+					region.write(location, GameMode.ADVENTURE);
+				}
+				region.close();
+			}catch(IOException e){
+				e.printStackTrace();
 			}
-			for(String s : this.creativeBlocks){
-				save(s, GameMode.CREATIVE, blocks, true);
-			}
-			for(String s : this.survivalBlocks){
-				save(s, GameMode.SURVIVAL, blocks, true);
-			}
-			blocks.save();
 		}
 		if(!noEntityFile){
 			WrappedEnhancedConfiguration entities = new WrappedEnhancedConfiguration(entityFile, plugin);
 			entities.load();
 			entities.clearFile();
 			for(String s : this.adventureEntities){
-				save(s, GameMode.ADVENTURE, entities, false);
+				//save(s, GameMode.ADVENTURE, entities, false);
 			}
 			for(String s : this.creativeEntities){
-				save(s, GameMode.CREATIVE, entities, false);
+				//save(s, GameMode.CREATIVE, entities, false);
 			}
 			for(String s : this.survivalEntities){
-				save(s, GameMode.SURVIVAL, entities, false);
+				//save(s, GameMode.SURVIVAL, entities, false);
 			}
 			entities.save();
 			if(clear){
@@ -319,26 +329,6 @@ class ChunkWrapper{
 		if(load){
 			load(true, blocksDir);
 			load(false, entitiesDir);
-		}
-	}
-
-	private void save(String rawString, GameMode gamemode, EnhancedConfiguration configuration, boolean isBlock){
-		/*
-		 * 0 = chunkX
-		 * 1 = chunkZ
-		 * 2 = world name
-		 * 3 = block x
-		 * 4 = block y
-		 * 5 = block z
-		 * 6 = (if provided) entity type as string
-		 */
-		String[] parts = rawString.split(";");
-		if(parts.length < (isBlock ? 6 : 7) || parts.length > (isBlock ? 6 : 7)){
-			plugin.getLogger().warning(plugin.getMessages().getMessage("bad-save-key", rawString, gamemode.name(), String.valueOf(isBlock)));
-		}else{
-			String key = parts[3] + ";" + parts[4] + ";" + parts[5] + ";" + parts[2] + (isBlock ? "" : ";" + parts[6]);
-			String value = gamemode.name();
-			configuration.set(key, value);
 		}
 	}
 
