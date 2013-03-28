@@ -46,7 +46,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class CommandHandler implements CommandExecutor{
+public class CommandHandler implements CommandExecutor {
 
 	private final AntiShare plugin = AntiShare.p;
 	private String noPermission = plugin.getMessages().getMessage("no-permission");
@@ -61,40 +61,6 @@ public class CommandHandler implements CommandExecutor{
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("version")){
 					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
-					return true;
-				}else if(args[0].equalsIgnoreCase("test") && sender.getName().equals("turt2live")){
-					//					try{
-					//						//String out = "";
-					//						Random r = new Random();
-					//						DataOutputStream oos = new DataOutputStream(new FileOutputStream("temp.dat", false));
-					//						for(int i = 0; i < 207901; i++){
-					//							Location l = new Location(Bukkit.getWorlds().get(0), -197, 60, 313);
-					//							GameMode gm = GameMode.values()[r.nextInt(3)];
-					//							gm = GameMode.SURVIVAL;
-					//							BlockSaver.save(oos, l, gm);
-					//							//out += l.toString() + " " + gm.name() + " " + BlockSaver.fromGameMode(gm) + " | ";
-					//						}
-					//						oos.close();
-					//						//sender.sendMessage(out);
-					//						DataInputStream ois = new DataInputStream(new FileInputStream("temp.dat"));
-					//						List<BlockInfo> info = new ArrayList<BlockInfo>();
-					//						//out = "";
-					//						while(ois.available() > 0){
-					//							BlockInfo i = BlockSaver.getNext(ois);
-					//							info.add(i);
-					//							//out += i.location.toString() + " " + i.gamemode + " " + i.raw + " | ";
-					//						}
-					//						//sender.sendMessage(ChatColor.YELLOW + out);
-					//						ois.close();
-					//					}catch(IOException e){
-					//						e.printStackTrace();
-					//					}
-					//					sender.sendMessage("DONE");
-					try{
-						BlockIO.tortureTest(args.length > 1 ? Integer.parseInt(args[1]) : 65536);
-					}catch(IOException e){
-						e.printStackTrace();
-					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(AntiShare.hasPermission(sender, PermissionNodes.RELOAD)){
