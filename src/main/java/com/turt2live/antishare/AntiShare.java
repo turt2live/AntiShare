@@ -526,12 +526,6 @@ public class AntiShare extends PluginWrapper{
 			if(hasPermission(player, allowPermission + "." + target)){
 				return false;
 			}
-			if(hasPermission(player, allowPermission + "." + target)){
-				return false;
-			}
-			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
-				return true;
-			}
 			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
 				return true;
 			}

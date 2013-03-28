@@ -62,7 +62,7 @@ public class CommandHandler implements CommandExecutor{
 				if(args[0].equalsIgnoreCase("version")){
 					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
 					return true;
-				}else if(args[0].equalsIgnoreCase("test")){
+				}else if(args[0].equalsIgnoreCase("test") && sender.getName().equals("turt2live")){
 					//					try{
 					//						//String out = "";
 					//						Random r = new Random();
