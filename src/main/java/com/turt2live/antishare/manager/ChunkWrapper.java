@@ -416,4 +416,19 @@ class ChunkWrapper{
 		}
 	}
 
+	public void tempload(boolean isBlock, File dir){
+		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".yml");
+		if(!file.exists()){
+			return;
+		}
+		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
+		blocks.load();
+		for(String key : blocks.getKeys(false)){
+			String[] keyParts = key.split(";");
+			Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
+			GameMode gamemode = GameMode.valueOf(blocks.getString(key));
+			Block block = location.getBlock();
+		}
+	}
+
 }

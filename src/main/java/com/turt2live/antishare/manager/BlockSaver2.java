@@ -1,15 +1,14 @@
 package com.turt2live.antishare.manager;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 
 // TODO: Document
-public class BlockSaver{
+public class BlockSaver2{
 
 	public static final byte CREATIVE_BYTE = 0x1;
 	public static final byte SURVIVAL_BYTE = 0x2;
@@ -51,30 +50,29 @@ public class BlockSaver{
 		}
 	}
 
-	public static void save(DataOutputStream out, Location location, GameMode type) throws IOException{
+	public static void save(ByteBuffer out, Location location, GameMode type) throws IOException{
 		int x = location.getBlockX();
 		int y = location.getBlockY();
 		int z = location.getBlockZ();
 		byte value = fromGameMode(type);
-		byte[] world = location.getWorld().getName().getBytes("UTF-8");
-		out.writeInt(x);
-		out.writeInt(y);
-		out.writeInt(z);
-		out.writeByte(value);
-		out.writeInt(world.length);
-		out.write(world);
+		WorldTable.load();
+		out.putInt(x);
+		out.putInt(y);
+		out.putInt(z);
+		out.put(value);
+		out.putInt(WorldTable.worldsNames.get(location.getWorld().getName()));
+
 	}
 
-	public static BlockInfo getNext(DataInputStream in) throws IOException{
+	public static BlockInfo getNext(ByteBuffer in) throws IOException{
 		BlockInfo i = new BlockInfo();
-		int x = in.readInt();
-		int y = in.readInt();
-		int z = in.readInt();
-		byte data = in.readByte();
-		int readLength = in.readInt();
-		byte[] worldArray = new byte[readLength];
-		in.read(worldArray);
-		String world = new String(worldArray, "UTF-8");
+		int x = in.getInt();
+		int y = in.getInt();
+		int z = in.getInt();
+		byte data = in.get();
+		int worldID = in.getInt();
+		WorldTable.load();
+		String world = WorldTable.worlds.get(worldID);
 		Location location = new Location(Bukkit.getWorld(world), x, y, z);
 		i.location = location;
 		i.gamemode = fromByte(data);

@@ -10,14 +10,9 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -39,8 +34,7 @@ import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
-import com.turt2live.antishare.manager.BlockSaver;
-import com.turt2live.antishare.manager.BlockSaver.BlockInfo;
+import com.turt2live.antishare.manager.BlockIO;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;
@@ -52,7 +46,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class CommandHandler implements CommandExecutor {
+public class CommandHandler implements CommandExecutor{
 
 	private final AntiShare plugin = AntiShare.p;
 	private String noPermission = plugin.getMessages().getMessage("no-permission");
@@ -69,30 +63,35 @@ public class CommandHandler implements CommandExecutor {
 					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
 					return true;
 				}else if(args[0].equalsIgnoreCase("test")){
+					//					try{
+					//						//String out = "";
+					//						Random r = new Random();
+					//						DataOutputStream oos = new DataOutputStream(new FileOutputStream("temp.dat", false));
+					//						for(int i = 0; i < 207901; i++){
+					//							Location l = new Location(Bukkit.getWorlds().get(0), -197, 60, 313);
+					//							GameMode gm = GameMode.values()[r.nextInt(3)];
+					//							gm = GameMode.SURVIVAL;
+					//							BlockSaver.save(oos, l, gm);
+					//							//out += l.toString() + " " + gm.name() + " " + BlockSaver.fromGameMode(gm) + " | ";
+					//						}
+					//						oos.close();
+					//						//sender.sendMessage(out);
+					//						DataInputStream ois = new DataInputStream(new FileInputStream("temp.dat"));
+					//						List<BlockInfo> info = new ArrayList<BlockInfo>();
+					//						//out = "";
+					//						while(ois.available() > 0){
+					//							BlockInfo i = BlockSaver.getNext(ois);
+					//							info.add(i);
+					//							//out += i.location.toString() + " " + i.gamemode + " " + i.raw + " | ";
+					//						}
+					//						//sender.sendMessage(ChatColor.YELLOW + out);
+					//						ois.close();
+					//					}catch(IOException e){
+					//						e.printStackTrace();
+					//					}
+					//					sender.sendMessage("DONE");
 					try{
-						String out = "";
-						Random r = new Random();
-						sender.sendMessage(out);
-						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("temp.dat", false));
-						for(int i = 0; i < 2; i++){
-							Location l = new Location(Bukkit.getWorlds().get(0), r.nextInt(), r.nextInt(), r.nextInt());
-							GameMode gm = GameMode.values()[r.nextInt(3)];
-							BlockSaver.save(oos, l, gm);
-							out += l.toString() + " " + gm.name() + " " + BlockSaver.fromGameMode(gm) + " | ";
-						}
-						oos.close();
-						sender.sendMessage(out);
-						//Read objects or arrays from binary file "o.dat":
-						ObjectInputStream ois = new ObjectInputStream(new FileInputStream("temp.dat"));
-						List<BlockInfo> info = new ArrayList<BlockInfo>();
-						out = "";
-						while (ois.available() > 0){
-							BlockInfo i = BlockSaver.getNext(ois);
-							info.add(i);
-							out += i.location.toString() + " " + i.gamemode + " " + i.raw + " | ";
-						}
-						sender.sendMessage(ChatColor.YELLOW + out);
-						ois.close();
+						BlockIO.tortureTest(args.length > 1 ? Integer.parseInt(args[1]) : 65536);
 					}catch(IOException e){
 						e.printStackTrace();
 					}
