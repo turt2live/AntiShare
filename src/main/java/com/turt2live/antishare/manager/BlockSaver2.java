@@ -55,12 +55,10 @@ public class BlockSaver2{
 		int y = location.getBlockY();
 		int z = location.getBlockZ();
 		byte value = fromGameMode(type);
-		WorldTable.load();
 		out.putInt(x);
 		out.putInt(y);
 		out.putInt(z);
 		out.put(value);
-		out.putInt(WorldTable.worldsNames.get(location.getWorld().getName()));
 
 	}
 
@@ -71,9 +69,7 @@ public class BlockSaver2{
 		int z = in.getInt();
 		byte data = in.get();
 		int worldID = in.getInt();
-		WorldTable.load();
-		String world = WorldTable.worlds.get(worldID);
-		Location location = new Location(Bukkit.getWorld(world), x, y, z);
+		Location location = new Location(Bukkit.getWorld((String) null), x, y, z);
 		i.location = location;
 		i.gamemode = fromByte(data);
 		i.raw = data;
