@@ -524,35 +524,45 @@ public class AntiShare extends PluginWrapper{
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly){
 		if(target != null){
 			if(hasPermission(player, allowPermission + "." + target)){
+				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f1");
 				return false;
 			}
 			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
+				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f2");
 				return true;
 			}
 		}
 		if(specialOnly){
+			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f3");
 			return false;
 		}
 		if(hasPermission(player, allowPermission)){
+			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f4");
 			return false;
 		}
 		if(denyPermission != null && hasPermission(player, denyPermission)){
+			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f5");
 			return true;
 		}
-		if(GamemodeAbstraction.isCreative(player.getGameMode())){
+		if(GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()){
 			if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) || hasPermission(player, PermissionNodes.AFFECT_ADVENTURE)){
+				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f6");
 				return true;
 			}
 		}
 		if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
+			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f7");
 			return true;
 		}
 		if(hasPermission(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
+			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f8");
 			return true;
 		}
 		if(hasPermission(player, PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE){
+			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f9");
 			return true;
 		}
+		System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f10");
 		return false;
 	}
 
@@ -569,7 +579,7 @@ public class AntiShare extends PluginWrapper{
 		}
 		Player player = (Player) target;
 		if(pex.hasPEX()){
-			return pex.getAbstract().has(player, permission, player.getWorld());
+			//return pex.getAbstract().has(player, permission, player.getWorld()) || player.hasPermission(permission);
 		}
 		return player.hasPermission(permission);
 	}
