@@ -27,7 +27,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
-import com.turt2live.antishare.compatibility.other.PEX;
 import com.turt2live.antishare.config.ASConfig;
 import com.turt2live.antishare.config.ConfigConvert;
 import com.turt2live.antishare.manager.BlockManager;
@@ -104,14 +103,10 @@ public class AntiShare extends PluginWrapper{
 	private InventoryManager inventories;
 	private RegionManager regions;
 	private final List<String> disabledSNPlayers = new ArrayList<String>();
-	private static PEX pex;
 
 	@Override
 	public void onEnable(){
 		p = this;
-
-		// Start PEX
-		pex = new PEX();
 
 		// Setup graphs
 		for(Action action : Action.values()){
@@ -462,15 +457,6 @@ public class AntiShare extends PluginWrapper{
 	}
 
 	/**
-	 * Gets the active PEX compatibility instance, this will never be null
-	 * 
-	 * @return the active PEX compatibility instance
-	 */
-	public PEX getPEX(){
-		return pex;
-	}
-
-	/**
 	 * Determines if a player is blocked from doing something
 	 * 
 	 * @param player the player
@@ -524,45 +510,35 @@ public class AntiShare extends PluginWrapper{
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly){
 		if(target != null){
 			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
-				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f2");
 				return true;
 			}
 			if(hasPermission(player, allowPermission + "." + target)){
-				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f1");
 				return false;
 			}
 		}
 		if(specialOnly){
-			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f3");
 			return false;
 		}
 		if(denyPermission != null && hasPermission(player, denyPermission)){
-			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f5");
 			return true;
 		}
 		if(hasPermission(player, allowPermission)){
-			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f4");
 			return false;
 		}
 		if(GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()){
 			if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) || hasPermission(player, PermissionNodes.AFFECT_ADVENTURE)){
-				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f6");
 				return true;
 			}
 		}
 		if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
-			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f7");
 			return true;
 		}
 		if(hasPermission(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
-			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f8");
 			return true;
 		}
 		if(hasPermission(player, PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE){
-			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f9");
 			return true;
 		}
-		System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f10");
 		return false;
 	}
 
@@ -574,16 +550,6 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if they have the permission
 	 */
 	public static boolean hasPermission(CommandSender target, String permission){
-		boolean has = target.hasPermission(permission);
-		System.out.println("============ " + permission + ": " + has + " (" + target.getName() + ")");
-		return has;
-		//		if(!(target instanceof Player)){
-		//			return target.hasPermission(permission);
-		//		}
-		//		Player player = (Player) target;
-		//		if(pex.hasPEX()){
-		//			//return pex.getAbstract().has(player, permission, player.getWorld()) || player.hasPermission(permission);
-		//		}
-		//		return player.hasPermission(permission);
+		return target.hasPermission(permission);
 	}
 }

@@ -27,7 +27,6 @@
     <towny.version>0.82.0.5</towny.version>
     <multiverse.version>2.5</multiverse.version>
     <magicspells.version>2.13.1</magicspells.version>
-    <pex.version>1.19.5</pex.version>
 
     <!-- Test Versions -->
     <junit.version>4.11</junit.version>
@@ -131,15 +130,6 @@
       <version>${logblock.version}</version>
       <scope>system</scope>
       <systemPath>${basedir}/lib/LogBlock.jar</systemPath>
-    </dependency>
-
-    <!-- PermissionsEx -->
-    <dependency>
-      <groupId>ru.tehkode.permissions</groupId>
-      <artifactId>PermissionsEx</artifactId>
-      <version>${pex.version}</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/PermissionsEx.jar</systemPath>
     </dependency>
 
     <!-- MagicSpells -->
