@@ -492,15 +492,18 @@ public class ASUtils{
 		if(list.has(target)){
 			illegal = true;
 		}
+		System.out.println(illegal + " " + region);
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
 			illegal = false;
 		}
+		System.out.println(illegal + " " + region);
 		if(target != null && permissions.region != null && !AntiShare.hasPermission(player, permissions.region)){
 			if(sourceRegion != targetRegion){
 				illegal = true;
 				region = true;
 			}
 		}
+		System.out.println(illegal + " " + region);
 		return new ProtectionInformation(illegal, region, sourceRegion, targetRegion);
 	}
 

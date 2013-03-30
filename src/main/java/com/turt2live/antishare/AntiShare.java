@@ -494,6 +494,7 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if blocked
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material, boolean specialOnly){
+		// TODO: Logic issue here?
 		return isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly)
 				|| isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
 	}
@@ -523,26 +524,26 @@ public class AntiShare extends PluginWrapper{
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly){
 		if(target != null){
-			if(hasPermission(player, allowPermission + "." + target)){
-				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f1");
-				return false;
-			}
 			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
 				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f2");
 				return true;
+			}
+			if(hasPermission(player, allowPermission + "." + target)){
+				System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f1");
+				return false;
 			}
 		}
 		if(specialOnly){
 			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f3");
 			return false;
 		}
-		if(hasPermission(player, allowPermission)){
-			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f4");
-			return false;
-		}
 		if(denyPermission != null && hasPermission(player, denyPermission)){
 			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f5");
 			return true;
+		}
+		if(hasPermission(player, allowPermission)){
+			System.out.println(allowPermission + "  " + denyPermission + "  " + target + "  f4");
+			return false;
 		}
 		if(GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()){
 			if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) || hasPermission(player, PermissionNodes.AFFECT_ADVENTURE)){
@@ -574,13 +575,16 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if they have the permission
 	 */
 	public static boolean hasPermission(CommandSender target, String permission){
-		if(!(target instanceof Player)){
-			return target.hasPermission(permission);
-		}
-		Player player = (Player) target;
-		if(pex.hasPEX()){
-			//return pex.getAbstract().has(player, permission, player.getWorld()) || player.hasPermission(permission);
-		}
-		return player.hasPermission(permission);
+		boolean has = target.hasPermission(permission);
+		System.out.println("============ " + permission + ": " + has + " (" + target.getName() + ")");
+		return has;
+		//		if(!(target instanceof Player)){
+		//			return target.hasPermission(permission);
+		//		}
+		//		Player player = (Player) target;
+		//		if(pex.hasPEX()){
+		//			//return pex.getAbstract().has(player, permission, player.getWorld()) || player.hasPermission(permission);
+		//		}
+		//		return player.hasPermission(permission);
 	}
 }
