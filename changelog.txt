@@ -28,6 +28,7 @@ Since 5.3.0:
 - Added block spreading support (can be disabled), includes storage block <-> hopper
 - AntiShare tools will no longer conflict with regular items (like Blaze Rods). They must be spawed with /as toolbox (or similar) however.
 - Inventories have been upgraded
+- Permissions have been fixed
 - Misc. Fixes:
     - Fixed region owner names not being loaded
     - Fixed cuboids not acting as expected
