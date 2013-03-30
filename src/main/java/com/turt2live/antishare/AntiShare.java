@@ -494,9 +494,8 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if blocked
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material, boolean specialOnly){
-		// TODO: Logic issue here?
-		return isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly)
-				|| isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
+		return !(!isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly)
+		|| !isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly));
 	}
 
 	/**
