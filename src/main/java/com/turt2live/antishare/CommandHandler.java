@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +33,6 @@ import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.DisplayableInventory;
-import com.turt2live.antishare.manager.BlockIO;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;
@@ -46,7 +44,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class CommandHandler implements CommandExecutor {
+public class CommandHandler implements CommandExecutor{
 
 	private final AntiShare plugin = AntiShare.p;
 	private String noPermission = plugin.getMessages().getMessage("no-permission");

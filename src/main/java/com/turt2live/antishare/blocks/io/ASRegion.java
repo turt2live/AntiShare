@@ -14,7 +14,19 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 // TODO: Document
-public class ASRegion {
+public class ASRegion{
+
+	public static class BlockInfo{
+		public final Location location;
+		public final GameMode gamemode;
+		public final byte raw;
+
+		private BlockInfo(Location location, GameMode gamemode, byte raw){
+			this.location = location;
+			this.gamemode = gamemode;
+			this.raw = raw;
+		}
+	}
 
 	public static final Pattern pattern = Pattern.compile(" ");
 	public static final byte CREATIVE_BYTE = 0x1;
@@ -56,15 +68,6 @@ public class ASRegion {
 		}
 	}
 
-	private String locationToString(Location location){
-		return location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ();
-	}
-
-	private Location stringToLocation(String string, World world){
-		String[] parts = pattern.split(string, 3);
-		return new Location(world, Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
-	}
-
 	public void prepare(File file, boolean write) throws FileNotFoundException{
 		if(write){
 			output = new FileOutputStream(file, false);
@@ -84,6 +87,19 @@ public class ASRegion {
 		buffer.put(gamemodeToByte(gamemode));
 		buffer.flip();
 		channel.write(buffer);
+	}
+
+	public BlockInfo getNext(World world) throws IOException{
+		int read = channel.read(buffer);
+		if(read <= 0){
+			return null;
+		}
+		buffer.position(0);
+		int x = buffer.getInt(), y = buffer.getInt(), z = buffer.getInt();
+		byte bite = buffer.get();
+		GameMode value = byteToGamemode(bite);
+		buffer.clear();
+		return new BlockInfo(new Location(world, x, y, z), value, bite);
 	}
 
 	public void close() throws IOException{

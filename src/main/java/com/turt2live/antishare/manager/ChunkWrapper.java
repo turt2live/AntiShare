@@ -24,9 +24,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.blocks.io.ASRegion;
+import com.turt2live.antishare.blocks.io.ASRegion.BlockInfo;
+import com.turt2live.antishare.blocks.io.LegacyBlockIO;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 import com.turt2live.materials.MaterialAPI;
@@ -37,7 +38,7 @@ import com.turt2live.materials.MaterialAPI;
  * @author turt2live
  */
 //TODO: Schedule for rewrite
-class ChunkWrapper {
+public class ChunkWrapper{
 
 	private final BlockManager manager;
 	private final AntiShare plugin = AntiShare.p;
@@ -265,8 +266,8 @@ class ChunkWrapper {
 	 * @param entitiesDir the entities data directory
 	 */
 	public void save(boolean load, boolean clear, File blocksDir, File entitiesDir){
-		File blockFile = new File(blocksDir, chunkX + "." + chunkZ + "." + world + ".yml");
-		File entityFile = new File(entitiesDir, chunkX + "." + chunkZ + "." + world + ".yml");
+		File blockFile = new File(blocksDir, chunkX + "." + chunkZ + "." + world + ".asr");
+		File entityFile = new File(entitiesDir, chunkX + "." + chunkZ + "." + world + ".asr");
 		// Used for sane file creation
 		boolean noBlockFile = false, noEntityFile = false;
 		if(this.adventureBlocks.size() <= 0 && this.survivalBlocks.size() <= 0 && this.creativeBlocks.size() <= 0){
@@ -350,7 +351,7 @@ class ChunkWrapper {
 	 * @param dir the directory to load
 	 */
 	public void load(boolean isBlock, File dir){
-		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".yml");
+		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".asr");
 		if(!file.exists()){
 			return;
 		}
@@ -360,7 +361,8 @@ class ChunkWrapper {
 			return;
 		}
 		String w = fileParts[2]; // To see if world == file name world
-		if(Bukkit.getWorld(w) == null){
+		World bWorld = Bukkit.getWorld(w);
+		if(bWorld == null){
 			plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-world", w));
 			return;
 		}
@@ -368,56 +370,23 @@ class ChunkWrapper {
 			plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-world", w));
 			return;
 		}
-		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
-		blocks.load();
-		for(String key : blocks.getKeys(false)){
-			String[] keyParts = key.split(";");
-			if(keyParts.length < (isBlock ? 3 : 4)){
-				plugin.getLogger().severe(plugin.getMessages().getMessage("bad-file", file.getAbsolutePath()));
-				continue;
-			}
-			Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
-			if(Bukkit.getWorld(keyParts[3]) == null || location == null || location.getWorld() == null){
-				continue;
-			}
-			EntityType entityType = null;
-			if(keyParts.length > 4){
-				try{
-					entityType = EntityType.fromName(keyParts[4]);
-				}catch(Exception e){ // Prevents messy consoles
-					entityType = null;
-				}
-			}
-			GameMode gamemode = GameMode.valueOf(blocks.getString(key));
+		ASRegion region = new ASRegion();
+		try{
+			region.prepare(file, false);
 			if(isBlock){
-				Block block = location.getBlock();
-				if(block == null){
-					location.getChunk().load();
-					block = location.getBlock();
+				BlockInfo info = null;
+				while((info = region.getNext(bWorld)) != null){
+					Block block = info.location.getBlock();
+					if(block == null){
+						info.location.getChunk().load();
+						block = info.location.getBlock();
+					}
+					addBlock(info.gamemode, block);
 				}
-				addBlock(gamemode, block);
-			}else{
-				if(entityType == null){
-					plugin.getLogger().severe(plugin.getMessages().getMessage("bad-file", file.getAbsolutePath()));
-					continue;
-				}
-				addEntity(gamemode, location, entityType);
 			}
-		}
-	}
-
-	public void tempload(boolean isBlock, File dir){
-		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".yml");
-		if(!file.exists()){
-			return;
-		}
-		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
-		blocks.load();
-		for(String key : blocks.getKeys(false)){
-			String[] keyParts = key.split(";");
-			Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
-			GameMode gamemode = GameMode.valueOf(blocks.getString(key));
-			Block block = location.getBlock();
+			region.close();
+		}catch(IOException e){
+			e.printStackTrace();
 		}
 	}
 
