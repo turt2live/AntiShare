@@ -29,6 +29,7 @@ Since 5.3.0:
 - AntiShare tools will no longer conflict with regular items (like Blaze Rods). They must be spawed with /as toolbox (or similar) however.
 - Inventories have been upgraded
 - Permissions have been fixed
+- Updated block management to use a much faster and smaller system
 - Misc. Fixes:
     - Fixed region owner names not being loaded
     - Fixed cuboids not acting as expected
