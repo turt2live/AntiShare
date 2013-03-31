@@ -49,12 +49,26 @@ public class ChunkWrapper{
 	CopyOnWriteArrayList<String> adventureEntities = new CopyOnWriteArrayList<String>();
 	private final int chunkX, chunkZ;
 	private final String world;
+	private final File blocksDir, entitiesDir;
 
-	ChunkWrapper(BlockManager manager, Chunk chunk){
+	ChunkWrapper(BlockManager manager, Chunk chunk, File blocksDir, File entitiesDir){
 		this.manager = manager;
 		this.chunkX = chunk.getX();
 		this.chunkZ = chunk.getZ();
 		this.world = chunk.getWorld().getName();
+		this.blocksDir = blocksDir;
+		this.entitiesDir = entitiesDir;
+
+		// Check for YAML
+		File blockFile = new File(blocksDir, chunkX + "." + chunkZ + "." + world + ".yml");
+		File entityFile = new File(entitiesDir, chunkX + "." + chunkZ + "." + world + ".yml");
+
+		if(blockFile.exists()){
+			LegacyBlockIO.load(true, blockFile, this);
+		}
+		if(entityFile.exists()){
+			LegacyBlockIO.load(false, entityFile, this);
+		}
 	}
 
 	/**
@@ -264,7 +278,7 @@ public class ChunkWrapper{
 	 * @param blocksDir the blocks data directory
 	 * @param entitiesDir the entities data directory
 	 */
-	public void save(boolean load, boolean clear, File blocksDir, File entitiesDir){
+	public void save(boolean load, boolean clear){
 		File blockFile = new File(blocksDir, chunkX + "." + chunkZ + "." + world + ".asr");
 		File entityFile = new File(entitiesDir, chunkX + "." + chunkZ + "." + world + ".asr");
 		// Used for sane file creation
@@ -335,8 +349,8 @@ public class ChunkWrapper{
 			}
 		}
 		if(load){
-			load(true, blocksDir);
-			load(false, entitiesDir);
+			load(true);
+			load(false);
 		}
 	}
 
@@ -346,9 +360,9 @@ public class ChunkWrapper{
 	 * @param blocks the blocks data directory
 	 * @param entity the entities data directory
 	 */
-	public void load(File blocks, File entity){
-		load(true, blocks);
-		load(false, entity);
+	public void load(){
+		load(true);
+		load(false);
 	}
 
 	/**
@@ -357,8 +371,8 @@ public class ChunkWrapper{
 	 * @param isBlock set to true if loading block information
 	 * @param dir the directory to load
 	 */
-	public void load(boolean isBlock, File dir){
-		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".asr");
+	public void load(boolean isBlock){
+		File file = new File(isBlock ? blocksDir : entitiesDir, chunkX + "." + chunkZ + "." + world + ".asr");
 		if(!file.exists()){
 			return;
 		}

@@ -16,11 +16,13 @@ import com.turt2live.antishare.manager.ChunkWrapper;
 // TODO: Document
 public class LegacyBlockIO{
 
+	@Deprecated
 	public static Location locationFromString(World world, String string){
 		String[] parts = string.split(";");
 		return new Location(world, Integer.parseInt(parts[3]), Integer.parseInt(parts[4]), Integer.parseInt(parts[5]));
 	}
 
+	@Deprecated
 	public static EntityType entityFromString(String string){
 		String[] parts = string.split(";");
 		EntityType e = null;
@@ -30,23 +32,6 @@ public class LegacyBlockIO{
 		return e;
 	}
 
-	// TODO
-	public void uselessloadREMOVEME(boolean isBlock, File dir){
-		//		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".yml");
-		//		if(!file.exists()){
-		//			return;
-		//		}
-		//		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
-		//		blocks.load();
-		//		for(String key : blocks.getKeys(false)){
-		//			String[] keyParts = key.split(";");
-		//			Location location = new Location(Bukkit.getWorld(keyParts[3]), Double.parseDouble(keyParts[0]), Double.parseDouble(keyParts[1]), Double.parseDouble(keyParts[2]));
-		//			GameMode gamemode = GameMode.valueOf(blocks.getString(key));
-		//			Block block = location.getBlock();
-		//		}
-	}
-
-	// TODO
 	public static void load(boolean isBlock, File file, ChunkWrapper wrapper){
 		AntiShare plugin = AntiShare.p;
 		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);

@@ -128,7 +128,7 @@ public class BlockManager{
 		Double done = 0.0;
 		for(String key : wrappers.keySet()){
 			ChunkWrapper w = wrappers.get(key);
-			w.save(false, true, blocksDir, entitiesDir);
+			w.save(false, true);
 			done++;
 			this.percent = ((Double) (done / max)).intValue();
 		}
@@ -143,8 +143,8 @@ public class BlockManager{
 	 */
 	public void loadChunk(Chunk chunk){
 		String str = chunkToString(chunk);
-		ChunkWrapper wrapper = new ChunkWrapper(this, chunk);
-		wrapper.load(blocksDir, entitiesDir);
+		ChunkWrapper wrapper = new ChunkWrapper(this, chunk, blocksDir, entitiesDir);
+		wrapper.load();
 		wrappers.put(str, wrapper);
 	}
 
@@ -157,7 +157,7 @@ public class BlockManager{
 		String key = chunkToString(chunk);
 		ChunkWrapper wrapper = wrappers.get(key);
 		if(wrapper != null){
-			wrapper.save(false, false, blocksDir, entitiesDir);
+			wrapper.save(false, false);
 			wrappers.remove(wrapper);
 		}
 	}
