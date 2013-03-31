@@ -359,19 +359,27 @@ public class BlockManager{
 		});
 	}
 
+	// TODO REPLACE
+	@Deprecated
 	String chunkToString(Chunk chunk){
 		return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
 	}
 
+	// TODO REPLACE
+	@Deprecated
 	String blockToString(Block block){
 		return block.getChunk().getX() + ";" + block.getChunk().getZ() + ";" + block.getWorld().getName() + ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
 	}
 
+	// TODO REPLACE
+	@Deprecated
 	String entityToString(Entity entity){
 		Location location = entity.getLocation();
 		return location.getChunk().getX() + ";" + location.getChunk().getZ() + ";" + location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + entity.getType().name();
 	}
 
+	// TODO REPLACE
+	@Deprecated
 	String entityToString(Location entity, EntityType type){
 		return entity.getChunk().getX() + ";" + entity.getChunk().getZ() + ";" + entity.getWorld().getName() + ";" + entity.getX() + ";" + entity.getY() + ";" + entity.getZ() + ";" + type.name();
 	}

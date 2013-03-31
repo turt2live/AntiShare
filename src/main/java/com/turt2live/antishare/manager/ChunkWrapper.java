@@ -29,7 +29,6 @@ import com.turt2live.antishare.blocks.io.ASRegion;
 import com.turt2live.antishare.blocks.io.ASRegion.BlockInfo;
 import com.turt2live.antishare.blocks.io.LegacyBlockIO;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
-import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 import com.turt2live.materials.MaterialAPI;
 
 /**
@@ -284,7 +283,7 @@ public class ChunkWrapper{
 		}
 		World world = plugin.getServer().getWorld(this.world);
 		if(!noBlockFile){
-			ASRegion region = new ASRegion();
+			ASRegion region = new ASRegion(false);
 			try{
 				region.prepare(blockFile, true);
 				for(String string : creativeBlocks){
@@ -305,19 +304,27 @@ public class ChunkWrapper{
 			}
 		}
 		if(!noEntityFile){
-			WrappedEnhancedConfiguration entities = new WrappedEnhancedConfiguration(entityFile, plugin);
-			entities.load();
-			entities.clearFile();
-			for(String s : this.adventureEntities){
-				//save(s, GameMode.ADVENTURE, entities, false);
+			ASRegion region = new ASRegion(true);
+			try{
+				region.prepare(entityFile, true);
+				for(String s : this.adventureEntities){
+					Location location = LegacyBlockIO.locationFromString(world, s);
+					EntityType type = LegacyBlockIO.entityFromString(s);
+					region.write(location, GameMode.ADVENTURE, type);
+				}
+				for(String s : this.creativeEntities){
+					Location location = LegacyBlockIO.locationFromString(world, s);
+					EntityType type = LegacyBlockIO.entityFromString(s);
+					region.write(location, GameMode.CREATIVE, type);
+				}
+				for(String s : this.survivalEntities){
+					Location location = LegacyBlockIO.locationFromString(world, s);
+					EntityType type = LegacyBlockIO.entityFromString(s);
+					region.write(location, GameMode.SURVIVAL, type);
+				}
+			}catch(IOException e){
+				e.printStackTrace();
 			}
-			for(String s : this.creativeEntities){
-				//save(s, GameMode.CREATIVE, entities, false);
-			}
-			for(String s : this.survivalEntities){
-				//save(s, GameMode.SURVIVAL, entities, false);
-			}
-			entities.save();
 			if(clear){
 				this.adventureBlocks.clear();
 				this.adventureEntities.clear();
@@ -370,7 +377,7 @@ public class ChunkWrapper{
 			plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-world", w));
 			return;
 		}
-		ASRegion region = new ASRegion();
+		ASRegion region = new ASRegion(!isBlock);
 		try{
 			region.prepare(file, false);
 			if(isBlock){
@@ -382,6 +389,11 @@ public class ChunkWrapper{
 						block = info.location.getBlock();
 					}
 					addBlock(info.gamemode, block);
+				}
+			}else{
+				BlockInfo info = null;
+				while((info = region.getNext(bWorld)) != null){
+					addEntity(info.gamemode, info.location, info.entity);
 				}
 			}
 			region.close();

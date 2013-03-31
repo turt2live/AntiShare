@@ -21,6 +21,15 @@ public class LegacyBlockIO{
 		return new Location(world, Integer.parseInt(parts[3]), Integer.parseInt(parts[4]), Integer.parseInt(parts[5]));
 	}
 
+	public static EntityType entityFromString(String string){
+		String[] parts = string.split(";");
+		EntityType e = null;
+		try{
+			e = EntityType.fromName(parts[6]);
+		}catch(Exception ex){}
+		return e;
+	}
+
 	// TODO
 	public void uselessloadREMOVEME(boolean isBlock, File dir){
 		//		File file = new File(dir, chunkX + "." + chunkZ + "." + world + ".yml");
