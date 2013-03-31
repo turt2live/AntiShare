@@ -13,16 +13,31 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.manager.ChunkWrapper;
 
-// TODO: Document
+/**
+ * Legacy support class for block/entity operations
+ * 
+ * @author turt2live
+ */
 public class LegacyBlockIO{
 
 	@Deprecated
+	/**
+	 * Loads a location from a string
+	 * @param world the world
+	 * @param string the string
+	 * @return a location
+	 */
 	public static Location locationFromString(World world, String string){
 		String[] parts = string.split(";");
 		return new Location(world, Integer.parseInt(parts[3]), Integer.parseInt(parts[4]), Integer.parseInt(parts[5]));
 	}
 
 	@Deprecated
+	/**
+	 * Loads an EntityType from string
+	 * @param string the string
+	 * @return an entity type, or null if not found
+	 */
 	public static EntityType entityFromString(String string){
 		String[] parts = string.split(";");
 		EntityType e = null;
@@ -32,6 +47,13 @@ public class LegacyBlockIO{
 		return e;
 	}
 
+	/**
+	 * Loads a YAML-Styled block/entity file (Pre-5.4.0)
+	 * 
+	 * @param isBlock true for block file, false otherwise
+	 * @param file the file to load
+	 * @param wrapper the wrapper to load into
+	 */
 	public static void load(boolean isBlock, File file, ChunkWrapper wrapper){
 		AntiShare plugin = AntiShare.p;
 		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
