@@ -65,9 +65,11 @@ public class ChunkWrapper{
 
 		if(blockFile.exists()){
 			LegacyBlockIO.load(true, blockFile, this);
+			blockFile.delete();
 		}
 		if(entityFile.exists()){
 			LegacyBlockIO.load(false, entityFile, this);
+			entityFile.delete();
 		}
 	}
 
