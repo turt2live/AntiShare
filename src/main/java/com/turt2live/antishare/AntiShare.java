@@ -509,21 +509,21 @@ public class AntiShare extends PluginWrapper{
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly){
 		if(target != null){
-			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
-				return true;
-			}
 			if(hasPermission(player, allowPermission + "." + target)){
 				return false;
+			}
+			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
+				return true;
 			}
 		}
 		if(specialOnly){
 			return false;
 		}
-		if(denyPermission != null && hasPermission(player, denyPermission)){
-			return true;
-		}
 		if(hasPermission(player, allowPermission)){
 			return false;
+		}
+		if(denyPermission != null && hasPermission(player, denyPermission)){
+			return true;
 		}
 		if(GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()){
 			if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) || hasPermission(player, PermissionNodes.AFFECT_ADVENTURE)){
