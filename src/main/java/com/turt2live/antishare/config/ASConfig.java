@@ -110,7 +110,7 @@ public class ASConfig{
 		}
 	}
 
-	public final ASMaterialList blockBreak, blockPlace, death, pickup, drop, use, craft, trackedCreative, trackedSurvival, trackedAdventure, eat;
+	public final ASMaterialList blockBreak, blockPlace, death, pickup, drop, use, interact, craft, trackedCreative, trackedSurvival, trackedAdventure, eat;
 	public final List<String> commands;
 	public final List<EntityType> interactMobs, attackMobs, craftedMobs;
 	public final boolean adventureEqCreative, perWorldInventories, updateChecker, magicSpells, logBlockSpam, potions, thrownPotions;
@@ -135,6 +135,7 @@ public class ASConfig{
 		pickup = new ASMaterialList(config.getList("lists.pickup", p.getConfig().getList("lists.pickup")));
 		drop = new ASMaterialList(config.getList("lists.drop", p.getConfig().getList("lists.drop")));
 		use = new ASMaterialList(config.getList("lists.use", p.getConfig().getList("lists.use")));
+		interact = new ASMaterialList(config.getList("lists.interact", p.getConfig().getList("lists.interact")));
 		eat = new ASMaterialList(config.getList("lists.eat", p.getConfig().getList("lists.eat")));
 		craft = new ASMaterialList(config.getList("lists.crafting", p.getConfig().getList("lists.crafting")));
 		trackedCreative = new ASMaterialList(config.getList("tracking.creative", p.getConfig().getList("tracking.creative")));

@@ -70,7 +70,8 @@ public class ConfigConvert{
 		c.set("lists.death", convertList(o.getString("blocked-lists.dropped-items-on-death")));
 		c.set("lists.pickup", convertList(o.getString("blocked-lists.picked-up-items")));
 		c.set("lists.drop", convertList(o.getString("blocked-lists.dropped-items")));
-		c.set("lists.use", merge(o.getString("blocked-lists.right-click"), o.getString("blocked-lists.use-items")));
+		c.set("lists.use", convertList(o.getString("blocked-lists.use-items")));
+		c.set("lists.interact", convertList(o.getString("blocked-lists.right-click")));
 		c.set("lists.commands", convertList(o.getString("blocked-lists.commands")));
 		c.set("lists.attack-mobs", convertList(o.getString("blocked-lists.mobs")));
 		c.set("lists.interact-mobs", convertList(o.getString("blocked-lists.right-click-mobs")));
@@ -147,16 +148,6 @@ public class ConfigConvert{
 		p.getLogger().warning("=========================");
 		p.getLogger().warning(p.getMessages().getMessage("configuration-update"));
 		p.getLogger().warning("=========================");
-	}
-
-	private static List<String> merge(String s1, String s2){
-		if(s1 == null || s2 == null){
-			return null;
-		}
-		List<String> l = new ArrayList<String>();
-		l.addAll(convertList(s1));
-		l.addAll(convertList(s2));
-		return l;
 	}
 
 	private static List<String> convertList(String raw){
