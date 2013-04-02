@@ -266,10 +266,10 @@ permissions:
             AntiShare.deny.eat: true
     AntiShare.deny.eat:
         description: Denies food
-        default: op
+        default: false
     AntiShare.deny.create:
         description: Denies mob creation
-        default: op
+        default: false
     AntiShare.deny.block_place:
         description: Denies block place
         default: false
