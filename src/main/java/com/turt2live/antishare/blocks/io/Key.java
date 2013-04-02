@@ -2,6 +2,7 @@ package com.turt2live.antishare.blocks.io;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 
 /**
@@ -74,6 +75,16 @@ public class Key{
 		this.y = y;
 		this.z = z;
 		this.gamemode = gamemode;
+	}
+
+	/**
+	 * Converts the position data to a location
+	 * 
+	 * @param world the world, can be null
+	 * @return the location
+	 */
+	public Location toLocation(World world){
+		return new Location(world, x, y, z);
 	}
 
 	@Override

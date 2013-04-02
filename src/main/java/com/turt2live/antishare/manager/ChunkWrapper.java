@@ -26,7 +26,6 @@ import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.blocks.io.ASRegion;
-import com.turt2live.antishare.blocks.io.ASRegion.EntryInfo;
 import com.turt2live.antishare.blocks.io.Key;
 import com.turt2live.antishare.blocks.io.LegacyBlockIO;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
@@ -354,19 +353,20 @@ public class ChunkWrapper{
 		try{
 			region.prepare(file, false);
 			if(isBlock){
-				EntryInfo info = null;
+				Key info = null;
 				while((info = region.getNext(bWorld)) != null){
-					Block block = info.location.getBlock();
+					Location loc = info.toLocation(bWorld);
+					Block block = loc.getBlock();
 					if(block == null){
-						info.location.getChunk().load();
-						block = info.location.getBlock();
+						loc.getChunk().load();
+						block = loc.getBlock();
 					}
 					addBlock(info.gamemode, block);
 				}
 			}else{
-				EntryInfo info = null;
+				Key info = null;
 				while((info = region.getNext(bWorld)) != null){
-					addEntity(info.gamemode, info.location, info.entity);
+					addEntity(info.gamemode, info.toLocation(bWorld), info.entity);
 				}
 			}
 			region.close();

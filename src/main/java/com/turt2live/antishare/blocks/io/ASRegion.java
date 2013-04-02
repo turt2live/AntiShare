@@ -31,42 +31,6 @@ import org.bukkit.entity.EntityType;
  */
 public class ASRegion{
 
-	/**
-	 * Information class
-	 * 
-	 * @author turt2live
-	 */
-	public static class EntryInfo{
-		/**
-		 * Location of object (in world)
-		 */
-		public final Location location;
-		/**
-		 * Game mode of object
-		 */
-		public final GameMode gamemode;
-		/**
-		 * Raw Game Mode byte
-		 */
-		public final byte rawGM;
-		/**
-		 * Raw entity byte
-		 */
-		public final byte rawEntity;
-		/**
-		 * Entity type of the object, can be null
-		 */
-		public final EntityType entity;
-
-		private EntryInfo(Location location, GameMode gamemode, EntityType type, byte raw, byte rawEntity){
-			this.location = location;
-			this.gamemode = gamemode;
-			this.rawGM = raw;
-			this.rawEntity = rawEntity;
-			this.entity = type;
-		}
-	}
-
 	public static final Pattern SPLIT_PATTERN = Pattern.compile(" ");
 	public static final byte CREATIVE_BYTE = 0x1;
 	public static final byte SURVIVAL_BYTE = 0x2;
@@ -231,7 +195,7 @@ public class ASRegion{
 	 * @return the entry (a block) or null if EOF has been reached / nothing was read
 	 * @throws IOException thrown if something happens
 	 */
-	public EntryInfo getNext(World world) throws IOException{
+	public Key getNext(World world) throws IOException{
 		int read = channel.read(buffer);
 		if(read <= 0){
 			return null;
@@ -241,7 +205,7 @@ public class ASRegion{
 		byte bite = buffer.get();
 		GameMode value = byteToGamemode(bite);
 		buffer.clear();
-		return new EntryInfo(new Location(world, x, y, z), value, null, bite, (byte) 0x0);
+		return new Key(x, y, z, value);
 	}
 
 	/**
@@ -251,7 +215,7 @@ public class ASRegion{
 	 * @return the entry (an entity) or null if EOF has been reached / nothing was read
 	 * @throws IOException thrown if something happens
 	 */
-	public EntryInfo getNextEntity(World world) throws IOException{
+	public Key getNextEntity(World world) throws IOException{
 		int read = channel.read(buffer);
 		if(read <= 0){
 			return null;
@@ -262,7 +226,7 @@ public class ASRegion{
 		GameMode value = byteToGamemode(bite);
 		EntityType entity = byteToEntity(biteEntity);
 		buffer.clear();
-		return new EntryInfo(new Location(world, x, y, z), value, entity, bite, biteEntity);
+		return new Key(x, y, z, value, entity);
 	}
 
 	/**
