@@ -24,7 +24,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.materials.MaterialAPI;
@@ -143,7 +142,7 @@ public class BlockManager{
 	 */
 	public void loadChunk(Chunk chunk){
 		String str = chunkToString(chunk);
-		ChunkWrapper wrapper = new ChunkWrapper(this, chunk, blocksDir, entitiesDir);
+		ChunkWrapper wrapper = new ChunkWrapper(chunk, blocksDir, entitiesDir);
 		wrapper.load();
 		wrappers.put(str, wrapper);
 	}
@@ -363,25 +362,6 @@ public class BlockManager{
 	@Deprecated
 	String chunkToString(Chunk chunk){
 		return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
-	}
-
-	// TODO REPLACE
-	@Deprecated
-	String blockToString(Block block){
-		return block.getChunk().getX() + ";" + block.getChunk().getZ() + ";" + block.getWorld().getName() + ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
-	}
-
-	// TODO REPLACE
-	@Deprecated
-	String entityToString(Entity entity){
-		Location location = entity.getLocation();
-		return location.getChunk().getX() + ";" + location.getChunk().getZ() + ";" + location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + entity.getType().name();
-	}
-
-	// TODO REPLACE
-	@Deprecated
-	String entityToString(Location entity, EntityType type){
-		return entity.getChunk().getX() + ";" + entity.getChunk().getZ() + ";" + entity.getWorld().getName() + ";" + entity.getX() + ";" + entity.getY() + ";" + entity.getZ() + ";" + type.name();
 	}
 
 	/**

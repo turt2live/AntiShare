@@ -169,10 +169,23 @@ public class ASRegion{
 	 * @throws IOException thrown if something happens
 	 */
 	public void write(Location location, GameMode gamemode) throws IOException{
+		write(location.getBlockX(), location.getBlockY(), location.getBlockZ(), gamemode);
+	}
+
+	/**
+	 * Writes a block location to file
+	 * 
+	 * @param x the x location
+	 * @param y the y location
+	 * @param z the z location
+	 * @param gamemode the gamemode to write
+	 * @throws IOException thrown if something happens
+	 */
+	public void write(int x, int y, int z, GameMode gamemode) throws IOException{
 		buffer.clear();
-		buffer.putInt(location.getBlockX());
-		buffer.putInt(location.getBlockY());
-		buffer.putInt(location.getBlockZ());
+		buffer.putInt(x);
+		buffer.putInt(y);
+		buffer.putInt(z);
 		buffer.put(gamemodeToByte(gamemode));
 		buffer.flip();
 		channel.write(buffer);
@@ -187,10 +200,24 @@ public class ASRegion{
 	 * @throws IOException thrown if something happens
 	 */
 	public void write(Location location, GameMode gamemode, EntityType entity) throws IOException{
+		write(location.getBlockX(), location.getBlockY(), location.getBlockZ(), gamemode, entity);
+	}
+
+	/**
+	 * Writes an entity to file
+	 * 
+	 * @param x the x location
+	 * @param y the y location
+	 * @param z the z location
+	 * @param gamemode the gamemode of the entity
+	 * @param entity the entity type of the entity
+	 * @throws IOException thrown if something happens
+	 */
+	public void write(int x, int y, int z, GameMode gamemode, EntityType entity) throws IOException{
 		buffer.clear();
-		buffer.putInt(location.getBlockX());
-		buffer.putInt(location.getBlockY());
-		buffer.putInt(location.getBlockZ());
+		buffer.putInt(x);
+		buffer.putInt(y);
+		buffer.putInt(z);
 		buffer.put(gamemodeToByte(gamemode));
 		buffer.put(entityToByte(entity));
 		buffer.flip();

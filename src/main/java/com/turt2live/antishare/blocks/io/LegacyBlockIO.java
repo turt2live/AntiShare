@@ -5,7 +5,6 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 
@@ -19,33 +18,6 @@ import com.turt2live.antishare.manager.ChunkWrapper;
  * @author turt2live
  */
 public class LegacyBlockIO{
-
-	@Deprecated
-	/**
-	 * Loads a location from a string
-	 * @param world the world
-	 * @param string the string
-	 * @return a location
-	 */
-	public static Location locationFromString(World world, String string){
-		String[] parts = string.split(";");
-		return new Location(world, Integer.parseInt(parts[3]), Integer.parseInt(parts[4]), Integer.parseInt(parts[5]));
-	}
-
-	@Deprecated
-	/**
-	 * Loads an EntityType from string
-	 * @param string the string
-	 * @return an entity type, or null if not found
-	 */
-	public static EntityType entityFromString(String string){
-		String[] parts = string.split(";");
-		EntityType e = null;
-		try{
-			e = EntityType.fromName(parts[6]);
-		}catch(Exception ex){}
-		return e;
-	}
 
 	/**
 	 * Loads a YAML-Styled block/entity file (Pre-5.4.0)
