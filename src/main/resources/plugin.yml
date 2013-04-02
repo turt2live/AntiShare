@@ -153,6 +153,7 @@ permissions:
             AntiShare.regions.place: true
             AntiShare.regions.break: true
             AntiShare.regions.use_item: true
+            AntiShare.regions.interact_item: true
             AntiShare.regions.list: true
             AntiShare.regions.attack_mobs: true
             AntiShare.regions.attack_players: true
@@ -189,6 +190,9 @@ permissions:
     AntiShare.regions.use_item:
         description: Allows the target to use items between regions
         default: op
+    AntiShare.regions.interact_item:
+        description: Allows the target to interact with items between regions
+        default: op
     AntiShare.regions.list:
         description: Allows the target to list and lookup regions
         default: op
@@ -199,6 +203,7 @@ permissions:
             AntiShare.allow.block_place: true
             AntiShare.allow.block_break: true
             AntiShare.allow.use_item: true
+            AntiShare.allow.interact_item: true
             AntiShare.allow.commands: true
             AntiShare.allow.pickup_item: true
             AntiShare.allow.drop_item: true
@@ -221,6 +226,9 @@ permissions:
         default: op
     AntiShare.allow.use_item:
         description: Allows item use
+        default: op
+    AntiShare.allow.interact_item:
+        description: Allows item interaction
         default: op
     AntiShare.allow.commands:
         description: Allows item use
@@ -247,6 +255,7 @@ permissions:
             AntiShare.deny.block_place: true
             AntiShare.deny.block_break: true
             AntiShare.deny.use_item: true
+            AntiShare.deny.interact_item: true
             AntiShare.deny.commands: true
             AntiShare.deny.pickup_item: true
             AntiShare.deny.drop_item: true
@@ -269,6 +278,9 @@ permissions:
         default: false
     AntiShare.deny.use_item:
         description: Denies item use
+        default: false
+    AntiShare.deny.interact_item:
+        description: Denies item interaction
         default: false
     AntiShare.deny.commands:
         description: Denies item use

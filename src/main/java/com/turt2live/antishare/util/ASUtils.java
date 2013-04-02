@@ -525,6 +525,51 @@ public class ASUtils{
 		if(list.has(item)){
 			illegal = true;
 		}
+		if(!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())){
+			illegal = false;
+		}
+		if(target != null && permissions.region != null && !AntiShare.hasPermission(player, permissions.region)){
+			if(sourceRegion != targetRegion){
+				illegal = true;
+				region = true;
+			}
+		}
+		return new ProtectionInformation(illegal, region, sourceRegion, targetRegion);
+	}
+
+	/**
+	 * Used to determine if something is blocked
+	 * 
+	 * @param player the player, this is the source location
+	 * @param item the item in question
+	 * @param target the target block
+	 * @param list the list to check
+	 * @param permissions the permissions to use
+	 * @param config the configuration object to use
+	 * @return protection information
+	 */
+	public static ProtectionInformation isBlocked(Player player, ItemStack item, Location target, ASMaterialList list, PermissionPackage permissions, ASConfig config){
+		if(player == null || list == null || permissions == null){
+			throw new IllegalArgumentException("Null arguments are not allowed");
+		}
+		boolean illegal = false, region = false, isPotion = false, isThrownPotion = false;
+		AntiShare p = AntiShare.p;
+		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
+		Region targetRegion = p.getRegionManager().getRegion(target);
+		if(list.has(item)){
+			illegal = true;
+		}
+		if(item.getType() == Material.POTION){
+			isPotion = true;
+			if(item.getDurability() > 32000){
+				isThrownPotion = true;
+			}
+		}
+		if(isThrownPotion && config.thrownPotions){
+			illegal = true;
+		}else if(isPotion && config.potions){
+			illegal = true;
+		}
 
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())){
 			illegal = false;

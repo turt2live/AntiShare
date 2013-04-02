@@ -662,7 +662,7 @@ public class ASListener implements Listener{
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
 		boolean illegal = false;
-		boolean isPotion = false, isThrownPotion = false, isRegion = false;
+		boolean isUse = true, isRegion = false;
 		Location blockLocation = block.getLocation();
 		ASConfig c = configFor(blockLocation);
 		ItemStack hand = player.getItemInHand();
@@ -719,35 +719,13 @@ public class ASListener implements Listener{
 			}
 		}
 
-		if(hand.getType() == Material.POTION){
-			isPotion = true;
-			if(hand.getDurability() > 32000){
-				isThrownPotion = true;
-			}
-		}
-
 		// TODO: Logic split
-		if(c.use.has(block) || c.use.has(hand)){
-			illegal = true;
-		}
-		if(isThrownPotion && c.thrownPotions){
-			illegal = true;
-		}else if(isPotion && c.potions){
-			illegal = true;
-		}
-		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, block.getType())
-				|| !plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
-			illegal = false;
-		}
+		ProtectionInformation information = ASUtils.isBlocked(player, hand, blockLocation, c.use, PermissionNodes.PACK_USE, c);
+		illegal = information.illegal;
+		isRegion = information.isRegion;
+		Region blockRegion = information.targetRegion;
 
-		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
-		Region blockRegion = plugin.getRegionManager().getRegion(blockLocation);
-		if(!AntiShare.hasPermission(player, PermissionNodes.REGION_USE)){
-			if(playerRegion != blockRegion){
-				isRegion = true;
-				illegal = true;
-			}
-		}
+		// TODO: Apply interact list
 
 		if(illegal){
 			event.setCancelled(true);

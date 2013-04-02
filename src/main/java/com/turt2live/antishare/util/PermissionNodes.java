@@ -43,6 +43,7 @@ public class PermissionNodes{
 	public static final String ALLOW_PICKUP = "AntiShare.allow.pickup_item";
 	public static final String ALLOW_DROP = "AntiShare.allow.drop_item";
 	public static final String ALLOW_USE = "AntiShare.allow.use_item";
+	public static final String ALLOW_INTERACT = "AntiShare.allow.interact_item";
 	public static final String ALLOW_COMMANDS = "AntiShare.allow.commands";
 	public static final String ALLOW_COMBAT_PLAYERS = "AntiShare.allow.hit_players";
 	public static final String ALLOW_COMBAT_MOBS = "AntiShare.allow.hit_mobs";
@@ -56,6 +57,7 @@ public class PermissionNodes{
 	public static final String DENY_PICKUP = "AntiShare.deny.pickup_item";
 	public static final String DENY_DROP = "AntiShare.deny.drop_item";
 	public static final String DENY_USE = "AntiShare.deny.use_item";
+	public static final String DENY_INTERACT = "AntiShare.deny.interact_item";
 	public static final String DENY_COMMANDS = "AntiShare.deny.commands";
 	public static final String DENY_COMBAT_PLAYERS = "AntiShare.deny.hit_players";
 	public static final String DENY_COMBAT_MOBS = "AntiShare.deny.hit_mobs";
@@ -99,6 +101,7 @@ public class PermissionNodes{
 	public static final String REGION_ATTACK_MOBS = "AntiShare.regions.attack_mobs";
 	public static final String REGION_ATTACK_PLAYERS = "AntiShare.regions.attack_players";
 	public static final String REGION_USE = "AntiShare.regions.use_item";
+	public static final String REGION_INTERACT = "AntiShare.regions.interact_item";
 	public static final String REGION_LIST = "AntiShare.regions.list";
 
 	// World Split Nodes
@@ -119,6 +122,7 @@ public class PermissionNodes{
 	public static final PermissionPackage PACK_PICKUP = new PermissionPackage(ALLOW_PICKUP, DENY_PICKUP, REGION_PICKUP);
 	public static final PermissionPackage PACK_DROP = new PermissionPackage(ALLOW_DROP, DENY_DROP, REGION_THROW);
 	public static final PermissionPackage PACK_USE = new PermissionPackage(ALLOW_USE, DENY_USE, REGION_USE);
+	public static final PermissionPackage PACK_INTERACT = new PermissionPackage(ALLOW_INTERACT, DENY_INTERACT, REGION_INTERACT);
 	public static final PermissionPackage PACK_COMMANDS = new PermissionPackage(ALLOW_COMMANDS, DENY_COMMANDS, null);
 	public static final PermissionPackage PACK_COMBAT_PLAYERS = new PermissionPackage(ALLOW_COMBAT_PLAYERS, DENY_COMBAT_PLAYERS, REGION_ATTACK_PLAYERS);
 	public static final PermissionPackage PACK_COMBAT_MOBS = new PermissionPackage(ALLOW_COMBAT_MOBS, DENY_COMBAT_MOBS, REGION_ATTACK_MOBS);
