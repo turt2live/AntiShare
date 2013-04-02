@@ -33,7 +33,6 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-//TODO: Schedule for rewrite
 public class BlockManager{
 
 	static class ASMaterial{
@@ -358,8 +357,6 @@ public class BlockManager{
 		});
 	}
 
-	// TODO REPLACE
-	@Deprecated
 	String chunkToString(Chunk chunk){
 		return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
 	}
