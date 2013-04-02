@@ -34,11 +34,20 @@ lists:
     # Items creative players cannot drop
     drop:
     - all
-    # Items/blocks creative players cannot use/interact with
+    # Items/blocks creative players cannot use (such as flint and steel)
     use:
-    - storage minecart
-    - powered minecart 
     - tnt minecart
+    - sign
+    - flint and steel
+    - exp bottle
+    - monster egg
+    - lava bucket
+    - water bucket
+    - fireball
+    # Items/blocks creative players cannot right click (interact with)
+    interact:
+    - storage minecart
+    - powered minecart
     - hopper minecart
     - hopper
     - chest
@@ -49,13 +58,6 @@ lists:
     - jukebox
     - anvil
     - enchantment table
-    - sign
-    - flint and steel
-    - exp bottle
-    - monster egg
-    - lava bucket
-    - water bucket
-    - fireball
     - item frame
     # Items creative players cannot eat (potions, food, etc)
     eat:
