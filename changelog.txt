@@ -30,6 +30,7 @@ Since 5.3.0:
 - Inventories have been upgraded
 - Permissions have been fixed
 - Updated block management to use a much faster and smaller system
+- Updated block management to use less resources
 - Misc. Fixes:
     - Fixed region owner names not being loaded
     - Fixed cuboids not acting as expected
