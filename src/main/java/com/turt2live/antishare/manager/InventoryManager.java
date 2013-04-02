@@ -355,8 +355,6 @@ public class InventoryManager{
 		for(ASInventory inventory : inventories){
 			insert(player, inventory);
 		}
-
-		// TODO: Load temp?
 	}
 
 	/**
