@@ -173,7 +173,7 @@ public class SelfCompatibility{
 				new File(p.getDataFolder(), "fines.yml")
 		};
 
-		File backupFolder = new File(p.getDataFolder(), "5_3_0_Backup");
+		File backupFolder = new File(p.getDataFolder(), "AntiShare5.3.0");
 
 		for(File f : files){
 			if(f.exists()){
@@ -181,6 +181,18 @@ public class SelfCompatibility{
 					backupFolder.mkdirs();
 				}
 				f.renameTo(new File(backupFolder, f.getName()));
+			}
+		}
+
+		File config = new File(p.getDataFolder(), "config-backup.yml");
+		if(config.exists()){
+			if(!backupFolder.exists()){
+				backupFolder.mkdirs();
+			}
+			try{
+				ASUtils.copyFile(config, new File(backupFolder, "config.yml"));
+			}catch(IOException e){
+				e.printStackTrace();
 			}
 		}
 

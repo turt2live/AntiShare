@@ -45,7 +45,7 @@ public class ConfigConvert{
 		File original = new File(p.getDataFolder(), "config-backup-temp.yml");
 
 		try{
-			ASUtils.copyFile(config, new File(p.getDataFolder(), "config-5.3.0-backup.yml"));
+			ASUtils.copyFile(config, new File(p.getDataFolder(), "config-backup.yml"));
 			ASUtils.copyFile(config, original);
 		}catch(IOException e){
 			e.printStackTrace();
@@ -58,6 +58,7 @@ public class ConfigConvert{
 		o.load();
 
 		if(o.getString("other.version_string") != null){
+			original.delete();
 			return; // Already converted!
 		}
 
