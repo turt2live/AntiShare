@@ -246,6 +246,13 @@ public class AntiShare extends PluginWrapper{
 			getLogger().severe("**********************");
 		}
 
+		// PermissionsEx warning
+		if(getServer().getPluginManager().getPlugin("PermissionsEx") != null){
+			getLogger().severe("=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
+			getLogger().severe(messages.getMessage("permissionsex"));
+			getLogger().severe("=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
+		}
+
 		// Spam console
 		getLogger().info(messages.getMessage("enabled"));
 

@@ -650,9 +650,8 @@ public class ASListener implements Listener{
 		plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType());
 	}
 
-	// TODO: Rework logic
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onInteract(PlayerInteractEvent event){
+	public void onToolInteract(PlayerInteractEvent event){
 		org.bukkit.event.block.Action action = event.getAction();
 		switch (action){
 		case LEFT_CLICK_AIR:
@@ -661,10 +660,6 @@ public class ASListener implements Listener{
 		}
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
-		boolean illegal = false;
-		boolean isUse = true, isRegion = false;
-		Location blockLocation = block.getLocation();
-		ASConfig c = configFor(blockLocation);
 		ItemStack hand = player.getItemInHand();
 		if(hand == null){
 			hand = new ItemStack(Material.AIR);
@@ -718,14 +713,30 @@ public class ASListener implements Listener{
 				return;
 			}
 		}
+	}
 
-		// TODO: Logic split
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onUseInteract(PlayerInteractEvent event){
+		org.bukkit.event.block.Action action = event.getAction();
+		switch (action){
+		case LEFT_CLICK_AIR:
+		case RIGHT_CLICK_AIR:
+			return;
+		}
+		Player player = event.getPlayer();
+		Block block = event.getClickedBlock();
+		boolean illegal = false, isRegion = false;
+		Location blockLocation = block.getLocation();
+		ASConfig c = configFor(blockLocation);
+		ItemStack hand = player.getItemInHand();
+		if(hand == null){
+			hand = new ItemStack(Material.AIR);
+		}
+
 		ProtectionInformation information = ASUtils.isBlocked(player, hand, blockLocation, c.use, PermissionNodes.PACK_USE, c);
 		illegal = information.illegal;
 		isRegion = information.isRegion;
 		Region blockRegion = information.targetRegion;
-
-		// TODO: Apply interact list
 
 		if(illegal){
 			event.setCancelled(true);
@@ -740,10 +751,49 @@ public class ASListener implements Listener{
 		}
 
 		Action eventAction = Action.USE_SOMETHING;
-		String[] extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
+		String[] extra = new String[0];
 		if(isRegion){
 			eventAction = Action.REGION_USE_SOMETHING;
-			extra = new String[] {MaterialAPI.capitalize(hand.getType().name()), blockRegion == null ? plugin.getMessages().getMessage("wilderness") : blockRegion.getName()};
+			extra = new String[] {blockRegion == null ? plugin.getMessages().getMessage("wilderness") : blockRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType(), extra);
+	}
+
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onInteractInteract(PlayerInteractEvent event){
+		org.bukkit.event.block.Action action = event.getAction();
+		switch (action){
+		case LEFT_CLICK_AIR:
+		case RIGHT_CLICK_AIR:
+			return;
+		}
+		Player player = event.getPlayer();
+		Block block = event.getClickedBlock();
+		boolean illegal = false, isRegion = false;
+		ASConfig c = configFor(block.getLocation());
+
+		ProtectionInformation information = ASUtils.isBlocked(player, block, c.interact, PermissionNodes.PACK_USE);
+		illegal = information.illegal;
+		isRegion = information.isRegion;
+		Region blockRegion = information.targetRegion;
+
+		if(illegal){
+			event.setCancelled(true);
+			if(hasMobCatcher){
+				ItemStack trueHand = player.getItemInHand();
+				if(trueHand != null){
+					if(trueHand.getType() == Material.EGG || trueHand.getType() == Material.MONSTER_EGG){
+						trueHand.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
+					}
+				}
+			}
+		}
+
+		Action eventAction = Action.INTERACT_SOMETHING;
+		String[] extra = new String[0];
+		if(isRegion){
+			eventAction = Action.REGION_INTERACT_SOMETHING;
+			extra = new String[] {blockRegion == null ? plugin.getMessages().getMessage("wilderness") : blockRegion.getName()};
 		}
 		plugin.getMessages().notifyParties(player, eventAction, illegal, block.getType(), extra);
 	}
