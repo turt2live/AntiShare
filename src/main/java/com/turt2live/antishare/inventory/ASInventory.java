@@ -23,7 +23,7 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-public class ASInventory implements Cloneable{
+public class ASInventory implements Cloneable {
 
 	/**
 	 * Inventory type
