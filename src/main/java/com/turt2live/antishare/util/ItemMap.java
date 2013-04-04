@@ -23,6 +23,7 @@ import java.util.Map;
 import org.bukkit.Material;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.compatibility.SelfCompatibility;
 import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 import com.turt2live.materials.MaterialAPI;
 

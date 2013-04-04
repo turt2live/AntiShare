@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
+import com.turt2live.antishare.compatibility.SelfCompatibility;
 import com.turt2live.antishare.config.ASConfig;
 import com.turt2live.antishare.config.ConfigConvert;
 import com.turt2live.antishare.manager.BlockManager;
@@ -41,7 +42,6 @@ import com.turt2live.antishare.util.Action;
 import com.turt2live.antishare.util.GamemodeAbstraction;
 import com.turt2live.antishare.util.Messages;
 import com.turt2live.antishare.util.PermissionNodes;
-import com.turt2live.antishare.util.SelfCompatibility;
 import com.turt2live.antishare.util.UpdateChecker;
 import com.turt2live.metrics.EMetrics;
 import com.turt2live.metrics.graph.PieGraph;

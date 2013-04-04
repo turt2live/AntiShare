@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.util;
+package com.turt2live.antishare.compatibility;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -31,6 +31,9 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LegacyInventory;
+import com.turt2live.antishare.util.ASMaterialList;
+import com.turt2live.antishare.util.ASUtils;
+import com.turt2live.antishare.util.ItemMap;
 import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 
 /**

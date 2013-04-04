@@ -17,9 +17,9 @@ import java.util.List;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.compatibility.SelfCompatibility;
+import com.turt2live.antishare.compatibility.SelfCompatibility.FileType;
 import com.turt2live.antishare.util.ASUtils;
-import com.turt2live.antishare.util.SelfCompatibility;
-import com.turt2live.antishare.util.SelfCompatibility.FileType;
 import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
 /**
