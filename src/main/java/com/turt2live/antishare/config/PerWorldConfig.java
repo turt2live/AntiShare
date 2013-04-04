@@ -52,7 +52,7 @@ public class PerWorldConfig extends ASConfig{
 	}
 
 	PerWorldConfig(String world, EnhancedConfiguration config){
-		super(config);
+		super(null, config);
 		worldName = world;
 	}
 

@@ -196,7 +196,7 @@ public class AntiShare extends PluginWrapper{
 		}
 
 		// Start configuration
-		config = new ASConfig(getConfig());
+		config = new ASConfig(null, null);
 
 		// Start update checker - internal enabled state
 		UpdateChecker.start();
@@ -304,7 +304,7 @@ public class AntiShare extends PluginWrapper{
 	 */
 	public void reload(){
 		reloadConfig();
-		config = new ASConfig(getConfig());
+		config = new ASConfig(null, null);
 		messages.reload();
 		hooks.reload();
 		worldConfigs.reload();

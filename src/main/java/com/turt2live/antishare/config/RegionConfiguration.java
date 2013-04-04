@@ -40,17 +40,18 @@ public class RegionConfiguration extends ASConfig{
 		if(regionConfig.needsUpdate()){
 			regionConfig.saveDefaults();
 		}
+		EnhancedConfiguration worldConfig = plugin.getWorldConfigs().getConfig(region.getWorldName()).rawConfiguration;
 		regionConfig.load();
 		if(regionConfig.getBoolean("use-global")){
 			regionConfig = plugin.getConfig();
 		}else if(regionConfig.getBoolean("use-world")){
-			regionConfig = plugin.getWorldConfigs().getConfig(region.getWorldName()).rawConfiguration;
+			regionConfig = worldConfig;
 		}
-		return new RegionConfiguration(region, regionConfig);
+		return new RegionConfiguration(region, regionConfig, worldConfig);
 	}
 
-	RegionConfiguration(Region region, EnhancedConfiguration config){
-		super(config);
+	RegionConfiguration(Region region, EnhancedConfiguration config, EnhancedConfiguration world){
+		super(config, world);
 		this.region = region;
 	}
 

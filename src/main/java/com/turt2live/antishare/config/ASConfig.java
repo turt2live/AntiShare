@@ -125,67 +125,82 @@ public class ASConfig{
 
 	private AntiShare p = AntiShare.p;
 
-	public ASConfig(EnhancedConfiguration config){
-		rawConfiguration = config;
-		potions = config.getBoolean("lists.no-potions", p.getConfig().getBoolean("lists.no-potions"));
-		thrownPotions = config.getBoolean("lists.no-thrown-potions", p.getConfig().getBoolean("lists.no-thrown-potions"));
-		blockBreak = new ASMaterialList(config.getList("lists.break", p.getConfig().getList("lists.break")));
-		blockPlace = new ASMaterialList(config.getList("lists.place", p.getConfig().getList("lists.place")));
-		death = new ASMaterialList(config.getList("lists.death", p.getConfig().getList("lists.death")));
-		pickup = new ASMaterialList(config.getList("lists.pickup", p.getConfig().getList("lists.pickup")));
-		drop = new ASMaterialList(config.getList("lists.drop", p.getConfig().getList("lists.drop")));
-		use = new ASMaterialList(config.getList("lists.use", p.getConfig().getList("lists.use")));
-		interact = new ASMaterialList(config.getList("lists.interact", p.getConfig().getList("lists.interact")));
-		eat = new ASMaterialList(config.getList("lists.eat", p.getConfig().getList("lists.eat")));
-		craft = new ASMaterialList(config.getList("lists.crafting", p.getConfig().getList("lists.crafting")));
-		trackedCreative = new ASMaterialList(config.getList("tracking.creative", p.getConfig().getList("tracking.creative")));
-		trackedSurvival = new ASMaterialList(config.getList("tracking.survival", p.getConfig().getList("tracking.survival")));
-		trackedAdventure = new ASMaterialList(config.getList("tracking.adventure", p.getConfig().getList("tracking.adventure")));
-		commands = toStringList(config.getList("lists.commands", p.getConfig().getList("lists.commands")));
-		interactMobs = stringToEntityList(config.getList("lists.interact-mobs", p.getConfig().getList("lists.interact-mobs")));
-		attackMobs = stringToEntityList(config.getList("lists.attack-mobs", p.getConfig().getList("lists.attack-mobs")));
-		craftedMobs = stringToEntityList(config.getList("lists.craft-mob", p.getConfig().getList("lists.craft-mob")));
-		adventureEqCreative = config.getBoolean("settings.adventure-is-creative", p.getConfig().getBoolean("settings.adventure-is-creative"));
-		perWorldInventories = config.getBoolean("settings.use-per-world-inventories", p.getConfig().getBoolean("settings.use-per-world-inventories"));
-		magicSpells = config.getBoolean("hooks.magicspells.block-creative", p.getConfig().getBoolean("hooks.magicspells.block-creative"));
-		logBlockSpam = config.getBoolean("hooks.logblock.stop-spam", p.getConfig().getBoolean("settings.logblock.stop-spam"));
-		updateChecker = !config.getBoolean("other.ignore-updates", p.getConfig().getBoolean("other.ignore-updates"));
-		inventoryCleanupSettings = new InventoryCleanupSettings(config.getBoolean("settings.cleanup.inventories.enabled", p.getConfig().getBoolean("settings.cleanup.inventories.enabled")),
-				!config.getString("settings.cleanup.inventories.method", p.getConfig().getString("settings.cleanup.inventories.method")).equalsIgnoreCase("delete"),
-				config.getInt("settings.cleanup.inventories.after", p.getConfig().getInt("settings.cleanup.inventories.after")),
-				config.getBoolean("settings.cleanup.inventories.remove-old-worlds", p.getConfig().getBoolean("settings.cleanup.inventories.remove-old-worlds")));
-		cooldownSettings = new CooldownSettings(config.getBoolean("settings.cooldown.enabled", p.getConfig().getBoolean("settings.cooldown.enabled")),
-				config.getInt("settings.cooldown.wait-time-seconds", p.getConfig().getInt("settings.cooldown.wait-time-seconds")));
-		naturalSettings = new NaturalSettings(config.getBoolean("settings.natural-protection.gamemode-spreading", p.getConfig().getBoolean("settings.natural-protection.gamemode-spreading")),
-				config.getBoolean("settings.natural-protection.allow-mismatch-gamemode", p.getConfig().getBoolean("settings.natural-protection.allow-mismatch-gamemode")),
-				config.getBoolean("settings.natural-protection.break-as-gamemode.pistons", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.pistons")),
-				config.getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks")),
-				config.getBoolean("settings.natural-protection.break-as-gamemode.water", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.water")),
-				config.getBoolean("settings.natural-protection.break-as-gamemode.blown-up", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.blown-up")),
-				config.getBoolean("settings.natural-protection.empty-inventories", p.getConfig().getBoolean("settings.natural-protection.empty-inventories")),
-				config.getBoolean("settings.natural-protection.remove-attached-blocks", p.getConfig().getBoolean("settings.natural-protection.remove-attached-blocks")),
-				config.getBoolean("settings.natural-protection.break-as-gamemode.falling-blocks", p.getConfig().getBoolean("settings.natural-protection.break-as-gamemode.falling-blocks")));
-		survivalBreakCreative = new InteractionSettings(config.getBoolean("interaction.survival-breaking-creative.deny", p.getConfig().getBoolean("interaction.survival-breaking-creative.deny")),
-				config.getBoolean("interaction.survival-breaking-creative.drop-items", p.getConfig().getBoolean("interaction.survival-breaking-creative.drop-items")));
-		creativeBreakSurvival = new InteractionSettings(config.getBoolean("interaction.creative-breaking-survival.deny", p.getConfig().getBoolean("interaction.creative-breaking-survival.deny")),
-				config.getBoolean("interaction.creative-breaking-survival.drop-items", p.getConfig().getBoolean("interaction.creative-breaking-survival.drop-items")));
-		survivalBreakAdventure = new InteractionSettings(config.getBoolean("interaction.survival-breaking-adventure.deny", p.getConfig().getBoolean("interaction.survival-breaking-adventure.deny")),
-				config.getBoolean("interaction.survival-breaking-adventure.drop-items", p.getConfig().getBoolean("interaction.survival-breaking-adventure.drop-items")));
-		adventureBreakCreative = new InteractionSettings(config.getBoolean("interaction.adventure-breaking-creative.deny", p.getConfig().getBoolean("interaction.adventure-breaking-creative.deny")),
-				config.getBoolean("interaction.adventure-breaking-creative.drop-items", p.getConfig().getBoolean("interaction.adventure-breaking-creative.drop-items")));
-		adventureBreakSurvival = new InteractionSettings(config.getBoolean("interaction.adventure-breaking-survival.deny", p.getConfig().getBoolean("interaction.adventure-breaking-survival.deny")),
-				config.getBoolean("interaction.adventure-breaking-survival.drop-items", p.getConfig().getBoolean("interaction.adventure-breaking-survival.drop-items")));
-		creativeBreakAdventure = new InteractionSettings(config.getBoolean("interaction.creative-breaking-adventure.deny", p.getConfig().getBoolean("interaction.creative-breaking-adventure.deny")),
-				config.getBoolean("interaction.creative-breaking-adventure.drop-items", p.getConfig().getBoolean("interaction.creative-breaking-adventure.drop-items")));
-		gamemodeChangeSettings = new GameModeChangeSettings(config.getBoolean("settings.gamemode-change.change-level", p.getConfig().getBoolean("settings.gamemode-change.change-level")),
-				config.getBoolean("settings.gamemode-change.change-economy-balance", p.getConfig().getBoolean("settings.gamemode-change.change-economy-balance")),
-				config.getBoolean("settings.gamemode-change.change-inventory", p.getConfig().getBoolean("settings.gamemode-change.change-inventory")),
-				config.getBoolean("settings.gamemode-change.change-ender-chest", p.getConfig().getBoolean("settings.gamemode-change.change-ender-chest")));
-		notificationSettings = new NotifySettings(config.getBoolean("settings.notify.use", p.getConfig().getBoolean("settings.notify.use")),
-				config.getBoolean("settings.notify.with-permission", p.getConfig().getBoolean("settings.notify.with-permission")),
-				config.getBoolean("settings.notify.console", p.getConfig().getBoolean("settings.notify.console")));
-		features = new FeatureSettings(config.getBoolean("settings.features.use-inventories", p.getConfig().getBoolean("settings.features.use-inventories")),
-				config.getBoolean("settings.features.use-fines-rewards", p.getConfig().getBoolean("settings.features.use-fines-rewards")));
+	public ASConfig(EnhancedConfiguration regionConfig, EnhancedConfiguration worldConfig){
+		LayeredConfig layer = new LayeredConfig(regionConfig, worldConfig, p.getConfig());
+		layer.loadAll();
+		rawConfiguration = regionConfig == null ? (worldConfig == null ? p.getConfig() : worldConfig) : regionConfig;
+		potions = (layer.configFor("lists.no-potions", false)).getBoolean("lists.no-potions");
+		thrownPotions = (layer.configFor("lists.no-thrown-potions", false)).getBoolean("lists.no-thrown-potions");
+		blockBreak = new ASMaterialList((layer.configFor("lists.break", true)).getList("lists.break"));
+		blockPlace = new ASMaterialList((layer.configFor("lists.place", true)).getList("lists.place"));
+		death = new ASMaterialList((layer.configFor("lists.death", true)).getList("lists.death"));
+		pickup = new ASMaterialList((layer.configFor("lists.pickup", true)).getList("lists.pickup"));
+		drop = new ASMaterialList((layer.configFor("lists.drop", true)).getList("lists.drop"));
+		use = new ASMaterialList((layer.configFor("lists.use", true)).getList("lists.use"));
+		interact = new ASMaterialList((layer.configFor("lists.interact", true)).getList("lists.interact"));
+		eat = new ASMaterialList((layer.configFor("lists.eat", true)).getList("lists.eat"));
+		craft = new ASMaterialList((layer.configFor("lists.crafting", true)).getList("lists.crafting"));
+		trackedCreative = new ASMaterialList((layer.configFor("tracking.creative", true)).getList("tracking.creative"));
+		trackedSurvival = new ASMaterialList((layer.configFor("tracking.survival", true)).getList("tracking.survival"));
+		trackedAdventure = new ASMaterialList((layer.configFor("tracking.adventure", true)).getList("tracking.adventure"));
+		commands = toStringList((layer.configFor("lists.commands", true)).getList("lists.commands"));
+		interactMobs = stringToEntityList((layer.configFor("lists.interact-mobs", true)).getList("lists.interact-mobs"));
+		attackMobs = stringToEntityList((layer.configFor("lists.attack-mobs", true)).getList("lists.attack-mobs"));
+		craftedMobs = stringToEntityList((layer.configFor("lists.craft-mob", true)).getList("lists.craft-mob"));
+		adventureEqCreative = (layer.configFor("settings.adventure-is-creative", false)).getBoolean("settings.adventure-is-creative");
+
+		perWorldInventories = (layer.configFor("settings.use-per-world-inventories", false)).getBoolean("settings.use-per-world-inventories");
+		magicSpells = (layer.configFor("hooks.magicspells.block-creative", false)).getBoolean("hooks.magicspells.block-creative");
+		logBlockSpam = (layer.configFor("hooks.logblock.stop-spam", false)).getBoolean("hooks.logblock.stop-spam");
+		updateChecker = !(layer.configFor("other.ignore-updates", false)).getBoolean("other.ignore-updates");
+		inventoryCleanupSettings = new InventoryCleanupSettings(
+				(layer.configFor("settings.cleanup.inventories.enabled", false)).getBoolean("settings.cleanup.inventories.enabled"),
+				!(layer.configFor("settings.cleanup.inventories.method", false)).getString("settings.cleanup.inventories.method").equalsIgnoreCase("delete"),
+				(layer.configFor("settings.cleanup.inventories.after", false)).getInt("settings.cleanup.inventories.after"),
+				(layer.configFor("settings.cleanup.inventories.remove-old-worlds", false)).getBoolean("settings.cleanup.inventories.remove-old-worlds"));
+		cooldownSettings = new CooldownSettings(
+				(layer.configFor("settings.cooldown.enabled", false)).getBoolean("settings.cooldown.enabled"),
+				(layer.configFor("settings.cooldown.wait-time-seconds", false)).getInt("settings.cooldown.wait-time-seconds"));
+		naturalSettings = new NaturalSettings(
+				(layer.configFor("settings.natural-protection.gamemode-spreading", false)).getBoolean("settings.natural-protection.gamemode-spreading"),
+				(layer.configFor("settings.natural-protection.allow-mismatch-gamemode", false)).getBoolean("settings.natural-protection.allow-mismatch-gamemode"),
+				(layer.configFor("settings.natural-protection.break-as-gamemode.pistons", false)).getBoolean("settings.natural-protection.break-as-gamemode.pistons"),
+				(layer.configFor("settings.natural-protection.break-as-gamemode.attached-blocks", false)).getBoolean("settings.natural-protection.break-as-gamemode.attached-blocks"),
+				(layer.configFor("settings.natural-protection.break-as-gamemode.water", false)).getBoolean("settings.natural-protection.break-as-gamemode.water"),
+				(layer.configFor("settings.natural-protection.break-as-gamemode.blown-up", false)).getBoolean("settings.natural-protection.break-as-gamemode.blown-up"),
+				(layer.configFor("settings.natural-protection.empty-inventories", false)).getBoolean("settings.natural-protection.empty-inventories"),
+				(layer.configFor("settings.natural-protection.remove-attached-blocks", false)).getBoolean("settings.natural-protection.remove-attached-blocks"),
+				(layer.configFor("settings.natural-protection.break-as-gamemode.falling-blocks", false)).getBoolean("settings.natural-protection.break-as-gamemode.falling-blocks"));
+		survivalBreakCreative = new InteractionSettings(
+				(layer.configFor("interaction.survival-breaking-creative.deny", false)).getBoolean("interaction.survival-breaking-creative.deny"),
+				(layer.configFor("interaction.survival-breaking-creative.drop-items", false)).getBoolean("interaction.survival-breaking-creative.drop-items"));
+		creativeBreakSurvival = new InteractionSettings(
+				(layer.configFor("interaction.creative-breaking-survival.deny", false)).getBoolean("interaction.creative-breaking-survival.deny"),
+				(layer.configFor("interaction.creative-breaking-survival.drop-items", false)).getBoolean("interaction.creative-breaking-survival.drop-items"));
+		survivalBreakAdventure = new InteractionSettings(
+				(layer.configFor("interaction.survival-breaking-adventure.deny", false)).getBoolean("interaction.survival-breaking-adventure.deny"),
+				(layer.configFor("interaction.survival-breaking-adventure.drop-items", false)).getBoolean("interaction.survival-breaking-adventure.drop-items"));
+		adventureBreakCreative = new InteractionSettings(
+				(layer.configFor("interaction.adventure-breaking-creative.deny", false)).getBoolean("interaction.adventure-breaking-creative.deny"),
+				(layer.configFor("interaction.adventure-breaking-creative.drop-items", false)).getBoolean("interaction.adventure-breaking-creative.drop-items"));
+		adventureBreakSurvival = new InteractionSettings(
+				(layer.configFor("interaction.adventure-breaking-survival.deny", false)).getBoolean("interaction.adventure-breaking-survival.deny"),
+				(layer.configFor("interaction.adventure-breaking-survival.drop-items", false)).getBoolean("interaction.adventure-breaking-survival.drop-items"));
+		creativeBreakAdventure = new InteractionSettings(
+				(layer.configFor("interaction.creative-breaking-adventure.deny", false)).getBoolean("interaction.creative-breaking-adventure.deny"),
+				(layer.configFor("interaction.creative-breaking-adventure.drop-items", false)).getBoolean("interaction.creative-breaking-adventure.drop-items"));
+		gamemodeChangeSettings = new GameModeChangeSettings(
+				(layer.configFor("settings.gamemode-change.change-level", false)).getBoolean("settings.gamemode-change.change-level"),
+				(layer.configFor("settings.gamemode-change.change-economy-balance", false)).getBoolean("settings.gamemode-change.change-economy-balance"),
+				(layer.configFor("settings.gamemode-change.change-inventory", false)).getBoolean("settings.gamemode-change.change-inventory"),
+				(layer.configFor("settings.gamemode-change.change-ender-chest", false)).getBoolean("settings.gamemode-change.change-ender-chest"));
+		notificationSettings = new NotifySettings(
+				(layer.configFor("settings.notify.use", false)).getBoolean("settings.notify.use"),
+				(layer.configFor("settings.notify.with-permission", false)).getBoolean("settings.notify.with-permission"),
+				(layer.configFor("settings.notify.console", false)).getBoolean("settings.notify.console"));
+		features = new FeatureSettings(
+				(layer.configFor("settings.features.use-inventories", false)).getBoolean("settings.features.use-inventories"),
+				(layer.configFor("settings.features.use-fines-rewards", false)).getBoolean("settings.features.use-fines-rewards"));
 	}
 
 	private List<String> toStringList(List<?> list){
