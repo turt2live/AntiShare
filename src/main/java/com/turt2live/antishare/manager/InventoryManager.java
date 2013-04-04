@@ -26,7 +26,7 @@ import com.turt2live.antishare.util.PermissionNodes;
  * 
  * @author turt2live
  */
-public class InventoryManager{
+public class InventoryManager {
 
 	private AntiShare plugin = AntiShare.p;
 	private final ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
@@ -386,6 +386,20 @@ public class InventoryManager{
 	 */
 	public int getLoaded(){
 		return creative.size() + survival.size() + temporary.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
+	}
+
+	/**
+	 * Loads a region inventory into memory
+	 * 
+	 * @param region the region to load
+	 * @return the region's inventory, or null if not found
+	 */
+	public ASInventory loadRegionInventory(Region region){
+		List<ASInventory> list = ASInventory.getAll(region.getID(), InventoryType.REGION);
+		if(list == null || list.size() <= 0){
+			return null;
+		}
+		return list.get(0);
 	}
 
 	/**

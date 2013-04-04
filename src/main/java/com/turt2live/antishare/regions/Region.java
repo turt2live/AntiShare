@@ -38,7 +38,7 @@ import com.turt2live.antishare.util.PermissionNodes;
 /**
  * An AntiShare Region
  */
-public class Region{
+public class Region {
 
 	private static AntiShare plugin = AntiShare.p;
 
@@ -58,7 +58,7 @@ public class Region{
 	private String worldName = "antishare", owner = "antishare", id = "-1", enterMessage = "You entered {name}!", exitMessage = "You left {name}!", name = "AntiShareRegion";
 	private RegionCuboid size = new RegionCuboid(this);
 	private boolean showEnterMessage = true, showExitMessage = true;
-	private ASInventory inventory = null;
+	//private ASInventory inventory = null;
 	private final Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
 	private RegionConfiguration config = RegionConfiguration.getConfig(this);
 	private GameMode gamemode = GameMode.CREATIVE;
@@ -524,6 +524,7 @@ public class Region{
 		region.setGameMode(GameMode.valueOf(yaml.getString("gamemode")));
 		region.setWorld(world);
 		region.setConfig(RegionConfiguration.getConfig(region));
+		region.setInventory(plugin.getInventoryManager().loadRegionInventory(region));
 		if(yaml.getInt("version", 0) == REGION_VERSION){
 			List<String> players = yaml.getStringList("players");
 			region.populatePlayers(players);
