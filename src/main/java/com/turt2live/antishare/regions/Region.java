@@ -58,7 +58,7 @@ public class Region {
 	private String worldName = "antishare", owner = "antishare", id = "-1", enterMessage = "You entered {name}!", exitMessage = "You left {name}!", name = "AntiShareRegion";
 	private RegionCuboid size = new RegionCuboid(this);
 	private boolean showEnterMessage = true, showExitMessage = true;
-	//private ASInventory inventory = null;
+	private ASInventory inventory = null;
 	private final Map<String, GameMode> gamemodes = new HashMap<String, GameMode>();
 	private RegionConfiguration config = RegionConfiguration.getConfig(this);
 	private GameMode gamemode = GameMode.CREATIVE;
