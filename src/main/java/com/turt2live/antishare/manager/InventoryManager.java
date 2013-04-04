@@ -293,6 +293,7 @@ public class InventoryManager {
 		}else{
 			player.getInventory().clear();
 		}
+		// TODO: Linked Inventories
 		ASInventory ender = getInventory(player, to, InventoryType.ENDER);
 		if(ender != null && !ender.isEmpty()){
 			ender.setTo(player.getEnderChest());
