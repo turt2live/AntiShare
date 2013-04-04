@@ -32,7 +32,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class ItemMap{
+public class ItemMap {
 
 	private static Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 
@@ -103,7 +103,7 @@ public class ItemMap{
 		Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 		BufferedReader in = new BufferedReader(new FileReader(items));
 		String line;
-		while((line = in.readLine()) != null){
+		while ((line = in.readLine()) != null){
 			if(line.startsWith("#")){
 				continue;
 			}
@@ -149,12 +149,19 @@ public class ItemMap{
 		return asMaterial;
 	}
 
-	static void createFile(File items, AntiShare p) throws IOException{
+	/**
+	 * Creates an item map file
+	 * 
+	 * @param items the item file
+	 * @param p the AntiShare plugin instance
+	 * @throws IOException thrown if something goes wrong
+	 */
+	public static void createFile(File items, AntiShare p) throws IOException{
 		InputStream input = p.getResource("items.csv");
 		FileOutputStream out = new FileOutputStream(items);
 		byte[] buf = new byte[1024];
 		int len;
-		while((len = input.read(buf)) > 0){
+		while ((len = input.read(buf)) > 0){
 			out.write(buf, 0, len);
 		}
 		out.close();

@@ -31,15 +31,14 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LegacyInventory;
-import com.turt2live.antishare.util.ASMaterialList;
+import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ItemMap;
-import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 
 /**
  * Compatibility class for other AntiShare versions
  */
-public class SelfCompatibility{
+public class SelfCompatibility {
 
 	private static enum CompatibilityType{
 		REGION_PLAYER_DATA_MIGRATE(5),
@@ -59,7 +58,8 @@ public class SelfCompatibility{
 		CONFIGURATION_540(50),
 		ITEM_MAP_540(55),
 		FILES_AND_FOLDERS_540(60),
-		INVENTORY_UPDATE_540(65);
+		INVENTORY_UPDATE_540(65),
+		WORLD_CONFIG_540(70);
 
 		public final int bytePosition;
 
@@ -119,7 +119,14 @@ public class SelfCompatibility{
 		return null;
 	}
 
-	static List<ASMaterial> updateItemMap(Map<String, ASMaterial> listing) throws IOException{
+	/**
+	 * Updates the item map file
+	 * 
+	 * @param listing the listing of items currently in the file
+	 * @return the extra (new items)
+	 * @throws IOException
+	 */
+	public static List<ASMaterial> updateItemMap(Map<String, ASMaterial> listing) throws IOException{
 		List<ASMaterial> r = new ArrayList<ASMaterial>();
 		if(!needsUpdate(CompatibilityType.ITEM_MAP_540)){
 			return r;
@@ -131,7 +138,7 @@ public class SelfCompatibility{
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(p.getDataFolder(), "items.csv"), true));
 		boolean updated = false;
 		String line;
-		while((line = in.readLine()) != null){
+		while ((line = in.readLine()) != null){
 			if(line.startsWith("#")){
 				continue;
 			}
@@ -213,7 +220,7 @@ public class SelfCompatibility{
 		File newDir = new File(directory, "world_configurations");
 		int files = 0;
 		if(directory.listFiles() != null){
-			for(File file : directory.listFiles(new FileFilter() {
+			for(File file : directory.listFiles(new FileFilter(){
 				@Override
 				public boolean accept(File arg0){
 					if(arg0.getName().endsWith("_config.yml")){
@@ -333,7 +340,7 @@ public class SelfCompatibility{
 				BufferedReader reader = new BufferedReader(new FileReader(config));
 				BufferedWriter writer = new BufferedWriter(new FileWriter(backup));
 				String line;
-				while((line = reader.readLine()) != null){
+				while ((line = reader.readLine()) != null){
 					writer.write(line);
 					writer.newLine();
 				}
@@ -461,6 +468,34 @@ public class SelfCompatibility{
 			AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("inventories-to-540-converted", String.valueOf(resolved)));
 		}
 		noLongerNeedsUpdate(CompatibilityType.INVENTORY_UPDATE_540);
+	}
+
+	/**
+	 * Updates world configurations to 5.4.0 format by moving them to an 'old' folder.
+	 */
+	public static void update540WorldConfigurations(){
+		if(!needsUpdate(CompatibilityType.WORLD_CONFIG_540)){
+			return;
+		}
+		File folder = new File(AntiShare.p.getDataFolder(), "world_configurations");
+		if(folder.exists()){
+			File archive = new File(folder, "old");
+			archive.mkdirs();
+			File[] listing = folder.listFiles();
+			boolean updated = false;
+			if(listing != null){
+				for(File file : listing){
+					if(file.getName().toLowerCase().endsWith("_config.yml")){
+						file.renameTo(new File(archive, file.getName()));
+						updated = true;
+					}
+				}
+			}
+			if(updated){
+				AntiShare.p.getLogger().warning(AntiShare.p.getMessages().getMessage("world-config-540-update"));
+			}
+		}
+		noLongerNeedsUpdate(CompatibilityType.WORLD_CONFIG_540);
 	}
 
 	private static int cleanFolder(File folder, FileType type){
