@@ -287,13 +287,14 @@ public class InventoryManager {
 			return; // Don't bother
 		}
 		saveInventory(player, player.getGameMode());
+		checkLinksAndWorlds(player.getName(), getInventory(player, player.getWorld(), InventoryType.PLAYER));
+		checkLinksAndWorlds(player.getName(), getInventory(player, player.getWorld(), InventoryType.ENDER));
 		ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
 		if(regular != null && !regular.isEmpty()){
 			regular.setTo(player.getInventory());
 		}else{
 			player.getInventory().clear();
 		}
-		// TODO: Linked Inventories
 		ASInventory ender = getInventory(player, to, InventoryType.ENDER);
 		if(ender != null && !ender.isEmpty()){
 			ender.setTo(player.getEnderChest());
