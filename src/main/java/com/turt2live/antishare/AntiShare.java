@@ -52,7 +52,7 @@ import com.turt2live.metrics.tracker.FixedTracker;
  * 
  * @author turt2live
  */
-public class AntiShare extends PluginWrapper {
+public class AntiShare extends PluginWrapper{
 
 	/**
 	 * AntiShare instance
@@ -151,7 +151,7 @@ public class AntiShare extends PluginWrapper {
 			if(simpleNoticeFile.exists()){
 				BufferedReader in = new BufferedReader(new FileReader(simpleNoticeFile));
 				String line;
-				while ((line = in.readLine()) != null){
+				while((line = in.readLine()) != null){
 					disabledSNPlayers.add(line);
 				}
 				in.close();
@@ -179,7 +179,7 @@ public class AntiShare extends PluginWrapper {
 		try{
 			BufferedReader in = new BufferedReader(new InputStreamReader(getResource("plugin.yml")));
 			String line;
-			while ((line = in.readLine()) != null){
+			while((line = in.readLine()) != null){
 				if(line.startsWith("build: ")){
 					line = line.replace("build: ", "");
 					build = line;
@@ -317,7 +317,7 @@ public class AntiShare extends PluginWrapper {
 	}
 
 	private void loadPlayerInformation(){
-		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			@Override
 			public void run(){
 				for(Player player : getServer().getOnlinePlayers()){

@@ -26,9 +26,9 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-public class ASMaterialList {
+public class ASMaterialList{
 
-	public static class ASMaterial {
+	public static class ASMaterial{
 		int id = 0;
 		short data = -1; // -1 = any
 		public String name = "Unknown";

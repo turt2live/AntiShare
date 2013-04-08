@@ -32,7 +32,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class ItemMap {
+public class ItemMap{
 
 	private static Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 
@@ -103,7 +103,7 @@ public class ItemMap {
 		Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 		BufferedReader in = new BufferedReader(new FileReader(items));
 		String line;
-		while ((line = in.readLine()) != null){
+		while((line = in.readLine()) != null){
 			if(line.startsWith("#")){
 				continue;
 			}
@@ -161,7 +161,7 @@ public class ItemMap {
 		FileOutputStream out = new FileOutputStream(items);
 		byte[] buf = new byte[1024];
 		int len;
-		while ((len = input.read(buf)) > 0){
+		while((len = input.read(buf)) > 0){
 			out.write(buf, 0, len);
 		}
 		out.close();

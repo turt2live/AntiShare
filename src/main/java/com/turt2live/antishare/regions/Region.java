@@ -38,7 +38,7 @@ import com.turt2live.antishare.util.PermissionNodes;
 /**
  * An AntiShare Region
  */
-public class Region {
+public class Region{
 
 	private static AntiShare plugin = AntiShare.p;
 
