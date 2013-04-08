@@ -26,7 +26,7 @@ import com.turt2live.antishare.util.PermissionNodes;
  * 
  * @author turt2live
  */
-public class InventoryManager {
+public class InventoryManager{
 
 	private AntiShare plugin = AntiShare.p;
 	private final ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
@@ -78,13 +78,17 @@ public class InventoryManager {
 	}
 
 	private void saveInventory(Player player, GameMode gamemode){
+		saveInventory(player, gamemode, player.getWorld());
+	}
+
+	private void saveInventory(Player player, GameMode gamemode, World world){
 		if(!plugin.settings().features.inventories){
 			return; // Don't bother
 		}
-		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), gamemode, InventoryType.PLAYER);
+		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), gamemode, InventoryType.PLAYER);
 		inventory.clone(player.getInventory());
 		insert(player.getName(), inventory.clone());
-		inventory = ASInventory.createEmptyInventory(player.getName(), player.getWorld().getName(), gamemode, InventoryType.ENDER);
+		inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), gamemode, InventoryType.ENDER);
 		inventory.clone(player.getEnderChest());
 		insert(player.getName(), inventory.clone());
 	}
@@ -280,15 +284,16 @@ public class InventoryManager {
 	 * Does an inventory world change on a player
 	 * 
 	 * @param player the player
-	 * @param to the world heading to
+	 * @param from the world heading from
 	 */
-	public void onWorldChange(Player player, World to){
+	public void onWorldChange(Player player, World from){
 		if(!plugin.settings().features.inventories || AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
 			return; // Don't bother
 		}
-		saveInventory(player, player.getGameMode());
-		checkLinksAndWorlds(player.getName(), getInventory(player, player.getWorld(), InventoryType.PLAYER));
-		checkLinksAndWorlds(player.getName(), getInventory(player, player.getWorld(), InventoryType.ENDER));
+		saveInventory(player, player.getGameMode(), from);
+		World to = player.getWorld();
+		checkLinksAndWorlds(player.getName(), getInventory(player, from, InventoryType.PLAYER));
+		checkLinksAndWorlds(player.getName(), getInventory(player, from, InventoryType.ENDER));
 		ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
 		if(regular != null && !regular.isEmpty()){
 			regular.setTo(player.getInventory());

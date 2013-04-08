@@ -1560,7 +1560,7 @@ public class ASListener implements Listener{
 		// Check to see if we should even bother checking
 		if(!plugin.settings().perWorldInventories){
 			// Fix up inventories
-			plugin.getInventoryManager().mergeAllWorlds(player, from);
+			plugin.getInventoryManager().mergeAllWorlds(player, from); // Internal save
 			return;
 		}
 
@@ -1571,7 +1571,7 @@ public class ASListener implements Listener{
 
 		// Inventory check
 		if(!AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
-			plugin.getInventoryManager().onWorldChange(player, to);
+			plugin.getInventoryManager().onWorldChange(player, from);
 
 			// For alerts
 			ignore = false;
