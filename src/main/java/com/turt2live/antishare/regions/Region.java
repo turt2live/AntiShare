@@ -30,6 +30,7 @@ import com.turt2live.antishare.config.RegionConfiguration;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.cuboid.RegionCuboid;
 import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.regions.RegionWall.Wall;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.Action;
@@ -259,7 +260,13 @@ public class Region{
 	 * @param asInventory
 	 */
 	public void setInventory(ASInventory asInventory){
-		this.inventory = asInventory != null ? asInventory.clone() : null;
+		if(asInventory != null){
+			ASInventory i = ASInventory.createEmptyInventory(id, worldName, gamemode, InventoryType.REGION);
+			i.clone(asInventory);
+			this.inventory = i;
+		}else{
+			this.inventory = null;
+		}
 	}
 
 	/**
@@ -497,6 +504,9 @@ public class Region{
 		yaml.set("players", playersAsList());
 		yaml.set("version", REGION_VERSION);
 		yaml.save();
+		if(inventory != null){
+			inventory.save();
+		}
 	}
 
 	/**
