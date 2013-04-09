@@ -10,16 +10,12 @@
  ******************************************************************************/
 package com.turt2live.antishare.io;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.AntiShare;
 
-public class LevelSaver{
+public class LevelSaver extends GenericDataFile{
 
 	/**
 	 * Stores a level
@@ -58,22 +54,6 @@ public class LevelSaver{
 
 	}
 
-	private static EnhancedConfiguration getFile(){
-		AntiShare plugin = AntiShare.p;
-		File file = new File(plugin.getDataFolder(), "data" + File.separator + "levels.yml");
-		if(!file.exists()){
-			try{
-				file.getParentFile().mkdirs();
-				file.createNewFile();
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-		EnhancedConfiguration efile = new EnhancedConfiguration(file, plugin);
-		efile.load();
-		return efile;
-	}
-
 	/**
 	 * Gets the level for a player
 	 * 
@@ -82,7 +62,7 @@ public class LevelSaver{
 	 * @return a level. If not found this will return a level of 0 with 0% to the next level.
 	 */
 	public static Level getLevel(String player, GameMode gamemode){
-		EnhancedConfiguration file = getFile();
+		EnhancedConfiguration file = getFile("levels");
 		if(!file.isSet(player + "." + gamemode.name())){
 			return new Level(0, 0);
 		}
@@ -102,7 +82,7 @@ public class LevelSaver{
 		if(level.level == 0 && level.percent < 0.01){
 			return;
 		}
-		EnhancedConfiguration file = getFile();
+		EnhancedConfiguration file = getFile("levels");
 		file.set(player + "." + gamemode.name() + ".level", level.level);
 		file.set(player + "." + gamemode.name() + ".percent", level.percent);
 		file.save();

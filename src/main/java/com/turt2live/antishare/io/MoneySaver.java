@@ -10,30 +10,11 @@
  ******************************************************************************/
 package com.turt2live.antishare.io;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.bukkit.GameMode;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.AntiShare;
 
-public class MoneySaver{
-
-	private static EnhancedConfiguration getFile(){
-		AntiShare plugin = AntiShare.p;
-		File file = new File(plugin.getDataFolder(), "data" + File.separator + "balance.yml");
-		if(!file.exists()){
-			try{
-				file.createNewFile();
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
-		yamlFile.load();
-		return yamlFile;
-	}
+public class MoneySaver extends GenericDataFile{
 
 	/**
 	 * Gets the balance for a player
@@ -43,7 +24,7 @@ public class MoneySaver{
 	 * @return a double (balance). If not found this will return 0
 	 */
 	public static double getLevel(String player, GameMode gamemode){
-		EnhancedConfiguration yaml = getFile();
+		EnhancedConfiguration yaml = getFile("balance");
 		double balance = yaml.getDouble(player + "." + gamemode.name(), 0.0);
 		return balance;
 	}
@@ -59,7 +40,7 @@ public class MoneySaver{
 		if(balance <= 0){
 			return;
 		}
-		EnhancedConfiguration yaml = getFile();
+		EnhancedConfiguration yaml = getFile("balance");
 		yaml.set(player + "." + gamemode.name(), balance);
 		yaml.save();
 	}

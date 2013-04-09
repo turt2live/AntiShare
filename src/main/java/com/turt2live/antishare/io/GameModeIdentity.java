@@ -10,28 +10,9 @@
  ******************************************************************************/
 package com.turt2live.antishare.io;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
-import com.turt2live.antishare.AntiShare;
 
-public class GameModeIdentity{
-
-	private static EnhancedConfiguration getFile(){
-		AntiShare plugin = AntiShare.p;
-		File file = new File(plugin.getDataFolder(), "data" + File.separator + "gamemodeswitches.yml");
-		if(!file.exists()){
-			try{
-				file.createNewFile();
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
-		yamlFile.load();
-		return yamlFile;
-	}
+public class GameModeIdentity extends GenericDataFile{
 
 	/**
 	 * Determines if a player has changed GameMode before
@@ -40,7 +21,7 @@ public class GameModeIdentity{
 	 * @return true if they have changed Game Mode before
 	 */
 	public static boolean hasChangedGameMode(String player){
-		EnhancedConfiguration yaml = getFile();
+		EnhancedConfiguration yaml = getFile("gamemodeswitches");
 		return yaml.getBoolean(player, false);
 	}
 
@@ -50,7 +31,7 @@ public class GameModeIdentity{
 	 * @param player the player
 	 */
 	public static void setChangedGameMode(String player){
-		EnhancedConfiguration yaml = getFile();
+		EnhancedConfiguration yaml = getFile("gamemodeswitches");
 		yaml.set(player, true);
 		yaml.save();
 	}
