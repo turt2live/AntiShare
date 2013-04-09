@@ -126,7 +126,7 @@ public class ASListener implements Listener{
 
 	public static final String FALLING_METADATA_KEY = "antishare-falling-original-gamemode";
 	public static final String LOGBLOCK_METADATA_KEY = "antishare-logblock";
-	public static final FixedMetadataValue EMPTY_METADATA = new FixedMetadataValue(plugin, true);
+	public final FixedMetadataValue EMPTY_METADATA;
 
 	private final Map<String, Long> gamemodeCooldowns = new HashMap<String, Long>();
 
@@ -134,6 +134,7 @@ public class ASListener implements Listener{
 
 	public ASListener(){
 		hasMobCatcher = plugin.getServer().getPluginManager().getPlugin("MobCatcher") != null;
+		EMPTY_METADATA = new FixedMetadataValue(plugin, true);
 	}
 
 	private ASConfig configFor(Location location){
