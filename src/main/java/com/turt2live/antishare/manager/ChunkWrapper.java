@@ -25,10 +25,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.blocks.io.ASRegion;
-import com.turt2live.antishare.blocks.io.Key;
-import com.turt2live.antishare.blocks.io.LegacyBlockIO;
+import com.turt2live.antishare.io.ASRFile;
+import com.turt2live.antishare.io.LegacyBlockIO;
 import com.turt2live.antishare.manager.BlockManager.ASMaterial;
+import com.turt2live.antishare.util.Key;
 import com.turt2live.materials.MaterialAPI;
 
 /**
@@ -268,7 +268,7 @@ public class ChunkWrapper{
 			noEntityFile = true;
 		}
 		if(!noBlockFile){
-			ASRegion region = new ASRegion(false);
+			ASRFile region = new ASRFile(false);
 			try{
 				region.prepare(blockFile, true);
 				for(Key key : creativeBlocks){
@@ -286,7 +286,7 @@ public class ChunkWrapper{
 			}
 		}
 		if(!noEntityFile){
-			ASRegion region = new ASRegion(true);
+			ASRFile region = new ASRFile(true);
 			try{
 				region.prepare(entityFile, true);
 				for(Key key : this.adventureEntities){
@@ -349,7 +349,7 @@ public class ChunkWrapper{
 			plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-world", w));
 			return;
 		}
-		ASRegion region = new ASRegion(!isBlock);
+		ASRFile region = new ASRFile(!isBlock);
 		try{
 			region.prepare(file, false);
 			if(isBlock){

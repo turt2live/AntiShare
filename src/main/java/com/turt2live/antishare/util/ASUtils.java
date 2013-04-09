@@ -40,10 +40,10 @@ import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.PermissionNodes.PermissionPackage;
 import com.turt2live.antishare.config.ASConfig;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.MobPattern.MobPatternType;
-import com.turt2live.antishare.util.PermissionNodes.PermissionPackage;
 
 /**
  * Utilities

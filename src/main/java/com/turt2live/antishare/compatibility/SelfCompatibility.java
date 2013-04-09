@@ -31,9 +31,9 @@ import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LegacyInventory;
+import com.turt2live.antishare.io.ItemMap;
 import com.turt2live.antishare.util.ASMaterialList.ASMaterial;
 import com.turt2live.antishare.util.ASUtils;
-import com.turt2live.antishare.util.ItemMap;
 
 /**
  * Compatibility class for other AntiShare versions

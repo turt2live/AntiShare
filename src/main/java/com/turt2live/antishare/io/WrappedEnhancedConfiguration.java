@@ -8,7 +8,7 @@
  * Contributors:
  * turt2live (Travis Ralston) - initial API and implementation
  ******************************************************************************/
-package com.turt2live.antishare.util;
+package com.turt2live.antishare.io;
 
 import java.io.File;
 

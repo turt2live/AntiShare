@@ -13,13 +13,13 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.inventory.LinkedInventory;
 import com.turt2live.antishare.inventory.TemporaryASInventory;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
-import com.turt2live.antishare.util.PermissionNodes;
 
 /**
  * AntiShare Inventory Manager - Entry point for all inventory stuff

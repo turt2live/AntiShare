@@ -26,6 +26,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.config.RegionConfiguration;
 import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.cuboid.RegionCuboid;
@@ -34,7 +35,6 @@ import com.turt2live.antishare.inventory.ASInventory.InventoryType;
 import com.turt2live.antishare.regions.RegionWall.Wall;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.Action;
-import com.turt2live.antishare.util.PermissionNodes;
 
 /**
  * An AntiShare Region

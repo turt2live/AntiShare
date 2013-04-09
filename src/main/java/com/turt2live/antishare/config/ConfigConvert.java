@@ -19,8 +19,8 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.compatibility.SelfCompatibility;
 import com.turt2live.antishare.compatibility.SelfCompatibility.FileType;
+import com.turt2live.antishare.io.WrappedEnhancedConfiguration;
 import com.turt2live.antishare.util.ASUtils;
-import com.turt2live.antishare.util.WrappedEnhancedConfiguration;
 
 /**
  * Converts a 5.3.0 configuration to a 5.4.0 configuration

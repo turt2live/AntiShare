@@ -41,7 +41,6 @@ import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.Action;
 import com.turt2live.antishare.util.GamemodeAbstraction;
 import com.turt2live.antishare.util.Messages;
-import com.turt2live.antishare.util.PermissionNodes;
 import com.turt2live.antishare.util.UpdateChecker;
 import com.turt2live.metrics.EMetrics;
 import com.turt2live.metrics.graph.PieGraph;

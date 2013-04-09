@@ -18,8 +18,8 @@ import org.bukkit.GameMode;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.io.MoneySaver;
 import com.turt2live.antishare.money.TransactionResult;
-import com.turt2live.antishare.util.MoneySaver;
 
 /**
  * Safe-hook for Vault Economy

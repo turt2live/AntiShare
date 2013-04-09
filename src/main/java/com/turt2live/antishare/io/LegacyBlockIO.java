@@ -1,4 +1,4 @@
-package com.turt2live.antishare.blocks.io;
+package com.turt2live.antishare.io;
 
 import java.io.File;
 

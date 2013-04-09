@@ -1,4 +1,4 @@
-package com.turt2live.antishare.blocks.io;
+package com.turt2live.antishare.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +13,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
+
+import com.turt2live.antishare.util.Key;
 
 /**
  * Represents a block region file<br>
@@ -29,7 +31,7 @@ import org.bukkit.entity.EntityType;
 /* TODO: Eventual plans:
  * - Save multiple chunks in a file
  */
-public class ASRegion{
+public class ASRFile{
 
 	public static final Pattern SPLIT_PATTERN = Pattern.compile(" ");
 	public static final byte CREATIVE_BYTE = 0x1;
@@ -49,7 +51,7 @@ public class ASRegion{
 	 * 
 	 * @param isEntity true to make an entity file, false otherwise
 	 */
-	public ASRegion(boolean isEntity){
+	public ASRFile(boolean isEntity){
 		buffer = ByteBuffer.allocateDirect(isEntity ? 14 : 13);
 	}
 

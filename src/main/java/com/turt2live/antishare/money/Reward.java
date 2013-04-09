@@ -14,9 +14,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.util.ASGameMode;
 import com.turt2live.antishare.util.Action;
-import com.turt2live.antishare.util.PermissionNodes;
 
 /**
  * Reward for doing something

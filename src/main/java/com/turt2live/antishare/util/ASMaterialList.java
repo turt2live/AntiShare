@@ -20,6 +20,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.io.ItemMap;
 
 /**
  * Material list for items
@@ -29,8 +30,8 @@ import com.turt2live.antishare.AntiShare;
 public class ASMaterialList{
 
 	public static class ASMaterial{
-		int id = 0;
-		short data = -1; // -1 = any
+		public int id = 0;
+		public short data = -1; // -1 = any
 		public String name = "Unknown";
 	}
 

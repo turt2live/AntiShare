@@ -17,8 +17,8 @@ import org.bukkit.event.Listener;
 import com.nisovin.magicspells.events.SpellCastEvent;
 import com.nisovin.magicspells.events.SpellTargetEvent;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.util.GamemodeAbstraction;
-import com.turt2live.antishare.util.PermissionNodes;
 
 /**
  * MagicSpells hook

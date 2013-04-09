@@ -36,7 +36,6 @@ import com.turt2live.antishare.inventory.DisplayableInventory;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.regions.RegionKey;
 import com.turt2live.antishare.util.ASUtils;
-import com.turt2live.antishare.util.PermissionNodes;
 import com.turt2live.materials.MaterialAPI;
 
 /**

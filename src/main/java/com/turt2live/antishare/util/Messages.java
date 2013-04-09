@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.materials.MaterialAPI;
 import com.turt2live.simplenotice.SNAPI;
 
