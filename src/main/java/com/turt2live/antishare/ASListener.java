@@ -102,6 +102,7 @@ import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.config.ASConfig;
 import com.turt2live.antishare.config.ASConfig.InteractionSettings;
 import com.turt2live.antishare.cuboid.Cuboid;
+import com.turt2live.antishare.io.GameModeIdentity;
 import com.turt2live.antishare.io.LevelSaver;
 import com.turt2live.antishare.io.LevelSaver.Level;
 import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
@@ -1197,6 +1198,11 @@ public class ASListener implements Listener{
 				event.setCancelled(true);
 			}
 		}
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onGameModeChangeInventories(PlayerGameModeChangeEvent event){
+		GameModeIdentity.setChangedGameMode(event.getPlayer().getName());
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)

@@ -17,6 +17,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.io.GameModeIdentity;
 
 /**
  * AntiShare Inventory
@@ -229,6 +230,11 @@ public class ASInventory implements Cloneable{
 		checkDataFolder();
 		if(isEmpty()){
 			return; // Don't save empty things
+		}
+		if(type == InventoryType.PLAYER || type == InventoryType.ENDER){
+			if(!GameModeIdentity.hasChangedGameMode(owner)){
+				return; // Don't save if they haven't changed Game Mode yet
+			}
 		}
 		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".json");
 		JsonConfiguration yaml = new JsonConfiguration();
