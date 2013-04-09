@@ -269,7 +269,7 @@ public class ASInventory implements Cloneable{
 		JsonConfiguration json = new JsonConfiguration();
 		try{
 			if(!file.exists()){
-				file.createNewFile();
+				return inventory; // Empty inventory
 			}
 			json.load(file);
 			String version = json.getString("version");
