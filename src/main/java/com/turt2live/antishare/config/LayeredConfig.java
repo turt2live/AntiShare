@@ -4,7 +4,11 @@ import java.util.List;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
-// TODO: Document
+/**
+ * A layered configuration. This is used to determine what value to use from a region, world, or plugin configuration
+ * 
+ * @author turt2live
+ */
 public class LayeredConfig{
 
 	private final EnhancedConfiguration region, world, plugin;
@@ -18,6 +22,9 @@ public class LayeredConfig{
 		this.plugin = plugin;
 	}
 
+	/**
+	 * Loads all configurations
+	 */
 	public void loadAll(){
 		if(region != null)
 			region.load();
@@ -26,6 +33,13 @@ public class LayeredConfig{
 		plugin.load();
 	}
 
+	/**
+	 * Determines the configuration to use for a specific node
+	 * 
+	 * @param path the node
+	 * @param isList true if the node is a list
+	 * @return the configuration to use
+	 */
 	public EnhancedConfiguration configFor(String path, boolean isList){
 		if(region == null && world == null){
 			return plugin;
