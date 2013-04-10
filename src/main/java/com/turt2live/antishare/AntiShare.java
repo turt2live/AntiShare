@@ -316,7 +316,7 @@ public class AntiShare extends PluginWrapper{
 	}
 
 	private void loadPlayerInformation(){
-		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
 			@Override
 			public void run(){
 				for(Player player : getServer().getOnlinePlayers()){

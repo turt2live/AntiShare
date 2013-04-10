@@ -58,7 +58,7 @@ public class BlockManager{
 		blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
 
 		// Start cleanup
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
 
 			@Override
 			public void run(){
@@ -321,7 +321,7 @@ public class BlockManager{
 
 		// Start a thread to wait until the block changes
 		final Material oldType = oldBlock.getType();
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
 
 			@Override
 			public void run(){

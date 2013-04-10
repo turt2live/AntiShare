@@ -320,7 +320,7 @@ public class ASListener implements Listener{
 		final Player player = event.getPlayer();
 		final GameMode from = player.getGameMode();
 		final GameMode to = event.getNewGameMode();
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				doGameModeChange(player, from, to);
@@ -430,7 +430,7 @@ public class ASListener implements Listener{
 				event.setCancelled(true);
 			}
 		}
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 			@Override
 			public void run(){
 				block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
