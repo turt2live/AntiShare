@@ -19,11 +19,7 @@ import com.turt2live.antishare.util.Key;
 /**
  * Represents a block region file<br>
  * <p>
- * <b>Block File Format:</b><br>
- * | int X | int Y | int Z | byte GAMEMODE |<br>
- * <br>
- * <b>Entity File Format: </b><br>
- * | int X | int Y | int Z | byte GAMEMODE | byte ENTITY TYPE |
+ * ASR File Specification: https://docs.google.com/document/d/1snoRy52eYsdUJDLxPkF_X5gV-QWTqEcEa5W5LiYmkSQ/edit
  * </p>
  * 
  * @author turt2live
