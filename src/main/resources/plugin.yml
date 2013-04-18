@@ -34,29 +34,6 @@ commands:
       /<command> help = This menu
 
 permissions:
-    AntiShare.*:
-        description: All AntiShare permissions
-        default: op
-        children:
-            AntiShare.allow.*: true
-            AntiShare.deny.*: false
-            AntiShare.getDrops: true
-            AntiShare.mirror: true
-            AntiShare.getNotifications: true
-            AntiShare.silent: true
-            AntiShare.regions.*: true
-            AntiShare.tool.*: true
-            AntiShare.free_place: true
-            AntiShare.inventories.*: true
-            AntiShare.worldsplit.*: true
-            AntiShare.reload: true
-            AntiShare.affect.*: false
-            AntiShare.money.*: true
-            AntiShare.cooldownbypass: true
-            AntiShare.check: true
-            AntiShare.itemframes: true
-            AntiShare.cuboid: true
-            AntiShare.plugin.magicspells: true
     AntiShare.cuboid:
         description: Allows the target to create cuboids in AntiShare
         default: op
@@ -111,13 +88,6 @@ permissions:
     AntiShare.money.nofine:
         description: Never fine the player
         default: op
-    AntiShare.affect.*:
-        description: The target is affected by all Game Modes
-        default: false
-        children:
-            AntiShare.affect.creative: true
-            AntiShare.affect.survival: true
-            AntiShare.affect.adventure: true
     AntiShare.affect.creative:
         description: The target is affected when in Creative
         default: true
@@ -127,36 +97,12 @@ permissions:
     AntiShare.affect.adventure:
         description: The target is affected when in Adventure
         default: false
-    AntiShare.inventories.*:
-        description: Allow all AntiShare inventory functions
-        default: op
-        children:
-            AntiShare.inventories.no_swap: true
-            AntiShare.inventories.allowcrafting: true
     AntiShare.inventories.no_swap:
         description: Allows the target to never swap inventories on Game Mode changes. Will also stop experience changes.
         default: op
     AntiShare.inventories.allowcrafting:
         description: Allows the target to use crafting tables
         default: op
-    AntiShare.regions.*:
-        description: Allow all AntiShare region functions
-        default: op
-        children:
-            AntiShare.regions.create: true
-            AntiShare.regions.delete: true
-            AntiShare.regions.edit: true
-            AntiShare.regions.roam: true
-            AntiShare.regions.eat: true
-            AntiShare.regions.throw_item: true
-            AntiShare.regions.pickup_item: true
-            AntiShare.regions.place: true
-            AntiShare.regions.break: true
-            AntiShare.regions.use_item: true
-            AntiShare.regions.interact_item: true
-            AntiShare.regions.list: true
-            AntiShare.regions.attack_mobs: true
-            AntiShare.regions.attack_players: true
     AntiShare.regions.attack_mobs:
         description: Allows the target to attack mobs in any region
         default: op
@@ -196,22 +142,6 @@ permissions:
     AntiShare.regions.list:
         description: Allows the target to list and lookup regions
         default: op
-    AntiShare.allow.*:
-        description: Allow all AntiShare.allow events
-        default: op
-        children:
-            AntiShare.allow.block_place: true
-            AntiShare.allow.block_break: true
-            AntiShare.allow.use_item: true
-            AntiShare.allow.interact_item: true
-            AntiShare.allow.commands: true
-            AntiShare.allow.pickup_item: true
-            AntiShare.allow.drop_item: true
-            AntiShare.allow.hit_players: true
-            AntiShare.allow.hit_mobs: true
-            AntiShare.allow.death: true
-            AntiShare.allow.create: true
-            AntiShare.allow.eat: true
     AntiShare.allow.eat:
         description: Allows food
         default: op
@@ -248,22 +178,6 @@ permissions:
     AntiShare.allow.hit_mobs:
         description: Allows combat with mobs (cows, creepers, etc)
         default: op
-    AntiShare.deny.*:
-        description: Give all AntiShare.deny permissions
-        default: false
-        children:
-            AntiShare.deny.block_place: true
-            AntiShare.deny.block_break: true
-            AntiShare.deny.use_item: true
-            AntiShare.deny.interact_item: true
-            AntiShare.deny.commands: true
-            AntiShare.deny.pickup_item: true
-            AntiShare.deny.drop_item: true
-            AntiShare.deny.hit_players: true
-            AntiShare.deny.hit_mobs: true
-            AntiShare.deny.death: true
-            AntiShare.deny.create: true
-            AntiShare.deny.eat: true
     AntiShare.deny.eat:
         description: Denies food
         default: false
@@ -300,11 +214,6 @@ permissions:
     AntiShare.deny.hit_mobs:
         description: Denies combat with mobs (cows, creepers, etc)
         default: false
-    AntiShare.plugin.*:
-        description: Allow all AntiShare plugin integration functions
-        default: op
-        children:
-            AntiShare.plugin.magicspells: true
     AntiShare.plugin.magicspells:
         description: Allows the target to bypass MagicSpells integration
         default: op
