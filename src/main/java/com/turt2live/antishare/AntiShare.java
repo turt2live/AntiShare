@@ -316,7 +316,7 @@ public class AntiShare extends PluginWrapper{
 	}
 
 	private void loadPlayerInformation(){
-		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
 			@Override
 			public void run(){
 				for(Player player : getServer().getOnlinePlayers()){
@@ -515,28 +515,36 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if blocked
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly){
-		if((hasPermission(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE)
-				|| (hasPermission(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL)
-				|| (hasPermission(player, PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE)
-				|| (GamemodeAbstraction.isCreative(player.getGameMode()) &&
-				(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) || hasPermission(player, PermissionNodes.AFFECT_ADVENTURE)))){
-			if(target != null){
-				if(hasPermission(player, allowPermission + "." + target)){
-					return false;
-				}
-				if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
-					return true;
-				}
-			}
-			if(specialOnly){
+		if(target != null){
+			if(hasPermission(player, allowPermission + "." + target)){
 				return false;
 			}
-			if(hasPermission(player, allowPermission)){
-				return false;
-			}
-			if(denyPermission != null && hasPermission(player, denyPermission)){
+			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
 				return true;
 			}
+		}
+		if(specialOnly){
+			return false;
+		}
+		if(hasPermission(player, allowPermission)){
+			return false;
+		}
+		if(denyPermission != null && hasPermission(player, denyPermission)){
+			return true;
+		}
+		if(GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()){
+			if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) || hasPermission(player, PermissionNodes.AFFECT_ADVENTURE)){
+				return true;
+			}
+		}
+		if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
+			return true;
+		}
+		if(hasPermission(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
+			return true;
+		}
+		if(hasPermission(player, PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE){
+			return true;
 		}
 		return false;
 	}
