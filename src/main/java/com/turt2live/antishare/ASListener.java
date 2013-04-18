@@ -730,8 +730,8 @@ public class ASListener implements Listener{
 		Location blockLocation = block.getLocation();
 		ASConfig c = configFor(blockLocation);
 		ItemStack hand = player.getItemInHand();
-		if(hand == null){
-			hand = new ItemStack(Material.AIR);
+		if(hand == null || hand.getType() == Material.AIR){
+			return; // Do not process
 		}
 
 		ProtectionInformation information = ASUtils.isBlocked(player, hand, blockLocation, c.use, PermissionNodes.PACK_USE, c);
