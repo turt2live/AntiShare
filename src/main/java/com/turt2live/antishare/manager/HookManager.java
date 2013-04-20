@@ -26,6 +26,7 @@ import com.turt2live.antishare.compatibility.Lockette;
 import com.turt2live.antishare.compatibility.LogBlock;
 import com.turt2live.antishare.compatibility.Towny;
 import com.turt2live.antishare.compatibility.other.MagicSpells;
+import com.turt2live.antishare.compatibility.other.WorldEdit;
 import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
 import com.turt2live.antishare.compatibility.type.RegionProtection;
@@ -42,6 +43,7 @@ public class HookManager{
 	private final List<RegionProtection> regions = new ArrayList<RegionProtection>();
 	private final List<BlockLogger> loggers = new ArrayList<BlockLogger>();
 	private MagicSpells spells;
+	private WorldEdit worldedit;
 
 	/**
 	 * Sends a block break to all block logging plugins
@@ -155,6 +157,24 @@ public class HookManager{
 		return false;
 	}
 
+	/**
+	 * Determines if the WorldEdit hook has been loaded
+	 * 
+	 * @return true if there is a valid WorldEdit hook
+	 */
+	public boolean hasWorldEdit(){
+		return worldedit != null;
+	}
+
+	/**
+	 * Gets the WorldEdit hook, may be null
+	 * 
+	 * @return the WorldEdit hook, if any
+	 */
+	public WorldEdit getWorldEdit(){
+		return worldedit;
+	}
+
 	private void hooked(Plugin hook){
 		plugin.getLogger().info(plugin.getMessages().getMessage("hooked", hook.getName()));
 	}
@@ -167,6 +187,7 @@ public class HookManager{
 		loggers.clear();
 		regions.clear();
 		spells = null;
+		worldedit = null;
 		load();
 	}
 
@@ -179,6 +200,7 @@ public class HookManager{
 		loggers.clear();
 		regions.clear();
 		spells = null;
+		worldedit = null;
 
 		// Find plugins
 		Plugin chestshop = plugin.getServer().getPluginManager().getPlugin("ChestShop");
@@ -211,6 +233,11 @@ public class HookManager{
 			hooked(magicspells);
 			spells = new MagicSpells();
 			plugin.getServer().getPluginManager().registerEvents(spells, plugin);
+		}
+		Plugin worldedit = plugin.getServer().getPluginManager().getPlugin("WorldEdit");
+		if(worldedit != null){
+			hooked(worldedit);
+			this.worldedit = new WorldEdit();
 		}
 	}
 

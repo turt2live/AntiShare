@@ -17,6 +17,7 @@
     <snapi.version>0.0.1-SNAPSHOT</snapi.version>
     <jsonconfig.version>1.0-SNAPSHOT</jsonconfig.version>
     <json.version>1.1.1</json.version>
+    <worldedit.version>4.4.1</worldedit.version>
 
     <!-- JAR Versions -->
     <logblock.version>1.70</logblock.version>
@@ -42,6 +43,15 @@
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <version>${bukkit.version}</version>
+    </dependency>
+
+    <!-- WorldEdit -->
+    <dependency>
+      <groupId>com.sk89q</groupId>
+      <artifactId>worldedit</artifactId>
+      <version>${worldedit.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
     </dependency>
 
     <!-- Vault -->
@@ -217,6 +227,12 @@
   <!-- REPOSITORIES -->
 
   <repositories>
+
+    <!-- For WorldEdit -->
+    <repository>
+      <id>sk89q-repo</id>
+      <url>http://maven.sk89q.com/repo/</url>
+    </repository>
 
     <!-- For configuration library -->
     <repository>
