@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
@@ -37,13 +38,18 @@ public class CuboidManager{
 	private AntiShare plugin = AntiShare.p;
 
 	/**
-	 * Gets the cuboid for a player
+	 * Gets the cuboid for a player. This will also check WorldEdit if found
 	 * 
 	 * @param player the player
 	 * @return the cuboid, or null if not found
 	 */
 	public Cuboid getCuboid(String player){
-		return cuboids.containsKey(player) ? cuboids.get(player).clone() : null;
+		Cuboid cuboid = cuboids.containsKey(player) ? cuboids.get(player).clone() : null;
+		Player playerObj = plugin.getServer().getPlayer(player);
+		if(cuboid == null && playerObj != null){
+			cuboid = plugin.getHookManager().hasWorldEdit() ? plugin.getHookManager().getWorldEdit().getCuboid(playerObj) : null;
+		}
+		return cuboid;
 	}
 
 	/**

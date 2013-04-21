@@ -237,7 +237,7 @@ public class HookManager{
 		Plugin worldedit = plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 		if(worldedit != null){
 			hooked(worldedit);
-			this.worldedit = new WorldEdit();
+			this.worldedit = new WorldEdit(worldedit);
 		}
 	}
 
