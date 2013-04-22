@@ -132,75 +132,81 @@ public class PermissionNodes{
 	public static final PermissionPackage PACK_MOB_MAKE = new PermissionPackage(ALLOW_MOB_CREATION, DENY_MOB_CREATION, null);
 	public static final PermissionPackage PACK_EAT = new PermissionPackage(ALLOW_EAT, DENY_EAT, null);
 
+	// Internal list of all permission nodes
+	private static List<String> SAVED_NODES;
+
 	/**
 	 * Gets a list of all AntiShare permissions
 	 * 
 	 * @return a list of all AntiShare permissions. Never empty and never null.
 	 */
 	public static List<String> getAllPermissions(){
-		List<String> list = new ArrayList<String>();
-		list.add(CONFIG_ALLOW_NODE_START); // AntiShare.allow
-		list.add(CONFIG_DENY_NODE_START); // AntiShare.deny
-		list.add(ALLOW_BLOCK_PLACE); // AntiShare.allow.block_place
-		list.add(ALLOW_BLOCK_BREAK); // AntiShare.allow.block_break
-		list.add(ALLOW_DEATH); // AntiShare.allow.death
-		list.add(ALLOW_PICKUP); // AntiShare.allow.pickup_item
-		list.add(ALLOW_DROP); // AntiShare.allow.drop_item
-		list.add(ALLOW_USE); // AntiShare.allow.use_item
-		list.add(ALLOW_INTERACT); // AntiShare.allow.interact_item
-		list.add(ALLOW_COMMANDS); // AntiShare.allow.commands
-		list.add(ALLOW_COMBAT_PLAYERS); // AntiShare.allow.hit_players
-		list.add(ALLOW_COMBAT_MOBS); // AntiShare.allow.hit_mobs
-		list.add(ALLOW_MOB_CREATION); // AntiShare.allow.create
-		list.add(ALLOW_EAT); // AntiShare.allow.eat
-		list.add(DENY_BLOCK_PLACE); // AntiShare.deny.block_place
-		list.add(DENY_BLOCK_BREAK); // AntiShare.deny.block_break
-		list.add(DENY_DEATH); // AntiShare.deny.death
-		list.add(DENY_PICKUP); // AntiShare.deny.pickup_item
-		list.add(DENY_DROP); // AntiShare.deny.drop_item
-		list.add(DENY_USE); // AntiShare.deny.use_item
-		list.add(DENY_INTERACT); // AntiShare.deny.interact_item
-		list.add(DENY_COMMANDS); // AntiShare.deny.commands
-		list.add(DENY_COMBAT_PLAYERS); // AntiShare.deny.hit_players
-		list.add(DENY_COMBAT_MOBS); // AntiShare.deny.hit_mobs
-		list.add(DENY_MOB_CREATION); // AntiShare.deny.create
-		list.add(DENY_EAT); // AntiShare.deny.eat
-		list.add(GET_NOTIFICATIONS); // AntiShare.getNotifications
-		list.add(SILENT_NOTIFICATIONS); // AntiShare.silent
-		list.add(BREAK_ANYTHING); // AntiShare.getDrops
-		list.add(MIRROR); // AntiShare.mirror
-		list.add(FREE_PLACE); // AntiShare.free_place
-		list.add(RELOAD); // AntiShare.reload
-		list.add(NO_GAMEMODE_COOLDOWN); // AntiShare.cooldownbypass
-		list.add(CHECK); // AntiShare.check
-		list.add(ITEM_FRAMES); // AntiShare.itemframes
-		list.add(CREATE_CUBOID); // AntiShare.cuboid
-		list.add(AFFECT_SURVIVAL); // AntiShare.affect.survival
-		list.add(AFFECT_CREATIVE); // AntiShare.affect.creative
-		list.add(AFFECT_ADVENTURE); // AntiShare.affect.survival
-		list.add(NO_SWAP); // AntiShare.inventories.no_swap
-		list.add(MAKE_ANYTHING); // AntiShare.inventories.allowcrafting
-		list.add(TOOL_GET); // AntiShare.tool.get
-		list.add(TOOL_USE); // AntiShare.tool.use
-		list.add(REGION_CREATE); // AntiShare.regions.create
-		list.add(REGION_DELETE); // AntiShare.regions.delete
-		list.add(REGION_EDIT); // AntiShare.regions.edit
-		list.add(REGION_ROAM); // AntiShare.regions.roam
-		list.add(REGION_THROW); // AntiShare.regions.throw_item
-		list.add(REGION_PICKUP); // AntiShare.regions.pickup_item
-		list.add(REGION_PLACE); // AntiShare.regions.place
-		list.add(REGION_BREAK); // AntiShare.regions.break
-		list.add(REGION_ATTACK_MOBS); // AntiShare.regions.attack_mobs
-		list.add(REGION_ATTACK_PLAYERS); // AntiShare.regions.attack_players
-		list.add(REGION_USE); // AntiShare.regions.use_item
-		list.add(REGION_INTERACT); // AntiShare.regions.interact_item
-		list.add(REGION_LIST); // AntiShare.regions.list
-		list.add(WORLD_SPLIT_NO_SPLIT_CREATIVE); // AntiShare.worldsplit.creative
-		list.add(WORLD_SPLIT_NO_SPLIT_SURVIVAL); // AntiShare.worldsplit.survival
-		list.add(MONEY_NO_FINE); // AntiShare.money.nofine
-		list.add(MONEY_NO_REWARD); // AntiShare.money.noreward
-		list.add(PLUGIN_MAGIC_SPELLS); // AntiShare.plugin.magicspells
-		return list;
+		if(SAVED_NODES != null && SAVED_NODES.size() > 0){
+			return SAVED_NODES;
+		}
+		SAVED_NODES = new ArrayList<String>();
+		SAVED_NODES.add(CONFIG_ALLOW_NODE_START); // AntiShare.allow
+		SAVED_NODES.add(CONFIG_DENY_NODE_START); // AntiShare.deny
+		SAVED_NODES.add(ALLOW_BLOCK_PLACE); // AntiShare.allow.block_place
+		SAVED_NODES.add(ALLOW_BLOCK_BREAK); // AntiShare.allow.block_break
+		SAVED_NODES.add(ALLOW_DEATH); // AntiShare.allow.death
+		SAVED_NODES.add(ALLOW_PICKUP); // AntiShare.allow.pickup_item
+		SAVED_NODES.add(ALLOW_DROP); // AntiShare.allow.drop_item
+		SAVED_NODES.add(ALLOW_USE); // AntiShare.allow.use_item
+		SAVED_NODES.add(ALLOW_INTERACT); // AntiShare.allow.interact_item
+		SAVED_NODES.add(ALLOW_COMMANDS); // AntiShare.allow.commands
+		SAVED_NODES.add(ALLOW_COMBAT_PLAYERS); // AntiShare.allow.hit_players
+		SAVED_NODES.add(ALLOW_COMBAT_MOBS); // AntiShare.allow.hit_mobs
+		SAVED_NODES.add(ALLOW_MOB_CREATION); // AntiShare.allow.create
+		SAVED_NODES.add(ALLOW_EAT); // AntiShare.allow.eat
+		SAVED_NODES.add(DENY_BLOCK_PLACE); // AntiShare.deny.block_place
+		SAVED_NODES.add(DENY_BLOCK_BREAK); // AntiShare.deny.block_break
+		SAVED_NODES.add(DENY_DEATH); // AntiShare.deny.death
+		SAVED_NODES.add(DENY_PICKUP); // AntiShare.deny.pickup_item
+		SAVED_NODES.add(DENY_DROP); // AntiShare.deny.drop_item
+		SAVED_NODES.add(DENY_USE); // AntiShare.deny.use_item
+		SAVED_NODES.add(DENY_INTERACT); // AntiShare.deny.interact_item
+		SAVED_NODES.add(DENY_COMMANDS); // AntiShare.deny.commands
+		SAVED_NODES.add(DENY_COMBAT_PLAYERS); // AntiShare.deny.hit_players
+		SAVED_NODES.add(DENY_COMBAT_MOBS); // AntiShare.deny.hit_mobs
+		SAVED_NODES.add(DENY_MOB_CREATION); // AntiShare.deny.create
+		SAVED_NODES.add(DENY_EAT); // AntiShare.deny.eat
+		SAVED_NODES.add(GET_NOTIFICATIONS); // AntiShare.getNotifications
+		SAVED_NODES.add(SILENT_NOTIFICATIONS); // AntiShare.silent
+		SAVED_NODES.add(BREAK_ANYTHING); // AntiShare.getDrops
+		SAVED_NODES.add(MIRROR); // AntiShare.mirror
+		SAVED_NODES.add(FREE_PLACE); // AntiShare.free_place
+		SAVED_NODES.add(RELOAD); // AntiShare.reload
+		SAVED_NODES.add(NO_GAMEMODE_COOLDOWN); // AntiShare.cooldownbypass
+		SAVED_NODES.add(CHECK); // AntiShare.check
+		SAVED_NODES.add(ITEM_FRAMES); // AntiShare.itemframes
+		SAVED_NODES.add(CREATE_CUBOID); // AntiShare.cuboid
+		SAVED_NODES.add(AFFECT_SURVIVAL); // AntiShare.affect.survival
+		SAVED_NODES.add(AFFECT_CREATIVE); // AntiShare.affect.creative
+		SAVED_NODES.add(AFFECT_ADVENTURE); // AntiShare.affect.survival
+		SAVED_NODES.add(NO_SWAP); // AntiShare.inventories.no_swap
+		SAVED_NODES.add(MAKE_ANYTHING); // AntiShare.inventories.allowcrafting
+		SAVED_NODES.add(TOOL_GET); // AntiShare.tool.get
+		SAVED_NODES.add(TOOL_USE); // AntiShare.tool.use
+		SAVED_NODES.add(REGION_CREATE); // AntiShare.regions.create
+		SAVED_NODES.add(REGION_DELETE); // AntiShare.regions.delete
+		SAVED_NODES.add(REGION_EDIT); // AntiShare.regions.edit
+		SAVED_NODES.add(REGION_ROAM); // AntiShare.regions.roam
+		SAVED_NODES.add(REGION_THROW); // AntiShare.regions.throw_item
+		SAVED_NODES.add(REGION_PICKUP); // AntiShare.regions.pickup_item
+		SAVED_NODES.add(REGION_PLACE); // AntiShare.regions.place
+		SAVED_NODES.add(REGION_BREAK); // AntiShare.regions.break
+		SAVED_NODES.add(REGION_ATTACK_MOBS); // AntiShare.regions.attack_mobs
+		SAVED_NODES.add(REGION_ATTACK_PLAYERS); // AntiShare.regions.attack_players
+		SAVED_NODES.add(REGION_USE); // AntiShare.regions.use_item
+		SAVED_NODES.add(REGION_INTERACT); // AntiShare.regions.interact_item
+		SAVED_NODES.add(REGION_LIST); // AntiShare.regions.list
+		SAVED_NODES.add(WORLD_SPLIT_NO_SPLIT_CREATIVE); // AntiShare.worldsplit.creative
+		SAVED_NODES.add(WORLD_SPLIT_NO_SPLIT_SURVIVAL); // AntiShare.worldsplit.survival
+		SAVED_NODES.add(MONEY_NO_FINE); // AntiShare.money.nofine
+		SAVED_NODES.add(MONEY_NO_REWARD); // AntiShare.money.noreward
+		SAVED_NODES.add(PLUGIN_MAGIC_SPELLS); // AntiShare.plugin.magicspells
+		return SAVED_NODES;
 	}
 
 }
