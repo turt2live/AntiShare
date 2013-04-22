@@ -8,11 +8,16 @@ import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionUser;
+import ru.tehkode.permissions.events.PermissionSystemEvent;
+import ru.tehkode.permissions.events.PermissionSystemEvent.Action;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
@@ -23,7 +28,7 @@ import com.turt2live.antishare.PermissionNodes;
  * 
  * @author turt2live
  */
-public class PermissionsEx{
+public class PermissionsEx implements Listener{
 
 	private ru.tehkode.permissions.bukkit.PermissionsEx pex;
 	private Map<String, List<String>> groups = new HashMap<String, List<String>>();
@@ -32,24 +37,9 @@ public class PermissionsEx{
 	public PermissionsEx(Plugin plugin){
 		this.pex = (ru.tehkode.permissions.bukkit.PermissionsEx) plugin;
 
-		// Manually cache all groups
-		List<String> antishare = PermissionNodes.getAllPermissions();
-		EnhancedConfiguration permissionList = new EnhancedConfiguration(new File(pex.getDataFolder(), "permissions.yml"));
-		permissionList.load();
-		for(PermissionGroup group : ru.tehkode.permissions.bukkit.PermissionsEx.getPermissionManager().getGroups()){
-			List<String> appliedPermissions = permissionList.getStringList("groups." + group.getName() + ".pemrissions");
-			List<String> applicable = new ArrayList<String>();
-			if(appliedPermissions != null){
-				for(String permission : appliedPermissions){
-					if(permission.toLowerCase().startsWith("antishare.")){
-						if(existsInList(permission, antishare)){
-							applicable.add(permission);
-						}
-					}
-				}
-			}
-			groups.put(group.getName().toLowerCase(), applicable);
-		}
+		buildPermissions();
+
+		AntiShare.p.getServer().getPluginManager().registerEvents(this, AntiShare.p);
 	}
 
 	/**
@@ -75,6 +65,13 @@ public class PermissionsEx{
 			}
 		}
 		return target.hasPermission(permission);
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPermissionsUpdate(PermissionSystemEvent event){
+		if(event.getAction() == Action.REINJECT_PERMISSIBLES || event.getAction() == Action.RELOADED){
+			buildPermissions(); // Rebuild
+		}
 	}
 
 	private boolean has(Player player, String permission){
@@ -122,6 +119,29 @@ public class PermissionsEx{
 			}
 		}
 		return false;
+	}
+
+	private void buildPermissions(){
+		groups.clear();
+
+		// Manually cache all groups
+		List<String> antishare = PermissionNodes.getAllPermissions();
+		EnhancedConfiguration permissionList = new EnhancedConfiguration(new File(pex.getDataFolder(), "permissions.yml"));
+		permissionList.load();
+		for(PermissionGroup group : ru.tehkode.permissions.bukkit.PermissionsEx.getPermissionManager().getGroups()){
+			List<String> appliedPermissions = permissionList.getStringList("groups." + group.getName() + ".pemrissions");
+			List<String> applicable = new ArrayList<String>();
+			if(appliedPermissions != null){
+				for(String permission : appliedPermissions){
+					if(permission.toLowerCase().startsWith("antishare.")){
+						if(existsInList(permission, antishare)){
+							applicable.add(permission);
+						}
+					}
+				}
+			}
+			groups.put(group.getName().toLowerCase(), applicable);
+		}
 	}
 
 }
