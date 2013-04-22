@@ -32,6 +32,7 @@ Since 5.3.0:
 - Updated block management to use a much faster and smaller system
 - Updated block management to use less resources
 - WorldEdit can again be used to create a region. This is optional (built-in support still available)
+- PermissionsEx support removed. Can be patched with instructions in the console.
 - Misc. Fixes:
     - Fixed region owner names not being loaded
     - Fixed cuboids not acting as expected
