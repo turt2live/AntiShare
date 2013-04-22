@@ -107,6 +107,12 @@ configuration-update: 'Your configuration has been updated. Please review the up
 key: 'Key'
 value: 'Value'
 permissionsex: 'Your server has PermissionsEx enabled. Be warned: This can cause weird bugs with AntiShare. Do not report PermissionsEx-related bugs'
+permissionsex2: 'To restore DEFAULT function in AntiShare, assign the following permission nodes:'
+permissionsex3: 'AntiShare.affect.creative'
+permissionsex4: 'AntiShare.affect.adventure'
+permissionsex5: '-AntiShare.affect.survival'
+permissionsex6: '-AntiShare.deny.*'
+permissionsex7: 'NOTE: The last two are in fact NEGATED (false).'
 tool-meta:
     generic-tool: 'Right click a player/block to see the Game Mode of that object'
     set-tool-1: 'Left click to SET the Game Mode of a block'

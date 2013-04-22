@@ -247,9 +247,15 @@ public class AntiShare extends PluginWrapper{
 		}
 
 		// PermissionsEx warning
-		if(getServer().getPluginManager().getPlugin("PermissionsEx") != null){
+		if(!getConfig().getBoolean("other.no-pex-warning") && getServer().getPluginManager().getPlugin("PermissionsEx") != null){
 			getLogger().severe("=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
 			getLogger().severe(messages.getMessage("permissionsex"));
+			getLogger().severe(messages.getMessage("permissionsex2"));
+			getLogger().severe(messages.getMessage("permissionsex3"));
+			getLogger().severe(messages.getMessage("permissionsex4"));
+			getLogger().severe(messages.getMessage("permissionsex5"));
+			getLogger().severe(messages.getMessage("permissionsex6"));
+			getLogger().severe(messages.getMessage("permissionsex7"));
 			getLogger().severe("=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
 		}
 
@@ -557,6 +563,6 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if they have the permission
 	 */
 	public static boolean hasPermission(CommandSender target, String permission){
-		return p.getHookManager().hasPermissionsEx() ? p.getHookManager().getPermissionsEx().hasPermission(target, permission) : target.hasPermission(permission);
+		return target.hasPermission(permission);
 	}
 }
