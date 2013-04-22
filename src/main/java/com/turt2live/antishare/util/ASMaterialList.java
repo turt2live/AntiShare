@@ -88,7 +88,8 @@ public class ASMaterialList{
 				add(Material.BREWING_STAND, negate);
 				add(Material.BREWING_STAND_ITEM, negate);
 				continue;
-			}else if(testString.equalsIgnoreCase("enderportal") || testString.equalsIgnoreCase("enderportalframe")
+			}else if(testString.equalsIgnoreCase("endportal") || testString.equalsIgnoreCase("enderframe") || testString.equalsIgnoreCase("endframe")
+					|| testString.equalsIgnoreCase("enderportal") || testString.equalsIgnoreCase("endportalframe") || testString.equalsIgnoreCase("enderportalframe")
 					|| testString.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL.getId()))
 					|| testString.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL_FRAME.getId()))){
 				add(Material.ENDER_PORTAL, negate);
