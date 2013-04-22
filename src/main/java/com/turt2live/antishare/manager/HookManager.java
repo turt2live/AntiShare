@@ -26,6 +26,7 @@ import com.turt2live.antishare.compatibility.Lockette;
 import com.turt2live.antishare.compatibility.LogBlock;
 import com.turt2live.antishare.compatibility.Towny;
 import com.turt2live.antishare.compatibility.other.MagicSpells;
+import com.turt2live.antishare.compatibility.other.PermissionsEx;
 import com.turt2live.antishare.compatibility.other.WorldEdit;
 import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
@@ -44,6 +45,7 @@ public class HookManager{
 	private final List<BlockLogger> loggers = new ArrayList<BlockLogger>();
 	private MagicSpells spells;
 	private WorldEdit worldedit;
+	private PermissionsEx pex;
 
 	/**
 	 * Sends a block break to all block logging plugins
@@ -167,12 +169,30 @@ public class HookManager{
 	}
 
 	/**
+	 * Determines if the PermissionsEx hook has been loaded
+	 * 
+	 * @return true if there is a valid PermissionsEx hook
+	 */
+	public boolean hasPermissionsEx(){
+		return pex != null;
+	}
+
+	/**
 	 * Gets the WorldEdit hook, may be null
 	 * 
 	 * @return the WorldEdit hook, if any
 	 */
 	public WorldEdit getWorldEdit(){
 		return worldedit;
+	}
+
+	/**
+	 * Gets the PermissionsEx hook, may be null.
+	 * 
+	 * @return the PermissionsEx hook, if any
+	 */
+	public PermissionsEx getPermissionsEx(){
+		return pex;
 	}
 
 	private void hooked(Plugin hook){
@@ -188,6 +208,7 @@ public class HookManager{
 		regions.clear();
 		spells = null;
 		worldedit = null;
+		pex = null;
 		load();
 	}
 
@@ -238,6 +259,11 @@ public class HookManager{
 		if(worldedit != null){
 			hooked(worldedit);
 			this.worldedit = new WorldEdit(worldedit);
+		}
+		Plugin permissionsex = plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
+		if(permissionsex != null){
+			hooked(permissionsex);
+			this.pex = new PermissionsEx(permissionsex);
 		}
 	}
 

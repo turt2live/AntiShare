@@ -316,7 +316,7 @@ public class AntiShare extends PluginWrapper{
 	}
 
 	private void loadPlayerInformation(){
-		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			@Override
 			public void run(){
 				for(Player player : getServer().getOnlinePlayers()){
@@ -557,6 +557,6 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if they have the permission
 	 */
 	public static boolean hasPermission(CommandSender target, String permission){
-		return target.hasPermission(permission);
+		return p.getHookManager().hasPermissionsEx() ? p.getHookManager().getPermissionsEx().hasPermission(target, permission) : target.hasPermission(permission);
 	}
 }
