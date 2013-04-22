@@ -238,6 +238,12 @@
 
   <repositories>
 
+    <!-- For Bukkit -->
+    <repository>
+      <id>bukkit-repo</id>
+      <url>http://repo.bukkit.org/content/groups/public</url>
+    </repository>
+
     <!-- For WorldEdit -->
     <repository>
       <id>sk89q-repo</id>
@@ -254,12 +260,6 @@
     <repository>
       <id>vault</id>
       <url>http://ci.herocraftonline.com/plugin/repository/project/Vault/LastSuccessful/repository/</url>
-    </repository>
-
-    <!-- For Bukkit -->
-    <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public</url>
     </repository>
 
     <!-- For MultiVerse and JSONConfiguration -->
