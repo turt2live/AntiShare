@@ -1359,7 +1359,7 @@ public class ASListener implements Listener{
 			event.setCancelled(true);
 		}
 
-		plugin.getMessages().notifyParties(player, Action.ITEM_THROW, illegal, item);
+		plugin.getMessages().notifyParties(player, Action.USE_SOMETHING, illegal, item);
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
