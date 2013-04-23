@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.turt2live.antishare</groupId>
   <artifactId>AntiShare</artifactId>
-  <version>5.4.0-RELEASEWAIT</version>
+  <version>5.4.0</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- Dependency Versions -->
-    <bukkit.version>1.5.1-R0.1</bukkit.version>
+    <bukkit.version>1.5.1-R0.2</bukkit.version>
     <vault.version>1.2.24-SNAPSHOT</vault.version>
     <materialapi.version>0.0.2-SNAPSHOT</materialapi.version>
     <metricsextension.version>0.0.4-SNAPSHOT</metricsextension.version>
