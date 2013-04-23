@@ -220,7 +220,7 @@ public class SelfCompatibility{
 		File newDir = new File(directory, "world_configurations");
 		int files = 0;
 		if(directory.listFiles() != null){
-			for(File file : directory.listFiles(new FileFilter(){
+			for(File file : directory.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File arg0){
 					if(arg0.getName().endsWith("_config.yml")){

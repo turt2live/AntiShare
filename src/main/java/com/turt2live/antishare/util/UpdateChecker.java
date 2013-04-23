@@ -45,7 +45,7 @@ public class UpdateChecker{
 		if(!plugin.settings().updateChecker){
 			return;
 		}
-		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable(){
+		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
 
 			@Override
 			public void run(){
