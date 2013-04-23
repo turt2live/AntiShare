@@ -113,6 +113,8 @@ permissionsex4: 'AntiShare.affect.adventure'
 permissionsex5: '-AntiShare.affect.survival'
 permissionsex6: '-AntiShare.deny.*'
 permissionsex7: 'NOTE: The last two are in fact NEGATED (false).'
+potion-effects-error1: 'Potion effect not applied due to unknown reason.'
+potion-effects-error2: 'Saved object is not a potion effect'
 tool-meta:
     generic-tool: 'Right click a player/block to see the Game Mode of that object'
     set-tool-1: 'Left click to SET the Game Mode of a block'

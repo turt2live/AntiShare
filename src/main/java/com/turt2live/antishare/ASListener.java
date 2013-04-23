@@ -105,6 +105,7 @@ import com.turt2live.antishare.cuboid.Cuboid;
 import com.turt2live.antishare.io.GameModeIdentity;
 import com.turt2live.antishare.io.LevelSaver;
 import com.turt2live.antishare.io.LevelSaver.Level;
+import com.turt2live.antishare.io.PotionSaver;
 import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
@@ -260,6 +261,12 @@ public class ASListener implements Listener{
 			}
 		}
 
+		// Change potion effects if needed
+		if(plugin.settings().gamemodeChangeSettings.changePotionEffects && !AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+			PotionSaver.saveEffects(player, from);
+			PotionSaver.applySavedEffects(player, to);
+		}
+
 		// Check to see if we should even bother
 		if(!plugin.settings().features.inventories){
 			return cancel;
@@ -283,6 +290,11 @@ public class ASListener implements Listener{
 					if(plugin.getMoneyManager().getRawEconomyHook() != null){
 						plugin.getMoneyManager().getRawEconomyHook().switchBalance(player.getName(), to, from);
 					}
+				}
+				// Restore effects
+				if(plugin.settings().gamemodeChangeSettings.changePotionEffects && !AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+					PotionSaver.saveEffects(player, to);
+					PotionSaver.applySavedEffects(player, from);
 				}
 				return cancel;
 			}
