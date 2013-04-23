@@ -777,6 +777,7 @@ public class ASListener implements Listener{
 		org.bukkit.event.block.Action action = event.getAction();
 		switch (action){
 		case LEFT_CLICK_AIR:
+		case LEFT_CLICK_BLOCK:
 		case RIGHT_CLICK_AIR:
 			return;
 		}

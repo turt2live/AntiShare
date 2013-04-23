@@ -1,11 +1,11 @@
 [Legend]
-+ Added
-- Removed
-! Breaking Change
-= Changed
++ Addition
+= Fix
+! Change
+- Removal
 
 Since 5.4.0:
-- Nothing
+= Fixed interaction logic
 
 Known Bugs:
 - Beacons
