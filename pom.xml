@@ -7,6 +7,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <shade.name>shade.antishare</shade.name>
 
     <!-- Dependency Versions -->
     <bukkit.version>1.5.1-R0.2</bukkit.version>
@@ -314,27 +315,27 @@
               <relocations>
                 <relocation>
                   <pattern>com.feildmaster.lib.configuration</pattern>
-                  <shadedPattern>com.feildmaster.lib.configuration.${project.name}</shadedPattern>
+                  <shadedPattern>com.feildmaster.lib.configuration.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>net.minidev.json</pattern>
-                  <shadedPattern>net.minidev.json.${project.name}</shadedPattern>
+                  <shadedPattern>net.minidev.json.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.dumptruckman.minecraft.configuration</pattern>
-                  <shadedPattern>com.dumptruckman.minecraft.configuration.${project.name}</shadedPattern>
+                  <shadedPattern>com.dumptruckman.minecraft.configuration.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.materials</pattern>
-                  <shadedPattern>com.turt2live.materials.${project.name}</shadedPattern>
+                  <shadedPattern>com.turt2live.materials.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.metrics</pattern>
-                  <shadedPattern>com.turt2live.metrics.${project.name}</shadedPattern>
+                  <shadedPattern>com.turt2live.metrics.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.simplenotice</pattern>
-                  <shadedPattern>com.turt2live.simplenotice.${project.name}</shadedPattern>
+                  <shadedPattern>com.turt2live.simplenotice.${shade.name}</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
