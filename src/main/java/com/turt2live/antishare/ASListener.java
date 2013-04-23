@@ -1352,7 +1352,7 @@ public class ASListener implements Listener{
 			illegal = true;
 		}
 
-		ProtectionInformation info = ASUtils.isBlocked(player, null, c.drop, item, PermissionNodes.PACK_DROP);
+		ProtectionInformation info = ASUtils.isBlocked(player, null, c.use, item, PermissionNodes.PACK_USE);
 		illegal = info.illegal;
 
 		if(illegal){
