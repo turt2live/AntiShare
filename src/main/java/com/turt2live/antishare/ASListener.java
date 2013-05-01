@@ -941,21 +941,13 @@ public class ASListener implements Listener{
 			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, entity.getType().getName())){
 				illegal = false;
 			}
-		}else{
-			if(c.use.has(rightClicked)){
-				illegal = true;
-			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, rightClicked)){
-				illegal = false;
-			}
-			if(!illegal && hand.getType() != Material.AIR){
-				if(c.use.has(hand)){
-					illegal = true;
-				}
-				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
-					illegal = false;
-				}
-			}
+		}
+
+		if(c.interact.has(rightClicked)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_INTERACT, PermissionNodes.DENY_INTERACT, rightClicked)){
+			illegal = false;
 		}
 
 		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
