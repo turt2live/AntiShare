@@ -197,6 +197,9 @@ public class ASInventory implements Cloneable{
 	 */
 	public void setTo(Inventory inventory){
 		inventory.clear();
+		if(inventory instanceof PlayerInventory){
+			((PlayerInventory) inventory).setArmorContents(null);
+		}
 		ItemStack[] armor = getContents(false, true);
 		ItemStack[] contents = getContents(true, false);
 		inventory.setContents(contents);

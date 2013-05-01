@@ -271,6 +271,7 @@ public class InventoryManager{
 			regular.setTo(player.getInventory());
 		}else{
 			player.getInventory().clear();
+			player.getInventory().setArmorContents(null);
 		}
 		ASInventory ender = getInventory(player, to, InventoryType.ENDER);
 		if(ender != null && !ender.isEmpty()){
