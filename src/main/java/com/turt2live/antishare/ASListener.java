@@ -127,6 +127,7 @@ public class ASListener implements Listener{
 
 	public static final String FALLING_METADATA_KEY = "antishare-falling-original-gamemode";
 	public static final String LOGBLOCK_METADATA_KEY = "antishare-logblock";
+	public static final String NO_PICKUP_METADATA_KEY = "antishare-logblock";
 	public final FixedMetadataValue EMPTY_METADATA;
 
 	private final Map<String, Long> gamemodeCooldowns = new HashMap<String, Long>();
@@ -215,6 +216,10 @@ public class ASListener implements Listener{
 		boolean checkRegion = true;
 		boolean cancel = false;
 
+		if(!player.hasMetadata(NO_PICKUP_METADATA_KEY)){
+			player.setMetadata(NO_PICKUP_METADATA_KEY, EMPTY_METADATA);
+		}
+
 		// Automatically close all open windows
 		InventoryView active = player.getOpenInventory();
 		if(active != null){
@@ -236,6 +241,7 @@ public class ASListener implements Listener{
 						cancel = true;
 						int seconds = (int) (time - (now - lastUsed)) / 1000;
 						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("gamemode-wait", String.valueOf(seconds)), true); //ASUtils.sendToPlayer(player, ChatColor.RED + "You must wait at least " + seconds + " more second" + s + " before changing Game Modes.", true);
+						player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 						return cancel;
 					}
 				}else{
@@ -269,6 +275,7 @@ public class ASListener implements Listener{
 
 		// Check to see if we should even bother
 		if(!plugin.settings().features.inventories){
+			player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 			return cancel;
 		}
 
@@ -296,6 +303,7 @@ public class ASListener implements Listener{
 					PotionSaver.saveEffects(player, to);
 					PotionSaver.applySavedEffects(player, from);
 				}
+				player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 				return cancel;
 			}
 		}
@@ -325,6 +333,7 @@ public class ASListener implements Listener{
 			plugin.getMessages().notifyParties(player, Action.GAMEMODE_CHANGE, false, MaterialAPI.capitalize(to.name()));
 		}
 
+		player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 		return cancel;
 	}
 
@@ -332,6 +341,7 @@ public class ASListener implements Listener{
 		final Player player = event.getPlayer();
 		final GameMode from = player.getGameMode();
 		final GameMode to = event.getNewGameMode();
+		player.setMetadata(NO_PICKUP_METADATA_KEY, EMPTY_METADATA);
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override
 			public void run(){
@@ -1086,6 +1096,11 @@ public class ASListener implements Listener{
 		Item drop = event.getItem();
 		Material item = event.getItem().getItemStack().getType();
 		ASConfig c = configFor(drop.getLocation());
+
+		if(player.hasMetadata(NO_PICKUP_METADATA_KEY)){
+			event.setCancelled(true);
+			return;
+		}
 
 		ProtectionInformation info = ASUtils.isBlocked(player, drop.getItemStack(), drop.getLocation(), c.pickup, PermissionNodes.PACK_PICKUP);
 		illegal = info.illegal;
