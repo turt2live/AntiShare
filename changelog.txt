@@ -7,6 +7,7 @@
 Since 5.4.0:
 = Fixed interaction logic
 = Fixed being close enough triggering the wrong inventory to pickup items
+= Fixed container interaction
 
 Known Bugs:
 - Beacons

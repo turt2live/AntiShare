@@ -801,6 +801,13 @@ public class ASListener implements Listener{
 		isRegion = information.isRegion;
 		Region blockRegion = information.targetRegion;
 
+		if(!c.naturalSettings.allowMismatchedGM
+				&& !GamemodeAbstraction.isMatch(player.getGameMode(), plugin.getBlockManager().getType(block))
+				&& !AntiShare.hasPermission(player, PermissionNodes.FREE_PLACE)
+				&& !illegal){
+			illegal = true;
+		}
+
 		if(illegal){
 			event.setCancelled(true);
 			if(hasMobCatcher){
