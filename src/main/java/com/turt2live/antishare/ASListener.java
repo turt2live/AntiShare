@@ -802,6 +802,7 @@ public class ASListener implements Listener{
 		Region blockRegion = information.targetRegion;
 
 		if(!c.naturalSettings.allowMismatchedGM
+				&& plugin.getBlockManager().getType(block) != null
 				&& !GamemodeAbstraction.isMatch(player.getGameMode(), plugin.getBlockManager().getType(block))
 				&& !AntiShare.hasPermission(player, PermissionNodes.FREE_PLACE)
 				&& !illegal){
