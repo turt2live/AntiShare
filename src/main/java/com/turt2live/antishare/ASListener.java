@@ -1000,7 +1000,6 @@ public class ASListener implements Listener{
 				main = entity.getType().getName();
 			}else if(!isItemFrame){
 				action = Action.USE_SOMETHING;
-				extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
 			}
 		}
 		plugin.getMessages().notifyParties(player, action, illegal, main, extra);

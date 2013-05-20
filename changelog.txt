@@ -6,6 +6,7 @@
 
 Since 5.4.1:
 = Interaction logic (Issue #77)
+= Fix error with minecart interaction
 
 Known Bugs:
 - Beacons
