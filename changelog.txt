@@ -4,10 +4,8 @@
 ! Change
 - Removal
 
-Since 5.4.1:
-= Interaction logic (Issue #77)
-= Fix error with minecart interaction
-= Fix inventory duplication exploit (Issue #75)
+Since 5.4.2:
+-- None
 
 Known Bugs:
 - Beacons
