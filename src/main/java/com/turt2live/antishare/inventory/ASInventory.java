@@ -231,9 +231,6 @@ public class ASInventory implements Cloneable{
 	 */
 	public void save(){
 		checkDataFolder();
-		if(isEmpty()){
-			return; // Don't save empty things
-		}
 		if(type == InventoryType.PLAYER || type == InventoryType.ENDER){
 			if(!GameModeIdentity.hasChangedGameMode(owner)){
 				return; // Don't save if they haven't changed Game Mode yet
