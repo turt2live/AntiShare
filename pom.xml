@@ -13,7 +13,7 @@
     <bukkit.version>1.5.1-R0.2</bukkit.version>
     <vault.version>1.2.24-SNAPSHOT</vault.version>
     <materialapi.version>0.0.2-SNAPSHOT</materialapi.version>
-    <metricsextension.version>0.0.4-SNAPSHOT</metricsextension.version>
+    <metricsextension.version>0.0.5-SNAPSHOT</metricsextension.version>
     <configurationlib.version>1.1.3</configurationlib.version>
     <snapi.version>0.0.1-SNAPSHOT</snapi.version>
     <jsonconfig.version>1.0-SNAPSHOT</jsonconfig.version>
