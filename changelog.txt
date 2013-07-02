@@ -10,6 +10,9 @@ Since 5.4.2:
 Known Bugs:
 - Beacons
 - PEX
+- Horses are not correctly detected (BUKKIT-4393)
+    - Displays as "EntityHorse"
+- Leashes are not visually blocked (BUKKIT-4395)
 
 Planned:
 - Rollback support

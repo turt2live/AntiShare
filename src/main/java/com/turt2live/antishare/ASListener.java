@@ -26,11 +26,13 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Jukebox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Item;
@@ -953,10 +955,12 @@ public class ASListener implements Listener{
 		}else if(rightClicked == Material.AIR){
 			isInteract = true;
 			regionPermission = PermissionNodes.REGION_ATTACK_MOBS;
-			if(c.interactMobs.contains(entity.getType())){
+			// TODO: 1.6.1 temp fix
+			if(c.interactMobs.contains((entity instanceof Animals && entity.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : entity.getType())){
 				illegal = true;
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, entity.getType().getName())){
+			// TODO: 1.6.1 temp fix
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, ((entity instanceof Animals && entity.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : entity.getType()).getName())){
 				illegal = false;
 			}
 		}
@@ -988,7 +992,8 @@ public class ASListener implements Listener{
 			action = Action.REGION_INTERACT_MOB;
 			extra = new String[] {entityRegion == null ? plugin.getMessages().getMessage("wilderness") : entityRegion.getName()};
 			if(isInteract){
-				main = entity.getType().getName();
+				// TODO: 1.6.1 temp fix
+				main = ((entity instanceof Animals && entity.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : entity.getType()).getName();
 			}else if(!isItemFrame){
 				action = Action.REGION_USE_SOMETHING;
 				extra = new String[] {MaterialAPI.capitalize(hand.getType().name()),
@@ -997,7 +1002,8 @@ public class ASListener implements Listener{
 		}else{
 			action = Action.INTERACT_MOB;
 			if(isInteract){
-				main = entity.getType().getName();
+				// TODO: 1.6.1 temp fix
+				main = ((entity instanceof Animals && entity.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : entity.getType()).getName();
 			}else if(!isItemFrame){
 				action = Action.USE_SOMETHING;
 			}
