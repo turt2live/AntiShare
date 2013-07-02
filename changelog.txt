@@ -5,7 +5,7 @@
 - Removal
 
 Since 5.4.2:
--- None
++ Partial support for 1.6.1 - Pending Bukkit bug fixes
 
 Known Bugs:
 - Beacons
