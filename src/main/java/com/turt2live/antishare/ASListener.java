@@ -1255,7 +1255,8 @@ public class ASListener implements Listener{
 			isPlayerCombat = true;
 		}
 
-		ProtectionInformation info = ASUtils.isBlocked(playerAttacker, target.getLocation(), c.attackMobs, target.getType(), isPlayerCombat ? PermissionNodes.PACK_COMBAT_PLAYERS : PermissionNodes.PACK_COMBAT_MOBS);
+		// TODO: 1.6.1 temp fix
+		ProtectionInformation info = ASUtils.isBlocked(playerAttacker, target.getLocation(), c.attackMobs, ((target instanceof Animals && target.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : target.getType()), isPlayerCombat ? PermissionNodes.PACK_COMBAT_PLAYERS : PermissionNodes.PACK_COMBAT_MOBS);
 		illegal = info.illegal;
 		isRegion = info.isRegion;
 		Region entityRegion = info.targetRegion;
@@ -1265,7 +1266,8 @@ public class ASListener implements Listener{
 		}
 
 		Action action = isPlayerCombat ? Action.HIT_PLAYER : Action.HIT_MOB;
-		String name = target instanceof Player ? ((Player) target).getName() : MaterialAPI.capitalize(target.getType().getName());
+		// TODO: 1.6.1 temp fix
+		String name = target instanceof Player ? ((Player) target).getName() : MaterialAPI.capitalize(((target instanceof Animals && target.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : target.getType()).getName());
 		String[] extra = null;
 		if(isRegion){
 			action = isPlayerCombat ? Action.REGION_HIT_PLAYER : Action.REGION_HIT_MOB;
