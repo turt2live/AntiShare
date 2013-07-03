@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -76,6 +77,7 @@ import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -886,6 +888,22 @@ public class ASListener implements Listener{
 		plugin.getMessages().notifyParties(player, action, illegal, item, extra);
 	}
 
+	// TODO: 1.6.1 temp fix
+	// Fixes opening inventory screen (I/E key) while on a horse.
+	// Duplication steps:
+	/*
+	 * 1) In survival, mount a horse
+	 * 2) Go to creative
+	 * 3) Open inventory
+	 */
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onInvOpen(InventoryOpenEvent event){
+		if(GamemodeAbstraction.isCreative(event.getPlayer().getGameMode()) && event.getPlayer().getVehicle() != null && !AntiShare.hasPermission((Player) event.getPlayer(), "AntiShare.161.temp")){
+			event.setCancelled(true);
+			plugin.getMessages().sendTo((Player) event.getPlayer(), ChatColor.RED + "You can't do that on a mount. Dismount first.", false);
+		}
+	}
+
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityInteract(PlayerInteractEntityEvent event){
 		Player player = event.getPlayer();
@@ -985,6 +1003,8 @@ public class ASListener implements Listener{
 		boolean horse = entity instanceof Animals && entity.getType() == EntityType.UNKNOWN;
 		if(horse && GamemodeAbstraction.isCreative(player.getGameMode()) && !AntiShare.hasPermission(player, PermissionNodes.ALLOW_INTERACT)){
 			illegal = true;
+			isInteract = true;
+			isRegion = false;
 		}
 
 		if(illegal){
