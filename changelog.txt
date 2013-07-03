@@ -12,8 +12,6 @@ Known Bugs:
 - PEX
 - Horses are not correctly detected (BUKKIT-4393)
     - Displays as "EntityHorse"
-- Leashes are not visually blocked (BUKKIT-4395)
-- Cannot cancel name tags (BUKKIT-4396)
 
 Planned:
 - Rollback support
