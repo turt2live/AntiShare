@@ -12,6 +12,7 @@ Known Bugs:
 - PEX
 - Horses are not correctly detected (BUKKIT-4393)
     - Displays as "EntityHorse"
+- Horse inventory cannot be blocked (BUKKIT-4427)
 
 Planned:
 - Rollback support
