@@ -1,15 +1,19 @@
 [Legend]
-+ Added
-- Removed
-! Breaking Change
-= Changed
++ Addition
+= Fix
+! Change
+- Removal
 
-Since 5.4.0:
-- Nothing
+Since 5.4.2:
++ Partial support for 1.6.1 - Pending Bukkit bug fixes
 
 Known Bugs:
 - Beacons
 - PEX
+- Horses are not correctly detected (BUKKIT-4393)
+    - Displays as "EntityHorse"
+- Horse inventory cannot be blocked (BUKKIT-4427)
+- Leashes can be duped via spam rclick at a cow (Vanilla)
 
 Planned:
 - Rollback support

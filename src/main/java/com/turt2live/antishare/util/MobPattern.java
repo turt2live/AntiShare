@@ -107,7 +107,7 @@ public class MobPattern{
 	 */
 	public void scheduleUpdate(final Block block){
 		AntiShare plugin = AntiShare.p;
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 
 			@Override
 			public void run(){

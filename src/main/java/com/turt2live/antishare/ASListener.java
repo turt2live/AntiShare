@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,11 +27,13 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Jukebox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Item;
@@ -74,6 +77,7 @@ import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -127,6 +131,7 @@ public class ASListener implements Listener{
 
 	public static final String FALLING_METADATA_KEY = "antishare-falling-original-gamemode";
 	public static final String LOGBLOCK_METADATA_KEY = "antishare-logblock";
+	public static final String NO_PICKUP_METADATA_KEY = "antishare-logblock";
 	public final FixedMetadataValue EMPTY_METADATA;
 
 	private final Map<String, Long> gamemodeCooldowns = new HashMap<String, Long>();
@@ -215,6 +220,10 @@ public class ASListener implements Listener{
 		boolean checkRegion = true;
 		boolean cancel = false;
 
+		if(!player.hasMetadata(NO_PICKUP_METADATA_KEY)){
+			player.setMetadata(NO_PICKUP_METADATA_KEY, EMPTY_METADATA);
+		}
+
 		// Automatically close all open windows
 		InventoryView active = player.getOpenInventory();
 		if(active != null){
@@ -236,6 +245,7 @@ public class ASListener implements Listener{
 						cancel = true;
 						int seconds = (int) (time - (now - lastUsed)) / 1000;
 						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("gamemode-wait", String.valueOf(seconds)), true); //ASUtils.sendToPlayer(player, ChatColor.RED + "You must wait at least " + seconds + " more second" + s + " before changing Game Modes.", true);
+						player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 						return cancel;
 					}
 				}else{
@@ -269,6 +279,7 @@ public class ASListener implements Listener{
 
 		// Check to see if we should even bother
 		if(!plugin.settings().features.inventories){
+			player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 			return cancel;
 		}
 
@@ -296,6 +307,7 @@ public class ASListener implements Listener{
 					PotionSaver.saveEffects(player, to);
 					PotionSaver.applySavedEffects(player, from);
 				}
+				player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 				return cancel;
 			}
 		}
@@ -325,6 +337,7 @@ public class ASListener implements Listener{
 			plugin.getMessages().notifyParties(player, Action.GAMEMODE_CHANGE, false, MaterialAPI.capitalize(to.name()));
 		}
 
+		player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 		return cancel;
 	}
 
@@ -332,6 +345,7 @@ public class ASListener implements Listener{
 		final Player player = event.getPlayer();
 		final GameMode from = player.getGameMode();
 		final GameMode to = event.getNewGameMode();
+		player.setMetadata(NO_PICKUP_METADATA_KEY, EMPTY_METADATA);
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override
 			public void run(){
@@ -777,6 +791,7 @@ public class ASListener implements Listener{
 		org.bukkit.event.block.Action action = event.getAction();
 		switch (action){
 		case LEFT_CLICK_AIR:
+		case LEFT_CLICK_BLOCK:
 		case RIGHT_CLICK_AIR:
 			return;
 		}
@@ -789,6 +804,14 @@ public class ASListener implements Listener{
 		illegal = information.illegal;
 		isRegion = information.isRegion;
 		Region blockRegion = information.targetRegion;
+
+		if(!c.naturalSettings.allowMismatchedGM
+				&& plugin.getBlockManager().getType(block) != null
+				&& !GamemodeAbstraction.isMatch(player.getGameMode(), plugin.getBlockManager().getType(block))
+				&& !AntiShare.hasPermission(player, PermissionNodes.FREE_PLACE)
+				&& !illegal){
+			illegal = true;
+		}
 
 		if(illegal){
 			event.setCancelled(true);
@@ -865,6 +888,22 @@ public class ASListener implements Listener{
 		plugin.getMessages().notifyParties(player, action, illegal, item, extra);
 	}
 
+	// TODO: 1.6.1 temp fix
+	// Fixes opening inventory screen (I/E key) while on a horse.
+	// Duplication steps:
+	/*
+	 * 1) In survival, mount a horse
+	 * 2) Go to creative
+	 * 3) Open inventory
+	 */
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onInvOpen(InventoryOpenEvent event){
+		if(GamemodeAbstraction.isCreative(event.getPlayer().getGameMode()) && event.getPlayer().getVehicle() != null && !AntiShare.hasPermission((Player) event.getPlayer(), "AntiShare.161.temp")){
+			event.setCancelled(true);
+			plugin.getMessages().sendTo((Player) event.getPlayer(), ChatColor.RED + "You can't do that on a mount. Dismount first.", false);
+		}
+	}
+
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityInteract(PlayerInteractEntityEvent event){
 		Player player = event.getPlayer();
@@ -934,27 +973,21 @@ public class ASListener implements Listener{
 		}else if(rightClicked == Material.AIR){
 			isInteract = true;
 			regionPermission = PermissionNodes.REGION_ATTACK_MOBS;
-			if(c.interactMobs.contains(entity.getType())){
+			// TODO: 1.6.1 temp fix
+			if(c.interactMobs.contains((entity instanceof Animals && entity.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : entity.getType())){
 				illegal = true;
 			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, entity.getType().getName())){
+			// TODO: 1.6.1 temp fix
+			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, ((entity instanceof Animals && entity.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : entity.getType()).getName())){
 				illegal = false;
 			}
-		}else{
-			if(c.use.has(rightClicked)){
-				illegal = true;
-			}
-			if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, rightClicked)){
-				illegal = false;
-			}
-			if(!illegal && hand.getType() != Material.AIR){
-				if(c.use.has(hand)){
-					illegal = true;
-				}
-				if(!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, hand.getType())){
-					illegal = false;
-				}
-			}
+		}
+
+		if(c.interact.has(rightClicked)){
+			illegal = true;
+		}
+		if(!plugin.isBlocked(player, PermissionNodes.ALLOW_INTERACT, PermissionNodes.DENY_INTERACT, rightClicked)){
+			illegal = false;
 		}
 
 		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
@@ -964,6 +997,14 @@ public class ASListener implements Listener{
 				illegal = true;
 				isRegion = true;
 			}
+		}
+
+		// TODO: 1.6.1 temp fix
+		boolean horse = entity instanceof Animals && entity.getType() == EntityType.UNKNOWN;
+		if(horse && GamemodeAbstraction.isCreative(player.getGameMode()) && !AntiShare.hasPermission(player, PermissionNodes.ALLOW_INTERACT)){
+			illegal = true;
+			isInteract = true;
+			isRegion = false;
 		}
 
 		if(illegal){
@@ -977,7 +1018,8 @@ public class ASListener implements Listener{
 			action = Action.REGION_INTERACT_MOB;
 			extra = new String[] {entityRegion == null ? plugin.getMessages().getMessage("wilderness") : entityRegion.getName()};
 			if(isInteract){
-				main = entity.getType().getName();
+				// TODO: 1.6.1 temp fix
+				main = ((entity instanceof Animals && entity.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : entity.getType()).getName();
 			}else if(!isItemFrame){
 				action = Action.REGION_USE_SOMETHING;
 				extra = new String[] {MaterialAPI.capitalize(hand.getType().name()),
@@ -986,10 +1028,10 @@ public class ASListener implements Listener{
 		}else{
 			action = Action.INTERACT_MOB;
 			if(isInteract){
-				main = entity.getType().getName();
+				// TODO: 1.6.1 temp fix
+				main = ((entity instanceof Animals && entity.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : entity.getType()).getName();
 			}else if(!isItemFrame){
 				action = Action.USE_SOMETHING;
-				extra = new String[] {MaterialAPI.capitalize(hand.getType().name())};
 			}
 		}
 		plugin.getMessages().notifyParties(player, action, illegal, main, extra);
@@ -1093,6 +1135,11 @@ public class ASListener implements Listener{
 		Item drop = event.getItem();
 		Material item = event.getItem().getItemStack().getType();
 		ASConfig c = configFor(drop.getLocation());
+
+		if(player.hasMetadata(NO_PICKUP_METADATA_KEY)){
+			event.setCancelled(true);
+			return;
+		}
 
 		ProtectionInformation info = ASUtils.isBlocked(player, drop.getItemStack(), drop.getLocation(), c.pickup, PermissionNodes.PACK_PICKUP);
 		illegal = info.illegal;
@@ -1234,7 +1281,8 @@ public class ASListener implements Listener{
 			isPlayerCombat = true;
 		}
 
-		ProtectionInformation info = ASUtils.isBlocked(playerAttacker, target.getLocation(), c.attackMobs, target.getType(), isPlayerCombat ? PermissionNodes.PACK_COMBAT_PLAYERS : PermissionNodes.PACK_COMBAT_MOBS);
+		// TODO: 1.6.1 temp fix
+		ProtectionInformation info = ASUtils.isBlocked(playerAttacker, target.getLocation(), c.attackMobs, ((target instanceof Animals && target.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : target.getType()), isPlayerCombat ? PermissionNodes.PACK_COMBAT_PLAYERS : PermissionNodes.PACK_COMBAT_MOBS);
 		illegal = info.illegal;
 		isRegion = info.isRegion;
 		Region entityRegion = info.targetRegion;
@@ -1244,7 +1292,8 @@ public class ASListener implements Listener{
 		}
 
 		Action action = isPlayerCombat ? Action.HIT_PLAYER : Action.HIT_MOB;
-		String name = target instanceof Player ? ((Player) target).getName() : MaterialAPI.capitalize(target.getType().getName());
+		// TODO: 1.6.1 temp fix
+		String name = target instanceof Player ? ((Player) target).getName() : MaterialAPI.capitalize(((target instanceof Animals && target.getType() == EntityType.UNKNOWN) ? EntityType.HORSE : target.getType()).getName());
 		String[] extra = null;
 		if(isRegion){
 			action = isPlayerCombat ? Action.REGION_HIT_PLAYER : Action.REGION_HIT_MOB;

@@ -7,12 +7,13 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <shade.name>shade.antishare</shade.name>
 
     <!-- Dependency Versions -->
-    <bukkit.version>1.5.1-R0.3-SNAPSHOT</bukkit.version>
-    <vault.version>1.2.24-SNAPSHOT</vault.version>
+    <bukkit.version>1.6.1-R0.1-SNAPSHOT</bukkit.version>
+    <vault.version>1.2.26-SNAPSHOT</vault.version>
     <materialapi.version>0.0.2-SNAPSHOT</materialapi.version>
-    <metricsextension.version>0.0.4-SNAPSHOT</metricsextension.version>
+    <metricsextension.version>0.0.5-SNAPSHOT</metricsextension.version>
     <configurationlib.version>1.1.3</configurationlib.version>
     <snapi.version>0.0.1-SNAPSHOT</snapi.version>
     <jsonconfig.version>1.0-SNAPSHOT</jsonconfig.version>
@@ -314,27 +315,27 @@
               <relocations>
                 <relocation>
                   <pattern>com.feildmaster.lib.configuration</pattern>
-                  <shadedPattern>com.feildmaster.lib.configuration.${project.name}</shadedPattern>
+                  <shadedPattern>com.feildmaster.lib.configuration.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>net.minidev.json</pattern>
-                  <shadedPattern>net.minidev.json.${project.name}</shadedPattern>
+                  <shadedPattern>net.minidev.json.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.dumptruckman.minecraft.configuration</pattern>
-                  <shadedPattern>com.dumptruckman.minecraft.configuration.${project.name}</shadedPattern>
+                  <shadedPattern>com.dumptruckman.minecraft.configuration.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.materials</pattern>
-                  <shadedPattern>com.turt2live.materials.${project.name}</shadedPattern>
+                  <shadedPattern>com.turt2live.materials.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.metrics</pattern>
-                  <shadedPattern>com.turt2live.metrics.${project.name}</shadedPattern>
+                  <shadedPattern>com.turt2live.metrics.${shade.name}</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.turt2live.simplenotice</pattern>
-                  <shadedPattern>com.turt2live.simplenotice.${project.name}</shadedPattern>
+                  <shadedPattern>com.turt2live.simplenotice.${shade.name}</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>

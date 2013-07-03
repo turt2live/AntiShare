@@ -56,10 +56,12 @@ public class SelfCompatibility{
 		@Deprecated
 		CONFIGURATION_540_BETA(45),
 		CONFIGURATION_540(50),
+		@Deprecated
 		ITEM_MAP_540(55),
 		FILES_AND_FOLDERS_540(60),
 		INVENTORY_UPDATE_540(65),
-		WORLD_CONFIG_540(70);
+		WORLD_CONFIG_540(70),
+		ITEM_MAP_550(75);
 
 		public final int bytePosition;
 
@@ -128,7 +130,7 @@ public class SelfCompatibility{
 	 */
 	public static List<ASMaterial> updateItemMap(Map<String, ASMaterial> listing) throws IOException{
 		List<ASMaterial> r = new ArrayList<ASMaterial>();
-		if(!needsUpdate(CompatibilityType.ITEM_MAP_540)){
+		if(!needsUpdate(CompatibilityType.ITEM_MAP_550)){
 			return r;
 		}
 		AntiShare p = AntiShare.p;
@@ -161,7 +163,7 @@ public class SelfCompatibility{
 		in.close();
 		out.close();
 		items.delete();
-		noLongerNeedsUpdate(CompatibilityType.ITEM_MAP_540);
+		noLongerNeedsUpdate(CompatibilityType.ITEM_MAP_550);
 		return r;
 	}
 
@@ -220,7 +222,7 @@ public class SelfCompatibility{
 		File newDir = new File(directory, "world_configurations");
 		int files = 0;
 		if(directory.listFiles() != null){
-			for(File file : directory.listFiles(new FileFilter(){
+			for(File file : directory.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File arg0){
 					if(arg0.getName().endsWith("_config.yml")){
