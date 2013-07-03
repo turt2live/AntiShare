@@ -981,6 +981,12 @@ public class ASListener implements Listener{
 			}
 		}
 
+		// TODO: 1.6.1 temp fix
+		boolean horse = entity instanceof Animals && entity.getType() == EntityType.UNKNOWN;
+		if(horse && GamemodeAbstraction.isCreative(player.getGameMode()) && !AntiShare.hasPermission(player, PermissionNodes.ALLOW_INTERACT)){
+			illegal = true;
+		}
+
 		if(illegal){
 			event.setCancelled(true);
 		}
