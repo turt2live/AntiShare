@@ -241,6 +241,7 @@ public class Messages{
 		if(ChatColor.stripColor(message).trim().equalsIgnoreCase("no message")){
 			return;
 		}
+		message = message.replace("EntityHorse", "Horse"); // Cause Bukkit is weird
 		String prefix = plugin.getPrefix() == null || plugin.getPrefix().equalsIgnoreCase("no message") ? "[AntiShare]" : plugin.getPrefix();
 		message = ChatColor.GRAY + prefix + " " + ChatColor.RESET + message;
 		/* SimpleNotice support provided by feildmaster.
