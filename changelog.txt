@@ -4,8 +4,8 @@
 ! Change
 - Removal
 
-Since 5.4.2:
-+ Support for 1.6.2
+Since 5.4.3:
+-- None
 
 Known Bugs:
 - Beacons
