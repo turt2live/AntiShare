@@ -947,6 +947,10 @@ public class ASListener implements Listener{
 			rightClicked = Material.STORAGE_MINECART;
 		}else if(entity instanceof PoweredMinecart){
 			rightClicked = Material.POWERED_MINECART;
+		}else if(entity instanceof HopperMinecart){
+			rightClicked = Material.HOPPER_MINECART;
+		}else if(entity instanceof ExplosiveMinecart){
+			rightClicked = Material.EXPLOSIVE_MINECART;
 		}else if(entity instanceof Boat){
 			rightClicked = Material.BOAT;
 		}else if(entity instanceof Minecart){
