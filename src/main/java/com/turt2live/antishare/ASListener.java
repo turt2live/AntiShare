@@ -113,6 +113,7 @@ import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.Action;
+import com.turt2live.antishare.util.DelayBreakSettings;
 import com.turt2live.antishare.util.GamemodeAbstraction;
 import com.turt2live.antishare.util.MobPattern;
 import com.turt2live.antishare.util.ProtectionInformation;
@@ -130,6 +131,7 @@ public class ASListener implements Listener{
 	public static final String FALLING_METADATA_KEY = "antishare-falling-original-gamemode";
 	public static final String LOGBLOCK_METADATA_KEY = "antishare-logblock";
 	public static final String NO_PICKUP_METADATA_KEY = "antishare-logblock";
+	public static final String ANTISHARE_DELAY_BREAK_KEY = "antishare-delay-break";
 	public final FixedMetadataValue EMPTY_METADATA;
 
 	private final Map<String, Long> gamemodeCooldowns = new HashMap<String, Long>();
@@ -496,6 +498,39 @@ public class ASListener implements Listener{
 		}
 	}
 
+	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockBreakHighest(BlockBreakEvent event){
+		if(event.getBlock().hasMetadata(ANTISHARE_DELAY_BREAK_KEY)){
+			Block block = event.getBlock();
+			block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
+			DelayBreakSettings settings = null;
+			for(MetadataValue value : block.getMetadata(ANTISHARE_DELAY_BREAK_KEY)){
+				if(value.value() instanceof DelayBreakSettings && value.getOwningPlugin().getName().equals(plugin.getName())){
+					settings = (DelayBreakSettings) value.value();
+				}
+			}
+			// We cannot do anything about this case...
+			if(settings == null){
+				plugin.getLogger().warning("Block at " + block.getX() + ", " + block.getY() + ", " + block.getZ() + ", " + block.getWorld().getName() + " was scheduled for a delayed break but did not have any settings for the break.");
+				return;
+			}
+			plugin.getHookManager().sendBlockBreak(settings.playerName, block.getLocation(), block.getType(), block.getData());
+			plugin.getBlockManager().removeBlock(block);
+			if(settings.interactionSettings.drop){
+				block.breakNaturally();
+			}else{
+				block.setType(Material.AIR);
+			}
+		}
+	}
+
+	@EventHandler (priority = EventPriority.MONITOR)
+	public void onBlockBreakMonitor(BlockBreakEvent event){
+		if(event.getBlock().hasMetadata(ANTISHARE_DELAY_BREAK_KEY)){
+			event.getBlock().removeMetadata(ANTISHARE_DELAY_BREAK_KEY, plugin);
+		}
+	}
+
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event){
 		Block block = event.getBlock();
@@ -563,14 +598,8 @@ public class ASListener implements Listener{
 		plugin.getMessages().notifyParties(player, action, illegal, isAttached ? attachedMaterial : block.getType(), extras);
 
 		if(interaction != null && !interaction.deny){
-			block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
-			plugin.getHookManager().sendBlockBreak(player.getName(), block.getLocation(), block.getType(), block.getData());
-			plugin.getBlockManager().removeBlock(block);
-			if(interaction.drop){
-				block.breakNaturally();
-			}else{
-				block.setType(Material.AIR);
-			}
+			// We handle this at highest. Issue #85
+			block.setMetadata(ANTISHARE_DELAY_BREAK_KEY, new FixedMetadataValue(plugin, new DelayBreakSettings(interaction, player.getName())));
 		}
 
 		if(event.isCancelled() || AntiShare.hasPermission(player, PermissionNodes.BREAK_ANYTHING)){

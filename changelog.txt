@@ -5,7 +5,7 @@
 - Removal
 
 Since 5.4.3:
--- None
+= Fix "no-drop cross-gamemode breaking" (Issue #85)
 
 Known Bugs:
 - Beacons
