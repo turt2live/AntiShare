@@ -354,6 +354,42 @@ public class ASListener implements Listener{
 		}, 2);
 	}
 
+	private void doOnUseInteract(PlayerInteractEvent event, Block block){
+		Player player = event.getPlayer();
+		boolean illegal = false, isRegion = false;
+		Location blockLocation = block.getLocation();
+		ASConfig c = configFor(blockLocation);
+		ItemStack hand = player.getItemInHand();
+		if(hand == null || hand.getType() == Material.AIR){
+			return; // Do not process
+		}
+
+		ProtectionInformation information = ASUtils.isBlocked(player, hand, blockLocation, c.use, PermissionNodes.PACK_USE, c);
+		illegal = information.illegal;
+		isRegion = information.isRegion;
+		Region blockRegion = information.targetRegion;
+
+		if(illegal){
+			event.setCancelled(true);
+			if(hasMobCatcher){
+				ItemStack trueHand = player.getItemInHand();
+				if(trueHand != null){
+					if(trueHand.getType() == Material.EGG || trueHand.getType() == Material.MONSTER_EGG){
+						trueHand.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
+					}
+				}
+			}
+		}
+
+		Action eventAction = Action.USE_SOMETHING;
+		String[] extra = new String[0];
+		if(isRegion){
+			eventAction = Action.REGION_USE_SOMETHING;
+			extra = new String[] {blockRegion == null ? plugin.getMessages().getMessage("wilderness") : blockRegion.getName()};
+		}
+		plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType(), extra);
+	}
+
 	// Code used from feildmaster's gist on recursive player fetching
 	// https://gist.github.com/feildmaster/6e8f6bfa0aa55cbab208
 	private Player getPlayer(final Entity damager){
@@ -769,6 +805,28 @@ public class ASListener implements Listener{
 		}
 	}
 
+	// Issue #96
+	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = false)
+	public void onInteractPossibleWaterSpawn(PlayerInteractEvent event){
+		if(event.isCancelled() && event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR && event.getClickedBlock() == null){
+			// It is almost certainly water.
+			Player player = event.getPlayer();
+			// Ray casting maybe?
+			List<Block> blocks = player.getLineOfSight(null, 10);
+			boolean water = false;
+			Block waterBlock = null;
+			for(Block block : blocks){
+				if(block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER){
+					water = true;
+					waterBlock = block;
+					break;
+				}
+			}
+			if(water)
+				doOnUseInteract(event, waterBlock);
+		}
+	}
+
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onUseInteract(PlayerInteractEvent event){
 		org.bukkit.event.block.Action action = event.getAction();
@@ -777,40 +835,7 @@ public class ASListener implements Listener{
 		case RIGHT_CLICK_AIR:
 			return;
 		}
-		Player player = event.getPlayer();
-		Block block = event.getClickedBlock();
-		boolean illegal = false, isRegion = false;
-		Location blockLocation = block.getLocation();
-		ASConfig c = configFor(blockLocation);
-		ItemStack hand = player.getItemInHand();
-		if(hand == null || hand.getType() == Material.AIR){
-			return; // Do not process
-		}
-
-		ProtectionInformation information = ASUtils.isBlocked(player, hand, blockLocation, c.use, PermissionNodes.PACK_USE, c);
-		illegal = information.illegal;
-		isRegion = information.isRegion;
-		Region blockRegion = information.targetRegion;
-
-		if(illegal){
-			event.setCancelled(true);
-			if(hasMobCatcher){
-				ItemStack trueHand = player.getItemInHand();
-				if(trueHand != null){
-					if(trueHand.getType() == Material.EGG || trueHand.getType() == Material.MONSTER_EGG){
-						trueHand.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 1);
-					}
-				}
-			}
-		}
-
-		Action eventAction = Action.USE_SOMETHING;
-		String[] extra = new String[0];
-		if(isRegion){
-			eventAction = Action.REGION_USE_SOMETHING;
-			extra = new String[] {blockRegion == null ? plugin.getMessages().getMessage("wilderness") : blockRegion.getName()};
-		}
-		plugin.getMessages().notifyParties(player, eventAction, illegal, hand.getType(), extra);
+		doOnUseInteract(event, event.getClickedBlock());
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
