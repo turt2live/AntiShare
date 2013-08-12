@@ -174,4 +174,3 @@ interaction:
 other:
     ignore-updates: false
     version_string: Not set
-    no-pex-warning: false

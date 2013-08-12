@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.turt2live.antishare;
 
+import org.bukkit.GameMode;
 
 /**
  * Holds all permission nodes in AntiShare
@@ -106,8 +107,10 @@ public class PermissionNodes{
 	public static final String REGION_LIST = "AntiShare.regions.list";
 
 	// World Split Nodes
+	public static final String WORLD_SPLIT_NO_SPLIT_ADVENTURE = "AntiShare.worldsplit.adventure";
 	public static final String WORLD_SPLIT_NO_SPLIT_CREATIVE = "AntiShare.worldsplit.creative";
 	public static final String WORLD_SPLIT_NO_SPLIT_SURVIVAL = "AntiShare.worldsplit.survival";
+	public static final String WORLD_SPLIT_NO_SPLIT = "AntiShare.worldsplit.*";
 
 	// Money Nodes
 	public static final String MONEY_NO_FINE = "AntiShare.money.nofine";
@@ -129,5 +132,18 @@ public class PermissionNodes{
 	public static final PermissionPackage PACK_COMBAT_MOBS = new PermissionPackage(ALLOW_COMBAT_MOBS, DENY_COMBAT_MOBS, REGION_ATTACK_MOBS);
 	public static final PermissionPackage PACK_MOB_MAKE = new PermissionPackage(ALLOW_MOB_CREATION, DENY_MOB_CREATION, null);
 	public static final PermissionPackage PACK_EAT = new PermissionPackage(ALLOW_EAT, DENY_EAT, null);
+
+	public static String getWorldSplitNode(GameMode side){
+		switch (side){
+		case SURVIVAL:
+			return WORLD_SPLIT_NO_SPLIT_SURVIVAL;
+		case CREATIVE:
+			return WORLD_SPLIT_NO_SPLIT_CREATIVE;
+		case ADVENTURE:
+			return WORLD_SPLIT_NO_SPLIT_ADVENTURE;
+		default:
+			return WORLD_SPLIT_NO_SPLIT;
+		}
+	}
 
 }

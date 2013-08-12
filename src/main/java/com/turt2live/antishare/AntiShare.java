@@ -36,6 +36,7 @@ import com.turt2live.antishare.manager.HookManager;
 import com.turt2live.antishare.manager.InventoryManager;
 import com.turt2live.antishare.manager.MoneyManager;
 import com.turt2live.antishare.manager.RegionManager;
+import com.turt2live.antishare.manager.SplitManager;
 import com.turt2live.antishare.manager.WorldConfigManager;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.Action;
@@ -102,6 +103,7 @@ public class AntiShare extends PluginWrapper{
 	private InventoryManager inventories;
 	private RegionManager regions;
 	private final List<String> disabledSNPlayers = new ArrayList<String>();
+	private SplitManager splits;
 
 	@Override
 	public void onEnable(){
@@ -223,6 +225,7 @@ public class AntiShare extends PluginWrapper{
 		cuboids = new CuboidManager();
 		inventories = new InventoryManager();
 		regions = new RegionManager();
+		splits = new SplitManager();
 
 		// Load managers
 		hooks.load();
@@ -231,6 +234,7 @@ public class AntiShare extends PluginWrapper{
 		cuboids.load();
 		inventories.load();
 		regions.load();
+		splits.load();
 
 		// Start listeners
 		getServer().getPluginManager().registerEvents(worldConfigs, this);
@@ -244,19 +248,6 @@ public class AntiShare extends PluginWrapper{
 			getLogger().severe("**********************");
 			getLogger().severe(messages.getMessage("offlinemode"));
 			getLogger().severe("**********************");
-		}
-
-		// PermissionsEx warning
-		if(!getConfig().getBoolean("other.no-pex-warning") && getServer().getPluginManager().getPlugin("PermissionsEx") != null){
-			getLogger().severe("=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
-			getLogger().severe(messages.getMessage("permissionsex"));
-			getLogger().severe(messages.getMessage("permissionsex2"));
-			getLogger().severe(messages.getMessage("permissionsex3"));
-			getLogger().severe(messages.getMessage("permissionsex4"));
-			getLogger().severe(messages.getMessage("permissionsex5"));
-			getLogger().severe(messages.getMessage("permissionsex6"));
-			getLogger().severe(messages.getMessage("permissionsex7"));
-			getLogger().severe("=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
 		}
 
 		// Spam console
@@ -318,6 +309,7 @@ public class AntiShare extends PluginWrapper{
 		regions.reload();
 		inventories.reload();
 		blocks.reload();
+		splits.reload();
 		loadPlayerInformation();
 	}
 
@@ -340,6 +332,15 @@ public class AntiShare extends PluginWrapper{
 				}
 			}
 		});
+	}
+
+	/**
+	 * Gets the active split manager
+	 * 
+	 * @return the split manager
+	 */
+	public SplitManager getSplitManager(){
+		return splits;
 	}
 
 	/**

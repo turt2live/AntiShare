@@ -1,0 +1,34 @@
+# World Split Configuration
+# 
+# Use the following template to create a world split:
+# 
+# worldname:
+#     axis: 
+#     value: 
+#     positive: 
+#     negative: 
+#     warn:
+#         use: 
+#         distance: 
+# 
+# Here is the above example filled out:
+# 
+# world1:
+#     axis: X
+#     value: 245
+#     positive: creative
+#     negative: survival
+#     warn:
+#         use: true 
+#         distance: 15
+# 
+# The above example says that in "world1" there is a split on the X-axis (the only other
+# option is the Z-axis) at the value 245. Anything ABOVE 245 (>=246) will be the "creative"
+# side while anything less than 245 (<=245) will be the "survival" side. This example also
+# uses the warning function. This means that as the player approaches the split axis they 
+# can be warned of such. This example says "warn them when they are 15 blocks away".
+# 
+# ------
+# For assistance please see the config.yml
+# ------
+warn-every-in-seconds: 3

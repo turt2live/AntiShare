@@ -110,6 +110,8 @@ import com.turt2live.antishare.io.LevelSaver.Level;
 import com.turt2live.antishare.io.PotionSaver;
 import com.turt2live.antishare.manager.CuboidManager.CuboidPoint;
 import com.turt2live.antishare.regions.Region;
+import com.turt2live.antishare.regions.worldsplit.WorldSplit;
+import com.turt2live.antishare.regions.worldsplit.WorldSplit.Axis;
 import com.turt2live.antishare.util.ASUtils;
 import com.turt2live.antishare.util.ASUtils.EntityPattern;
 import com.turt2live.antishare.util.Action;
@@ -135,6 +137,7 @@ public class ASListener implements Listener{
 	public final FixedMetadataValue EMPTY_METADATA;
 
 	private final Map<String, Long> gamemodeCooldowns = new HashMap<String, Long>();
+	private final Map<String, Long> worldSplitWarnings = new HashMap<String, Long>();
 
 	private boolean hasMobCatcher;
 
@@ -215,6 +218,24 @@ public class ASListener implements Listener{
 		breakBlock(block, playerGamemode, config, isAttachment, false);
 	}
 
+	private boolean isOnGMCooldown(Player player){
+		if(plugin.settings().cooldownSettings.enabled && !AntiShare.hasPermission(player, PermissionNodes.NO_GAMEMODE_COOLDOWN)){
+			long time = (long) Math.abs(plugin.settings().cooldownSettings.seconds) * 1000;
+			long now = System.currentTimeMillis();
+			if(time > 0){
+				if(gamemodeCooldowns.containsKey(player.getName())){
+					long lastUsed = gamemodeCooldowns.get(player.getName());
+					if(now - lastUsed > time){
+						return false;
+					}else{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	private boolean doGameModeChange(Player player, GameMode from, GameMode to){
 		boolean ignore = true;
 		boolean checkRegion = true;
@@ -244,7 +265,7 @@ public class ASListener implements Listener{
 						// Deny
 						cancel = true;
 						int seconds = (int) (time - (now - lastUsed)) / 1000;
-						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("gamemode-wait", String.valueOf(seconds)), true); //ASUtils.sendToPlayer(player, ChatColor.RED + "You must wait at least " + seconds + " more second" + s + " before changing Game Modes.", true);
+						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("gamemode-wait", String.valueOf(seconds)), true);
 						player.removeMetadata(NO_PICKUP_METADATA_KEY, plugin);
 						return cancel;
 					}
@@ -1311,6 +1332,43 @@ public class ASListener implements Listener{
 			}
 			if(toRegion != null){
 				toRegion.alertEntry(player);
+			}
+		}else{
+			// Check world splits
+			WorldSplit split = plugin.getSplitManager().getSplit(event.getFrom().getWorld());
+			if(split != null && split.isValid()){
+				// Permission check
+				GameMode side = split.getGameModeForSide(event.getTo());
+				boolean canSkip = AntiShare.hasPermission(player, PermissionNodes.getWorldSplitNode(side));
+				if(!canSkip){
+					// We do not need to verify creative==adventure here
+					if(side != player.getGameMode()){
+						if(isOnGMCooldown(player)){
+							event.setCancelled(true);
+							String msg = plugin.getMessages().getMessage("world-split-cooldown");
+							plugin.getMessages().sendTo(player, msg, true);
+						}else{
+							player.setGameMode(side); // Set them to the other side
+						}
+					}else if(split.getShouldWarn()){
+						int distance = (split.getAxis() == Axis.X ? player.getLocation().getBlockX() : player.getLocation().getBlockZ()) - split.getValue();
+						if(Math.abs(distance) <= split.getWarnDistance()){
+							boolean warn = true;
+							long now = System.currentTimeMillis();
+							if(worldSplitWarnings.containsKey(player.getName())){
+								long time = worldSplitWarnings.get(player.getName());
+								if(now - time < plugin.getSplitManager().getWarnEvery()){
+									warn = false;
+								}
+							}
+							if(warn){
+								String msg = plugin.getMessages().getMessage("world-split-warn");
+								plugin.getMessages().sendTo(player, msg, false);
+								worldSplitWarnings.put(player.getName(), now);
+							}
+						}
+					}
+				}
 			}
 		}
 	}

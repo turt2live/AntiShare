@@ -7,6 +7,7 @@
 Since 5.4.3:
 = Fix "no-drop cross-gamemode breaking" (Issue #85)
 = Fix mobs beaing spawnable on water (Issue #96)
++ Added World Splits (again, Issue 90)
 
 Known Bugs:
 - Beacons

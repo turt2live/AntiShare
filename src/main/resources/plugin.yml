@@ -308,3 +308,19 @@ permissions:
     AntiShare.plugin.magicspells:
         description: Allows the target to bypass MagicSpells integration
         default: op
+    AntiShare.worldsplit.*:
+        description: Allow full bypass for world splits
+        default: op
+        children:
+            AntiShare.worldsplit.creative: true
+            AntiShare.worldsplit.survival: true
+            AntiShare.worldsplit.adventure: true
+    AntiShare.worldsplit.creative:
+        description: Allow bypass of creative world split sides
+        default: op
+    AntiShare.worldsplit.survival:
+        description: Allow bypass of survival world split sides
+        default: op
+    AntiShare.worldsplit.adventure:
+        description: Allow bypass of adventure world split sides
+        default: op

@@ -55,13 +55,15 @@ public class SelfCompatibility{
 		INVENTORY_540_BETA(40),
 		@Deprecated
 		CONFIGURATION_540_BETA(45),
+		@Deprecated
 		CONFIGURATION_540(50),
 		@Deprecated
 		ITEM_MAP_540(55),
 		FILES_AND_FOLDERS_540(60),
 		INVENTORY_UPDATE_540(65),
 		WORLD_CONFIG_540(70),
-		ITEM_MAP_550(75);
+		ITEM_MAP_543(75),
+		CONFIGURATION_544(80);
 
 		public final int bytePosition;
 
@@ -80,7 +82,8 @@ public class SelfCompatibility{
 		REGION_CONFIGURATION,
 		WORLD_CONFIGURATION,
 		FINES_REWARDS,
-		LOCALE;
+		LOCALE,
+		WORLD_SPLIT;
 	}
 
 	private static final String COMPATIBILITY_FILE_NAME = "compat.antishare";
@@ -130,7 +133,7 @@ public class SelfCompatibility{
 	 */
 	public static List<ASMaterial> updateItemMap(Map<String, ASMaterial> listing) throws IOException{
 		List<ASMaterial> r = new ArrayList<ASMaterial>();
-		if(!needsUpdate(CompatibilityType.ITEM_MAP_550)){
+		if(!needsUpdate(CompatibilityType.ITEM_MAP_543)){
 			return r;
 		}
 		AntiShare p = AntiShare.p;
@@ -163,7 +166,7 @@ public class SelfCompatibility{
 		in.close();
 		out.close();
 		items.delete();
-		noLongerNeedsUpdate(CompatibilityType.ITEM_MAP_550);
+		noLongerNeedsUpdate(CompatibilityType.ITEM_MAP_543);
 		return r;
 	}
 
@@ -324,7 +327,7 @@ public class SelfCompatibility{
 	 * Cleans YAML files
 	 */
 	public static void cleanupYAML(){
-		if(!needsUpdate(CompatibilityType.CONFIGURATION_540)){
+		if(!needsUpdate(CompatibilityType.CONFIGURATION_544)){
 			return;
 		}
 		int cleaned = 0;
@@ -335,6 +338,7 @@ public class SelfCompatibility{
 		files.put("world_configurations", FileType.WORLD_CONFIGURATION);
 		files.put("fines.yml", FileType.FINES_REWARDS);
 		files.put("locale.yml", FileType.LOCALE);
+		files.put("worldsplit.yml", FileType.WORLD_SPLIT);
 		File config = new File(plugin.getDataFolder(), "config.yml");
 		if(config.exists()){
 			File backup = new File(plugin.getDataFolder(), "config-backup.yml");
@@ -364,7 +368,7 @@ public class SelfCompatibility{
 		if(cleaned > 0){
 			AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("files-cleaned", String.valueOf(cleaned)));
 		}
-		noLongerNeedsUpdate(CompatibilityType.CONFIGURATION_540);
+		noLongerNeedsUpdate(CompatibilityType.CONFIGURATION_544);
 	}
 
 	/**
@@ -539,6 +543,9 @@ public class SelfCompatibility{
 			break;
 		case LOCALE:
 			local.loadDefaults(plugin.getResource("locale.yml"));
+			break;
+		case WORLD_SPLIT:
+			local.loadDefaults(plugin.getResource("worldsplit.yml"));
 			break;
 		}
 		local.saveDefaults();
