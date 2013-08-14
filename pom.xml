@@ -11,7 +11,7 @@
 
     <!-- Dependency Versions -->
     <bukkit.version>1.6.2-R0.2-SNAPSHOT</bukkit.version>
-    <vault.version>1.2.27-SNAPSHOT</vault.version>
+    <vault.version>1.2.27</vault.version>
     <materialapi.version>0.0.2-SNAPSHOT</materialapi.version>
     <metricsextension.version>0.0.5-SNAPSHOT</metricsextension.version>
     <configurationlib.version>1.1.3</configurationlib.version>
