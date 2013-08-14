@@ -162,24 +162,27 @@ public class ASListener implements Listener{
 				return c.adventureBreakCreative;
 			case SURVIVAL:
 				return c.adventureBreakSurvival;
+			default:
+				return null;
 			}
-			break;
 		case SURVIVAL:
 			switch (gamemode2){
 			case ADVENTURE:
 				return c.survivalBreakAdventure;
 			case CREATIVE:
 				return c.survivalBreakCreative;
+			default:
+				return null;
 			}
-			break;
 		case CREATIVE:
 			switch (gamemode2){
 			case ADVENTURE:
 				return c.creativeBreakAdventure;
 			case SURVIVAL:
 				return c.creativeBreakSurvival;
+			default:
+				return null;
 			}
-			break;
 		}
 		return null;
 	}
@@ -768,6 +771,8 @@ public class ASListener implements Listener{
 		case LEFT_CLICK_AIR:
 		case RIGHT_CLICK_AIR:
 			return;
+		default:
+			break;
 		}
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
@@ -802,6 +807,8 @@ public class ASListener implements Listener{
 					plugin.getBlockManager().addBlock(player.getGameMode(), block);
 					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-set", MaterialAPI.capitalize(player.getGameMode().name())), true);
 					break;
+				default:
+					break;
 				}
 				event.setCancelled(true);
 				return;
@@ -813,6 +820,8 @@ public class ASListener implements Listener{
 					break;
 				case LEFT_CLICK_BLOCK:
 					point = CuboidPoint.POINT1;
+					break;
+				default:
 					break;
 				}
 				plugin.getCuboidManager().updateCuboid(player.getName(), point, block.getLocation());
@@ -855,6 +864,8 @@ public class ASListener implements Listener{
 		case LEFT_CLICK_AIR:
 		case RIGHT_CLICK_AIR:
 			return;
+		default:
+			break;
 		}
 		doOnUseInteract(event, event.getClickedBlock());
 	}
@@ -867,6 +878,8 @@ public class ASListener implements Listener{
 		case LEFT_CLICK_BLOCK:
 		case RIGHT_CLICK_AIR:
 			return;
+		default:
+			break;
 		}
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
