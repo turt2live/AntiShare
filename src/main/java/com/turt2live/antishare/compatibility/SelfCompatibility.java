@@ -277,16 +277,26 @@ public class SelfCompatibility{
 		if(plugin.settings().inventoryCleanupSettings.enabled){
 			File timeFile = new File(plugin.getDataFolder(), "data" + File.separator + "lastCleanup");
 			if(timeFile.exists()){
+				BufferedReader in = null;
+				boolean doClean = true;
 				try{
-					BufferedReader in = new BufferedReader(new FileReader(timeFile));
+					in = new BufferedReader(new FileReader(timeFile));
 					String line = in.readLine();
 					int lastMS = Integer.parseInt(line);
 					int hours = 3600000 * 6;
 					if(System.currentTimeMillis() - lastMS < hours){
-						return; // Don't clean
+						doClean = false; // Don't clean
 					}
-					in.close();
-				}catch(IOException e){}catch(NumberFormatException e){}
+				}catch(IOException e){}catch(NumberFormatException e){}finally{
+					if(in != null){
+						try{
+							in.close();
+						}catch(IOException e){}
+					}
+					if(!doClean){
+						return;
+					}
+				}
 			}
 			try{
 				BufferedWriter out = new BufferedWriter(new FileWriter(timeFile, false));
