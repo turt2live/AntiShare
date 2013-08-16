@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,19 @@ import com.turt2live.materials.MaterialAPI;
 public class ItemMap{
 
 	private static Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
+
+	public static List<String> getNamesFromID(int id){
+		List<String> mats = new ArrayList<String>();
+		for(String key : listing.keySet()){
+			ASMaterial mat = listing.get(key);
+			if(mat != null){
+				if(mat.id == id){
+					mats.add(key);
+				}
+			}
+		}
+		return mats;
+	}
 
 	public static ASMaterial get(String string){
 		if(listing.size() <= 0){
