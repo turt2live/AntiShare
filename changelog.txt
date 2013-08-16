@@ -9,6 +9,7 @@ Since 5.4.3:
 = Fix mobs beaing spawnable on water (Issue #96)
 + Added World Splits (again, Issue 90)
 + Added more comprehensive permissions
++ Add warning for failed block moves
 
 Known Bugs:
 - Beacons
