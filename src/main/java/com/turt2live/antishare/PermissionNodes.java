@@ -118,6 +118,7 @@ public class PermissionNodes{
 
 	// Plugin-Specific Nodes
 	public static final String PLUGIN_MAGIC_SPELLS = "AntiShare.plugin.magicspells";
+	public static final String PLUGIN_PLAYER_VAULTS = "AntiShare.plugin.playervaults";
 
 	// PACKAGES
 	public static final PermissionPackage PACK_BLOCK_BREAK = new PermissionPackage(ALLOW_BLOCK_BREAK, DENY_BLOCK_BREAK, REGION_BREAK);

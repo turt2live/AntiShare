@@ -30,7 +30,6 @@ import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.compatibility.SelfCompatibility;
 import com.turt2live.antishare.config.ASConfig;
 import com.turt2live.antishare.config.ConfigConvert;
-import com.turt2live.antishare.io.ItemMap;
 import com.turt2live.antishare.manager.BlockManager;
 import com.turt2live.antishare.manager.CuboidManager;
 import com.turt2live.antishare.manager.HookManager;
@@ -495,17 +494,8 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if blocked
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material, boolean specialOnly){
-		boolean check1 = isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly), check2 = isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
-		if(check1 || check2){
-			return true;
-		}
-		List<String> materials = ItemMap.getNamesFromID(material.getId());
-		for(String mat : materials){
-			if(isBlocked(player, allowPermission, denyPermission, mat, specialOnly)){
-				return true;
-			}
-		}
-		return false;
+		return !(!isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly)
+		|| !isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly));
 	}
 
 	/**

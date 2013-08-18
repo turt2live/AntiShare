@@ -148,6 +148,8 @@ settings:
 hooks:
     magicspells:
         block-creative: true
+    playervaults:
+        block-creative: true
     logblock:
         stop-spam: false
 # Advanced interaction settings, 'drop-items' only takes effect if 'deny' is false

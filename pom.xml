@@ -19,6 +19,7 @@
     <jsonconfig.version>1.0-SNAPSHOT</jsonconfig.version>
     <json.version>1.1.1</json.version>
     <worldedit.version>4.4.1</worldedit.version>
+    <playervaults.version>3.2.4</playervaults.version>
 
     <!-- JAR Versions -->
     <logblock.version>1.70</logblock.version>
@@ -44,6 +45,15 @@
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <version>${bukkit.version}</version>
+    </dependency>
+
+    <!-- PlayerVaults -->
+    <dependency>
+      <groupId>com.drtshock</groupId>
+      <artifactId>PlayerVaults</artifactId>
+      <version>${playervaults.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
     </dependency>
 
     <!-- WorldEdit -->
@@ -269,6 +279,12 @@
     <repository>
       <id>md5-repo</id>
       <url>http://repo.md-5.net</url>
+    </repository>
+
+    <!-- For PlayerVaults -->
+    <repository>
+      <id>drtshock-repo</id>
+      <url>http://ci.drtshock.com/plugin/repository/everything/</url>
     </repository>
 
   </repositories>

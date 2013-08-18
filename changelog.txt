@@ -10,6 +10,7 @@ Since 5.4.3:
 + Added World Splits (again, Issue 90)
 + Added more comprehensive permissions
 + Add warning for failed block moves
++ Added PlayerVaults integration - Fixes duplication glitch
 
 Known Bugs:
 - Beacons

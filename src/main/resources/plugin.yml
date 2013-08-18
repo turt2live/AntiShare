@@ -305,8 +305,12 @@ permissions:
         default: op
         children:
             AntiShare.plugin.magicspells: true
+            AntiShare.plugin.playervaults: true
     AntiShare.plugin.magicspells:
         description: Allows the target to bypass MagicSpells integration
+        default: op
+    AntiShare.plugin.playervaults:
+        description: Allows the target to bypass PlayerVaults integration
         default: op
     AntiShare.worldsplit.*:
         description: Allow full bypass for world splits

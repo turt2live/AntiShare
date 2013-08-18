@@ -114,7 +114,7 @@ public class ASConfig{
 	public final ASMaterialList blockBreak, blockPlace, death, pickup, drop, use, interact, craft, trackedCreative, trackedSurvival, trackedAdventure, eat;
 	public final List<String> commands;
 	public final List<EntityType> interactMobs, attackMobs, craftedMobs;
-	public final boolean adventureEqCreative, perWorldInventories, updateChecker, magicSpells, logBlockSpam, potions, thrownPotions;
+	public final boolean adventureEqCreative, perWorldInventories, updateChecker, magicSpells, logBlockSpam, potions, thrownPotions, playerVaults;
 	public final InventoryCleanupSettings inventoryCleanupSettings;
 	public final CooldownSettings cooldownSettings;
 	public final NaturalSettings naturalSettings;
@@ -152,6 +152,7 @@ public class ASConfig{
 
 		perWorldInventories = (layer.configFor("settings.use-per-world-inventories", false)).getBoolean("settings.use-per-world-inventories");
 		magicSpells = (layer.configFor("hooks.magicspells.block-creative", false)).getBoolean("hooks.magicspells.block-creative");
+		playerVaults = (layer.configFor("hooks.playervaults.block-creative", false)).getBoolean("hooks.playervaults.block-creative");
 		logBlockSpam = (layer.configFor("hooks.logblock.stop-spam", false)).getBoolean("hooks.logblock.stop-spam");
 		updateChecker = !(layer.configFor("other.ignore-updates", false)).getBoolean("other.ignore-updates");
 		inventoryCleanupSettings = new InventoryCleanupSettings(

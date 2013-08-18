@@ -26,6 +26,7 @@ import com.turt2live.antishare.compatibility.Lockette;
 import com.turt2live.antishare.compatibility.LogBlock;
 import com.turt2live.antishare.compatibility.Towny;
 import com.turt2live.antishare.compatibility.other.MagicSpells;
+import com.turt2live.antishare.compatibility.other.PlayerVaults;
 import com.turt2live.antishare.compatibility.other.WorldEdit;
 import com.turt2live.antishare.compatibility.type.BlockLogger;
 import com.turt2live.antishare.compatibility.type.BlockProtection;
@@ -44,6 +45,7 @@ public class HookManager{
 	private final List<BlockLogger> loggers = new ArrayList<BlockLogger>();
 	private MagicSpells spells;
 	private WorldEdit worldedit;
+	private PlayerVaults pv;
 
 	/**
 	 * Sends a block break to all block logging plugins
@@ -179,6 +181,10 @@ public class HookManager{
 		plugin.getLogger().info(plugin.getMessages().getMessage("hooked", hook.getName()));
 	}
 
+	private void notHooked(Plugin hook){
+		plugin.getLogger().info(plugin.getMessages().getMessage("not-hooked", hook.getName()));
+	}
+
 	/**
 	 * Reloads the hook manager
 	 */
@@ -188,6 +194,7 @@ public class HookManager{
 		regions.clear();
 		spells = null;
 		worldedit = null;
+		pv = null;
 		load();
 	}
 
@@ -201,6 +208,7 @@ public class HookManager{
 		regions.clear();
 		spells = null;
 		worldedit = null;
+		pv = null;
 
 		// Find plugins
 		Plugin chestshop = plugin.getServer().getPluginManager().getPlugin("ChestShop");
@@ -238,6 +246,20 @@ public class HookManager{
 		if(worldedit != null){
 			hooked(worldedit);
 			this.worldedit = new WorldEdit(worldedit);
+		}
+		Plugin playervaults = plugin.getServer().getPluginManager().getPlugin("PlayerVaults");
+		if(playervaults != null){
+			// We need to do an extra class check on PlayerVaults
+			try{
+				if(Class.forName("com.drtshock.playervaults.util.VaultHolder") != null){
+					hooked(playervaults);
+					pv = new PlayerVaults();
+					plugin.getServer().getPluginManager().registerEvents(pv, plugin);
+				}else
+					notHooked(playervaults);
+			}catch(ClassNotFoundException e){
+				notHooked(playervaults);
+			}
 		}
 	}
 

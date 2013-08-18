@@ -310,7 +310,7 @@ public class BlockManager{
 	 */
 	public void moveBlock(Location oldLocation, final Location newLocation){
 		final GameMode type = getType(oldLocation.getBlock());
-		final Block oldBlock = oldLocation.getBlock();
+		Block oldBlock = oldLocation.getBlock();
 
 		if(type == null){
 			return;
@@ -352,19 +352,6 @@ public class BlockManager{
 				// Warn if not updated
 				if(!updated){
 					plugin.getLogger().severe(plugin.getMessages().getMessage("failed-to-update", String.valueOf(delay * maxRuns)));
-					plugin.getLogger().severe(plugin.getMessages().getMessage("check-location",
-							oldBlock.getWorld().getName(),
-							String.valueOf(oldBlock.getX()),
-							String.valueOf(oldBlock.getY()),
-							String.valueOf(oldBlock.getZ()),
-							type.name(),
-							oldBlock.getType().name() + "(ID: " + oldBlock.getTypeId() + ")" + (oldBlock.getData() > 0 ? (":" + String.valueOf(oldBlock.getData())) : "")));
-					if(oldBlock.getType() == oldType){
-						addBlock(type, oldBlock); // Re-add the block
-						plugin.getLogger().warning(plugin.getMessages().getMessage("updated-old-block"));
-					}else{
-						plugin.getLogger().warning(plugin.getMessages().getMessage("not-updated-old-block"));
-					}
 				}
 			}
 		});
