@@ -222,7 +222,7 @@ public class ASListener implements Listener{
 	}
 
 	private boolean isOnGMCooldown(Player player){
-		if(plugin.settings().cooldownSettings.enabled && !AntiShare.hasPermission(player, PermissionNodes.NO_GAMEMODE_COOLDOWN)){
+		if(plugin.settings().cooldownSettings.enabled && !player.hasPermission(PermissionNodes.NO_GAMEMODE_COOLDOWN)){
 			long time = (long) Math.abs(plugin.settings().cooldownSettings.seconds) * 1000;
 			long now = System.currentTimeMillis();
 			if(time > 0){
@@ -255,7 +255,7 @@ public class ASListener implements Listener{
 		}
 
 		// Implement cooldown if needed
-		if(plugin.settings().cooldownSettings.enabled && !AntiShare.hasPermission(player, PermissionNodes.NO_GAMEMODE_COOLDOWN)){
+		if(plugin.settings().cooldownSettings.enabled && !player.hasPermission(PermissionNodes.NO_GAMEMODE_COOLDOWN)){
 			long time = (long) Math.abs(plugin.settings().cooldownSettings.seconds) * 1000;
 			long now = System.currentTimeMillis();
 			if(time > 0){
@@ -280,7 +280,7 @@ public class ASListener implements Listener{
 
 		// Change level if needed
 		Level currentLevel = new Level(player.getLevel(), player.getExp());
-		if(plugin.settings().gamemodeChangeSettings.changeLevel && !AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+		if(plugin.settings().gamemodeChangeSettings.changeLevel && !player.hasPermission(PermissionNodes.NO_SWAP)){
 			Level desired = LevelSaver.getLevel(player.getName(), to);
 			LevelSaver.saveLevel(player.getName(), player.getGameMode(), currentLevel);
 			desired.setTo(player);
@@ -288,7 +288,7 @@ public class ASListener implements Listener{
 
 		// Change balance if needed
 		boolean alert = false;
-		if(plugin.settings().gamemodeChangeSettings.changeBalance && !AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+		if(plugin.settings().gamemodeChangeSettings.changeBalance && !player.hasPermission(PermissionNodes.NO_SWAP)){
 			if(plugin.getMoneyManager().getRawEconomyHook() != null){
 				plugin.getMoneyManager().getRawEconomyHook().switchBalance(player.getName(), from, to);
 				alert = true;
@@ -296,7 +296,7 @@ public class ASListener implements Listener{
 		}
 
 		// Change potion effects if needed
-		if(plugin.settings().gamemodeChangeSettings.changePotionEffects && !AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+		if(plugin.settings().gamemodeChangeSettings.changePotionEffects && !player.hasPermission(PermissionNodes.NO_SWAP)){
 			PotionSaver.saveEffects(player, from);
 			PotionSaver.applySavedEffects(player, to);
 		}
@@ -314,20 +314,20 @@ public class ASListener implements Listener{
 		}
 
 		// Region Check
-		if(!AntiShare.hasPermission(player, PermissionNodes.REGION_ROAM) && checkRegion){
+		if(!player.hasPermission(PermissionNodes.REGION_ROAM) && checkRegion){
 			Region region = plugin.getRegionManager().getRegion(player.getLocation());
 			if(region != null){
 				plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("region-gamemode"), true);
 				cancel = true;
 				currentLevel.setTo(player); // Restore level
 				// Restore balance if needed
-				if(plugin.settings().gamemodeChangeSettings.changeBalance && !AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+				if(plugin.settings().gamemodeChangeSettings.changeBalance && !player.hasPermission(PermissionNodes.NO_SWAP)){
 					if(plugin.getMoneyManager().getRawEconomyHook() != null){
 						plugin.getMoneyManager().getRawEconomyHook().switchBalance(player.getName(), to, from);
 					}
 				}
 				// Restore effects
-				if(plugin.settings().gamemodeChangeSettings.changePotionEffects && !AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+				if(plugin.settings().gamemodeChangeSettings.changePotionEffects && !player.hasPermission(PermissionNodes.NO_SWAP)){
 					PotionSaver.saveEffects(player, to);
 					PotionSaver.applySavedEffects(player, from);
 				}
@@ -341,7 +341,7 @@ public class ASListener implements Listener{
 			plugin.getInventoryManager().removeFromTemporary(player);
 		}
 
-		if(!AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+		if(!player.hasPermission(PermissionNodes.NO_SWAP)){
 			// Check for open inventories and stuff
 			player.closeInventory();
 
@@ -611,7 +611,7 @@ public class ASListener implements Listener{
 		isRegion = info.isRegion;
 		Region blockRegion = info.targetRegion;
 
-		if(!AntiShare.hasPermission(player, PermissionNodes.FREE_PLACE)){
+		if(!player.hasPermission(PermissionNodes.FREE_PLACE)){
 			blockGamemode = plugin.getBlockManager().getType(block);
 			if(blockGamemode != null){
 				if(!GamemodeAbstraction.isMatch(blockGamemode, player.getGameMode())){
@@ -662,7 +662,7 @@ public class ASListener implements Listener{
 			block.setMetadata(ANTISHARE_DELAY_BREAK_KEY, new FixedMetadataValue(plugin, new DelayBreakSettings(interaction, player.getName())));
 		}
 
-		if(event.isCancelled() || AntiShare.hasPermission(player, PermissionNodes.BREAK_ANYTHING)){
+		if(event.isCancelled() || player.hasPermission(PermissionNodes.BREAK_ANYTHING)){
 			return;
 		}
 
@@ -712,7 +712,7 @@ public class ASListener implements Listener{
 		if(!illegal && !c.naturalSettings.allowMismatchedGM){
 			Block source = event.getBlockAgainst();
 			Block relative = event.getBlockPlaced();
-			if(!AntiShare.hasPermission(player, PermissionNodes.FREE_PLACE)){
+			if(!player.hasPermission(PermissionNodes.FREE_PLACE)){
 				GameMode potentialNewGM = player.getGameMode();
 				if(MaterialAPI.isDroppedOnBreak(relative, source, true)){
 					existing = plugin.getBlockManager().getType(source);
@@ -729,7 +729,7 @@ public class ASListener implements Listener{
 		if(illegal){
 			event.setCancelled(true);
 		}else{
-			if(!AntiShare.hasPermission(player, PermissionNodes.FREE_PLACE)){
+			if(!player.hasPermission(PermissionNodes.FREE_PLACE)){
 				plugin.getBlockManager().addBlock(player.getGameMode(), block);
 			}
 		}
@@ -781,7 +781,7 @@ public class ASListener implements Listener{
 			hand = new ItemStack(Material.AIR);
 		}
 
-		if(AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
+		if(player.hasPermission(PermissionNodes.TOOL_USE) && hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
 			String blockName = MaterialAPI.capitalize(block.getType().name());
 			if(hand.getType() == AntiShare.ANTISHARE_TOOL){
 				GameMode type = plugin.getBlockManager().getType(block);
@@ -812,7 +812,7 @@ public class ASListener implements Listener{
 				}
 				event.setCancelled(true);
 				return;
-			}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && AntiShare.hasPermission(player, PermissionNodes.CREATE_CUBOID)){
+			}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && player.hasPermission(PermissionNodes.CREATE_CUBOID)){
 				CuboidPoint point = null;
 				switch (action){
 				case RIGHT_CLICK_BLOCK:
@@ -894,7 +894,7 @@ public class ASListener implements Listener{
 		if(!c.naturalSettings.allowMismatchedGM
 				&& plugin.getBlockManager().getType(block) != null
 				&& !GamemodeAbstraction.isMatch(player.getGameMode(), plugin.getBlockManager().getType(block))
-				&& !AntiShare.hasPermission(player, PermissionNodes.FREE_PLACE)
+				&& !player.hasPermission(PermissionNodes.FREE_PLACE)
 				&& !illegal){
 			illegal = true;
 		}
@@ -959,7 +959,7 @@ public class ASListener implements Listener{
 			if(event.getVehicle() instanceof StorageMinecart
 					&& c.naturalSettings.emptyInventories
 					&& GamemodeAbstraction.isCreative(player.getGameMode())
-					&& !AntiShare.hasPermission(player, PermissionNodes.BREAK_ANYTHING)){
+					&& !player.hasPermission(PermissionNodes.BREAK_ANYTHING)){
 				StorageMinecart m = (StorageMinecart) event.getVehicle();
 				m.getInventory().clear();
 			}
@@ -995,7 +995,7 @@ public class ASListener implements Listener{
 
 		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
 		Region entityRegion = plugin.getRegionManager().getRegion(entity.getLocation());
-		if(!AntiShare.hasPermission(player, regionPermission)){
+		if(!player.hasPermission(regionPermission)){
 			if(playerRegion != entityRegion){
 				illegal = true;
 				isRegion = true;
@@ -1051,7 +1051,7 @@ public class ASListener implements Listener{
 			return; // We don't need to protect against right clicking players
 		}
 
-		if(hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA && AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && rightClicked != Material.AIR){
+		if(hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA && player.hasPermission(PermissionNodes.TOOL_USE) && rightClicked != Material.AIR){
 			if(hand.getType() == AntiShare.ANTISHARE_TOOL){
 				if(gamemode == null){
 					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-natural", MaterialAPI.capitalize(rightClicked.name())), true);
@@ -1069,7 +1069,7 @@ public class ASListener implements Listener{
 				}
 				event.setCancelled(true);
 				return;
-			}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && AntiShare.hasPermission(player, PermissionNodes.CREATE_CUBOID)){
+			}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && player.hasPermission(PermissionNodes.CREATE_CUBOID)){
 				plugin.getCuboidManager().updateCuboid(player.getName(), CuboidPoint.POINT2, entity.getLocation());
 				Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
 				int volume = cuboid == null ? 0 : cuboid.getVolume();
@@ -1085,7 +1085,7 @@ public class ASListener implements Listener{
 			if(!GamemodeAbstraction.isMatch(gamemode, player.getGameMode())){
 				illegal = true;
 			}
-			if(gamemode == null || AntiShare.hasPermission(player, PermissionNodes.ITEM_FRAMES)){
+			if(gamemode == null || player.hasPermission(PermissionNodes.ITEM_FRAMES)){
 				illegal = false;
 			}
 		}else if(rightClicked == Material.AIR){
@@ -1108,7 +1108,7 @@ public class ASListener implements Listener{
 
 		Region playerRegion = plugin.getRegionManager().getRegion(player.getLocation());
 		Region entityRegion = plugin.getRegionManager().getRegion(entity.getLocation());
-		if(!AntiShare.hasPermission(player, regionPermission)){
+		if(!player.hasPermission(regionPermission)){
 			if(playerRegion != entityRegion){
 				illegal = true;
 				isRegion = true;
@@ -1352,7 +1352,7 @@ public class ASListener implements Listener{
 			if(split != null && split.isValid()){
 				// Permission check
 				GameMode side = split.getGameModeForSide(event.getTo());
-				boolean canSkip = AntiShare.hasPermission(player, PermissionNodes.getWorldSplitNode(side));
+				boolean canSkip = player.hasPermission(PermissionNodes.getWorldSplitNode(side));
 				if(!canSkip){
 					// We do not need to verify creative==adventure here
 					if(side != player.getGameMode()){
@@ -1639,7 +1639,7 @@ public class ASListener implements Listener{
 				hand = new ItemStack(Material.AIR);
 			}
 
-			if(AntiShare.hasPermission(player, PermissionNodes.TOOL_USE) && hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
+			if(player.hasPermission(PermissionNodes.TOOL_USE) && hand.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
 				if(hand.getType() == AntiShare.ANTISHARE_TOOL){
 					if(hangingGamemode == null){
 						plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-natural", MaterialAPI.capitalize(item.name())), true);
@@ -1654,7 +1654,7 @@ public class ASListener implements Listener{
 					plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("block-set", MaterialAPI.capitalize(player.getGameMode().name())), true);
 					event.setCancelled(true);
 					return;
-				}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && AntiShare.hasPermission(player, PermissionNodes.CREATE_CUBOID)){
+				}else if(hand.getType() == AntiShare.ANTISHARE_CUBOID_TOOL && player.hasPermission(PermissionNodes.CREATE_CUBOID)){
 					plugin.getCuboidManager().updateCuboid(player.getName(), CuboidPoint.POINT1, hanging.getLocation());
 					Cuboid cuboid = plugin.getCuboidManager().getCuboid(player.getName());
 					int volume = cuboid == null ? 0 : cuboid.getVolume();
@@ -1670,7 +1670,7 @@ public class ASListener implements Listener{
 			Region hangingRegion = info.targetRegion;
 
 			InteractionSettings i = null;
-			if(hangingGamemode != null && !AntiShare.hasPermission(player, PermissionNodes.FREE_PLACE)){
+			if(hangingGamemode != null && !player.hasPermission(PermissionNodes.FREE_PLACE)){
 				if(!GamemodeAbstraction.isMatch(hangingGamemode, player.getGameMode())){
 					i = configFor(player.getGameMode(), hangingGamemode, hanging.getLocation());
 					isGameMode = true;
@@ -1778,7 +1778,7 @@ public class ASListener implements Listener{
 		}
 
 		// Inventory check
-		if(!AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+		if(!player.hasPermission(PermissionNodes.NO_SWAP)){
 			plugin.getInventoryManager().onWorldChange(player, from);
 
 			// For alerts

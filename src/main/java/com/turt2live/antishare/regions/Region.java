@@ -416,7 +416,7 @@ public class Region{
 		plugin.getMessages().notifyParties(player, Action.ENTER_REGION, false, getName()); // Player name is applied because player message is ignored
 
 		// Set the player
-		if(!AntiShare.hasPermission(player, PermissionNodes.REGION_ROAM)){
+		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
 			gamemodes.put(player.getName(), player.getGameMode());
 			if(player.getGameMode() != gamemode){
 				player.setGameMode(gamemode);
@@ -435,7 +435,7 @@ public class Region{
 	 */
 	public void alertSilentEntry(Player player){
 		// Set the player
-		if(!AntiShare.hasPermission(player, PermissionNodes.REGION_ROAM)){
+		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
 			gamemodes.put(player.getName(), player.getGameMode());
 			if(player.getGameMode() != gamemode){
 				player.setGameMode(gamemode);
@@ -466,7 +466,7 @@ public class Region{
 		player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
 
 		// Reset the player
-		if(!AntiShare.hasPermission(player, PermissionNodes.REGION_ROAM)){
+		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
 			if(inventory != null){
 				plugin.getInventoryManager().removeFromTemporary(player);
 			}

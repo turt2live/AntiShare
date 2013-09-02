@@ -180,7 +180,7 @@ public class Messages{
 		// Prepare logic and messages
 		String playerMessage = ignoredAction ? "no message" : getMessage("player-messages." + action.name(), playerStrings);
 		String adminMessage = getMessage("notify-messages." + action.name(), notifyStrings);
-		boolean toPlayer = !AntiShare.hasPermission(player, PermissionNodes.SILENT_NOTIFICATIONS);
+		boolean toPlayer = !player.hasPermission(PermissionNodes.SILENT_NOTIFICATIONS);
 		boolean toAdmin = plugin.settings().notificationSettings.admins && plugin.settings().notificationSettings.enabled;
 		boolean toConsole = plugin.settings().notificationSettings.console && plugin.settings().notificationSettings.enabled;
 		String mapKey = action.name() + adminMessage + playerMessage + player.hashCode();
@@ -213,7 +213,7 @@ public class Messages{
 		if(toAdmin){
 			details.admin_last_sent = System.currentTimeMillis();
 			for(Player potentialAdmin : plugin.getServer().getOnlinePlayers()){
-				if(AntiShare.hasPermission(potentialAdmin, PermissionNodes.GET_NOTIFICATIONS)){
+				if(potentialAdmin.hasPermission(PermissionNodes.GET_NOTIFICATIONS)){
 					sendTo(potentialAdmin, adminMessage, true);
 				}
 			}

@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -535,47 +534,36 @@ public class AntiShare extends PluginWrapper{
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly){
 		if(target != null){
-			if(hasPermission(player, allowPermission + "." + target)){
+			if(player.hasPermission(allowPermission + "." + target)){
 				return false;
 			}
-			if(denyPermission != null && hasPermission(player, denyPermission + "." + target)){
+			if(denyPermission != null && player.hasPermission(denyPermission + "." + target)){
 				return true;
 			}
 		}
 		if(specialOnly){
 			return false;
 		}
-		if(hasPermission(player, allowPermission)){
+		if(player.hasPermission(allowPermission)){
 			return false;
 		}
-		if(denyPermission != null && hasPermission(player, denyPermission)){
+		if(denyPermission != null && player.hasPermission(denyPermission)){
 			return true;
 		}
 		if(GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()){
-			if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) || hasPermission(player, PermissionNodes.AFFECT_ADVENTURE)){
+			if(player.hasPermission(PermissionNodes.AFFECT_CREATIVE) || player.hasPermission(PermissionNodes.AFFECT_ADVENTURE)){
 				return true;
 			}
 		}
-		if(hasPermission(player, PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
+		if(player.hasPermission(PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE){
 			return true;
 		}
-		if(hasPermission(player, PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
+		if(player.hasPermission(PermissionNodes.AFFECT_SURVIVAL) && player.getGameMode() == GameMode.SURVIVAL){
 			return true;
 		}
-		if(hasPermission(player, PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE){
+		if(player.hasPermission(PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE){
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Determines if the target has a permission
-	 * 
-	 * @param target the target
-	 * @param permission the permission
-	 * @return true if they have the permission
-	 */
-	public static boolean hasPermission(CommandSender target, String permission){
-		return target.hasPermission(permission);
 	}
 }

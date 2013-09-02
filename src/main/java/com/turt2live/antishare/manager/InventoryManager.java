@@ -262,7 +262,7 @@ public class InventoryManager{
 	 * @param from the gamemode travelling from
 	 */
 	public void onGameModeChange(Player player, GameMode to, GameMode from){
-		if(!plugin.settings().features.inventories || AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+		if(!plugin.settings().features.inventories || player.hasPermission(PermissionNodes.NO_SWAP)){
 			return; // Don't bother
 		}
 		saveInventory(player, from);
@@ -288,7 +288,7 @@ public class InventoryManager{
 	 * @param from the world heading from
 	 */
 	public void onWorldChange(Player player, World from){
-		if(!plugin.settings().features.inventories || AntiShare.hasPermission(player, PermissionNodes.NO_SWAP)){
+		if(!plugin.settings().features.inventories || player.hasPermission(PermissionNodes.NO_SWAP)){
 			return; // Don't bother
 		}
 		saveInventory(player, player.getGameMode(), from);

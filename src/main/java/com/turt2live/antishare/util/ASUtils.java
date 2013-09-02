@@ -495,7 +495,7 @@ public class ASUtils{
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !AntiShare.hasPermission(player, permissions.region)){
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
 			if(sourceRegion != targetRegion){
 				illegal = true;
 				region = true;
@@ -528,7 +528,7 @@ public class ASUtils{
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())){
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !AntiShare.hasPermission(player, permissions.region)){
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
 			if(sourceRegion != targetRegion){
 				illegal = true;
 				region = true;
@@ -574,7 +574,7 @@ public class ASUtils{
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())){
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !AntiShare.hasPermission(player, permissions.region)){
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
 			if(sourceRegion != targetRegion){
 				illegal = true;
 				region = true;
@@ -607,7 +607,7 @@ public class ASUtils{
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, object instanceof Material ? (Material) object : null)){
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !AntiShare.hasPermission(player, permissions.region)){
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
 			if(sourceRegion != targetRegion){
 				illegal = true;
 				region = true;
@@ -640,7 +640,7 @@ public class ASUtils{
 		if(!p.isBlocked(player, permissions.allow, permissions.deny, object.getName())){
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !AntiShare.hasPermission(player, permissions.region)){
+		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
 			if(sourceRegion != targetRegion){
 				illegal = true;
 				region = true;

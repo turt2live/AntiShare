@@ -40,7 +40,7 @@ public class PlayerVaults implements Listener{
 		}
 		if(event.getInventory().getHolder() != null && event.getInventory().getHolder() instanceof VaultHolder){
 			Player player = (Player) event.getPlayer();
-			if(!AntiShare.hasPermission(player, PermissionNodes.PLUGIN_PLAYER_VAULTS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+			if(!player.hasPermission(PermissionNodes.PLUGIN_PLAYER_VAULTS) && GamemodeAbstraction.isCreative(player.getGameMode())){
 				event.setCancelled(true);
 			}
 		}
