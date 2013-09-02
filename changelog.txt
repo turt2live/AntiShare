@@ -4,17 +4,11 @@
 ! Change
 - Removal
 
-Since 5.4.3:
-= Fix "no-drop cross-gamemode breaking" (Issue #85)
-= Fix mobs beaing spawnable on water (Issue #96)
-+ Added World Splits (again, Issue 90)
-+ Added more comprehensive permissions
-+ Add warning for failed block moves
-+ Added PlayerVaults integration - Fixes duplication glitch
+Since 5.5.0:
+-- None
 
 Known Bugs:
 - Beacons
-- PEX
 
 Planned:
 - Rollback support
