@@ -56,8 +56,7 @@ public class VaultEconomy{
 			EconomyResponse r1 = economy.withdrawPlayer(player, current);
 			EconomyResponse r2 = economy.depositPlayer(player, balance);
 			if(!r1.transactionSuccess() || !r2.transactionSuccess()){
-				Exception e = new Exception("Cannot set balance: p=" + player + " gfrom=" + from + " gto=" + to);
-				e.printStackTrace();
+				new Throwable("Cannot set balance: p=" + player + " gfrom=" + from + " gto=" + to).printStackTrace();
 			}
 		}
 	}
