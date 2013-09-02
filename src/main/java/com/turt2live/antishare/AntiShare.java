@@ -499,10 +499,12 @@ public class AntiShare extends PluginWrapper{
 		if(check1 || check2){
 			return true;
 		}
-		List<String> materials = ItemMap.getNamesFromID(material.getId());
-		for(String mat : materials){
-			if(isBlocked(player, allowPermission, denyPermission, mat, specialOnly)){
-				return true;
+		if(material != null){
+			List<String> materials = ItemMap.getNamesFromID(material.getId());
+			for(String mat : materials){
+				if(isBlocked(player, allowPermission, denyPermission, mat, specialOnly)){
+					return true;
+				}
 			}
 		}
 		return false;
