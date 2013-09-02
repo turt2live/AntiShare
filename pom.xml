@@ -318,6 +318,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <minimizeJar>true</minimizeJar>
               <artifactSet>
                 <includes>
                   <include>com.feildmaster.lib:EnhancedConfiguration</include>
