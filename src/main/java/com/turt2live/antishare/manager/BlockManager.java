@@ -323,6 +323,8 @@ public class BlockManager{
 		final Material oldType = oldBlock.getType();
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
+			@SuppressWarnings ("deprecation")
+			// TODO: Magic value
 			@Override
 			public void run(){
 				// Setup vars

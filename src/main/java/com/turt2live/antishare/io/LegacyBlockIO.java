@@ -26,6 +26,8 @@ public class LegacyBlockIO{
 	 * @param file the file to load
 	 * @param wrapper the wrapper to load into
 	 */
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public static void load(boolean isBlock, File file, ChunkWrapper wrapper){
 		AntiShare plugin = AntiShare.p;
 		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);

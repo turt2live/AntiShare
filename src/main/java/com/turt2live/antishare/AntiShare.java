@@ -466,12 +466,18 @@ public class AntiShare extends PluginWrapper{
 	 * @return true if blocked
 	 */
 	public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material, boolean specialOnly){
-		boolean check1 = isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly), check2 = isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
+		boolean check1 = isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly);
+		@SuppressWarnings ("deprecation")
+		boolean check2 = isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
 		if(check1 || check2){
 			return true;
 		}
+		if(check2){
+			// TODO: Magic value
+			getMessages().magicValue();
+		}
 		if(material != null){
-			List<String> materials = ItemMap.getNamesFromID(material.getId());
+			List<String> materials = ItemMap.getNamesFromID(material);
 			for(String mat : materials){
 				if(isBlocked(player, allowPermission, denyPermission, mat, specialOnly)){
 					return true;

@@ -47,11 +47,15 @@ public class LogBlock extends BlockLogger implements Listener{
 	}
 
 	@Override
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void breakBlock(String playerName, Location location, Material before, byte data){
 		lb.queueBlockBreak(playerName, location, before.getId(), data);
 	}
 
 	@Override
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void placeBlock(String playerName, Location location, Material after, byte data){
 		lb.queueBlockPlace(playerName, location, after.getId(), data);
 	}

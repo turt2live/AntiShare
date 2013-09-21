@@ -114,7 +114,7 @@ public class ASConfig{
 	public final ASMaterialList blockBreak, blockPlace, death, pickup, drop, use, interact, craft, trackedCreative, trackedSurvival, trackedAdventure, eat;
 	public final List<String> commands;
 	public final List<EntityType> interactMobs, attackMobs, craftedMobs;
-	public final boolean adventureEqCreative, perWorldInventories, updateChecker, magicSpells, logBlockSpam, potions, thrownPotions, playerVaults;
+	public final boolean adventureEqCreative, perWorldInventories, updateChecker, magicSpells, logBlockSpam, potions, thrownPotions, playerVaults, ignoreMagicValues;
 	public final InventoryCleanupSettings inventoryCleanupSettings;
 	public final CooldownSettings cooldownSettings;
 	public final NaturalSettings naturalSettings;
@@ -149,12 +149,12 @@ public class ASConfig{
 		attackMobs = stringToEntityList((layer.configFor("lists.attack-mobs", true)).getList("lists.attack-mobs"));
 		craftedMobs = stringToEntityList((layer.configFor("lists.craft-mob", true)).getList("lists.craft-mob"));
 		adventureEqCreative = (layer.configFor("settings.adventure-is-creative", false)).getBoolean("settings.adventure-is-creative");
-
 		perWorldInventories = (layer.configFor("settings.use-per-world-inventories", false)).getBoolean("settings.use-per-world-inventories");
 		magicSpells = (layer.configFor("hooks.magicspells.block-creative", false)).getBoolean("hooks.magicspells.block-creative");
 		playerVaults = (layer.configFor("hooks.playervaults.block-creative", false)).getBoolean("hooks.playervaults.block-creative");
 		logBlockSpam = (layer.configFor("hooks.logblock.stop-spam", false)).getBoolean("hooks.logblock.stop-spam");
 		updateChecker = !(layer.configFor("other.ignore-updates", false)).getBoolean("other.ignore-updates");
+		ignoreMagicValues = (layer.configFor("other.ignore-magic-value", false)).getBoolean("ignore-magic-value");
 		inventoryCleanupSettings = new InventoryCleanupSettings(
 				(layer.configFor("settings.cleanup.inventories.enabled", false)).getBoolean("settings.cleanup.inventories.enabled"),
 				!(layer.configFor("settings.cleanup.inventories.method", false)).getString("settings.cleanup.inventories.method").equalsIgnoreCase("delete"),
@@ -250,6 +250,8 @@ public class ASConfig{
 				entities.add(EntityType.PLAYER);
 				continue;
 			}
+			@SuppressWarnings ("deprecation")
+			// TODO: Magic value
 			EntityType entity = EntityType.fromName(modified);
 			if(entity == null){
 				p.getLogger().warning(p.getMessages().getMessage("unknown-entity", string));

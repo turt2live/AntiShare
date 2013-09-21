@@ -42,6 +42,8 @@ public class ASMaterialList{
 	 * 
 	 * @param strings the list of strings
 	 */
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public ASMaterialList(List<?> strings){
 		if(strings == null){
 			throw new IllegalArgumentException("Null arguments are not allowed");
@@ -134,6 +136,8 @@ public class ASMaterialList{
 		listing.put(m.id, materials);
 	}
 
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	void add(Material m, boolean negate){
 		ASMaterial asm = new ASMaterial();
 		asm.id = m.getId();
@@ -148,6 +152,8 @@ public class ASMaterialList{
 	 * @param material the material
 	 * @return true if found
 	 */
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public boolean has(Material material){
 		if(material == null){
 			return false;
@@ -161,6 +167,8 @@ public class ASMaterialList{
 	 * @param block the block
 	 * @return true if found
 	 */
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public boolean has(Block block){
 		if(block == null){
 			return false;
@@ -185,6 +193,8 @@ public class ASMaterialList{
 		return find(material, data);
 	}
 
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	private boolean find(Material material, short data){
 		List<ASMaterial> asMaterials = listing.get(material.getId());
 		if(asMaterials == null){

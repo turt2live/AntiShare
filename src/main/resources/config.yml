@@ -175,4 +175,5 @@ interaction:
 # Misc. Settings
 other:
     ignore-updates: false
+    ignore-magic-value: false
     version_string: Not set

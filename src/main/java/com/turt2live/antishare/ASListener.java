@@ -483,6 +483,8 @@ public class ASListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onExplode(EntityExplodeEvent event){
 		ASConfig c = configFor(event.getLocation());
 		List<Block> list = new ArrayList<Block>();
@@ -504,6 +506,8 @@ public class ASListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onItemSpawn(ItemSpawnEvent event){
 		final Block block = event.getLocation().getBlock();
 		if(block.getType() != Material.AIR && !MaterialAPI.isSimilar(block.getType(), event.getEntity().getItemStack().getType())){
@@ -559,6 +563,8 @@ public class ASListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onBlockBreakHighest(BlockBreakEvent event){
 		if(event.getBlock().hasMetadata(ANTISHARE_DELAY_BREAK_KEY)){
 			Block block = event.getBlock();
@@ -837,6 +843,8 @@ public class ASListener implements Listener{
 
 	// Issue #96
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = false)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onInteractPossibleWaterSpawn(PlayerInteractEvent event){
 		if(event.isCancelled() && event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR && event.getClickedBlock() == null){
 			// It is almost certainly water.
@@ -975,6 +983,8 @@ public class ASListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onInvOpen(InventoryOpenEvent event){
 		Player player = (Player) event.getPlayer();
 		Entity entity = player.getVehicle();
@@ -1019,6 +1029,8 @@ public class ASListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onEntityInteract(PlayerInteractEntityEvent event){
 		Player player = event.getPlayer();
 		ItemStack hand = player.getItemInHand();
@@ -1408,6 +1420,8 @@ public class ASListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onCombat(EntityDamageByEntityEvent event){
 		Entity attacker = event.getDamager();
 		Entity target = event.getEntity();
@@ -1444,6 +1458,8 @@ public class ASListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onPistonExtend(BlockPistonExtendEvent event){
 		for(Block block : event.getBlocks()){
 			GameMode type = plugin.getBlockManager().getType(block);
@@ -1482,6 +1498,8 @@ public class ASListener implements Listener{
 	}
 
 	@EventHandler (priority = EventPriority.HIGH, ignoreCancelled = true)
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void onBlockFlow(BlockFromToEvent event){
 		Block to = event.getToBlock();
 		if(MaterialAPI.canBeBrokenByWater(to.getType())){

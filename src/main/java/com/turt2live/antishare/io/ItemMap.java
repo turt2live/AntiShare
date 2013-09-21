@@ -37,7 +37,10 @@ public class ItemMap{
 
 	private static Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 
-	public static List<String> getNamesFromID(int id){
+	public static List<String> getNamesFromID(Material material){
+		@SuppressWarnings ("deprecation")
+		// TODO: Magic value
+		int id = material.getId();
 		List<String> mats = new ArrayList<String>();
 		for(String key : listing.keySet()){
 			ASMaterial mat = listing.get(key);
@@ -50,6 +53,8 @@ public class ItemMap{
 		return mats;
 	}
 
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public static ASMaterial get(String string){
 		if(listing.size() <= 0){
 			try{
@@ -87,6 +92,8 @@ public class ItemMap{
 		return asm;
 	}
 
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	private static void load() throws IOException{
 		AntiShare p = AntiShare.p;
 		File items = new File(p.getDataFolder(), "items.csv");

@@ -55,6 +55,34 @@ public class Messages{
 		yaml.load();
 	}
 
+	public void magicValue(){
+		if(plugin.settings().ignoreMagicValues){
+			return;
+		}
+
+		String mapKey = "antishare.magic.value";
+		// Check last alert, if any
+		AlertDetails details = alerts.get(mapKey);
+		if(details == null){
+			details = new AlertDetails();
+			details.admin_last_sent = System.currentTimeMillis();
+			details.player_last_sent = System.currentTimeMillis();
+			details.console_last_sent = System.currentTimeMillis();
+		}else{
+			long now = System.currentTimeMillis();
+			if((now - details.console_last_sent) < messageDelay){
+				return;
+			}
+		}
+
+		// Send the message
+		plugin.getLogger().warning("Magic values (Item IDs, etc) may be removed in a later version!");
+		plugin.getLogger().warning("Please update your config to avoid using the item IDs!");
+
+		// Update last sent
+		alerts.put(mapKey, details);
+	}
+
 	/**
 	 * Gets a message
 	 * 
@@ -126,6 +154,8 @@ public class Messages{
 	 * @param entity the Entity involved (Eg: attacked)
 	 * @param extraVariables any extra variables (Eg: GameMode)
 	 */
+	@SuppressWarnings ("deprecation")
+	// TODO: Magic value
 	public void notifyParties(Player player, Action action, boolean illegal, EntityType entity, String... extraVariables){
 		notifyParties(player, action, illegal, MaterialAPI.capitalize(entity.getName()), extraVariables);
 	}
