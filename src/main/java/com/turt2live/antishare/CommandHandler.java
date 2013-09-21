@@ -45,6 +45,8 @@ import com.turt2live.materials.MaterialAPI;
  */
 public class CommandHandler implements CommandExecutor{
 
+	// TODO: Fix before live push
+	private static final boolean ALLOW_TEST = true;
 	private final AntiShare plugin = AntiShare.p;
 	private String noPermission = plugin.getMessages().getMessage("no-permission");
 	private String notPlayer = plugin.getMessages().getMessage("not-a-player");
@@ -56,7 +58,31 @@ public class CommandHandler implements CommandExecutor{
 		}
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
-				if(args[0].equalsIgnoreCase("version")){
+				if(args[0].equalsIgnoreCase("test")){
+					if(ALLOW_TEST){
+						if(sender.isOp()){
+							// BEGIN TEST CODE
+							if(sender instanceof Player){
+								final Player pl = (Player) sender;
+								pl.setGameMode(GameMode.SURVIVAL);
+								pl.teleport(pl.getLocation().add(0, 45, 0));
+								plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+									@Override
+									public void run(){
+										pl.setGameMode(GameMode.CREATIVE);
+										pl.kickPlayer("antishare");
+									}
+								}, (long) (3.5 * 20));
+							}else{
+								sender.sendMessage("not a player");
+							}
+							// END TEST CODE
+						}else{
+							plugin.getMessages().sendTo(sender, noPermission, true);
+						}
+						return true;
+					}
+				}else if(args[0].equalsIgnoreCase("version")){
 					plugin.getMessages().sendTo(sender, ChatColor.YELLOW + "Version: " + ChatColor.GOLD + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Build: " + ChatColor.GOLD + plugin.getBuild(), false);
 					return true;
 				}else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){

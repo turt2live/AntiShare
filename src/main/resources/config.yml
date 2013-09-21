@@ -176,4 +176,5 @@ interaction:
 other:
     ignore-updates: false
     ignore-magic-value: false
+    allow-test-command: false
     version_string: Not set

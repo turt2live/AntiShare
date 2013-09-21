@@ -114,7 +114,7 @@ public class ASConfig{
 	public final ASMaterialList blockBreak, blockPlace, death, pickup, drop, use, interact, craft, trackedCreative, trackedSurvival, trackedAdventure, eat;
 	public final List<String> commands;
 	public final List<EntityType> interactMobs, attackMobs, craftedMobs;
-	public final boolean adventureEqCreative, perWorldInventories, updateChecker, magicSpells, logBlockSpam, potions, thrownPotions, playerVaults, ignoreMagicValues;
+	public final boolean adventureEqCreative, perWorldInventories, updateChecker, magicSpells, logBlockSpam, potions, thrownPotions, playerVaults, ignoreMagicValues, allowTestCommand;
 	public final InventoryCleanupSettings inventoryCleanupSettings;
 	public final CooldownSettings cooldownSettings;
 	public final NaturalSettings naturalSettings;
@@ -155,6 +155,7 @@ public class ASConfig{
 		logBlockSpam = (layer.configFor("hooks.logblock.stop-spam", false)).getBoolean("hooks.logblock.stop-spam");
 		updateChecker = !(layer.configFor("other.ignore-updates", false)).getBoolean("other.ignore-updates");
 		ignoreMagicValues = (layer.configFor("other.ignore-magic-value", false)).getBoolean("ignore-magic-value");
+		allowTestCommand = (layer.configFor("other.allow-test-command", false)).getBoolean("allow-test-command");
 		inventoryCleanupSettings = new InventoryCleanupSettings(
 				(layer.configFor("settings.cleanup.inventories.enabled", false)).getBoolean("settings.cleanup.inventories.enabled"),
 				!(layer.configFor("settings.cleanup.inventories.method", false)).getString("settings.cleanup.inventories.method").equalsIgnoreCase("delete"),
