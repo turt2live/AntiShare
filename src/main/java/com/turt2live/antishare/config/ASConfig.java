@@ -154,8 +154,8 @@ public class ASConfig{
 		playerVaults = (layer.configFor("hooks.playervaults.block-creative", false)).getBoolean("hooks.playervaults.block-creative");
 		logBlockSpam = (layer.configFor("hooks.logblock.stop-spam", false)).getBoolean("hooks.logblock.stop-spam");
 		updateChecker = !(layer.configFor("other.ignore-updates", false)).getBoolean("other.ignore-updates");
-		ignoreMagicValues = (layer.configFor("other.ignore-magic-value", false)).getBoolean("ignore-magic-value");
-		allowTestCommand = (layer.configFor("other.allow-test-command", false)).getBoolean("allow-test-command");
+		ignoreMagicValues = (layer.configFor("other.ignore-magic-value", false)).getBoolean("other.ignore-magic-value");
+		allowTestCommand = (layer.configFor("other.allow-test-command", false)).getBoolean("other.allow-test-command");
 		inventoryCleanupSettings = new InventoryCleanupSettings(
 				(layer.configFor("settings.cleanup.inventories.enabled", false)).getBoolean("settings.cleanup.inventories.enabled"),
 				!(layer.configFor("settings.cleanup.inventories.method", false)).getString("settings.cleanup.inventories.method").equalsIgnoreCase("delete"),
