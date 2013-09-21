@@ -45,8 +45,6 @@ import com.turt2live.materials.MaterialAPI;
  */
 public class CommandHandler implements CommandExecutor{
 
-	// TODO: Fix before live push
-	private static final boolean ALLOW_TEST = true;
 	private final AntiShare plugin = AntiShare.p;
 	private String noPermission = plugin.getMessages().getMessage("no-permission");
 	private String notPlayer = plugin.getMessages().getMessage("not-a-player");
@@ -59,7 +57,7 @@ public class CommandHandler implements CommandExecutor{
 		if(command.getName().equalsIgnoreCase("AntiShare")){
 			if(args.length > 0){
 				if(args[0].equalsIgnoreCase("test")){
-					if(ALLOW_TEST){
+					if(plugin.settings().allowTestCommand){
 						if(sender.isOp()){
 							// BEGIN TEST CODE
 							if(sender instanceof Player){
