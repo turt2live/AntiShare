@@ -6,6 +6,9 @@
 
 Since 5.5.0:
 = Fix death-drop exploit (applies to all death possibilities. #106)
+- Removed Metrics (MCStats)
++ Added "magic value" warnings for block ID usage
+! Code cleanup
 
 Known Bugs:
 - Beacons
