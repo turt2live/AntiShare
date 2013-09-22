@@ -13,6 +13,7 @@
     <bukkit.version>1.6.2-R1.0</bukkit.version>
     <vault.version>1.2.27</vault.version>
     <materialapi.version>0.0.2-SNAPSHOT</materialapi.version>
+    <metricsextension.version>0.0.5-SNAPSHOT</metricsextension.version>
     <configurationlib.version>1.1.3</configurationlib.version>
     <snapi.version>0.0.1-SNAPSHOT</snapi.version>
     <jsonconfig.version>1.0-SNAPSHOT</jsonconfig.version>
@@ -107,6 +108,16 @@
       <version>${materialapi.version}</version>
       <type>jar</type>
       <scope>compile</scope>
+    </dependency>
+
+    <!-- Metrics Extension -->
+    <dependency>
+      <groupId>com.turt2live.metrics</groupId>
+      <artifactId>MetricsExtension</artifactId>
+      <version>${metricsextension.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
+      <!--<classifier>DEBUG</classifier> -->
     </dependency>
 
     <!-- Configuration Library -->

@@ -177,6 +177,15 @@ public class Messages{
 		boolean ignoredAction = action == Action.ENTER_REGION || action == Action.EXIT_REGION
 				|| action == Action.GAMEMODE_CHANGE || action == Action.WORLD_CHANGE;
 
+		// Metrics
+		if(!ignoredAction){
+			if(illegal){
+				AntiShare.ILLEGAL_ACTIONS.increment(action);
+			}else{
+				AntiShare.LEGAL_ACTIONS.increment(action);
+			}
+		}
+
 		// We don't care
 		if(!illegal){
 			return;

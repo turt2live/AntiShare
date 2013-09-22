@@ -23,6 +23,7 @@ import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.antishare.compatibility.SelfCompatibility;
@@ -38,9 +39,13 @@ import com.turt2live.antishare.manager.RegionManager;
 import com.turt2live.antishare.manager.SplitManager;
 import com.turt2live.antishare.manager.WorldConfigManager;
 import com.turt2live.antishare.regions.Region;
+import com.turt2live.antishare.util.Action;
 import com.turt2live.antishare.util.GamemodeAbstraction;
 import com.turt2live.antishare.util.Messages;
 import com.turt2live.antishare.util.UpdateChecker;
+import com.turt2live.metrics.EMetrics;
+import com.turt2live.metrics.graph.PieGraph;
+import com.turt2live.metrics.tracker.FixedTracker;
 
 /**
  * AntiShare plugin class
@@ -70,6 +75,10 @@ public class AntiShare extends PluginWrapper{
 	 */
 	public static final short ANTISHARE_TOOL_DATA = 1;
 
+	// Trackers
+	public static final PieGraph<Action> LEGAL_ACTIONS = new PieGraph<Action>("5.4.0 Legal Actions");
+	public static final PieGraph<Action> ILLEGAL_ACTIONS = new PieGraph<Action>("5.4.0 Illegal Actions");
+
 	// Folder locations
 	public File generalDataDirectory;
 	public File inventoriesDirectory;
@@ -82,6 +91,7 @@ public class AntiShare extends PluginWrapper{
 	private File simpleNoticeFile;
 
 	// Private stuff
+	private EMetrics metrics;
 	private String build;
 	private Messages messages;
 	private ASConfig config;
@@ -98,6 +108,12 @@ public class AntiShare extends PluginWrapper{
 	@Override
 	public void onEnable(){
 		p = this;
+
+		// Setup graphs
+		for(Action action : Action.values()){
+			ILLEGAL_ACTIONS.addSlice(action, action.name());
+			LEGAL_ACTIONS.addSlice(action, action.name());
+		}
 
 		// Create folder structure
 		generalDataDirectory = new File(getDataFolder(), "data");
@@ -239,6 +255,18 @@ public class AntiShare extends PluginWrapper{
 
 		// Load player information
 		loadPlayerInformation();
+
+		// Start metrics
+		try{
+			metrics = new EMetrics(this);
+			metrics.addGraph(LEGAL_ACTIONS);
+			metrics.addGraph(ILLEGAL_ACTIONS);
+			Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
+			metrics.addTracker(new FixedTracker("mcMMO Servers", mcmmo != null ? "Found" : "Not Found"));
+			metrics.startMetrics();
+		}catch(IOException e){ // Metrics error
+			e.printStackTrace();
+		}
 	}
 
 	@Override
