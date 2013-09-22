@@ -255,8 +255,9 @@ public class HookManager{
 					hooked(playervaults);
 					pv = new PlayerVaults();
 					plugin.getServer().getPluginManager().registerEvents(pv, plugin);
-				}else
+				}else{
 					notHooked(playervaults);
+				}
 			}catch(ClassNotFoundException e){
 				notHooked(playervaults);
 			}

@@ -860,8 +860,9 @@ public class ASListener implements Listener{
 					break;
 				}
 			}
-			if(water)
+			if(water){
 				doOnUseInteract(event, waterBlock);
+			}
 		}
 	}
 

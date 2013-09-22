@@ -96,8 +96,9 @@ public class WorldSplit{
 	 * @return the gamemode for the side this location resides on. If the location is null then this will be null, if {@link #getAxis()} is UNKNOWN or null then this is also null.
 	 */
 	public GameMode getGameModeForSide(Location location){
-		if(location == null)
+		if(location == null){
 			return null;
+		}
 		int v = 0;
 		switch (axis){
 		case X:

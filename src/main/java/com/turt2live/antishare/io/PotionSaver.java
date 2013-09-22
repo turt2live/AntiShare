@@ -49,8 +49,9 @@ public class PotionSaver extends GenericDataFile{
 			player.removePotionEffect(effect.getType());
 		}
 		ConfigurationSection section = file.getConfigurationSection(player.getName() + "." + gamemode);
-		if(section == null)
+		if(section == null){
 			return;
+		}
 		Set<String> saved = section.getKeys(false);
 		if(saved != null){
 			for(String key : saved){

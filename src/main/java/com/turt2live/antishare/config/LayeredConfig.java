@@ -26,10 +26,12 @@ public class LayeredConfig{
 	 * Loads all configurations
 	 */
 	public void loadAll(){
-		if(region != null)
+		if(region != null){
 			region.load();
-		if(world != null)
+		}
+		if(world != null){
 			world.load();
+		}
 		plugin.load();
 	}
 

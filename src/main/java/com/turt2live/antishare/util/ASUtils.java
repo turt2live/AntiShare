@@ -383,10 +383,12 @@ public class ASUtils{
 	 */
 	public static boolean hasTool(Material material, Player player){
 		for(ItemStack item : player.getInventory().getContents()){
-			if(item == null)
+			if(item == null){
 				continue;
-			if(item.getType() == material && item.getDurability() == AntiShare.ANTISHARE_TOOL_DATA)
+			}
+			if(item.getType() == material && item.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
 				return true;
+			}
 		}
 		return false;
 	}
