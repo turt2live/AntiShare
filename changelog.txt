@@ -5,7 +5,7 @@
 - Removal
 
 Since 5.5.0:
--- None
+= Fix death-drop exploit (applies to all death possibilities. #106)
 
 Known Bugs:
 - Beacons

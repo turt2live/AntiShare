@@ -70,7 +70,7 @@ public class CommandHandler implements CommandExecutor{
 										pl.setGameMode(GameMode.CREATIVE);
 										pl.kickPlayer("antishare");
 									}
-								}, (long) (3.5 * 20));
+								}, (long) (2.5 * 20));
 							}else{
 								sender.sendMessage("not a player");
 							}

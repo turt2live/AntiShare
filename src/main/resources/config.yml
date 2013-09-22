@@ -117,6 +117,16 @@ settings:
         # This also affects chest (and etc) interactions with hoppers. This means that if true, AntiShare will stop items from a Creative chest
         # from spreading to a survival hopper (for example).
         gamemode-spreading: true
+        # Options for death control
+        on-death:
+            # The number of seconds after a gamemode change before items will drop.
+            # For example, if this is "1" then if the player has changed gamemode
+            # within the last 1 second upon death then no items will be dropped.
+            # Set to 0 to disable.
+            # Note: This simply clears the inventory instead of dropping items, 
+            # regardless of Game Mode on death.
+            # Negative numbers are ignored and treated as "zero"
+            no-drops-after: 2
         break-as-gamemode:
             pistons: true
             # If this is true, then blocks will be broken according to their gamemode (if attached, such as a torch on a falling sand block)

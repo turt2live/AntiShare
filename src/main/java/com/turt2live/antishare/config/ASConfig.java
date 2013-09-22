@@ -123,6 +123,7 @@ public class ASConfig{
 	public final NotifySettings notificationSettings;
 	public final EnhancedConfiguration rawConfiguration;
 	public final FeatureSettings features;
+	public final double onDeathTimerSeconds;
 
 	private AntiShare p = AntiShare.p;
 
@@ -164,6 +165,7 @@ public class ASConfig{
 		cooldownSettings = new CooldownSettings(
 				(layer.configFor("settings.cooldown.enabled", false)).getBoolean("settings.cooldown.enabled"),
 				(layer.configFor("settings.cooldown.wait-time-seconds", false)).getInt("settings.cooldown.wait-time-seconds"));
+		onDeathTimerSeconds = (layer.configFor("settings.natural-protection.on-death.no-drops-after", false)).getDouble("settings.natural-protection.on-death.no-drops-after", 0);
 		naturalSettings = new NaturalSettings(
 				(layer.configFor("settings.natural-protection.gamemode-spreading", false)).getBoolean("settings.natural-protection.gamemode-spreading"),
 				(layer.configFor("settings.natural-protection.allow-mismatch-gamemode", false)).getBoolean("settings.natural-protection.allow-mismatch-gamemode"),

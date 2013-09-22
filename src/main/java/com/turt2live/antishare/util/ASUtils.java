@@ -38,6 +38,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Bed;
 import org.bukkit.material.Door;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import com.turt2live.antishare.AntiShare;
 import com.turt2live.antishare.PermissionNodes.PermissionPackage;
@@ -64,6 +66,45 @@ public class ASUtils{
 	private static MobPattern SNOW_GOLEM_PATTERN;
 	private static MobPattern IRON_GOLEM_PATTERN;
 	private static MobPattern WITHER_PATTERN;
+	private static String NO_DROP_KEY = "antishare.no.drop.key";
+
+	/**
+	 * Determines if a player has the "no drop" metadata
+	 * 
+	 * @param player the player to check
+	 * @return true if the player has the no drop metadata
+	 */
+	public static boolean hasNoDrop(Player player){
+		AntiShare plugin = AntiShare.p;
+		if(player.hasMetadata(NO_DROP_KEY)){
+			List<MetadataValue> vals = player.getMetadata(NO_DROP_KEY);
+			for(MetadataValue val : vals){
+				if(System.currentTimeMillis() - val.asLong() > plugin.settings().onDeathTimerSeconds * 1000){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Removes the "no drop" metadata from the player
+	 * 
+	 * @param player the player to remove the metadata from
+	 */
+	public static void removeNoDrop(Player player){
+		player.removeMetadata(NO_DROP_KEY, AntiShare.p);
+	}
+
+	/**
+	 * Adds the "no drop" metadata to the player
+	 * 
+	 * @param player the player to add it to
+	 */
+	public static void applyNoDrop(Player player){
+		removeNoDrop(player);
+		player.setMetadata(NO_DROP_KEY, new FixedMetadataValue(AntiShare.p, System.currentTimeMillis()));
+	}
 
 	/**
 	 * Gets a boolean from a String

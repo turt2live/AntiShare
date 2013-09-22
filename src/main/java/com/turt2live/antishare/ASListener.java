@@ -1289,6 +1289,12 @@ public class ASListener implements Listener{
 			playerRegion.alertExit(player);
 		}
 
+		// Death-drop exploit. #106
+		if(ASUtils.hasNoDrop(player)){
+			drops.clear();
+			ASUtils.removeNoDrop(player);
+		}
+
 		List<ItemStack> r = new ArrayList<ItemStack>();
 		for(ItemStack item : drops){
 			boolean remove = false;
@@ -1411,6 +1417,11 @@ public class ASListener implements Listener{
 			if(cancel){
 				event.setCancelled(true);
 			}
+		}
+
+		// Death-drop exploit. #106
+		if(!event.isCancelled()){
+			ASUtils.applyNoDrop(player);
 		}
 	}
 
