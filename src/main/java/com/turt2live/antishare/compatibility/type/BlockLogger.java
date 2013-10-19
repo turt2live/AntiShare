@@ -18,7 +18,7 @@ import org.bukkit.Material;
  * 
  * @author turt2live
  */
-public abstract class BlockLogger{
+public abstract class BlockLogger {
 
 	/**
 	 * Default player name to inject into Block Loggers

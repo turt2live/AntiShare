@@ -53,9 +53,9 @@ import com.turt2live.antishare.util.MobPattern.MobPatternType;
  * @author turt2live
  */
 @SuppressWarnings ("deprecation")
-public class ASUtils{
+public class ASUtils {
 
-	public static enum EntityPattern{
+	public static enum EntityPattern {
 		SNOW_GOLEM, IRON_GOLEM, WITHER;
 	}
 
@@ -74,12 +74,12 @@ public class ASUtils{
 	 * @param player the player to check
 	 * @return true if the player has the no drop metadata
 	 */
-	public static boolean hasNoDrop(Player player){
+	public static boolean hasNoDrop(Player player) {
 		AntiShare plugin = AntiShare.p;
-		if(player.hasMetadata(NO_DROP_KEY)){
+		if (player.hasMetadata(NO_DROP_KEY)) {
 			List<MetadataValue> vals = player.getMetadata(NO_DROP_KEY);
-			for(MetadataValue val : vals){
-				if(System.currentTimeMillis() - val.asLong() > plugin.settings().onDeathTimerSeconds * 1000){
+			for (MetadataValue val : vals) {
+				if (System.currentTimeMillis() - val.asLong() > plugin.settings().onDeathTimerSeconds * 1000) {
 					return true;
 				}
 			}
@@ -92,7 +92,7 @@ public class ASUtils{
 	 * 
 	 * @param player the player to remove the metadata from
 	 */
-	public static void removeNoDrop(Player player){
+	public static void removeNoDrop(Player player) {
 		player.removeMetadata(NO_DROP_KEY, AntiShare.p);
 	}
 
@@ -101,7 +101,7 @@ public class ASUtils{
 	 * 
 	 * @param player the player to add it to
 	 */
-	public static void applyNoDrop(Player player){
+	public static void applyNoDrop(Player player) {
 		removeNoDrop(player);
 		player.setMetadata(NO_DROP_KEY, new FixedMetadataValue(AntiShare.p, System.currentTimeMillis()));
 	}
@@ -112,13 +112,13 @@ public class ASUtils{
 	 * @param value the String
 	 * @return the boolean (or null if not found)
 	 */
-	public static Boolean getBoolean(String value){
-		if(value == null || value.trim().length() == 0){
+	public static Boolean getBoolean(String value) {
+		if (value == null || value.trim().length() == 0) {
 			return null;
 		}
-		if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("on") || value.equalsIgnoreCase("active") || value.equalsIgnoreCase("1")){
+		if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("t") || value.equalsIgnoreCase("on") || value.equalsIgnoreCase("active") || value.equalsIgnoreCase("1")) {
 			return true;
-		}else if(value.equalsIgnoreCase("false") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("off") || value.equalsIgnoreCase("inactive") || value.equalsIgnoreCase("0")){
+		} else if (value.equalsIgnoreCase("false") || value.equalsIgnoreCase("f") || value.equalsIgnoreCase("off") || value.equalsIgnoreCase("inactive") || value.equalsIgnoreCase("0")) {
 			return false;
 		}
 		return null;
@@ -130,15 +130,15 @@ public class ASUtils{
 	 * @param value the string
 	 * @return the GameMode (or null if not found)
 	 */
-	public static GameMode getGameMode(String value){
-		if(value == null){
+	public static GameMode getGameMode(String value) {
+		if (value == null) {
 			return null;
 		}
-		if(value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")){
+		if (value.equalsIgnoreCase("creative") || value.equalsIgnoreCase("c") || value.equalsIgnoreCase("1")) {
 			return GameMode.CREATIVE;
-		}else if(value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")){
+		} else if (value.equalsIgnoreCase("survival") || value.equalsIgnoreCase("s") || value.equalsIgnoreCase("0")) {
 			return GameMode.SURVIVAL;
-		}else if(value.equalsIgnoreCase("adventure") || value.equalsIgnoreCase("a") || value.equalsIgnoreCase("2")){
+		} else if (value.equalsIgnoreCase("adventure") || value.equalsIgnoreCase("a") || value.equalsIgnoreCase("2")) {
 			return GameMode.ADVENTURE;
 		}
 		return null;
@@ -155,16 +155,16 @@ public class ASUtils{
 	 * @param zero true to add zero
 	 * @return the block as a string
 	 */
-	public static String blockToString(Block block, boolean zero){
-		if(block == null){
+	public static String blockToString(Block block, boolean zero) {
+		if (block == null) {
 			return null;
 		}
 		String typeId = "";
 		String data = "0";
 		typeId = Integer.toString(block.getTypeId());
-		if(block.getType().getMaxDurability() > 0){
+		if (block.getType().getMaxDurability() > 0) {
 			data = "0";
-		}else if(block.getData() > 0){
+		} else if (block.getData() > 0) {
 			data = Byte.toString(block.getData());
 		}
 		return typeId + (data.equals("0") && zero ? "" : ":" + data);
@@ -183,13 +183,13 @@ public class ASUtils{
 	 * @param zero true to add zero
 	 * @return the material as a string
 	 */
-	public static String materialToString(Material material, boolean zero){
-		if(material == null){
+	public static String materialToString(Material material, boolean zero) {
+		if (material == null) {
 			return null;
 		}
 		StringBuilder ret = new StringBuilder();
 		ret.append(material.getId());
-		if(!zero){
+		if (!zero) {
 			ret.append(":");
 			ret.append("*");
 		}
@@ -202,13 +202,13 @@ public class ASUtils{
 	 * @param input the raw input
 	 * @return the wool ID (with data value) or null if not wool
 	 */
-	public static String getWool(String input){
-		if(input == null || !input.toLowerCase().contains("wool")){
+	public static String getWool(String input) {
+		if (input == null || !input.toLowerCase().contains("wool")) {
 			return null;
 		}
 
 		String color = input.replace("wool", "").trim().toLowerCase();
-		if(color.length() == 0){
+		if (color.length() == 0) {
 			color = "white";
 		}
 		color = color.replaceAll(" ", "_");
@@ -238,10 +238,10 @@ public class ASUtils{
 	 * @param gamemode the Game Mode
 	 * @return the player names with that Game Mode (online only)
 	 */
-	public static List<String> findGameModePlayers(GameMode gamemode){
+	public static List<String> findGameModePlayers(GameMode gamemode) {
 		List<String> affected = new ArrayList<String>();
-		for(Player player : Bukkit.getOnlinePlayers()){
-			if(player.getGameMode() == gamemode){
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.getGameMode() == gamemode) {
 				affected.add(player.getName());
 			}
 		}
@@ -254,12 +254,12 @@ public class ASUtils{
 	 * @param list the list
 	 * @return the comma-separated String
 	 */
-	public static String commas(List<String> list){
-		if(list == null){
+	public static String commas(List<String> list) {
+		if (list == null) {
 			return "no one";
 		}
 		StringBuilder commas = new StringBuilder();
-		for(String s : list){
+		for (String s : list) {
 			commas.append(s).append(", ");
 		}
 		String finalComma = commas.toString().trim();
@@ -273,8 +273,8 @@ public class ASUtils{
 	 * @param shortVersion true to use the single letter, false otherwise
 	 * @return the short hand version, or null if invalid
 	 */
-	public static String gamemodeAbbreviation(GameMode gamemode, boolean shortVersion){
-		if(gamemode == null){
+	public static String gamemodeAbbreviation(GameMode gamemode, boolean shortVersion) {
+		if (gamemode == null) {
 			return null;
 		}
 		return (shortVersion ? "" : "GM = ") + gamemode.name().charAt(0);
@@ -286,7 +286,7 @@ public class ASUtils{
 	 * @param name the string
 	 * @return the file safe name
 	 */
-	public static String fileSafeName(String name){
+	public static String fileSafeName(String name) {
 		return name.replaceAll("[^0-9a-zA-Z]", "-");
 	}
 
@@ -296,18 +296,18 @@ public class ASUtils{
 	 * @param folder the folder to wipe
 	 * @param fileNames file names to wipe, can be null for "all"
 	 */
-	public static void wipeFolder(File folder, CopyOnWriteArrayList<String> fileNames){
-		if(folder == null || !folder.exists()){
+	public static void wipeFolder(File folder, CopyOnWriteArrayList<String> fileNames) {
+		if (folder == null || !folder.exists()) {
 			return;
 		}
-		if(folder.listFiles() == null){
+		if (folder.listFiles() == null) {
 			return;
-		}else{
-			for(File file : folder.listFiles()){
-				if(file.isDirectory()){
+		} else {
+			for (File file : folder.listFiles()) {
+				if (file.isDirectory()) {
 					wipeFolder(file, fileNames);
 				}
-				if(fileNames == null || fileNames.contains(file.getName())){
+				if (fileNames == null || fileNames.contains(file.getName())) {
 					file.delete();
 				}
 			}
@@ -320,7 +320,7 @@ public class ASUtils{
 	 * @param tool the tool
 	 * @param player the player
 	 */
-	public static void giveTool(Material tool, Player player){
+	public static void giveTool(Material tool, Player player) {
 		giveTool(tool, player, 1);
 	}
 
@@ -331,11 +331,11 @@ public class ASUtils{
 	 * @param player the player
 	 * @param slot the slot to place it in. <b>Starts at 1</b>
 	 */
-	public static void giveTool(Material tool, Player player, int slot){
+	public static void giveTool(Material tool, Player player, int slot) {
 		Inventory inv = player.getInventory();
-		if(inv.firstEmpty() >= 0){
+		if (inv.firstEmpty() >= 0) {
 			ItemStack original = inv.getItem(slot - 1);
-			if(original != null){
+			if (original != null) {
 				original = original.clone();
 			}
 			ItemStack itemTool = new ItemStack(tool);
@@ -343,14 +343,14 @@ public class ASUtils{
 			String title = null;
 			List<String> lore = new ArrayList<String>();
 			AntiShare p = AntiShare.p;
-			if(tool == AntiShare.ANTISHARE_TOOL){
+			if (tool == AntiShare.ANTISHARE_TOOL) {
 				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Tool";
 				lore.add(ChatColor.GREEN + p.getMessages().getMessage("tool-meta.generic-tool"));
-			}else if(tool == AntiShare.ANTISHARE_SET_TOOL){
+			} else if (tool == AntiShare.ANTISHARE_SET_TOOL) {
 				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Set Tool";
 				lore.add(ChatColor.GREEN + p.getMessages().getMessage("tool-meta.set-tool-1"));
 				lore.add(ChatColor.RED + p.getMessages().getMessage("tool-meta.set-tool-2"));
-			}else if(tool == AntiShare.ANTISHARE_CUBOID_TOOL){
+			} else if (tool == AntiShare.ANTISHARE_CUBOID_TOOL) {
 				title = ChatColor.RESET + "" + ChatColor.AQUA + "AntiShare Cuboid Tool";
 				lore.add(ChatColor.GREEN + p.getMessages().getMessage("tool-meta.cuboid-tool-1"));
 				lore.add(ChatColor.DARK_GREEN + p.getMessages().getMessage("tool-meta.cuboid-tool-2"));
@@ -358,15 +358,15 @@ public class ASUtils{
 			lore.add(p.getMessages().getMessage("tool-meta.all"));
 			lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + p.getMessages().getMessage("tool-meta.created-for", player.getName()));
 			ItemMeta meta = itemTool.getItemMeta();
-			if(title != null){
+			if (title != null) {
 				meta.setDisplayName(title);
 			}
-			if(lore.size() > 0){
+			if (lore.size() > 0) {
 				meta.setLore(lore);
 			}
 			itemTool.setItemMeta(meta);
 			inv.setItem(slot - 1, itemTool);
-			if(original != null){
+			if (original != null) {
 				inv.addItem(original);
 			}
 			player.updateInventory();
@@ -381,12 +381,12 @@ public class ASUtils{
 	 * @param player the player
 	 * @return true if found, false otherwise
 	 */
-	public static boolean hasTool(Material material, Player player){
-		for(ItemStack item : player.getInventory().getContents()){
-			if(item == null){
+	public static boolean hasTool(Material material, Player player) {
+		for (ItemStack item : player.getInventory().getContents()) {
+			if (item == null) {
 				continue;
 			}
-			if(item.getType() == material && item.getDurability() == AntiShare.ANTISHARE_TOOL_DATA){
+			if (item.getType() == material && item.getDurability() == AntiShare.ANTISHARE_TOOL_DATA) {
 				return true;
 			}
 		}
@@ -399,24 +399,24 @@ public class ASUtils{
 	 * @param block the source
 	 * @return the second block, or null if not found
 	 */
-	public static Block multipleBlocks(Block block){
-		if(block == null){
+	public static Block multipleBlocks(Block block) {
+		if (block == null) {
 			return null;
 		}
-		switch (block.getType()){
+		switch (block.getType()) {
 		case WOODEN_DOOR:
 		case IRON_DOOR_BLOCK:
 			Door door = (Door) block.getState().getData();
-			if(door.isTopHalf()){
+			if (door.isTopHalf()) {
 				return block.getRelative(BlockFace.DOWN);
-			}else{
+			} else {
 				return block.getRelative(BlockFace.UP);
 			}
 		case BED_BLOCK:
 			Bed bed = (Bed) block.getState().getData();
-			if(bed.isHeadOfBed()){
+			if (bed.isHeadOfBed()) {
 				return block.getRelative(bed.getFacing().getOppositeFace());
-			}else{
+			} else {
 				return block.getRelative(bed.getFacing());
 			}
 		default:
@@ -430,23 +430,23 @@ public class ASUtils{
 	 * @param pattern the pattern to look for
 	 * @return the pattern. This will be null if the pattern is not found or unsupported
 	 */
-	public static MobPattern getMobPattern(EntityPattern pattern){
-		if(pattern == null){
+	public static MobPattern getMobPattern(EntityPattern pattern) {
+		if (pattern == null) {
 			return null;
 		}
-		switch (pattern){
+		switch (pattern) {
 		case SNOW_GOLEM:
-			if(SNOW_GOLEM_PATTERN == null){
+			if (SNOW_GOLEM_PATTERN == null) {
 				SNOW_GOLEM_PATTERN = new MobPattern(MobPatternType.I_SHAPE, Material.SNOW_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
 			}
 			return SNOW_GOLEM_PATTERN;
 		case IRON_GOLEM:
-			if(IRON_GOLEM_PATTERN == null){
+			if (IRON_GOLEM_PATTERN == null) {
 				IRON_GOLEM_PATTERN = new MobPattern(MobPatternType.T_SHAPE, Material.IRON_BLOCK, Material.PUMPKIN, Material.JACK_O_LANTERN);
 			}
 			return IRON_GOLEM_PATTERN;
 		case WITHER:
-			if(WITHER_PATTERN == null){
+			if (WITHER_PATTERN == null) {
 				WITHER_PATTERN = new MobPattern(MobPatternType.T_SHAPE, Material.SOUL_SAND, Material.SKULL);
 			}
 			return WITHER_PATTERN;
@@ -464,27 +464,27 @@ public class ASUtils{
 	 * @param configuration the configuration to use
 	 * @return protection information
 	 */
-	public static ProtectionInformation isBlocked(Player player, ItemStack target, ASMaterialList list, PermissionPackage permissions, ASConfig configuration){
-		if(player == null || list == null || permissions == null){
+	public static ProtectionInformation isBlocked(Player player, ItemStack target, ASMaterialList list, PermissionPackage permissions, ASConfig configuration) {
+		if (player == null || list == null || permissions == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		boolean illegal = false, isPotion = false, isThrownPotion = false;
-		if(target.getType() == Material.POTION){
+		if (target.getType() == Material.POTION) {
 			isPotion = true;
-			if(target.getDurability() > 32000){
+			if (target.getDurability() > 32000) {
 				isThrownPotion = true;
 			}
 		}
 		AntiShare p = AntiShare.p;
-		if(list.has(target)){
+		if (list.has(target)) {
 			illegal = true;
 		}
-		if(isThrownPotion && configuration.thrownPotions){
+		if (isThrownPotion && configuration.thrownPotions) {
 			illegal = true;
-		}else if(isPotion && configuration.potions){
+		} else if (isPotion && configuration.potions) {
 			illegal = true;
 		}
-		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
+		if (!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())) {
 			illegal = false;
 		}
 		return new ProtectionInformation(illegal, false, null, null);
@@ -500,16 +500,16 @@ public class ASUtils{
 	 * @param configuration the configuration to use
 	 * @return protection information
 	 */
-	public static ProtectionInformation isBlocked(Player player, Block target, ASMaterialList list, PermissionPackage permissions, ASConfig configuration){
-		if(player == null || list == null || permissions == null){
+	public static ProtectionInformation isBlocked(Player player, Block target, ASMaterialList list, PermissionPackage permissions, ASConfig configuration) {
+		if (player == null || list == null || permissions == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		boolean illegal = false;
 		AntiShare p = AntiShare.p;
-		if(list.has(target)){
+		if (list.has(target)) {
 			illegal = true;
 		}
-		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
+		if (!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())) {
 			illegal = false;
 		}
 		return new ProtectionInformation(illegal, false, null, null);
@@ -524,22 +524,22 @@ public class ASUtils{
 	 * @param permissions the permissions to use
 	 * @return protection information
 	 */
-	public static ProtectionInformation isBlocked(Player player, Block target, ASMaterialList list, PermissionPackage permissions){
-		if(player == null || list == null || permissions == null){
+	public static ProtectionInformation isBlocked(Player player, Block target, ASMaterialList list, PermissionPackage permissions) {
+		if (player == null || list == null || permissions == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		boolean illegal = false, region = false;
 		AntiShare p = AntiShare.p;
 		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
 		Region targetRegion = p.getRegionManager().getRegion(target.getLocation());
-		if(list.has(target)){
+		if (list.has(target)) {
 			illegal = true;
 		}
-		if(!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())){
+		if (!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())) {
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
-			if(sourceRegion != targetRegion){
+		if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
+			if (sourceRegion != targetRegion) {
 				illegal = true;
 				region = true;
 			}
@@ -557,22 +557,22 @@ public class ASUtils{
 	 * @param permissions the permissions to use
 	 * @return protection information
 	 */
-	public static ProtectionInformation isBlocked(Player player, ItemStack item, Location target, ASMaterialList list, PermissionPackage permissions){
-		if(player == null || list == null || permissions == null){
+	public static ProtectionInformation isBlocked(Player player, ItemStack item, Location target, ASMaterialList list, PermissionPackage permissions) {
+		if (player == null || list == null || permissions == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		boolean illegal = false, region = false;
 		AntiShare p = AntiShare.p;
 		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
 		Region targetRegion = p.getRegionManager().getRegion(target);
-		if(list.has(item)){
+		if (list.has(item)) {
 			illegal = true;
 		}
-		if(!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())){
+		if (!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())) {
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
-			if(sourceRegion != targetRegion){
+		if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
+			if (sourceRegion != targetRegion) {
 				illegal = true;
 				region = true;
 			}
@@ -591,34 +591,34 @@ public class ASUtils{
 	 * @param config the configuration object to use
 	 * @return protection information
 	 */
-	public static ProtectionInformation isBlocked(Player player, ItemStack item, Location target, ASMaterialList list, PermissionPackage permissions, ASConfig config){
-		if(player == null || list == null || permissions == null){
+	public static ProtectionInformation isBlocked(Player player, ItemStack item, Location target, ASMaterialList list, PermissionPackage permissions, ASConfig config) {
+		if (player == null || list == null || permissions == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		boolean illegal = false, region = false, isPotion = false, isThrownPotion = false;
 		AntiShare p = AntiShare.p;
 		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
 		Region targetRegion = p.getRegionManager().getRegion(target);
-		if(list.has(item)){
+		if (list.has(item)) {
 			illegal = true;
 		}
-		if(item.getType() == Material.POTION){
+		if (item.getType() == Material.POTION) {
 			isPotion = true;
-			if(item.getDurability() > 32000){
+			if (item.getDurability() > 32000) {
 				isThrownPotion = true;
 			}
 		}
-		if(isThrownPotion && config.thrownPotions){
+		if (isThrownPotion && config.thrownPotions) {
 			illegal = true;
-		}else if(isPotion && config.potions){
+		} else if (isPotion && config.potions) {
 			illegal = true;
 		}
 
-		if(!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())){
+		if (!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())) {
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
-			if(sourceRegion != targetRegion){
+		if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
+			if (sourceRegion != targetRegion) {
 				illegal = true;
 				region = true;
 			}
@@ -636,22 +636,22 @@ public class ASUtils{
 	 * @param permissions the permissions to use
 	 * @return protection information
 	 */
-	public static ProtectionInformation isBlocked(Player player, Location target, ASMaterialList list, Object object, PermissionPackage permissions){
-		if(player == null || list == null || permissions == null){
+	public static ProtectionInformation isBlocked(Player player, Location target, ASMaterialList list, Object object, PermissionPackage permissions) {
+		if (player == null || list == null || permissions == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		boolean illegal = false, region = false;
 		AntiShare p = AntiShare.p;
 		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
 		Region targetRegion = p.getRegionManager().getRegion(target);
-		if(object instanceof Material && list.has((Material) object)){
+		if (object instanceof Material && list.has((Material) object)) {
 			illegal = true;
 		}
-		if(!p.isBlocked(player, permissions.allow, permissions.deny, object instanceof Material ? (Material) object : null)){
+		if (!p.isBlocked(player, permissions.allow, permissions.deny, object instanceof Material ? (Material) object : null)) {
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
-			if(sourceRegion != targetRegion){
+		if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
+			if (sourceRegion != targetRegion) {
 				illegal = true;
 				region = true;
 			}
@@ -669,22 +669,22 @@ public class ASUtils{
 	 * @param permissions the permission package
 	 * @return protection information
 	 */
-	public static ProtectionInformation isBlocked(Player player, Location target, List<EntityType> list, EntityType object, PermissionPackage permissions){
-		if(player == null || list == null || object == null || permissions == null){
+	public static ProtectionInformation isBlocked(Player player, Location target, List<EntityType> list, EntityType object, PermissionPackage permissions) {
+		if (player == null || list == null || object == null || permissions == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		boolean illegal = false, region = false;
 		AntiShare p = AntiShare.p;
 		Region sourceRegion = p.getRegionManager().getRegion(player.getLocation());
 		Region targetRegion = p.getRegionManager().getRegion(target);
-		if(list.contains(object)){
+		if (list.contains(object)) {
 			illegal = true;
 		}
-		if(!p.isBlocked(player, permissions.allow, permissions.deny, object.getName())){
+		if (!p.isBlocked(player, permissions.allow, permissions.deny, object.getName())) {
 			illegal = false;
 		}
-		if(target != null && permissions.region != null && !player.hasPermission(permissions.region)){
-			if(sourceRegion != targetRegion){
+		if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
+			if (sourceRegion != targetRegion) {
 				illegal = true;
 				region = true;
 			}
@@ -699,21 +699,21 @@ public class ASUtils{
 	 * @param destination destination file
 	 * @throws IOException thrown if something goes wrong
 	 */
-	public static void copyFile(File source, File destination) throws IOException{
-		if(source == null || destination == null){
+	public static void copyFile(File source, File destination) throws IOException {
+		if (source == null || destination == null) {
 			throw new IllegalArgumentException("Null files are not allowed");
 		}
-		if(!source.exists()){
+		if (!source.exists()) {
 			throw new IllegalArgumentException("Source file not found");
 		}
-		if(!destination.exists()){
+		if (!destination.exists()) {
 			destination.createNewFile();
 		}
 		InputStream input = new FileInputStream(source);
 		FileOutputStream out = new FileOutputStream(destination);
 		byte[] buf = new byte[1024];
 		int len;
-		while((len = input.read(buf)) > 0){
+		while ((len = input.read(buf)) > 0) {
 			out.write(buf, 0, len);
 		}
 		out.close();
@@ -726,11 +726,11 @@ public class ASUtils{
 	 * @param holder the inventory holder
 	 * @return the location, or null if not found
 	 */
-	public static Location getLocation(InventoryHolder holder){
-		if(holder instanceof BlockState){
+	public static Location getLocation(InventoryHolder holder) {
+		if (holder instanceof BlockState) {
 			BlockState state = (BlockState) holder;
 			return state.getLocation();
-		}else if(holder instanceof Entity){
+		} else if (holder instanceof Entity) {
 			Location entity = ((Entity) holder).getLocation();
 			return entity;
 		}

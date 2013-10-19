@@ -33,19 +33,19 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class ItemMap{
+public class ItemMap {
 
 	private static Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 
-	public static List<String> getNamesFromID(Material material){
+	public static List<String> getNamesFromID(Material material) {
 		@SuppressWarnings ("deprecation")
 		// TODO: Magic value
 		int id = material.getId();
 		List<String> mats = new ArrayList<String>();
-		for(String key : listing.keySet()){
+		for (String key : listing.keySet()) {
 			ASMaterial mat = listing.get(key);
-			if(mat != null){
-				if(mat.id == id){
+			if (mat != null) {
+				if (mat.id == id) {
 					mats.add(key);
 				}
 			}
@@ -55,36 +55,36 @@ public class ItemMap{
 
 	@SuppressWarnings ("deprecation")
 	// TODO: Magic value
-	public static ASMaterial get(String string){
-		if(listing.size() <= 0){
-			try{
+	public static ASMaterial get(String string) {
+		if (listing.size() <= 0) {
+			try {
 				load();
-			}catch(IOException e){
+			} catch(IOException e) {
 				e.printStackTrace();
 			}
 		}
-		if(string == null){
+		if (string == null) {
 			return null;
 		}
 		string = string.trim().toLowerCase().replace(" ", "");
 		String[] parts = string.split(":");
 		String customData = null;
 		String name = parts[0];
-		if(parts.length >= 2){
+		if (parts.length >= 2) {
 			customData = parts[1];
 		}
 		ASMaterial asm = listing.get(string);
-		if(asm == null){
+		if (asm == null) {
 			Material real = Material.matchMaterial(name);
-			if(real != null){
+			if (real != null) {
 				asm = new ASMaterial();
 				asm.id = real.getId();
 				asm.name = name;
 				short d = -1;
-				if(customData != null && MaterialAPI.hasData(real)){
-					try{
+				if (customData != null && MaterialAPI.hasData(real)) {
+					try {
 						d = Short.parseShort(customData);
-					}catch(NumberFormatException e){}
+					} catch(NumberFormatException e) {}
 				}
 				asm.data = d;
 			}
@@ -94,20 +94,20 @@ public class ItemMap{
 
 	@SuppressWarnings ("deprecation")
 	// TODO: Magic value
-	private static void load() throws IOException{
+	private static void load() throws IOException {
 		AntiShare p = AntiShare.p;
 		File items = new File(p.getDataFolder(), "items.csv");
-		if(!items.exists()){
+		if (!items.exists()) {
 			createFile(items, p);
 		}
 		listing = read(items);
 		List<ASMaterial> add = SelfCompatibility.updateItemMap(listing);
-		for(ASMaterial a : add){
+		for (ASMaterial a : add) {
 			listing.put(a.name.trim().toLowerCase(), a);
 		}
-		for(Material material : Material.values()){
+		for (Material material : Material.values()) {
 			String name = String.valueOf(material.getId()); // Use the ID
-			if(!listing.containsKey(name)){
+			if (!listing.containsKey(name)) {
 				listing.put(name, generate(name + "," + name + ",*"));
 			}
 		}
@@ -120,12 +120,12 @@ public class ItemMap{
 	 * @return a map of pointers
 	 * @throws IOException thrown if something goes wrong
 	 */
-	public static Map<String, ASMaterial> read(File items) throws IOException{
+	public static Map<String, ASMaterial> read(File items) throws IOException {
 		Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 		BufferedReader in = new BufferedReader(new FileReader(items));
 		String line;
-		while((line = in.readLine()) != null){
-			if(line.startsWith("#")){
+		while ((line = in.readLine()) != null) {
+			if (line.startsWith("#")) {
 				continue;
 			}
 			ASMaterial asMaterial = generate(line);
@@ -141,9 +141,9 @@ public class ItemMap{
 	 * @param line the CSV line
 	 * @return the AS Material or null if invalid
 	 */
-	public static ASMaterial generate(String line){
+	public static ASMaterial generate(String line) {
 		String[] parts = line.split(",");
-		if(parts.length < 3 || parts.length > 3){
+		if (parts.length < 3 || parts.length > 3) {
 			return null;
 		}
 		// 0 = item name
@@ -152,15 +152,15 @@ public class ItemMap{
 		String name = parts[0].trim().toLowerCase();
 		int id = 0;
 		short data = 0;
-		try{
+		try {
 			id = Integer.parseInt(parts[1].trim());
 			String d = parts[2].trim();
-			if(d.equalsIgnoreCase("*") || !MaterialAPI.hasData(id)){
+			if (d.equalsIgnoreCase("*") || !MaterialAPI.hasData(id)) {
 				data = -1;
-			}else{
+			} else {
 				data = Short.parseShort(d);
 			}
-		}catch(NumberFormatException e){
+		} catch(NumberFormatException e) {
 			return null;
 		}
 		ASMaterial asMaterial = new ASMaterial();
@@ -177,12 +177,12 @@ public class ItemMap{
 	 * @param p the AntiShare plugin instance
 	 * @throws IOException thrown if something goes wrong
 	 */
-	public static void createFile(File items, AntiShare p) throws IOException{
+	public static void createFile(File items, AntiShare p) throws IOException {
 		InputStream input = p.getResource("items.csv");
 		FileOutputStream out = new FileOutputStream(items);
 		byte[] buf = new byte[1024];
 		int len;
-		while((len = input.read(buf)) > 0){
+		while ((len = input.read(buf)) > 0) {
 			out.write(buf, 0, len);
 		}
 		out.close();

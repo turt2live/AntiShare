@@ -17,17 +17,17 @@ import org.bukkit.GameMode;
  * 
  * @author turt2live
  */
-public class PermissionNodes{
+public class PermissionNodes {
 
 	/**
 	 * Holds multiple permissions for illegal/legal checks
 	 * 
 	 * @author turt2live
 	 */
-	public static class PermissionPackage{
+	public static class PermissionPackage {
 		public final String allow, deny, region;
 
-		PermissionPackage(String allow, String deny, String region){
+		PermissionPackage(String allow, String deny, String region) {
 			this.allow = allow;
 			this.deny = deny;
 			this.region = region;
@@ -134,8 +134,8 @@ public class PermissionNodes{
 	public static final PermissionPackage PACK_MOB_MAKE = new PermissionPackage(ALLOW_MOB_CREATION, DENY_MOB_CREATION, null);
 	public static final PermissionPackage PACK_EAT = new PermissionPackage(ALLOW_EAT, DENY_EAT, null);
 
-	public static String getWorldSplitNode(GameMode side){
-		switch (side){
+	public static String getWorldSplitNode(GameMode side) {
+		switch (side) {
 		case SURVIVAL:
 			return WORLD_SPLIT_NO_SPLIT_SURVIVAL;
 		case CREATIVE:

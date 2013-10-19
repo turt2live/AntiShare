@@ -16,7 +16,7 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-public class PotionSaver extends GenericDataFile{
+public class PotionSaver extends GenericDataFile {
 
 	/**
 	 * Saves the potion effects of a player
@@ -24,12 +24,12 @@ public class PotionSaver extends GenericDataFile{
 	 * @param player the player to get the effects from
 	 * @param gamemode the gamemode to save as
 	 */
-	public static void saveEffects(Player player, GameMode gamemode){
+	public static void saveEffects(Player player, GameMode gamemode) {
 		EnhancedConfiguration file = getFile("potions");
 		Collection<PotionEffect> effects = player.getActivePotionEffects();
 		file.set(player.getName() + "." + gamemode, null); // Remove current save
 		int i = 0;
-		for(PotionEffect effect : effects){
+		for (PotionEffect effect : effects) {
 			file.set(player.getName() + "." + gamemode + ".potion" + i, effect);
 			i++;
 		}
@@ -43,25 +43,25 @@ public class PotionSaver extends GenericDataFile{
 	 * @param player the player to apply the effects to
 	 * @param gamemode the gamemode to get the effects from
 	 */
-	public static void applySavedEffects(Player player, GameMode gamemode){
+	public static void applySavedEffects(Player player, GameMode gamemode) {
 		EnhancedConfiguration file = getFile("potions");
-		for(PotionEffect effect : player.getActivePotionEffects()){
+		for (PotionEffect effect : player.getActivePotionEffects()) {
 			player.removePotionEffect(effect.getType());
 		}
 		ConfigurationSection section = file.getConfigurationSection(player.getName() + "." + gamemode);
-		if(section == null){
+		if (section == null) {
 			return;
 		}
 		Set<String> saved = section.getKeys(false);
-		if(saved != null){
-			for(String key : saved){
+		if (saved != null) {
+			for (String key : saved) {
 				Object obj = file.get(player.getName() + "." + gamemode + "." + key);
-				if(obj instanceof PotionEffect){
+				if (obj instanceof PotionEffect) {
 					boolean added = player.addPotionEffect((PotionEffect) obj);
-					if(!added){
+					if (!added) {
 						AntiShare.p.getLogger().warning(AntiShare.p.getMessages().getMessage("potion-effects-error1"));
 					}
-				}else{
+				} else {
 					AntiShare.p.getLogger().warning(AntiShare.p.getMessages().getMessage("potion-effects-error2"));
 				}
 			}

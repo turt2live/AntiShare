@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
  * 
  * @author turt2live
  */
-public abstract class RegionProtection{
+public abstract class RegionProtection {
 
 	/**
 	 * Determines if there is a region at the specified location

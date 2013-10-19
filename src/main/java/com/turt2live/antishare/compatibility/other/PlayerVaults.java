@@ -25,22 +25,22 @@ import com.turt2live.antishare.util.GamemodeAbstraction;
  * 
  * @author turt2live
  */
-public class PlayerVaults implements Listener{
+public class PlayerVaults implements Listener {
 
 	private boolean enabled = false;
 
-	public PlayerVaults(){
+	public PlayerVaults() {
 		enabled = AntiShare.p.settings().playerVaults;
 	}
 
 	@EventHandler
-	public void onTarget(InventoryOpenEvent event){
-		if(event.isCancelled() || !enabled || !(event.getPlayer() instanceof Player)){
+	public void onTarget(InventoryOpenEvent event) {
+		if (event.isCancelled() || !enabled || !(event.getPlayer() instanceof Player)) {
 			return;
 		}
-		if(event.getInventory().getHolder() != null && event.getInventory().getHolder() instanceof VaultHolder){
+		if (event.getInventory().getHolder() != null && event.getInventory().getHolder() instanceof VaultHolder) {
 			Player player = (Player) event.getPlayer();
-			if(!player.hasPermission(PermissionNodes.PLUGIN_PLAYER_VAULTS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+			if (!player.hasPermission(PermissionNodes.PLUGIN_PLAYER_VAULTS) && GamemodeAbstraction.isCreative(player.getGameMode())) {
 				event.setCancelled(true);
 			}
 		}

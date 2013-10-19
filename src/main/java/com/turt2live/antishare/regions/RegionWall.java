@@ -17,14 +17,14 @@ import org.bukkit.Location;
  * 
  * @author turt2live
  */
-public class RegionWall{
+public class RegionWall {
 
 	/**
 	 * An enum to represent a wall
 	 * 
 	 * @author turt2live
 	 */
-	public static enum Wall{
+	public static enum Wall {
 		NORTH,
 		SOUTH,
 		EAST,
@@ -42,7 +42,7 @@ public class RegionWall{
 	 * @param location the wall type
 	 * @param point the point
 	 */
-	public RegionWall(Wall location, Location point){
+	public RegionWall(Wall location, Location point) {
 		this.location = location;
 		this.point = point;
 	}
@@ -53,9 +53,9 @@ public class RegionWall{
 	 * @param amount the amount to add (absolute)
 	 * @return the new region wall
 	 */
-	public RegionWall add(double amount){
+	public RegionWall add(double amount) {
 		amount = Math.abs(amount);
-		switch (location){
+		switch (location) {
 		case NORTH:
 			point.setX(point.getX() - (point.getX() < 0 ? amount * +1 : amount * -1));
 			break;
@@ -83,7 +83,7 @@ public class RegionWall{
 	 * 
 	 * @return the point
 	 */
-	public Location getPoint(){
+	public Location getPoint() {
 		return point;
 	}
 
@@ -92,7 +92,7 @@ public class RegionWall{
 	 * 
 	 * @return the wall type
 	 */
-	public Wall getType(){
+	public Wall getType() {
 		return location;
 	}
 }

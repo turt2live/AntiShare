@@ -9,12 +9,12 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
  * 
  * @author turt2live
  */
-public class LayeredConfig{
+public class LayeredConfig {
 
 	private final EnhancedConfiguration region, world, plugin;
 
-	LayeredConfig(EnhancedConfiguration region, EnhancedConfiguration world, EnhancedConfiguration plugin){
-		if(plugin == null){
+	LayeredConfig(EnhancedConfiguration region, EnhancedConfiguration world, EnhancedConfiguration plugin) {
+		if (plugin == null) {
 			throw new IllegalArgumentException("Plugin configuration cannot be null");
 		}
 		this.region = region;
@@ -25,11 +25,11 @@ public class LayeredConfig{
 	/**
 	 * Loads all configurations
 	 */
-	public void loadAll(){
-		if(region != null){
+	public void loadAll() {
+		if (region != null) {
 			region.load();
 		}
-		if(world != null){
+		if (world != null) {
 			world.load();
 		}
 		plugin.load();
@@ -42,31 +42,31 @@ public class LayeredConfig{
 	 * @param isList true if the node is a list
 	 * @return the configuration to use
 	 */
-	public EnhancedConfiguration configFor(String path, boolean isList){
-		if(region == null && world == null){
+	public EnhancedConfiguration configFor(String path, boolean isList) {
+		if (region == null && world == null) {
 			return plugin;
 		}
 		final EnhancedConfiguration world = this.world == null ? plugin : this.world;
 		final EnhancedConfiguration region = this.region == null ? world : this.region;
-		if(isList){
+		if (isList) {
 			List<String> strings = region.getStringList(path);
-			if(strings != null && strings.size() > 0 && (strings.get(0).equalsIgnoreCase("world") || strings.get(0).equalsIgnoreCase("global"))){
-				if(strings.get(0).equalsIgnoreCase("world")){
+			if (strings != null && strings.size() > 0 && (strings.get(0).equalsIgnoreCase("world") || strings.get(0).equalsIgnoreCase("global"))) {
+				if (strings.get(0).equalsIgnoreCase("world")) {
 					return world;
-				}else{
+				} else {
 					return plugin;
 				}
-			}else{
+			} else {
 				return region;
 			}
-		}else{
+		} else {
 			String string = region.getString(path);
-			if(string == null){
+			if (string == null) {
 				return region;
 			}
-			if(string.equalsIgnoreCase("world")){
+			if (string.equalsIgnoreCase("world")) {
 				return world;
-			}else if(string.equalsIgnoreCase("global")){
+			} else if (string.equalsIgnoreCase("global")) {
 				return plugin;
 			}
 			return region;

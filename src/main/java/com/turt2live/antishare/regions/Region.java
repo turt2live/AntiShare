@@ -39,7 +39,7 @@ import com.turt2live.antishare.util.Action;
 /**
  * An AntiShare Region
  */
-public class Region{
+public class Region {
 
 	private static AntiShare plugin = AntiShare.p;
 
@@ -69,7 +69,7 @@ public class Region{
 	 * 
 	 * @return the region name
 	 */
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 
@@ -78,7 +78,7 @@ public class Region{
 	 * 
 	 * @return the world this region resides in
 	 */
-	public String getWorldName(){
+	public String getWorldName() {
 		return worldName;
 	}
 
@@ -87,7 +87,7 @@ public class Region{
 	 * 
 	 * @return the region owner
 	 */
-	public String getOwner(){
+	public String getOwner() {
 		return owner;
 	}
 
@@ -96,7 +96,7 @@ public class Region{
 	 * 
 	 * @return the region ID
 	 */
-	public String getID(){
+	public String getID() {
 		return id;
 	}
 
@@ -105,7 +105,7 @@ public class Region{
 	 * 
 	 * @return the enter message
 	 */
-	public String getEnterMessage(){
+	public String getEnterMessage() {
 		return enterMessage;
 	}
 
@@ -114,7 +114,7 @@ public class Region{
 	 * 
 	 * @return the exit message
 	 */
-	public String getExitMessage(){
+	public String getExitMessage() {
 		return exitMessage;
 	}
 
@@ -123,7 +123,7 @@ public class Region{
 	 * 
 	 * @return true if shown
 	 */
-	public boolean isEnterMessageShown(){
+	public boolean isEnterMessageShown() {
 		return showEnterMessage;
 	}
 
@@ -132,7 +132,7 @@ public class Region{
 	 * 
 	 * @return true if shown
 	 */
-	public boolean isExitMessageShown(){
+	public boolean isExitMessageShown() {
 		return showExitMessage;
 	}
 
@@ -141,7 +141,7 @@ public class Region{
 	 * 
 	 * @return the <b>cloned</b> cuboid of this region
 	 */
-	public RegionCuboid getCuboid(){
+	public RegionCuboid getCuboid() {
 		return size.clone();
 	}
 
@@ -150,7 +150,7 @@ public class Region{
 	 * 
 	 * @return null for no inventory, otherwise a <b>cloned</b> inventory
 	 */
-	public ASInventory getInventory(){
+	public ASInventory getInventory() {
 		return inventory == null ? null : inventory.clone();
 	}
 
@@ -159,7 +159,7 @@ public class Region{
 	 * 
 	 * @return the region's Game Mode
 	 */
-	public GameMode getGameMode(){
+	public GameMode getGameMode() {
 		return gamemode;
 	}
 
@@ -168,7 +168,7 @@ public class Region{
 	 * 
 	 * @return the configuration
 	 */
-	public RegionConfiguration getConfig(){
+	public RegionConfiguration getConfig() {
 		return config;
 	}
 
@@ -177,7 +177,7 @@ public class Region{
 	 * 
 	 * @param name the new name
 	 */
-	public void setName(String name){
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -186,7 +186,7 @@ public class Region{
 	 * 
 	 * @param world the region's world
 	 */
-	public void setWorld(World world){
+	public void setWorld(World world) {
 		this.worldName = world.getName();
 		size.setWorld(world);
 	}
@@ -196,7 +196,7 @@ public class Region{
 	 * 
 	 * @param owner the new creator
 	 */
-	public void setOwner(String owner){
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 
@@ -205,7 +205,7 @@ public class Region{
 	 * 
 	 * @param id the new ID
 	 */
-	public void setID(String id){
+	public void setID(String id) {
 		this.id = id;
 	}
 
@@ -214,7 +214,7 @@ public class Region{
 	 * 
 	 * @param enterMessage the new enter message
 	 */
-	public void setEnterMessage(String enterMessage){
+	public void setEnterMessage(String enterMessage) {
 		this.enterMessage = enterMessage;
 	}
 
@@ -223,7 +223,7 @@ public class Region{
 	 * 
 	 * @param exitMessage the new exit message
 	 */
-	public void setExitMessage(String exitMessage){
+	public void setExitMessage(String exitMessage) {
 		this.exitMessage = exitMessage;
 	}
 
@@ -232,7 +232,7 @@ public class Region{
 	 * 
 	 * @param cuboid the new region area
 	 */
-	public void setCuboid(Cuboid cuboid){
+	public void setCuboid(Cuboid cuboid) {
 		this.size = RegionCuboid.fromCuboid(cuboid, this);
 	}
 
@@ -241,7 +241,7 @@ public class Region{
 	 * 
 	 * @param showEnterMessage true to show the enter message
 	 */
-	public void setShowEnterMessage(boolean showEnterMessage){
+	public void setShowEnterMessage(boolean showEnterMessage) {
 		this.showEnterMessage = showEnterMessage;
 	}
 
@@ -250,7 +250,7 @@ public class Region{
 	 * 
 	 * @param showExitMessage true to show the exit message
 	 */
-	public void setShowExitMessage(boolean showExitMessage){
+	public void setShowExitMessage(boolean showExitMessage) {
 		this.showExitMessage = showExitMessage;
 	}
 
@@ -259,12 +259,12 @@ public class Region{
 	 * 
 	 * @param asInventory
 	 */
-	public void setInventory(ASInventory asInventory){
-		if(asInventory != null){
+	public void setInventory(ASInventory asInventory) {
+		if (asInventory != null) {
 			ASInventory i = ASInventory.createEmptyInventory(id, worldName, gamemode, InventoryType.REGION);
 			i.clone(asInventory);
 			this.inventory = i;
-		}else{
+		} else {
 			this.inventory = null;
 		}
 	}
@@ -274,7 +274,7 @@ public class Region{
 	 * 
 	 * @param gamemode the region's new Game Mode
 	 */
-	public void setGameMode(GameMode gamemode){
+	public void setGameMode(GameMode gamemode) {
 		this.gamemode = gamemode;
 	}
 
@@ -283,7 +283,7 @@ public class Region{
 	 * 
 	 * @param config the new configuration
 	 */
-	public void setConfig(RegionConfiguration config){
+	public void setConfig(RegionConfiguration config) {
 		this.config = config;
 	}
 
@@ -294,8 +294,8 @@ public class Region{
 	 * @param location the location
 	 * @return the RegionWall (or null if the location is not in the region)
 	 */
-	public RegionWall getWallLocation(Location location){
-		if(!size.isContained(location)){
+	public RegionWall getWallLocation(Location location) {
+		if (!size.isContained(location)) {
 			return null;
 		}
 
@@ -314,13 +314,13 @@ public class Region{
 		double toWest = Math.abs(westWall.distanceSquared(location));
 
 		// Find walls and return the wall (or lack of)
-		if(toNorth <= toSouth && toNorth <= toEast && toNorth <= toWest){
+		if (toNorth <= toSouth && toNorth <= toEast && toNorth <= toWest) {
 			return new RegionWall(Wall.NORTH, northWall);
-		}else if(toSouth <= toNorth && toSouth <= toEast && toSouth <= toWest){
+		} else if (toSouth <= toNorth && toSouth <= toEast && toSouth <= toWest) {
 			return new RegionWall(Wall.SOUTH, southWall);
-		}else if(toEast <= toNorth && toEast <= toSouth && toEast <= toWest){
+		} else if (toEast <= toNorth && toEast <= toSouth && toEast <= toWest) {
 			return new RegionWall(Wall.EAST, eastWall);
-		}else if(toWest <= toNorth && toWest <= toEast && toWest <= toSouth){
+		} else if (toWest <= toNorth && toWest <= toEast && toWest <= toSouth) {
 			return new RegionWall(Wall.WEST, westWall);
 		}
 		return null;
@@ -332,8 +332,8 @@ public class Region{
 	 * @param location the location
 	 * @return the RegionWall (or null if the location is not in the region)
 	 */
-	public RegionWall getFaceLocation(Location location){
-		if(!size.isContained(location)){
+	public RegionWall getFaceLocation(Location location) {
+		if (!size.isContained(location)) {
 			return null;
 		}
 
@@ -356,17 +356,17 @@ public class Region{
 		double toCeil = Math.abs(ceil.distanceSquared(location));
 
 		// Find face and return the face (or lack of)
-		if(toNorth <= toSouth && toNorth <= toEast && toNorth <= toWest){
+		if (toNorth <= toSouth && toNorth <= toEast && toNorth <= toWest) {
 			return new RegionWall(Wall.NORTH, northWall);
-		}else if(toSouth <= toNorth && toSouth <= toEast && toSouth <= toWest){
+		} else if (toSouth <= toNorth && toSouth <= toEast && toSouth <= toWest) {
 			return new RegionWall(Wall.SOUTH, southWall);
-		}else if(toEast <= toNorth && toEast <= toSouth && toEast <= toWest){
+		} else if (toEast <= toNorth && toEast <= toSouth && toEast <= toWest) {
 			return new RegionWall(Wall.EAST, eastWall);
-		}else if(toWest <= toNorth && toWest <= toEast && toWest <= toSouth){
+		} else if (toWest <= toNorth && toWest <= toEast && toWest <= toSouth) {
 			return new RegionWall(Wall.WEST, westWall);
-		}else if(toCeil <= toNorth && toCeil <= toEast && toCeil <= toWest && toCeil <= toFloor && toCeil <= toSouth){
+		} else if (toCeil <= toNorth && toCeil <= toEast && toCeil <= toWest && toCeil <= toFloor && toCeil <= toSouth) {
 			return new RegionWall(Wall.CEILING, ceil);
-		}else if(toFloor <= toNorth && toFloor <= toEast && toFloor <= toWest && toFloor <= toCeil && toFloor <= toSouth){
+		} else if (toFloor <= toNorth && toFloor <= toEast && toFloor <= toWest && toFloor <= toCeil && toFloor <= toSouth) {
 			return new RegionWall(Wall.FLOOR, floor);
 		}
 		return null;
@@ -380,9 +380,9 @@ public class Region{
 	 * @param fromBorder the distance to get from the region (absolute values)
 	 * @return the new location (or null if the location is not inside the region)
 	 */
-	public Location getPointOutside(Location location, int fromBorder){
+	public Location getPointOutside(Location location, int fromBorder) {
 		fromBorder = Math.abs(fromBorder); // Sanity
-		if(!size.isContained(location)){
+		if (!size.isContained(location)) {
 			return null;
 		}
 		return getWallLocation(location).add(fromBorder).getPoint();
@@ -395,7 +395,7 @@ public class Region{
 	 * @param fromBorder the distance to get from the region (absolute values)
 	 * @return the new location (or null if the location is not inside the region)
 	 */
-	public Location getPointOutsideFace(Location location, int fromBorder){
+	public Location getPointOutsideFace(Location location, int fromBorder) {
 		return getFaceLocation(location).add(fromBorder).getPoint();
 	}
 
@@ -406,22 +406,22 @@ public class Region{
 	 * 
 	 * @param player the player entering the region
 	 */
-	public void alertEntry(Player player){
+	public void alertEntry(Player player) {
 		// Message
 		String playerMessage = "no message";
-		if(showEnterMessage){
+		if (showEnterMessage) {
 			playerMessage = ChatColor.GOLD + enterMessage.replaceAll("\\{name\\}", name);
 		}
 		plugin.getMessages().sendTo(player, playerMessage, true);
 		plugin.getMessages().notifyParties(player, Action.ENTER_REGION, false, getName()); // Player name is applied because player message is ignored
 
 		// Set the player
-		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
+		if (!player.hasPermission(PermissionNodes.REGION_ROAM)) {
 			gamemodes.put(player.getName(), player.getGameMode());
-			if(player.getGameMode() != gamemode){
+			if (player.getGameMode() != gamemode) {
 				player.setGameMode(gamemode);
 			}
-			if(inventory != null){
+			if (inventory != null) {
 				plugin.getInventoryManager().setToTemporary(player, inventory);
 			}
 		}
@@ -433,14 +433,14 @@ public class Region{
 	 * 
 	 * @param player the player entering the region
 	 */
-	public void alertSilentEntry(Player player){
+	public void alertSilentEntry(Player player) {
 		// Set the player
-		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
+		if (!player.hasPermission(PermissionNodes.REGION_ROAM)) {
 			gamemodes.put(player.getName(), player.getGameMode());
-			if(player.getGameMode() != gamemode){
+			if (player.getGameMode() != gamemode) {
 				player.setGameMode(gamemode);
 			}
-			if(inventory != null){
+			if (inventory != null) {
 				plugin.getInventoryManager().setToTemporary(player, inventory);
 			}
 		}
@@ -453,10 +453,10 @@ public class Region{
 	 * 
 	 * @param player the player exiting the region
 	 */
-	public void alertExit(Player player){
+	public void alertExit(Player player) {
 		// Message
 		String playerMessage = "no message";
-		if(showExitMessage){
+		if (showExitMessage) {
 			playerMessage = ChatColor.GOLD + exitMessage.replaceAll("\\{name\\}", name);
 		}
 		plugin.getMessages().sendTo(player, playerMessage, true);
@@ -466,8 +466,8 @@ public class Region{
 		player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
 
 		// Reset the player
-		if(!player.hasPermission(PermissionNodes.REGION_ROAM)){
-			if(inventory != null){
+		if (!player.hasPermission(PermissionNodes.REGION_ROAM)) {
+			if (inventory != null) {
 				plugin.getInventoryManager().removeFromTemporary(player);
 			}
 			player.setGameMode(gamemodes.get(player.getName()) == null ? player.getGameMode() : gamemodes.get(player.getName()));
@@ -477,15 +477,15 @@ public class Region{
 	/**
 	 * Saves the region and all of it's information to disk
 	 */
-	public void save(){
-		if(!REGION_INFORMATION.exists()){
+	public void save() {
+		if (!REGION_INFORMATION.exists()) {
 			REGION_INFORMATION.mkdirs();
 		}
 		File saveFile = new File(REGION_INFORMATION, ASUtils.fileSafeName(name) + ".yml");
-		if(!saveFile.exists()){
-			try{
+		if (!saveFile.exists()) {
+			try {
 				saveFile.createNewFile();
-			}catch(IOException e){
+			} catch(IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -504,7 +504,7 @@ public class Region{
 		yaml.set("players", playersAsList());
 		yaml.set("version", REGION_VERSION);
 		yaml.save();
-		if(inventory != null){
+		if (inventory != null) {
 			inventory.save();
 		}
 	}
@@ -515,14 +515,14 @@ public class Region{
 	 * @param saveFile the region file
 	 * @return the region, or null if there was an error
 	 */
-	public static Region fromFile(File saveFile){
+	public static Region fromFile(File saveFile) {
 		Region region = new Region();
 		AntiShare plugin = AntiShare.p;
 		EnhancedConfiguration yaml = new EnhancedConfiguration(saveFile, plugin);
 		yaml.load();
 		region.setName(yaml.getString("name"));
 		World world = plugin.getServer().getWorld(yaml.getString("worldName"));
-		if(world == null){
+		if (world == null) {
 			plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-world", yaml.getString("worldName")));
 			return null;
 		}
@@ -535,7 +535,7 @@ public class Region{
 		region.setWorld(world);
 		region.setConfig(RegionConfiguration.getConfig(region));
 		region.setInventory(plugin.getInventoryManager().loadRegionInventory(region));
-		if(yaml.getInt("version", 0) == REGION_VERSION){
+		if (yaml.getInt("version", 0) == REGION_VERSION) {
 			List<String> players = yaml.getStringList("players");
 			region.populatePlayers(players);
 
@@ -543,7 +543,7 @@ public class Region{
 			region.setCuboid(area);
 
 			region.setOwner(yaml.getString("owner"));
-		}else{
+		} else {
 			double mix = yaml.getDouble("mi-x"), miy = yaml.getDouble("mi-y"), miz = yaml.getDouble("mi-z");
 			double max = yaml.getDouble("ma-x"), may = yaml.getDouble("ma-y"), maz = yaml.getDouble("ma-z");
 			Location l1 = new Location(world, mix, miy, miz);
@@ -554,24 +554,24 @@ public class Region{
 			region.setOwner(yaml.getString("set-by"));
 			loadLegacyPlayerInformation(region);
 		}
-		if(region.getID().equalsIgnoreCase("-1")){
+		if (region.getID().equalsIgnoreCase("-1")) {
 			region.setID(String.valueOf(System.nanoTime()));
 		}
 		return region;
 	}
 
-	private List<String> playersAsList(){
+	private List<String> playersAsList() {
 		List<String> list = new ArrayList<String>();
-		for(String playername : gamemodes.keySet()){
+		for (String playername : gamemodes.keySet()) {
 			list.add(playername + " " + gamemodes.get(playername).name());
 		}
 		return list;
 	}
 
-	private void populatePlayers(List<String> list){
-		for(String record : list){
+	private void populatePlayers(List<String> list) {
+		for (String record : list) {
 			String[] parts = record.split(" ");
-			if(parts.length > 1){
+			if (parts.length > 1) {
 				String playerName = parts[0];
 				GameMode gamemode = GameMode.valueOf(parts[1]);
 				gamemodes.put(playerName, gamemode);
@@ -579,18 +579,18 @@ public class Region{
 		}
 	}
 
-	private static void loadLegacyPlayerInformation(Region region){
+	private static void loadLegacyPlayerInformation(Region region) {
 		// Check file/folder
 		File saveFolder = new File(plugin.getDataFolder(), "data" + File.separator + "region_players");
 		File saveFile = new File(saveFolder, region.getID() + ".yml");
-		if(!saveFile.exists()){
+		if (!saveFile.exists()) {
 			return;
 		}
 
 		// Load
 		EnhancedConfiguration playerInfo = new EnhancedConfiguration(saveFile, plugin);
 		playerInfo.load();
-		for(String key : playerInfo.getKeys(false)){
+		for (String key : playerInfo.getKeys(false)) {
 			region.gamemodes.put(key, GameMode.valueOf(playerInfo.getString(key)));
 		}
 	}
@@ -598,12 +598,12 @@ public class Region{
 	/**
 	 * Called on region creation
 	 */
-	public void onCreate(){
+	public void onCreate() {
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
-		if(players != null){
-			for(Player player : players){
-				if(size.isContained(player.getLocation())){
+		if (players != null) {
+			for (Player player : players) {
+				if (size.isContained(player.getLocation())) {
 					alertEntry(player);
 				}
 			}
@@ -615,14 +615,14 @@ public class Region{
 	 * 
 	 * @param last the old region cuboid
 	 */
-	public void onUpdate(Cuboid last){
+	public void onUpdate(Cuboid last) {
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
-		if(players != null){
-			for(Player player : players){
-				if(size.isContained(player.getLocation()) && !last.isContained(player.getLocation())){
+		if (players != null) {
+			for (Player player : players) {
+				if (size.isContained(player.getLocation()) && !last.isContained(player.getLocation())) {
 					alertEntry(player);
-				}else if(last.isContained(player.getLocation()) && !size.isContained(player.getLocation())){
+				} else if (last.isContained(player.getLocation()) && !size.isContained(player.getLocation())) {
 					alertExit(player);
 				}
 			}
@@ -632,12 +632,12 @@ public class Region{
 	/**
 	 * Called on region deletion
 	 */
-	public void onDelete(){
+	public void onDelete() {
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
-		if(players != null){
-			for(Player player : players){
-				if(size.isContained(player.getLocation())){
+		if (players != null) {
+			for (Player player : players) {
+				if (size.isContained(player.getLocation())) {
 					alertExit(player);
 				}
 			}

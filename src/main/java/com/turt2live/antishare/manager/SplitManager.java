@@ -19,7 +19,7 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
-public class SplitManager{
+public class SplitManager {
 
 	private Map<String, WorldSplit> splits = new HashMap<String, WorldSplit>();
 	private long milliseconds = 3000;
@@ -30,7 +30,7 @@ public class SplitManager{
 	 * @param world the world
 	 * @return the split, if any. Will be null if not found
 	 */
-	public WorldSplit getSplit(World world){
+	public WorldSplit getSplit(World world) {
 		return getSplit(world.getName());
 	}
 
@@ -40,7 +40,7 @@ public class SplitManager{
 	 * @param worldName the world name
 	 * @return the split, if any. Will be null if not found
 	 */
-	public WorldSplit getSplit(String worldName){
+	public WorldSplit getSplit(String worldName) {
 		return splits.get(worldName.toLowerCase());
 	}
 
@@ -49,21 +49,21 @@ public class SplitManager{
 	 * 
 	 * @return milliseconds between warnings
 	 */
-	public long getWarnEvery(){
+	public long getWarnEvery() {
 		return milliseconds;
 	}
 
-	public void load(){
+	public void load() {
 		splits.clear();
 		AntiShare plugin = AntiShare.p;
 		EnhancedConfiguration config = new EnhancedConfiguration(new File(plugin.getDataFolder(), "worldsplit.yml"), plugin);
 		config.loadDefaults(plugin.getResource("worldsplit.yml"));
-		if(config.needsUpdate()){
+		if (config.needsUpdate()) {
 			config.saveDefaults();
 		}
 		Set<String> keys = config.getKeys(false);
-		for(String key : keys){
-			if(key.equalsIgnoreCase("warn-every-in-seconds")){
+		for (String key : keys) {
+			if (key.equalsIgnoreCase("warn-every-in-seconds")) {
 				milliseconds = config.getLong(key, 3) * 1000;
 				continue;
 			}
@@ -75,12 +75,12 @@ public class SplitManager{
 			boolean warnUse = config.getBoolean(key + ".warn.use");
 			int warnDistance = config.getInt(key + ".warn.distance", 5);
 
-			if(warnUse && warnDistance <= 0){
+			if (warnUse && warnDistance <= 0) {
 				plugin.getLogger().warning("Invalid warn distance for '" + key + "'. Should be >0. Using 5");
 				warnDistance = 5;
 			}
 
-			if(axis == null || positive == null || negative == null){
+			if (axis == null || positive == null || negative == null) {
 				plugin.getLogger().warning("Invalid world split for '" + key + "'. Please see the configuration header in worldsplits.yml");
 				continue;
 			}
@@ -90,19 +90,19 @@ public class SplitManager{
 			GameMode n = ASUtils.getGameMode(negative);
 
 			WorldSplit split = new WorldSplit(axisE, worldName, value, p, n, warnUse, warnDistance);
-			if(split.isValid()){
+			if (split.isValid()) {
 				this.splits.put(worldName.toLowerCase(), split);
-			}else{
+			} else {
 				plugin.getLogger().warning("Invalid world split for '" + key + "'. Please see the configuration header in worldsplits.yml");
 			}
 		}
 
-		if(splits.keySet().size() > 0){
+		if (splits.keySet().size() > 0) {
 			plugin.getLogger().info(plugin.getMessages().getMessage("splits-loaded", String.valueOf(this.splits.keySet().size())));
 		}
 	}
 
-	public void reload(){
+	public void reload() {
 		load();
 	}
 

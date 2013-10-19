@@ -36,7 +36,7 @@ import com.turt2live.materials.MaterialAPI;
  * 
  * @author turt2live
  */
-public class ChunkWrapper{
+public class ChunkWrapper {
 
 	private final AntiShare plugin = AntiShare.p;
 	CopyOnWriteArrayList<Key> creativeBlocks = new CopyOnWriteArrayList<Key>();
@@ -49,7 +49,7 @@ public class ChunkWrapper{
 	private final String world;
 	private final File blocksDir, entitiesDir;
 
-	ChunkWrapper(Chunk chunk, File blocksDir, File entitiesDir){
+	ChunkWrapper(Chunk chunk, File blocksDir, File entitiesDir) {
 		this.chunkX = chunk.getX();
 		this.chunkZ = chunk.getZ();
 		this.world = chunk.getWorld().getName();
@@ -60,11 +60,11 @@ public class ChunkWrapper{
 		File blockFile = new File(blocksDir, chunkX + "." + chunkZ + "." + world + ".yml");
 		File entityFile = new File(entitiesDir, chunkX + "." + chunkZ + "." + world + ".yml");
 
-		if(blockFile.exists()){
+		if (blockFile.exists()) {
 			LegacyBlockIO.load(true, blockFile, this);
 			blockFile.delete();
 		}
-		if(entityFile.exists()){
+		if (entityFile.exists()) {
 			LegacyBlockIO.load(false, entityFile, this);
 			entityFile.delete();
 		}
@@ -75,7 +75,7 @@ public class ChunkWrapper{
 	 * 
 	 * @return the world name
 	 */
-	public String getWorldName(){
+	public String getWorldName() {
 		return world;
 	}
 
@@ -85,22 +85,22 @@ public class ChunkWrapper{
 	 * @param type the block type
 	 * @param block the block
 	 */
-	public void addBlock(GameMode type, Block block){
-		switch (type){
+	public void addBlock(GameMode type, Block block) {
+		switch (type) {
 		case CREATIVE:
-			if(!plugin.settings().trackedCreative.has(block)){
+			if (!plugin.settings().trackedCreative.has(block)) {
 				break;
 			}
 			creativeBlocks.add(Key.generate(block.getLocation(), type));
 			break;
 		case SURVIVAL:
-			if(!plugin.settings().trackedSurvival.has(block)){
+			if (!plugin.settings().trackedSurvival.has(block)) {
 				break;
 			}
 			survivalBlocks.add(Key.generate(block.getLocation(), type));
 			break;
 		case ADVENTURE:
-			if(!plugin.settings().trackedAdventure.has(block)){
+			if (!plugin.settings().trackedAdventure.has(block)) {
 				break;
 			}
 			adventureBlocks.add(Key.generate(block.getLocation(), type));
@@ -116,7 +116,7 @@ public class ChunkWrapper{
 	 * @param type the entity type
 	 * @param entity the entity
 	 */
-	public void addEntity(GameMode type, Entity entity){
+	public void addEntity(GameMode type, Entity entity) {
 		addEntity(type, entity.getLocation(), entity.getType());
 	}
 
@@ -127,26 +127,26 @@ public class ChunkWrapper{
 	 * @param location the entity location
 	 * @param entity the entity
 	 */
-	public void addEntity(GameMode type, Location location, EntityType entity){
+	public void addEntity(GameMode type, Location location, EntityType entity) {
 		Material material = MaterialAPI.getMaterialForEntity(entity);
-		if(material == null){
+		if (material == null) {
 			return;
 		}
-		switch (type){
+		switch (type) {
 		case CREATIVE:
-			if(!plugin.settings().trackedCreative.has(material)){
+			if (!plugin.settings().trackedCreative.has(material)) {
 				break;
 			}
 			creativeEntities.add(Key.generate(location, type, entity));
 			break;
 		case SURVIVAL:
-			if(!plugin.settings().trackedSurvival.has(material)){
+			if (!plugin.settings().trackedSurvival.has(material)) {
 				break;
 			}
 			survivalEntities.add(Key.generate(location, type, entity));
 			break;
 		case ADVENTURE:
-			if(!plugin.settings().trackedAdventure.has(material)){
+			if (!plugin.settings().trackedAdventure.has(material)) {
 				break;
 			}
 			adventureEntities.add(Key.generate(location, type, entity));
@@ -161,13 +161,13 @@ public class ChunkWrapper{
 	 * 
 	 * @param entity the entity
 	 */
-	public void removeEntity(Entity entity){
+	public void removeEntity(Entity entity) {
 		GameMode type = getType(entity);
-		if(type != null){
+		if (type != null) {
 			ASMaterial material = new ASMaterial();
 			material.gamemode = type;
 			material.location = entity.getLocation();
-			switch (type){
+			switch (type) {
 			case CREATIVE:
 				creativeEntities.remove(Key.generate(entity.getLocation(), type, entity.getType()));
 				break;
@@ -188,13 +188,13 @@ public class ChunkWrapper{
 	 * 
 	 * @param block the block
 	 */
-	public void removeBlock(Block block){
+	public void removeBlock(Block block) {
 		GameMode type = getType(block);
-		if(type != null){
+		if (type != null) {
 			ASMaterial material = new ASMaterial();
 			material.gamemode = type;
 			material.location = block.getLocation();
-			switch (type){
+			switch (type) {
 			case CREATIVE:
 				creativeBlocks.remove(Key.generate(block.getLocation(), type));
 				break;
@@ -216,12 +216,12 @@ public class ChunkWrapper{
 	 * @param entity the entity
 	 * @return the gamemode, or null if not found, of the entity
 	 */
-	public GameMode getType(Entity entity){
-		if(creativeEntities.contains(Key.generate(entity.getLocation(), GameMode.CREATIVE, entity.getType()))){
+	public GameMode getType(Entity entity) {
+		if (creativeEntities.contains(Key.generate(entity.getLocation(), GameMode.CREATIVE, entity.getType()))) {
 			return GameMode.CREATIVE;
-		}else if(survivalEntities.contains(Key.generate(entity.getLocation(), GameMode.SURVIVAL, entity.getType()))){
+		} else if (survivalEntities.contains(Key.generate(entity.getLocation(), GameMode.SURVIVAL, entity.getType()))) {
 			return GameMode.SURVIVAL;
-		}else if(adventureEntities.contains(Key.generate(entity.getLocation(), GameMode.ADVENTURE, entity.getType()))){
+		} else if (adventureEntities.contains(Key.generate(entity.getLocation(), GameMode.ADVENTURE, entity.getType()))) {
 			return GameMode.ADVENTURE;
 		}
 		return null;
@@ -233,12 +233,12 @@ public class ChunkWrapper{
 	 * @param block the entity
 	 * @return the gamemode, or null if not found, of the block
 	 */
-	public GameMode getType(Block block){
-		if(creativeBlocks.contains(Key.generate(block.getLocation(), GameMode.CREATIVE))){
+	public GameMode getType(Block block) {
+		if (creativeBlocks.contains(Key.generate(block.getLocation(), GameMode.CREATIVE))) {
 			return GameMode.CREATIVE;
-		}else if(survivalBlocks.contains(Key.generate(block.getLocation(), GameMode.SURVIVAL))){
+		} else if (survivalBlocks.contains(Key.generate(block.getLocation(), GameMode.SURVIVAL))) {
 			return GameMode.SURVIVAL;
-		}else if(adventureBlocks.contains(Key.generate(block.getLocation(), GameMode.ADVENTURE))){
+		} else if (adventureBlocks.contains(Key.generate(block.getLocation(), GameMode.ADVENTURE))) {
 			return GameMode.ADVENTURE;
 		}
 		return null;
@@ -250,58 +250,58 @@ public class ChunkWrapper{
 	 * @param load set to true to load data after saving
 	 * @param clear set to true to clear self after saving
 	 */
-	public void save(boolean load, boolean clear){
+	public void save(boolean load, boolean clear) {
 		File blockFile = new File(blocksDir, chunkX + "." + chunkZ + "." + world + ".asr");
 		File entityFile = new File(entitiesDir, chunkX + "." + chunkZ + "." + world + ".asr");
 		// Used for sane file creation
 		boolean noBlockFile = false, noEntityFile = false;
-		if(this.adventureBlocks.size() <= 0 && this.survivalBlocks.size() <= 0 && this.creativeBlocks.size() <= 0){
-			if(blockFile.exists()){
+		if (this.adventureBlocks.size() <= 0 && this.survivalBlocks.size() <= 0 && this.creativeBlocks.size() <= 0) {
+			if (blockFile.exists()) {
 				blockFile.delete();
 			}
 			noBlockFile = true;
 		}
-		if(this.adventureEntities.size() <= 0 && this.survivalEntities.size() <= 0 && this.creativeEntities.size() <= 0){
-			if(entityFile.exists()){
+		if (this.adventureEntities.size() <= 0 && this.survivalEntities.size() <= 0 && this.creativeEntities.size() <= 0) {
+			if (entityFile.exists()) {
 				entityFile.delete();
 			}
 			noEntityFile = true;
 		}
-		if(!noBlockFile){
+		if (!noBlockFile) {
 			ASRFile region = new ASRFile(false);
-			try{
+			try {
 				region.prepare(blockFile, true);
-				for(Key key : creativeBlocks){
+				for (Key key : creativeBlocks) {
 					region.write(key.x, key.y, key.z, key.gamemode);
 				}
-				for(Key key : survivalBlocks){
+				for (Key key : survivalBlocks) {
 					region.write(key.x, key.y, key.z, key.gamemode);
 				}
-				for(Key key : adventureBlocks){
+				for (Key key : adventureBlocks) {
 					region.write(key.x, key.y, key.z, key.gamemode);
 				}
 				region.close();
-			}catch(IOException e){
+			} catch(IOException e) {
 				e.printStackTrace();
 			}
 		}
-		if(!noEntityFile){
+		if (!noEntityFile) {
 			ASRFile region = new ASRFile(true);
-			try{
+			try {
 				region.prepare(entityFile, true);
-				for(Key key : this.adventureEntities){
+				for (Key key : this.adventureEntities) {
 					region.write(key.x, key.y, key.z, key.gamemode, key.entity);
 				}
-				for(Key key : this.creativeEntities){
+				for (Key key : this.creativeEntities) {
 					region.write(key.x, key.y, key.z, key.gamemode, key.entity);
 				}
-				for(Key key : this.survivalEntities){
+				for (Key key : this.survivalEntities) {
 					region.write(key.x, key.y, key.z, key.gamemode, key.entity);
 				}
-			}catch(IOException e){
+			} catch(IOException e) {
 				e.printStackTrace();
 			}
-			if(clear){
+			if (clear) {
 				this.adventureBlocks.clear();
 				this.adventureEntities.clear();
 				this.creativeBlocks.clear();
@@ -310,7 +310,7 @@ public class ChunkWrapper{
 				this.survivalEntities.clear();
 			}
 		}
-		if(load){
+		if (load) {
 			load(true);
 			load(false);
 		}
@@ -319,7 +319,7 @@ public class ChunkWrapper{
 	/**
 	 * Loads data for this chunk
 	 */
-	public void load(){
+	public void load() {
 		load(true);
 		load(false);
 	}
@@ -329,48 +329,48 @@ public class ChunkWrapper{
 	 * 
 	 * @param isBlock set to true if loading block information
 	 */
-	public void load(boolean isBlock){
+	public void load(boolean isBlock) {
 		File file = new File(isBlock ? blocksDir : entitiesDir, chunkX + "." + chunkZ + "." + world + ".asr");
-		if(!file.exists()){
+		if (!file.exists()) {
 			return;
 		}
 		String[] fileParts = file.getName().split("\\.");
-		if(fileParts.length < 3){
+		if (fileParts.length < 3) {
 			plugin.getLogger().severe(plugin.getMessages().getMessage("bad-file", file.getAbsolutePath()));
 			return;
 		}
 		String w = fileParts[2]; // To see if world == file name world
 		World bWorld = Bukkit.getWorld(w);
-		if(bWorld == null){
+		if (bWorld == null) {
 			plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-world", w));
 			return;
 		}
-		if(!w.equals(world)){
+		if (!w.equals(world)) {
 			plugin.getLogger().warning(plugin.getMessages().getMessage("unknown-world", w));
 			return;
 		}
 		ASRFile region = new ASRFile(!isBlock);
-		try{
+		try {
 			region.prepare(file, false);
-			if(isBlock){
+			if (isBlock) {
 				Key info = null;
-				while((info = region.getNext(bWorld)) != null){
+				while ((info = region.getNext(bWorld)) != null) {
 					Location loc = info.toLocation(bWorld);
 					Block block = loc.getBlock();
-					if(block == null){
+					if (block == null) {
 						loc.getChunk().load();
 						block = loc.getBlock();
 					}
 					addBlock(info.gamemode, block);
 				}
-			}else{
+			} else {
 				Key info = null;
-				while((info = region.getNext(bWorld)) != null){
+				while ((info = region.getNext(bWorld)) != null) {
 					addEntity(info.gamemode, info.toLocation(bWorld), info.entity);
 				}
 			}
 			region.close();
-		}catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

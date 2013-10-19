@@ -26,7 +26,7 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
-public class InventoryManager{
+public class InventoryManager {
 
 	private AntiShare plugin = AntiShare.p;
 	private final ConcurrentHashMap<String, ASInventory> creative = new ConcurrentHashMap<String, ASInventory>();
@@ -41,28 +41,28 @@ public class InventoryManager{
 	/**
 	 * Creates a new inventory manager
 	 */
-	public InventoryManager(){
+	public InventoryManager() {
 		// Prepare linked inventories
 		EnhancedConfiguration linksYaml = new EnhancedConfiguration(new File(plugin.getDataFolder(), "linked-inventories.yml"), plugin);
 		linksYaml.loadDefaults(plugin.getResource("linked-inventories.yml"));
-		if(!linksYaml.fileExists() || !linksYaml.checkDefaults()){
+		if (!linksYaml.fileExists() || !linksYaml.checkDefaults()) {
 			linksYaml.saveDefaults();
 		}
 		linksYaml.load();
 	}
 
-	private void insert(String playername, ASInventory inventory){
+	private void insert(String playername, ASInventory inventory) {
 		insertNoCheck(playername, inventory);
 		checkLinksAndWorlds(playername, inventory);
 	}
 
-	private void insertNoCheck(String playername, ASInventory inventory){
-		if(!(inventory.type == InventoryType.PLAYER || inventory.type == InventoryType.ENDER)){
+	private void insertNoCheck(String playername, ASInventory inventory) {
+		if (!(inventory.type == InventoryType.PLAYER || inventory.type == InventoryType.ENDER)) {
 			return;
 		}
 		String key = playername + "." + inventory.world;
 		boolean isEnder = inventory.type == InventoryType.ENDER;
-		switch (inventory.gamemode){
+		switch (inventory.gamemode) {
 		case SURVIVAL:
 			(isEnder ? enderSurvival : survival).put(key, inventory);
 			break;
@@ -77,12 +77,12 @@ public class InventoryManager{
 		}
 	}
 
-	private void saveInventory(Player player, GameMode gamemode){
+	private void saveInventory(Player player, GameMode gamemode) {
 		saveInventory(player, gamemode, player.getWorld());
 	}
 
-	private void saveInventory(Player player, GameMode gamemode, World world){
-		if(!plugin.settings().features.inventories){
+	private void saveInventory(Player player, GameMode gamemode, World world) {
+		if (!plugin.settings().features.inventories) {
 			return; // Don't bother
 		}
 		ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), gamemode, InventoryType.PLAYER);
@@ -93,19 +93,19 @@ public class InventoryManager{
 		insert(player.getName(), inventory.clone());
 	}
 
-	private ASInventory getInventory(Player player, GameMode gamemode, InventoryType type){
+	private ASInventory getInventory(Player player, GameMode gamemode, InventoryType type) {
 		return getInventory(player, player.getWorld(), gamemode, type);
 	}
 
-	private ASInventory getInventory(Player player, World world, InventoryType type){
+	private ASInventory getInventory(Player player, World world, InventoryType type) {
 		return getInventory(player, world, player.getGameMode(), type);
 	}
 
-	private ASInventory getInventory(Player player, World world, GameMode gamemode, InventoryType type){
+	private ASInventory getInventory(Player player, World world, GameMode gamemode, InventoryType type) {
 		String key = player.getName() + "." + world.getName();
 		boolean isEnder = type == InventoryType.ENDER;
 		ASInventory ret = null;
-		switch (gamemode){
+		switch (gamemode) {
 		case SURVIVAL:
 			ret = (isEnder ? enderSurvival : survival).get(key);
 			break;
@@ -119,26 +119,26 @@ public class InventoryManager{
 			ret = ASInventory.EMPTY;
 			break;
 		}
-		if(ret == null){
+		if (ret == null) {
 			ret = ASInventory.load(player.getName(), gamemode, type, world.getName());
-			if(ret != null){
+			if (ret != null) {
 				insert(player.getName(), ret);
 			}
 		}
 		return ret;
 	}
 
-	private void checkLinksAndWorlds(String player, ASInventory inventory){
+	private void checkLinksAndWorlds(String player, ASInventory inventory) {
 		ASInventory clone = inventory.clone();
-		if(!plugin.settings().perWorldInventories){
-			for(World world : Bukkit.getWorlds()){
+		if (!plugin.settings().perWorldInventories) {
+			for (World world : Bukkit.getWorlds()) {
 				clone.world = world.getName();
 				insertNoCheck(player, clone);
 			}
-		}else{
-			for(World world : Bukkit.getWorlds()){
-				for(LinkedInventory link : linkedInventories){
-					if(link.isGameModeAffected(inventory.gamemode) && link.isWorldAffected(world)){
+		} else {
+			for (World world : Bukkit.getWorlds()) {
+				for (LinkedInventory link : linkedInventories) {
+					if (link.isGameModeAffected(inventory.gamemode) && link.isWorldAffected(world)) {
 						clone.world = world.getName();
 						insertNoCheck(player, clone);
 					}
@@ -153,11 +153,11 @@ public class InventoryManager{
 	 * @param player the player to affect
 	 * @param from the "old" world
 	 */
-	public void mergeAllWorlds(Player player, World from){
+	public void mergeAllWorlds(Player player, World from) {
 		saveInventory(player, player.getGameMode());
-		for(GameMode gamemode : GameMode.values()){
-			for(World world : Bukkit.getWorlds()){
-				if(!world.getName().equalsIgnoreCase(from.getName())){
+		for (GameMode gamemode : GameMode.values()) {
+			for (World world : Bukkit.getWorlds()) {
+				if (!world.getName().equalsIgnoreCase(from.getName())) {
 					ASInventory inventory = getInventory(player, from, gamemode, InventoryType.PLAYER);
 					inventory.world = world.getName(); // Do this after so we load the correct inventory first
 					insertNoCheck(player.getName(), inventory.clone());
@@ -174,30 +174,30 @@ public class InventoryManager{
 	 * 
 	 * @param player the player to save
 	 */
-	public void savePlayer(Player player){
-		if(!plugin.settings().features.inventories){
+	public void savePlayer(Player player) {
+		if (!plugin.settings().features.inventories) {
 			return; // Don't bother
 		}
 		saveInventory(player, player.getGameMode());
 		String name = player.getName();
-		for(World w : plugin.getServer().getWorlds()){
+		for (World w : plugin.getServer().getWorlds()) {
 			String world = w.getName();
-			if(creative.get(name + "." + world) != null){
+			if (creative.get(name + "." + world) != null) {
 				creative.get(name + "." + world).save();
 			}
-			if(survival.get(name + "." + world) != null){
+			if (survival.get(name + "." + world) != null) {
 				survival.get(name + "." + world).save();
 			}
-			if(adventure.get(name + "." + world) != null){
+			if (adventure.get(name + "." + world) != null) {
 				adventure.get(name + "." + world).save();
 			}
-			if(enderCreative.get(name + "." + world) != null){
+			if (enderCreative.get(name + "." + world) != null) {
 				enderCreative.get(name + "." + world).save();
 			}
-			if(enderSurvival.get(name + "." + world) != null){
+			if (enderSurvival.get(name + "." + world) != null) {
 				enderSurvival.get(name + "." + world).save();
 			}
-			if(enderAdventure.get(name + "." + world) != null){
+			if (enderAdventure.get(name + "." + world) != null) {
 				enderAdventure.get(name + "." + world).save();
 			}
 		}
@@ -210,7 +210,7 @@ public class InventoryManager{
 	 * @param inventory the temporary inventory
 	 */
 	@SuppressWarnings ("deprecation")
-	public void setToTemporary(Player player, ASInventory inventory){
+	public void setToTemporary(Player player, ASInventory inventory) {
 		// Save current inventory
 		saveInventory(player, player.getGameMode());
 
@@ -219,10 +219,10 @@ public class InventoryManager{
 		current.clone(player.getInventory());
 		TemporaryASInventory spec = new TemporaryASInventory(current, inventory);
 		temporary.put(player.getName(), spec);
-		if(inventory == null){
+		if (inventory == null) {
 			player.getInventory().clear();
 			player.updateInventory();
-		}else{
+		} else {
 			inventory.setTo(player.getInventory());
 		}
 	}
@@ -232,12 +232,12 @@ public class InventoryManager{
 	 * 
 	 * @param player the player
 	 */
-	public void removeFromTemporary(Player player){
+	public void removeFromTemporary(Player player) {
 		TemporaryASInventory inventory = temporary.get(player.getName());
-		if(inventory != null){
-			if(inventory.getLastInventory().type == InventoryType.ENDER){
+		if (inventory != null) {
+			if (inventory.getLastInventory().type == InventoryType.ENDER) {
 				inventory.getLastInventory().setTo(player.getEnderChest());
-			}else{
+			} else {
 				inventory.getLastInventory().setTo(player.getInventory());
 			}
 			temporary.remove(player.getName());
@@ -250,7 +250,7 @@ public class InventoryManager{
 	 * @param player the player
 	 * @return true if they are in temporary
 	 */
-	public boolean isInTemporary(Player player){
+	public boolean isInTemporary(Player player) {
 		return temporary.containsKey(player.getName());
 	}
 
@@ -261,22 +261,22 @@ public class InventoryManager{
 	 * @param to the gamemode the player is changing to
 	 * @param from the gamemode travelling from
 	 */
-	public void onGameModeChange(Player player, GameMode to, GameMode from){
-		if(!plugin.settings().features.inventories || player.hasPermission(PermissionNodes.NO_SWAP)){
+	public void onGameModeChange(Player player, GameMode to, GameMode from) {
+		if (!plugin.settings().features.inventories || player.hasPermission(PermissionNodes.NO_SWAP)) {
 			return; // Don't bother
 		}
 		saveInventory(player, from);
 		ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
-		if(regular != null && !regular.isEmpty()){
+		if (regular != null && !regular.isEmpty()) {
 			regular.setTo(player.getInventory());
-		}else{
+		} else {
 			player.getInventory().clear();
 			player.getInventory().setArmorContents(null);
 		}
 		ASInventory ender = getInventory(player, to, InventoryType.ENDER);
-		if(ender != null && !ender.isEmpty()){
+		if (ender != null && !ender.isEmpty()) {
 			ender.setTo(player.getEnderChest());
-		}else{
+		} else {
 			player.getEnderChest().clear();
 		}
 	}
@@ -287,8 +287,8 @@ public class InventoryManager{
 	 * @param player the player
 	 * @param from the world heading from
 	 */
-	public void onWorldChange(Player player, World from){
-		if(!plugin.settings().features.inventories || player.hasPermission(PermissionNodes.NO_SWAP)){
+	public void onWorldChange(Player player, World from) {
+		if (!plugin.settings().features.inventories || player.hasPermission(PermissionNodes.NO_SWAP)) {
 			return; // Don't bother
 		}
 		saveInventory(player, player.getGameMode(), from);
@@ -296,15 +296,15 @@ public class InventoryManager{
 		checkLinksAndWorlds(player.getName(), getInventory(player, from, InventoryType.PLAYER));
 		checkLinksAndWorlds(player.getName(), getInventory(player, from, InventoryType.ENDER));
 		ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
-		if(regular != null && !regular.isEmpty()){
+		if (regular != null && !regular.isEmpty()) {
 			regular.setTo(player.getInventory());
-		}else{
+		} else {
 			player.getInventory().clear();
 		}
 		ASInventory ender = getInventory(player, to, InventoryType.ENDER);
-		if(ender != null && !ender.isEmpty()){
+		if (ender != null && !ender.isEmpty()) {
 			ender.setTo(player.getEnderChest());
-		}else{
+		} else {
 			player.getEnderChest().clear();
 		}
 	}
@@ -314,11 +314,11 @@ public class InventoryManager{
 	 * 
 	 * @param inventory the inventory to inject
 	 */
-	public void inject(ASInventory inventory){
+	public void inject(ASInventory inventory) {
 		// player.world = key
 		String key = inventory.owner + "." + inventory.world;
 		boolean ender = inventory.type == InventoryType.ENDER;
-		switch (inventory.gamemode){
+		switch (inventory.gamemode) {
 		case CREATIVE:
 			(ender ? enderCreative : creative).put(key, inventory);
 			break;
@@ -338,17 +338,17 @@ public class InventoryManager{
 	 * 
 	 * @param player the player name to load
 	 */
-	public void loadPlayer(String player){
-		if(!plugin.settings().features.inventories){
+	public void loadPlayer(String player) {
+		if (!plugin.settings().features.inventories) {
 			return; // Don't bother
 		}
 
 		// Check archive first
 		File expected = new File(plugin.getDataFolder(), "data" + File.separator + "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player + ".json");
 		File archive = new File(plugin.getDataFolder(), "archive" + File.separator + "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName() + File.separator + player + ".json");
-		if(!expected.exists()){
+		if (!expected.exists()) {
 			// Check archive
-			if(archive.exists()){
+			if (archive.exists()) {
 				// Move file
 				archive.renameTo(expected);
 			}
@@ -356,11 +356,11 @@ public class InventoryManager{
 
 		// Load inventories
 		List<ASInventory> inventories = ASInventory.getAll(player, InventoryType.PLAYER);
-		for(ASInventory inventory : inventories){
+		for (ASInventory inventory : inventories) {
 			insert(player, inventory);
 		}
 		inventories = ASInventory.getAll(player, InventoryType.ENDER);
-		for(ASInventory inventory : inventories){
+		for (ASInventory inventory : inventories) {
 			insert(player, inventory);
 		}
 	}
@@ -370,13 +370,13 @@ public class InventoryManager{
 	 * 
 	 * @param player the player to unload
 	 */
-	public void unloadPlayer(Player player){
-		if(isInTemporary(player)){
+	public void unloadPlayer(Player player) {
+		if (isInTemporary(player)) {
 			removeFromTemporary(player);
 		}
 		savePlayer(player);
 		String playerName = player.getName();
-		for(World world : plugin.getServer().getWorlds()){
+		for (World world : plugin.getServer().getWorlds()) {
 			String worldName = world.getName();
 			creative.remove(playerName + "." + worldName);
 			survival.remove(playerName + "." + worldName);
@@ -392,7 +392,7 @@ public class InventoryManager{
 	 * 
 	 * @return the number of loaded inventories
 	 */
-	public int getLoaded(){
+	public int getLoaded() {
 		return creative.size() + survival.size() + temporary.size() + adventure.size() + enderCreative.size() + enderSurvival.size() + enderAdventure.size();
 	}
 
@@ -402,9 +402,9 @@ public class InventoryManager{
 	 * @param region the region to load
 	 * @return the region's inventory, or null if not found
 	 */
-	public ASInventory loadRegionInventory(Region region){
+	public ASInventory loadRegionInventory(Region region) {
 		List<ASInventory> list = ASInventory.getAll(region.getID(), InventoryType.REGION);
-		if(list == null || list.size() <= 0){
+		if (list == null || list.size() <= 0) {
 			return null;
 		}
 		return list.get(0);
@@ -413,7 +413,7 @@ public class InventoryManager{
 	/**
 	 * Loads the inventory manager
 	 */
-	public void load(){
+	public void load() {
 		// Clear
 		creative.clear();
 		survival.clear();
@@ -423,13 +423,13 @@ public class InventoryManager{
 		enderAdventure.clear();
 		temporary.clear();
 		// Loads regions
-		for(Region region : plugin.getRegionManager().getAllRegions()){
+		for (Region region : plugin.getRegionManager().getAllRegions()) {
 			String UID = region.getID();
 			List<ASInventory> inventory = ASInventory.getAll(UID, InventoryType.REGION);
-			if(inventory != null){
-				if(inventory.size() >= 1){
+			if (inventory != null) {
+				if (inventory.size() >= 1) {
 					region.setInventory(inventory.get(0));
-				}else{
+				} else {
 					region.setInventory(null);
 				}
 			}
@@ -440,29 +440,29 @@ public class InventoryManager{
 		links.load();
 		Set<String> worlds = links.getKeys(false);
 		this.linkedInventories.clear();
-		if(worlds != null){
-			for(String w : worlds){
+		if (worlds != null) {
+			for (String w : worlds) {
 				List<String> affectedWorlds = new ArrayList<String>();
 				affectedWorlds.add(w);
 				String otherWorlds = links.getString(w + ".linked");
 				String[] otherWorldsArray = otherWorlds.split(",");
-				for(String ow : otherWorldsArray){
+				for (String ow : otherWorldsArray) {
 					affectedWorlds.add(ow.trim());
 				}
 				GameMode gamemode = ASUtils.getGameMode(links.getString(w + ".gamemode"));
-				if(gamemode != null && affectedWorlds.size() > 0){
+				if (gamemode != null && affectedWorlds.size() > 0) {
 					String[] allWorlds;
 					allWorlds = affectedWorlds.toArray(new String[affectedWorlds.size()]);
 					LinkedInventory link = new LinkedInventory(gamemode, allWorlds);
 					this.linkedInventories.add(link);
-				}else{
+				} else {
 					plugin.getLogger().warning(plugin.getMessages().getMessage("bad-file", "linked-inventories.yml"));
 				}
 			}
 		}
 
 		// Status
-		if(this.linkedInventories.size() > 0){
+		if (this.linkedInventories.size() > 0) {
 			plugin.getLogger().info(plugin.getMessages().getMessage("linked-inventories-loaded", String.valueOf(this.linkedInventories.size())));
 		}
 	}
@@ -470,35 +470,35 @@ public class InventoryManager{
 	/**
 	 * Saves the inventory manager
 	 */
-	public void save(){
+	public void save() {
 		// Save players
-		if(Bukkit.getOnlinePlayers() != null){
-			for(Player player : Bukkit.getOnlinePlayers()){
+		if (Bukkit.getOnlinePlayers() != null) {
+			for (Player player : Bukkit.getOnlinePlayers()) {
 				unloadPlayer(player);
 			}
 		}
 
 		// Save inventories
-		for(String key : creative.keySet()){
+		for (String key : creative.keySet()) {
 			creative.get(key).save();
 		}
-		for(String key : survival.keySet()){
+		for (String key : survival.keySet()) {
 			survival.get(key).save();
 		}
-		for(String key : adventure.keySet()){
+		for (String key : adventure.keySet()) {
 			adventure.get(key).save();
 		}
-		for(String key : enderCreative.keySet()){
+		for (String key : enderCreative.keySet()) {
 			enderCreative.get(key).save();
 		}
-		for(String key : enderSurvival.keySet()){
+		for (String key : enderSurvival.keySet()) {
 			enderSurvival.get(key).save();
 		}
-		for(String key : enderAdventure.keySet()){
+		for (String key : enderAdventure.keySet()) {
 			enderAdventure.get(key).save();
 		}
-		for(Region region : plugin.getRegionManager().getAllRegions()){
-			if(region.getInventory() != null){
+		for (Region region : plugin.getRegionManager().getAllRegions()) {
+			if (region.getInventory() != null) {
 				region.getInventory().save();
 			}
 		}
@@ -507,7 +507,7 @@ public class InventoryManager{
 	/**
 	 * Reloads the inventory manager
 	 */
-	public void reload(){
+	public void reload() {
 		save();
 		load();
 	}

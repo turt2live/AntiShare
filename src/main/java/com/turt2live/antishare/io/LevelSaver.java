@@ -15,12 +15,12 @@ import org.bukkit.entity.Player;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
-public class LevelSaver extends GenericDataFile{
+public class LevelSaver extends GenericDataFile {
 
 	/**
 	 * Stores a level
 	 */
-	public static class Level{
+	public static class Level {
 
 		/**
 		 * Level (eg: 40)
@@ -37,7 +37,7 @@ public class LevelSaver extends GenericDataFile{
 		 * @param level the level
 		 * @param percent percent, as a decimal, to next level
 		 */
-		public Level(int level, float percent){
+		public Level(int level, float percent) {
 			this.level = level;
 			this.percent = percent;
 		}
@@ -47,7 +47,7 @@ public class LevelSaver extends GenericDataFile{
 		 * 
 		 * @param player the player to apply
 		 */
-		public void setTo(Player player){
+		public void setTo(Player player) {
 			player.setLevel(level);
 			player.setExp(percent);
 		}
@@ -61,9 +61,9 @@ public class LevelSaver extends GenericDataFile{
 	 * @param gamemode the gamemode to get the level for
 	 * @return a level. If not found this will return a level of 0 with 0% to the next level.
 	 */
-	public static Level getLevel(String player, GameMode gamemode){
+	public static Level getLevel(String player, GameMode gamemode) {
 		EnhancedConfiguration file = getFile("levels");
-		if(!file.isSet(player + "." + gamemode.name())){
+		if (!file.isSet(player + "." + gamemode.name())) {
 			return new Level(0, 0);
 		}
 		float percent = (float) file.getDouble(player + "." + gamemode.name() + ".percent", 0f);
@@ -78,8 +78,8 @@ public class LevelSaver extends GenericDataFile{
 	 * @param gamemode the gamemode to save as
 	 * @param level the level to save
 	 */
-	public static void saveLevel(String player, GameMode gamemode, Level level){
-		if(level.level == 0 && level.percent < 0.01){
+	public static void saveLevel(String player, GameMode gamemode, Level level) {
+		if (level.level == 0 && level.percent < 0.01) {
 			return;
 		}
 		EnhancedConfiguration file = getFile("levels");

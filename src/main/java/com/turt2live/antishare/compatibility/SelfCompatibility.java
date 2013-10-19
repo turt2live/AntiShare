@@ -38,9 +38,9 @@ import com.turt2live.antishare.util.ASUtils;
 /**
  * Compatibility class for other AntiShare versions
  */
-public class SelfCompatibility{
+public class SelfCompatibility {
 
-	private static enum CompatibilityType{
+	private static enum CompatibilityType {
 		REGION_PLAYER_DATA_MIGRATE(5),
 		WORLD_CONFIGURATION_MIGRATE(15),
 		// Above is the estimated version applied in
@@ -67,7 +67,7 @@ public class SelfCompatibility{
 
 		public final int bytePosition;
 
-		private CompatibilityType(int byt){
+		private CompatibilityType(int byt) {
 			bytePosition = byt;
 		}
 	}
@@ -77,7 +77,7 @@ public class SelfCompatibility{
 	 * 
 	 * @author turt2live
 	 */
-	public static enum FileType{
+	public static enum FileType {
 		CONFIGURATION,
 		REGION_CONFIGURATION,
 		WORLD_CONFIGURATION,
@@ -88,39 +88,39 @@ public class SelfCompatibility{
 
 	private static final String COMPATIBILITY_FILE_NAME = "compat.antishare";
 
-	private static void noLongerNeedsUpdate(CompatibilityType compatType){
+	private static void noLongerNeedsUpdate(CompatibilityType compatType) {
 		RandomAccessFile file = getFile();
-		if(file != null){
-			try{
+		if (file != null) {
+			try {
 				file.seek(compatType.bytePosition);
 				file.writeBoolean(false);
-			}catch(IOException e){}
+			} catch(IOException e) {}
 		}
 	}
 
-	private static boolean needsUpdate(CompatibilityType compat){
+	private static boolean needsUpdate(CompatibilityType compat) {
 		RandomAccessFile file = getFile();
-		if(file != null){
-			try{
+		if (file != null) {
+			try {
 				file.seek(compat.bytePosition);
 				return file.readBoolean();
-			}catch(IOException e){}
+			} catch(IOException e) {}
 			return true;
 		}
 		return true;
 	}
 
-	private static RandomAccessFile getFile(){
+	private static RandomAccessFile getFile() {
 		File rfile = new File(AntiShare.p.getDataFolder(), "data" + File.separator + COMPATIBILITY_FILE_NAME);
-		if(!rfile.exists()){
-			try{
+		if (!rfile.exists()) {
+			try {
 				rfile.createNewFile();
-			}catch(IOException e){}
+			} catch(IOException e) {}
 		}
-		try{
+		try {
 			RandomAccessFile file = new RandomAccessFile(rfile, "rw");
 			return file;
-		}catch(FileNotFoundException e){}
+		} catch(FileNotFoundException e) {}
 		return null;
 	}
 
@@ -131,9 +131,9 @@ public class SelfCompatibility{
 	 * @return the extra (new items)
 	 * @throws IOException
 	 */
-	public static List<ASMaterial> updateItemMap(Map<String, ASMaterial> listing) throws IOException{
+	public static List<ASMaterial> updateItemMap(Map<String, ASMaterial> listing) throws IOException {
 		List<ASMaterial> r = new ArrayList<ASMaterial>();
-		if(!needsUpdate(CompatibilityType.ITEM_MAP_543)){
+		if (!needsUpdate(CompatibilityType.ITEM_MAP_543)) {
 			return r;
 		}
 		AntiShare p = AntiShare.p;
@@ -143,18 +143,18 @@ public class SelfCompatibility{
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(p.getDataFolder(), "items.csv"), true));
 		boolean updated = false;
 		String line;
-		while((line = in.readLine()) != null){
-			if(line.startsWith("#")){
+		while ((line = in.readLine()) != null) {
+			if (line.startsWith("#")) {
 				continue;
 			}
 			ASMaterial asMaterial = ItemMap.generate(line);
-			if(asMaterial == null){
+			if (asMaterial == null) {
 				continue;
 			}
 			String name = asMaterial.name.trim().toLowerCase();
-			if(!listing.containsKey(name)){
+			if (!listing.containsKey(name)) {
 				r.add(asMaterial);
-				if(!updated){
+				if (!updated) {
 					out.newLine();
 					out.write("# AntiShare v" + p.getDescription().getVersion() + " (Build " + p.getBuild() + ") updates below this line");
 					updated = true;
@@ -173,8 +173,8 @@ public class SelfCompatibility{
 	/**
 	 * Cleans the 5.3.0 file structure
 	 */
-	public static void cleanup530FileStructure(){
-		if(!needsUpdate(CompatibilityType.FILES_AND_FOLDERS_540)){
+	public static void cleanup530FileStructure() {
+		if (!needsUpdate(CompatibilityType.FILES_AND_FOLDERS_540)) {
 			return;
 		}
 		AntiShare p = AntiShare.p;
@@ -190,9 +190,9 @@ public class SelfCompatibility{
 
 		File backupFolder = new File(p.getDataFolder(), "AntiShare5.3.0");
 
-		for(File f : files){
-			if(f.exists()){
-				if(!backupFolder.exists()){
+		for (File f : files) {
+			if (f.exists()) {
+				if (!backupFolder.exists()) {
 					backupFolder.mkdirs();
 				}
 				f.renameTo(new File(backupFolder, f.getName()));
@@ -200,13 +200,13 @@ public class SelfCompatibility{
 		}
 
 		File config = new File(p.getDataFolder(), "config-backup.yml");
-		if(config.exists()){
-			if(!backupFolder.exists()){
+		if (config.exists()) {
+			if (!backupFolder.exists()) {
 				backupFolder.mkdirs();
 			}
-			try{
+			try {
 				ASUtils.copyFile(config, new File(backupFolder, "config.yml"));
-			}catch(IOException e){
+			} catch(IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -217,28 +217,28 @@ public class SelfCompatibility{
 	/**
 	 * Migrates the world configurations to their own folder
 	 */
-	public static void migrateWorldConfigurations(){
-		if(!needsUpdate(CompatibilityType.WORLD_CONFIGURATION_MIGRATE)){
+	public static void migrateWorldConfigurations() {
+		if (!needsUpdate(CompatibilityType.WORLD_CONFIGURATION_MIGRATE)) {
 			return;
 		}
 		File directory = AntiShare.p.getDataFolder();
 		File newDir = new File(directory, "world_configurations");
 		int files = 0;
-		if(directory.listFiles() != null){
-			for(File file : directory.listFiles(new FileFilter() {
+		if (directory.listFiles() != null) {
+			for (File file : directory.listFiles(new FileFilter() {
 				@Override
-				public boolean accept(File arg0){
-					if(arg0.getName().endsWith("_config.yml")){
+				public boolean accept(File arg0) {
+					if (arg0.getName().endsWith("_config.yml")) {
 						return true;
 					}
 					return false;
 				}
-			})){
+			})) {
 				files++;
 				file.renameTo(new File(newDir, file.getName()));
 				file.delete();
 			}
-			if(files > 0){
+			if (files > 0) {
 				AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("world-config-migrate", String.valueOf(files)));
 			}
 		}
@@ -248,18 +248,18 @@ public class SelfCompatibility{
 	/**
 	 * Migrates player data from region_players to data/region_players
 	 */
-	public static void migratePlayerData(){
-		if(!needsUpdate(CompatibilityType.REGION_PLAYER_DATA_MIGRATE)){
+	public static void migratePlayerData() {
+		if (!needsUpdate(CompatibilityType.REGION_PLAYER_DATA_MIGRATE)) {
 			return;
 		}
 		AntiShare plugin = AntiShare.p;
 		File newSaveFolder = new File(plugin.getDataFolder(), "data" + File.separator + "region_players");
 		File oldSaveFolder = new File(plugin.getDataFolder(), "region_players");
 		newSaveFolder.mkdirs();
-		if(oldSaveFolder.exists()){
+		if (oldSaveFolder.exists()) {
 			File[] files = oldSaveFolder.listFiles();
-			if(files != null && files.length > 0){
-				for(File file : files){
+			if (files != null && files.length > 0) {
+				for (File file : files) {
 					file.renameTo(new File(newSaveFolder, file.getName()));
 				}
 				AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("region-info-migrate", String.valueOf(files.length)));
@@ -272,62 +272,62 @@ public class SelfCompatibility{
 	/**
 	 * Removes/Archives old inventories
 	 */
-	public static void cleanupOldInventories(){
+	public static void cleanupOldInventories() {
 		AntiShare plugin = AntiShare.p;
-		if(plugin.settings().inventoryCleanupSettings.enabled){
+		if (plugin.settings().inventoryCleanupSettings.enabled) {
 			File timeFile = new File(plugin.getDataFolder(), "data" + File.separator + "lastCleanup");
-			if(timeFile.exists()){
+			if (timeFile.exists()) {
 				BufferedReader in = null;
 				boolean doClean = true;
-				try{
+				try {
 					in = new BufferedReader(new FileReader(timeFile));
 					String line = in.readLine();
 					int lastMS = Integer.parseInt(line);
 					int hours = 3600000 * 6;
-					if(System.currentTimeMillis() - lastMS < hours){
+					if (System.currentTimeMillis() - lastMS < hours) {
 						doClean = false; // Don't clean
 					}
-				}catch(IOException e){}catch(NumberFormatException e){}finally{
-					if(in != null){
-						try{
+				} catch(IOException e) {} catch(NumberFormatException e) {} finally {
+					if (in != null) {
+						try {
 							in.close();
-						}catch(IOException e){}
+						} catch(IOException e) {}
 					}
-					if(!doClean){
+					if (!doClean) {
 						return;
 					}
 				}
 			}
-			try{
+			try {
 				BufferedWriter out = new BufferedWriter(new FileWriter(timeFile, false));
 				out.write(String.valueOf(System.currentTimeMillis()));
 				out.close();
-			}catch(IOException e){}
+			} catch(IOException e) {}
 			long time = plugin.settings().inventoryCleanupSettings.after;
 			boolean delete = !plugin.settings().inventoryCleanupSettings.archive;
 			File archiveLocation = new File(plugin.getDataFolder(), "archive" + File.separator + "inventories" + File.separator + "players");
-			if(!delete && !archiveLocation.exists()){
+			if (!delete && !archiveLocation.exists()) {
 				archiveLocation.mkdirs();
 			}
 			File[] files = new File(plugin.getDataFolder(), "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName()).listFiles();
 			int cleaned = 0;
-			if(files != null){
-				for(File file : files){
+			if (files != null) {
+				for (File file : files) {
 					String player = file.getName().split("\\.")[0];
 					OfflinePlayer p = plugin.getServer().getOfflinePlayer(player);
 					long diff = System.currentTimeMillis() - p.getLastPlayed();
 					long days = diff / (24 * 60 * 60 * 1000);
-					if(days >= time){
-						if(delete){
+					if (days >= time) {
+						if (delete) {
 							file.delete();
-						}else{
+						} else {
 							file.renameTo(new File(archiveLocation, file.getName()));
 						}
 						cleaned++;
 					}
 				}
 			}
-			if(cleaned > 0){
+			if (cleaned > 0) {
 				AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("inventories-archived", String.valueOf(cleaned)));
 			}
 		}
@@ -336,8 +336,8 @@ public class SelfCompatibility{
 	/**
 	 * Cleans YAML files
 	 */
-	public static void cleanupYAML(){
-		if(!needsUpdate(CompatibilityType.CONFIGURATION_544)){
+	public static void cleanupYAML() {
+		if (!needsUpdate(CompatibilityType.CONFIGURATION_544)) {
 			return;
 		}
 		int cleaned = 0;
@@ -350,32 +350,32 @@ public class SelfCompatibility{
 		files.put("locale.yml", FileType.LOCALE);
 		files.put("worldsplit.yml", FileType.WORLD_SPLIT);
 		File config = new File(plugin.getDataFolder(), "config.yml");
-		if(config.exists()){
+		if (config.exists()) {
 			File backup = new File(plugin.getDataFolder(), "config-backup.yml");
-			try{
+			try {
 				BufferedReader reader = new BufferedReader(new FileReader(config));
 				BufferedWriter writer = new BufferedWriter(new FileWriter(backup));
 				String line;
-				while((line = reader.readLine()) != null){
+				while ((line = reader.readLine()) != null) {
 					writer.write(line);
 					writer.newLine();
 				}
 				reader.close();
 				writer.close();
-			}catch(IOException e){
+			} catch(IOException e) {
 				e.printStackTrace();
 			}
 		}
-		for(String name : files.keySet()){
+		for (String name : files.keySet()) {
 			File file = new File(plugin.getDataFolder(), name);
-			if(file.isDirectory()){
+			if (file.isDirectory()) {
 				cleaned += cleanFolder(file, files.get(name));
-			}else{
+			} else {
 				cleanFile(file, files.get(name));
 				cleaned++;
 			}
 		}
-		if(cleaned > 0){
+		if (cleaned > 0) {
 			AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("files-cleaned", String.valueOf(cleaned)));
 		}
 		noLongerNeedsUpdate(CompatibilityType.CONFIGURATION_544);
@@ -384,14 +384,14 @@ public class SelfCompatibility{
 	/**
 	 * Relocates 5.2.0 inventories
 	 */
-	public static void cleanup520Inventories(){
-		if(!needsUpdate(CompatibilityType.INVENTORY_520)){
+	public static void cleanup520Inventories() {
+		if (!needsUpdate(CompatibilityType.INVENTORY_520)) {
 			return;
 		}
 		File data = AntiShare.p.getDataFolder();
 		File inventoryFile = new File(data, "inventories");
 		File newFolder = new File(data, "data" + File.separator + "inventories");
-		if(inventoryFile.exists()){
+		if (inventoryFile.exists()) {
 			inventoryFile.renameTo(newFolder);
 		}
 		noLongerNeedsUpdate(CompatibilityType.INVENTORY_520);
@@ -400,18 +400,18 @@ public class SelfCompatibility{
 	/**
 	 * Relocates 5.3.0 inventories
 	 */
-	public static void cleanup530Inventories(){
-		if(!needsUpdate(CompatibilityType.INVENTORY_540_BETA)){
+	public static void cleanup530Inventories() {
+		if (!needsUpdate(CompatibilityType.INVENTORY_540_BETA)) {
 			return;
 		}
 		File data = AntiShare.p.getDataFolder();
 		File inventoryFile = new File(data, "inventories");
 		File newFolder = new File(data, "data" + File.separator + "inventories");
-		if(inventoryFile.exists()){
+		if (inventoryFile.exists()) {
 			File[] files = inventoryFile.listFiles();
 			ASUtils.wipeFolder(newFolder, null);
-			if(files != null){
-				for(File file : files){
+			if (files != null) {
+				for (File file : files) {
 					file.renameTo(new File(newFolder, file.getName()));
 				}
 			}
@@ -423,35 +423,35 @@ public class SelfCompatibility{
 	/**
 	 * Removes dead block files introduced in 5.3.0. "The 0kb bug"
 	 */
-	public static void cleanup520blocks(){
-		if(!needsUpdate(CompatibilityType.BLOCK_BUG_CLEANUP_540_BETA)){
+	public static void cleanup520blocks() {
+		if (!needsUpdate(CompatibilityType.BLOCK_BUG_CLEANUP_540_BETA)) {
 			return;
 		}
 		long deleted = 0;
 		AntiShare plugin = AntiShare.p;
 		File entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
 		File blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
-		if(entitiesDir.listFiles() != null){
-			for(File file : entitiesDir.listFiles()){
-				if(file.isFile()){
-					if(file.length() < 100){ // 100 bytes
+		if (entitiesDir.listFiles() != null) {
+			for (File file : entitiesDir.listFiles()) {
+				if (file.isFile()) {
+					if (file.length() < 100) { // 100 bytes
 						file.delete();
 						deleted++;
 					}
 				}
 			}
 		}
-		if(blocksDir.listFiles() != null){
-			for(File file : blocksDir.listFiles()){
-				if(file.isFile()){
-					if(file.length() <= 0){
+		if (blocksDir.listFiles() != null) {
+			for (File file : blocksDir.listFiles()) {
+				if (file.isFile()) {
+					if (file.length() <= 0) {
 						file.delete();
 						deleted++;
 					}
 				}
 			}
 		}
-		if(deleted > 0){
+		if (deleted > 0) {
 			AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("bugged-remove", String.valueOf(deleted)));
 		}
 		noLongerNeedsUpdate(CompatibilityType.BLOCK_BUG_CLEANUP_540_BETA);
@@ -460,18 +460,18 @@ public class SelfCompatibility{
 	/**
 	 * Converts inventories to 5.4.0 format (JSON)
 	 */
-	public static void convertTo540Inventories(){
-		if(!needsUpdate(CompatibilityType.INVENTORY_UPDATE_540)){
+	public static void convertTo540Inventories() {
+		if (!needsUpdate(CompatibilityType.INVENTORY_UPDATE_540)) {
 			return;
 		}
 		int resolved = 0;
-		for(InventoryType type : InventoryType.values()){
+		for (InventoryType type : InventoryType.values()) {
 			File[] files = new File(ASInventory.getDataFolder(), type.getRelativeFolderName()).listFiles();
-			if(files != null){
-				for(File file : files){
-					if(file.getName().toLowerCase().endsWith(".yml")){
+			if (files != null) {
+				for (File file : files) {
+					if (file.getName().toLowerCase().endsWith(".yml")) {
 						List<ASInventory> list = LegacyInventory.load(file.getName().split("\\.")[0], type);
-						for(ASInventory inv : list){
+						for (ASInventory inv : list) {
 							inv.save();
 						}
 						file.delete();
@@ -480,7 +480,7 @@ public class SelfCompatibility{
 				}
 			}
 		}
-		if(resolved > 0){
+		if (resolved > 0) {
 			AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("inventories-to-540-converted", String.valueOf(resolved)));
 		}
 		noLongerNeedsUpdate(CompatibilityType.INVENTORY_UPDATE_540);
@@ -489,36 +489,36 @@ public class SelfCompatibility{
 	/**
 	 * Updates world configurations to 5.4.0 format by moving them to an 'old' folder.
 	 */
-	public static void update540WorldConfigurations(){
-		if(!needsUpdate(CompatibilityType.WORLD_CONFIG_540)){
+	public static void update540WorldConfigurations() {
+		if (!needsUpdate(CompatibilityType.WORLD_CONFIG_540)) {
 			return;
 		}
 		File folder = new File(AntiShare.p.getDataFolder(), "world_configurations");
-		if(folder.exists()){
+		if (folder.exists()) {
 			File archive = new File(folder, "old");
 			archive.mkdirs();
 			File[] listing = folder.listFiles();
 			boolean updated = false;
-			if(listing != null){
-				for(File file : listing){
-					if(file.getName().toLowerCase().endsWith("_config.yml")){
+			if (listing != null) {
+				for (File file : listing) {
+					if (file.getName().toLowerCase().endsWith("_config.yml")) {
 						file.renameTo(new File(archive, file.getName()));
 						updated = true;
 					}
 				}
 			}
-			if(updated){
+			if (updated) {
 				AntiShare.p.getLogger().warning(AntiShare.p.getMessages().getMessage("world-config-540-update"));
 			}
 		}
 		noLongerNeedsUpdate(CompatibilityType.WORLD_CONFIG_540);
 	}
 
-	private static int cleanFolder(File folder, FileType type){
+	private static int cleanFolder(File folder, FileType type) {
 		int cleaned = 0;
-		if(folder.listFiles() != null){
-			for(File file : folder.listFiles()){
-				if(file.getName().endsWith(".yml")){
+		if (folder.listFiles() != null) {
+			for (File file : folder.listFiles()) {
+				if (file.getName().endsWith(".yml")) {
 					cleanFile(file, type);
 					cleaned++;
 				}
@@ -533,12 +533,12 @@ public class SelfCompatibility{
 	 * @param file the file
 	 * @param type the file type
 	 */
-	public static void cleanFile(File file, FileType type){
+	public static void cleanFile(File file, FileType type) {
 		AntiShare plugin = AntiShare.p;
 		File temp = new File(plugin.getDataFolder(), "temp");
 		temp.mkdirs();
 		EnhancedConfiguration local = new EnhancedConfiguration(new File(temp, "temp1"), plugin);
-		switch (type){
+		switch (type) {
 		case CONFIGURATION:
 			local.loadDefaults(plugin.getResource("config.yml"));
 			break;
@@ -561,8 +561,8 @@ public class SelfCompatibility{
 		local.saveDefaults();
 		EnhancedConfiguration actual = new EnhancedConfiguration(file, plugin);
 		actual.load();
-		for(String key : actual.getKeys(true)){
-			if(local.get(key) == null){
+		for (String key : actual.getKeys(true)) {
+			if (local.get(key) == null) {
 				actual.set(key, null);
 			}
 		}

@@ -25,32 +25,32 @@ import com.turt2live.antishare.util.GamemodeAbstraction;
  * 
  * @author turt2live
  */
-public class MagicSpells implements Listener{
+public class MagicSpells implements Listener {
 
 	private boolean enabled = false;
 
-	public MagicSpells(){
+	public MagicSpells() {
 		enabled = AntiShare.p.settings().magicSpells;
 	}
 
 	@EventHandler
-	public void onTarget(SpellTargetEvent event){
-		if(event.isCancelled() || !enabled){
+	public void onTarget(SpellTargetEvent event) {
+		if (event.isCancelled() || !enabled) {
 			return;
 		}
 		Player player = event.getCaster();
-		if(!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+		if (!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
-	public void onTarget(SpellCastEvent event){
-		if(event.isCancelled() || !enabled){
+	public void onTarget(SpellCastEvent event) {
+		if (event.isCancelled() || !enabled) {
 			return;
 		}
 		Player player = event.getCaster();
-		if(!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())){
+		if (!player.hasPermission(PermissionNodes.PLUGIN_MAGIC_SPELLS) && GamemodeAbstraction.isCreative(player.getGameMode())) {
 			event.setCancelled(true);
 		}
 	}

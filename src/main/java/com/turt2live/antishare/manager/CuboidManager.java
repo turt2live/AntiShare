@@ -24,12 +24,12 @@ import com.turt2live.antishare.cuboid.Cuboid;
 /**
  * Cuboid manager
  */
-public class CuboidManager{
+public class CuboidManager {
 
 	/**
 	 * A cuboid point
 	 */
-	public static enum CuboidPoint{
+	public static enum CuboidPoint {
 		POINT1,
 		POINT2;
 	}
@@ -43,10 +43,10 @@ public class CuboidManager{
 	 * @param player the player
 	 * @return the cuboid, or null if not found
 	 */
-	public Cuboid getCuboid(String player){
+	public Cuboid getCuboid(String player) {
 		Cuboid cuboid = cuboids.containsKey(player) ? cuboids.get(player).clone() : null;
 		Player playerObj = plugin.getServer().getPlayer(player);
-		if(cuboid == null && playerObj != null){
+		if (cuboid == null && playerObj != null) {
 			cuboid = plugin.getHookManager().hasWorldEdit() ? plugin.getHookManager().getWorldEdit().getCuboid(playerObj) : null;
 		}
 		return cuboid;
@@ -58,9 +58,9 @@ public class CuboidManager{
 	 * @param player the player
 	 * @return true if valid and complete
 	 */
-	public boolean isCuboidComplete(String player){
+	public boolean isCuboidComplete(String player) {
 		Cuboid cuboid = getCuboid(player);
-		if(cuboid != null){
+		if (cuboid != null) {
 			return cuboid.isValid();
 		}
 		return false;
@@ -73,9 +73,9 @@ public class CuboidManager{
 	 * @param point the point
 	 * @param value the value
 	 */
-	public void updateCuboid(String player, CuboidPoint point, Location value){
+	public void updateCuboid(String player, CuboidPoint point, Location value) {
 		Cuboid cuboid = getCuboid(player);
-		if(cuboid == null){
+		if (cuboid == null) {
 			cuboid = new Cuboid();
 		}
 		cuboid.setPoint(point, value);
@@ -86,14 +86,14 @@ public class CuboidManager{
 	/**
 	 * Saves all the cuboids to disk for loading later
 	 */
-	public void save(){
+	public void save() {
 		File file = new File(plugin.getDataFolder(), "data" + File.separator + "cuboids.yml");
-		if(file.exists()){
+		if (file.exists()) {
 			file.delete();
 		}
 		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
 		yamlFile.load();
-		for(String player : cuboids.keySet()){
+		for (String player : cuboids.keySet()) {
 			Cuboid cuboid = cuboids.get(player);
 			yamlFile.set(player, cuboid);
 		}
@@ -104,18 +104,18 @@ public class CuboidManager{
 	/**
 	 * Loads all cuboids
 	 */
-	public void load(){
+	public void load() {
 		File file = new File(plugin.getDataFolder(), "data" + File.separator + "cuboids.yml");
-		if(!file.exists()){
+		if (!file.exists()) {
 			return;
 		}
 		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
 		yamlFile.load();
-		for(String player : yamlFile.getKeys(false)){
+		for (String player : yamlFile.getKeys(false)) {
 			Cuboid cuboid = (Cuboid) yamlFile.get(player);
 			cuboids.put(player, cuboid);
 		}
-		if(cuboids.keySet().size() > 0){
+		if (cuboids.keySet().size() > 0) {
 			plugin.getLogger().info(plugin.getMessages().getMessage("cuboids-loaded", String.valueOf(this.cuboids.keySet().size())));
 		}
 	}
@@ -123,7 +123,7 @@ public class CuboidManager{
 	/**
 	 * Reloads the cuboid manager
 	 */
-	public void reload(){
+	public void reload() {
 		save();
 		load();
 	}
@@ -133,7 +133,7 @@ public class CuboidManager{
 	 * 
 	 * @param name the player name
 	 */
-	public void removeCuboid(String name){
+	public void removeCuboid(String name) {
 		cuboids.remove(name);
 	}
 

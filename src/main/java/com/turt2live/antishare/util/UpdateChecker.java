@@ -29,7 +29,7 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-public class UpdateChecker{
+public class UpdateChecker {
 
 	/*
 	 * Class function replicated from Vault (thanks Sleaker!)
@@ -40,22 +40,22 @@ public class UpdateChecker{
 	/**
 	 * Creates and starts the update checker
 	 */
-	public static void start(){
+	public static void start() {
 		final AntiShare plugin = AntiShare.p;
-		if(!plugin.settings().updateChecker){
+		if (!plugin.settings().updateChecker) {
 			return;
 		}
 		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
 
 			@Override
-			public void run(){
-				try{
-					if(isOutdated()){
+			public void run() {
+				try {
+					if (isOutdated()) {
 						String newVersion = getBukkitDevVersion();
 						String currentVersion = getCurrentVersion();
 						plugin.getLogger().warning(plugin.getMessages().getMessage("update", newVersion, currentVersion));
 					}
-				}catch(NumberFormatException e){} // Don't handle
+				} catch(NumberFormatException e) {} // Don't handle
 			}
 		}, 0, 36000); // 30 minutes
 	}
@@ -66,7 +66,7 @@ public class UpdateChecker{
 	 * @return true if outdated
 	 * @throws NumberFormatException if the version of AntiShare is abnormal
 	 */
-	public static boolean isOutdated() throws NumberFormatException{
+	public static boolean isOutdated() throws NumberFormatException {
 		double current = Double.valueOf(getCurrentVersion().split("-")[0].replaceFirst("\\.", ""));
 		double release = Double.valueOf(getReleasedVersion());
 		return release > current;
@@ -77,7 +77,7 @@ public class UpdateChecker{
 	 * 
 	 * @return the active version of AntiShare
 	 */
-	public static String getCurrentVersion(){
+	public static String getCurrentVersion() {
 		return AntiShare.p.getDescription().getVersion();
 	}
 
@@ -86,7 +86,7 @@ public class UpdateChecker{
 	 * 
 	 * @return the public release version of AntiShare
 	 */
-	public static String getReleasedVersion(){
+	public static String getReleasedVersion() {
 		return getBukkitDevVersion().replaceFirst("\\.", "");
 	}
 
@@ -97,24 +97,24 @@ public class UpdateChecker{
 	 */
 	// Borrowed from Vault, thanks Sleaker!
 	// https://github.com/MilkBowl/Vault/blob/master/src/net/milkbowl/vault/Vault.java#L520
-	public static String getBukkitDevVersion(){
+	public static String getBukkitDevVersion() {
 		String pluginUrlString = "http://dev.bukkit.org/server-mods/antishare/files.rss";
-		try{
+		try {
 			URL url = new URL(pluginUrlString);
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
 			doc.getDocumentElement().normalize();
 			NodeList nodes = doc.getElementsByTagName("item");
 			Node firstNode = nodes.item(0);
-			if(firstNode.getNodeType() == 1){
+			if (firstNode.getNodeType() == 1) {
 				Element firstElement = (Element) firstNode;
 				NodeList firstElementTagName = firstElement.getElementsByTagName("title");
 				Element firstNameElement = (Element) firstElementTagName.item(0);
 				NodeList firstNodes = firstNameElement.getChildNodes();
 				return firstNodes.item(0).getNodeValue().replace("v", "").trim();
 			}
-		}catch(IOException e){} // Do not handle
-		catch(SAXException e){} // Do not handle
-		catch(ParserConfigurationException e){} // Do not handle
+		} catch(IOException e) {} // Do not handle
+		catch(SAXException e) {} // Do not handle
+		catch(ParserConfigurationException e) {} // Do not handle
 		return getCurrentVersion();
 	}
 }

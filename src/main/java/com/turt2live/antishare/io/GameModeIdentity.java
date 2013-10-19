@@ -12,7 +12,7 @@ package com.turt2live.antishare.io;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
-public class GameModeIdentity extends GenericDataFile{
+public class GameModeIdentity extends GenericDataFile {
 
 	/**
 	 * Determines if a player has changed GameMode before
@@ -20,7 +20,7 @@ public class GameModeIdentity extends GenericDataFile{
 	 * @param player the player to check
 	 * @return true if they have changed Game Mode before
 	 */
-	public static boolean hasChangedGameMode(String player){
+	public static boolean hasChangedGameMode(String player) {
 		EnhancedConfiguration yaml = getFile("gamemodeswitches");
 		return yaml.getBoolean(player, false);
 	}
@@ -30,7 +30,7 @@ public class GameModeIdentity extends GenericDataFile{
 	 * 
 	 * @param player the player
 	 */
-	public static void setChangedGameMode(String player){
+	public static void setChangedGameMode(String player) {
 		EnhancedConfiguration yaml = getFile("gamemodeswitches");
 		yaml.set(player, true);
 		yaml.save();

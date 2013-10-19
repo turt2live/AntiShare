@@ -19,20 +19,20 @@ import com.feildmaster.lib.configuration.EnhancedConfiguration;
 /**
  * Temporary fix for missing methods
  */
-public class WrappedEnhancedConfiguration extends EnhancedConfiguration{
+public class WrappedEnhancedConfiguration extends EnhancedConfiguration {
 
-	public WrappedEnhancedConfiguration(File file, Plugin plugin){
+	public WrappedEnhancedConfiguration(File file, Plugin plugin) {
 		super(file, plugin);
 	}
 
-	public WrappedEnhancedConfiguration(File file){
+	public WrappedEnhancedConfiguration(File file) {
 		super(file);
 	}
 
 	/**
 	 * Clears the configuration. This does not save the file.
 	 */
-	public void clearFile(){
+	public void clearFile() {
 		clearCache();
 		map.clear();
 	}

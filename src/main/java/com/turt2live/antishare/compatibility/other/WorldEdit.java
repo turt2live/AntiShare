@@ -12,11 +12,11 @@ import com.turt2live.antishare.cuboid.Cuboid;
  * 
  * @author turt2live
  */
-public class WorldEdit{
+public class WorldEdit {
 
 	private WorldEditPlugin worldedit;
 
-	public WorldEdit(Plugin worldedit){
+	public WorldEdit(Plugin worldedit) {
 		this.worldedit = (WorldEditPlugin) worldedit;
 	}
 
@@ -26,9 +26,9 @@ public class WorldEdit{
 	 * @param player the player to get the selection from
 	 * @return the cuboid, or null if the selection is incomplete/missing
 	 */
-	public Cuboid getCuboid(Player player){
+	public Cuboid getCuboid(Player player) {
 		Selection selection = worldedit.getSelection(player);
-		if(selection == null || selection.getMaximumPoint() == null || selection.getMinimumPoint() == null){
+		if (selection == null || selection.getMaximumPoint() == null || selection.getMinimumPoint() == null) {
 			return null;
 		}
 		Cuboid cuboid = new Cuboid(selection.getMaximumPoint(), selection.getMinimumPoint());

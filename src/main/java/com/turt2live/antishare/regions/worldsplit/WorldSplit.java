@@ -10,15 +10,15 @@ import com.turt2live.antishare.AntiShare;
  * 
  * @author turt2live
  */
-public class WorldSplit{
+public class WorldSplit {
 
-	public static enum Axis{
+	public static enum Axis {
 		X, Z, UNKNOWN;
 
-		public static Axis fromString(String val){
-			if(val.equalsIgnoreCase("X")){
+		public static Axis fromString(String val) {
+			if (val.equalsIgnoreCase("X")) {
 				return X;
-			}else if(val.equalsIgnoreCase("Z")){
+			} else if (val.equalsIgnoreCase("Z")) {
 				return Z;
 			}
 			return UNKNOWN;
@@ -32,7 +32,7 @@ public class WorldSplit{
 	private GameMode positive = GameMode.CREATIVE, negative = GameMode.SURVIVAL;
 	private AntiShare plugin = AntiShare.p;
 
-	public WorldSplit(Axis axis, String worldName, int value, GameMode positive, GameMode negative, boolean warn, int warnValue){
+	public WorldSplit(Axis axis, String worldName, int value, GameMode positive, GameMode negative, boolean warn, int warnValue) {
 		this.axis = axis;
 		this.worldName = worldName;
 		this.value = value;
@@ -47,7 +47,7 @@ public class WorldSplit{
 	 * 
 	 * @return true if this world split should warn
 	 */
-	public boolean getShouldWarn(){
+	public boolean getShouldWarn() {
 		return warn;
 	}
 
@@ -56,7 +56,7 @@ public class WorldSplit{
 	 * 
 	 * @return the distance to warn from
 	 */
-	public int getWarnDistance(){
+	public int getWarnDistance() {
 		return warnDistance;
 	}
 
@@ -65,7 +65,7 @@ public class WorldSplit{
 	 * 
 	 * @return true if valid
 	 */
-	public boolean isValid(){
+	public boolean isValid() {
 		return worldName != null && plugin.getServer().getWorld(worldName) != null && axis != null
 				&& axis != Axis.UNKNOWN && positive != null && negative != null && positive != negative
 				&& warnDistance > 0;
@@ -76,7 +76,7 @@ public class WorldSplit{
 	 * 
 	 * @return the value of the split.
 	 */
-	public int getValue(){
+	public int getValue() {
 		return value;
 	}
 
@@ -85,7 +85,7 @@ public class WorldSplit{
 	 * 
 	 * @return the axis
 	 */
-	public Axis getAxis(){
+	public Axis getAxis() {
 		return axis;
 	}
 
@@ -95,12 +95,12 @@ public class WorldSplit{
 	 * @param location the location
 	 * @return the gamemode for the side this location resides on. If the location is null then this will be null, if {@link #getAxis()} is UNKNOWN or null then this is also null.
 	 */
-	public GameMode getGameModeForSide(Location location){
-		if(location == null){
+	public GameMode getGameModeForSide(Location location) {
+		if (location == null) {
 			return null;
 		}
 		int v = 0;
-		switch (axis){
+		switch (axis) {
 		case X:
 			v = location.getBlockX();
 			break;
@@ -110,7 +110,7 @@ public class WorldSplit{
 		default:
 			return null;
 		}
-		if(v <= value){
+		if (v <= value) {
 			return negative;
 		}
 		return positive;

@@ -27,7 +27,7 @@ import com.turt2live.antishare.util.Key;
 /* TODO: Eventual plans:
  * - Save multiple chunks in a file
  */
-public class ASRFile{
+public class ASRFile {
 
 	public static final Pattern SPLIT_PATTERN = Pattern.compile(" ");
 	public static final byte CREATIVE_BYTE = 0x1;
@@ -47,15 +47,15 @@ public class ASRFile{
 	 * 
 	 * @param isEntity true to make an entity file, false otherwise
 	 */
-	public ASRFile(boolean isEntity){
+	public ASRFile(boolean isEntity) {
 		buffer = ByteBuffer.allocateDirect(isEntity ? 14 : 13);
 	}
 
-	private byte gamemodeToByte(GameMode gamemode){
-		if(gamemode == null){
+	private byte gamemodeToByte(GameMode gamemode) {
+		if (gamemode == null) {
 			return UNKNOWN_OBJECT_BYTE;
 		}
-		switch (gamemode){
+		switch (gamemode) {
 		case CREATIVE:
 			return CREATIVE_BYTE;
 		case SURVIVAL:
@@ -67,8 +67,8 @@ public class ASRFile{
 		}
 	}
 
-	private GameMode byteToGamemode(byte bite){
-		switch (bite){
+	private GameMode byteToGamemode(byte bite) {
+		switch (bite) {
 		case CREATIVE_BYTE:
 			return GameMode.CREATIVE;
 		case SURVIVAL_BYTE:
@@ -80,11 +80,11 @@ public class ASRFile{
 		}
 	}
 
-	private byte entityToByte(EntityType type){
-		if(type == null){
+	private byte entityToByte(EntityType type) {
+		if (type == null) {
 			return UNKNOWN_OBJECT_BYTE;
 		}
-		switch (type){
+		switch (type) {
 		case PAINTING:
 			return PAINTING_BYTE;
 		case ITEM_FRAME:
@@ -94,8 +94,8 @@ public class ASRFile{
 		}
 	}
 
-	private EntityType byteToEntity(byte bite){
-		switch (bite){
+	private EntityType byteToEntity(byte bite) {
+		switch (bite) {
 		case PAINTING_BYTE:
 			return EntityType.PAINTING;
 		case ITEM_FRAME_BYTE:
@@ -112,11 +112,11 @@ public class ASRFile{
 	 * @param write true to write to the file, false otherwise
 	 * @throws FileNotFoundException thrown if the file is missing
 	 */
-	public void prepare(File file, boolean write) throws FileNotFoundException{
-		if(write){
+	public void prepare(File file, boolean write) throws FileNotFoundException {
+		if (write) {
 			output = new FileOutputStream(file, false);
 			channel = output.getChannel();
-		}else{
+		} else {
 			input = new FileInputStream(file);
 			channel = input.getChannel();
 		}
@@ -130,7 +130,7 @@ public class ASRFile{
 	 * @param gamemode the gamemode of the block
 	 * @throws IOException thrown if something happens
 	 */
-	public void write(Location location, GameMode gamemode) throws IOException{
+	public void write(Location location, GameMode gamemode) throws IOException {
 		write(location.getBlockX(), location.getBlockY(), location.getBlockZ(), gamemode);
 	}
 
@@ -143,7 +143,7 @@ public class ASRFile{
 	 * @param gamemode the gamemode to write
 	 * @throws IOException thrown if something happens
 	 */
-	public void write(int x, int y, int z, GameMode gamemode) throws IOException{
+	public void write(int x, int y, int z, GameMode gamemode) throws IOException {
 		buffer.clear();
 		buffer.putInt(x);
 		buffer.putInt(y);
@@ -161,7 +161,7 @@ public class ASRFile{
 	 * @param entity the entity type of the entity
 	 * @throws IOException thrown if something happens
 	 */
-	public void write(Location location, GameMode gamemode, EntityType entity) throws IOException{
+	public void write(Location location, GameMode gamemode, EntityType entity) throws IOException {
 		write(location.getBlockX(), location.getBlockY(), location.getBlockZ(), gamemode, entity);
 	}
 
@@ -175,7 +175,7 @@ public class ASRFile{
 	 * @param entity the entity type of the entity
 	 * @throws IOException thrown if something happens
 	 */
-	public void write(int x, int y, int z, GameMode gamemode, EntityType entity) throws IOException{
+	public void write(int x, int y, int z, GameMode gamemode, EntityType entity) throws IOException {
 		buffer.clear();
 		buffer.putInt(x);
 		buffer.putInt(y);
@@ -193,9 +193,9 @@ public class ASRFile{
 	 * @return the entry (a block) or null if EOF has been reached / nothing was read
 	 * @throws IOException thrown if something happens
 	 */
-	public Key getNext(World world) throws IOException{
+	public Key getNext(World world) throws IOException {
 		int read = channel.read(buffer);
-		if(read <= 0){
+		if (read <= 0) {
 			return null;
 		}
 		buffer.position(0);
@@ -213,9 +213,9 @@ public class ASRFile{
 	 * @return the entry (an entity) or null if EOF has been reached / nothing was read
 	 * @throws IOException thrown if something happens
 	 */
-	public Key getNextEntity(World world) throws IOException{
+	public Key getNextEntity(World world) throws IOException {
 		int read = channel.read(buffer);
-		if(read <= 0){
+		if (read <= 0) {
 			return null;
 		}
 		buffer.position(0);
@@ -232,10 +232,10 @@ public class ASRFile{
 	 * 
 	 * @throws IOException thrown if something goes wrong
 	 */
-	public void close() throws IOException{
-		if(write){
+	public void close() throws IOException {
+		if (write) {
 			output.close();
-		}else{
+		} else {
 			input.close();
 		}
 	}

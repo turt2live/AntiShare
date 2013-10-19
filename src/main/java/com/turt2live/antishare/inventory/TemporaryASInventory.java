@@ -15,7 +15,7 @@ package com.turt2live.antishare.inventory;
  * 
  * @author turt2live
  */
-public class TemporaryASInventory{
+public class TemporaryASInventory {
 
 	private ASInventory lastInventory;
 	private ASInventory tempInventory;
@@ -26,7 +26,7 @@ public class TemporaryASInventory{
 	 * @param last the last used inventory
 	 * @param temp the temporary inventory
 	 */
-	public TemporaryASInventory(ASInventory last, ASInventory temp){
+	public TemporaryASInventory(ASInventory last, ASInventory temp) {
 		this.lastInventory = last;
 		this.tempInventory = temp;
 	}
@@ -36,7 +36,7 @@ public class TemporaryASInventory{
 	 * 
 	 * @return the last used inventory
 	 */
-	public ASInventory getLastInventory(){
+	public ASInventory getLastInventory() {
 		return lastInventory;
 	}
 
@@ -45,7 +45,7 @@ public class TemporaryASInventory{
 	 * 
 	 * @return the temporary inventory
 	 */
-	public ASInventory getTempInventory(){
+	public ASInventory getTempInventory() {
 		return tempInventory;
 	}
 

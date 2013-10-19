@@ -26,16 +26,16 @@ import com.turt2live.antishare.money.TransactionResult;
  * 
  * @author turt2live
  */
-public class VaultEconomy{
+public class VaultEconomy {
 
 	private Economy economy;
 
 	/**
 	 * Creates a new Vault Economy instance
 	 */
-	public VaultEconomy(){
+	public VaultEconomy() {
 		RegisteredServiceProvider<Economy> rsp = AntiShare.p.getServer().getServicesManager().getRegistration(Economy.class);
-		if(rsp == null){
+		if (rsp == null) {
 			return;
 		}
 		economy = rsp.getProvider();
@@ -48,14 +48,14 @@ public class VaultEconomy{
 	 * @param from the gamemode to
 	 * @param to the gamemode from
 	 */
-	public void switchBalance(String player, GameMode from, GameMode to){
-		if(economy.hasAccount(player)){
+	public void switchBalance(String player, GameMode from, GameMode to) {
+		if (economy.hasAccount(player)) {
 			double current = economy.getBalance(player);
 			MoneySaver.saveLevel(player, from, current);
 			double balance = MoneySaver.getLevel(player, to);
 			EconomyResponse r1 = economy.withdrawPlayer(player, current);
 			EconomyResponse r2 = economy.depositPlayer(player, balance);
-			if(!r1.transactionSuccess() || !r2.transactionSuccess()){
+			if (!r1.transactionSuccess() || !r2.transactionSuccess()) {
 				new Throwable("Cannot set balance: p=" + player + " gfrom=" + from + " gto=" + to).printStackTrace();
 			}
 		}
@@ -68,12 +68,12 @@ public class VaultEconomy{
 	 * @param amount the amount
 	 * @return the result
 	 */
-	public TransactionResult add(String player, double amount){
-		if(amount < 0){
+	public TransactionResult add(String player, double amount) {
+		if (amount < 0) {
 			return subtract(player, Math.abs(amount));
 		}
 		EconomyResponse resp = economy.depositPlayer(player, amount);
-		if(resp.type == ResponseType.FAILURE){
+		if (resp.type == ResponseType.FAILURE) {
 			return new TransactionResult(resp.errorMessage, false);
 		}
 		return new TransactionResult("Completed", true);
@@ -86,9 +86,9 @@ public class VaultEconomy{
 	 * @param amount the amount
 	 * @return the result
 	 */
-	public TransactionResult subtract(String player, double amount){
+	public TransactionResult subtract(String player, double amount) {
 		EconomyResponse resp = economy.withdrawPlayer(player, amount);
-		if(resp.type == ResponseType.FAILURE){
+		if (resp.type == ResponseType.FAILURE) {
 			return new TransactionResult(resp.errorMessage, false);
 		}
 		return new TransactionResult("Completed", true);
@@ -100,7 +100,7 @@ public class VaultEconomy{
 	 * @param player the player
 	 * @return true if the tab feature will be required by the player
 	 */
-	public boolean requiresTab(String player){
+	public boolean requiresTab(String player) {
 		return getBalance(player) <= 0;
 	}
 
@@ -110,7 +110,7 @@ public class VaultEconomy{
 	 * @param player the player
 	 * @return the balance
 	 */
-	public double getBalance(String player){
+	public double getBalance(String player) {
 		return economy.getBalance(player);
 	}
 
@@ -120,7 +120,7 @@ public class VaultEconomy{
 	 * @param amount the amount
 	 * @return the amount as a string
 	 */
-	public String format(double amount){
+	public String format(double amount) {
 		return economy.format(amount);
 	}
 

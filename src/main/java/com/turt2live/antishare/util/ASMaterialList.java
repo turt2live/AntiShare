@@ -27,9 +27,9 @@ import com.turt2live.antishare.io.ItemMap;
  * 
  * @author turt2live
  */
-public class ASMaterialList{
+public class ASMaterialList {
 
-	public static class ASMaterial{
+	public static class ASMaterial {
 		public int id = 0;
 		public short data = -1; // -1 = any
 		public String name = "Unknown";
@@ -44,13 +44,13 @@ public class ASMaterialList{
 	 */
 	@SuppressWarnings ("deprecation")
 	// TODO: Magic value
-	public ASMaterialList(List<?> strings){
-		if(strings == null){
+	public ASMaterialList(List<?> strings) {
+		if (strings == null) {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		AntiShare p = AntiShare.p;
-		for(Object o : strings){
-			if(!(o instanceof String)){
+		for (Object o : strings) {
+			if (!(o instanceof String)) {
 				continue;
 			}
 			String s = (String) o;
@@ -58,8 +58,8 @@ public class ASMaterialList{
 			String testString = s.toLowerCase().replace(" ", "");
 			boolean negate = s.startsWith("-");
 			s = negate ? (s.replaceFirst("-", "").trim()) : s;
-			if(s.equalsIgnoreCase("all")){
-				for(Material m : Material.values()){
+			if (s.equalsIgnoreCase("all")) {
+				for (Material m : Material.values()) {
 					ASMaterial asm = new ASMaterial();
 					asm.id = m.getId();
 					asm.data = -1;
@@ -67,45 +67,45 @@ public class ASMaterialList{
 					add(asm, negate);
 				}
 				continue;
-			}else if(s.equalsIgnoreCase("none")){
+			} else if (s.equalsIgnoreCase("none")) {
 				listing.clear();
 				continue;
-			}else if(testString.equalsIgnoreCase("furnace") || testString.equalsIgnoreCase("burningfurnace")
+			} else if (testString.equalsIgnoreCase("furnace") || testString.equalsIgnoreCase("burningfurnace")
 					|| testString.equalsIgnoreCase(String.valueOf(Material.FURNACE.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))){
+					|| testString.equalsIgnoreCase(String.valueOf(Material.BURNING_FURNACE.getId()))) {
 				add(Material.FURNACE, negate);
 				add(Material.BURNING_FURNACE, negate);
 				continue;
-			}else if(testString.equalsIgnoreCase("sign") || testString.equalsIgnoreCase("wallsign") || testString.equalsIgnoreCase("signpost")
+			} else if (testString.equalsIgnoreCase("sign") || testString.equalsIgnoreCase("wallsign") || testString.equalsIgnoreCase("signpost")
 					|| testString.equalsIgnoreCase(String.valueOf(Material.SIGN.getId()))
 					|| testString.equalsIgnoreCase(String.valueOf(Material.WALL_SIGN.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))){
+					|| testString.equalsIgnoreCase(String.valueOf(Material.SIGN_POST.getId()))) {
 				add(Material.SIGN, negate);
 				add(Material.WALL_SIGN, negate);
 				add(Material.SIGN_POST, negate);
 				continue;
-			}else if(testString.equalsIgnoreCase("brewingstand") || testString.equalsIgnoreCase("brewingstanditem")
+			} else if (testString.equalsIgnoreCase("brewingstand") || testString.equalsIgnoreCase("brewingstanditem")
 					|| testString.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))){
+					|| testString.equalsIgnoreCase(String.valueOf(Material.BREWING_STAND_ITEM.getId()))) {
 				add(Material.BREWING_STAND, negate);
 				add(Material.BREWING_STAND_ITEM, negate);
 				continue;
-			}else if(testString.equalsIgnoreCase("endportal") || testString.equalsIgnoreCase("enderframe") || testString.equalsIgnoreCase("endframe")
+			} else if (testString.equalsIgnoreCase("endportal") || testString.equalsIgnoreCase("enderframe") || testString.equalsIgnoreCase("endframe")
 					|| testString.equalsIgnoreCase("enderportal") || testString.equalsIgnoreCase("endportalframe") || testString.equalsIgnoreCase("enderportalframe")
 					|| testString.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL_FRAME.getId()))){
+					|| testString.equalsIgnoreCase(String.valueOf(Material.ENDER_PORTAL_FRAME.getId()))) {
 				add(Material.ENDER_PORTAL, negate);
 				add(Material.ENDER_PORTAL_FRAME, negate);
 				continue;
-			}else if(testString.equalsIgnoreCase("skull") || testString.equalsIgnoreCase("skullitem") || testString.equalsIgnoreCase("mobskull")
+			} else if (testString.equalsIgnoreCase("skull") || testString.equalsIgnoreCase("skullitem") || testString.equalsIgnoreCase("mobskull")
 					|| testString.equalsIgnoreCase(String.valueOf(Material.SKULL.getId()))
-					|| testString.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))){
+					|| testString.equalsIgnoreCase(String.valueOf(Material.SKULL_ITEM.getId()))) {
 				add(Material.SKULL, negate);
 				add(Material.SKULL_ITEM, negate);
 				continue;
 			}
 			ASMaterial asm = ItemMap.get(s);
-			if(asm == null){
+			if (asm == null) {
 				p.getLogger().warning(p.getMessages().getMessage("unknown-material", s));
 				continue;
 			}
@@ -113,23 +113,23 @@ public class ASMaterialList{
 		}
 	}
 
-	void add(ASMaterial m, boolean negate){
+	void add(ASMaterial m, boolean negate) {
 		List<ASMaterial> materials = new ArrayList<ASMaterial>();
-		if(negate && m.data < 0){
+		if (negate && m.data < 0) {
 			listing.remove(m.id);
 			return;
 		}
-		if(!negate){
+		if (!negate) {
 			materials.add(m);
 		}
-		if(listing.containsKey(m.id)){
-			if(negate){
-				for(ASMaterial m2 : listing.get(m.id)){
-					if(m.data != m2.data){
+		if (listing.containsKey(m.id)) {
+			if (negate) {
+				for (ASMaterial m2 : listing.get(m.id)) {
+					if (m.data != m2.data) {
 						materials.add(m2);
 					}
 				}
-			}else{
+			} else {
 				materials.addAll(listing.get(m.id));
 			}
 		}
@@ -138,7 +138,7 @@ public class ASMaterialList{
 
 	@SuppressWarnings ("deprecation")
 	// TODO: Magic value
-	void add(Material m, boolean negate){
+	void add(Material m, boolean negate) {
 		ASMaterial asm = new ASMaterial();
 		asm.id = m.getId();
 		asm.data = -1;
@@ -154,8 +154,8 @@ public class ASMaterialList{
 	 */
 	@SuppressWarnings ("deprecation")
 	// TODO: Magic value
-	public boolean has(Material material){
-		if(material == null){
+	public boolean has(Material material) {
+		if (material == null) {
 			return false;
 		}
 		return listing.containsKey(material.getId());
@@ -169,8 +169,8 @@ public class ASMaterialList{
 	 */
 	@SuppressWarnings ("deprecation")
 	// TODO: Magic value
-	public boolean has(Block block){
-		if(block == null){
+	public boolean has(Block block) {
+		if (block == null) {
 			return false;
 		}
 		Material material = block.getType();
@@ -184,8 +184,8 @@ public class ASMaterialList{
 	 * @param item the item
 	 * @return true if found
 	 */
-	public boolean has(ItemStack item){
-		if(item == null){
+	public boolean has(ItemStack item) {
+		if (item == null) {
 			return false;
 		}
 		Material material = item.getType();
@@ -195,13 +195,13 @@ public class ASMaterialList{
 
 	@SuppressWarnings ("deprecation")
 	// TODO: Magic value
-	private boolean find(Material material, short data){
+	private boolean find(Material material, short data) {
 		List<ASMaterial> asMaterials = listing.get(material.getId());
-		if(asMaterials == null){
+		if (asMaterials == null) {
 			return false;
 		}
-		for(ASMaterial m : asMaterials){
-			if(m.id == material.getId() && (m.data == data || m.data < 0)){
+		for (ASMaterial m : asMaterials) {
+			if (m.id == material.getId() && (m.data == data || m.data < 0)) {
 				return true;
 			}
 		}

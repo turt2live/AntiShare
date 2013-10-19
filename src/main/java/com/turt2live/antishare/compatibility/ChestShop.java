@@ -23,24 +23,24 @@ import com.turt2live.antishare.compatibility.type.BlockProtection;
  * 
  * @author turt2live
  */
-public class ChestShop extends BlockProtection{
+public class ChestShop extends BlockProtection {
 
 	@Override
-	public boolean isProtected(Block block){
+	public boolean isProtected(Block block) {
 		Sign protection = getSign(block);
 		return protection != null && ChestShopSign.isValid(protection);
 	}
 
 	@Override
-	public boolean canAccess(Player player, Block block){
+	public boolean canAccess(Player player, Block block) {
 		return hasSign(block) ? isProtected(block) ? ChestShopSign.canAccess(player, getSign(block)) : true : true;
 	}
 
-	private boolean hasSign(Block block){
+	private boolean hasSign(Block block) {
 		return getSign(block) != null;
 	}
 
-	private Sign getSign(Block block){
+	private Sign getSign(Block block) {
 		return uBlock.findAnyNearbyShopSign(block);
 	}
 

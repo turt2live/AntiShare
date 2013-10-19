@@ -24,14 +24,14 @@ import com.turt2live.antishare.io.GameModeIdentity;
  * 
  * @author turt2live
  */
-public class ASInventory implements Cloneable{
+public class ASInventory implements Cloneable {
 
 	/**
 	 * Inventory type
 	 * 
 	 * @author turt2live
 	 */
-	public static enum InventoryType{
+	public static enum InventoryType {
 		PLAYER("players"),
 		REGION("regions"),
 		TEMPORARY("temporary"),
@@ -39,7 +39,7 @@ public class ASInventory implements Cloneable{
 
 		private String relativeFolderName;
 
-		private InventoryType(String relativeFolderName){
+		private InventoryType(String relativeFolderName) {
 			this.relativeFolderName = relativeFolderName;
 		}
 
@@ -48,7 +48,7 @@ public class ASInventory implements Cloneable{
 		 * 
 		 * @return the folder
 		 */
-		public String getRelativeFolderName(){
+		public String getRelativeFolderName() {
 			return relativeFolderName;
 		}
 	}
@@ -66,7 +66,7 @@ public class ASInventory implements Cloneable{
 	public final InventoryType type;
 	final Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
 
-	ASInventory(GameMode gamemode, String owner, String world, InventoryType type){
+	ASInventory(GameMode gamemode, String owner, String world, InventoryType type) {
 		this.gamemode = gamemode;
 		this.owner = owner;
 		this.world = world;
@@ -79,7 +79,7 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @return the contents as an array
 	 */
-	public ItemStack[] getContents(){
+	public ItemStack[] getContents() {
 		return getContents(true, true);
 	}
 
@@ -91,25 +91,25 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @return the contents as an array
 	 */
-	public ItemStack[] getContents(boolean core, boolean armor){
+	public ItemStack[] getContents(boolean core, boolean armor) {
 		ItemStack[] array = new ItemStack[SIZE];
-		if(core && armor){
-			for(Integer slot : items.keySet()){
+		if (core && armor) {
+			for (Integer slot : items.keySet()) {
 				array[slot] = items.get(slot);
 			}
-		}else if(core && !armor){
+		} else if (core && !armor) {
 			int size = type == InventoryType.ENDER ? 27 : SIZE - 4;
 			array = new ItemStack[size];
-			for(Integer slot : items.keySet()){
-				if(slot >= size){
+			for (Integer slot : items.keySet()) {
+				if (slot >= size) {
 					continue;
 				}
 				array[slot] = items.get(slot);
 			}
-		}else if(!core && armor){
+		} else if (!core && armor) {
 			array = new ItemStack[4];
-			for(Integer slot : items.keySet()){
-				if(slot < SIZE - 4){
+			for (Integer slot : items.keySet()) {
+				if (slot < SIZE - 4) {
 					continue;
 				}
 				array[slot - (SIZE - 4)] = items.get(slot);
@@ -123,8 +123,8 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @param items the items
 	 */
-	public void setContents(ItemStack[] items){
-		for(int i = 0; i < items.length; i++){
+	public void setContents(ItemStack[] items) {
+		for (int i = 0; i < items.length; i++) {
 			set(i, items[i]);
 		}
 	}
@@ -135,7 +135,7 @@ public class ASInventory implements Cloneable{
 	 * @param slot the slot (any number, outside of 36+4 is ignored)
 	 * @param item the item
 	 */
-	public void set(int slot, ItemStack item){
+	public void set(int slot, ItemStack item) {
 		items.put(slot, item);
 	}
 
@@ -144,17 +144,17 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @param inventory the inventory to clone
 	 */
-	public void clone(Inventory inventory){
+	public void clone(Inventory inventory) {
 		items.clear();
-		if(inventory instanceof PlayerInventory){
+		if (inventory instanceof PlayerInventory) {
 			PlayerInventory playerInv = (PlayerInventory) inventory;
 			ItemStack[] armor = playerInv.getArmorContents();
-			for(int i = 0; i < armor.length; i++){
+			for (int i = 0; i < armor.length; i++) {
 				set(36 + i, armor[i]);
 			}
 		}
 		ItemStack[] contents = inventory.getContents();
-		for(int i = 0; i < contents.length; i++){
+		for (int i = 0; i < contents.length; i++) {
 			set(i, contents[i]);
 		}
 	}
@@ -164,17 +164,17 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @param inventory the inventory to clone
 	 */
-	public void clone(ASInventory inventory){
+	public void clone(ASInventory inventory) {
 		items.clear();
-		if(inventory instanceof PlayerInventory){
+		if (inventory instanceof PlayerInventory) {
 			PlayerInventory playerInv = (PlayerInventory) inventory;
 			ItemStack[] armor = playerInv.getArmorContents();
-			for(int i = 0; i < armor.length; i++){
+			for (int i = 0; i < armor.length; i++) {
 				set(36 + i, armor[i]);
 			}
 		}
 		ItemStack[] contents = inventory.getContents();
-		for(int i = 0; i < contents.length; i++){
+		for (int i = 0; i < contents.length; i++) {
 			set(i, contents[i]);
 		}
 	}
@@ -184,8 +184,8 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @param item the item
 	 */
-	public void fill(ItemStack item){
-		for(int i = 0; i < SIZE; i++){
+	public void fill(ItemStack item) {
+		for (int i = 0; i < SIZE; i++) {
 			set(i, item.clone());
 		}
 	}
@@ -195,15 +195,15 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @param inventory the inventory to set to
 	 */
-	public void setTo(Inventory inventory){
+	public void setTo(Inventory inventory) {
 		inventory.clear();
-		if(inventory instanceof PlayerInventory){
+		if (inventory instanceof PlayerInventory) {
 			((PlayerInventory) inventory).setArmorContents(null);
 		}
 		ItemStack[] armor = getContents(false, true);
 		ItemStack[] contents = getContents(true, false);
 		inventory.setContents(contents);
-		if(inventory instanceof PlayerInventory){
+		if (inventory instanceof PlayerInventory) {
 			((PlayerInventory) inventory).setArmorContents(armor);
 		}
 	}
@@ -213,10 +213,10 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @return true if empty
 	 */
-	public boolean isEmpty(){
-		for(int slot : items.keySet()){
+	public boolean isEmpty() {
+		for (int slot : items.keySet()) {
 			ItemStack item = items.get(slot);
-			if(!(item == null || item.getType() == Material.AIR)){
+			if (!(item == null || item.getType() == Material.AIR)) {
 				return false;
 			}
 		}
@@ -229,26 +229,26 @@ public class ASInventory implements Cloneable{
 	/* TODO: Eventual plans:
 	 * - Save to 'regions' (Multiple players per file). 1 person ~= 150kb. ~7 people per file
 	 */
-	public void save(){
+	public void save() {
 		checkDataFolder();
-		if(type == InventoryType.PLAYER || type == InventoryType.ENDER){
-			if(!GameModeIdentity.hasChangedGameMode(owner)){
+		if (type == InventoryType.PLAYER || type == InventoryType.ENDER) {
+			if (!GameModeIdentity.hasChangedGameMode(owner)) {
 				return; // Don't save if they haven't changed Game Mode yet
 			}
 		}
 		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + owner + ".json");
 		JsonConfiguration yaml = new JsonConfiguration();
-		try{
-			if(!file.exists()){
+		try {
+			if (!file.exists()) {
 				file.createNewFile();
 			}
 			yaml.load(file);
 			yaml.set(owner + "." + world + "." + gamemode.name(), getContents());
 			yaml.set("version", VERSION);
 			yaml.save(file);
-		}catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
-		}catch(InvalidConfigurationException e){
+		} catch(InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 	}
@@ -262,34 +262,34 @@ public class ASInventory implements Cloneable{
 	 * @param world the world name to load
 	 * @return the loaded inventory. Will never be null.
 	 */
-	public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world){
+	public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world) {
 		checkDataFolder();
 		File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".json");
 		ASInventory inventory = new ASInventory(gamemode, player, world, type);
 		JsonConfiguration json = new JsonConfiguration();
-		try{
-			if(!file.exists()){
+		try {
+			if (!file.exists()) {
 				return inventory; // Empty inventory
 			}
 			json.load(file);
 			String version = json.getString("version");
-			if(version == null){
+			if (version == null) {
 				return inventory; // Empty inventory
-			}else if(version.equalsIgnoreCase("2")){
+			} else if (version.equalsIgnoreCase("2")) {
 				Object something = json.get(player + "." + world + "." + gamemode.name());
-				if(something instanceof List){
+				if (something instanceof List) {
 					List<?> objects = (List<?>) something;
-					for(int i = 0; i < objects.size(); i++){
+					for (int i = 0; i < objects.size(); i++) {
 						Object entry = objects.get(i);
-						if(entry instanceof ItemStack){
+						if (entry instanceof ItemStack) {
 							inventory.set(i, (ItemStack) entry);
 						}
 					}
 				}
 			}
-		}catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
-		}catch(InvalidConfigurationException e){
+		} catch(InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 		return inventory;
@@ -302,13 +302,13 @@ public class ASInventory implements Cloneable{
 	 * @param type the type
 	 * @return a list of inventories, never null
 	 */
-	public static List<ASInventory> getAll(String playerName, InventoryType type){
+	public static List<ASInventory> getAll(String playerName, InventoryType type) {
 		List<ASInventory> invs = new ArrayList<ASInventory>();
 		ASInventory i = null;
-		for(World world : AntiShare.p.getServer().getWorlds()){
-			for(GameMode gamemode : GameMode.values()){
+		for (World world : AntiShare.p.getServer().getWorlds()) {
+			for (GameMode gamemode : GameMode.values()) {
 				i = load(playerName, gamemode, type, world.getName());
-				if(!i.isEmpty()){ // Never null
+				if (!i.isEmpty()) { // Never null
 					invs.add(i);
 				}
 			}
@@ -325,7 +325,7 @@ public class ASInventory implements Cloneable{
 	 * @param type the inventory type
 	 * @return an empty inventory
 	 */
-	public static ASInventory createEmptyInventory(String playerName, String worldName, GameMode gamemode, InventoryType type){
+	public static ASInventory createEmptyInventory(String playerName, String worldName, GameMode gamemode, InventoryType type) {
 		return new ASInventory(gamemode, playerName, worldName, type);
 	}
 
@@ -334,41 +334,41 @@ public class ASInventory implements Cloneable{
 	 * 
 	 * @return the data folder
 	 */
-	public static File getDataFolder(){
+	public static File getDataFolder() {
 		checkDataFolder();
 		return DATA_FOLDER;
 	}
 
-	private static void checkDataFolder(){
+	private static void checkDataFolder() {
 		File archiveFolder = new File(AntiShare.p.getDataFolder(), "archive" + File.separator + "inventories");
-		if(DATA_FOLDER == null){
+		if (DATA_FOLDER == null) {
 			DATA_FOLDER = new File(AntiShare.p.getDataFolder(), "data" + File.separator + "inventories");
 		}
-		if(!DATA_FOLDER.exists()){
+		if (!DATA_FOLDER.exists()) {
 			DATA_FOLDER.mkdirs();
 		}
-		if(!archiveFolder.exists()){
+		if (!archiveFolder.exists()) {
 			archiveFolder.mkdirs();
 		}
-		for(InventoryType type : InventoryType.values()){
+		for (InventoryType type : InventoryType.values()) {
 			File f = new File(DATA_FOLDER, type.getRelativeFolderName());
-			if(!f.exists()){
+			if (!f.exists()) {
 				f.mkdirs();
 			}
 			f = new File(archiveFolder, type.getRelativeFolderName());
-			if(!f.exists()){
+			if (!f.exists()) {
 				f.mkdirs();
 			}
 		}
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return "ASInventory [gamemode=" + gamemode + ", owner=" + owner + ", world=" + world + ", type=" + type + ", items=" + items + "]";
 	}
 
 	@Override
-	public ASInventory clone(){
+	public ASInventory clone() {
 		ASInventory inventory = new ASInventory(gamemode, owner, world, type);
 		inventory.setContents(getContents());
 		return inventory;

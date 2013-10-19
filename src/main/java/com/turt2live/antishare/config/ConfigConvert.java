@@ -27,27 +27,27 @@ import com.turt2live.antishare.util.ASUtils;
  * 
  * @author turt2live
  */
-public class ConfigConvert{
+public class ConfigConvert {
 
 	/**
 	 * Does the actual conversion.<br>
 	 * <i>This does attempt to look for 5.4.0-BETA keys that may exist</i>
 	 */
-	public static void doConvert(){
+	public static void doConvert() {
 		AntiShare p = AntiShare.p;
 
 		File config = new File(p.getDataFolder(), "config.yml");
 
-		if(!config.exists()){
+		if (!config.exists()) {
 			return; // Fresh install
 		}
 
 		File original = new File(p.getDataFolder(), "config-backup-temp.yml");
 
-		try{
+		try {
 			ASUtils.copyFile(config, new File(p.getDataFolder(), "config-backup.yml"));
 			ASUtils.copyFile(config, original);
-		}catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 
@@ -57,7 +57,7 @@ public class ConfigConvert{
 		c.load();
 		o.load();
 
-		if(o.getString("other.version_string") != null){
+		if (o.getString("other.version_string") != null) {
 			original.delete();
 			return; // Already converted!
 		}
@@ -85,13 +85,13 @@ public class ConfigConvert{
 
 		// Convert crafted mobs
 		List<String> mobs = new ArrayList<String>();
-		if(o.getBoolean("enabled-features.mob-creation.allow-snow-golems")){
+		if (o.getBoolean("enabled-features.mob-creation.allow-snow-golems")) {
 			mobs.add("snow golem");
 		}
-		if(o.getBoolean("enabled-features.mob-creation.allow-iron-golems")){
+		if (o.getBoolean("enabled-features.mob-creation.allow-iron-golems")) {
 			mobs.add("iron golem");
 		}
-		if(o.getBoolean("enabled-features.mob-creation.allow-wither")){
+		if (o.getBoolean("enabled-features.mob-creation.allow-wither")) {
 			mobs.add("wither");
 		}
 		c.set("lists.craft-mob", mobs);
@@ -151,13 +151,13 @@ public class ConfigConvert{
 		p.getLogger().warning("=========================");
 	}
 
-	private static List<String> convertList(String raw){
+	private static List<String> convertList(String raw) {
 		List<String> l = new ArrayList<String>();
-		if(raw == null){
+		if (raw == null) {
 			return null;
 		}
 		String[] parts = raw.split(",");
-		for(String s : parts){
+		for (String s : parts) {
 			s = s.trim();
 			l.add(s);
 		}

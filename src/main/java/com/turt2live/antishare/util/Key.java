@@ -10,7 +10,7 @@ import org.bukkit.entity.EntityType;
  * 
  * @author turt2live
  */
-public class Key{
+public class Key {
 
 	/**
 	 * Generates a key class for a location (block)
@@ -19,7 +19,7 @@ public class Key{
 	 * @param gamemode the gamemode of the block
 	 * @return the generated Key object
 	 */
-	public static Key generate(Location location, GameMode gamemode){
+	public static Key generate(Location location, GameMode gamemode) {
 		return new Key(location.getBlockX(), location.getBlockY(), location.getBlockZ(), gamemode);
 	}
 
@@ -31,7 +31,7 @@ public class Key{
 	 * @param entity the entity itself, cannot be null here
 	 * @return the generated Key object
 	 */
-	public static Key generate(Location location, GameMode gamemode, EntityType entity){
+	public static Key generate(Location location, GameMode gamemode, EntityType entity) {
 		return new Key(location.getBlockX(), location.getBlockY(), location.getBlockZ(), gamemode, entity);
 	}
 
@@ -56,7 +56,7 @@ public class Key{
 	 * @param z the z position
 	 * @param gamemode the gamemode of the block
 	 */
-	public Key(int x, int y, int z, GameMode gamemode){
+	public Key(int x, int y, int z, GameMode gamemode) {
 		this(x, y, z, gamemode, null);
 	}
 
@@ -69,7 +69,7 @@ public class Key{
 	 * @param gamemode the gamemode of the entity
 	 * @param entity the entity itself, cannot be null here
 	 */
-	public Key(int x, int y, int z, GameMode gamemode, EntityType entity){
+	public Key(int x, int y, int z, GameMode gamemode, EntityType entity) {
 		this.entity = entity;
 		this.x = x;
 		this.y = y;
@@ -83,12 +83,12 @@ public class Key{
 	 * @param world the world, can be null
 	 * @return the location
 	 */
-	public Location toLocation(World world){
+	public Location toLocation(World world) {
 		return new Location(world, x, y, z);
 	}
 
 	@Override
-	public int hashCode(){
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((entity == null) ? 0 : entity.hashCode());
@@ -100,8 +100,8 @@ public class Key{
 	}
 
 	@Override
-	public boolean equals(Object object){
-		if(object instanceof Key){
+	public boolean equals(Object object) {
+		if (object instanceof Key) {
 			Key other = (Key) object;
 			return this.x == other.x && this.y == other.y && this.z == other.z && this.gamemode == other.gamemode && this.entity == other.entity;
 		}

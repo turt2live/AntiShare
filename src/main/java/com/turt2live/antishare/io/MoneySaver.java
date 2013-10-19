@@ -14,7 +14,7 @@ import org.bukkit.GameMode;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 
-public class MoneySaver extends GenericDataFile{
+public class MoneySaver extends GenericDataFile {
 
 	/**
 	 * Gets the balance for a player
@@ -23,7 +23,7 @@ public class MoneySaver extends GenericDataFile{
 	 * @param gamemode the gamemode to get the balance for
 	 * @return a double (balance). If not found this will return 0
 	 */
-	public static double getLevel(String player, GameMode gamemode){
+	public static double getLevel(String player, GameMode gamemode) {
 		EnhancedConfiguration yaml = getFile("balance");
 		double balance = yaml.getDouble(player + "." + gamemode.name(), 0.0);
 		return balance;
@@ -36,8 +36,8 @@ public class MoneySaver extends GenericDataFile{
 	 * @param gamemode the gamemode to save as
 	 * @param balance the balance to save
 	 */
-	public static void saveLevel(String player, GameMode gamemode, double balance){
-		if(balance <= 0){
+	public static void saveLevel(String player, GameMode gamemode, double balance) {
+		if (balance <= 0) {
 			return;
 		}
 		EnhancedConfiguration yaml = getFile("balance");

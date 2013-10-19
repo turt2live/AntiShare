@@ -25,13 +25,13 @@ import com.turt2live.antishare.util.ASMaterialList;
  * 
  * @author turt2live
  */
-public class ASConfig{
+public class ASConfig {
 
-	public static class InventoryCleanupSettings{
+	public static class InventoryCleanupSettings {
 		public final boolean archive, enabled, removeOldWorlds;
 		public final int after;
 
-		InventoryCleanupSettings(boolean enabled, boolean archive, int after, boolean removeOldWorlds){
+		InventoryCleanupSettings(boolean enabled, boolean archive, int after, boolean removeOldWorlds) {
 			this.archive = archive;
 			this.enabled = enabled;
 			this.after = after;
@@ -39,17 +39,17 @@ public class ASConfig{
 		}
 	}
 
-	public static class CooldownSettings{
+	public static class CooldownSettings {
 		public final boolean enabled;
 		public final int seconds;
 
-		CooldownSettings(boolean enabled, int seconds){
+		CooldownSettings(boolean enabled, int seconds) {
 			this.enabled = enabled;
 			this.seconds = seconds;
 		}
 	}
 
-	public static class NaturalSettings{
+	public static class NaturalSettings {
 		public final boolean allowMismatchedGM;
 		public final boolean breakAsPiston, breakAsAttached, breakAsWater, breakAsBomb;
 		public final boolean emptyInventories;
@@ -58,7 +58,7 @@ public class ASConfig{
 		public final boolean spreading;
 
 		NaturalSettings(boolean spreading, boolean mismatch, boolean piston, boolean attached, boolean water, boolean bombs,
-				boolean empty, boolean removeAttached, boolean breakSand){
+				boolean empty, boolean removeAttached, boolean breakSand) {
 			this.allowMismatchedGM = mismatch;
 			this.breakAsPiston = piston;
 			this.breakAsAttached = attached;
@@ -71,10 +71,10 @@ public class ASConfig{
 		}
 	}
 
-	public static class GameModeChangeSettings{
+	public static class GameModeChangeSettings {
 		public final boolean changeLevel, changeBalance, changeInventory, changeEnder, changePotionEffects;
 
-		GameModeChangeSettings(boolean level, boolean balance, boolean inventory, boolean ender, boolean effects){
+		GameModeChangeSettings(boolean level, boolean balance, boolean inventory, boolean ender, boolean effects) {
 			this.changeBalance = balance;
 			this.changeEnder = ender;
 			this.changeInventory = inventory;
@@ -83,29 +83,29 @@ public class ASConfig{
 		}
 	}
 
-	public static class InteractionSettings{
+	public static class InteractionSettings {
 		public final boolean deny, drop;
 
-		InteractionSettings(boolean deny, boolean drop){
+		InteractionSettings(boolean deny, boolean drop) {
 			this.deny = deny;
 			this.drop = drop;
 		}
 	}
 
-	public static class NotifySettings{
+	public static class NotifySettings {
 		public final boolean enabled, admins, console;
 
-		NotifySettings(boolean enabled, boolean admins, boolean console){
+		NotifySettings(boolean enabled, boolean admins, boolean console) {
 			this.enabled = enabled;
 			this.admins = admins;
 			this.console = console;
 		}
 	}
 
-	public static class FeatureSettings{
+	public static class FeatureSettings {
 		public final boolean inventories, fines;
 
-		FeatureSettings(boolean inventories, boolean fines){
+		FeatureSettings(boolean inventories, boolean fines) {
 			this.inventories = inventories;
 			this.fines = fines;
 		}
@@ -127,7 +127,7 @@ public class ASConfig{
 
 	private AntiShare p = AntiShare.p;
 
-	public ASConfig(EnhancedConfiguration regionConfig, EnhancedConfiguration worldConfig){
+	public ASConfig(EnhancedConfiguration regionConfig, EnhancedConfiguration worldConfig) {
 		LayeredConfig layer = new LayeredConfig(regionConfig, worldConfig, p.getConfig());
 		layer.loadAll();
 		rawConfiguration = regionConfig == null ? (worldConfig == null ? p.getConfig() : worldConfig) : regionConfig;
@@ -209,14 +209,14 @@ public class ASConfig{
 				(layer.configFor("settings.features.use-fines-rewards", false)).getBoolean("settings.features.use-fines-rewards"));
 	}
 
-	private List<String> toStringList(List<?> list){
+	private List<String> toStringList(List<?> list) {
 		List<String> strings = new ArrayList<String>();
-		for(Object o : list){
-			if(!(o instanceof String)){
+		for (Object o : list) {
+			if (!(o instanceof String)) {
 				continue;
 			}
 			String s = ((String) o).toLowerCase();
-			if(s.startsWith("/")){
+			if (s.startsWith("/")) {
 				s = s.substring(1);
 			}
 			strings.add(s);
@@ -224,39 +224,39 @@ public class ASConfig{
 		return Collections.unmodifiableList(strings);
 	}
 
-	private List<EntityType> stringToEntityList(List<?> list){
+	private List<EntityType> stringToEntityList(List<?> list) {
 		List<EntityType> entities = new ArrayList<EntityType>();
-		for(Object o : list){
-			if(!(o instanceof String)){
+		for (Object o : list) {
+			if (!(o instanceof String)) {
 				continue;
 			}
 			String string = (String) o;
 			string = string.trim();
-			if(string.equalsIgnoreCase("all")){
+			if (string.equalsIgnoreCase("all")) {
 				entities.clear();
-				for(EntityType e : EntityType.values()){
+				for (EntityType e : EntityType.values()) {
 					entities.add(e);
 				}
 				break;
-			}else if(string.equalsIgnoreCase("none")){
+			} else if (string.equalsIgnoreCase("none")) {
 				entities.clear();
 				break;
 			}
 			String modified = string.toLowerCase().replace(" ", "");
-			if(modified.equalsIgnoreCase("irongolem")){
+			if (modified.equalsIgnoreCase("irongolem")) {
 				modified = "villagergolem";
-			}else if(modified.equalsIgnoreCase("snowgolem")){
+			} else if (modified.equalsIgnoreCase("snowgolem")) {
 				modified = "snowman";
-			}else if(modified.equalsIgnoreCase("wither")){
+			} else if (modified.equalsIgnoreCase("wither")) {
 				modified = "witherboss";
-			}else if(modified.equalsIgnoreCase("players") || modified.equalsIgnoreCase("player")){
+			} else if (modified.equalsIgnoreCase("players") || modified.equalsIgnoreCase("player")) {
 				entities.add(EntityType.PLAYER);
 				continue;
 			}
 			@SuppressWarnings ("deprecation")
 			// TODO: Magic value
 			EntityType entity = EntityType.fromName(modified);
-			if(entity == null){
+			if (entity == null) {
 				p.getLogger().warning(p.getMessages().getMessage("unknown-entity", string));
 				continue;
 			}
