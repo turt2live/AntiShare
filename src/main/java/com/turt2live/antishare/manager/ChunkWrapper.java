@@ -301,14 +301,14 @@ public class ChunkWrapper {
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
-			if (clear) {
-				this.adventureBlocks.clear();
-				this.adventureEntities.clear();
-				this.creativeBlocks.clear();
-				this.creativeEntities.clear();
-				this.survivalBlocks.clear();
-				this.survivalEntities.clear();
-			}
+		}
+		if (clear) {
+			this.adventureBlocks.clear();
+			this.adventureEntities.clear();
+			this.creativeBlocks.clear();
+			this.creativeEntities.clear();
+			this.survivalBlocks.clear();
+			this.survivalEntities.clear();
 		}
 		if (load) {
 			load(true);
