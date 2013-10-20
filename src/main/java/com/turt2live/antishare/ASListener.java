@@ -255,7 +255,7 @@ public class ASListener implements Listener {
 		}
 
 		// Implement cooldown if needed
-		if (plugin.settings().cooldownSettings.enabled && !player.hasPermission(PermissionNodes.NO_GAMEMODE_COOLDOWN)) {
+		if (!player.hasMetadata("antishare-regionleave") || plugin.settings().cooldownSettings.enabled && !player.hasPermission(PermissionNodes.NO_GAMEMODE_COOLDOWN)) {
 			long time = (long) Math.abs(plugin.settings().cooldownSettings.seconds) * 1000;
 			long now = System.currentTimeMillis();
 			if (time > 0) {
@@ -276,6 +276,11 @@ public class ASListener implements Listener {
 					gamemodeCooldowns.put(player.getName(), now);
 				}
 			}
+		}
+
+		// Fixes #105
+		if (player.hasMetadata("antishare-regionleave")) {
+			player.removeMetadata("antishare-regionleave", plugin);
 		}
 
 		// Change level if needed

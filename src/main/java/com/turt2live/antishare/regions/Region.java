@@ -419,6 +419,8 @@ public class Region {
 		if (!player.hasPermission(PermissionNodes.REGION_ROAM)) {
 			gamemodes.put(player.getName(), player.getGameMode());
 			if (player.getGameMode() != gamemode) {
+				// Tag the player so the Game Mode listener knows to ignore them
+				player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
 				player.setGameMode(gamemode);
 			}
 			if (inventory != null) {
@@ -438,6 +440,8 @@ public class Region {
 		if (!player.hasPermission(PermissionNodes.REGION_ROAM)) {
 			gamemodes.put(player.getName(), player.getGameMode());
 			if (player.getGameMode() != gamemode) {
+				// Tag the player so the Game Mode listener knows to ignore them
+				player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
 				player.setGameMode(gamemode);
 			}
 			if (inventory != null) {
@@ -462,14 +466,13 @@ public class Region {
 		plugin.getMessages().sendTo(player, playerMessage, true);
 		plugin.getMessages().notifyParties(player, Action.EXIT_REGION, false, getName()); // Player name is applied because player message is ignored
 
-		// Tag the player so the Game Mode listener knows to ignore them
-		player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
-
 		// Reset the player
 		if (!player.hasPermission(PermissionNodes.REGION_ROAM)) {
 			if (inventory != null) {
 				plugin.getInventoryManager().removeFromTemporary(player);
 			}
+			// Tag the player so the Game Mode listener knows to ignore them
+			player.setMetadata("antishare-regionleave", new FixedMetadataValue(plugin, true));
 			player.setGameMode(gamemodes.get(player.getName()) == null ? player.getGameMode() : gamemodes.get(player.getName()));
 		}
 	}
@@ -484,6 +487,7 @@ public class Region {
 		File saveFile = new File(REGION_INFORMATION, ASUtils.fileSafeName(name) + ".yml");
 		if (!saveFile.exists()) {
 			try {
+				saveFile.getParentFile().mkdirs();
 				saveFile.createNewFile();
 			} catch(IOException e) {
 				e.printStackTrace();
