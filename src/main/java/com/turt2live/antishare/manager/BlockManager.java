@@ -156,7 +156,7 @@ public class BlockManager {
 		ChunkWrapper wrapper = wrappers.get(key);
 		if (wrapper != null) {
 			wrapper.save(false, false);
-			wrappers.remove(wrapper);
+			wrappers.remove(key);
 		}
 	}
 
