@@ -49,7 +49,7 @@ public class ASMaterialList {
 			throw new IllegalArgumentException("Null arguments are not allowed");
 		}
 		AntiShare p = AntiShare.p;
-		for (Object o : strings) {
+		for(Object o : strings) {
 			if (!(o instanceof String)) {
 				continue;
 			}
@@ -59,7 +59,7 @@ public class ASMaterialList {
 			boolean negate = s.startsWith("-");
 			s = negate ? (s.replaceFirst("-", "").trim()) : s;
 			if (s.equalsIgnoreCase("all")) {
-				for (Material m : Material.values()) {
+				for(Material m : Material.values()) {
 					ASMaterial asm = new ASMaterial();
 					asm.id = m.getId();
 					asm.data = -1;
@@ -124,7 +124,7 @@ public class ASMaterialList {
 		}
 		if (listing.containsKey(m.id)) {
 			if (negate) {
-				for (ASMaterial m2 : listing.get(m.id)) {
+				for(ASMaterial m2 : listing.get(m.id)) {
 					if (m.data != m2.data) {
 						materials.add(m2);
 					}
@@ -200,7 +200,7 @@ public class ASMaterialList {
 		if (asMaterials == null) {
 			return false;
 		}
-		for (ASMaterial m : asMaterials) {
+		for(ASMaterial m : asMaterials) {
 			if (m.id == material.getId() && (m.data == data || m.data < 0)) {
 				return true;
 			}

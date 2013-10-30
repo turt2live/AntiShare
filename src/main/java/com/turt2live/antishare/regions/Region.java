@@ -566,14 +566,14 @@ public class Region {
 
 	private List<String> playersAsList() {
 		List<String> list = new ArrayList<String>();
-		for (String playername : gamemodes.keySet()) {
+		for(String playername : gamemodes.keySet()) {
 			list.add(playername + " " + gamemodes.get(playername).name());
 		}
 		return list;
 	}
 
 	private void populatePlayers(List<String> list) {
-		for (String record : list) {
+		for(String record : list) {
 			String[] parts = record.split(" ");
 			if (parts.length > 1) {
 				String playerName = parts[0];
@@ -594,7 +594,7 @@ public class Region {
 		// Load
 		EnhancedConfiguration playerInfo = new EnhancedConfiguration(saveFile, plugin);
 		playerInfo.load();
-		for (String key : playerInfo.getKeys(false)) {
+		for(String key : playerInfo.getKeys(false)) {
 			region.gamemodes.put(key, GameMode.valueOf(playerInfo.getString(key)));
 		}
 	}
@@ -606,7 +606,7 @@ public class Region {
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if (players != null) {
-			for (Player player : players) {
+			for(Player player : players) {
 				if (size.isContained(player.getLocation())) {
 					alertEntry(player);
 				}
@@ -623,7 +623,7 @@ public class Region {
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if (players != null) {
-			for (Player player : players) {
+			for(Player player : players) {
 				if (size.isContained(player.getLocation()) && !last.isContained(player.getLocation())) {
 					alertEntry(player);
 				} else if (last.isContained(player.getLocation()) && !size.isContained(player.getLocation())) {
@@ -640,7 +640,7 @@ public class Region {
 		World world = plugin.getServer().getWorld(getWorldName());
 		List<Player> players = world.getPlayers();
 		if (players != null) {
-			for (Player player : players) {
+			for(Player player : players) {
 				if (size.isContained(player.getLocation())) {
 					alertExit(player);
 				}

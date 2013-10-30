@@ -35,7 +35,7 @@ public class WorldConfigManager implements Listener {
 	 */
 	public void load() {
 		config.clear();
-		for (World world : Bukkit.getWorlds()) {
+		for(World world : Bukkit.getWorlds()) {
 			config.put(world.getName(), PerWorldConfig.getConfig(world.getName()));
 		}
 	}

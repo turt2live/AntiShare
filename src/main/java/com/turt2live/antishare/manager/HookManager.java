@@ -56,7 +56,7 @@ public class HookManager {
 	 * @param data the data before the break
 	 */
 	public void sendBlockBreak(String playerName, Location location, Material before, byte data) {
-		for (BlockLogger logger : loggers) {
+		for(BlockLogger logger : loggers) {
 			logger.breakBlock(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, before, data);
 		}
 	}
@@ -70,7 +70,7 @@ public class HookManager {
 	 * @param data the data after the break
 	 */
 	public void sendBlockPlace(String playerName, Location location, Material after, byte data) {
-		for (BlockLogger logger : loggers) {
+		for(BlockLogger logger : loggers) {
 			logger.placeBlock(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, after, data);
 		}
 	}
@@ -84,7 +84,7 @@ public class HookManager {
 	 * @param data the data before the break
 	 */
 	public void sendEntityBreak(String playerName, Location location, Material before, byte data) {
-		for (BlockLogger logger : loggers) {
+		for(BlockLogger logger : loggers) {
 			logger.breakHanging(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, before, data);
 		}
 	}
@@ -98,7 +98,7 @@ public class HookManager {
 	 * @param data the data after the break
 	 */
 	public void sendEntityPlace(String playerName, Location location, Material after, byte data) {
-		for (BlockLogger logger : loggers) {
+		for(BlockLogger logger : loggers) {
 			logger.placeHanging(playerName != null ? BlockLogger.PLAYER_NAME + "_" + playerName : BlockLogger.PLAYER_NAME, location, after, data);
 		}
 	}
@@ -110,7 +110,7 @@ public class HookManager {
 	 * @return true if a region was found, false otherwise
 	 */
 	public boolean checkForRegion(Location location) {
-		for (RegionProtection protection : regions) {
+		for(RegionProtection protection : regions) {
 			if (protection.isRegion(location)) {
 				return true;
 			}
@@ -126,7 +126,7 @@ public class HookManager {
 	 * @return true if region found (not allowed), false otherwise
 	 */
 	public boolean checkForRegion(Player player, Block block) {
-		for (RegionProtection protection : regions) {
+		for(RegionProtection protection : regions) {
 			if (!protection.isAllowed(player, block)) {
 				return true;
 			}
@@ -151,7 +151,7 @@ public class HookManager {
 	 * @return true if a plugin claims this block protected
 	 */
 	public boolean checkForBlockProtection(Block block) {
-		for (BlockProtection protection : blocks) {
+		for(BlockProtection protection : blocks) {
 			if (protection.isProtected(block)) {
 				return true;
 			}

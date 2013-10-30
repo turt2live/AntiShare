@@ -39,7 +39,7 @@ public class LinkedInventory {
 	 * @return true if affected, false otherwise
 	 */
 	public boolean isWorldAffected(World world) {
-		for (String w : worlds) {
+		for(String w : worlds) {
 			if (world.getName().equalsIgnoreCase(w)) {
 				return true;
 			}

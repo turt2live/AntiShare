@@ -111,7 +111,7 @@ public class CommandHandler implements CommandExecutor {
 								OfflinePlayer player = plugin.getServer().getPlayer(playername);
 								// Find online player first, then we look for offline players
 								if (player == null) {
-									for (OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
+									for(OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
 										if (offlinePlayer.getName().equalsIgnoreCase(playername) || offlinePlayer.getName().toLowerCase().startsWith(playername.toLowerCase())) {
 											player = offlinePlayer;
 											break;
@@ -315,7 +315,7 @@ public class CommandHandler implements CommandExecutor {
 
 							// Merge message
 							if (args.length > 4) {
-								for (int i = 4; i < args.length; i++) { // Starts at args[4]
+								for(int i = 4; i < args.length; i++) { // Starts at args[4]
 									value = value + args[i] + " ";
 								}
 								value = value.substring(0, value.length() - 1);
@@ -378,7 +378,7 @@ public class CommandHandler implements CommandExecutor {
 						// Generate pages
 						String pagenation = ChatColor.DARK_GREEN + "=======[ " + ChatColor.GREEN + "AntiShare Regions " + ChatColor.DARK_GREEN + "|" + ChatColor.GREEN + " Page " + page + "/" + maxPages + ChatColor.DARK_GREEN + " ]=======";
 						plugin.getMessages().sendTo(sender, pagenation, false);
-						for (int i = (page - 1) * resultsPerPage; i < (resultsPerPage < regions.size() ? resultsPerPage * page : regions.size()); i++) {
+						for(int i = (page - 1) * resultsPerPage; i < (resultsPerPage < regions.size() ? resultsPerPage * page : regions.size()); i++) {
 							plugin.getMessages().sendTo(sender, ChatColor.DARK_AQUA + "#" + (i + 1) + " " + ChatColor.GOLD + regions.get(i).getName() + ChatColor.YELLOW + " Creator: " + ChatColor.AQUA + regions.get(i).getOwner() + ChatColor.YELLOW + " World: " + ChatColor.AQUA + regions.get(i).getWorldName(), false);
 						}
 						plugin.getMessages().sendTo(sender, pagenation, false);
@@ -450,7 +450,7 @@ public class CommandHandler implements CommandExecutor {
 
 							// Find clear spots
 							int clearSpots = 0;
-							for (ItemStack stack : inventory.getContents()) {
+							for(ItemStack stack : inventory.getContents()) {
 								if (stack == null || stack.getType() == Material.AIR) {
 									clearSpots++;
 								}
@@ -536,7 +536,7 @@ public class CommandHandler implements CommandExecutor {
 							}
 						}
 						if (gm == null) {
-							for (GameMode gamemode : GameMode.values()) {
+							for(GameMode gamemode : GameMode.values()) {
 								if (ASUtils.findGameModePlayers(gamemode).size() > 0) {
 									plugin.getMessages().sendTo(sender, ChatColor.GOLD + gamemode.name() + ": " + ChatColor.YELLOW + ASUtils.commas(ASUtils.findGameModePlayers(gamemode)), false);
 								} else {

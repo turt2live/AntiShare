@@ -29,7 +29,7 @@ public class PotionSaver extends GenericDataFile {
 		Collection<PotionEffect> effects = player.getActivePotionEffects();
 		file.set(player.getName() + "." + gamemode, null); // Remove current save
 		int i = 0;
-		for (PotionEffect effect : effects) {
+		for(PotionEffect effect : effects) {
 			file.set(player.getName() + "." + gamemode + ".potion" + i, effect);
 			i++;
 		}
@@ -45,7 +45,7 @@ public class PotionSaver extends GenericDataFile {
 	 */
 	public static void applySavedEffects(Player player, GameMode gamemode) {
 		EnhancedConfiguration file = getFile("potions");
-		for (PotionEffect effect : player.getActivePotionEffects()) {
+		for(PotionEffect effect : player.getActivePotionEffects()) {
 			player.removePotionEffect(effect.getType());
 		}
 		ConfigurationSection section = file.getConfigurationSection(player.getName() + "." + gamemode);
@@ -54,7 +54,7 @@ public class PotionSaver extends GenericDataFile {
 		}
 		Set<String> saved = section.getKeys(false);
 		if (saved != null) {
-			for (String key : saved) {
+			for(String key : saved) {
 				Object obj = file.get(player.getName() + "." + gamemode + "." + key);
 				if (obj instanceof PotionEffect) {
 					boolean added = player.addPotionEffect((PotionEffect) obj);

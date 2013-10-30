@@ -63,7 +63,7 @@ public class BlockManager {
 			@Override
 			public void run() {
 				List<ASMaterial> r = new ArrayList<ASMaterial>();
-				for (ASMaterial m : recentlyRemoved) {
+				for(ASMaterial m : recentlyRemoved) {
 					if (System.currentTimeMillis() - m.added >= 1000) {
 						r.add(m);
 					}
@@ -79,15 +79,15 @@ public class BlockManager {
 	public void load() {
 		// Load
 		wrappers.clear();
-		for (World world : plugin.getServer().getWorlds()) {
-			for (Chunk chunk : world.getLoadedChunks()) {
+		for(World world : plugin.getServer().getWorlds()) {
+			for(Chunk chunk : world.getLoadedChunks()) {
 				loadChunk(chunk);
 			}
 		}
 
 		// Tell console what we loaded
 		int cb = 0, ce = 0, sb = 0, se = 0, ab = 0, ae = 0;
-		for (String key : wrappers.keySet()) {
+		for(String key : wrappers.keySet()) {
 			ChunkWrapper wrapper = wrappers.get(key);
 			cb += wrapper.creativeBlocks.size();
 			ce += wrapper.creativeEntities.size();
@@ -124,7 +124,7 @@ public class BlockManager {
 		doneSave = false;
 		Double max = ((Integer) wrappers.size()).doubleValue();
 		Double done = 0.0;
-		for (String key : wrappers.keySet()) {
+		for(String key : wrappers.keySet()) {
 			ChunkWrapper w = wrappers.get(key);
 			w.save(false, true);
 			done++;
@@ -167,7 +167,7 @@ public class BlockManager {
 	 * @return the Game Mode (or null if not applicable)
 	 */
 	public GameMode getRecentBreak(Location location) {
-		for (ASMaterial material : recentlyRemoved) {
+		for(ASMaterial material : recentlyRemoved) {
 			Location l = material.location;
 			if (Math.floor(l.getX()) == Math.floor(location.getX()) && Math.floor(l.getY()) == Math.floor(location.getY()) && Math.floor(l.getZ()) == Math.floor(location.getZ()) && l.getWorld().getName().equalsIgnoreCase(location.getWorld().getName())) {
 				return material.gamemode;
@@ -334,7 +334,7 @@ public class BlockManager {
 				boolean updated = false;
 
 				// Loop
-				while (runs <= maxRuns && !updated) {
+				while(runs <= maxRuns && !updated) {
 					// Check block
 					Block newBlock = newLocation.getBlock();
 					if (newBlock.getType() == oldType) {

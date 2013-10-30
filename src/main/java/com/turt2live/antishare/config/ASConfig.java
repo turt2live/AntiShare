@@ -211,7 +211,7 @@ public class ASConfig {
 
 	private List<String> toStringList(List<?> list) {
 		List<String> strings = new ArrayList<String>();
-		for (Object o : list) {
+		for(Object o : list) {
 			if (!(o instanceof String)) {
 				continue;
 			}
@@ -226,7 +226,7 @@ public class ASConfig {
 
 	private List<EntityType> stringToEntityList(List<?> list) {
 		List<EntityType> entities = new ArrayList<EntityType>();
-		for (Object o : list) {
+		for(Object o : list) {
 			if (!(o instanceof String)) {
 				continue;
 			}
@@ -234,7 +234,7 @@ public class ASConfig {
 			string = string.trim();
 			if (string.equalsIgnoreCase("all")) {
 				entities.clear();
-				for (EntityType e : EntityType.values()) {
+				for(EntityType e : EntityType.values()) {
 					entities.add(e);
 				}
 				break;

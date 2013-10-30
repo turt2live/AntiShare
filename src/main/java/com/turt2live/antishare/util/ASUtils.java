@@ -78,7 +78,7 @@ public class ASUtils {
 		AntiShare plugin = AntiShare.p;
 		if (player.hasMetadata(NO_DROP_KEY)) {
 			List<MetadataValue> vals = player.getMetadata(NO_DROP_KEY);
-			for (MetadataValue val : vals) {
+			for(MetadataValue val : vals) {
 				if (System.currentTimeMillis() - val.asLong() > plugin.settings().onDeathTimerSeconds * 1000) {
 					return true;
 				}
@@ -240,7 +240,7 @@ public class ASUtils {
 	 */
 	public static List<String> findGameModePlayers(GameMode gamemode) {
 		List<String> affected = new ArrayList<String>();
-		for (Player player : Bukkit.getOnlinePlayers()) {
+		for(Player player : Bukkit.getOnlinePlayers()) {
 			if (player.getGameMode() == gamemode) {
 				affected.add(player.getName());
 			}
@@ -259,7 +259,7 @@ public class ASUtils {
 			return "no one";
 		}
 		StringBuilder commas = new StringBuilder();
-		for (String s : list) {
+		for(String s : list) {
 			commas.append(s).append(", ");
 		}
 		String finalComma = commas.toString().trim();
@@ -303,7 +303,7 @@ public class ASUtils {
 		if (folder.listFiles() == null) {
 			return;
 		} else {
-			for (File file : folder.listFiles()) {
+			for(File file : folder.listFiles()) {
 				if (file.isDirectory()) {
 					wipeFolder(file, fileNames);
 				}
@@ -382,7 +382,7 @@ public class ASUtils {
 	 * @return true if found, false otherwise
 	 */
 	public static boolean hasTool(Material material, Player player) {
-		for (ItemStack item : player.getInventory().getContents()) {
+		for(ItemStack item : player.getInventory().getContents()) {
 			if (item == null) {
 				continue;
 			}
@@ -713,7 +713,7 @@ public class ASUtils {
 		FileOutputStream out = new FileOutputStream(destination);
 		byte[] buf = new byte[1024];
 		int len;
-		while ((len = input.read(buf)) > 0) {
+		while((len = input.read(buf)) > 0) {
 			out.write(buf, 0, len);
 		}
 		out.close();

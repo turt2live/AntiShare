@@ -94,13 +94,13 @@ public class ASInventory implements Cloneable {
 	public ItemStack[] getContents(boolean core, boolean armor) {
 		ItemStack[] array = new ItemStack[SIZE];
 		if (core && armor) {
-			for (Integer slot : items.keySet()) {
+			for(Integer slot : items.keySet()) {
 				array[slot] = items.get(slot);
 			}
 		} else if (core && !armor) {
 			int size = type == InventoryType.ENDER ? 27 : SIZE - 4;
 			array = new ItemStack[size];
-			for (Integer slot : items.keySet()) {
+			for(Integer slot : items.keySet()) {
 				if (slot >= size) {
 					continue;
 				}
@@ -108,7 +108,7 @@ public class ASInventory implements Cloneable {
 			}
 		} else if (!core && armor) {
 			array = new ItemStack[4];
-			for (Integer slot : items.keySet()) {
+			for(Integer slot : items.keySet()) {
 				if (slot < SIZE - 4) {
 					continue;
 				}
@@ -124,7 +124,7 @@ public class ASInventory implements Cloneable {
 	 * @param items the items
 	 */
 	public void setContents(ItemStack[] items) {
-		for (int i = 0; i < items.length; i++) {
+		for(int i = 0; i < items.length; i++) {
 			set(i, items[i]);
 		}
 	}
@@ -149,12 +149,12 @@ public class ASInventory implements Cloneable {
 		if (inventory instanceof PlayerInventory) {
 			PlayerInventory playerInv = (PlayerInventory) inventory;
 			ItemStack[] armor = playerInv.getArmorContents();
-			for (int i = 0; i < armor.length; i++) {
+			for(int i = 0; i < armor.length; i++) {
 				set(36 + i, armor[i]);
 			}
 		}
 		ItemStack[] contents = inventory.getContents();
-		for (int i = 0; i < contents.length; i++) {
+		for(int i = 0; i < contents.length; i++) {
 			set(i, contents[i]);
 		}
 	}
@@ -169,12 +169,12 @@ public class ASInventory implements Cloneable {
 		if (inventory instanceof PlayerInventory) {
 			PlayerInventory playerInv = (PlayerInventory) inventory;
 			ItemStack[] armor = playerInv.getArmorContents();
-			for (int i = 0; i < armor.length; i++) {
+			for(int i = 0; i < armor.length; i++) {
 				set(36 + i, armor[i]);
 			}
 		}
 		ItemStack[] contents = inventory.getContents();
-		for (int i = 0; i < contents.length; i++) {
+		for(int i = 0; i < contents.length; i++) {
 			set(i, contents[i]);
 		}
 	}
@@ -185,7 +185,7 @@ public class ASInventory implements Cloneable {
 	 * @param item the item
 	 */
 	public void fill(ItemStack item) {
-		for (int i = 0; i < SIZE; i++) {
+		for(int i = 0; i < SIZE; i++) {
 			set(i, item.clone());
 		}
 	}
@@ -214,7 +214,7 @@ public class ASInventory implements Cloneable {
 	 * @return true if empty
 	 */
 	public boolean isEmpty() {
-		for (int slot : items.keySet()) {
+		for(int slot : items.keySet()) {
 			ItemStack item = items.get(slot);
 			if (!(item == null || item.getType() == Material.AIR)) {
 				return false;
@@ -279,7 +279,7 @@ public class ASInventory implements Cloneable {
 				Object something = json.get(player + "." + world + "." + gamemode.name());
 				if (something instanceof List) {
 					List<?> objects = (List<?>) something;
-					for (int i = 0; i < objects.size(); i++) {
+					for(int i = 0; i < objects.size(); i++) {
 						Object entry = objects.get(i);
 						if (entry instanceof ItemStack) {
 							inventory.set(i, (ItemStack) entry);
@@ -305,8 +305,8 @@ public class ASInventory implements Cloneable {
 	public static List<ASInventory> getAll(String playerName, InventoryType type) {
 		List<ASInventory> invs = new ArrayList<ASInventory>();
 		ASInventory i = null;
-		for (World world : AntiShare.p.getServer().getWorlds()) {
-			for (GameMode gamemode : GameMode.values()) {
+		for(World world : AntiShare.p.getServer().getWorlds()) {
+			for(GameMode gamemode : GameMode.values()) {
 				i = load(playerName, gamemode, type, world.getName());
 				if (!i.isEmpty()) { // Never null
 					invs.add(i);
@@ -350,7 +350,7 @@ public class ASInventory implements Cloneable {
 		if (!archiveFolder.exists()) {
 			archiveFolder.mkdirs();
 		}
-		for (InventoryType type : InventoryType.values()) {
+		for(InventoryType type : InventoryType.values()) {
 			File f = new File(DATA_FOLDER, type.getRelativeFolderName());
 			if (!f.exists()) {
 				f.mkdirs();

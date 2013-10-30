@@ -475,7 +475,7 @@ public class ASListener implements Listener {
 			} else if (sand.hasMetadata(FALLING_METADATA_KEY)) {
 				List<MetadataValue> meta = sand.getMetadata(FALLING_METADATA_KEY);
 				GameMode type = null;
-				for (MetadataValue v : meta) {
+				for(MetadataValue v : meta) {
 					if (v.getOwningPlugin().getName().equalsIgnoreCase("AntiShare") && v.value() instanceof GameMode) {
 						type = (GameMode) v.value();
 					}
@@ -495,7 +495,7 @@ public class ASListener implements Listener {
 		List<Block> list = new ArrayList<Block>();
 		list.addAll(event.blockList());
 		Iterator<Block> iterate = list.iterator();
-		while (iterate.hasNext()) {
+		while(iterate.hasNext()) {
 			Block block = iterate.next();
 			GameMode type = plugin.getBlockManager().getType(block);
 			if (GamemodeAbstraction.isCreative(type)) {
@@ -575,7 +575,7 @@ public class ASListener implements Listener {
 			Block block = event.getBlock();
 			block.setMetadata(LOGBLOCK_METADATA_KEY, EMPTY_METADATA);
 			DelayBreakSettings settings = null;
-			for (MetadataValue value : block.getMetadata(ANTISHARE_DELAY_BREAK_KEY)) {
+			for(MetadataValue value : block.getMetadata(ANTISHARE_DELAY_BREAK_KEY)) {
 				if (value.value() instanceof DelayBreakSettings && value.getOwningPlugin().getName().equals(plugin.getName())) {
 					settings = (DelayBreakSettings) value.value();
 				}
@@ -629,7 +629,7 @@ public class ASListener implements Listener {
 					isGamemode = true;
 					interaction = configFor(player.getGameMode(), blockGamemode, blockLocation);
 				} else if (!c.naturalSettings.allowMismatchedGM) {
-					for (BlockFace face : ASUtils.TRUE_BLOCK_FACES) {
+					for(BlockFace face : ASUtils.TRUE_BLOCK_FACES) {
 						Block rel = block.getRelative(face);
 						if (MaterialAPI.isDroppedOnBreak(rel, block, true)) {
 							attachedGamemode = plugin.getBlockManager().getType(rel);
@@ -693,7 +693,7 @@ public class ASListener implements Listener {
 		}
 
 		if (c.naturalSettings.removeAttached) {
-			for (Entity e : block.getChunk().getEntities()) {
+			for(Entity e : block.getChunk().getEntities()) {
 				if (e instanceof ItemFrame) {
 					double d2 = e.getLocation().distanceSquared(block.getLocation());
 					if (d2 < 1.65 && d2 > 1.6 || d2 > 0.5 && d2 < 0.51) {
@@ -858,7 +858,7 @@ public class ASListener implements Listener {
 			List<Block> blocks = player.getLineOfSight(null, 10);
 			boolean water = false;
 			Block waterBlock = null;
-			for (Block block : blocks) {
+			for(Block block : blocks) {
 				if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER) {
 					water = true;
 					waterBlock = block;
@@ -1302,7 +1302,7 @@ public class ASListener implements Listener {
 		}
 
 		List<ItemStack> r = new ArrayList<ItemStack>();
-		for (ItemStack item : drops) {
+		for(ItemStack item : drops) {
 			boolean remove = false;
 			ProtectionInformation info = ASUtils.isBlocked(player, item, player.getLocation(), c.death, PermissionNodes.PACK_DEATH);
 			remove = info.illegal;
@@ -1312,7 +1312,7 @@ public class ASListener implements Listener {
 				amount += item.getAmount();
 			}
 		}
-		for (ItemStack remove : r) {
+		for(ItemStack remove : r) {
 			drops.remove(remove);
 		}
 
@@ -1333,7 +1333,7 @@ public class ASListener implements Listener {
 
 		StringBuilder current = new StringBuilder();
 		current.append(arguments[0]).append(" ");
-		for (int i = 0; i < arguments.length; i++) {
+		for(int i = 0; i < arguments.length; i++) {
 			if (c.commands.contains(current.toString().trim())) {
 				illegal = true;
 				break;
@@ -1478,7 +1478,7 @@ public class ASListener implements Listener {
 	@SuppressWarnings ("deprecation")
 	// TODO: Magic value
 	public void onPistonExtend(BlockPistonExtendEvent event) {
-		for (Block block : event.getBlocks()) {
+		for(Block block : event.getBlocks()) {
 			GameMode type = plugin.getBlockManager().getType(block);
 			if (type == null) {
 				continue;

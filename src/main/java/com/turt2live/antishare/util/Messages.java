@@ -95,7 +95,7 @@ public class Messages {
 		int expectedArguments = 0;
 		int counter = 0;
 		boolean moreArguments = true;
-		while (moreArguments) {
+		while(moreArguments) {
 			if (!message.contains("{" + counter + "}")) {
 				moreArguments = false;
 			} else {
@@ -111,7 +111,7 @@ public class Messages {
 			exception.printStackTrace();
 		}
 		if (arguments != null) {
-			for (int i = 0; i < arguments.length; i++) {
+			for(int i = 0; i < arguments.length; i++) {
 				String replaceString = "{" + i + "}";
 				if (arguments[i] == null) {
 					arguments[i] = "null";
@@ -119,7 +119,7 @@ public class Messages {
 				message = message.replace(replaceString, arguments[i]);
 			}
 		}
-		for (ChatColor color : ChatColor.values()) {
+		for(ChatColor color : ChatColor.values()) {
 			message = message.replace("{" + color.name() + "}", color + "");
 		}
 		return message;
@@ -178,10 +178,10 @@ public class Messages {
 				|| action == Action.GAMEMODE_CHANGE || action == Action.WORLD_CHANGE;
 
 		// Metrics
-		if(!ignoredAction){
-			if(illegal){
+		if (!ignoredAction) {
+			if (illegal) {
 				AntiShare.ILLEGAL_ACTIONS.increment(action);
-			}else{
+			} else {
 				AntiShare.LEGAL_ACTIONS.increment(action);
 			}
 		}
@@ -199,7 +199,7 @@ public class Messages {
 		playerStrings[0] = string;
 		notifyStrings[0] = player.getName();
 		notifyStrings[1] = string;
-		for (int i = 0; i < extraVariables.length; i++) {
+		for(int i = 0; i < extraVariables.length; i++) {
 			playerStrings[i + 1] = extraVariables[i];
 			notifyStrings[i + 2] = extraVariables[i];
 		}
@@ -242,7 +242,7 @@ public class Messages {
 		}
 		if (toAdmin) {
 			details.admin_last_sent = System.currentTimeMillis();
-			for (Player potentialAdmin : plugin.getServer().getOnlinePlayers()) {
+			for(Player potentialAdmin : plugin.getServer().getOnlinePlayers()) {
 				if (potentialAdmin.hasPermission(PermissionNodes.GET_NOTIFICATIONS)) {
 					sendTo(potentialAdmin, adminMessage, true);
 				}

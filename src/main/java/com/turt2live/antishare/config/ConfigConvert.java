@@ -157,7 +157,7 @@ public class ConfigConvert {
 			return null;
 		}
 		String[] parts = raw.split(",");
-		for (String s : parts) {
+		for(String s : parts) {
 			s = s.trim();
 			l.add(s);
 		}

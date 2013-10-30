@@ -143,7 +143,7 @@ public class SelfCompatibility {
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(p.getDataFolder(), "items.csv"), true));
 		boolean updated = false;
 		String line;
-		while ((line = in.readLine()) != null) {
+		while((line = in.readLine()) != null) {
 			if (line.startsWith("#")) {
 				continue;
 			}
@@ -190,7 +190,7 @@ public class SelfCompatibility {
 
 		File backupFolder = new File(p.getDataFolder(), "AntiShare5.3.0");
 
-		for (File f : files) {
+		for(File f : files) {
 			if (f.exists()) {
 				if (!backupFolder.exists()) {
 					backupFolder.mkdirs();
@@ -225,7 +225,7 @@ public class SelfCompatibility {
 		File newDir = new File(directory, "world_configurations");
 		int files = 0;
 		if (directory.listFiles() != null) {
-			for (File file : directory.listFiles(new FileFilter() {
+			for(File file : directory.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File arg0) {
 					if (arg0.getName().endsWith("_config.yml")) {
@@ -259,7 +259,7 @@ public class SelfCompatibility {
 		if (oldSaveFolder.exists()) {
 			File[] files = oldSaveFolder.listFiles();
 			if (files != null && files.length > 0) {
-				for (File file : files) {
+				for(File file : files) {
 					file.renameTo(new File(newSaveFolder, file.getName()));
 				}
 				AntiShare.p.getLogger().info(AntiShare.p.getMessages().getMessage("region-info-migrate", String.valueOf(files.length)));
@@ -312,7 +312,7 @@ public class SelfCompatibility {
 			File[] files = new File(plugin.getDataFolder(), "inventories" + File.separator + InventoryType.PLAYER.getRelativeFolderName()).listFiles();
 			int cleaned = 0;
 			if (files != null) {
-				for (File file : files) {
+				for(File file : files) {
 					String player = file.getName().split("\\.")[0];
 					OfflinePlayer p = plugin.getServer().getOfflinePlayer(player);
 					long diff = System.currentTimeMillis() - p.getLastPlayed();
@@ -356,7 +356,7 @@ public class SelfCompatibility {
 				BufferedReader reader = new BufferedReader(new FileReader(config));
 				BufferedWriter writer = new BufferedWriter(new FileWriter(backup));
 				String line;
-				while ((line = reader.readLine()) != null) {
+				while((line = reader.readLine()) != null) {
 					writer.write(line);
 					writer.newLine();
 				}
@@ -366,7 +366,7 @@ public class SelfCompatibility {
 				e.printStackTrace();
 			}
 		}
-		for (String name : files.keySet()) {
+		for(String name : files.keySet()) {
 			File file = new File(plugin.getDataFolder(), name);
 			if (file.isDirectory()) {
 				cleaned += cleanFolder(file, files.get(name));
@@ -411,7 +411,7 @@ public class SelfCompatibility {
 			File[] files = inventoryFile.listFiles();
 			ASUtils.wipeFolder(newFolder, null);
 			if (files != null) {
-				for (File file : files) {
+				for(File file : files) {
 					file.renameTo(new File(newFolder, file.getName()));
 				}
 			}
@@ -432,7 +432,7 @@ public class SelfCompatibility {
 		File entitiesDir = new File(plugin.getDataFolder(), "data" + File.separator + "entities");
 		File blocksDir = new File(plugin.getDataFolder(), "data" + File.separator + "blocks");
 		if (entitiesDir.listFiles() != null) {
-			for (File file : entitiesDir.listFiles()) {
+			for(File file : entitiesDir.listFiles()) {
 				if (file.isFile()) {
 					if (file.length() < 100) { // 100 bytes
 						file.delete();
@@ -442,7 +442,7 @@ public class SelfCompatibility {
 			}
 		}
 		if (blocksDir.listFiles() != null) {
-			for (File file : blocksDir.listFiles()) {
+			for(File file : blocksDir.listFiles()) {
 				if (file.isFile()) {
 					if (file.length() <= 0) {
 						file.delete();
@@ -465,13 +465,13 @@ public class SelfCompatibility {
 			return;
 		}
 		int resolved = 0;
-		for (InventoryType type : InventoryType.values()) {
+		for(InventoryType type : InventoryType.values()) {
 			File[] files = new File(ASInventory.getDataFolder(), type.getRelativeFolderName()).listFiles();
 			if (files != null) {
-				for (File file : files) {
+				for(File file : files) {
 					if (file.getName().toLowerCase().endsWith(".yml")) {
 						List<ASInventory> list = LegacyInventory.load(file.getName().split("\\.")[0], type);
-						for (ASInventory inv : list) {
+						for(ASInventory inv : list) {
 							inv.save();
 						}
 						file.delete();
@@ -500,7 +500,7 @@ public class SelfCompatibility {
 			File[] listing = folder.listFiles();
 			boolean updated = false;
 			if (listing != null) {
-				for (File file : listing) {
+				for(File file : listing) {
 					if (file.getName().toLowerCase().endsWith("_config.yml")) {
 						file.renameTo(new File(archive, file.getName()));
 						updated = true;
@@ -517,7 +517,7 @@ public class SelfCompatibility {
 	private static int cleanFolder(File folder, FileType type) {
 		int cleaned = 0;
 		if (folder.listFiles() != null) {
-			for (File file : folder.listFiles()) {
+			for(File file : folder.listFiles()) {
 				if (file.getName().endsWith(".yml")) {
 					cleanFile(file, type);
 					cleaned++;
@@ -561,7 +561,7 @@ public class SelfCompatibility {
 		local.saveDefaults();
 		EnhancedConfiguration actual = new EnhancedConfiguration(file, plugin);
 		actual.load();
-		for (String key : actual.getKeys(true)) {
+		for(String key : actual.getKeys(true)) {
 			if (local.get(key) == null) {
 				actual.set(key, null);
 			}

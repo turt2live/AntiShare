@@ -271,13 +271,13 @@ public class ChunkWrapper {
 			ASRFile region = new ASRFile(false);
 			try {
 				region.prepare(blockFile, true);
-				for (Key key : creativeBlocks) {
+				for(Key key : creativeBlocks) {
 					region.write(key.x, key.y, key.z, key.gamemode);
 				}
-				for (Key key : survivalBlocks) {
+				for(Key key : survivalBlocks) {
 					region.write(key.x, key.y, key.z, key.gamemode);
 				}
-				for (Key key : adventureBlocks) {
+				for(Key key : adventureBlocks) {
 					region.write(key.x, key.y, key.z, key.gamemode);
 				}
 				region.close();
@@ -289,13 +289,13 @@ public class ChunkWrapper {
 			ASRFile region = new ASRFile(true);
 			try {
 				region.prepare(entityFile, true);
-				for (Key key : this.adventureEntities) {
+				for(Key key : this.adventureEntities) {
 					region.write(key.x, key.y, key.z, key.gamemode, key.entity);
 				}
-				for (Key key : this.creativeEntities) {
+				for(Key key : this.creativeEntities) {
 					region.write(key.x, key.y, key.z, key.gamemode, key.entity);
 				}
-				for (Key key : this.survivalEntities) {
+				for(Key key : this.survivalEntities) {
 					region.write(key.x, key.y, key.z, key.gamemode, key.entity);
 				}
 			} catch(IOException e) {
@@ -354,7 +354,7 @@ public class ChunkWrapper {
 			region.prepare(file, false);
 			if (isBlock) {
 				Key info = null;
-				while ((info = region.getNext(bWorld)) != null) {
+				while((info = region.getNext(bWorld)) != null) {
 					Location loc = info.toLocation(bWorld);
 					Block block = loc.getBlock();
 					if (block == null) {
@@ -365,7 +365,7 @@ public class ChunkWrapper {
 				}
 			} else {
 				Key info = null;
-				while ((info = region.getNext(bWorld)) != null) {
+				while((info = region.getNext(bWorld)) != null) {
 					addEntity(info.gamemode, info.toLocation(bWorld), info.entity);
 				}
 			}

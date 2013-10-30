@@ -54,7 +54,7 @@ public class MoneyManager {
 		try {
 			silent.getParentFile().mkdirs();
 			BufferedWriter out = new BufferedWriter(new FileWriter(silent, false));
-			for (String player : silentTo) {
+			for(String player : silentTo) {
 				out.write(player + "\r\n");
 			}
 			out.close();
@@ -73,7 +73,7 @@ public class MoneyManager {
 			if (silent.exists()) {
 				BufferedReader in = new BufferedReader(new FileReader(silent));
 				String line;
-				while ((line = in.readLine()) != null) {
+				while((line = in.readLine()) != null) {
 					silentTo.add(line);
 				}
 				in.close();
@@ -110,7 +110,7 @@ public class MoneyManager {
 		// Load tender
 		int finesLoaded = 0;
 		int rewardsLoaded = 0;
-		for (Action type : Action.values()) {
+		for(Action type : Action.values()) {
 			String path = type.name();
 			if (money.getConfigurationSection(path) == null) {
 				continue;
@@ -291,7 +291,7 @@ public class MoneyManager {
 	 * @return the fine, or null if not found
 	 */
 	public Fine getFine(Action type) {
-		for (Fine fine : fines) {
+		for(Fine fine : fines) {
 			if (fine.getType() == type) {
 				return fine;
 			}
@@ -306,7 +306,7 @@ public class MoneyManager {
 	 * @return the reward, or null if not found
 	 */
 	public Reward getReward(Action type) {
-		for (Reward reward : rewards) {
+		for(Reward reward : rewards) {
 			if (reward.getType() == type) {
 				return reward;
 			}

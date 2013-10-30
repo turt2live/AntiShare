@@ -32,7 +32,7 @@ public class LegacyBlockIO {
 		AntiShare plugin = AntiShare.p;
 		EnhancedConfiguration blocks = new EnhancedConfiguration(file, plugin);
 		blocks.load();
-		for (String key : blocks.getKeys(false)) {
+		for(String key : blocks.getKeys(false)) {
 			String[] keyParts = key.split(";");
 			if (keyParts.length < (isBlock ? 3 : 4)) {
 				plugin.getLogger().severe(plugin.getMessages().getMessage("bad-file", file.getAbsolutePath()));

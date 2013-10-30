@@ -57,7 +57,7 @@ public class RegionManager {
 		}
 		File[] list = path.listFiles();
 		if (list != null) {
-			for (File file : list) {
+			for(File file : list) {
 				if (file.getName().endsWith(".yml")) {
 					Region region = Region.fromFile(file);
 					if (region != null && region.getWorldName().equals(worldname)) {
@@ -86,7 +86,7 @@ public class RegionManager {
 		}
 		File[] list = path.listFiles();
 		if (list != null) {
-			for (File file : list) {
+			for(File file : list) {
 				if (file.getName().endsWith(".yml")) {
 					Region region = Region.fromFile(file);
 					if (region != null) {
@@ -111,9 +111,9 @@ public class RegionManager {
 	public void save() {
 		ASUtils.wipeFolder(Region.REGION_CONFIGURATIONS, null);
 		ASUtils.wipeFolder(Region.REGION_INFORMATION, null);
-		for (String world : regions.keySet()) {
+		for(String world : regions.keySet()) {
 			Set<Region> regions = this.regions.get(world);
-			for (Region region : regions) {
+			for(Region region : regions) {
 				region.save();
 			}
 		}
@@ -132,7 +132,7 @@ public class RegionManager {
 			return false;
 		}
 		Set<Region> regions = this.regions.get(worldname);
-		for (Region region : regions) {
+		for(Region region : regions) {
 			if (region.getCuboid().isContained(location)) {
 				return true;
 			}
@@ -155,7 +155,7 @@ public class RegionManager {
 			return null;
 		}
 		Set<Region> regions = this.regions.get(worldname);
-		for (Region region : regions) {
+		for(Region region : regions) {
 			if (region.getCuboid().isContained(location)) {
 				return region;
 			}
@@ -170,10 +170,10 @@ public class RegionManager {
 	 * @return the region, or null if not found
 	 */
 	public Region getRegion(String name) {
-		for (World world : plugin.getServer().getWorlds()) {
+		for(World world : plugin.getServer().getWorlds()) {
 			if (regions.containsKey(world.getName())) {
 				Set<Region> regions = this.regions.get(world.getName());
-				for (Region region : regions) {
+				for(Region region : regions) {
 					if (region.getName().equalsIgnoreCase(name)) {
 						return region;
 					}
@@ -225,18 +225,18 @@ public class RegionManager {
 	 * @param name the region name.
 	 */
 	public void removeRegion(String name) {
-		for (World world : plugin.getServer().getWorlds()) {
+		for(World world : plugin.getServer().getWorlds()) {
 			if (regions.containsKey(world.getName())) {
 				Set<Region> regions = this.regions.get(world.getName());
 				Iterator<Region> iterator = regions.iterator();
 				List<Region> remove = new ArrayList<Region>();
-				while (iterator.hasNext()) {
+				while(iterator.hasNext()) {
 					Region region = iterator.next();
 					if (region.getName().equalsIgnoreCase(name)) {
 						remove.add(region);
 					}
 				}
-				for (Region region : remove) {
+				for(Region region : remove) {
 					region.onDelete();
 					regions.remove(region);
 				}
@@ -276,7 +276,7 @@ public class RegionManager {
 	 */
 	public Set<Region> getAllRegions() {
 		Set<Region> returnableRegions = new HashSet<Region>();
-		for (World world : plugin.getServer().getWorlds()) {
+		for(World world : plugin.getServer().getWorlds()) {
 			returnableRegions.addAll(getAllRegions(world));
 		}
 		return returnableRegions;
@@ -290,7 +290,7 @@ public class RegionManager {
 	 */
 	public Set<Region> getAllRegions(GameMode gamemode) {
 		Set<Region> returnableRegions = new HashSet<Region>();
-		for (Region region : getAllRegions()) {
+		for(Region region : getAllRegions()) {
 			if (region.getGameMode() == gamemode) {
 				returnableRegions.add(region);
 			}

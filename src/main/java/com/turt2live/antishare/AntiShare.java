@@ -110,7 +110,7 @@ public class AntiShare extends PluginWrapper {
 		p = this;
 
 		// Setup graphs
-		for(Action action : Action.values()){
+		for(Action action : Action.values()) {
 			ILLEGAL_ACTIONS.addSlice(action, action.name());
 			LEGAL_ACTIONS.addSlice(action, action.name());
 		}
@@ -152,7 +152,7 @@ public class AntiShare extends PluginWrapper {
 			if (simpleNoticeFile.exists()) {
 				BufferedReader in = new BufferedReader(new FileReader(simpleNoticeFile));
 				String line;
-				while ((line = in.readLine()) != null) {
+				while((line = in.readLine()) != null) {
 					disabledSNPlayers.add(line);
 				}
 				in.close();
@@ -180,7 +180,7 @@ public class AntiShare extends PluginWrapper {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(getResource("plugin.yml")));
 			String line;
-			while ((line = in.readLine()) != null) {
+			while((line = in.readLine()) != null) {
 				if (line.startsWith("build: ")) {
 					line = line.replace("build: ", "");
 					build = line;
@@ -257,14 +257,14 @@ public class AntiShare extends PluginWrapper {
 		loadPlayerInformation();
 
 		// Start metrics
-		try{
+		try {
 			metrics = new EMetrics(this);
 			metrics.addGraph(LEGAL_ACTIONS);
 			metrics.addGraph(ILLEGAL_ACTIONS);
 			Plugin mcmmo = getServer().getPluginManager().getPlugin("mcMMO");
 			metrics.addTracker(new FixedTracker("mcMMO Servers", mcmmo != null ? "Found" : "Not Found"));
 			metrics.startMetrics();
-		}catch(IOException e){ // Metrics error
+		} catch(IOException e) { // Metrics error
 			e.printStackTrace();
 		}
 	}
@@ -281,7 +281,7 @@ public class AntiShare extends PluginWrapper {
 		// Save disabled SimpleNotice users
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(simpleNoticeFile, false));
-			for (String user : disabledSNPlayers) {
+			for(String user : disabledSNPlayers) {
 				out.write(user + "\r\n");
 			}
 			out.close();
@@ -317,7 +317,7 @@ public class AntiShare extends PluginWrapper {
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			@Override
 			public void run() {
-				for (Player player : getServer().getOnlinePlayers()) {
+				for(Player player : getServer().getOnlinePlayers()) {
 					inventories.loadPlayer(player.getName());
 					Region playerRegion = regions.getRegion(player.getLocation());
 					if (playerRegion != null) {
@@ -506,7 +506,7 @@ public class AntiShare extends PluginWrapper {
 		}
 		if (material != null) {
 			List<String> materials = ItemMap.getNamesFromID(material);
-			for (String mat : materials) {
+			for(String mat : materials) {
 				if (isBlocked(player, allowPermission, denyPermission, mat, specialOnly)) {
 					return true;
 				}

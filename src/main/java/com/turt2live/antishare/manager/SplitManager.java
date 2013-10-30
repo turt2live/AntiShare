@@ -62,7 +62,7 @@ public class SplitManager {
 			config.saveDefaults();
 		}
 		Set<String> keys = config.getKeys(false);
-		for (String key : keys) {
+		for(String key : keys) {
 			if (key.equalsIgnoreCase("warn-every-in-seconds")) {
 				milliseconds = config.getLong(key, 3) * 1000;
 				continue;

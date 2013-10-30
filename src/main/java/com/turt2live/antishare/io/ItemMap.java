@@ -42,7 +42,7 @@ public class ItemMap {
 		// TODO: Magic value
 		int id = material.getId();
 		List<String> mats = new ArrayList<String>();
-		for (String key : listing.keySet()) {
+		for(String key : listing.keySet()) {
 			ASMaterial mat = listing.get(key);
 			if (mat != null) {
 				if (mat.id == id) {
@@ -102,10 +102,10 @@ public class ItemMap {
 		}
 		listing = read(items);
 		List<ASMaterial> add = SelfCompatibility.updateItemMap(listing);
-		for (ASMaterial a : add) {
+		for(ASMaterial a : add) {
 			listing.put(a.name.trim().toLowerCase(), a);
 		}
-		for (Material material : Material.values()) {
+		for(Material material : Material.values()) {
 			String name = String.valueOf(material.getId()); // Use the ID
 			if (!listing.containsKey(name)) {
 				listing.put(name, generate(name + "," + name + ",*"));
@@ -124,7 +124,7 @@ public class ItemMap {
 		Map<String, ASMaterial> listing = new HashMap<String, ASMaterial>();
 		BufferedReader in = new BufferedReader(new FileReader(items));
 		String line;
-		while ((line = in.readLine()) != null) {
+		while((line = in.readLine()) != null) {
 			if (line.startsWith("#")) {
 				continue;
 			}
@@ -182,7 +182,7 @@ public class ItemMap {
 		FileOutputStream out = new FileOutputStream(items);
 		byte[] buf = new byte[1024];
 		int len;
-		while ((len = input.read(buf)) > 0) {
+		while((len = input.read(buf)) > 0) {
 			out.write(buf, 0, len);
 		}
 		out.close();

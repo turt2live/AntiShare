@@ -131,13 +131,13 @@ public class InventoryManager {
 	private void checkLinksAndWorlds(String player, ASInventory inventory) {
 		ASInventory clone = inventory.clone();
 		if (!plugin.settings().perWorldInventories) {
-			for (World world : Bukkit.getWorlds()) {
+			for(World world : Bukkit.getWorlds()) {
 				clone.world = world.getName();
 				insertNoCheck(player, clone);
 			}
 		} else {
-			for (World world : Bukkit.getWorlds()) {
-				for (LinkedInventory link : linkedInventories) {
+			for(World world : Bukkit.getWorlds()) {
+				for(LinkedInventory link : linkedInventories) {
 					if (link.isGameModeAffected(inventory.gamemode) && link.isWorldAffected(world)) {
 						clone.world = world.getName();
 						insertNoCheck(player, clone);
@@ -155,8 +155,8 @@ public class InventoryManager {
 	 */
 	public void mergeAllWorlds(Player player, World from) {
 		saveInventory(player, player.getGameMode());
-		for (GameMode gamemode : GameMode.values()) {
-			for (World world : Bukkit.getWorlds()) {
+		for(GameMode gamemode : GameMode.values()) {
+			for(World world : Bukkit.getWorlds()) {
 				if (!world.getName().equalsIgnoreCase(from.getName())) {
 					ASInventory inventory = getInventory(player, from, gamemode, InventoryType.PLAYER);
 					inventory.world = world.getName(); // Do this after so we load the correct inventory first
@@ -180,7 +180,7 @@ public class InventoryManager {
 		}
 		saveInventory(player, player.getGameMode());
 		String name = player.getName();
-		for (World w : plugin.getServer().getWorlds()) {
+		for(World w : plugin.getServer().getWorlds()) {
 			String world = w.getName();
 			if (creative.get(name + "." + world) != null) {
 				creative.get(name + "." + world).save();
@@ -356,11 +356,11 @@ public class InventoryManager {
 
 		// Load inventories
 		List<ASInventory> inventories = ASInventory.getAll(player, InventoryType.PLAYER);
-		for (ASInventory inventory : inventories) {
+		for(ASInventory inventory : inventories) {
 			insert(player, inventory);
 		}
 		inventories = ASInventory.getAll(player, InventoryType.ENDER);
-		for (ASInventory inventory : inventories) {
+		for(ASInventory inventory : inventories) {
 			insert(player, inventory);
 		}
 	}
@@ -376,7 +376,7 @@ public class InventoryManager {
 		}
 		savePlayer(player);
 		String playerName = player.getName();
-		for (World world : plugin.getServer().getWorlds()) {
+		for(World world : plugin.getServer().getWorlds()) {
 			String worldName = world.getName();
 			creative.remove(playerName + "." + worldName);
 			survival.remove(playerName + "." + worldName);
@@ -423,7 +423,7 @@ public class InventoryManager {
 		enderAdventure.clear();
 		temporary.clear();
 		// Loads regions
-		for (Region region : plugin.getRegionManager().getAllRegions()) {
+		for(Region region : plugin.getRegionManager().getAllRegions()) {
 			String UID = region.getID();
 			List<ASInventory> inventory = ASInventory.getAll(UID, InventoryType.REGION);
 			if (inventory != null) {
@@ -441,12 +441,12 @@ public class InventoryManager {
 		Set<String> worlds = links.getKeys(false);
 		this.linkedInventories.clear();
 		if (worlds != null) {
-			for (String w : worlds) {
+			for(String w : worlds) {
 				List<String> affectedWorlds = new ArrayList<String>();
 				affectedWorlds.add(w);
 				String otherWorlds = links.getString(w + ".linked");
 				String[] otherWorldsArray = otherWorlds.split(",");
-				for (String ow : otherWorldsArray) {
+				for(String ow : otherWorldsArray) {
 					affectedWorlds.add(ow.trim());
 				}
 				GameMode gamemode = ASUtils.getGameMode(links.getString(w + ".gamemode"));
@@ -473,31 +473,31 @@ public class InventoryManager {
 	public void save() {
 		// Save players
 		if (Bukkit.getOnlinePlayers() != null) {
-			for (Player player : Bukkit.getOnlinePlayers()) {
+			for(Player player : Bukkit.getOnlinePlayers()) {
 				unloadPlayer(player);
 			}
 		}
 
 		// Save inventories
-		for (String key : creative.keySet()) {
+		for(String key : creative.keySet()) {
 			creative.get(key).save();
 		}
-		for (String key : survival.keySet()) {
+		for(String key : survival.keySet()) {
 			survival.get(key).save();
 		}
-		for (String key : adventure.keySet()) {
+		for(String key : adventure.keySet()) {
 			adventure.get(key).save();
 		}
-		for (String key : enderCreative.keySet()) {
+		for(String key : enderCreative.keySet()) {
 			enderCreative.get(key).save();
 		}
-		for (String key : enderSurvival.keySet()) {
+		for(String key : enderSurvival.keySet()) {
 			enderSurvival.get(key).save();
 		}
-		for (String key : enderAdventure.keySet()) {
+		for(String key : enderAdventure.keySet()) {
 			enderAdventure.get(key).save();
 		}
-		for (Region region : plugin.getRegionManager().getAllRegions()) {
+		for(Region region : plugin.getRegionManager().getAllRegions()) {
 			if (region.getInventory() != null) {
 				region.getInventory().save();
 			}

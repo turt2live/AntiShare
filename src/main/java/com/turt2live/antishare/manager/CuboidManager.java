@@ -93,7 +93,7 @@ public class CuboidManager {
 		}
 		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
 		yamlFile.load();
-		for (String player : cuboids.keySet()) {
+		for(String player : cuboids.keySet()) {
 			Cuboid cuboid = cuboids.get(player);
 			yamlFile.set(player, cuboid);
 		}
@@ -111,7 +111,7 @@ public class CuboidManager {
 		}
 		EnhancedConfiguration yamlFile = new EnhancedConfiguration(file, plugin);
 		yamlFile.load();
-		for (String player : yamlFile.getKeys(false)) {
+		for(String player : yamlFile.getKeys(false)) {
 			Cuboid cuboid = (Cuboid) yamlFile.get(player);
 			cuboids.put(player, cuboid);
 		}
