@@ -5,7 +5,7 @@
 - Removal
 
 Since 5.5.0:
-= Fix death-drop exploit (applies to all death possibilities. #106)
+= Fix death-drop exploit (applies to all death possibilities. #106, #119)
 - Removed Metrics (MCStats)
 + Added "magic value" warnings for block ID usage
 ! Code cleanup

@@ -79,7 +79,7 @@ public class ASUtils {
 		if (player.hasMetadata(NO_DROP_KEY)) {
 			List<MetadataValue> vals = player.getMetadata(NO_DROP_KEY);
 			for(MetadataValue val : vals) {
-				if (System.currentTimeMillis() - val.asLong() > plugin.settings().onDeathTimerSeconds * 1000) {
+				if (System.currentTimeMillis() - val.asLong() < plugin.settings().onDeathTimerSeconds * 1000) {
 					return true;
 				}
 			}
