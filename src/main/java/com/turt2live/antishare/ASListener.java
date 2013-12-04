@@ -134,6 +134,7 @@ public class ASListener implements Listener {
 	public static final String LOGBLOCK_METADATA_KEY = "antishare-logblock";
 	public static final String NO_PICKUP_METADATA_KEY = "antishare-logblock";
 	public static final String ANTISHARE_DELAY_BREAK_KEY = "antishare-delay-break";
+	public static final String ANTISHARE_CANCELLED_KEY = "antishare-cancelled";
 	public final FixedMetadataValue EMPTY_METADATA;
 
 	private final Map<String, Long> gamemodeCooldowns = new HashMap<String, Long>();
@@ -600,6 +601,13 @@ public class ASListener implements Listener {
 		if (event.getBlock().hasMetadata(ANTISHARE_DELAY_BREAK_KEY)) {
 			event.getBlock().removeMetadata(ANTISHARE_DELAY_BREAK_KEY, plugin);
 		}
+
+		// Fixes WorldGuard. #120
+		if (event.getBlock().hasMetadata(ANTISHARE_CANCELLED_KEY)) {
+			GameMode gamemode = (GameMode) event.getBlock().getMetadata(ANTISHARE_CANCELLED_KEY).get(0).value();
+			event.getBlock().removeMetadata(ANTISHARE_CANCELLED_KEY, plugin);
+			plugin.getBlockManager().addBlock(gamemode, event.getBlock());
+		}
 	}
 
 	@EventHandler (priority = EventPriority.LOW, ignoreCancelled = true)
@@ -651,6 +659,9 @@ public class ASListener implements Listener {
 		}
 		if (illegal) {
 			event.setCancelled(true);
+			if (blockGamemode != null) {
+				block.setMetadata(ANTISHARE_CANCELLED_KEY, new FixedMetadataValue(plugin, blockGamemode)); // Fixes WorldGuard. #120
+			}
 		} else {
 			plugin.getBlockManager().removeBlock(block);
 		}
