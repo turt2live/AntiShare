@@ -5,8 +5,13 @@
 - Removal
 
 Since 5.5.0:
+= Fix region plugins not working with AntiShare (#120)
+= Fix permissions not always working (#107)
+= Fix items not registering correctly (#117)
 = Fix death-drop exploit (applies to all death possibilities. #106, #119)
 - Removed Metrics (MCStats)
++ Added support for 1.7.X
++ Added option to force empty inventories when switching gamemodes (#114)
 + Added "magic value" warnings for block ID usage
 ! Code cleanup
 
