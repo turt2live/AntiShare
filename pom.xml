@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.turt2live.antishare</groupId>
   <artifactId>AntiShare</artifactId>
-  <version>5.5.2-SNAPSHOT</version>
+  <version>5.5.2</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
