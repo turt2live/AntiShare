@@ -42,7 +42,9 @@ import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.Action;
 import com.turt2live.antishare.util.GamemodeAbstraction;
 import com.turt2live.antishare.util.Messages;
-import com.turt2live.antishare.util.UpdateChecker;
+import com.turt2live.antishare.util.Updater;
+import com.turt2live.antishare.util.Updater.UpdateResult;
+import com.turt2live.antishare.util.Updater.UpdateType;
 import com.turt2live.metrics.EMetrics;
 import com.turt2live.metrics.graph.PieGraph;
 import com.turt2live.metrics.tracker.FixedTracker;
@@ -199,8 +201,18 @@ public class AntiShare extends PluginWrapper {
 		// Start configuration
 		config = new ASConfig(null, null);
 
-		// Start update checker - internal enabled state
-		UpdateChecker.start();
+		// Start update checker, if needed
+		if (!getConfig().getBoolean("other.ignore-updates", false)) {
+			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+				@Override
+				public void run() {
+					Updater update = new Updater(p, 0, getFile(), UpdateType.NO_DOWNLOAD, true);
+					if (update.getResult() == UpdateResult.UPDATE_AVAILABLE) {
+						getLogger().warning(getMessages().getMessage("update", update.getLatestName(), getDescription().getVersion()));
+					}
+				}
+			}, 0, 20 * 60 * 60); // Once an hour
+		}
 
 		// Pre-load
 		blocks = new BlockManager();
