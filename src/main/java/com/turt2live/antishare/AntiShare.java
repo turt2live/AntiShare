@@ -211,7 +211,7 @@ public class AntiShare extends PluginWrapper {
 						getLogger().warning(getMessages().getMessage("update", update.getLatestName(), getDescription().getVersion()));
 					}
 				}
-			}, 0, 20 * 60 * 60); // Once an hour
+			}, 0, 20 * 60 * 60 * 60); // Once an hour
 		}
 
 		// Pre-load
