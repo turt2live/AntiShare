@@ -50,6 +50,7 @@ public class ItemMap {
 				}
 			}
 		}
+		mats.add(material.name());
 		return mats;
 	}
 
