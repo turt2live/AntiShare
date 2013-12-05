@@ -197,6 +197,15 @@ public class ASListener implements Listener {
 				breakAs = playerGamemode;
 			}
 		}
+
+		// Break blocks according to water, if needed. #117
+		if (!isAttachment && water && config.naturalSettings.breakAsWater && MaterialAPI.canBeBrokenByWater(block.getType())) {
+			breakAs = plugin.getBlockManager().getType(block);
+			if (breakAs == null) {
+				breakAs = playerGamemode;
+			}
+		}
+
 		if (breakAs == null) {
 			block.breakNaturally();
 		} else {
