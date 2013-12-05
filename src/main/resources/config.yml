@@ -142,6 +142,8 @@ settings:
         change-inventory: true
         change-ender-chest: true
         change-potion-effects: true
+        # If true, game mode changes can only occur if the player has an empty inventory
+        require-empty-inventory: false
     # Use per world inventories?
     use-per-world-inventories: false
     # Feature handling

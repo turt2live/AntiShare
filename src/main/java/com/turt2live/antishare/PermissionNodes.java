@@ -77,6 +77,7 @@ public class PermissionNodes {
 	public static final String CHECK = "AntiShare.check";
 	public static final String ITEM_FRAMES = "AntiShare.itemframes";
 	public static final String CREATE_CUBOID = "AntiShare.cuboid";
+	public static final String ALLOW_EMPTY_INVENTORY = "AntiShare.gamemode.emptyinv";
 
 	// General Nodes
 	public static final String AFFECT_SURVIVAL = "AntiShare.affect.survival";

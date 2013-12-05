@@ -97,6 +97,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
@@ -276,6 +277,23 @@ public class ASListener implements Listener {
 				} else {
 					gamemodeCooldowns.put(player.getName(), now);
 				}
+			}
+		}
+
+		// Implement empty-inventory requirement, #114
+		if (plugin.settings().gamemodeChangeSettings.requireEmptyInv && !player.hasPermission(PermissionNodes.ALLOW_EMPTY_INVENTORY)) {
+			PlayerInventory inv = player.getInventory();
+			for(ItemStack item : inv) {
+				if (item != null) {
+					if (item.getType() != Material.AIR) {
+						cancel = true;
+						break;
+					}
+				}
+			}
+			if (cancel) {
+				plugin.getMessages().sendTo(player, plugin.getMessages().getMessage("non-empty-inventory"), true);
+				return cancel;
 			}
 		}
 

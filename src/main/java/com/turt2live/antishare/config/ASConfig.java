@@ -72,14 +72,15 @@ public class ASConfig {
 	}
 
 	public static class GameModeChangeSettings {
-		public final boolean changeLevel, changeBalance, changeInventory, changeEnder, changePotionEffects;
+		public final boolean changeLevel, changeBalance, changeInventory, changeEnder, changePotionEffects, requireEmptyInv;
 
-		GameModeChangeSettings(boolean level, boolean balance, boolean inventory, boolean ender, boolean effects) {
+		GameModeChangeSettings(boolean level, boolean balance, boolean inventory, boolean ender, boolean effects, boolean emptyInv) {
 			this.changeBalance = balance;
 			this.changeEnder = ender;
 			this.changeInventory = inventory;
 			this.changeLevel = level;
 			this.changePotionEffects = effects;
+			this.requireEmptyInv = emptyInv;
 		}
 	}
 
@@ -199,7 +200,8 @@ public class ASConfig {
 				(layer.configFor("settings.gamemode-change.change-economy-balance", false)).getBoolean("settings.gamemode-change.change-economy-balance"),
 				(layer.configFor("settings.gamemode-change.change-inventory", false)).getBoolean("settings.gamemode-change.change-inventory"),
 				(layer.configFor("settings.gamemode-change.change-ender-chest", false)).getBoolean("settings.gamemode-change.change-ender-chest"),
-				(layer.configFor("settings.gamemode-change.change-potion-effects", false)).getBoolean("settings.gamemode-change.change-potion-effects"));
+				(layer.configFor("settings.gamemode-change.change-potion-effects", false)).getBoolean("settings.gamemode-change.change-potion-effects"),
+				(layer.configFor("settings.gamemode-change.require-empty-inventory", false)).getBoolean("settings.gamemode-change.require-empty-inventory"));
 		notificationSettings = new NotifySettings(
 				(layer.configFor("settings.notify.use", false)).getBoolean("settings.notify.use"),
 				(layer.configFor("settings.notify.with-permission", false)).getBoolean("settings.notify.with-permission"),

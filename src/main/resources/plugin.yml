@@ -57,6 +57,7 @@ permissions:
             AntiShare.itemframes: true
             AntiShare.cuboid: true
             AntiShare.plugin.magicspells: true
+            AntiShare.gamemode.emptyinv: true
     AntiShare.cuboid:
         description: Allows the target to create cuboids in AntiShare
         default: op
@@ -86,6 +87,9 @@ permissions:
         default: op
     AntiShare.cooldownbypass:
         description: Allows the player to bypass the Game Mode Cooldown
+        default: op
+    AntiShare.gamemode.emptyinv:
+        description: Allows the player to bypass the empty inventory GameMode change check
         default: op
     AntiShare.tool.*:
         description: Allow all AntiShare tool functions
