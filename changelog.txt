@@ -4,7 +4,7 @@
 ! Change
 - Removal
 
-Since 5.5.0:
+Since 5.5.1:
 ! Changed updater
 
 Known Bugs:
