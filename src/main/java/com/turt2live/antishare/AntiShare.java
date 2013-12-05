@@ -73,7 +73,7 @@ public class AntiShare extends PluginWrapper {
 	/**
 	 * AntiShare tool data value. This is to avoid competition with general actions
 	 */
-	public static final short ANTISHARE_TOOL_DATA = 1;
+	public static final short ANTISHARE_TOOL_DATA = 0; // TODO: Temp fix for #123
 
 	// Trackers
 	public static final PieGraph<Action> LEGAL_ACTIONS = new PieGraph<Action>("5.4.0 Legal Actions");
