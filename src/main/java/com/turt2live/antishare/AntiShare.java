@@ -539,26 +539,15 @@ public class AntiShare extends PluginWrapper {
      */
     public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly) {
         if (target != null) {
-            if (player.hasPermission(allowPermission + "." + target)) {
-                return false;
-            }
             if (denyPermission != null && player.hasPermission(denyPermission + "." + target)) {
                 return true;
+            }
+            if (player.hasPermission(allowPermission + "." + target)) {
+                return false;
             }
         }
         if (specialOnly) {
             return false;
-        }
-        if (player.hasPermission(allowPermission)) {
-            return false;
-        }
-        if (denyPermission != null && player.hasPermission(denyPermission)) {
-            return true;
-        }
-        if (GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()) {
-            if (player.hasPermission(PermissionNodes.AFFECT_CREATIVE) || player.hasPermission(PermissionNodes.AFFECT_ADVENTURE)) {
-                return true;
-            }
         }
         if (player.hasPermission(PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE) {
             return true;
@@ -568,6 +557,17 @@ public class AntiShare extends PluginWrapper {
         }
         if (player.hasPermission(PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE) {
             return true;
+        }
+        if (denyPermission != null && player.hasPermission(denyPermission)) {
+            return true;
+        }
+        if (player.hasPermission(allowPermission)) {
+            return false;
+        }
+        if (GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()) {
+            if (player.hasPermission(PermissionNodes.AFFECT_CREATIVE) || player.hasPermission(PermissionNodes.AFFECT_ADVENTURE)) {
+                return true;
+            }
         }
         return false;
     }
