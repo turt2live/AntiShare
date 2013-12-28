@@ -274,7 +274,7 @@ public class Messages {
         String prefix = plugin.getPrefix() == null || plugin.getPrefix().equalsIgnoreCase("no message") ? "[AntiShare]" : plugin.getPrefix();
         message = ChatColor.GRAY + prefix + " " + ChatColor.RESET + message;
         /* SimpleNotice support provided by feildmaster.
-		 * Support adapted by krinsdeath and further
+         * Support adapted by krinsdeath and further
 		 * modified by turt2live for AntiShare.
 		 */
         if (target instanceof Player) {

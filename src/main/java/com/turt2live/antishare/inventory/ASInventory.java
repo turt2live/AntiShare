@@ -225,7 +225,7 @@ public class ASInventory implements Cloneable {
      * Saves the inventory
      */
     /* TODO: Eventual plans:
-	 * - Save to 'regions' (Multiple players per file). 1 person ~= 150kb. ~7 people per file
+     * - Save to 'regions' (Multiple players per file). 1 person ~= 150kb. ~7 people per file
 	 */
     public void save() {
         checkDataFolder();
