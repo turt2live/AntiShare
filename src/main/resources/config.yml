@@ -126,7 +126,7 @@ settings:
             # Note: This simply clears the inventory instead of dropping items, 
             # regardless of Game Mode on death.
             # Negative numbers are ignored and treated as "zero"
-            no-drops-after: 2
+            no-drops-after: 0.5
         break-as-gamemode:
             pistons: true
             # If this is true, then blocks will be broken according to their gamemode (if attached, such as a torch on a falling sand block)
@@ -142,6 +142,8 @@ settings:
         change-inventory: true
         change-ender-chest: true
         change-potion-effects: true
+        # If true, game mode changes can only occur if the player has an empty inventory
+        require-empty-inventory: false
     # Use per world inventories?
     use-per-world-inventories: false
     # Feature handling
