@@ -48,6 +48,27 @@ public class InventoryManager {
             linksYaml.saveDefaults();
         }
         linksYaml.load();
+
+        AntiShare.p.getServer().getScheduler().runTaskTimerAsynchronously(AntiShare.p, new Runnable() {
+            @Override
+            public void run() {
+                checkCache(creative);
+                checkCache(survival);
+                checkCache(adventure);
+                checkCache(enderCreative);
+                checkCache(enderSurvival);
+                checkCache(enderAdventure);
+            }
+        }, 0L, 20L * 5);
+    }
+
+    private void checkCache(ConcurrentHashMap<String, ASInventory> map) {
+        for (String key : map.keySet()) {
+            ASInventory inv = map.get(key);
+            if (inv.isCache() && inv.getCacheTime() > ASInventory.CACHE_EXPIRE) {
+                map.remove(key);
+            }
+        }
     }
 
     private void insert(String playername, ASInventory inventory) {
@@ -56,9 +77,14 @@ public class InventoryManager {
     }
 
     private void insertNoCheck(String playername, ASInventory inventory) {
+        insertNoCheckCache(playername, inventory, true);
+    }
+
+    private void insertNoCheckCache(String playername, ASInventory inventory, boolean checkCache) {
         if (!(inventory.type == InventoryType.PLAYER || inventory.type == InventoryType.ENDER)) {
             return;
         }
+        if (checkCache && isCached(playername, inventory)) return;
         String key = playername + "." + inventory.world;
         boolean isEnder = inventory.type == InventoryType.ENDER;
         switch (inventory.gamemode) {
@@ -76,6 +102,34 @@ public class InventoryManager {
         }
     }
 
+    private boolean isCached(String playerName, ASInventory inventory) {
+        if (!(inventory.type == InventoryType.PLAYER || inventory.type == InventoryType.ENDER)) {
+            return false;
+        }
+        String key = playerName + "." + inventory.world;
+        boolean isEnder = inventory.type == InventoryType.ENDER;
+        ASInventory cache = null;
+        switch (inventory.gamemode) {
+            case SURVIVAL:
+                cache = (isEnder ? enderSurvival : survival).get(key);
+                break;
+            case CREATIVE:
+                cache = (isEnder ? enderCreative : creative).get(key);
+                break;
+            case ADVENTURE:
+                cache = (isEnder ? enderAdventure : adventure).get(key);
+                break;
+            default:
+                return false;
+        }
+        if (cache != null) {
+            if (cache.isCache() && cache.getCacheTime() < ASInventory.CACHE_EXPIRE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void saveInventory(Player player, GameMode gamemode) {
         saveInventory(player, gamemode, player.getWorld());
     }
@@ -86,10 +140,10 @@ public class InventoryManager {
         }
         ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), gamemode, InventoryType.PLAYER);
         inventory.clone(player.getInventory());
-        insert(player.getName(), inventory.clone());
+        insertNoCheckCache(player.getName(), inventory.clone(), false);
         inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), gamemode, InventoryType.ENDER);
         inventory.clone(player.getEnderChest());
-        insert(player.getName(), inventory.clone());
+        insertNoCheckCache(player.getName(), inventory.clone(), false);
     }
 
     private ASInventory getInventory(Player player, GameMode gamemode, InventoryType type) {
@@ -377,12 +431,24 @@ public class InventoryManager {
         String playerName = player.getName();
         for (World world : plugin.getServer().getWorlds()) {
             String worldName = world.getName();
-            creative.remove(playerName + "." + worldName);
-            survival.remove(playerName + "." + worldName);
-            adventure.remove(playerName + "." + worldName);
-            enderCreative.remove(playerName + "." + worldName);
-            enderSurvival.remove(playerName + "." + worldName);
-            enderAdventure.remove(playerName + "." + worldName);
+            if (creative.get(playerName + "." + worldName) != null) {
+                creative.get(playerName + "." + worldName).setCache(true);
+            }
+            if (survival.get(playerName + "." + worldName) != null) {
+                survival.get(playerName + "." + worldName).setCache(true);
+            }
+            if (adventure.get(playerName + "." + worldName) != null) {
+                adventure.get(playerName + "." + worldName).setCache(true);
+            }
+            if (enderCreative.get(playerName + "." + worldName) != null) {
+                enderCreative.get(playerName + "." + worldName).setCache(true);
+            }
+            if (enderSurvival.get(playerName + "." + worldName) != null) {
+                enderSurvival.get(playerName + "." + worldName).setCache(true);
+            }
+            if (enderAdventure.get(playerName + "." + worldName) != null) {
+                enderAdventure.get(playerName + "." + worldName).setCache(true);
+            }
         }
     }
 

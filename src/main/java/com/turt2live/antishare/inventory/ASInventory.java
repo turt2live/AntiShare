@@ -58,18 +58,34 @@ public class ASInventory implements Cloneable {
     public static final ItemStack AIR = new ItemStack(Material.AIR);
     public static final String VERSION = "2";
     public static final ASInventory EMPTY = null;
+    public static final long CACHE_EXPIRE = 60000;
 
     public GameMode gamemode;
     public final String owner;
     public String world;
     public final InventoryType type;
     final Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
+    private boolean isCache = false;
+    private long cacheTime = 0;
 
     ASInventory(GameMode gamemode, String owner, String world, InventoryType type) {
         this.gamemode = gamemode;
         this.owner = owner;
         this.world = world;
         this.type = type;
+    }
+
+    public void setCache(boolean cache) {
+        this.isCache = cache;
+        if (cache) cacheTime = System.currentTimeMillis();
+    }
+
+    public boolean isCache() {
+        return isCache;
+    }
+
+    public long getCacheTime() {
+        return System.currentTimeMillis() - cacheTime;
     }
 
     /**
