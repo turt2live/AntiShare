@@ -86,12 +86,18 @@ public class MobPattern {
         }
         switch (type) {
             case I_SHAPE:
-                if (world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body) {
+                if (world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body
+                        && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body) {
                     return true;
                 }
                 break;
             case T_SHAPE:
-                if (world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body && (world.getBlockAt(block.getX() + 1, block.getY() - 1, block.getZ()).getType() == body && world.getBlockAt(block.getX() - 1, block.getY() - 1, block.getZ()).getType() == body || world.getBlockAt(block.getX(), block.getY() - 1, block.getZ() + 1).getType() == body && world.getBlockAt(block.getX(), block.getY() - 1, block.getZ() - 1).getType() == body)) {
+                if (world.getBlockAt(block.getX(), block.getY() - 1, block.getZ()).getType() == body
+                        && world.getBlockAt(block.getX(), block.getY() - 2, block.getZ()).getType() == body
+                        && (world.getBlockAt(block.getX() + 1, block.getY() - 1, block.getZ()).getType() == body
+                        && world.getBlockAt(block.getX() - 1, block.getY() - 1, block.getZ()).getType() == body
+                        || world.getBlockAt(block.getX(), block.getY() - 1, block.getZ() + 1).getType() == body
+                        && world.getBlockAt(block.getX(), block.getY() - 1, block.getZ() - 1).getType() == body)) {
                     return true;
                 }
                 break;
