@@ -474,12 +474,11 @@ public class AntiShare extends PluginWrapper {
      *
      * @param player          the player
      * @param allowPermission the "allow" permission
-     * @param denyPermission  the "deny" permission
      * @param material        the material applied to the permissions (or null for none)
      * @return true if blocked
      */
-    public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material) {
-        return isBlocked(player, allowPermission, denyPermission, material, false);
+    public boolean isBlocked(Player player, String allowPermission, Material material) {
+        return isBlocked(player, allowPermission, material, false);
     }
 
     /**
@@ -487,15 +486,14 @@ public class AntiShare extends PluginWrapper {
      *
      * @param player          the player
      * @param allowPermission the "allow" permission
-     * @param denyPermission  the "deny" permission
      * @param material        the material applied to the permissions (or null for none)
      * @param specialOnly     true to only check permission.[item] permissions
      * @return true if blocked
      */
-    public boolean isBlocked(Player player, String allowPermission, String denyPermission, Material material, boolean specialOnly) {
-        boolean check1 = isBlocked(player, allowPermission, denyPermission, material == null ? null : material.name(), specialOnly);
+    public boolean isBlocked(Player player, String allowPermission, Material material, boolean specialOnly) {
+        boolean check1 = isBlocked(player, allowPermission, material == null ? null : material.name(), specialOnly);
         @SuppressWarnings("deprecation")
-        boolean check2 = isBlocked(player, allowPermission, denyPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
+        boolean check2 = isBlocked(player, allowPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
         if (check1 || check2) {
             return true;
         }
@@ -506,7 +504,7 @@ public class AntiShare extends PluginWrapper {
         if (material != null) {
             List<String> materials = ItemMap.getNamesFromID(material);
             for (String mat : materials) {
-                if (isBlocked(player, allowPermission, denyPermission, mat, specialOnly)) {
+                if (isBlocked(player, allowPermission, mat, specialOnly)) {
                     return true;
                 }
             }
@@ -519,12 +517,11 @@ public class AntiShare extends PluginWrapper {
      *
      * @param player          the player
      * @param allowPermission the "allow" permission
-     * @param denyPermission  the "deny" permission
      * @param target          the target to apply to this permission, spaces will removed
      * @return true if blocked
      */
-    public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target) {
-        return isBlocked(player, allowPermission, denyPermission, target, false);
+    public boolean isBlocked(Player player, String allowPermission, String target) {
+        return isBlocked(player, allowPermission, target, false);
     }
 
     /**
@@ -532,16 +529,12 @@ public class AntiShare extends PluginWrapper {
      *
      * @param player          the player
      * @param allowPermission the "allow" permission
-     * @param denyPermission  the "deny" permission
      * @param target          the target to apply to this permission, spaces will removed
      * @param specialOnly     true to only check permission.[item] permissions
      * @return true if blocked
      */
-    public boolean isBlocked(Player player, String allowPermission, String denyPermission, String target, boolean specialOnly) {
+    public boolean isBlocked(Player player, String allowPermission, String target, boolean specialOnly) {
         if (target != null) {
-            if (denyPermission != null && player.hasPermission(denyPermission + "." + target)) {
-                return true;
-            }
             if (player.hasPermission(allowPermission + "." + target)) {
                 return false;
             }
@@ -556,9 +549,6 @@ public class AntiShare extends PluginWrapper {
             return true;
         }
         if (player.hasPermission(PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE) {
-            return true;
-        }
-        if (denyPermission != null && player.hasPermission(denyPermission)) {
             return true;
         }
         if (player.hasPermission(allowPermission)) {

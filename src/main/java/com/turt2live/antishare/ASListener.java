@@ -988,7 +988,7 @@ public class ASListener implements Listener {
         if (c.interactMobs.contains(entity.getType())) {
             illegal = true;
         }
-        if (!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, entity.getType().getName())) {
+        if (!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, entity.getType().getName())) {
             illegal = false;
         }
 
@@ -1095,7 +1095,7 @@ public class ASListener implements Listener {
             if (c.interactMobs.contains(entity.getType())) {
                 illegal = true;
             }
-            if (!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, PermissionNodes.DENY_COMBAT_MOBS, entity.getType().getName())) {
+            if (!plugin.isBlocked(player, PermissionNodes.ALLOW_COMBAT_MOBS, entity.getType().getName())) {
                 illegal = false;
             }
         }
@@ -1103,7 +1103,7 @@ public class ASListener implements Listener {
         if (c.interact.has(rightClicked)) {
             illegal = true;
         }
-        if (!plugin.isBlocked(player, PermissionNodes.ALLOW_INTERACT, PermissionNodes.DENY_INTERACT, rightClicked)) {
+        if (!plugin.isBlocked(player, PermissionNodes.ALLOW_INTERACT, rightClicked)) {
             illegal = false;
         }
 
@@ -1326,7 +1326,7 @@ public class ASListener implements Listener {
             }
         }
 
-        if (!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, PermissionNodes.DENY_COMMANDS, (Material) null)) {
+        if (!plugin.isBlocked(player, PermissionNodes.ALLOW_COMMANDS, (Material) null)) {
             illegal = false;
         }
 
@@ -1580,7 +1580,7 @@ public class ASListener implements Listener {
                 if (c.craft.has(event.getRecipe().getResult())) {
                     illegal = true;
                 }
-                if (!plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, null, event.getRecipe().getResult().getType())) {
+                if (!plugin.isBlocked(player, PermissionNodes.MAKE_ANYTHING, event.getRecipe().getResult().getType())) {
                     illegal = false;
                 }
             }
@@ -1823,7 +1823,7 @@ public class ASListener implements Listener {
             if (c.use.has(pearl)) {
                 illegal = true;
             }
-            if (!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, PermissionNodes.DENY_USE, pearl)) {
+            if (!plugin.isBlocked(player, PermissionNodes.ALLOW_USE, pearl)) {
                 illegal = false;
             }
         }

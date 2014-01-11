@@ -475,7 +475,7 @@ public class ASUtils {
         } else if (isPotion && configuration.potions) {
             illegal = true;
         }
-        if (!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())) {
+        if (!p.isBlocked(player, permissions.allow, target.getType())) {
             illegal = false;
         }
         return new ProtectionInformation(illegal, false, null, null);
@@ -500,7 +500,7 @@ public class ASUtils {
         if (list.has(target)) {
             illegal = true;
         }
-        if (!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())) {
+        if (!p.isBlocked(player, permissions.allow, target.getType())) {
             illegal = false;
         }
         return new ProtectionInformation(illegal, false, null, null);
@@ -526,7 +526,7 @@ public class ASUtils {
         if (list.has(target)) {
             illegal = true;
         }
-        if (!p.isBlocked(player, permissions.allow, permissions.deny, target.getType())) {
+        if (!p.isBlocked(player, permissions.allow, target.getType())) {
             illegal = false;
         }
         if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
@@ -559,7 +559,7 @@ public class ASUtils {
         if (list.has(item)) {
             illegal = true;
         }
-        if (!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())) {
+        if (!p.isBlocked(player, permissions.allow, item.getType())) {
             illegal = false;
         }
         if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
@@ -605,7 +605,7 @@ public class ASUtils {
             illegal = true;
         }
 
-        if (!p.isBlocked(player, permissions.allow, permissions.deny, item.getType())) {
+        if (!p.isBlocked(player, permissions.allow, item.getType())) {
             illegal = false;
         }
         if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
@@ -638,7 +638,7 @@ public class ASUtils {
         if (object instanceof Material && list.has((Material) object)) {
             illegal = true;
         }
-        if (!p.isBlocked(player, permissions.allow, permissions.deny, object instanceof Material ? (Material) object : null)) {
+        if (!p.isBlocked(player, permissions.allow, object instanceof Material ? (Material) object : null)) {
             illegal = false;
         }
         if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {
@@ -671,7 +671,7 @@ public class ASUtils {
         if (list.contains(object)) {
             illegal = true;
         }
-        if (!p.isBlocked(player, permissions.allow, permissions.deny, object.getName())) {
+        if (!p.isBlocked(player, permissions.allow, object.getName())) {
             illegal = false;
         }
         if (target != null && permissions.region != null && !player.hasPermission(permissions.region)) {

@@ -25,11 +25,10 @@ public class PermissionNodes {
      * @author turt2live
      */
     public static class PermissionPackage {
-        public final String allow, deny, region;
+        public final String allow, region;
 
-        PermissionPackage(String allow, String deny, String region) {
+        PermissionPackage(String allow, String region) {
             this.allow = allow;
-            this.deny = deny;
             this.region = region;
         }
     }
@@ -51,20 +50,6 @@ public class PermissionNodes {
     public static final String ALLOW_COMBAT_MOBS = "AntiShare.allow.hit_mobs";
     public static final String ALLOW_MOB_CREATION = "AntiShare.allow.create";
     public static final String ALLOW_EAT = "AntiShare.allow.eat";
-
-    // Deny Nodes
-    public static final String DENY_BLOCK_PLACE = "AntiShare.deny.block_place";
-    public static final String DENY_BLOCK_BREAK = "AntiShare.deny.block_break";
-    public static final String DENY_DEATH = "AntiShare.deny.death";
-    public static final String DENY_PICKUP = "AntiShare.deny.pickup_item";
-    public static final String DENY_DROP = "AntiShare.deny.drop_item";
-    public static final String DENY_USE = "AntiShare.deny.use_item";
-    public static final String DENY_INTERACT = "AntiShare.deny.interact_item";
-    public static final String DENY_COMMANDS = "AntiShare.deny.commands";
-    public static final String DENY_COMBAT_PLAYERS = "AntiShare.deny.hit_players";
-    public static final String DENY_COMBAT_MOBS = "AntiShare.deny.hit_mobs";
-    public static final String DENY_MOB_CREATION = "AntiShare.deny.create";
-    public static final String DENY_EAT = "AntiShare.deny.eat";
 
     // Admin Nodes
     public static final String GET_NOTIFICATIONS = "AntiShare.getNotifications";
@@ -122,18 +107,18 @@ public class PermissionNodes {
     public static final String PLUGIN_PLAYER_VAULTS = "AntiShare.plugin.playervaults";
 
     // PACKAGES
-    public static final PermissionPackage PACK_BLOCK_BREAK = new PermissionPackage(ALLOW_BLOCK_BREAK, DENY_BLOCK_BREAK, REGION_BREAK);
-    public static final PermissionPackage PACK_BLOCK_PLACE = new PermissionPackage(ALLOW_BLOCK_PLACE, DENY_BLOCK_PLACE, REGION_PLACE);
-    public static final PermissionPackage PACK_DEATH = new PermissionPackage(ALLOW_DEATH, DENY_DEATH, null);
-    public static final PermissionPackage PACK_PICKUP = new PermissionPackage(ALLOW_PICKUP, DENY_PICKUP, REGION_PICKUP);
-    public static final PermissionPackage PACK_DROP = new PermissionPackage(ALLOW_DROP, DENY_DROP, REGION_THROW);
-    public static final PermissionPackage PACK_USE = new PermissionPackage(ALLOW_USE, DENY_USE, REGION_USE);
-    public static final PermissionPackage PACK_INTERACT = new PermissionPackage(ALLOW_INTERACT, DENY_INTERACT, REGION_INTERACT);
-    public static final PermissionPackage PACK_COMMANDS = new PermissionPackage(ALLOW_COMMANDS, DENY_COMMANDS, null);
-    public static final PermissionPackage PACK_COMBAT_PLAYERS = new PermissionPackage(ALLOW_COMBAT_PLAYERS, DENY_COMBAT_PLAYERS, REGION_ATTACK_PLAYERS);
-    public static final PermissionPackage PACK_COMBAT_MOBS = new PermissionPackage(ALLOW_COMBAT_MOBS, DENY_COMBAT_MOBS, REGION_ATTACK_MOBS);
-    public static final PermissionPackage PACK_MOB_MAKE = new PermissionPackage(ALLOW_MOB_CREATION, DENY_MOB_CREATION, null);
-    public static final PermissionPackage PACK_EAT = new PermissionPackage(ALLOW_EAT, DENY_EAT, null);
+    public static final PermissionPackage PACK_BLOCK_BREAK = new PermissionPackage(ALLOW_BLOCK_BREAK, REGION_BREAK);
+    public static final PermissionPackage PACK_BLOCK_PLACE = new PermissionPackage(ALLOW_BLOCK_PLACE, REGION_PLACE);
+    public static final PermissionPackage PACK_DEATH = new PermissionPackage(ALLOW_DEATH, null);
+    public static final PermissionPackage PACK_PICKUP = new PermissionPackage(ALLOW_PICKUP, REGION_PICKUP);
+    public static final PermissionPackage PACK_DROP = new PermissionPackage(ALLOW_DROP, REGION_THROW);
+    public static final PermissionPackage PACK_USE = new PermissionPackage(ALLOW_USE, REGION_USE);
+    public static final PermissionPackage PACK_INTERACT = new PermissionPackage(ALLOW_INTERACT, REGION_INTERACT);
+    public static final PermissionPackage PACK_COMMANDS = new PermissionPackage(ALLOW_COMMANDS, null);
+    public static final PermissionPackage PACK_COMBAT_PLAYERS = new PermissionPackage(ALLOW_COMBAT_PLAYERS, REGION_ATTACK_PLAYERS);
+    public static final PermissionPackage PACK_COMBAT_MOBS = new PermissionPackage(ALLOW_COMBAT_MOBS, REGION_ATTACK_MOBS);
+    public static final PermissionPackage PACK_MOB_MAKE = new PermissionPackage(ALLOW_MOB_CREATION, null);
+    public static final PermissionPackage PACK_EAT = new PermissionPackage(ALLOW_EAT, null);
 
     public static String getWorldSplitNode(GameMode side) {
         switch (side) {

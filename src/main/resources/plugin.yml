@@ -252,58 +252,6 @@ permissions:
     AntiShare.allow.hit_mobs:
         description: Allows combat with mobs (cows, creepers, etc)
         default: op
-    AntiShare.deny.*:
-        description: Give all AntiShare.deny permissions
-        default: false
-        children:
-            AntiShare.deny.block_place: true
-            AntiShare.deny.block_break: true
-            AntiShare.deny.use_item: true
-            AntiShare.deny.interact_item: true
-            AntiShare.deny.commands: true
-            AntiShare.deny.pickup_item: true
-            AntiShare.deny.drop_item: true
-            AntiShare.deny.hit_players: true
-            AntiShare.deny.hit_mobs: true
-            AntiShare.deny.death: true
-            AntiShare.deny.create: true
-            AntiShare.deny.eat: true
-    AntiShare.deny.eat:
-        description: Denies food
-        default: false
-    AntiShare.deny.create:
-        description: Denies mob creation
-        default: false
-    AntiShare.deny.block_place:
-        description: Denies block place
-        default: false
-    AntiShare.deny.block_break:
-        description: Denies block break
-        default: false
-    AntiShare.deny.use_item:
-        description: Denies item use
-        default: false
-    AntiShare.deny.interact_item:
-        description: Denies item interaction
-        default: false
-    AntiShare.deny.commands:
-        description: Denies item use
-        default: false
-    AntiShare.deny.death:
-        description: Denies death with illegal items
-        default: false
-    AntiShare.deny.pickup_item:
-        description: Denies item pickup
-        default: false
-    AntiShare.deny.drop_item:
-        description: Denies item dropping
-        default: false
-    AntiShare.deny.hit_players:
-        description: Denies combat with players
-        default: false
-    AntiShare.deny.hit_mobs:
-        description: Denies combat with mobs (cows, creepers, etc)
-        default: false
     AntiShare.plugin.*:
         description: Allow all AntiShare plugin integration functions
         default: op
