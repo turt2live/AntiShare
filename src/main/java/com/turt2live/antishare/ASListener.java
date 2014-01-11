@@ -486,12 +486,12 @@ public class ASListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     @SuppressWarnings("deprecation")
     // TODO: Magic value
-    public void onItemSpawn(ItemSpawnEvent event) {
+    public void onItemSpawn(final ItemSpawnEvent event) {
         final Block block = event.getLocation().getBlock();
         if (block.getType() != Material.AIR && !MaterialAPI.isSimilar(block.getType(), event.getEntity().getItemStack().getType())) {
             return;
         }
-        ASConfig c = configFor(event.getLocation());
+        final ASConfig c = configFor(event.getLocation());
         if (c.naturalSettings.breakAsAttached) {
             GameMode type = plugin.getBlockManager().getType(block);
             if (GamemodeAbstraction.isCreative(type)) {
