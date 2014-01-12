@@ -20,6 +20,7 @@
         <json.version>1.1.1</json.version>
         <worldedit.version>4.4.1</worldedit.version>
         <playervaults.version>3.2.4</playervaults.version>
+        <updater.version>2.1</updater.version>
 
         <!-- JAR Versions -->
         <logblock.version>1.70</logblock.version>
@@ -47,6 +48,13 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>${bukkit.version}</version>
+        </dependency>
+
+        <!-- Updater -->
+        <dependency>
+            <groupId>net.gravitydevelopment.updater</groupId>
+            <artifactId>updater</artifactId>
+            <version>${updater.version}</version>
         </dependency>
 
         <!-- PlayerVaults -->
@@ -271,6 +279,12 @@
             <url>http://ci.herocraftonline.com/plugin/repository/project/Vault/LastSuccessful/repository/</url>
         </repository>
 
+        <!-- For Updater -->
+        <repository>
+            <id>gravity-repo</id>
+            <url>http://repo.gravitydevelopment.net</url>
+        </repository>
+
         <!-- For MultiVerse and JSONConfiguration -->
         <repository>
             <id>onarandombox-repo</id>
@@ -335,6 +349,7 @@
                                     <include>com.turt2live.simplenotice:SimpleNoticeAPI</include>
                                     <include>com.dumptruckman.minecraft:JsonConfiguration</include>
                                     <include>net.minidev:json-smart</include>
+                                    <include>net.gravitydevelopment.updater:updater</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -362,6 +377,10 @@
                                 <relocation>
                                     <pattern>com.turt2live.simplenotice</pattern>
                                     <shadedPattern>com.turt2live.simplenotice.${shade.name}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.gravitydevelopment.updater</pattern>
+                                    <shadedPattern>net.gravitydevelopment.updater.${shade.name}</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

@@ -19,11 +19,11 @@ import com.turt2live.antishare.manager.*;
 import com.turt2live.antishare.regions.Region;
 import com.turt2live.antishare.util.GamemodeAbstraction;
 import com.turt2live.antishare.util.Messages;
-import com.turt2live.antishare.util.Updater;
-import com.turt2live.antishare.util.Updater.UpdateResult;
-import com.turt2live.antishare.util.Updater.UpdateType;
 import com.turt2live.metrics.EMetrics;
 import com.turt2live.metrics.tracker.FixedTracker;
+import net.gravitydevelopment.updater.Updater;
+import net.gravitydevelopment.updater.Updater.UpdateResult;
+import net.gravitydevelopment.updater.Updater.UpdateType;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -163,6 +163,7 @@ public class AntiShare extends PluginWrapper {
                     break;
                 }
             }
+            in.close();
         } catch (IOException e) {
         }
 
@@ -182,7 +183,7 @@ public class AntiShare extends PluginWrapper {
                 @Override
                 public void run() {
                     Updater update = new Updater(p, 0, getFile(), UpdateType.NO_DOWNLOAD, true);
-                    if (update.getResult() == UpdateResult.UPDATE_AVAILABLE) {
+                    if (hasUpdate(getDescription().getVersion(), update.getLatestName()) && update.getResult() == UpdateResult.UPDATE_AVAILABLE) {
                         getLogger().warning(getMessages().getMessage("update", update.getLatestName(), getDescription().getVersion()));
                     }
                 }
@@ -296,6 +297,18 @@ public class AntiShare extends PluginWrapper {
         blocks.reload();
         splits.reload();
         loadPlayerInformation();
+    }
+
+    private boolean hasUpdate(String current, String latest) {
+        current = current.toLowerCase();
+        latest = latest.toLowerCase();
+        if (current.contains("v")) current = current.split("v")[1];
+        if (latest.contains("v")) latest = latest.split("v")[1];
+
+        double currentVal = Double.valueOf(current.replaceFirst("\\.", ""));
+        double latestVal = Double.valueOf(latest.replaceFirst("\\.", ""));
+
+        return latestVal > currentVal;
     }
 
     private void loadPlayerInformation() {
