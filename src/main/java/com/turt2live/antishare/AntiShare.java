@@ -182,7 +182,7 @@ public class AntiShare extends PluginWrapper {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                 @Override
                 public void run() {
-                    Updater update = new Updater(p, 0, getFile(), UpdateType.NO_DOWNLOAD, true);
+                    Updater update = new Updater(p, 35181, getFile(), UpdateType.NO_DOWNLOAD, true);
                     if (hasUpdate(getDescription().getVersion(), update.getLatestName()) && update.getResult() == UpdateResult.UPDATE_AVAILABLE) {
                         getLogger().warning(getMessages().getMessage("update", update.getLatestName(), getDescription().getVersion()));
                     }
