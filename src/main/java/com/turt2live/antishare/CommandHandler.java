@@ -67,7 +67,7 @@ public class CommandHandler implements CommandExecutor {
                         plugin.getMessages().sendTo(sender, notPlayer, true);
                     } else {
                         if (sender.hasPermission(PermissionNodes.MIRROR)) {
-                            if (!plugin.getConfig().getBoolean("handled-actions.gamemode-inventories")) {
+                            if (!plugin.settings().features.inventories) {
                                 plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("inventories-not-enabled"), true);
                                 return true;
                             }
