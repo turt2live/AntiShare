@@ -72,7 +72,6 @@ public class CommandHandler implements CommandExecutor {
                                 return true;
                             }
                             if (args.length < 2) {
-                                //plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as mirror <player> [enderchest/normal] [gamemode] [world]"), true);
                                 plugin.getMessages().sendTo(sender, plugin.getMessages().getMessage("syntax", "/as mirror <player> [enderchest/normal] [gamemode] [world]"), true);
                             } else {
                                 // Setup
