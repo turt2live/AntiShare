@@ -2,6 +2,7 @@ package com.turt2live.antishare.inventory;
 
 import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.DebugLogger;
 import com.turt2live.antishare.io.GameModeIdentity;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -106,6 +107,8 @@ public class ASInventory implements Cloneable {
      * @return the contents as an array
      */
     public ItemStack[] getContents(boolean core, boolean armor) {
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (get) getting contents " + core + " " + armor + " " + owner + " " + type + " " + gamemode);
         ItemStack[] array = new ItemStack[SIZE];
         if (core && armor) {
             for (Integer slot : items.keySet()) {
@@ -160,6 +163,8 @@ public class ASInventory implements Cloneable {
      */
     public void clone(Inventory inventory) {
         items.clear();
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (clone2) cloning contents " + owner + " " + type + " " + gamemode);
         if (inventory instanceof PlayerInventory) {
             PlayerInventory playerInv = (PlayerInventory) inventory;
             ItemStack[] armor = playerInv.getArmorContents();
@@ -180,6 +185,8 @@ public class ASInventory implements Cloneable {
      */
     public void clone(ASInventory inventory) {
         items.clear();
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (clone) cloning contents " + owner + " " + type + " " + gamemode);
         if (inventory instanceof PlayerInventory) {
             PlayerInventory playerInv = (PlayerInventory) inventory;
             ItemStack[] armor = playerInv.getArmorContents();
@@ -216,6 +223,8 @@ public class ASInventory implements Cloneable {
         }
         ItemStack[] armor = getContents(false, true);
         ItemStack[] contents = getContents(true, false);
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (set) setting contents " + owner + " " + type + " " + gamemode);
         inventory.setContents(contents);
         if (inventory instanceof PlayerInventory) {
             ((PlayerInventory) inventory).setArmorContents(armor);
@@ -247,6 +256,8 @@ public class ASInventory implements Cloneable {
         checkDataFolder();
         if (type == InventoryType.PLAYER || type == InventoryType.ENDER) {
             if (!GameModeIdentity.hasChangedGameMode(owner)) {
+                // TODO: Remove from production
+                DebugLogger.log(System.currentTimeMillis() + " (save) NO GM CHANGE " + owner + " " + type + " " + gamemode);
                 return; // Don't save if they haven't changed Game Mode yet
             }
         }
@@ -256,10 +267,18 @@ public class ASInventory implements Cloneable {
             if (!file.exists()) {
                 file.createNewFile();
             }
+            // TODO: Remove from production
+            DebugLogger.log(System.currentTimeMillis() + " (save) loading file " + owner + " " + type + " " + gamemode);
             yaml.load(file);
+            // TODO: Remove from production
+            DebugLogger.log(System.currentTimeMillis() + " (save) setting file " + owner + " " + type + " " + gamemode);
             yaml.set(owner + "." + world + "." + gamemode.name(), getContents());
             yaml.set("version", VERSION);
+            // TODO: Remove from production
+            DebugLogger.log(System.currentTimeMillis() + " (save) saving file " + owner + " " + type + " " + gamemode);
             yaml.save(file);
+            // TODO: Remove from production
+            DebugLogger.log(System.currentTimeMillis() + " (save )done " + owner + " " + type + " " + gamemode);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InvalidConfigurationException e) {
@@ -277,29 +296,47 @@ public class ASInventory implements Cloneable {
      * @return the loaded inventory. Will never be null.
      */
     public static ASInventory load(String player, GameMode gamemode, InventoryType type, String world) {
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (load) checking data folder " + player + " " + type + " " + gamemode);
         checkDataFolder();
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (load) blank creation " + player + " " + type + " " + gamemode);
         File file = new File(DATA_FOLDER, type.getRelativeFolderName() + File.separator + player + ".json");
         ASInventory inventory = new ASInventory(gamemode, player, world, type);
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (load) loading json " + player + " " + type + " " + gamemode);
         JsonConfiguration json = new JsonConfiguration();
         try {
             if (!file.exists()) {
+                // TODO: Remove from production
+                DebugLogger.log(System.currentTimeMillis() + " (load) NO FILE EXIST " + player + " " + type + " " + gamemode);
                 return inventory; // Empty inventory
             }
             json.load(file);
             String version = json.getString("version");
             if (version == null) {
+                // TODO: Remove from production
+                DebugLogger.log(System.currentTimeMillis() + " (load) no version - null " + player + " " + type + " " + gamemode);
                 return inventory; // Empty inventory
             } else if (version.equalsIgnoreCase("2")) {
+                // TODO: Remove from production
+                DebugLogger.log(System.currentTimeMillis() + " (load) version2 " + player + " " + type + " " + gamemode);
                 Object something = json.get(player + "." + world + "." + gamemode.name());
                 if (something instanceof List) {
                     List<?> objects = (List<?>) something;
                     for (int i = 0; i < objects.size(); i++) {
                         Object entry = objects.get(i);
                         if (entry instanceof ItemStack) {
+                            // TODO: Remove from production
+                            DebugLogger.log(System.currentTimeMillis() + " (load) set " + i + " = " + entry + " || " + player + " " + type + " " + gamemode);
                             inventory.set(i, (ItemStack) entry);
                         }
                     }
                 }
+            } else {
+
+                // TODO: Remove from production
+                DebugLogger.log(System.currentTimeMillis() + " (load) unknown version " + version + " " + player + " " + type + " " + gamemode);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -321,6 +358,8 @@ public class ASInventory implements Cloneable {
         ASInventory i = null;
         for (World world : AntiShare.p.getServer().getWorlds()) {
             for (GameMode gamemode : GameMode.values()) {
+                // TODO: Remove from production
+                DebugLogger.log(System.currentTimeMillis() + " (load all) loading " + playerName + " " + type + " " + gamemode);
                 i = load(playerName, gamemode, type, world.getName());
                 invs.add(i); // Never null
             }
