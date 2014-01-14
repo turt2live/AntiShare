@@ -79,6 +79,8 @@ public class ASInventory implements Cloneable {
     public void setCache(boolean cache) {
         this.isCache = cache;
         if (cache) cacheTime = System.currentTimeMillis();
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (setcache) SET CACHED " + cache + " " + cacheTime + " " + owner + " " + type + " " + gamemode);
     }
 
     public boolean isCache() {
@@ -86,6 +88,8 @@ public class ASInventory implements Cloneable {
     }
 
     public long getCacheTime() {
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (cachetime) GET CACHED TIME " + isCache + " " + cacheTime + " " + owner + " " + type + " " + gamemode);
         return System.currentTimeMillis() - cacheTime;
     }
 
