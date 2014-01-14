@@ -300,6 +300,7 @@ public class AntiShare extends PluginWrapper {
     }
 
     private boolean hasUpdate(String current, String latest) {
+        if (current.toLowerCase().endsWith("-snapshot")) return false;
         current = current.toLowerCase();
         latest = latest.toLowerCase();
         if (current.contains("v")) current = current.split("v")[1];
