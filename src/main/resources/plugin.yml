@@ -39,7 +39,6 @@ permissions:
         default: op
         children:
             AntiShare.allow.*: true
-            AntiShare.deny.*: false
             AntiShare.getDrops: true
             AntiShare.mirror: true
             AntiShare.getNotifications: true

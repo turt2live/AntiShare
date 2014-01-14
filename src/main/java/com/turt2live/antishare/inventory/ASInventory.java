@@ -116,7 +116,7 @@ public class ASInventory implements Cloneable {
         ItemStack[] array = new ItemStack[SIZE];
         if (core && armor) {
             for (Integer slot : items.keySet()) {
-                array[slot] = items.get(slot);
+                array[slot] = convert(items.get(slot));
             }
         } else if (core && !armor) {
             int size = type == InventoryType.ENDER ? 27 : SIZE - 4;
@@ -125,7 +125,7 @@ public class ASInventory implements Cloneable {
                 if (slot >= size) {
                     continue;
                 }
-                array[slot] = items.get(slot);
+                array[slot] = convert(items.get(slot));
             }
         } else if (!core && armor) {
             array = new ItemStack[4];
@@ -133,10 +133,15 @@ public class ASInventory implements Cloneable {
                 if (slot < SIZE - 4) {
                     continue;
                 }
-                array[slot - (SIZE - 4)] = items.get(slot);
+                array[slot - (SIZE - 4)] = convert(items.get(slot));
             }
         }
         return array;
+    }
+
+    private ItemStack convert(ItemStack item) {
+        if (item == null) return new ItemStack(Material.AIR, 1);
+        return item;
     }
 
     /**
