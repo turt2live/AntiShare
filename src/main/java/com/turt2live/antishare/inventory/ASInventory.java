@@ -322,9 +322,7 @@ public class ASInventory implements Cloneable {
         for (World world : AntiShare.p.getServer().getWorlds()) {
             for (GameMode gamemode : GameMode.values()) {
                 i = load(playerName, gamemode, type, world.getName());
-                if (!i.isEmpty()) { // Never null
-                    invs.add(i);
-                }
+                invs.add(i); // Never null
             }
         }
         return invs;

@@ -320,14 +320,14 @@ public class InventoryManager {
         }
         saveInventory(player, from);
         ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
-        if (regular != null && !regular.isEmpty()) {
+        if (regular != null) {
             regular.setTo(player.getInventory());
         } else {
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
         }
         ASInventory ender = getInventory(player, to, InventoryType.ENDER);
-        if (ender != null && !ender.isEmpty()) {
+        if (ender != null) {
             ender.setTo(player.getEnderChest());
         } else {
             player.getEnderChest().clear();
@@ -349,13 +349,13 @@ public class InventoryManager {
         checkLinksAndWorlds(player.getName(), getInventory(player, from, InventoryType.PLAYER));
         checkLinksAndWorlds(player.getName(), getInventory(player, from, InventoryType.ENDER));
         ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
-        if (regular != null && !regular.isEmpty()) {
+        if (regular != null) {
             regular.setTo(player.getInventory());
         } else {
             player.getInventory().clear();
         }
         ASInventory ender = getInventory(player, to, InventoryType.ENDER);
-        if (ender != null && !ender.isEmpty()) {
+        if (ender != null) {
             ender.setTo(player.getEnderChest());
         } else {
             player.getEnderChest().clear();
