@@ -2,7 +2,6 @@ package com.turt2live.antishare.manager;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.DebugLogger;
 import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
@@ -64,13 +63,9 @@ public class InventoryManager {
     }
 
     private void checkCache(ConcurrentHashMap<String, ASInventory> map) {
-        // TODO: Remove from production
-        DebugLogger.log(System.currentTimeMillis() + " (cache) (man) verifying cache");
         for (String key : map.keySet()) {
             ASInventory inv = map.get(key);
             if (inv.isCache() && inv.getCacheTime() > ASInventory.CACHE_EXPIRE) {
-                // TODO: Remove from production
-                DebugLogger.log(System.currentTimeMillis() + " (cache) (man) [cleanup] clear " + key + " " + map.get(key));
                 map.remove(key);
             }
         }
@@ -89,11 +84,7 @@ public class InventoryManager {
         if (!(inventory.type == InventoryType.PLAYER || inventory.type == InventoryType.ENDER)) {
             return;
         }
-        // TODO: Remove from production
-        DebugLogger.log(System.currentTimeMillis() + " (insert) (man) checking cache... expect another message");
         if (checkCache && isCached(playername, inventory)) return;
-        // TODO: Remove from production
-        DebugLogger.log(System.currentTimeMillis() + " (insert) (man) not cached! inserting");
         String key = playername + "." + inventory.world;
         boolean isEnder = inventory.type == InventoryType.ENDER;
         switch (inventory.gamemode) {
@@ -147,8 +138,6 @@ public class InventoryManager {
         if (!plugin.settings().features.inventories) {
             return; // Don't bother
         }
-        // TODO: Remove from production
-        DebugLogger.log(System.currentTimeMillis() + " (save2) (man) save player using clone");
         ASInventory inventory = ASInventory.createEmptyInventory(player.getName(), world.getName(), gamemode, InventoryType.PLAYER);
         inventory.clone(player.getInventory());
         insertNoCheckCache(player.getName(), inventory.clone(), false);
@@ -242,12 +231,8 @@ public class InventoryManager {
         if (!plugin.settings().features.inventories) {
             return; // Don't bother
         }
-        // TODO: Remove from production
-        DebugLogger.log(System.currentTimeMillis() + " (save) (man) save player");
         saveInventory(player, player.getGameMode());
         String name = player.getName();
-        // TODO: Remove from production
-        DebugLogger.log(System.currentTimeMillis() + " (save) (man) save worlds");
         for (World w : plugin.getServer().getWorlds()) {
             String world = w.getName();
             if (creative.get(name + "." + world) != null) {
