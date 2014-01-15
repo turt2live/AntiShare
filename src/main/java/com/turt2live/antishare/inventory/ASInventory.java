@@ -58,7 +58,7 @@ public class ASInventory implements Cloneable {
     public static final ItemStack AIR = new ItemStack(Material.AIR);
     public static final String VERSION = "2";
     public static final ASInventory EMPTY = null;
-    public static final long CACHE_EXPIRE = 60000;
+    public static long CACHE_EXPIRE = 60000;
 
     public GameMode gamemode;
     public final String owner;
@@ -73,6 +73,11 @@ public class ASInventory implements Cloneable {
         this.owner = owner;
         this.world = world;
         this.type = type;
+        CACHE_EXPIRE = AntiShare.p.getConfig().getLong("other.inv-cache-time", 60) * 1000;
+        if (CACHE_EXPIRE < 0) {
+            CACHE_EXPIRE = 60000;
+            AntiShare.p.getLogger().warning("Invalid inventory cache time. Assuming 60");
+        }
     }
 
     public void setCache(boolean cache) {

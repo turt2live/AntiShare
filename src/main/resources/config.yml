@@ -190,3 +190,4 @@ other:
     ignore-magic-value: false
     allow-test-command: false
     version_string: Not set
+    inv-cache-time: 60
