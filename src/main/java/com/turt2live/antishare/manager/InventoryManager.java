@@ -188,14 +188,14 @@ public class InventoryManager {
         if (!plugin.settings().perWorldInventories) {
             for (World world : Bukkit.getWorlds()) {
                 clone.world = world.getName();
-                insertNoCheck(player, clone);
+                insertNoCheckCache(player, clone, false);
             }
         } else {
             for (World world : Bukkit.getWorlds()) {
                 for (LinkedInventory link : linkedInventories) {
                     if (link.isGameModeAffected(inventory.gamemode) && link.isWorldAffected(world)) {
                         clone.world = world.getName();
-                        insertNoCheck(player, clone);
+                        insertNoCheckCache(player, clone, false);
                     }
                 }
             }
@@ -331,6 +331,8 @@ public class InventoryManager {
             // TODO: Remove from production
             DebugLogger.log(System.currentTimeMillis() + " (gm change) (POS) [" + player.getName() + "] " + stack);
         }
+        checkLinksAndWorlds(player.getName(), getInventory(player, from, InventoryType.PLAYER));
+        checkLinksAndWorlds(player.getName(), getInventory(player, from, InventoryType.ENDER));
         ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
         if (regular != null) {
             regular.setTo(player.getInventory());
