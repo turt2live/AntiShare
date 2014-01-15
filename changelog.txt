@@ -5,7 +5,14 @@
 - Removal
 
 Since 5.5.2:
--- none
+= Fixed permissions issues regarding allow permissions
+= Fixed a huge duplication issue regarding inventories
+= Fixed updater not working
+- Removed "deny" permissions
+- Removed unused Metrics data
+- Removed left over debugging code
+! Updated to support 1.7.2-R0.2
++ Added cached inventories
 
 Known Bugs:
 - Beacons
