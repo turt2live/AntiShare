@@ -491,25 +491,27 @@ public class AntiShare extends PluginWrapper {
      * @return true if blocked
      */
     public boolean isBlocked(Player player, String allowPermission, Material material, boolean specialOnly) {
-        boolean check1 = isBlocked(player, allowPermission, material == null ? null : material.name(), specialOnly);
-        @SuppressWarnings("deprecation")
-        boolean check2 = isBlocked(player, allowPermission, String.valueOf(material == null ? null : material.getId()), specialOnly);
-        if (check1 || check2) {
-            return true;
-        }
-        if (check2) {
+        List<Boolean> permissions = new ArrayList<Boolean>();
+        permissions.add(isBlocked(player, allowPermission, material == null ? null : material.name(), specialOnly));
+        permissions.add(isBlocked(player, allowPermission, String.valueOf(material == null ? null : material.getId()), specialOnly));
+        if (permissions.get(1)) {
             // TODO: Magic value
             getMessages().magicValue();
         }
         if (material != null) {
             List<String> materials = ItemMap.getNamesFromID(material);
             for (String mat : materials) {
-                if (isBlocked(player, allowPermission, mat, specialOnly)) {
-                    return true;
-                }
+                permissions.add(isBlocked(player, allowPermission, mat, specialOnly));
             }
         }
-        return false;
+        boolean hasOneAllowed = false;
+        for (Boolean b : permissions) {
+            if (!b) {
+                hasOneAllowed = true;
+                break;
+            }
+        }
+        return !hasOneAllowed;
     }
 
     /**
@@ -542,6 +544,9 @@ public class AntiShare extends PluginWrapper {
         if (specialOnly) {
             return false;
         }
+        if (player.hasPermission(allowPermission)) {
+            return false;
+        }
         if (player.hasPermission(PermissionNodes.AFFECT_CREATIVE) && player.getGameMode() == GameMode.CREATIVE) {
             return true;
         }
@@ -550,9 +555,6 @@ public class AntiShare extends PluginWrapper {
         }
         if (player.hasPermission(PermissionNodes.AFFECT_ADVENTURE) && player.getGameMode() == GameMode.ADVENTURE) {
             return true;
-        }
-        if (player.hasPermission(allowPermission)) {
-            return false;
         }
         if (GamemodeAbstraction.isCreative(player.getGameMode()) && GamemodeAbstraction.isAdventureCreative()) {
             if (player.hasPermission(PermissionNodes.AFFECT_CREATIVE) || player.hasPermission(PermissionNodes.AFFECT_ADVENTURE)) {
