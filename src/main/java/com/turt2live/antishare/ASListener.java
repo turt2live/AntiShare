@@ -1396,8 +1396,6 @@ public class ASListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onGameModeChange(PlayerGameModeChangeEvent event) {
         Player player = event.getPlayer();
-        // TODO: Remove from production
-        DebugLogger.log(System.currentTimeMillis() + " (gm chg) " + player.getName() + " " + event.getNewGameMode() + " o:" + player.getGameMode());
         if (player.hasMetadata("antishare-joined")) {
             scheduleGameModeChange(event);
             player.removeMetadata("antishare-joined", plugin);

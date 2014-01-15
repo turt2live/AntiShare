@@ -2,7 +2,6 @@ package com.turt2live.antishare.inventory;
 
 import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
 import com.turt2live.antishare.AntiShare;
-import com.turt2live.antishare.DebugLogger;
 import com.turt2live.antishare.io.GameModeIdentity;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -171,15 +170,11 @@ public class ASInventory implements Cloneable {
             ItemStack[] armor = playerInv.getArmorContents();
             for (int i = 0; i < armor.length; i++) {
                 set(36 + i, armor[i]);
-                // TODO: Remove from production
-                DebugLogger.log(System.currentTimeMillis() + " (clone set) " + armor[i] + " ARMOR " + owner + " " + gamemode + " " + type + " " + world);
             }
         }
         ItemStack[] contents = inventory.getContents();
         for (int i = 0; i < contents.length; i++) {
             set(i, contents[i]);
-            // TODO: Remove from production
-            DebugLogger.log(System.currentTimeMillis() + " (clone set) " + contents[i] + " CONTENT " + owner + " " + gamemode + " " + type + " " + world);
         }
     }
 
@@ -257,8 +252,6 @@ public class ASInventory implements Cloneable {
         checkDataFolder();
         if (type == InventoryType.PLAYER || type == InventoryType.ENDER) {
             if (!GameModeIdentity.hasChangedGameMode(owner)) {
-                // TODO: Remove from production
-                DebugLogger.log(System.currentTimeMillis() + " (save) NO GM CHANGE " + owner + " " + type + " " + gamemode);
                 return; // Don't save if they haven't changed Game Mode yet
             }
         }
@@ -270,11 +263,6 @@ public class ASInventory implements Cloneable {
             }
             yaml.load(file);
             yaml.set(owner + "." + world + "." + gamemode.name(), getContents());
-            ItemStack[] k = getContents();
-            for (int i = 0; i < k.length; i++) {
-                // TODO: Remove from production
-                DebugLogger.log(System.currentTimeMillis() + " (inv save) " + i + " " + k[i] + " " + owner + " " + type + " " + gamemode + " " + world);
-            }
             yaml.set("version", VERSION);
             yaml.save(file);
         } catch (IOException e) {
@@ -313,8 +301,6 @@ public class ASInventory implements Cloneable {
                     for (int i = 0; i < objects.size(); i++) {
                         Object entry = objects.get(i);
                         if (entry instanceof ItemStack) {
-                            // TODO: Remove from production
-                            DebugLogger.log(System.currentTimeMillis() + " (load) set " + i + " = " + entry + " || " + player + " " + type + " " + gamemode);
                             inventory.set(i, (ItemStack) entry);
                         }
                     }
