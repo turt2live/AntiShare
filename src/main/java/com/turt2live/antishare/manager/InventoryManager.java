@@ -2,6 +2,7 @@ package com.turt2live.antishare.manager;
 
 import com.feildmaster.lib.configuration.EnhancedConfiguration;
 import com.turt2live.antishare.AntiShare;
+import com.turt2live.antishare.DebugLogger;
 import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASInventory.InventoryType;
@@ -13,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -318,7 +320,17 @@ public class InventoryManager {
         if (!plugin.settings().features.inventories || player.hasPermission(PermissionNodes.NO_SWAP)) {
             return; // Don't bother
         }
+        // TODO: Remove from production
+        DebugLogger.log(System.currentTimeMillis() + " (gm change) " + player.getName() + " " + to + " " + from);
+        for (ItemStack stack : getInventory(player, from, InventoryType.PLAYER).getContents()) {
+            // TODO: Remove from production
+            DebugLogger.log(System.currentTimeMillis() + " (gm change) (PRE) [" + player.getName() + "] " + stack);
+        }
         saveInventory(player, from);
+        for (ItemStack stack : getInventory(player, from, InventoryType.PLAYER).getContents()) {
+            // TODO: Remove from production
+            DebugLogger.log(System.currentTimeMillis() + " (gm change) (POS) [" + player.getName() + "] " + stack);
+        }
         ASInventory regular = getInventory(player, to, InventoryType.PLAYER);
         if (regular != null) {
             regular.setTo(player.getInventory());
