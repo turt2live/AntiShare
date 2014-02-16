@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentMap;
  * before loading. However, {@link #load()} will overwrite the data, if present, in
  * the store while loading. This functionality may be useful in the event of a needed
  * merge between the file system and the memory, where the file system gets the priority
- * on the data stored.
+ * on the data stored. The entire file is ordered with big endian data.
  * <br/><br/>
  * The header consists of 4 4 byte integers (16 bytes total) representing the "store
  * location". This location is an X/Y/Z location alongside the block size. The X/Y/Z
