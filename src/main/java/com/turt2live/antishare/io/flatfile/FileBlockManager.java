@@ -130,7 +130,10 @@ public class FileBlockManager extends GenericBlockManager {
             int header = -1;
             int count = -1;
             for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
-                if (entry.getValue() > count) header = entry.getKey();
+                if (entry.getValue() > count) {
+                    header = entry.getKey();
+                    count = entry.getValue();
+                }
             }
             return header;
         }
