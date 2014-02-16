@@ -6,6 +6,7 @@ import com.turt2live.antishare.io.generics.GenericBlockStore;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
@@ -62,6 +63,10 @@ public class FileBlockStore extends GenericBlockStore {
 
         this.file = file;
         header = new int[]{sx, sy, sz, blocks};
+
+        // Setup buffer order
+        headerBuffer.order(ByteOrder.BIG_ENDIAN);
+        buffer.order(ByteOrder.BIG_ENDIAN);
     }
 
     /**
