@@ -58,7 +58,7 @@ public class ASLocation implements Cloneable {
     }
 
     @Override
-    protected ASLocation clone() {
+    public ASLocation clone() {
         return new ASLocation(X, Y, Z);
     }
 }
