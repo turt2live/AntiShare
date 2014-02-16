@@ -148,15 +148,8 @@ public class FileBlockStore extends GenericBlockStore {
             FileChannel channel = input.getChannel();
 
             // Read header
-            int read = channel.read(headerBuffer);
+            int read = loadHeader(channel);
             if (read == headerBuffer.capacity()) {
-                headerBuffer.position(0);
-                header[0] = headerBuffer.getInt();
-                header[1] = headerBuffer.getInt();
-                header[2] = headerBuffer.getInt();
-                header[3] = headerBuffer.getInt();
-                headerBuffer.clear();
-
                 // Read blocks
                 while ((read = channel.read(buffer)) > -1) {
                     if (read == buffer.capacity()) {
@@ -170,6 +163,47 @@ public class FileBlockStore extends GenericBlockStore {
                     }
                 }
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+
+    private int loadHeader(FileChannel channel) throws IOException {
+        // Read header
+        int read = channel.read(headerBuffer);
+        if (read == headerBuffer.capacity()) {
+            headerBuffer.position(0);
+            header[0] = headerBuffer.getInt();
+            header[1] = headerBuffer.getInt();
+            header[2] = headerBuffer.getInt();
+            header[3] = headerBuffer.getInt();
+            headerBuffer.clear();
+        }
+        return read;
+    }
+
+    /**
+     * Loads the header without loading the entire file's block data
+     */
+    public void loadHeader() {
+        FileInputStream input = null;
+        try {
+            if (!file.exists()) return;
+
+            input = new FileInputStream(file);
+            FileChannel channel = input.getChannel();
+
+            // Read header
+            loadHeader(channel);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

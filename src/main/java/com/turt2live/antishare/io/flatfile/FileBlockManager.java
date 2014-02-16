@@ -5,6 +5,10 @@ import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.io.generics.GenericBlockManager;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -49,7 +53,7 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.load();
+                store.load(); // Less of a hit to load all information instead of just the header then the data
 
                 if (store.getHeader()[3] != blocksPerStore) continue; // Ignore anything that does not match our size
 
@@ -58,5 +62,146 @@ public class FileBlockManager extends GenericBlockManager {
                 stores.put(storeLocation, store);
             }
         }
+    }
+
+    /**
+     * Gets the largest block size from the block stores
+     *
+     * @return the largest block size, or -1 for none found
+     */
+    public int getLargestBlockSize() {
+        File[] files = folder.listFiles();
+        int highHeader = -1;
+        if (files != null) {
+            for (File file : files) {
+                FileBlockStore store = new FileBlockStore(file);
+                store.loadHeader();
+                int[] header = store.getHeader();
+
+                if (header[3] > highHeader) highHeader = header[3];
+            }
+        }
+        return highHeader;
+    }
+
+    /**
+     * Gets the smallest block size from the block stores
+     *
+     * @return the smallest block size, or -1 for none found
+     */
+    public int getSmallestBlockSize() {
+        File[] files = folder.listFiles();
+        int highHeader = Integer.MAX_VALUE;
+        int count = 0;
+        if (files != null) {
+            for (File file : files) {
+                FileBlockStore store = new FileBlockStore(file);
+                store.loadHeader();
+                int[] header = store.getHeader();
+
+                if (header[3] < highHeader) highHeader = header[3];
+                count++;
+            }
+        }
+        return count == 0 ? -1 : highHeader;
+    }
+
+    /**
+     * Gets the most common block size from the block stores
+     *
+     * @return the most common block size, or -1 for none found
+     */
+    public int getMostCommonBlockSize() {
+        File[] files = folder.listFiles();
+        Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
+        if (files != null) {
+            for (File file : files) {
+                FileBlockStore store = new FileBlockStore(file);
+                store.loadHeader();
+                int[] header = store.getHeader();
+
+                if (counts.containsKey(header[3]))
+                    counts.put(header[3], counts.get(header[3]) + 1);
+                else
+                    counts.put(header[3], 1);
+            }
+        }
+        if (counts.size() > 0) {
+            int header = -1;
+            int count = -1;
+            for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
+                if (entry.getValue() > count) header = entry.getKey();
+            }
+            return header;
+        }
+        return -1;
+    }
+
+    /**
+     * Gets the average block size from the block stores
+     *
+     * @return the average block size, or -1 if not found
+     */
+    public int getAverageBlockSize() {
+        File[] files = folder.listFiles();
+        int total = 0;
+        int count = 0;
+        if (files != null) {
+            for (File file : files) {
+                FileBlockStore store = new FileBlockStore(file);
+                store.loadHeader();
+                int[] header = store.getHeader();
+
+                total += header[3];
+                count++;
+            }
+        }
+        return count == 0 ? -1 : (int) (total / (double) count);
+    }
+
+    /**
+     * Gets an array sorted by no particular order of all the unique block sizes
+     * represented by the block stores.
+     *
+     * @return the unsorted array. Never null, but may be of length 0 to represent "no stores"
+     */
+    public int[] getBlockSizes() {
+        List<Integer> sizes = new ArrayList<Integer>();
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                FileBlockStore store = new FileBlockStore(file);
+                store.loadHeader();
+                int[] header = store.getHeader();
+                if (!sizes.contains(header[3])) sizes.add(header[3]);
+            }
+        }
+        int[] data = new int[sizes.size()];
+        for (int i = 0; i < sizes.size(); i++)
+            data[i] = sizes.get(i);
+        return data;
+    }
+
+    /**
+     * Gets a list of block stores that are of a particular block size
+     *
+     * @param blockSize the block size to look for. Value must be greater than 0
+     * @return the list of block stores. Never null but may be empty
+     */
+    public List<BlockStore> getStoresOfSize(int blockSize) {
+        if (blockSize <= 0) throw new IllegalArgumentException("block size must be a positive, non-zero, number");
+
+        List<BlockStore> stores = new ArrayList<BlockStore>();
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                FileBlockStore store = new FileBlockStore(file);
+                store.load(); // Load all information for use later
+                int[] header = store.getHeader();
+
+                if (header[3] == blockSize) stores.add(store);
+            }
+        }
+        return stores;
     }
 }
