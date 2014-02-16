@@ -163,7 +163,7 @@ public class FileBlockStore extends GenericBlockStore {
                         int x = buffer.getInt();
                         int y = buffer.getInt();
                         int z = buffer.getInt();
-                        super.setType(x, y, z, type);
+                        setType(x, y, z, type);
                         buffer.clear();
                     }
                 }
@@ -180,6 +180,36 @@ public class FileBlockStore extends GenericBlockStore {
                 }
             }
         }
+    }
+
+    @Override
+    public BlockType getType(ASLocation location) {
+        if (location == null) throw new IllegalArgumentException("location cannot be null");
+
+        // Validate block size range
+        int sx = (int) Math.floor(location.X / (double) header[3]);
+        int sy = (int) Math.floor(location.Y / (double) header[3]);
+        int sz = (int) Math.floor(location.Z / (double) header[3]);
+
+        if (sx != header[0] || sy != header[1] || sz != header[2])
+            throw new IllegalArgumentException("location is out of range");
+
+        return super.getType(location);
+    }
+
+    @Override
+    public void setType(ASLocation location, BlockType type) {
+        if (location == null) throw new IllegalArgumentException("location cannot be null");
+
+        // Validate block size range
+        int sx = (int) Math.floor(location.X / (double) header[3]);
+        int sy = (int) Math.floor(location.Y / (double) header[3]);
+        int sz = (int) Math.floor(location.Z / (double) header[3]);
+
+        if (sx != header[0] || sy != header[1] || sz != header[2])
+            throw new IllegalArgumentException("location is out of range");
+
+        super.setType(location, type);
     }
 
     private int loadHeader(FileChannel channel) throws IOException {
@@ -233,17 +263,17 @@ public class FileBlockStore extends GenericBlockStore {
         if (type == null) type = BlockType.UNKNOWN;
         switch (type) {
             case CREATIVE:
-                return 0x1;
+                return 0x01;
             case SURVIVAL:
-                return 0x2;
+                return 0x02;
             case ADVENTURE:
-                return 0x3;
+                return 0x03;
             case SPECTATOR:
-                return 0x4;
+                return 0x04;
             case UNKNOWN:
-                return 0x5;
+                return 0x05;
             default:
-                return 0x9;
+                return 0x09;
         }
     }
 
@@ -255,15 +285,15 @@ public class FileBlockStore extends GenericBlockStore {
      */
     public static BlockType byteToType(byte type) {
         switch (type) {
-            case 0x1:
+            case 0x01:
                 return BlockType.CREATIVE;
-            case 0x2:
+            case 0x02:
                 return BlockType.SURVIVAL;
-            case 0x3:
+            case 0x03:
                 return BlockType.ADVENTURE;
-            case 0x4:
+            case 0x04:
                 return BlockType.SPECTATOR;
-            case 0x5:
+            case 0x05:
                 return BlockType.UNKNOWN;
             default:
                 return null;

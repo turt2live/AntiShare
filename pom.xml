@@ -409,7 +409,7 @@
                     <threadCount>1</threadCount>
                     <perCoreThreadCount>false</perCoreThreadCount>
                     <includes>
-                        <include>**/Test*.java</include>
+                        <include>**/*Test.java</include>
                     </includes>
                     <!--<properties> <property> <name>listener</name> <value>com.turt2live.antishare.test.util.CleanupAfterTest</value>
                       </property> </properties> -->
