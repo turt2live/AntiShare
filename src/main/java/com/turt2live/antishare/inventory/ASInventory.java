@@ -82,6 +82,45 @@ public abstract class ASInventory<T> implements SlottedCollection<T>, Cloneable 
         return playerUUID;
     }
 
+    /**
+     * Determines if the inventories are similar regardless of the inventory content. This
+     * will compare everything except the actual inventory contents.
+     *
+     * @param inventory the inventory to compare to, cannot be null
+     * @return true if similar, false otherwise
+     */
+    public boolean isSimilar(ASInventory<T> inventory) {
+        if (gameMode != inventory.gameMode) return false;
+        if (!playerUUID.equals(inventory.playerUUID)) return false;
+        if (!world.equals(inventory.world)) return false;
+
+        return true;
+    }
+
     @Override
     public abstract ASInventory<T> clone();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ASInventory that = (ASInventory) o;
+
+        if (gameMode != that.gameMode) return false;
+        if (!inventory.equals(that.inventory)) return false;
+        if (!playerUUID.equals(that.playerUUID)) return false;
+        if (!world.equals(that.world)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = inventory.hashCode();
+        result = 31 * result + world.hashCode();
+        result = 31 * result + playerUUID.hashCode();
+        result = 31 * result + gameMode.hashCode();
+        return result;
+    }
 }
