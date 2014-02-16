@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentMap;
  * (X, Y, or Z) by the block size.
  * <br/><br/>
  * After the header is continuous data representing block information. The block
- * information consists of a byte flag for the {@link BlockType} and 3 4 byte integers
+ * information consists of a byte flag for the {@link com.turt2live.antishare.BlockType} and 3 4 byte integers
  * for the location of the block (13 bytes total). The data is formatted as flag, block X,
  * block Y, block Z with no leading or trailing bits. The methods {@link #byteToType(byte)}
  * and {@link #typeToByte(com.turt2live.antishare.BlockType)} can be used to convert
@@ -267,7 +267,7 @@ public class FileBlockStore extends GenericBlockStore {
     /**
      * Converts a block type to a byte flag
      *
-     * @param type the type to convert. Null is assumed to be {@link BlockType#UNKNOWN}
+     * @param type the type to convert. Null is assumed to be {@link com.turt2live.antishare.BlockType#UNKNOWN}
      * @return the byte flag representation of the block type
      */
     public static byte typeToByte(BlockType type) {
@@ -291,7 +291,7 @@ public class FileBlockStore extends GenericBlockStore {
     /**
      * Converts a byte flag to a block type
      *
-     * @param type the byte flag to convert. Unknown values return {@link BlockType#UNKNOWN}
+     * @param type the byte flag to convert. Unknown values return {@link com.turt2live.antishare.BlockType#UNKNOWN}
      * @return the block type, never null
      */
     public static BlockType byteToType(byte type) {

@@ -34,7 +34,7 @@ public interface BlockManager {
      * @param x    the X location
      * @param y    the Y location
      * @param z    the Z location
-     * @param type the new block type. Null is assumed to be {@link BlockType#UNKNOWN}
+     * @param type the new block type. Null is assumed to be {@link com.turt2live.antishare.BlockType#UNKNOWN}
      */
     public void setBlockType(int x, int y, int z, BlockType type);
 
@@ -42,7 +42,7 @@ public interface BlockManager {
      * Sets a block's type for the given location
      *
      * @param location the location, cannot be null
-     * @param type     the new block type. Null is assumed to be {@link BlockType#UNKNOWN}
+     * @param type     the new block type. Null is assumed to be {@link com.turt2live.antishare.BlockType#UNKNOWN}
      */
     public void setBlockType(ASLocation location, BlockType type);
 

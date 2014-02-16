@@ -26,7 +26,7 @@ public interface BlockStore {
      * @param x    the x location
      * @param y    the y location
      * @param z    the z location
-     * @param type the new block type. Null is assumed to be {@link BlockType#UNKNOWN}
+     * @param type the new block type. Null is assumed to be {@link com.turt2live.antishare.BlockType#UNKNOWN}
      */
     public void setType(int x, int y, int z, BlockType type);
 
@@ -42,7 +42,7 @@ public interface BlockStore {
      * Sets the type of a block
      *
      * @param location the location, cannot be null
-     * @param type     the new block type. Null is assumed to be {@link BlockType#UNKNOWN}
+     * @param type     the new block type. Null is assumed to be {@link com.turt2live.antishare.BlockType#UNKNOWN}
      */
     public void setType(ASLocation location, BlockType type);
 
