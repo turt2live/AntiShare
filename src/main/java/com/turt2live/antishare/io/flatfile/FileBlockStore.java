@@ -24,6 +24,16 @@ import java.util.concurrent.ConcurrentMap;
  * merge between the file system and the memory, where the file system gets the priority
  * on the data stored. The entire file is ordered with big endian data.
  * <br/><br/>
+ * The block size is the number of permitted blocks per dimension. Therefore, the block
+ * size taken to the power of 3 will represent the total number of blocks the file can
+ * store. To calculate the theoretical size of the resulting file, take the block size
+ * to the power 3, multiply the result by 13, and add 16 to the final result. This
+ * calculation determines the total number of blocks, calculates the size for the blocks
+ * (at 13 bytes per block) and adds the header size to the result (16 bytes). A block
+ * size of 50 will result in 125,000 possible block locations which takes up (if filled)
+ * a theoretical total of 1,625,000 bytes (about 1.55 MB). When adding the header, the
+ * total theoretical file size becomes 1,625,016 (about 1.55 MB).
+ * <br/><br/>
  * The header consists of 4 4 byte integers (16 bytes total) representing the "store
  * location". This location is an X/Y/Z location alongside the block size. The X/Y/Z
  * location is the position for the  store when using the block size as a reference.
@@ -53,10 +63,11 @@ public class FileBlockStore extends GenericBlockStore {
     /**
      * Creates a new file block store using a specified header
      *
-     * @param file the file to load, must not be null
-     * @param sx   the header X
-     * @param sy   the header Y
-     * @param sz   the header Z
+     * @param file   the file to load, must not be null
+     * @param sx     the header X
+     * @param sy     the header Y
+     * @param sz     the header Z
+     * @param blocks the number of permitted blocks per dimension
      */
     public FileBlockStore(File file, int sx, int sy, int sz, int blocks) {
         if (file == null) throw new IllegalArgumentException("file cannot be null");

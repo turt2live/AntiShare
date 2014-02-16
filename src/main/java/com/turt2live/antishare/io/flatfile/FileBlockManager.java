@@ -188,8 +188,9 @@ public class FileBlockManager extends GenericBlockManager {
     /**
      * Gets a list of block stores that are of a particular block size
      *
-     * @param blockSize the block size to look for. Value must be greater than 0
+     * @param blockSize the block size to look for. Value must be greater than 0. See {@link FileBlockStore} for more information
      * @return the list of block stores. Never null but may be empty
+     * @see FileBlockStore
      */
     public List<BlockStore> getStoresOfSize(int blockSize) {
         if (blockSize <= 0) throw new IllegalArgumentException("block size must be a positive, non-zero, number");
