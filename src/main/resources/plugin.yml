@@ -4,5 +4,4 @@ version: maven-version-number
 description: Create social awkwardness for creative-mode players
 author: turt2live
 website: http://dev.bukkit.org/server-mods/antishare
-#softdepend: [Vault, ChestShop, Lockette, LWC, LogBlock, MagicSpells, Pail, PermissionsEx, Towny, MultiVerse-Core]
 build: jenkins-build-number
