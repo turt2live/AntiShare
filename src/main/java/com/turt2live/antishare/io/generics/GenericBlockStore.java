@@ -36,7 +36,8 @@ public abstract class GenericBlockStore implements BlockStore {
     public void setType(ASLocation location, BlockType type) {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
-        types.put(location, type == null ? BlockType.UNKNOWN : type);
+        if (type == null || type == BlockType.UNKNOWN) types.remove(location);
+        else types.put(location, type);
     }
 
     @Override
