@@ -11,9 +11,10 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Represents a store for inventory information
  *
+ * @param <T> the type of inventory
  * @author turt2live
  */
-public abstract class ASInventory<T> implements SlottedCollection<T>, Cloneable {
+public abstract class ASInventory<T extends ASItem> implements SlottedCollection<T>, Cloneable {
 
     protected ConcurrentMap<Integer, T> inventory = new ConcurrentHashMap<Integer, T>();
     protected String world, playerUUID;
