@@ -89,7 +89,6 @@ public class Engine {
         // TODO: Expand to actually do all the processing (permissions, etc)
 
         blockManager.setBlockType(location, gamemode);
-        System.out.println(blockManager + " " + location + " " + gamemode);
     }
 
     /**
