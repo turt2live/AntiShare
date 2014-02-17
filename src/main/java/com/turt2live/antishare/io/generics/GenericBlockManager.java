@@ -4,7 +4,6 @@ import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.BlockStore;
-import org.omg.CORBA.UNKNOWN;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -64,7 +63,7 @@ public abstract class GenericBlockManager implements BlockManager {
     public void setBlockType(ASLocation location, BlockType type) {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
-        if (type == null) type = UNKNOWN;
+        if (type == null) type = BlockType.UNKNOWN;
 
         BlockStore store = getStore(location);
         if (store != null)
@@ -81,7 +80,7 @@ public abstract class GenericBlockManager implements BlockManager {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
         BlockStore store = getStore(location);
-        if (store == null) return UNKNOWN;
+        if (store == null) return BlockType.UNKNOWN;
 
         return store.getType(location);
     }
