@@ -61,4 +61,13 @@ public class ASLocation implements Cloneable {
     public ASLocation clone() {
         return new ASLocation(X, Y, Z);
     }
+
+    @Override
+    public String toString() {
+        return "ASLocation{" +
+                "X=" + X +
+                ", Y=" + Y +
+                ", Z=" + Z +
+                '}';
+    }
 }

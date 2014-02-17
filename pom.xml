@@ -30,7 +30,6 @@
 
         <!-- Test Versions -->
         <junit.version>4.11</junit.version>
-        <powermock.version>1.5</powermock.version>
 
         <!-- Used by replacement plugin to inject build number -->
         <BUILD_NUMBER>local</BUILD_NUMBER>
@@ -52,24 +51,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Power Mock (JUnit) -->
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock.version}</version>
-            <type>jar</type>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Mockito -->
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>${powermock.version}</version>
-            <type>jar</type>
             <scope>test</scope>
         </dependency>
 
@@ -129,7 +110,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
                                     <include>com.feildmaster.lib:EnhancedConfiguration</include>
