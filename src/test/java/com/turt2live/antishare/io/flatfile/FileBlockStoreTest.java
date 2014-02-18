@@ -26,6 +26,9 @@ public class FileBlockStoreTest {
     @BeforeClass
     public static void preTest() {
         folder = new File("test_data");
+        if (folder.exists()) {
+            delete(folder);
+        }
         folder.mkdirs();
         testFile1 = new File(folder, "test1.dat");
     }

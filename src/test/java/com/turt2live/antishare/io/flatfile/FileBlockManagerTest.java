@@ -30,6 +30,9 @@ public class FileBlockManagerTest {
     @BeforeClass
     public static void preTest() {
         folder = new File("test_data_2");
+        if (folder.exists()) {
+            delete(folder);
+        }
         folder.mkdirs();
 
         // Write a bunch of files
