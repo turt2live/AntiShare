@@ -16,13 +16,16 @@ public final class Engine {
     private static Engine instance;
     private CopyOnWriteArrayList<EngineListener> listeners = new CopyOnWriteArrayList<EngineListener>();
     private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<String, WorldEngine>();
-    private long cacheMaximum = 120000; // 120 seconds // TODO: Config
-    private long cacheIncrement = 60000; // 60 seconds // TODO: Config
-    private Timer cacheTimer;
+    private long cacheMaximum = 120000; // 120 seconds
+    private long cacheIncrement = 60000; // 60 seconds
+    private long saveInterval = 0; // Default no save
+    private Timer cacheTimer, saveTimer;
 
     private Engine() {
         newCacheTimer();
+        newSaveTimer();
         setCacheIncrement(cacheIncrement);
+        setSaveInterval(saveInterval);
     }
 
     /**
@@ -108,6 +111,7 @@ public final class Engine {
             listener.onEngineShutdown();
 
         newCacheTimer(); // Cancels internally, resetting the timer to no task
+        newSaveTimer(); // Cancels internally, resetting the timer to no task
         for (WorldEngine engine : engines.values())
             engine.prepareShutdown();
         engines.clear();
@@ -164,12 +168,54 @@ public final class Engine {
                     engine.getBlockManager().cleanup();
                 }
             }
-        }, cacheIncrement, cacheIncrement);
+        }, 0L, cacheIncrement);
+    }
+
+    /**
+     * Sets the new save interval. This is a millisecond value for how often the engine
+     * should periodically save data in the subsequent world engines and itself. Values
+     * less than or equal to zero are considered to be "do not save periodically" and
+     * strictly follow that behaviour. Once called with a value that will trigger a
+     * periodic save, the timer will save immediately and fire every interval until
+     * cancelled.
+     *
+     * @param saveInterval the new save interval
+     */
+    public void setSaveInterval(long saveInterval) {
+        this.saveInterval = saveInterval;
+        newSaveTimer();
+        if (saveInterval > 0) {
+            saveTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    for (WorldEngine engine : engines.values()) {
+                        engine.getBlockManager().saveAll();
+                    }
+                }
+            }, 0, saveInterval);
+        }
+    }
+
+    /**
+     * Gets the save interval for the periodic save function. If the returned value
+     * is less than or equal to zero, the periodic save function is disabled and not
+     * operating. Any other positive value is used to indicate the period by which
+     * the engine triggers a save.
+     *
+     * @return the save interval
+     */
+    public long getSaveInterval() {
+        return saveInterval;
     }
 
     private void newCacheTimer() {
         if (cacheTimer != null) cacheTimer.cancel();
         cacheTimer = new Timer();
+    }
+
+    private void newSaveTimer() {
+        if (saveTimer != null) saveTimer.cancel();
+        saveTimer = new Timer();
     }
 
     /**
