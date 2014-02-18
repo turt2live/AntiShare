@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 
 /**
  * AntiShare Bukkit Listener for the AntiShare Engine. This listener will only
@@ -33,8 +34,15 @@ public class EngineListener implements Listener {
         ASLocation location = BukkitUtils.toLocation(event.getBlock().getLocation());
         BlockType type = ASUtils.toBlockType(BukkitUtils.toGameMode(event.getPlayer().getGameMode()));
 
-        engine.processBlockPlace(location, type);
+        engine.getEngine(event.getPlayer().getWorld().getName()).processBlockPlace(location, type);
     }
+
+    @EventHandler
+    public void onWorldLoad(WorldLoadEvent event) {
+        engine.createWorldEngine(event.getWorld().getName()); // Force-creates the world engine
+    }
+
+    // TODO: Unload world engines
 
     // TODO: Debug code
     @EventHandler
@@ -45,7 +53,8 @@ public class EngineListener implements Listener {
             if (block != null) {
                 event.setCancelled(true);
 
-                BlockType type = engine.getBlockManager().getBlockType(BukkitUtils.toLocation(block.getLocation()));
+                BlockType type = engine.getEngine(event.getPlayer().getWorld().getName())
+                        .getBlockManager().getBlockType(BukkitUtils.toLocation(block.getLocation()));
                 player.sendMessage(ChatColor.YELLOW + "Block Type: " + ChatColor.GOLD + type.name());
             }
         }

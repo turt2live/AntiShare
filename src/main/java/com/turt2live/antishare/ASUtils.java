@@ -22,7 +22,8 @@ public class ASUtils {
                 return BlockType.SURVIVAL;
             case CREATIVE:
                 return BlockType.CREATIVE;
-            // TODO: 1.8
+            case SPECTATOR:
+                return BlockType.SPECTATOR;
             default:
                 return BlockType.UNKNOWN;
         }
@@ -44,7 +45,8 @@ public class ASUtils {
                 return ASGameMode.SURVIVAL;
             case CREATIVE:
                 return ASGameMode.CREATIVE;
-            // TODO: 1.8
+            case SPECTATOR:
+                return ASGameMode.SPECTATOR;
             default:
                 return null;
         }

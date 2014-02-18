@@ -49,7 +49,8 @@ public abstract class GenericBlockManager implements BlockManager {
         BlockStore store = stores.get(storeLocation);
         if (store == null) {
             store = createStore(sx, sy, sz);
-            stores.put(location, store);
+            stores.put(storeLocation, store);
+            store.load();
         }
         return store;
     }
@@ -109,7 +110,8 @@ public abstract class GenericBlockManager implements BlockManager {
     }
 
     /**
-     * Creates a new store file
+     * Creates a new store file. The invoking object is expected to load any information
+     * from the resulting store as this method should be expected to not load data.
      *
      * @param sx the store x location, as per {@link #blocksPerStore}
      * @param sy the store y location, as per {@link #blocksPerStore}
