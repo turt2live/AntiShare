@@ -1,5 +1,7 @@
 package com.turt2live.antishare.engine;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -14,8 +16,20 @@ public final class Engine {
     private static Engine instance;
     private CopyOnWriteArrayList<EngineListener> listeners = new CopyOnWriteArrayList<EngineListener>();
     private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<String, WorldEngine>();
+    private long cacheMaximum = 120000; // 120 seconds // TODO: Config
+    private long cacheIncrement = 60000; // 60 seconds // TODO: Config
+    private Timer cacheTimer;
 
     private Engine() {
+        cacheTimer = new Timer();
+        cacheTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                for (WorldEngine engine : engines.values()) {
+                    engine.getBlockManager().cleanup();
+                }
+            }
+        }, cacheIncrement, cacheIncrement);
     }
 
     /**
@@ -77,14 +91,43 @@ public final class Engine {
     }
 
     /**
-     * Prepares the engine for shutdown
+     * Unloads a world engine from the core engine. If the passed world is
+     * null or not found, this will do nothing.
+     *
+     * @param world the world to unload
+     */
+    public void unloadWorldEngine(String world) {
+        if (world != null) {
+            WorldEngine engine = engines.get(world);
+            if (engine != null) {
+                engine.prepareShutdown();
+                engines.remove(world);
+            }
+        }
+    }
+
+    /**
+     * Prepares the engine for shutdown. This will save all world engines, cancel the
+     * cache timer, and revoke all listeners.
      */
     public void prepareShutdown() {
         for (EngineListener listener : listeners)
             listener.onEngineShutdown();
 
+        cacheTimer.cancel();
         for (WorldEngine engine : engines.values())
             engine.prepareShutdown();
+        engines.clear();
+        listeners.clear();
+    }
+
+    /**
+     * Gets the maximum time the cache is permitted to hold an object
+     *
+     * @return the maximum cache time, in milliseconds
+     */
+    public long getCacheMaximum() {
+        return cacheMaximum;
     }
 
     /**
@@ -96,5 +139,4 @@ public final class Engine {
         if (instance == null) instance = new Engine();
         return instance;
     }
-
 }

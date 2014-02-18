@@ -61,4 +61,11 @@ public interface BlockStore {
      */
     public void clear();
 
+    /**
+     * Gets the time (in milliseconds) this block store was last accessed
+     *
+     * @return the last time this store was accessed
+     */
+    public long getLastAccess();
+
 }

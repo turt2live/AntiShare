@@ -23,6 +23,8 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class FileBlockManager extends GenericBlockManager {
 
+    // TODO: Indexing
+
     private File folder;
 
     /**
@@ -50,6 +52,7 @@ public class FileBlockManager extends GenericBlockManager {
     public void loadAll() {
         File[] files = folder.listFiles();
         ConcurrentMap<ASLocation, BlockStore> stores = getLiveStores();
+        stores.clear(); // Assume a save has been done
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);

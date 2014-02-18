@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentMap;
 public abstract class GenericBlockStore implements BlockStore {
 
     private ConcurrentMap<ASLocation, BlockType> types = new ConcurrentHashMap<ASLocation, BlockType>();
+    private volatile long lastAccess = 0;
 
     @Override
     public BlockType getType(int x, int y, int z) {
@@ -28,12 +29,16 @@ public abstract class GenericBlockStore implements BlockStore {
 
     @Override
     public BlockType getType(ASLocation location) {
+        updateLastAccess();
+
         BlockType type = types.get(location);
         return type == null ? BlockType.UNKNOWN : type;
     }
 
     @Override
     public void setType(ASLocation location, BlockType type) {
+        updateLastAccess();
+
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
         if (type == null || type == BlockType.UNKNOWN) types.remove(location);
@@ -42,7 +47,18 @@ public abstract class GenericBlockStore implements BlockStore {
 
     @Override
     public void clear() {
+        updateLastAccess();
+
         types.clear();
+    }
+
+    @Override
+    public long getLastAccess() {
+        return lastAccess;
+    }
+
+    private void updateLastAccess() {
+        lastAccess = System.currentTimeMillis();
     }
 
     protected ConcurrentMap<ASLocation, BlockType> getLiveMap() {

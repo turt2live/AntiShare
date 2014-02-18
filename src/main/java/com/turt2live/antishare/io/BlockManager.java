@@ -70,8 +70,15 @@ public interface BlockManager {
     public void saveAll();
 
     /**
-     * Loads all the known block stores
+     * Loads all the known block stores. The implementing manager will assume a
+     * save has been completed and may wipe the previous entries from memory.
      */
     public void loadAll();
 
+    /**
+     * Runs a cleanup (on the current thread) on the BlockManager. This will remove
+     * any excess objects which have not been touched from the manager by cleanly
+     * unloading them.
+     */
+    public void cleanup();
 }

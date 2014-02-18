@@ -2,9 +2,11 @@ package com.turt2live.antishare.io.generics;
 
 import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.BlockStore;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -90,6 +92,21 @@ public abstract class GenericBlockManager implements BlockManager {
     public void saveAll() {
         for (BlockStore store : stores.values()) {
             store.save();
+        }
+    }
+
+    @Override
+    public void cleanup() {
+        long now = System.currentTimeMillis();
+        for (Map.Entry<ASLocation, BlockStore> storeEntry : stores.entrySet()) {
+            ASLocation location = storeEntry.getKey();
+            BlockStore store = storeEntry.getValue();
+
+            long lastAccess = store.getLastAccess();
+            if (now - lastAccess > Engine.getInstance().getCacheMaximum()) {
+                store.save();
+                stores.remove(location);
+            }
         }
     }
 
