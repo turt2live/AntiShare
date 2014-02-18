@@ -14,6 +14,7 @@ import java.util.Map;
  *
  * @author turt2live
  */
+// TODO: Add unit test
 public class FileBlockSizeConverter {
 
     protected int fromSize, toSize;
