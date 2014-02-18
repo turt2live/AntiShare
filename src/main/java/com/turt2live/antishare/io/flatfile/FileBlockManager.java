@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -23,8 +24,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class FileBlockManager extends GenericBlockManager {
 
-    // TODO: Indexing
-
+    private ConcurrentMap<ASLocation, String> index = new ConcurrentHashMap<ASLocation, String>();
     private File folder;
 
     /**
@@ -39,12 +39,23 @@ public class FileBlockManager extends GenericBlockManager {
             throw new IllegalArgumentException("folder must be a folder, cannot be null, and must exist");
 
         this.folder = folder;
+        index();
     }
 
     @Override
     protected BlockStore createStore(int sx, int sy, int sz) {
-        // File name is not used, the store uses a header for this information
-        File storeFile = new File(folder, sx + "." + sy + "." + sz + ".dat");
+        // File name is irrelevant. Check index, if not found then use default naming scheme
+        ASLocation indexLocation = new ASLocation(sx, sy, sz);
+        String fileName = index.get(indexLocation);
+        File storeFile = fileName == null ? new File(folder, sx + "." + sy + "." + sz + ".dat") : new File(fileName);
+
+        // Check for invalid index
+        if (!storeFile.exists() && fileName != null) storeFile = new File(folder, sx + "." + sy + "." + sz + ".dat");
+
+        // Update index
+        if (fileName == null || !fileName.equals(storeFile.getAbsolutePath()) || !storeFile.exists())
+            index.put(indexLocation, storeFile.getAbsolutePath());
+
         return new FileBlockStore(storeFile, sx, sy, sz, blocksPerStore);
     }
 
@@ -64,6 +75,22 @@ public class FileBlockManager extends GenericBlockManager {
                 ASLocation storeLocation = new ASLocation(header[0], header[1], header[2]);
                 stores.put(storeLocation, store);
                 store.load(); // Only load data once we know the header is OK
+            }
+        }
+    }
+
+    private void index() {
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                FileBlockStore store = new FileBlockStore(file);
+                store.loadHeader();
+
+                if (store.getHeader()[3] != blocksPerStore) continue; // Ignore anything that does not match our size
+
+                int[] header = store.getHeader();
+                ASLocation storeLocation = new ASLocation(header[0], header[1], header[2]);
+                index.put(storeLocation, file.getAbsolutePath());
             }
         }
     }
