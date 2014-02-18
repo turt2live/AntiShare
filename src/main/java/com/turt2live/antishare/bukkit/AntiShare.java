@@ -73,6 +73,11 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         for (World world : getServer().getWorlds()) {
             Engine.getInstance().createWorldEngine(world.getName());
         }
+
+        // Load economy hook
+        if (getServer().getPluginManager().getPlugin("Vault") != null) {
+            Engine.getInstance().setEconomy(new VaultEconomy());
+        }
     }
 
     @Override

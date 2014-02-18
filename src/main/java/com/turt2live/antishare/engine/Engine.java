@@ -1,5 +1,7 @@
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.economy.ASEconomy;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,12 +24,33 @@ public final class Engine {
     private long saveInterval = 0; // Default no save
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
+    private ASEconomy economy;
 
     private Engine() {
         newCacheTimer();
         newSaveTimer();
         setCacheIncrement(cacheIncrement);
         setSaveInterval(saveInterval);
+    }
+
+    /**
+     * Gets the economy engine for this engine. If economy support is
+     * not configured or not enabled, this will return null
+     *
+     * @return the economy instance, or null for none
+     */
+    public ASEconomy getEconomy() {
+        return economy;
+    }
+
+    /**
+     * Sets the economy instance to use for this enngine. If null, it is assumed
+     * the behaviour of "no economy" is applicable.
+     *
+     * @param economy the economy, may be null
+     */
+    public void setEconomy(ASEconomy economy) {
+        this.economy = economy;
     }
 
     /**
