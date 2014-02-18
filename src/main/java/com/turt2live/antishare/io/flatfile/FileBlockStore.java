@@ -213,7 +213,7 @@ public class FileBlockStore extends GenericBlockStore {
                         tries = 0; // Reset tries count to avoid potential bad data checks
                     } else {
                         // Error correction
-                        if (channel.position() == channel.size()) {
+                        if (channel.position() >= channel.size() - 1) {
                             // EOF
                             engine.getLogger().warning("Corrupted data found at end of file: " + file.getAbsolutePath());
                             engine.getLogger().warning("No error correction was performed due to lack of data.");
