@@ -56,13 +56,14 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.load(); // Less of a hit to load all information instead of just the header then the data
+                store.loadHeader();
 
                 if (store.getHeader()[3] != blocksPerStore) continue; // Ignore anything that does not match our size
 
                 int[] header = store.getHeader();
                 ASLocation storeLocation = new ASLocation(header[0], header[1], header[2]);
                 stores.put(storeLocation, store);
+                store.load(); // Only load data once we know the header is OK
             }
         }
     }

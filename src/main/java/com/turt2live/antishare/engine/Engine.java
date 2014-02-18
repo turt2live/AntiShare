@@ -5,6 +5,7 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 /**
  * Represents the AntiShare engine
@@ -20,12 +21,33 @@ public final class Engine {
     private long cacheIncrement = 60000; // 60 seconds
     private long saveInterval = 0; // Default no save
     private Timer cacheTimer, saveTimer;
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     private Engine() {
         newCacheTimer();
         newSaveTimer();
         setCacheIncrement(cacheIncrement);
         setSaveInterval(saveInterval);
+    }
+
+    /**
+     * Gets the logger for this engine
+     *
+     * @return the logger
+     */
+    public Logger getLogger() {
+        return logger;
+    }
+
+    /**
+     * Sets the new logger for this engine to use
+     *
+     * @param logger the new logger, cannot be null
+     */
+    public void setLogger(Logger logger) {
+        if (logger == null) throw new IllegalArgumentException("logger may not be null");
+
+        this.logger = logger;
     }
 
     /**

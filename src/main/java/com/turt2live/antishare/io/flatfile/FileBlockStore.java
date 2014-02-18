@@ -2,6 +2,7 @@ package com.turt2live.antishare.io.flatfile;
 
 import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.generics.GenericBlockStore;
 
 import java.io.*;
@@ -105,12 +106,13 @@ public class FileBlockStore extends GenericBlockStore {
     public void save() {
         FileOutputStream output = null;
         try {
+            // TODO: Avoid deleting the file
             file.delete();
             File parent = file.getParentFile();
             if (parent != null && !parent.exists()) parent.mkdirs();
             file.createNewFile();
 
-            output = new FileOutputStream(file);
+            output = new FileOutputStream(file, false); // Force append mode off
             FileChannel channel = output.getChannel();
 
             // Write header
@@ -164,18 +166,69 @@ public class FileBlockStore extends GenericBlockStore {
             FileChannel channel = input.getChannel();
 
             // Read header
+            Engine engine = Engine.getInstance();
             int read = loadHeader(channel);
+            int tries = 0;
             if (read == headerBuffer.capacity()) {
                 // Read blocks
                 while ((read = channel.read(buffer)) > -1) {
                     if (read == buffer.capacity()) {
                         buffer.position(0);
-                        BlockType type = byteToType(buffer.get());
+                        byte gmbyte = buffer.get();
+                        BlockType type = byteToType(gmbyte);
                         int x = buffer.getInt();
                         int y = buffer.getInt();
                         int z = buffer.getInt();
-                        setType(x, y, z, type);
+
+                        if (type == null) {
+                            // This is bad. This means the gamemode byte is invalid and cannot
+                            // be read correctly. Maybe half a block was stored? Maybe some weird data
+                            // was stored? Tampering? Who knows. We'll simply record the incident
+                            // and ignore it.
+                            engine.getLogger().severe("Invalid gamemode flag for data in file: " + file.getAbsolutePath());
+                            engine.getLogger().severe("Error correction has NOT been performed.");
+                            engine.getLogger().severe("Here is the known information. It should be noted that the following information is directly read from the file and may not actually represent the data expected in any way.");
+                            engine.getLogger().severe("    X = " + x);
+                            engine.getLogger().severe("    Y = " + y);
+                            engine.getLogger().severe("    Z = " + z);
+                            engine.getLogger().severe("    GameMode Byte = " + Integer.toHexString(gmbyte));
+                            engine.getLogger().severe("Please ensure that the file you have saved is supported by your version of AntiShare.");
+                        } else {
+                            BlockType previous = getType(x, y, z);
+                            if (previous != BlockType.UNKNOWN && previous != type) {
+                                // Duplicate entry - Print out both to console and save latest
+                                // Note: The above check also ensures the previous type is not the same
+                                // as the new type. This is because the data hasn't changed otherwise,
+                                // although it is weird there is a duplicate.
+                                engine.getLogger().warning("Duplicate mismatched data in file: " + file.getAbsolutePath());
+                                engine.getLogger().warning("Duplicate data was found in the mentioned file. The data is displayed below for your correction. The last data read is the data AntiShare is using for storage, therefore discarding the 'previous' data.");
+                                engine.getLogger().warning("LOCATION (" + x + ", " + y + ", " + z + ") Previous GameMode: " + previous + ", new GameMode: " + type);
+                            }
+
+                            // Write the new data, regardless of error state
+                            setType(x, y, z, type);
+                        }
+
                         buffer.clear();
+                        tries = 0; // Reset tries count to avoid potential bad data checks
+                    } else {
+                        // Error correction
+                        if (channel.position() == channel.size()) {
+                            // EOF
+                            engine.getLogger().warning("Corrupted data found at end of file: " + file.getAbsolutePath());
+                            engine.getLogger().warning("No error correction was performed due to lack of data.");
+                        } else {
+                            // LOVELY. We are in the middle of the file.
+                            if (tries > 3) {
+                                engine.getLogger().warning("Corrupted data found in the middle of file: " + file.getAbsolutePath());
+                                engine.getLogger().warning("No error correction was performed due to lack of information.");
+                            } else {
+                                tries++;
+                                channel.position(channel.position() - read); // Go back and retry
+                                engine.getLogger().warning("Potentially corrupted data found in file: " + file.getAbsolutePath());
+                                engine.getLogger().warning("Attempt " + tries + "/3 to re-read the section...");
+                            }
+                        }
                     }
                 }
             }
