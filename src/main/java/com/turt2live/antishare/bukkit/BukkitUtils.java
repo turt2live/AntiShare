@@ -2,8 +2,14 @@ package com.turt2live.antishare.bukkit;
 
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.ASUtils;
+import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.engine.Engine;
+import com.turt2live.antishare.engine.WorldEngine;
+import com.turt2live.antishare.io.BlockManager;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 /**
  * AntiShare to/from Bukkit Utilities
@@ -74,6 +80,40 @@ public class BukkitUtils {
             default:
                 return null;
         }
+    }
+
+    /**
+     * Converts a Bukkit Game Mode to an AntiShare Block Type
+     *
+     * @param gamemode the gamemode to convert
+     * @return the block type
+     */
+    public static BlockType toBlockType(GameMode gamemode) {
+        if (gamemode == null) throw new IllegalArgumentException("gamemode cannot be null");
+
+        return ASUtils.toBlockType(toGameMode(gamemode));
+    }
+
+    /**
+     * Gets the world engine for the supplied world
+     *
+     * @param world the world, cannot be null
+     * @return the world engine
+     */
+    public static WorldEngine getWorldEngine(World world) {
+        if (world == null) throw new IllegalArgumentException("world cannot be null");
+
+        return Engine.getInstance().getEngine(world.getName());
+    }
+
+    /**
+     * Gets the block manager for the specified world
+     *
+     * @param world the world, cannot be null
+     * @return the block manager
+     */
+    public static BlockManager getBlockManager(World world) {
+        return getWorldEngine(world).getBlockManager();
     }
 
 }

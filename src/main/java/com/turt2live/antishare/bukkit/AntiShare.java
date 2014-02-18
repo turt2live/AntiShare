@@ -1,10 +1,16 @@
 package com.turt2live.antishare.bukkit;
 
 import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.bukkit.command.ASCommandHandler;
+import com.turt2live.antishare.bukkit.lang.Lang;
+import com.turt2live.antishare.bukkit.listener.EngineListener;
+import com.turt2live.antishare.bukkit.listener.ToolListener;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.io.flatfile.FileBlockManager;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -30,14 +36,15 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
 
     @Override
     public void onEnable() {
-        Engine.getInstance().addListener(this);
-        Engine.getInstance().setLogger(this.getLogger());
-
-        getConfig().options().copyDefaults(true);
+        // Setup configuration
+        FileConfiguration configuration = YamlConfiguration.loadConfiguration(getResource("config.yml"));
+        getConfig().setDefaults(configuration);
         saveDefaultConfig();
-        getConfig().options().copyDefaults(false);
 
-        // load engine variables
+        // Start lang
+        Lang.getInstance();
+
+        // Load engine variables
         blockSize = getConfig().getInt("caching.block-size", 256);
         long cacheMax = getConfig().getLong("caching.cache-expiration", 120000);
         long cacheInterval = getConfig().getLong("caching.cache-timer-interval", 60000);
@@ -49,12 +56,18 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         if (cacheInterval <= 0) cacheInterval = 60000;
 
         // Setup engine
+        Engine.getInstance().addListener(this);
+        Engine.getInstance().setLogger(this.getLogger());
         Engine.getInstance().setCacheMaximum(cacheMax);
         Engine.getInstance().setCacheIncrement(cacheInterval);
         Engine.getInstance().setSaveInterval(periodicSave);
 
         // Setup listeners
         getServer().getPluginManager().registerEvents(new EngineListener(), this);
+        getServer().getPluginManager().registerEvents(new ToolListener(), this);
+
+        // Setup commands
+        getCommand("antishare").setExecutor(new ASCommandHandler(this));
 
         // Probe all currently loaded worlds
         for (World world : getServer().getWorlds()) {

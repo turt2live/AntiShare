@@ -53,4 +53,24 @@ public class ASUtils {
         }
     }
 
+    /**
+     * Converts an input string to have upper case words. Spaces and underscores
+     * are considered the same and therefore will create words as such.
+     *
+     * @param input the input, cannot be null
+     * @return the output as upper case words
+     */
+    public static String toUpperWords(String input) {
+        if (input == null) throw new IllegalArgumentException("input cannot be null");
+
+        StringBuilder out = new StringBuilder();
+        String[] parts = input.replaceAll("_", " ").split(" ");
+
+        for (String s : parts) {
+            out.append(s.substring(0, 1).toUpperCase()).append(s.substring(1).toLowerCase()).append(" ");
+        }
+
+        return out.toString().trim();
+    }
+
 }

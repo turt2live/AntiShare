@@ -1,8 +1,9 @@
-package com.turt2live.antishare.bukkit;
+package com.turt2live.antishare.bukkit.listener;
 
 import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.engine.Engine;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +22,7 @@ public class EngineListener implements Listener {
 
     private Engine engine;
 
-    EngineListener() {
+    public EngineListener() {
         engine = Engine.getInstance();
     }
 
