@@ -21,15 +21,8 @@ public final class Engine {
     private Timer cacheTimer;
 
     private Engine() {
-        cacheTimer = new Timer();
-        cacheTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                for (WorldEngine engine : engines.values()) {
-                    engine.getBlockManager().cleanup();
-                }
-            }
-        }, cacheIncrement, cacheIncrement);
+        newCacheTimer();
+        setCacheIncrement(cacheIncrement);
     }
 
     /**
@@ -114,7 +107,7 @@ public final class Engine {
         for (EngineListener listener : listeners)
             listener.onEngineShutdown();
 
-        cacheTimer.cancel();
+        newCacheTimer(); // Cancels internally, resetting the timer to no task
         for (WorldEngine engine : engines.values())
             engine.prepareShutdown();
         engines.clear();
@@ -128,6 +121,55 @@ public final class Engine {
      */
     public long getCacheMaximum() {
         return cacheMaximum;
+    }
+
+    /**
+     * Gets the number of milliseconds it takes for the cache timer to tick
+     *
+     * @return the milliseconds for a tick
+     */
+    public long getCacheIncrement() {
+        return cacheIncrement;
+    }
+
+    /**
+     * Sets the cache maximum. The value is a millisecond value for how long an object
+     * may remain stale before being removed
+     *
+     * @param cacheMaximum the new cache maximum, cannot be less than or equal to zero
+     */
+    public void setCacheMaximum(long cacheMaximum) {
+        if (cacheMaximum <= 0) throw new IllegalArgumentException("maximum cannot be less than or equal to zero");
+
+        this.cacheMaximum = cacheMaximum;
+    }
+
+    /**
+     * Sets the new cache increment. This is a millisecond value for how often a cache
+     * cleanup check is issued. Once this is called with a valid value, the cache timer
+     * is rescheduled to occur immediately and will have a period equal to the value
+     * passed.
+     *
+     * @param cacheIncrement the new increment, cannot be less than or equal to zero
+     */
+    public void setCacheIncrement(long cacheIncrement) {
+        if (cacheIncrement <= 0)
+            throw new IllegalArgumentException("cache increment must not be less than or equal to zero");
+
+        newCacheTimer();
+        cacheTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                for (WorldEngine engine : engines.values()) {
+                    engine.getBlockManager().cleanup();
+                }
+            }
+        }, cacheIncrement, cacheIncrement);
+    }
+
+    private void newCacheTimer() {
+        if (cacheTimer != null) cacheTimer.cancel();
+        cacheTimer = new Timer();
     }
 
     /**
