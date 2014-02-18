@@ -40,3 +40,9 @@ tools:
     on-set: '&9Block set as &b@g'
     on-unset: '&9Block type removed, was &b@g'
     on-get: '&2You now have the AntiShare tools'
+errors:
+    internal: '&cSevere internal error. Please contact your administrator.'
+    not-a-player: '&cYou are not a player!'
+    permission: '&cYou do not have permission to do that.'
+    syntax: '&cInvalid syntax. Try &e@v'
+    help-suggest: '&cDid you mean &e/as help&c?'

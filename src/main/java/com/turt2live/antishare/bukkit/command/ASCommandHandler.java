@@ -6,7 +6,6 @@ import com.turt2live.antishare.bukkit.command.validator.ArgumentValidator;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -80,13 +79,11 @@ public class ASCommandHandler implements CommandExecutor {
         List<CommandInfo> commandHandlers = commands.get(command.getName());
         if (commandHandlers == null || commandHandlers.isEmpty()) {
             plugin.getLogger().severe("No command handler for command: " + command.getName());
-            // TODO: Lang
-            sender.sendMessage(new LangBuilder(ChatColor.RED + "Severe internal error. Please contact your administrator.").withPrefix().build());
+            sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_INTERNAL)).withPrefix().build());
             return true;
         }
         if (args.length < 1) {
-            // TODO: Lang
-            sender.sendMessage(ChatColor.RED + "Did you mean " + ChatColor.YELLOW + "/" + command.getName() + " help" + ChatColor.RED + "?");
+            sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_HELP_SUGGEST)).withPrefix().build());
             return true;
         }
         for (CommandInfo handler : commandHandlers) {
@@ -94,13 +91,11 @@ public class ASCommandHandler implements CommandExecutor {
             Method method = handler.method;
             if (annotation.subArgument().equalsIgnoreCase(args[0]) || contains(annotation.alternateSubArgs(), args[0])) {
                 if (annotation.playersOnly() && !(sender instanceof Player)) {
-                    // TODO: Lang
-                    sender.sendMessage(new LangBuilder(ChatColor.RED + "You need to be a player to run that command.").withPrefix().build());
+                    sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_NOT_A_PLAYER)).withPrefix().build());
                     return true;
                 }
                 if (!annotation.permission().equalsIgnoreCase(Command.NO_PERMISSION) && !sender.hasPermission(annotation.permission())) {
-                    // TODO: Lang
-                    sender.sendMessage(new LangBuilder(ChatColor.RED + "No permission").withPrefix().build());
+                    sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_NO_PERMISSION)).withPrefix().build());
                     return true;
                 }
                 Map<String, Object> arguments = new HashMap<String, Object>();
@@ -121,56 +116,47 @@ public class ASCommandHandler implements CommandExecutor {
                                         if (validator.isValid(sender, input)) {
                                             arguments.put(arg.subArgument(), validator.get(sender, input));
                                         } else {
-                                            // TODO: Lang
                                             sender.sendMessage(validator.getErrorMessage(sender, input));
                                             return true;
                                         }
                                     } catch (InstantiationException e) {
                                         e.printStackTrace();
-                                        // TODO: Lang
-                                        sender.sendMessage(new LangBuilder(ChatColor.RED + "Severe internal error. Please contact your administrator.").withPrefix().build());
+                                        sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_INTERNAL)).withPrefix().build());
                                         return true;
                                     } catch (IllegalAccessException e) {
                                         e.printStackTrace();
-                                        // TODO: Lang
-                                        sender.sendMessage(new LangBuilder(ChatColor.RED + "Severe internal error. Please contact your administrator.").withPrefix().build());
+                                        sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_INTERNAL)).withPrefix().build());
                                         return true;
                                     }
                                 } else if (!arg.optional()) {
-                                    // TODO: Lang
-                                    sender.sendMessage(ChatColor.RED + "Incorrect syntax. Try " + ChatColor.YELLOW + annotation.usage());
+                                    sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_SYNTAX)).setReplacement(LangBuilder.SELECTOR_VARIABLE, annotation.usage()).withPrefix().build());
                                     return true;
                                 }
                             } else {
                                 plugin.getLogger().severe("Invalid argument handler for: /" + command.getName() + " " + args[0]);
-                                // TODO: Lang
-                                sender.sendMessage(new LangBuilder(ChatColor.RED + "Severe internal error. Please contact your administrator.").withPrefix().build());
+                                sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_INTERNAL)).withPrefix().build());
                                 return true;
                             }
                         }
                     }
                 }
                 if (numNonOptional > arguments.size()) {
-                    // TODO: Lang
-                    sender.sendMessage(ChatColor.RED + "Incorrect syntax. Try " + ChatColor.YELLOW + annotation.usage());
+                    sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_SYNTAX)).setReplacement(LangBuilder.SELECTOR_VARIABLE, annotation.usage()).withPrefix().build());
                     return true;
                 }
                 try {
                     return (Boolean) method.invoke(this, sender, arguments);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
-                    // TODO: Lang
-                    sender.sendMessage(new LangBuilder(ChatColor.RED + "Severe internal error. Please contact your administrator.").withPrefix().build());
+                    sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_INTERNAL)).withPrefix().build());
                     return true;
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
-                    // TODO: Lang
-                    sender.sendMessage(new LangBuilder(ChatColor.RED + "Severe internal error. Please contact your administrator.").withPrefix().build());
+                    sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_INTERNAL)).withPrefix().build());
                     return true;
                 } catch (ClassCastException e) {
                     e.printStackTrace();
-                    // TODO: Lang
-                    sender.sendMessage(new LangBuilder(ChatColor.RED + "Severe internal error. Please contact your administrator.").withPrefix().build());
+                    sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_INTERNAL)).withPrefix().build());
                     return true;
                 }
             }

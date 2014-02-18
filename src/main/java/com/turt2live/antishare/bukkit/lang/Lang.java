@@ -24,6 +24,11 @@ public class Lang {
     public static final String TOOL_ON_UNSET = "tools.on-unset";
     public static final String TOOL_ON_CHECK = "tools.on-check";
     public static final String TOOL_ON_GET = "tools.on-get";
+    public static final String ERROR_INTERNAL = "errors.internal";
+    public static final String ERROR_NOT_A_PLAYER = "errors.not-a-player";
+    public static final String ERROR_NO_PERMISSION = "errors.permission";
+    public static final String ERROR_SYNTAX = "errors.syntax";
+    public static final String ERROR_HELP_SUGGEST = "errors.help-suggest";
 
     private static Lang instance;
     private FileConfiguration configuration;
