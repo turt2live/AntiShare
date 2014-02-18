@@ -4,6 +4,8 @@ import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.io.BlockStore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -43,6 +45,13 @@ public abstract class GenericBlockStore implements BlockStore {
 
         if (type == null || type == BlockType.UNKNOWN) types.remove(location);
         else types.put(location, type);
+    }
+
+    @Override
+    public Map<ASLocation, BlockType> getAll() {
+        Map<ASLocation, BlockType> map = new HashMap<ASLocation, BlockType>();
+        map.putAll(types);
+        return map;
     }
 
     @Override

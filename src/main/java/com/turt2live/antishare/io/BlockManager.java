@@ -3,6 +3,8 @@ package com.turt2live.antishare.io;
 import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.BlockType;
 
+import java.util.List;
+
 /**
  * Handles block information
  *
@@ -72,8 +74,10 @@ public interface BlockManager {
     /**
      * Loads all the known block stores. The implementing manager will assume a
      * save has been completed and may wipe the previous entries from memory.
+     *
+     * @return a list of block stores loaded because of this operation
      */
-    public void loadAll();
+    public List<BlockStore> loadAll();
 
     /**
      * Runs a cleanup (on the current thread) on the BlockManager. This will remove

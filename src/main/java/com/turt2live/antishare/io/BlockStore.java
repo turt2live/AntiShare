@@ -3,6 +3,8 @@ package com.turt2live.antishare.io;
 import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.BlockType;
 
+import java.util.Map;
+
 /**
  * Represents storage for block information
  *
@@ -45,6 +47,13 @@ public interface BlockStore {
      * @param type     the new block type. Null is assumed to be {@link com.turt2live.antishare.BlockType#UNKNOWN}
      */
     public void setType(ASLocation location, BlockType type);
+
+    /**
+     * Gets all the location/block type combinations known as a copied map
+     *
+     * @return the map of values
+     */
+    public Map<ASLocation, BlockType> getAll();
 
     /**
      * Saves the store

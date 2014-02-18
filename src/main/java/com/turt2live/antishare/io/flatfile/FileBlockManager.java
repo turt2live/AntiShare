@@ -60,7 +60,7 @@ public class FileBlockManager extends GenericBlockManager {
     }
 
     @Override
-    public void loadAll() {
+    public List<BlockStore> loadAll() {
         File[] files = folder.listFiles();
         ConcurrentMap<ASLocation, BlockStore> stores = getLiveStores();
         stores.clear(); // Assume a save has been done
@@ -77,6 +77,10 @@ public class FileBlockManager extends GenericBlockManager {
                 store.load(); // Only load data once we know the header is OK
             }
         }
+
+        List<BlockStore> storesList = new ArrayList<BlockStore>();
+        storesList.addAll(stores.values());
+        return storesList;
     }
 
     private void index() {
