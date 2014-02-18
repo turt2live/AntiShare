@@ -57,7 +57,7 @@ public class FileBlockSizeConverter {
     public long doConversion() {
         long conversions = 0;
         List<BlockStore> stores = managerFrom.loadAll();
-        
+
         for (BlockStore store : stores) {
             Map<ASLocation, BlockType> types = store.getAll();
             for (Map.Entry<ASLocation, BlockType> entry : types.entrySet()) {

@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -119,5 +120,15 @@ public class FileBlockStoreTest {
         FileBlockStore store = new FileBlockStore(testFile1, 10, 11, 12, 60);
         BlockType[] types = BlockType.values();
         store.getType(-1, -1, -1);
+    }
+
+    @Test
+    public void hTestWriteNothing() {
+        // Attempt to write nothing, the file should not be created
+        File file = new File(folder, "write_nothing_test.dat");
+        FileBlockStore store = new FileBlockStore(file, 9, 8, 7, 6);
+        store.save();
+
+        assertFalse(file.exists());
     }
 }
