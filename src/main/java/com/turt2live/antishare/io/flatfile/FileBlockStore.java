@@ -169,6 +169,7 @@ public class FileBlockStore extends GenericBlockStore {
             Engine engine = Engine.getInstance();
             int read = loadHeader(channel);
             int tries = 0;
+            boolean hasError = false;
             if (read == headerBuffer.capacity()) {
                 // Read blocks
                 while ((read = channel.read(buffer)) > -1) {
@@ -185,6 +186,8 @@ public class FileBlockStore extends GenericBlockStore {
                             // be read correctly. Maybe half a block was stored? Maybe some weird data
                             // was stored? Tampering? Who knows. We'll simply record the incident
                             // and ignore it.
+                            if (!hasError) engine.getLogger().severe("===========================================");
+                            hasError = true;
                             engine.getLogger().severe("Invalid gamemode flag for data in file: " + file.getAbsolutePath());
                             engine.getLogger().severe("Error correction has NOT been performed.");
                             engine.getLogger().severe("Here is the known information. It should be noted that the following information is directly read from the file and may not actually represent the data expected in any way.");
@@ -200,6 +203,8 @@ public class FileBlockStore extends GenericBlockStore {
                                 // Note: The above check also ensures the previous type is not the same
                                 // as the new type. This is because the data hasn't changed otherwise,
                                 // although it is weird there is a duplicate.
+                                if (!hasError) engine.getLogger().severe("===========================================");
+                                hasError = true;
                                 engine.getLogger().warning("Duplicate mismatched data in file: " + file.getAbsolutePath());
                                 engine.getLogger().warning("Duplicate data was found in the mentioned file. The data is displayed below for your correction. The last data read is the data AntiShare is using for storage, therefore discarding the 'previous' data.");
                                 engine.getLogger().warning("LOCATION (" + x + ", " + y + ", " + z + ") Previous GameMode: " + previous + ", new GameMode: " + type);
@@ -215,23 +220,35 @@ public class FileBlockStore extends GenericBlockStore {
                         // Error correction
                         if (channel.position() >= channel.size() - 1) {
                             // EOF
+                            if (!hasError) engine.getLogger().severe("===========================================");
+                            hasError = true;
                             engine.getLogger().warning("Corrupted data found at end of file: " + file.getAbsolutePath());
                             engine.getLogger().warning("No error correction was performed due to lack of data.");
                         } else {
                             // LOVELY. We are in the middle of the file.
                             if (tries > 3) {
+                                if (!hasError) engine.getLogger().severe("===========================================");
+                                hasError = true;
                                 engine.getLogger().warning("Corrupted data found in the middle of file: " + file.getAbsolutePath());
                                 engine.getLogger().warning("No error correction was performed due to lack of information.");
                             } else {
                                 tries++;
                                 channel.position(channel.position() - read); // Go back and retry
+                                if (!hasError) engine.getLogger().severe("===========================================");
+                                hasError = true;
                                 engine.getLogger().warning("Potentially corrupted data found in file: " + file.getAbsolutePath());
                                 engine.getLogger().warning("Attempt " + tries + "/3 to re-read the section...");
                             }
                         }
                     }
                 }
+            } else {
+                if (!hasError) engine.getLogger().severe("===========================================");
+                hasError = true;
+                engine.getLogger().severe("Bad header for file: " + file.getAbsolutePath());
+                engine.getLogger().severe("The entire file has been rejected as a resolution for this problem.");
             }
+            if (hasError) engine.getLogger().severe("===========================================");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
