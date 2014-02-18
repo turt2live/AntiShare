@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 
 /**
  * AntiShare Bukkit Listener for the AntiShare Engine. This listener will only
@@ -42,7 +43,10 @@ public class EngineListener implements Listener {
         engine.createWorldEngine(event.getWorld().getName()); // Force-creates the world engine
     }
 
-    // TODO: Unload world engines
+    @EventHandler
+    public void onWorldUnload(WorldUnloadEvent event) {
+        engine.unloadWorldEngine(event.getWorld().getName());
+    }
 
     // TODO: Debug code
     @EventHandler
