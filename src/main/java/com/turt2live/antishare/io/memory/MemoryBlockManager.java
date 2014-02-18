@@ -3,6 +3,9 @@ package com.turt2live.antishare.io.memory;
 import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.io.generics.GenericBlockManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a block manager that is not persistent in any way. Any changes to this
  * block manager are done in memory and are not saved to any form of persistent storage.
@@ -26,6 +29,7 @@ public class MemoryBlockManager extends GenericBlockManager {
     }
 
     @Override
-    public void loadAll() {
+    public List<BlockStore> loadAll() {
+        return new ArrayList<BlockStore>();
     }
 }
