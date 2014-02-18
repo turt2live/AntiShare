@@ -64,7 +64,6 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
 
     @Override
     public void onDisable() {
-        getLogger().info("Saving data...");
         // Save everything
         Engine.getInstance().prepareShutdown();
 
@@ -78,14 +77,12 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
 
         if (!storeLocation.exists()) storeLocation.mkdirs();
 
+        getLogger().info("Indexing '" + engine.getWorldName() + "'...");
         engine.setBlockManager(new FileBlockManager(blockSize, storeLocation)); // TODO: Configuration (type)
 
         for (ASGameMode gameMode : ASGameMode.values()) {
             engine.setTrackedBlocks(gameMode, new DummyBlockTracker()); // TODO: Debug code
         }
-
-        // Start the engine
-        engine.getBlockManager().loadAll();
     }
 
     /**
