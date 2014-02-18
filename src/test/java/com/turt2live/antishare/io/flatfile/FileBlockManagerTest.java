@@ -62,7 +62,7 @@ public class FileBlockManagerTest {
     @AfterClass
     public static void postTest() {
         if (folder != null && folder.exists()) {
-            //delete(folder);
+            delete(folder);
         }
     }
 
