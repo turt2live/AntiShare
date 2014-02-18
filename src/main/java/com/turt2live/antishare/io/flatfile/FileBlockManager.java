@@ -221,7 +221,8 @@ public class FileBlockManager extends GenericBlockManager {
     }
 
     /**
-     * Gets a list of block stores that are of a particular block size
+     * Gets a list of block stores that are of a particular block size. This method only loads header information
+     * for the specified file stores and will not attempt to load the entire file.
      *
      * @param blockSize the block size to look for. Value must be greater than 0. See {@link FileBlockStore} for more information
      * @return the list of block stores. Never null but may be empty
@@ -235,7 +236,7 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.load(); // Load all information for use later
+                store.loadHeader();
                 int[] header = store.getHeader();
 
                 if (header[3] == blockSize) stores.add(store);

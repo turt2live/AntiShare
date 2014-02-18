@@ -29,7 +29,7 @@ public class FileBlockManagerTest {
 
     @BeforeClass
     public static void preTest() {
-        folder = new File("test_data");
+        folder = new File("test_data_2");
         folder.mkdirs();
 
         // Write a bunch of files

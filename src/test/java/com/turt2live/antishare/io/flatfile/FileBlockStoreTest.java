@@ -69,8 +69,7 @@ public class FileBlockStoreTest {
         for (int x = 0; x < 60; x++)
             for (int y = 0; y < 60; y++)
                 for (int z = 0; z < 60; z++) {
-                    BlockType actual = store.getType(600 + x, 660 + y, 720 + z);
-                    assertEquals(expected[x][y][z], actual);
+                    assertEquals(expected[x][y][z], store.getType(600 + x, 660 + y, 720 + z));
                 }
     }
 

@@ -64,6 +64,7 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
 
     @Override
     public void onDisable() {
+        getLogger().info("Saving data...");
         // Save everything
         Engine.getInstance().prepareShutdown();
 

@@ -5,9 +5,12 @@ import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.generics.GenericBlockStore;
 
-import java.io.*;
-import java.nio.ByteBuffer;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteOrder;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
@@ -57,9 +60,8 @@ import java.util.concurrent.ConcurrentMap;
 public class FileBlockStore extends GenericBlockStore {
 
     private File file;
-    private ByteBuffer buffer = ByteBuffer.allocateDirect(13);
-    private ByteBuffer headerBuffer = ByteBuffer.allocateDirect(16);
     private final int[] header;
+    private RandomAccessFile raf;
 
     /**
      * Creates a new file block store using a specified header
@@ -76,9 +78,7 @@ public class FileBlockStore extends GenericBlockStore {
         this.file = file;
         header = new int[]{sx, sy, sz, blocks};
 
-        // Setup buffer order
-        headerBuffer.order(ByteOrder.BIG_ENDIAN);
-        buffer.order(ByteOrder.BIG_ENDIAN);
+        refreshFile();
     }
 
     /**
@@ -91,6 +91,21 @@ public class FileBlockStore extends GenericBlockStore {
 
         this.file = file;
         header = new int[4];
+
+        refreshFile();
+    }
+
+    private void refreshFile() {
+        try {
+            if (raf != null) raf.close();
+            if (!file.exists()) {
+                if (file.getParentFile() != null) file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            raf = new RandomAccessFile(file, "rw");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -104,28 +119,27 @@ public class FileBlockStore extends GenericBlockStore {
 
     @Override
     public void save() {
-        FileOutputStream output = null;
         try {
-            // TODO: Avoid deleting the file
-            if (file.exists()) {
-                file.delete();
+            if (getLiveMap().size() <= 0) {
+                raf.close();
+                raf = null;
+                if (file.exists())
+                    file.delete();
+                return; // Don't save nothing
             }
-            if (getLiveMap().size() <= 0) return; // Don't save nothing
-            File parent = file.getParentFile();
-            if (parent != null && !parent.exists()) parent.mkdirs();
-            file.createNewFile();
 
-            output = new FileOutputStream(file, false); // Force append mode off
-            FileChannel channel = output.getChannel();
+            if (raf == null) refreshFile();
+            long requiredSize = (getLiveMap().size() * 13) + 16;
+            raf.setLength(requiredSize);
+            MappedByteBuffer out = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, requiredSize);
+            out.clear();
+            out.order(ByteOrder.BIG_ENDIAN);
 
             // Write header
-            headerBuffer.clear();
-            headerBuffer.putInt(header[0]);
-            headerBuffer.putInt(header[1]);
-            headerBuffer.putInt(header[2]);
-            headerBuffer.putInt(header[3]);
-            headerBuffer.flip();
-            channel.write(headerBuffer);
+            out.putInt(header[0]);
+            out.putInt(header[1]);
+            out.putInt(header[2]);
+            out.putInt(header[3]);
 
             // Write blocks
             ConcurrentMap<ASLocation, BlockType> blocks = getLiveMap();
@@ -136,133 +150,85 @@ public class FileBlockStore extends GenericBlockStore {
                     ASLocation location = entry.getKey();
 
                     // Write the buffer
-                    buffer.clear();
-                    buffer.put(typeByte);
-                    buffer.putInt(location.X);
-                    buffer.putInt(location.Y);
-                    buffer.putInt(location.Z);
-                    buffer.flip();
-                    channel.write(buffer);
+                    out.put(typeByte);
+                    out.putInt(location.X);
+                    out.putInt(location.Y);
+                    out.putInt(location.Z);
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (IOException e) {
-                }
-            }
         }
     }
 
     @Override
     public void load() {
-        FileInputStream input = null;
         try {
             if (!file.exists()) return;
 
-            input = new FileInputStream(file);
-            FileChannel channel = input.getChannel();
+            if (raf == null) refreshFile();
+            MappedByteBuffer in = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, raf.length());
+            in.order(ByteOrder.BIG_ENDIAN);
+
+            if (in.remaining() < 16) return;
 
             // Read header
             Engine engine = Engine.getInstance();
-            int read = loadHeader(channel);
-            int tries = 0;
+            loadHeader(in);
             boolean hasError = false;
-            if (read == headerBuffer.capacity()) {
-                // Read blocks
-                while ((read = channel.read(buffer)) > -1) {
-                    if (read == buffer.capacity()) {
-                        buffer.position(0);
-                        byte gmbyte = buffer.get();
-                        BlockType type = byteToType(gmbyte);
-                        int x = buffer.getInt();
-                        int y = buffer.getInt();
-                        int z = buffer.getInt();
+            // Read blocks
+            while (in.remaining() >= 13) {
+                byte gmbyte = in.get();
+                BlockType type = byteToType(gmbyte);
+                int x = in.getInt();
+                int y = in.getInt();
+                int z = in.getInt();
 
-                        if (type == null) {
-                            // This is bad. This means the gamemode byte is invalid and cannot
-                            // be read correctly. Maybe half a block was stored? Maybe some weird data
-                            // was stored? Tampering? Who knows. We'll simply record the incident
-                            // and ignore it.
-                            if (!hasError) engine.getLogger().severe("===========================================");
-                            hasError = true;
-                            engine.getLogger().severe("Invalid gamemode flag for data in file: " + file.getAbsolutePath());
-                            engine.getLogger().severe("Error correction has NOT been performed.");
-                            engine.getLogger().severe("Here is the known information. It should be noted that the following information is directly read from the file and may not actually represent the data expected in any way.");
-                            engine.getLogger().severe("    X = " + x);
-                            engine.getLogger().severe("    Y = " + y);
-                            engine.getLogger().severe("    Z = " + z);
-                            engine.getLogger().severe("    GameMode Byte = " + Integer.toHexString(gmbyte));
-                            engine.getLogger().severe("Please ensure that the file you have saved is supported by your version of AntiShare.");
-                        } else {
-                            BlockType previous = getType(x, y, z);
-                            if (previous != BlockType.UNKNOWN && previous != type) {
-                                // Duplicate entry - Print out both to console and save latest
-                                // Note: The above check also ensures the previous type is not the same
-                                // as the new type. This is because the data hasn't changed otherwise,
-                                // although it is weird there is a duplicate.
-                                if (!hasError) engine.getLogger().severe("===========================================");
-                                hasError = true;
-                                engine.getLogger().warning("Duplicate mismatched data in file: " + file.getAbsolutePath());
-                                engine.getLogger().warning("Duplicate data was found in the mentioned file. The data is displayed below for your correction. The last data read is the data AntiShare is using for storage, therefore discarding the 'previous' data.");
-                                engine.getLogger().warning("LOCATION (" + x + ", " + y + ", " + z + ") Previous GameMode: " + previous + ", new GameMode: " + type);
-                            }
-
-                            // Write the new data, regardless of error state
-                            setType(x, y, z, type);
-                        }
-
-                        buffer.clear();
-                        tries = 0; // Reset tries count to avoid potential bad data checks
-                    } else {
-                        // Error correction
-                        if (channel.position() >= channel.size() - 1) {
-                            // EOF
-                            if (!hasError) engine.getLogger().severe("===========================================");
-                            hasError = true;
-                            engine.getLogger().warning("Corrupted data found at end of file: " + file.getAbsolutePath());
-                            engine.getLogger().warning("No error correction was performed due to lack of data.");
-                        } else {
-                            // LOVELY. We are in the middle of the file.
-                            if (tries > 3) {
-                                if (!hasError) engine.getLogger().severe("===========================================");
-                                hasError = true;
-                                engine.getLogger().warning("Corrupted data found in the middle of file: " + file.getAbsolutePath());
-                                engine.getLogger().warning("No error correction was performed due to lack of information.");
-                            } else {
-                                tries++;
-                                channel.position(channel.position() - read); // Go back and retry
-                                if (!hasError) engine.getLogger().severe("===========================================");
-                                hasError = true;
-                                engine.getLogger().warning("Potentially corrupted data found in file: " + file.getAbsolutePath());
-                                engine.getLogger().warning("Attempt " + tries + "/3 to re-read the section...");
-                            }
-                        }
+                if (type == null) {
+                    // This is bad. This means the gamemode byte is invalid and cannot
+                    // be read correctly. Maybe half a block was stored? Maybe some weird data
+                    // was stored? Tampering? Who knows. We'll simply record the incident
+                    // and ignore it.
+                    if (!hasError) engine.getLogger().severe("===========================================");
+                    hasError = true;
+                    engine.getLogger().severe("Invalid gamemode flag for data in file: " + file.getAbsolutePath());
+                    engine.getLogger().severe("Error correction has NOT been performed.");
+                    engine.getLogger().severe("Here is the known information. It should be noted that the following information is directly read from the file and may not actually represent the data expected in any way.");
+                    engine.getLogger().severe("    X = " + x);
+                    engine.getLogger().severe("    Y = " + y);
+                    engine.getLogger().severe("    Z = " + z);
+                    engine.getLogger().severe("    GameMode Byte = " + Integer.toHexString(gmbyte));
+                    engine.getLogger().severe("Please ensure that the file you have saved is supported by your version of AntiShare.");
+                } else {
+                    BlockType previous = getType(x, y, z);
+                    if (previous != BlockType.UNKNOWN && previous != type) {
+                        // Duplicate entry - Print out both to console and save latest
+                        // Note: The above check also ensures the previous type is not the same
+                        // as the new type. This is because the data hasn't changed otherwise,
+                        // although it is weird there is a duplicate.
+                        if (!hasError) engine.getLogger().severe("===========================================");
+                        hasError = true;
+                        engine.getLogger().warning("Duplicate mismatched data in file: " + file.getAbsolutePath());
+                        engine.getLogger().warning("Duplicate data was found in the mentioned file. The data is displayed below for your correction. The last data read is the data AntiShare is using for storage, therefore discarding the 'previous' data.");
+                        engine.getLogger().warning("LOCATION (" + x + ", " + y + ", " + z + ") Previous GameMode: " + previous + ", new GameMode: " + type);
                     }
+
+                    // Write the new data, regardless of error state
+                    setType(x, y, z, type);
                 }
-            } else {
-                if (!hasError) engine.getLogger().severe("===========================================");
+            }
+            if (in.remaining() != 0) {
                 hasError = true;
-                engine.getLogger().severe("Bad header for file: " + file.getAbsolutePath());
-                engine.getLogger().severe("The entire file has been rejected as a resolution for this problem.");
+                engine.getLogger().warning("Failed to read entire file: " + file.getAbsolutePath());
+                engine.getLogger().warning("All data was loaded with " + in.remaining() + " bytes left.");
             }
             if (hasError) engine.getLogger().severe("===========================================");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                }
-            }
         }
     }
 
@@ -296,44 +262,30 @@ public class FileBlockStore extends GenericBlockStore {
         super.setType(location, type);
     }
 
-    private int loadHeader(FileChannel channel) throws IOException {
-        // Read header
-        int read = channel.read(headerBuffer);
-        if (read == headerBuffer.capacity()) {
-            headerBuffer.position(0);
-            header[0] = headerBuffer.getInt();
-            header[1] = headerBuffer.getInt();
-            header[2] = headerBuffer.getInt();
-            header[3] = headerBuffer.getInt();
-            headerBuffer.clear();
-        }
-        return read;
+    private void loadHeader(MappedByteBuffer buffer) throws IOException {
+        header[0] = buffer.getInt();
+        header[1] = buffer.getInt();
+        header[2] = buffer.getInt();
+        header[3] = buffer.getInt();
     }
 
     /**
      * Loads the header without loading the entire file's block data
      */
     public void loadHeader() {
-        FileInputStream input = null;
         try {
             if (!file.exists()) return;
 
-            input = new FileInputStream(file);
-            FileChannel channel = input.getChannel();
+            if (raf == null) refreshFile();
+            MappedByteBuffer in = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, 16);
+            in.order(ByteOrder.BIG_ENDIAN);
 
             // Read header
-            loadHeader(channel);
+            loadHeader(in);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                }
-            }
         }
     }
 
