@@ -107,7 +107,10 @@ public class FileBlockStore extends GenericBlockStore {
         FileOutputStream output = null;
         try {
             // TODO: Avoid deleting the file
-            file.delete();
+            if (file.exists()) {
+                file.delete();
+            }
+            if (getLiveMap().size() <= 0) return; // Don't save nothing
             File parent = file.getParentFile();
             if (parent != null && !parent.exists()) parent.mkdirs();
             file.createNewFile();
