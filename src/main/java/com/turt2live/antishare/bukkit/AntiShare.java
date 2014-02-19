@@ -99,7 +99,7 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         engine.setBlockManager(new FileBlockManager(blockSize, storeLocation)); // TODO: Configuration (type)
 
         for (ASGameMode gameMode : ASGameMode.values()) {
-            engine.setTrackedBlocks(gameMode, new DummyBlockTracker()); // TODO: Debug code
+            //engine.setTrackedBlocks(gameMode, new TrackedBlocksList()); // TODO: Debug code
         }
     }
 
