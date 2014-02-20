@@ -64,7 +64,8 @@ public class ToolListener implements Listener {
         ItemStack slot2 = inventory.getItem(1);
         inventory.setItem(0, checkTool);
         inventory.setItem(1, setTool);
-        inventory.addItem(slot1, slot2);
+        if (slot1 != null) inventory.addItem(slot1);
+        if (slot2 != null) inventory.addItem(slot2);
 
         player.updateInventory();
     }
