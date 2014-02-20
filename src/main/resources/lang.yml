@@ -32,9 +32,9 @@ tools:
     - '&eClick a block to see what'
     - '&egamemode it is.'
     set-lore:
-    - '&eRight click a block to set'
+    - '&eLeft click a block to set'
     - '&ethe gamemode of the block'
-    - '&6Left click a block to clear'
+    - '&6Right click a block to clear'
     - '&6the gamemode of the block'
     on-check: '&9That is a &b@g &9block'
     on-set: '&9Block set as &b@g'

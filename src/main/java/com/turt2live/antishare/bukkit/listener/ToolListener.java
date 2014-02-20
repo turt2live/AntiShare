@@ -97,7 +97,7 @@ public class ToolListener implements Listener {
             } else if (hand.isSimilar(SET_TEMPLATE)) {
                 event.setCancelled(true);
 
-                if (rclick) {
+                if (!rclick) {
                     BukkitUtils.getBlockManager(player.getWorld()).setBlockType(BukkitUtils.toLocation(block.getLocation()), BukkitUtils.toBlockType(player.getGameMode()));
 
                     String strRep = ASUtils.toUpperWords(player.getGameMode().name());
