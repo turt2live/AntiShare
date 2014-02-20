@@ -24,14 +24,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- Dependency Versions -->
-        <bukkit.version>1.7.2-R0.3</bukkit.version>
-        <vault.version>1.2.31</vault.version>
-
-        <!-- Test Versions -->
-        <junit.version>4.11</junit.version>
-
         <!-- Used by replacement plugin to inject build number -->
         <BUILD_NUMBER>local</BUILD_NUMBER>
     </properties>
@@ -44,21 +36,21 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>${bukkit.version}</version>
+            <version>1.4.7-R1.0</version>
         </dependency>
 
         <!-- Vault -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>${vault.version}</version>
+            <version>1.2.31</version>
         </dependency>
 
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
 
