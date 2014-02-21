@@ -16,7 +16,7 @@ import org.bukkit.World;
  *
  * @author turt2live
  */
-public class BukkitUtils {
+public final class BukkitUtils {
 
     /**
      * Converts a Bukkit location to an AntiShare location

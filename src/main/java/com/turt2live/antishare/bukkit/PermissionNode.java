@@ -5,7 +5,7 @@ package com.turt2live.antishare.bukkit;
  *
  * @author turt2live
  */
-public class PermissionNode {
+public final class PermissionNode {
 
     /**
      * Allows the use of the AntiShare tools

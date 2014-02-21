@@ -10,7 +10,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
  *
  * @author turt2live
  */
-public class VaultEconomy implements ASEconomy {
+public final class VaultEconomy implements ASEconomy {
 
     private Economy economy;
 

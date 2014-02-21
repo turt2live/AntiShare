@@ -1,7 +1,10 @@
 package com.turt2live.antishare.bukkit;
 
 import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.ArrayArrayList;
 import com.turt2live.antishare.bukkit.command.ASCommandHandler;
+import com.turt2live.antishare.bukkit.inventory.MaterialProvider;
+import com.turt2live.antishare.bukkit.inventory.VaultMaterialProvider;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
@@ -14,6 +17,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * The AntiShare Bukkit Plugin main class
@@ -25,6 +30,7 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
     private static AntiShare instance;
     private File dataFolder;
     private int blockSize;
+    private MaterialProvider materialProvider = new MaterialProvider();
 
     @Override
     public void onLoad() {
@@ -77,6 +83,7 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         // Load economy hook
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             Engine.getInstance().setEconomy(new VaultEconomy());
+            materialProvider = new VaultMaterialProvider();
         }
     }
 
@@ -98,9 +105,41 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         getLogger().info("Indexing '" + engine.getWorldName() + "'...");
         engine.setBlockManager(new FileBlockManager(blockSize, storeLocation)); // TODO: Configuration (type)
 
+        FileConfiguration configuration = forWorld(engine.getWorldName());
+
         for (ASGameMode gameMode : ASGameMode.values()) {
-            //engine.setTrackedBlocks(gameMode, new TrackedBlocksList()); // TODO: Debug code
+            List<String> values = configuration.getStringList(gameMode.name().toLowerCase());
+            if (values == null) values = new ArrayArrayList<String>(new String[]{"none"});
+
+            BlockListGenerator listing = BlockListGenerator.fromList(values, engine.getWorldName());
+            engine.setTrackedBlocks(gameMode, listing);
         }
+    }
+
+    private FileConfiguration forWorld(String world) {
+        File toFile = new File(AntiShare.getInstance().getDataFolder(), "config_blocks_" + world + ".yml");
+
+        FileConfiguration config = YamlConfiguration.loadConfiguration(toFile);
+        FileConfiguration defaults = YamlConfiguration.loadConfiguration(AntiShare.getInstance().getResource("block_config.yml"));
+        config.setDefaults(defaults);
+        config.options().copyDefaults(true);
+
+        try {
+            config.save(toFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return config;
+    }
+
+    /**
+     * Gets the active material provider for this plugin instance
+     *
+     * @return the material provider
+     */
+    public MaterialProvider getMaterialProvider() {
+        return materialProvider;
     }
 
     /**

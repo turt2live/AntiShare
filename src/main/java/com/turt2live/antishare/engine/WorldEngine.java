@@ -2,6 +2,7 @@ package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.ASUtils;
 import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.engine.defaults.DefaultBlockTypeList;
 import com.turt2live.antishare.io.BlockManager;
@@ -106,7 +107,8 @@ public final class WorldEngine {
 
         // TODO: Expand to actually do all the processing (permissions, etc)
 
-        blockManager.setBlockType(location, gamemode);
+        if (getTrackedBlocks(ASUtils.toGamemode(gamemode)).isTracked(location)) {
+            blockManager.setBlockType(location, gamemode);
+        }
     }
-
 }

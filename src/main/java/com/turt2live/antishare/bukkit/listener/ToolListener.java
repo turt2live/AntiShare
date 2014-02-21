@@ -98,7 +98,7 @@ public class ToolListener implements Listener {
                 event.setCancelled(true);
 
                 if (!rclick) {
-                    BukkitUtils.getBlockManager(player.getWorld()).setBlockType(BukkitUtils.toLocation(block.getLocation()), BukkitUtils.toBlockType(player.getGameMode()));
+                    BukkitUtils.getBlockManager(player.getWorld()).setBlockType(BukkitUtils.toLocation(block.getLocation()), ASUtils.toBlockType(BukkitUtils.toGameMode(player.getGameMode())));
 
                     String strRep = ASUtils.toUpperWords(player.getGameMode().name());
 
@@ -108,6 +108,8 @@ public class ToolListener implements Listener {
                 } else {
                     BlockType previous = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
                     String strRep = ASUtils.toUpperWords(previous == BlockType.UNKNOWN ? "Natural" : previous.name());
+
+                    BukkitUtils.getBlockManager(player.getWorld()).setBlockType(BukkitUtils.toLocation(block.getLocation()), BlockType.UNKNOWN);
 
                     player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_UNSET))
                             .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)

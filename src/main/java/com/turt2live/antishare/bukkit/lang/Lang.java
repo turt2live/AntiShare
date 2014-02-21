@@ -46,6 +46,7 @@ public class Lang {
         FileConfiguration lang = YamlConfiguration.loadConfiguration(toFile);
         FileConfiguration defaults = YamlConfiguration.loadConfiguration(AntiShare.getInstance().getResource("lang.yml"));
         lang.setDefaults(defaults);
+        lang.options().copyDefaults(true);
 
         try {
             lang.save(toFile);

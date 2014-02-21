@@ -6,7 +6,7 @@ package com.turt2live.antishare;
  * @author turt2live
  */
 // TODO: Add unit test
-public class ASUtils {
+public final class ASUtils {
 
     /**
      * Converts an AntiShare GameMode to a BlockType. If the passed gamemode
