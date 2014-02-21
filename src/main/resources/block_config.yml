@@ -1,10 +1,9 @@
 # AntiShare Block Configuration
 # -------------------------------------------------
 # Below are all the settings for the block tracking component
-# of AntiShare. The file is split up into a per-world and per-
-# server setup.
+# of AntiShare.
 # For more information, please see the following link
-# <TODO: LINK>
+# https://docs.google.com/document/d/168QPi5OW6M1dVHOG56iJv_7fgUdNWfUbukWHmNjg_84/edit?usp=sharing
 global:
     creative:
     - all
