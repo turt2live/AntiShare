@@ -96,6 +96,7 @@ public class PermissionNodes {
     public static final String WORLD_SPLIT_NO_SPLIT_ADVENTURE = "AntiShare.worldsplit.adventure";
     public static final String WORLD_SPLIT_NO_SPLIT_CREATIVE = "AntiShare.worldsplit.creative";
     public static final String WORLD_SPLIT_NO_SPLIT_SURVIVAL = "AntiShare.worldsplit.survival";
+    public static final String WORLD_SPLIT_NO_SPLIT_SPECTATOR = "AntiShare.worldsplit.spectator";
     public static final String WORLD_SPLIT_NO_SPLIT = "AntiShare.worldsplit.*";
 
     // Money Nodes
@@ -128,6 +129,8 @@ public class PermissionNodes {
                 return WORLD_SPLIT_NO_SPLIT_CREATIVE;
             case ADVENTURE:
                 return WORLD_SPLIT_NO_SPLIT_ADVENTURE;
+            case SPECTATOR:
+                return WORLD_SPLIT_NO_SPLIT_SPECTATOR;
             default:
                 return WORLD_SPLIT_NO_SPLIT;
         }
