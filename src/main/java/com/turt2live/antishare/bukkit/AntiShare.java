@@ -105,7 +105,7 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         getLogger().info("Indexing '" + engine.getWorldName() + "'...");
         engine.setBlockManager(new FileBlockManager(blockSize, storeLocation)); // TODO: Configuration (type)
 
-        FileConfiguration configuration = forWorld(engine.getWorldName());
+        FileConfiguration configuration = createBlockConfig();
 
         for (ASGameMode gameMode : ASGameMode.values()) {
             List<String> values = configuration.getStringList(gameMode.name().toLowerCase());
@@ -116,11 +116,11 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         }
     }
 
-    private FileConfiguration forWorld(String world) {
-        File toFile = new File(AntiShare.getInstance().getDataFolder(), "config_blocks_" + world + ".yml");
+    private FileConfiguration createBlockConfig( ) {
+        File toFile = new File(AntiShare.getInstance().getDataFolder(), "blocks.yml");
 
         FileConfiguration config = YamlConfiguration.loadConfiguration(toFile);
-        FileConfiguration defaults = YamlConfiguration.loadConfiguration(AntiShare.getInstance().getResource("block_config.yml"));
+        FileConfiguration defaults = YamlConfiguration.loadConfiguration(AntiShare.getInstance().getResource("blocks.yml"));
         config.setDefaults(defaults);
         config.options().copyDefaults(true);
 

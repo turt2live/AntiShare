@@ -102,6 +102,14 @@ public final class BlockListGenerator implements BlockTypeList {
             String[] parts = value.split(":");
             boolean remove = false;
 
+            // Check for world
+            if (parts[0].contains(";")) {
+                String[] parts1 = parts[0].split(";");
+                if (!parts1[0].equalsIgnoreCase(world)) {
+                    continue;
+                }
+            }
+
             if (parts[0].equalsIgnoreCase("all")) {
                 list.information.clear();
                 for (Material material : Material.values()) {

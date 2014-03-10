@@ -10,7 +10,6 @@ import com.turt2live.antishare.io.generics.GenericBlockStore;
  *
  * @author turt2live
  */
-// TODO: Add unit test
 public class MemoryBlockStore extends GenericBlockStore {
 
     @Override
