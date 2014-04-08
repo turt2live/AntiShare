@@ -5,6 +5,7 @@ import com.turt2live.antishare.collections.SlottedCollection;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -17,21 +18,22 @@ import java.util.concurrent.ConcurrentMap;
 public abstract class ASInventory<T extends ASItem> implements SlottedCollection<T>, Cloneable {
 
     protected ConcurrentMap<Integer, T> inventory = new ConcurrentHashMap<Integer, T>();
-    protected String world, playerUUID;
+    protected String world;
+    protected UUID player;
     protected ASGameMode gameMode;
 
     /**
      * Creates a new inventory
      *
-     * @param playerUUID the player's UUID string
-     * @param world      the world for the inventory
-     * @param gamemode   the gamemode of the inventory
+     * @param player   the player's UUID
+     * @param world    the world for the inventory
+     * @param gamemode the gamemode of the inventory
      */
-    public ASInventory(String playerUUID, String world, ASGameMode gamemode) {
-        if (playerUUID == null || world == null || gamemode == null)
+    public ASInventory(UUID player, String world, ASGameMode gamemode) {
+        if (player == null || world == null || gamemode == null)
             throw new IllegalArgumentException("player UUID, world, and gamemode cannot be null");
 
-        this.playerUUID = playerUUID;
+        this.player = player;
         this.world = world;
         this.gameMode = gamemode;
     }
@@ -79,8 +81,8 @@ public abstract class ASInventory<T extends ASItem> implements SlottedCollection
      *
      * @return the player's UUID
      */
-    public String getPlayerUUID() {
-        return playerUUID;
+    public UUID getPlayerUUID() {
+        return player;
     }
 
     /**
@@ -92,7 +94,7 @@ public abstract class ASInventory<T extends ASItem> implements SlottedCollection
      */
     public boolean isSimilar(ASInventory<T> inventory) {
         if (gameMode != inventory.gameMode) return false;
-        if (!playerUUID.equals(inventory.playerUUID)) return false;
+        if (!player.equals(inventory.player)) return false;
         if (!world.equals(inventory.world)) return false;
 
         return true;
@@ -110,7 +112,7 @@ public abstract class ASInventory<T extends ASItem> implements SlottedCollection
 
         if (gameMode != that.gameMode) return false;
         if (!inventory.equals(that.inventory)) return false;
-        if (!playerUUID.equals(that.playerUUID)) return false;
+        if (!player.equals(that.player)) return false;
         if (!world.equals(that.world)) return false;
 
         return true;
@@ -120,7 +122,7 @@ public abstract class ASInventory<T extends ASItem> implements SlottedCollection
     public int hashCode() {
         int result = inventory.hashCode();
         result = 31 * result + world.hashCode();
-        result = 31 * result + playerUUID.hashCode();
+        result = 31 * result + player.hashCode();
         result = 31 * result + gameMode.hashCode();
         return result;
     }
