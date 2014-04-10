@@ -1,6 +1,6 @@
 package com.turt2live.antishare.io;
 
-import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASInventoryCollection;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.inventory.InventorySerializer;
 
@@ -28,7 +28,7 @@ public interface InventoryManager<T extends ASItem> {
      * @param inventory the inventory to save, cannot be null
      * @throws java.lang.IllegalArgumentException thrown for bad arguments
      */
-    public void save(ASInventory<T> inventory);
+    public void save(ASInventoryCollection<T> inventory);
 
     /**
      * Loads an inventory for a specified UUID
@@ -36,6 +36,6 @@ public interface InventoryManager<T extends ASItem> {
      * @param uuid the UUID, cannot be null
      * @return the inventory, or null if not found (or null arguments)
      */
-    public ASInventory<T> load(UUID uuid);
+    public ASInventoryCollection<T> load(UUID uuid);
 
 }
