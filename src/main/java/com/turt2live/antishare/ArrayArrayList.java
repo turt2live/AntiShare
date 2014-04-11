@@ -11,8 +11,6 @@ import java.util.List;
  */
 public class ArrayArrayList<T> extends ArrayList<T> {
 
-    private static final long serialVersionUID = 2863735441934925044L;
-
     /**
      * Creates a new ArrayArrayList
      *

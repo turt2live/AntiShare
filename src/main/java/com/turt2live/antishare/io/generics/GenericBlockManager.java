@@ -21,6 +21,7 @@ public abstract class GenericBlockManager implements BlockManager {
      * The number of blocks to be stored per store
      */
     protected final int blocksPerStore;
+
     private ConcurrentMap<ASLocation, BlockStore> stores = new ConcurrentHashMap<ASLocation, BlockStore>();
 
     /**

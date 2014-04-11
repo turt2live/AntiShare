@@ -86,7 +86,17 @@ public abstract class GenericInventoryManager<T extends ASItem> implements Inven
         }
     }
 
+    /**
+     * Builds an inventory collection from the supplied UUID. This will return null if the
+     * store for the UUID cannot be found
+     *
+     * @param uuid the uuid to process, cannot be null
+     * @return the generated collection, may be null
+     * @throws java.lang.IllegalArgumentException thrown for invalid arguments
+     */
     protected ASInventoryCollection<T> buildCollection(UUID uuid) {
+        if (uuid == null) throw new IllegalArgumentException();
+
         InventoryStore<T> store = inventories.get(uuid);
         if (store == null) return null;
 

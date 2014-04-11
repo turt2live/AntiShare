@@ -17,10 +17,8 @@ import java.util.Map;
 // TODO: Add unit test
 public class FileBlockSizeConverter {
 
-    protected int fromSize, toSize;
-    protected File fromFolder, toFolder;
-    protected FileBlockManager managerFrom, managerTo;
-    protected boolean saveOnExit = true;
+    private FileBlockManager managerFrom,managerTo;
+    private boolean saveOnExit = true;
 
     /**
      * Creates a new FileBlockSizeConverter. This takes the passed "from size" value and searches the
@@ -41,10 +39,6 @@ public class FileBlockSizeConverter {
                 || !fromFolder.exists() || !toFolder.exists() || !fromFolder.isDirectory() || !toFolder.isDirectory())
             throw new IllegalArgumentException();
 
-        this.fromFolder = fromFolder;
-        this.toFolder = toFolder;
-        this.toSize = toSize;
-        this.fromSize = fromSize;
         this.saveOnExit = save;
         this.managerFrom = new FileBlockManager(fromSize, fromFolder);
         this.managerTo = new FileBlockManager(toSize, toFolder);

@@ -70,6 +70,11 @@ public abstract class GenericBlockStore implements BlockStore {
         lastAccess = System.currentTimeMillis();
     }
 
+    /**
+     * Gets a live map of the underlying collection
+     *
+     * @return the live map of the underlying collection
+     */
     protected ConcurrentMap<ASLocation, BlockType> getLiveMap() {
         return types;
     }

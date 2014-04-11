@@ -18,10 +18,17 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class GenericInventoryStore<T extends ASItem> implements InventoryStore<T> {
 
-    private long lastAccess = 0;
+    /**
+     * The UUID that this inventory store is representing
+     */
     protected final UUID uuid;
-    private String loadedSerializerClass;
+    /**
+     * The serializer this inventory store is using
+     */
     protected InventorySerializer serializer;
+
+    private volatile long lastAccess = 0;
+    private String loadedSerializerClass;
     private ConcurrentMap<ASGameMode, ASInventory<T>> inventories = new ConcurrentHashMap<ASGameMode, ASInventory<T>>();
 
     /**
@@ -80,6 +87,7 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
 
     @Override
     public final void load() {
+        this.inventories.clear(); // Avoid a double call of fillEmpty()
         loadAll();
         fillEmpty();
 
@@ -88,9 +96,28 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
         }
     }
 
+    @Override
+    public final void clear() {
+        this.inventories.clear();
+        fillEmpty();
+    }
+
+    /**
+     * Loads the default serializer class from the storage mechanism
+     *
+     * @return the class of the default serializer
+     */
     protected abstract String getDefaultSerializerClass();
 
+    /**
+     * Fills the underlying collection with non-null values. This must set
+     * an empty inventory to all gamemodes which are not set. This is called
+     * by the underlying class and will be validated.
+     */
     protected abstract void fillEmpty();
 
+    /**
+     * Loads all records from the underlying storage mechanism
+     */
     protected abstract void loadAll();
 }

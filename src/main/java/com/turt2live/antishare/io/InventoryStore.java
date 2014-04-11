@@ -16,14 +16,19 @@ import java.util.UUID;
 public interface InventoryStore<T extends ASItem> {
 
     /**
-     * Saves the inventory store to disk
+     * Saves the inventory store to the storage mechanism
      */
     public void save();
 
     /**
-     * Loads the inventory store from disk
+     * Loads the inventory store from the storage mechanism
      */
     public void load();
+
+    /**
+     * Clears all underlying records from the inventory store
+     */
+    public void clear();
 
     /**
      * Gets the UUID this inventory store uses

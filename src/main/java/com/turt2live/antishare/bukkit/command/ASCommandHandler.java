@@ -38,7 +38,14 @@ public class ASCommandHandler implements CommandExecutor {
     private Map<String, List<CommandInfo>> commands = new HashMap<String, List<CommandInfo>>();
     private AntiShare plugin;
 
+    /**
+     * Creates a new AntiShare command handler
+     *
+     * @param plugin the plugin instance, cannot be null
+     * @throws java.lang.IllegalArgumentException thrown for invalid arguments
+     */
     public ASCommandHandler(AntiShare plugin) {
+        if (plugin == null) throw new IllegalArgumentException();
         this.plugin = plugin;
 
         Class<?>[] expectedArguments = new Class[]{

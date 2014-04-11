@@ -15,8 +15,17 @@ import java.util.regex.Pattern;
  */
 public class LangBuilder {
 
+    /**
+     * The player selector
+     */
     public static final String SELECTOR_PLAYER = "@p";
+    /**
+     * The variable selector
+     */
     public static final String SELECTOR_VARIABLE = "@v";
+    /**
+     * The gamemode selector
+     */
     public static final String SELECTOR_GAMEMODE = "@g";
 
     private boolean prefix = false;

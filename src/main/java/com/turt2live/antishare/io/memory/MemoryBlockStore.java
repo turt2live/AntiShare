@@ -9,14 +9,24 @@ import com.turt2live.antishare.io.generics.GenericBlockStore;
  * There are no errors for saving/loading the block store. This would silently fail.
  *
  * @author turt2live
+ * @deprecated This should only be used for testing or temporary purposes
  */
+@Deprecated
 public class MemoryBlockStore extends GenericBlockStore {
 
+    /**
+     * @deprecated Does nothing
+     */
     @Override
+    @Deprecated
     public void save() {
     }
 
+    /**
+     * @deprecated Does nothing
+     */
     @Override
+    @Deprecated
     public void load() {
     }
 

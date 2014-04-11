@@ -38,11 +38,11 @@ public class BukkitInventory extends ASInventory<ItemWrapper> {
 
     @Override
     public void save() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // TODO
     }
 
     @Override
     public void load() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // TODO
     }
 }

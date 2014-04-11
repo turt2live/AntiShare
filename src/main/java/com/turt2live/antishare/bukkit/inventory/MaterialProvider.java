@@ -7,7 +7,7 @@ import org.bukkit.Material;
  *
  * @author turt2live
  */
-// TODO: Move this to generalized scope
+// TODO: Move this to generalized scope (hurtle?)
 public class MaterialProvider {
 
     /**

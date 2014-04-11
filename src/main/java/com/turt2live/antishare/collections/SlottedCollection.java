@@ -42,11 +42,13 @@ public interface SlottedCollection<T> {
     /**
      * Saves the collection
      */
+    // TODO: Is this even needed?
     public void save();
 
     /**
      * Loads the collection
      */
+    // TODO: Is this even needed?
     public void load();
 
 }

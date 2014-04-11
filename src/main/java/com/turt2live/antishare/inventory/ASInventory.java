@@ -17,10 +17,22 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class ASInventory<T extends ASItem> implements SlottedCollection<T>, Cloneable {
 
+    /**
+     * The world for this inventory
+     */
+    protected final String world;
+    /**
+     * The player this inventory is for
+     */
+    protected final UUID player;
+    /**
+     * The gamemode of this inventory
+     */
+    protected final ASGameMode gameMode;
+    /**
+     * The underlying inventory collection
+     */
     protected ConcurrentMap<Integer, T> inventory = new ConcurrentHashMap<Integer, T>();
-    protected String world;
-    protected UUID player;
-    protected ASGameMode gameMode;
 
     /**
      * Creates a new inventory

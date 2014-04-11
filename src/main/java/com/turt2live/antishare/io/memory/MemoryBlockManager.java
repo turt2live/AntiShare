@@ -13,7 +13,9 @@ import java.util.List;
  * There are no errors for saving/loading the block manager. This would silently fail.
  *
  * @author turt2live
+ * @deprecated This should only be used for testing or temporary purposes
  */
+@Deprecated
 public class MemoryBlockManager extends GenericBlockManager {
 
     /**
@@ -28,6 +30,10 @@ public class MemoryBlockManager extends GenericBlockManager {
         return new MemoryBlockStore();
     }
 
+    /**
+     * @deprecated Returns an empty list, always
+     */
+    @Deprecated
     @Override
     public List<BlockStore> loadAll() {
         return new ArrayList<BlockStore>();

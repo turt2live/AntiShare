@@ -14,6 +14,9 @@ public final class VaultEconomy implements ASEconomy {
 
     private Economy economy;
 
+    /**
+     * Creates a new Vault economy hook
+     */
     public VaultEconomy() {
         RegisteredServiceProvider<Economy> rsp = AntiShare.getInstance().getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp != null)

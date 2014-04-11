@@ -22,6 +22,9 @@ public class EngineListener implements Listener {
 
     private Engine engine;
 
+    /**
+     * Creates a new Bukkit engine listener
+     */
     public EngineListener() {
         engine = Engine.getInstance();
     }
