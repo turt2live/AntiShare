@@ -38,7 +38,7 @@ public class FileBlockManagerTest {
         // Write a bunch of files
         Random random = new Random();
         int total = 0;
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             int size = random.nextInt(100) + 1;
             FileBlockStore store = new FileBlockStore(new File(folder, i + ".dat"), 0, 0, 0, size);
             store.setType(0, 0, 0, BlockType.ADVENTURE); // Required : FileBlockStore doesn't save nothing
@@ -50,7 +50,7 @@ public class FileBlockManagerTest {
             if (counts.containsKey(size)) counts.put(size, counts.get(size) + 1);
             else counts.put(size, 1);
         }
-        expectedAvg = (int) (total / 1000.0);
+        expectedAvg = (int) (total / 100.0);
         int val = 0;
         total = 0;
         for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
