@@ -1,10 +1,10 @@
 package com.turt2live.antishare.io;
 
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.inventory.InventorySerializer;
-import org.bukkit.GameMode;
 
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -13,7 +13,7 @@ import java.util.UUID;
  *
  * @author turt2live
  */
-public interface InventoryStore {
+public interface InventoryStore<T extends ASItem> {
 
     /**
      * Saves the inventory store to disk
@@ -57,16 +57,23 @@ public interface InventoryStore {
      * @return the inventory, should never be null
      * @throws java.lang.IllegalArgumentException thrown for illegal arguments
      */
-    public Map<Integer, ASItem> getInventory(GameMode gamemode);
+    public ASInventory<T> getInventory(ASGameMode gamemode);
 
     /**
-     * Sets the inventory for a specified gamemode. Setting the map to null will
+     * Sets the inventory for a specified gamemode. Setting the inventory to null will
      * represent "deleting" the entire gamemode from the file.
      *
-     * @param gamemode the gamemode, cannot be null
-     * @param items    the items to use. Null indicates removal
+     * @param gamemode  the gamemode, cannot be null
+     * @param inventory the inventory to use. Null indicates removal
      * @throws java.lang.IllegalArgumentException thrown for illegal arguments
      */
-    public void setInventory(GameMode gamemode, Map<Integer, ASItem> items);
+    public void setInventory(ASGameMode gamemode, ASInventory<T> inventory);
+
+    /**
+     * Gets the time (in milliseconds) this inventory store was last accessed
+     *
+     * @return the last time this store was accessed
+     */
+    public long getLastAccess();
 
 }
