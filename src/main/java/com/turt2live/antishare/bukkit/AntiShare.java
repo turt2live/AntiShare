@@ -116,7 +116,7 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         }
     }
 
-    private FileConfiguration createBlockConfig( ) {
+    private FileConfiguration createBlockConfig() {
         File toFile = new File(AntiShare.getInstance().getDataFolder(), "blocks.yml");
 
         FileConfiguration config = YamlConfiguration.loadConfiguration(toFile);

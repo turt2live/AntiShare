@@ -17,7 +17,7 @@ import java.util.Map;
 // TODO: Add unit test
 public class FileBlockSizeConverter {
 
-    private FileBlockManager managerFrom,managerTo;
+    private FileBlockManager managerFrom, managerTo;
     private boolean saveOnExit = true;
 
     /**
