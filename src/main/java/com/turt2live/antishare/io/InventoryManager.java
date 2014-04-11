@@ -29,6 +29,7 @@ public interface InventoryManager<T extends ASItem> {
      *
      * @param uuid the UUID to lookup. Null returns null.
      * @return the inventory collection, or null
+     * @throws java.lang.IllegalArgumentException thrown for invalid arguments
      */
     public ASInventoryCollection<T> getInventories(UUID uuid);
 
