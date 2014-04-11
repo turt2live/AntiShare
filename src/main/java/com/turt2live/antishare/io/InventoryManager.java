@@ -4,6 +4,7 @@ import com.turt2live.antishare.inventory.ASInventoryCollection;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.inventory.InventorySerializer;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,19 +24,42 @@ public interface InventoryManager<T extends ASItem> {
     public void setSerializer(InventorySerializer serializer);
 
     /**
-     * Saves an inventory
+     * Gets an ASInventoryCollection of inventories for the specified UUID. If the
+     * UUID cannot be found, null is returned
      *
-     * @param inventory the inventory to save, cannot be null
-     * @throws java.lang.IllegalArgumentException thrown for bad arguments
+     * @param uuid the UUID to lookup. Null returns null.
+     * @return the inventory collection, or null
      */
-    public void save(ASInventoryCollection<T> inventory);
+    public ASInventoryCollection<T> getInventories(UUID uuid);
 
     /**
-     * Loads an inventory for a specified UUID
+     * Adds an inventory collection to the manager, overwriting any previous data. The
+     * collection must contain a UUID which is used to match the collection to the backend
+     * system(s).
      *
-     * @param uuid the UUID, cannot be null
-     * @return the inventory, or null if not found (or null arguments)
+     * @param collection the collection to save, cannot be null
+     * @throws java.lang.IllegalArgumentException thrown for invalid arguments
      */
-    public ASInventoryCollection<T> load(UUID uuid);
+    public void addInventory(ASInventoryCollection<T> collection);
+
+    /**
+     * Saves all the known inventory stores
+     */
+    public void saveAll();
+
+    /**
+     * Loads all the known inventory stores. The implementing manager will assume a
+     * save has been completed and may wipe the previous entries from memory.
+     *
+     * @return a list of inventory stores loaded because of this operation
+     */
+    public List<InventoryStore> loadAll();
+
+    /**
+     * Runs a cleanup (on the current thread) on the InventoryManager. This will remove
+     * any excess objects which have not been touched from the manager by cleanly
+     * unloading them.
+     */
+    public void cleanup();
 
 }
