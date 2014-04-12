@@ -13,9 +13,7 @@ import java.util.List;
  * There are no errors for saving/loading the block manager. This would silently fail.
  *
  * @author turt2live
- * @deprecated This should only be used for testing or temporary purposes
  */
-@Deprecated
 // TODO: Unit test
 public class MemoryBlockManager extends GenericBlockManager {
 

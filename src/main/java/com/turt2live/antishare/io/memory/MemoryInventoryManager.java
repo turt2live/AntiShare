@@ -18,9 +18,7 @@ import java.util.UUID;
  *
  * @param <T> the type of inventory item
  * @author turt2live
- * @deprecated This should only be used for testing or temporary purposes
  */
-@Deprecated
 // TODO: Unit test
 public class MemoryInventoryManager<T extends ASItem> extends GenericInventoryManager<T> {
 
