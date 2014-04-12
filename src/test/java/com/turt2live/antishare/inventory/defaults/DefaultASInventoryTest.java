@@ -2,8 +2,6 @@ package com.turt2live.antishare.inventory.defaults;
 
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.utils.ASGameMode;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,13 +49,4 @@ public class DefaultASInventoryTest {
 
         assertEquals(inventory, cloned);
     }
-
-    @BeforeClass
-    public static void preTest() {
-    }
-
-    @AfterClass
-    public static void postTest() {
-    }
-
 }

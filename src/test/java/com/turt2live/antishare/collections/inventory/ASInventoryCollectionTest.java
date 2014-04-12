@@ -26,18 +26,6 @@ public class ASInventoryCollectionTest {
     private static ASInventory<ASItem> inv1, inv2, inv3;
     private static ASGameMode unused;
 
-    @BeforeClass
-    public static void preTest() {
-        inv1 = mock(ASInventory.class);
-        inv2 = mock(ASInventory.class);
-        inv3 = mock(ASInventory.class);
-
-        when(inv1.getGameMode()).thenReturn(ASGameMode.ADVENTURE);
-        when(inv2.getGameMode()).thenReturn(ASGameMode.CREATIVE);
-        when(inv3.getGameMode()).thenReturn(ASGameMode.SURVIVAL);
-        unused = ASGameMode.SPECTATOR;
-    }
-
     @Test
     public void aTestNothing() {
         UUID uuid = UUID.randomUUID();
@@ -98,6 +86,18 @@ public class ASInventoryCollectionTest {
         assertEquals(inv2, collection.getInventory(inv2.getGameMode()));
         assertEquals(inv3, collection.getInventory(inv3.getGameMode()));
         assertNull(collection.getInventory(unused));
+    }
+
+    @BeforeClass
+    public static void preTest() {
+        inv1 = mock(ASInventory.class);
+        inv2 = mock(ASInventory.class);
+        inv3 = mock(ASInventory.class);
+
+        when(inv1.getGameMode()).thenReturn(ASGameMode.ADVENTURE);
+        when(inv2.getGameMode()).thenReturn(ASGameMode.CREATIVE);
+        when(inv3.getGameMode()).thenReturn(ASGameMode.SURVIVAL);
+        unused = ASGameMode.SPECTATOR;
     }
 
 }

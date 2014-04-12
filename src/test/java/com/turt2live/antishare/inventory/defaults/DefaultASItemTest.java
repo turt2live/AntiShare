@@ -2,8 +2,6 @@ package com.turt2live.antishare.inventory.defaults;
 
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.testobjects.UnitASItem;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,13 +64,5 @@ public class DefaultASItemTest {
         assertTrue(item2.equals(item1));
         assertFalse(item1.equals(new UnitASItem(12)));
         assertFalse(item1.equals(new UnitASItem(13)));
-    }
-
-    @BeforeClass
-    public static void preTest() {
-    }
-
-    @AfterClass
-    public static void postTest() {
     }
 }

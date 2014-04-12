@@ -1,7 +1,6 @@
 package com.turt2live.antishare.inventory.defaults;
 
 import com.turt2live.antishare.testobjects.UnitASItem;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -57,7 +56,4 @@ public class DefaultInventorySerializerTest {
         SERIALIZER = new DefaultInventorySerializer();
     }
 
-    @AfterClass
-    public static void postTest() {
-    }
 }
