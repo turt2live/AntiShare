@@ -47,6 +47,13 @@ public interface InventoryStore<T extends ASItem> {
     public String getSerializerClass();
 
     /**
+     * Gets the world this store is for
+     *
+     * @return the world
+     */
+    public String getWorld();
+
+    /**
      * Sets the inventory serializer to be used by this store
      *
      * @param serializer the serializer to use, cannot be null

@@ -16,6 +16,13 @@ import java.util.UUID;
 public interface InventoryManager<T extends ASItem> {
 
     /**
+     * Gets the world this inventory manager is for
+     *
+     * @return the world
+     */
+    public String getWorld();
+
+    /**
      * Sets the serializer to use for this inventory manager instance
      *
      * @param serializer the serializer to use, cannot be null
@@ -50,7 +57,8 @@ public interface InventoryManager<T extends ASItem> {
 
     /**
      * Loads all the known inventory stores. The implementing manager will assume a
-     * save has been completed and may wipe the previous entries from memory.
+     * save has been completed and may wipe the previous entries from memory. This will
+     * never return null, but may return an empty list.
      *
      * @return a list of inventory stores loaded because of this operation
      */

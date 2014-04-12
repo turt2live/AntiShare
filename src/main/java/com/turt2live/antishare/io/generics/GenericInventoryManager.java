@@ -23,8 +23,30 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class GenericInventoryManager<T extends ASItem> implements InventoryManager<T> {
 
+    /**
+     * The inventory serializer being used
+     */
     protected InventorySerializer serializer;
+
     private ConcurrentMap<UUID, InventoryStore<T>> inventories = new ConcurrentHashMap<UUID, InventoryStore<T>>();
+    private String world;
+
+    /**
+     * Creates a new inventory manager
+     *
+     * @param world the world to use, cannot be null
+     * @throws java.lang.IllegalArgumentException thrown for bad arguments
+     */
+    public GenericInventoryManager(String world) {
+        if (world == null) throw new IllegalArgumentException("world cannot be null");
+
+        this.world = world;
+    }
+
+    @Override
+    public String getWorld() {
+        return world;
+    }
 
     @Override
     public void setSerializer(InventorySerializer serializer) {
@@ -58,8 +80,13 @@ public abstract class GenericInventoryManager<T extends ASItem> implements Inven
     public void addInventory(ASInventoryCollection<T> collection) {
         if (collection == null) throw new IllegalArgumentException("collection cannot be null");
 
+        collection.reassociate();
         InventoryStore<T> store = toStore(collection);
         store.setSerializer(serializer);
+
+        if (store instanceof GenericInventoryStore) {
+            ((GenericInventoryStore) store).fillEmpty();
+        }
 
         inventories.put(collection.getPlayer(), store);
     }

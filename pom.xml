@@ -53,6 +53,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- JSON library -->
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>1.2</version>
+        </dependency>
+
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
@@ -127,6 +134,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.turt2live:Hurtle</include>
+                                    <include>net.minidev:json-smart</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -149,6 +157,10 @@
                                 <relocation>
                                     <pattern>com.ikeirnez.pluginmessageapiplus</pattern>
                                     <shadedPattern>com.ikeirnez.pluginmessageapiplus.${project.name}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.minidev</pattern>
+                                    <shadedPattern>net.minidev.${project.name}</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

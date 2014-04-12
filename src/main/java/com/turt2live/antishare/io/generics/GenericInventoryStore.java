@@ -26,6 +26,10 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
      * The serializer this inventory store is using
      */
     protected InventorySerializer serializer;
+    /**
+     * The world this store is being used by
+     */
+    protected String world;
 
     private volatile long lastAccess = 0;
     private String loadedSerializerClass;
@@ -34,14 +38,16 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
     /**
      * Creates a new generic inventory store
      *
-     * @param uuid the UUID this store represents, cannot be null
+     * @param uuid  the UUID this store represents, cannot be null
+     * @param world the world this store is for, cannot be null
      * @throws java.lang.IllegalArgumentException thrown for invalid arguments
      */
-    public GenericInventoryStore(UUID uuid) {
-        if (uuid == null) throw new IllegalArgumentException();
+    public GenericInventoryStore(UUID uuid, String world) {
+        if (uuid == null || world == null) throw new IllegalArgumentException();
 
         this.uuid = uuid;
         this.loadedSerializerClass = getDefaultSerializerClass();
+        this.world = world;
     }
 
     @Override
@@ -52,6 +58,11 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
     @Override
     public String getSerializerClass() {
         return loadedSerializerClass;
+    }
+
+    @Override
+    public String getWorld() {
+        return world;
     }
 
     @Override

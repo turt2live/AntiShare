@@ -19,10 +19,16 @@ import java.util.List;
 public class MemoryBlockManager extends GenericBlockManager {
 
     /**
+     * The arbitrary number all memory block managers use. This may not be used
+     * by subclasses of MemoryBlockManager.
+     */
+    public static final int DEFAULT_BLOCK_SIZE = 1024;
+
+    /**
      * Creates a new block manager
      */
     public MemoryBlockManager() {
-        super(1024);
+        super(DEFAULT_BLOCK_SIZE);
     }
 
     @Override
