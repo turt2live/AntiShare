@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * A utils block manager
+ * A generic block manager
  *
  * @author turt2live
  */
@@ -26,7 +26,7 @@ public abstract class GenericBlockManager implements BlockManager {
     private ConcurrentMap<ASLocation, BlockStore> stores = new ConcurrentHashMap<ASLocation, BlockStore>();
 
     /**
-     * Creates a new utils block manager
+     * Creates a new generic block manager
      *
      * @param blocksPerStore the number of blocks per store
      */

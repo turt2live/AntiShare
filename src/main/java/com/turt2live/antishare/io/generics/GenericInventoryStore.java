@@ -37,7 +37,7 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
     private ConcurrentMap<ASGameMode, ASInventory<T>> inventories = new ConcurrentHashMap<ASGameMode, ASInventory<T>>();
 
     /**
-     * Creates a new utils inventory store
+     * Creates a new generic inventory store
      *
      * @param uuid  the UUID this store represents, cannot be null
      * @param world the world this store is for, cannot be null
