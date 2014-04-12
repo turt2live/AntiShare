@@ -1,12 +1,12 @@
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.engine.defaults.DefaultBlockTypeList;
+import com.turt2live.antishare.io.BlockManager;
+import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.utils.ASLocation;
 import com.turt2live.antishare.utils.ASUtils;
 import com.turt2live.antishare.utils.BlockType;
-import com.turt2live.antishare.engine.defaults.DefaultBlockTypeList;
-import com.turt2live.antishare.io.BlockManager;
-import com.turt2live.antishare.io.memory.MemoryBlockManager;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

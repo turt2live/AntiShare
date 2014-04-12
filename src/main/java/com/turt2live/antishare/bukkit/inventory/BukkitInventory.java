@@ -1,7 +1,7 @@
 package com.turt2live.antishare.bukkit.inventory;
 
-import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.utils.ASGameMode;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
