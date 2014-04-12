@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * AntiShare Language File. This is not documented for code cleanliness
+ * AntiShare Language File. This is largely not documented for code cleanliness
  *
  * @author turt2live
  */

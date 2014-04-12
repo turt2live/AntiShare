@@ -27,6 +27,10 @@ public class LangBuilder {
      * The gamemode selector
      */
     public static final String SELECTOR_GAMEMODE = "@g";
+    /**
+     * The UUID selector
+     */
+    public static final String SELECTOR_UUID = "@u";
 
     private boolean prefix = false;
     private String format;

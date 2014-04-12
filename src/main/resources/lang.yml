@@ -10,6 +10,7 @@
 #  @p          - Applicable player, if any
 #  @v          - Generic variable, if any
 #  @g          - Applicable Game Mode, if any
+#  @u          - Applicable UUID, if any
 # -------------------------------------------------------
 # Formatting Color Codes:
 # -------------------------------------------------------
