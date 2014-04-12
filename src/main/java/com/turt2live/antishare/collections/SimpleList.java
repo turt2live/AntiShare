@@ -10,7 +10,6 @@ import java.util.List;
  * @param <T> the simple list type
  * @author turt2live
  */
-// TODO: Unit test
 public class SimpleList<T> {
 
     private List<T> listing = new ArrayList<T>();

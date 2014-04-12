@@ -9,7 +9,6 @@ import java.util.List;
  * @param <T> the type of list
  * @author turt2live
  */
-// TODO: Unit test
 public class ArrayArrayList<T> extends ArrayList<T> {
 
     /**
