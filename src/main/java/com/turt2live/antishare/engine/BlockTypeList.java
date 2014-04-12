@@ -7,7 +7,6 @@ import com.turt2live.antishare.utils.ASLocation;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public interface BlockTypeList {
 
     /**

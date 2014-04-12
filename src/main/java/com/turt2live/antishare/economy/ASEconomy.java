@@ -5,7 +5,6 @@ package com.turt2live.antishare.economy;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public interface ASEconomy {
 
     /**

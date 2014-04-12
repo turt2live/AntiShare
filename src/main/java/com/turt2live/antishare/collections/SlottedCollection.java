@@ -9,7 +9,6 @@ import java.util.Map;
  * @param <T> the collection type
  * @author turt2live
  */
-// TODO: Unit test
 public interface SlottedCollection<T> {
 
     /**
