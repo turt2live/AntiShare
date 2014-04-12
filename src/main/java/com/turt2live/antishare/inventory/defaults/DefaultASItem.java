@@ -29,7 +29,7 @@ public class DefaultASItem extends ASItem {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return id;
     }
 
     @Override
