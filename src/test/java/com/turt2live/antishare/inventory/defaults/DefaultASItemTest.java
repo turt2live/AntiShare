@@ -1,7 +1,6 @@
 package com.turt2live.antishare.inventory.defaults;
 
 import com.turt2live.antishare.inventory.ASItem;
-import com.turt2live.antishare.testobjects.UnitASItem;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +10,7 @@ import org.junit.runners.MethodSorters;
 import java.util.Random;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 @RunWith(JUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -62,7 +62,7 @@ public class DefaultASItemTest {
         assertFalse(item1.equals(null));
         assertFalse(item1.equals(item3));
         assertTrue(item2.equals(item1));
-        assertFalse(item1.equals(new UnitASItem(12)));
-        assertFalse(item1.equals(new UnitASItem(13)));
+        assertFalse(item1.equals(mock(ASItem.class)));
+        assertFalse(item1.equals(mock(ASItem.class)));
     }
 }

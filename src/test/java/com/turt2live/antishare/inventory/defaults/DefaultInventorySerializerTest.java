@@ -1,6 +1,6 @@
 package com.turt2live.antishare.inventory.defaults;
 
-import com.turt2live.antishare.testobjects.UnitASItem;
+import com.turt2live.antishare.inventory.ASItem;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 
 @RunWith(JUnit4.class)
@@ -38,7 +39,7 @@ public class DefaultInventorySerializerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void dTestInvalidSerialize2() {
-        SERIALIZER.toJson(new UnitASItem(12));
+        SERIALIZER.toJson(mock(ASItem.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -48,7 +49,7 @@ public class DefaultInventorySerializerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void fTestInvalidDeserialize2() {
-        SERIALIZER.fromJson(new UnitASItem(12).toString());
+        SERIALIZER.fromJson(mock(ASItem.class).toString());
     }
 
     @BeforeClass
