@@ -40,20 +40,4 @@ public class DefaultASInventory extends ASInventory<DefaultASItem> {
         }
         return map;
     }
-
-    /**
-     * @deprecated Does nothing
-     */
-    @Override
-    @Deprecated
-    public void save() {
-    }
-
-    /**
-     * @deprecated Does nothing
-     */
-    @Override
-    @Deprecated
-    public void load() {
-    }
 }

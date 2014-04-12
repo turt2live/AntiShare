@@ -40,16 +40,4 @@ public interface SlottedCollection<T> {
      */
     public void clear();
 
-    /**
-     * Saves the collection
-     */
-    // TODO: Is this even needed?
-    public void save();
-
-    /**
-     * Loads the collection
-     */
-    // TODO: Is this even needed?
-    public void load();
-
 }

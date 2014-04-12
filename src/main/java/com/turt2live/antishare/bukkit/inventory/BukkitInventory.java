@@ -35,14 +35,4 @@ public class BukkitInventory extends ASInventory<ItemWrapper> {
         inventory1.inventory = slots;
         return inventory1;
     }
-
-    @Override
-    public void save() {
-        // TODO
-    }
-
-    @Override
-    public void load() {
-        // TODO
-    }
 }

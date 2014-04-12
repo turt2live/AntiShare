@@ -1,16 +1,16 @@
 package com.turt2live.antishare.bukkit;
 
-import com.turt2live.antishare.utils.ASGameMode;
-import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.bukkit.command.ASCommandHandler;
 import com.turt2live.antishare.bukkit.inventory.MaterialProvider;
 import com.turt2live.antishare.bukkit.inventory.VaultMaterialProvider;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
+import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.io.flatfile.FileBlockManager;
+import com.turt2live.antishare.utils.ASGameMode;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -103,7 +103,7 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         if (!storeLocation.exists()) storeLocation.mkdirs();
 
         getLogger().info("Indexing '" + engine.getWorldName() + "'...");
-        engine.setBlockManager(new FileBlockManager(blockSize, storeLocation)); // TODO: Configuration (type)
+        engine.setBlockManager(new FileBlockManager(blockSize, storeLocation));
 
         FileConfiguration configuration = createBlockConfig();
 
