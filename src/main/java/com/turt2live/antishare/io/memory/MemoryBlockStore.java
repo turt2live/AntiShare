@@ -12,6 +12,7 @@ import com.turt2live.antishare.io.generics.GenericBlockStore;
  * @deprecated This should only be used for testing or temporary purposes
  */
 @Deprecated
+// TODO: Unit test
 public class MemoryBlockStore extends GenericBlockStore {
 
     /**

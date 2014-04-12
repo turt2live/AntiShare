@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentMap;
  * @param <T> the inventory storage type
  * @author turt2live
  */
+// TODO: Unit test
 public abstract class GenericInventoryManager<T extends ASItem> implements InventoryManager<T> {
 
     /**

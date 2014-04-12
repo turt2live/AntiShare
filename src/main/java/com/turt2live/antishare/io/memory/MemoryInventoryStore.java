@@ -19,6 +19,7 @@ import java.util.UUID;
  * @deprecated This should only be used for testing or temporary purposes
  */
 @Deprecated
+// TODO: Unit test
 public class MemoryInventoryStore<T extends ASItem> extends GenericInventoryStore<T> {
 
     /**

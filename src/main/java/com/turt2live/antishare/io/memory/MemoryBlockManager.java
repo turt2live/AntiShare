@@ -16,6 +16,7 @@ import java.util.List;
  * @deprecated This should only be used for testing or temporary purposes
  */
 @Deprecated
+// TODO: Unit test
 public class MemoryBlockManager extends GenericBlockManager {
 
     /**

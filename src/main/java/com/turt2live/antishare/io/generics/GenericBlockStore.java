@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public abstract class GenericBlockStore implements BlockStore {
 
     private ConcurrentMap<ASLocation, BlockType> types = new ConcurrentHashMap<ASLocation, BlockType>();

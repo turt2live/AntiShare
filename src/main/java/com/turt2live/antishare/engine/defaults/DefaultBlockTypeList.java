@@ -8,6 +8,7 @@ import com.turt2live.antishare.engine.BlockTypeList;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public class DefaultBlockTypeList implements BlockTypeList {
 
     @Override

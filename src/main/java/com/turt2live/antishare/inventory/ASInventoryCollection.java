@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentMap;
  * @param <T> the type of inventory
  * @author turt2live
  */
+// TODO: Unit test
 public class ASInventoryCollection<T extends ASItem> {
 
     private ConcurrentMap<ASGameMode, ASInventory<T>> inventories = new ConcurrentHashMap<ASGameMode, ASInventory<T>>();
