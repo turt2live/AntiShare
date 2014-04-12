@@ -1,6 +1,6 @@
 package com.turt2live.antishare.io;
 
-import com.turt2live.antishare.collections.ASInventoryCollection;
+import com.turt2live.antishare.collections.inventory.ASInventoryCollection;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.inventory.InventorySerializer;
 

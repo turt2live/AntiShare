@@ -1,13 +1,13 @@
 package com.turt2live.antishare.io.generics;
 
-import com.turt2live.antishare.utils.ASGameMode;
+import com.turt2live.antishare.collections.inventory.ASInventoryCollection;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.inventory.ASInventory;
-import com.turt2live.antishare.collections.ASInventoryCollection;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.inventory.InventorySerializer;
 import com.turt2live.antishare.io.InventoryManager;
 import com.turt2live.antishare.io.InventoryStore;
+import com.turt2live.antishare.utils.ASGameMode;
 
 import java.util.HashMap;
 import java.util.Map;
