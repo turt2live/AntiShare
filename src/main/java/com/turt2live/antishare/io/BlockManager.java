@@ -1,7 +1,7 @@
 package com.turt2live.antishare.io;
 
-import com.turt2live.antishare.ASLocation;
-import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.utils.BlockType;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public interface BlockManager {
      * @param x    the X location
      * @param y    the Y location
      * @param z    the Z location
-     * @param type the new block type. Null is assumed to be {@link com.turt2live.antishare.BlockType#UNKNOWN}
+     * @param type the new block type. Null is assumed to be {@link com.turt2live.antishare.utils.BlockType#UNKNOWN}
      */
     public void setBlockType(int x, int y, int z, BlockType type);
 
@@ -44,7 +44,7 @@ public interface BlockManager {
      * Sets a block's type for the given location
      *
      * @param location the location, cannot be null
-     * @param type     the new block type. Null is assumed to be {@link com.turt2live.antishare.BlockType#UNKNOWN}
+     * @param type     the new block type. Null is assumed to be {@link com.turt2live.antishare.utils.BlockType#UNKNOWN}
      */
     public void setBlockType(ASLocation location, BlockType type);
 

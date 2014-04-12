@@ -1,7 +1,7 @@
 package com.turt2live.antishare.bukkit;
 
-import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.ArrayArrayList;
+import com.turt2live.antishare.utils.ASGameMode;
+import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.bukkit.command.ASCommandHandler;
 import com.turt2live.antishare.bukkit.inventory.MaterialProvider;
 import com.turt2live.antishare.bukkit.inventory.VaultMaterialProvider;

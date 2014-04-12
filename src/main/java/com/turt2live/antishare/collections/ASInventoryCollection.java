@@ -1,6 +1,8 @@
-package com.turt2live.antishare.inventory;
+package com.turt2live.antishare.collections;
 
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.utils.ASGameMode;
+import com.turt2live.antishare.inventory.ASInventory;
+import com.turt2live.antishare.inventory.ASItem;
 
 import java.util.Map;
 import java.util.UUID;

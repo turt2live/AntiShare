@@ -1,6 +1,6 @@
 package com.turt2live.antishare.bukkit.inventory;
 
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.inventory.ASInventory;
 
 import java.util.UUID;

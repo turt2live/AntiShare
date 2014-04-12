@@ -1,6 +1,6 @@
 package com.turt2live.antishare.inventory.defaults;
 
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.inventory.ASInventory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

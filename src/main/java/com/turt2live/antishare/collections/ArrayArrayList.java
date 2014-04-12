@@ -1,4 +1,4 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.collections;
 
 import java.util.ArrayList;
 import java.util.List;

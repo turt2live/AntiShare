@@ -3,7 +3,7 @@ package com.turt2live.antishare.inventory.defaults;
 import com.turt2live.antishare.inventory.ASItem;
 
 /**
- * A generic AntiShare item. This does nothing but provide basic support for
+ * A utils AntiShare item. This does nothing but provide basic support for
  * testing materials and default attributes.
  *
  * @author turt2live

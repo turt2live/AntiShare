@@ -1,6 +1,6 @@
 package com.turt2live.antishare.io.generics;
 
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.inventory.InventorySerializer;
@@ -37,7 +37,7 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
     private ConcurrentMap<ASGameMode, ASInventory<T>> inventories = new ConcurrentHashMap<ASGameMode, ASInventory<T>>();
 
     /**
-     * Creates a new generic inventory store
+     * Creates a new utils inventory store
      *
      * @param uuid  the UUID this store represents, cannot be null
      * @param world the world this store is for, cannot be null

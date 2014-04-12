@@ -1,6 +1,6 @@
 package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.utils.ASLocation;
 
 /**
  * A block type list, used for tracking

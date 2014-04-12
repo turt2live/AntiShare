@@ -1,7 +1,7 @@
 package com.turt2live.antishare.bukkit.listener;
 
-import com.turt2live.antishare.ASUtils;
-import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.utils.ASUtils;
+import com.turt2live.antishare.utils.BlockType;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.PermissionNode;
 import com.turt2live.antishare.bukkit.lang.Lang;

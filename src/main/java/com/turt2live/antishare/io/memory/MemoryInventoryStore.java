@@ -1,6 +1,6 @@
 package com.turt2live.antishare.io.memory;
 
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.inventory.defaults.DefaultASInventory;
 import com.turt2live.antishare.inventory.defaults.DefaultInventorySerializer;
