@@ -51,6 +51,27 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
         this.world = world;
     }
 
+    private void updateLastAccess() {
+        lastAccess = System.currentTimeMillis();
+    }
+
+    @Override
+    public final void load() {
+        this.inventories.clear(); // Avoid a double call of fillEmpty()
+        loadAll();
+        fillEmpty();
+
+        for (ASGameMode gamemode : ASGameMode.values()) {
+            if (getInventory(gamemode) == null) throw new NullPointerException("Failed to load all gamemodes");
+        }
+    }
+
+    @Override
+    public final void clear() {
+        this.inventories.clear();
+        fillEmpty();
+    }
+
     @Override
     public UUID getUUID() {
         return uuid;
@@ -91,27 +112,6 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
     @Override
     public long getLastAccess() {
         return lastAccess;
-    }
-
-    private void updateLastAccess() {
-        lastAccess = System.currentTimeMillis();
-    }
-
-    @Override
-    public final void load() {
-        this.inventories.clear(); // Avoid a double call of fillEmpty()
-        loadAll();
-        fillEmpty();
-
-        for (ASGameMode gamemode : ASGameMode.values()) {
-            if (getInventory(gamemode) == null) throw new NullPointerException("Failed to load all gamemodes");
-        }
-    }
-
-    @Override
-    public final void clear() {
-        this.inventories.clear();
-        fillEmpty();
     }
 
     /**

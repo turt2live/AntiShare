@@ -114,7 +114,13 @@ public abstract class ASInventory<T extends ASItem> implements SlottedCollection
     }
 
     @Override
-    public abstract ASInventory<T> clone();
+    public int hashCode() {
+        int result = inventory.hashCode();
+        result = 31 * result + world.hashCode();
+        result = 31 * result + player.hashCode();
+        result = 31 * result + gameMode.hashCode();
+        return result;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -132,11 +138,5 @@ public abstract class ASInventory<T extends ASItem> implements SlottedCollection
     }
 
     @Override
-    public int hashCode() {
-        int result = inventory.hashCode();
-        result = 31 * result + world.hashCode();
-        result = 31 * result + player.hashCode();
-        result = 31 * result + gameMode.hashCode();
-        return result;
-    }
+    public abstract ASInventory<T> clone();
 }

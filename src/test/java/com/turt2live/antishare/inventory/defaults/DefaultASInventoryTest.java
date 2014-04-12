@@ -20,14 +20,6 @@ import static org.junit.Assert.assertTrue;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DefaultASInventoryTest {
 
-    @BeforeClass
-    public static void preTest() {
-    }
-
-    @AfterClass
-    public static void postTest() {
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void aTestCreation1() {
         // A default ASInventory should be a pass-through, therefore it should pass as expected
@@ -58,6 +50,14 @@ public class DefaultASInventoryTest {
         assertTrue(cloned != null && cloned instanceof DefaultASInventory);
 
         assertEquals(inventory, cloned);
+    }
+
+    @BeforeClass
+    public static void preTest() {
+    }
+
+    @AfterClass
+    public static void postTest() {
     }
 
 }

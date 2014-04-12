@@ -37,6 +37,14 @@ public class ASLocation implements Cloneable {
     }
 
     @Override
+    public int hashCode() {
+        int result = X;
+        result = 31 * result + Y;
+        result = 31 * result + Z;
+        return result;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -48,14 +56,6 @@ public class ASLocation implements Cloneable {
         if (Z != that.Z) return false;
 
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = X;
-        result = 31 * result + Y;
-        result = 31 * result + Z;
-        return result;
     }
 
     @Override

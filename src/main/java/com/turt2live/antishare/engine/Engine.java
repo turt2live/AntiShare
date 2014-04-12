@@ -174,15 +174,6 @@ public final class Engine {
     }
 
     /**
-     * Gets the number of milliseconds it takes for the cache timer to tick
-     *
-     * @return the milliseconds for a tick
-     */
-    public long getCacheIncrement() {
-        return cacheIncrement;
-    }
-
-    /**
      * Sets the cache maximum. The value is a millisecond value for how long an object
      * may remain stale before being removed
      *
@@ -192,6 +183,15 @@ public final class Engine {
         if (cacheMaximum <= 0) throw new IllegalArgumentException("maximum cannot be less than or equal to zero");
 
         this.cacheMaximum = cacheMaximum;
+    }
+
+    /**
+     * Gets the number of milliseconds it takes for the cache timer to tick
+     *
+     * @return the milliseconds for a tick
+     */
+    public long getCacheIncrement() {
+        return cacheIncrement;
     }
 
     /**
@@ -218,6 +218,18 @@ public final class Engine {
     }
 
     /**
+     * Gets the save interval for the periodic save function. If the returned value
+     * is less than or equal to zero, the periodic save function is disabled and not
+     * operating. Any other positive value is used to indicate the period by which
+     * the engine triggers a save.
+     *
+     * @return the save interval
+     */
+    public long getSaveInterval() {
+        return saveInterval;
+    }
+
+    /**
      * Sets the new save interval. This is a millisecond value for how often the engine
      * should periodically save data in the subsequent world engines and itself. Values
      * less than or equal to zero are considered to be "do not save periodically" and
@@ -240,18 +252,6 @@ public final class Engine {
                 }
             }, 0, saveInterval);
         }
-    }
-
-    /**
-     * Gets the save interval for the periodic save function. If the returned value
-     * is less than or equal to zero, the periodic save function is disabled and not
-     * operating. Any other positive value is used to indicate the period by which
-     * the engine triggers a save.
-     *
-     * @return the save interval
-     */
-    public long getSaveInterval() {
-        return saveInterval;
     }
 
     private void newCacheTimer() {

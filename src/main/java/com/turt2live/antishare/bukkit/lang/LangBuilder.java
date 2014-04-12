@@ -16,22 +16,21 @@ import java.util.regex.Pattern;
 public class LangBuilder {
 
     /**
-     * The player selector
-     */
-    public static final String SELECTOR_PLAYER = "@p";
-    /**
-     * The variable selector
-     */
-    public static final String SELECTOR_VARIABLE = "@v";
-    /**
      * The gamemode selector
      */
     public static final String SELECTOR_GAMEMODE = "@g";
     /**
+     * The player selector
+     */
+    public static final String SELECTOR_PLAYER = "@p";
+    /**
      * The UUID selector
      */
     public static final String SELECTOR_UUID = "@u";
-
+    /**
+     * The variable selector
+     */
+    public static final String SELECTOR_VARIABLE = "@v";
     private boolean prefix = false;
     private String format;
     private Map<String, String> replacements = new HashMap<String, String>();

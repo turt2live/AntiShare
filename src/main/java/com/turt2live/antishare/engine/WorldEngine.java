@@ -52,6 +52,15 @@ public final class WorldEngine {
     }
 
     /**
+     * Gets the block manager for this engine
+     *
+     * @return the block manager
+     */
+    public BlockManager getBlockManager() {
+        return blockManager;
+    }
+
+    /**
      * Sets the block manager to use. This will overwrite the previous one and NOT perform
      * any save routines on the previous manager, nor will this perform any load operations
      * on the new manager.
@@ -62,15 +71,6 @@ public final class WorldEngine {
         if (blockManager == null) throw new IllegalArgumentException("block manager cannot be null");
 
         this.blockManager = blockManager;
-    }
-
-    /**
-     * Gets the block manager for this engine
-     *
-     * @return the block manager
-     */
-    public BlockManager getBlockManager() {
-        return blockManager;
     }
 
     /**

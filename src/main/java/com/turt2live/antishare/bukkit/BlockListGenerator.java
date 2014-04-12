@@ -28,6 +28,13 @@ public final class BlockListGenerator implements BlockTypeList {
         }
 
         @Override
+        public int hashCode() {
+            int result = material.hashCode();
+            result = 31 * result + (int) damage;
+            return result;
+        }
+
+        @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
@@ -41,13 +48,6 @@ public final class BlockListGenerator implements BlockTypeList {
         }
 
         @Override
-        public int hashCode() {
-            int result = material.hashCode();
-            result = 31 * result + (int) damage;
-            return result;
-        }
-
-        @Override
         public String toString() {
             return "BInfo{" +
                     "material=" + material +
@@ -55,7 +55,6 @@ public final class BlockListGenerator implements BlockTypeList {
                     '}';
         }
     }
-
     private List<BInfo> information = new ArrayList<BInfo>();
     private String world;
 

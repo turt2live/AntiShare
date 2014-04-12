@@ -116,6 +116,11 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         }
     }
 
+    @Override
+    public void onEngineShutdown() {
+        // Ignore this event
+    }
+
     private FileConfiguration createBlockConfig() {
         File toFile = new File(AntiShare.getInstance().getDataFolder(), "blocks.yml");
 
@@ -149,11 +154,6 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
      */
     public int getBlockSize() {
         return blockSize;
-    }
-
-    @Override
-    public void onEngineShutdown() {
-        // Ignore this event
     }
 
     /**

@@ -11,14 +11,14 @@ public class UnitASItem extends ASItem {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || !(o instanceof UnitASItem)) return false;
-        return ((UnitASItem) o).id == this.id;
+    public int hashCode() {
+        return id;
     }
 
     @Override
-    public int hashCode() {
-        return id;
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof UnitASItem)) return false;
+        return ((UnitASItem) o).id == this.id;
     }
 
     @Override

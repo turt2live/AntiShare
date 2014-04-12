@@ -34,7 +34,6 @@ public class ASCommandHandler implements CommandExecutor {
             this.method = method;
         }
     }
-
     private Map<String, List<CommandInfo>> commands = new HashMap<String, List<CommandInfo>>();
     private AntiShare plugin;
 

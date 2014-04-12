@@ -15,21 +15,20 @@ import java.util.List;
  */
 public class Lang {
 
-    public static final String PREFIX = "prefix";
-    public static final String TOOL_CHECK_TITLE = "tools.check-title";
-    public static final String TOOL_SET_TITLE = "tools.set-title";
-    public static final String TOOL_CHECK_LORE = "tools.check-lore";
-    public static final String TOOL_SET_LORE = "tools.set-lore";
-    public static final String TOOL_ON_SET = "tools.on-set";
-    public static final String TOOL_ON_UNSET = "tools.on-unset";
-    public static final String TOOL_ON_CHECK = "tools.on-check";
-    public static final String TOOL_ON_GET = "tools.on-get";
+    public static final String ERROR_HELP_SUGGEST = "errors.help-suggest";
     public static final String ERROR_INTERNAL = "errors.internal";
     public static final String ERROR_NOT_A_PLAYER = "errors.not-a-player";
     public static final String ERROR_NO_PERMISSION = "errors.permission";
     public static final String ERROR_SYNTAX = "errors.syntax";
-    public static final String ERROR_HELP_SUGGEST = "errors.help-suggest";
-
+    public static final String PREFIX = "prefix";
+    public static final String TOOL_CHECK_LORE = "tools.check-lore";
+    public static final String TOOL_CHECK_TITLE = "tools.check-title";
+    public static final String TOOL_ON_CHECK = "tools.on-check";
+    public static final String TOOL_ON_GET = "tools.on-get";
+    public static final String TOOL_ON_SET = "tools.on-set";
+    public static final String TOOL_ON_UNSET = "tools.on-unset";
+    public static final String TOOL_SET_LORE = "tools.set-lore";
+    public static final String TOOL_SET_TITLE = "tools.set-title";
     private static Lang instance;
     private FileConfiguration configuration;
 

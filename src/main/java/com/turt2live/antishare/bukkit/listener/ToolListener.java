@@ -49,27 +49,6 @@ public class ToolListener implements Listener {
         SET_TEMPLATE.setItemMeta(meta);
     }
 
-    /**
-     * Gives the toolkit to a specified player. This does not validate the
-     * player's permissions
-     *
-     * @param player the player to give the tools to, cannot be null
-     */
-    public static void giveTools(Player player) {
-        ItemStack checkTool = CHECK_TEMPLATE.clone();
-        ItemStack setTool = SET_TEMPLATE.clone();
-
-        PlayerInventory inventory = player.getInventory();
-        ItemStack slot1 = inventory.getItem(0);
-        ItemStack slot2 = inventory.getItem(1);
-        inventory.setItem(0, checkTool);
-        inventory.setItem(1, setTool);
-        if (slot1 != null) inventory.addItem(slot1);
-        if (slot2 != null) inventory.addItem(slot2);
-
-        player.updateInventory();
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onInteract(PlayerInteractEvent event) {
         switch (event.getAction()) {
@@ -117,6 +96,27 @@ public class ToolListener implements Listener {
                 }
             }
         }
+    }
+
+    /**
+     * Gives the toolkit to a specified player. This does not validate the
+     * player's permissions
+     *
+     * @param player the player to give the tools to, cannot be null
+     */
+    public static void giveTools(Player player) {
+        ItemStack checkTool = CHECK_TEMPLATE.clone();
+        ItemStack setTool = SET_TEMPLATE.clone();
+
+        PlayerInventory inventory = player.getInventory();
+        ItemStack slot1 = inventory.getItem(0);
+        ItemStack slot2 = inventory.getItem(1);
+        inventory.setItem(0, checkTool);
+        inventory.setItem(1, setTool);
+        if (slot1 != null) inventory.addItem(slot1);
+        if (slot2 != null) inventory.addItem(slot2);
+
+        player.updateInventory();
     }
 
 }

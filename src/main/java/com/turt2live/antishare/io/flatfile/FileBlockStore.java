@@ -59,8 +59,8 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class FileBlockStore extends GenericBlockStore {
 
-    private File file;
     private final int[] header;
+    private File file;
     private RandomAccessFile raf;
 
     /**

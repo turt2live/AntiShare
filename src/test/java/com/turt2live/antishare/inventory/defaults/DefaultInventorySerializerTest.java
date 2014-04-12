@@ -18,15 +18,6 @@ public class DefaultInventorySerializerTest {
 
     private static DefaultInventorySerializer SERIALIZER;
 
-    @BeforeClass
-    public static void preTest() {
-        SERIALIZER = new DefaultInventorySerializer();
-    }
-
-    @AfterClass
-    public static void postTest() {
-    }
-
     @Test
     public void aTestSerialize() {
         DefaultASItem item1 = new DefaultASItem(12);
@@ -59,5 +50,14 @@ public class DefaultInventorySerializerTest {
     @Test(expected = IllegalArgumentException.class)
     public void fTestInvalidDeserialize2() {
         SERIALIZER.fromJson(new UnitASItem(12).toString());
+    }
+
+    @BeforeClass
+    public static void preTest() {
+        SERIALIZER = new DefaultInventorySerializer();
+    }
+
+    @AfterClass
+    public static void postTest() {
     }
 }

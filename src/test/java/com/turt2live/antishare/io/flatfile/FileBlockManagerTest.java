@@ -27,6 +27,18 @@ public class FileBlockManagerTest {
             expectedMostCommon;
     private static Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
 
+    @Test
+    public void aTestRanges() {
+        FileBlockManager manager = new FileBlockManager(80, folder);
+        assertEquals(expectedMin, manager.getSmallestBlockSize());
+        assertEquals(expectedMax, manager.getLargestBlockSize());
+        assertEquals(expectedAvg, manager.getAverageBlockSize());
+        assertEquals(expectedMostCommon, manager.getMostCommonBlockSize());
+        for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
+            assertEquals((int) entry.getValue(), manager.getStoresOfSize(entry.getKey()).size());
+        }
+    }
+
     @BeforeClass
     public static void preTest() {
         folder = new File("test_data_2");
@@ -76,17 +88,5 @@ public class FileBlockManagerTest {
             else f.delete();
         }
         folder.delete();
-    }
-
-    @Test
-    public void aTestRanges() {
-        FileBlockManager manager = new FileBlockManager(80, folder);
-        assertEquals(expectedMin, manager.getSmallestBlockSize());
-        assertEquals(expectedMax, manager.getLargestBlockSize());
-        assertEquals(expectedAvg, manager.getAverageBlockSize());
-        assertEquals(expectedMostCommon, manager.getMostCommonBlockSize());
-        for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
-            assertEquals((int) entry.getValue(), manager.getStoresOfSize(entry.getKey()).size());
-        }
     }
 }

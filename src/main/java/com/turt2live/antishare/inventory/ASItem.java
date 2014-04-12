@@ -8,10 +8,10 @@ package com.turt2live.antishare.inventory;
 public abstract class ASItem implements Cloneable {
 
     @Override
-    public abstract boolean equals(Object o);
+    public abstract int hashCode();
 
     @Override
-    public abstract int hashCode();
+    public abstract boolean equals(Object o);
 
     @Override
     public abstract ASItem clone();

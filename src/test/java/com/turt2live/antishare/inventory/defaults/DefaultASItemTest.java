@@ -18,14 +18,6 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DefaultASItemTest {
 
-    @BeforeClass
-    public static void preTest() {
-    }
-
-    @AfterClass
-    public static void postTest() {
-    }
-
     @Test
     public void aTestUnlimitedRange() {
         DefaultASItem item1 = new DefaultASItem(-1);
@@ -74,5 +66,13 @@ public class DefaultASItemTest {
         assertTrue(item2.equals(item1));
         assertFalse(item1.equals(new UnitASItem(12)));
         assertFalse(item1.equals(new UnitASItem(13)));
+    }
+
+    @BeforeClass
+    public static void preTest() {
+    }
+
+    @AfterClass
+    public static void postTest() {
     }
 }

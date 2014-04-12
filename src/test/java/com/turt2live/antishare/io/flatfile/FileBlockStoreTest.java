@@ -23,32 +23,6 @@ public class FileBlockStoreTest {
     private static File testFile1;
     private static BlockType[][][] expected;
 
-    @BeforeClass
-    public static void preTest() {
-        folder = new File("test_data");
-        if (folder.exists()) {
-            delete(folder);
-        }
-        folder.mkdirs();
-        testFile1 = new File(folder, "test1.dat");
-    }
-
-    @AfterClass
-    public static void postTest() {
-        if (folder != null && folder.exists()) {
-            delete(folder);
-        }
-    }
-
-    private static void delete(File folder) {
-        File[] files = folder.listFiles();
-        for (File f : files) {
-            if (f.isDirectory()) delete(f);
-            else f.delete();
-        }
-        folder.delete();
-    }
-
     @Test
     public void aTestWrite() {
         FileBlockStore store = new FileBlockStore(testFile1, 10, 11, 12, 60);
@@ -132,5 +106,31 @@ public class FileBlockStoreTest {
         store.save();
 
         assertFalse(file.exists());
+    }
+
+    @BeforeClass
+    public static void preTest() {
+        folder = new File("test_data");
+        if (folder.exists()) {
+            delete(folder);
+        }
+        folder.mkdirs();
+        testFile1 = new File(folder, "test1.dat");
+    }
+
+    @AfterClass
+    public static void postTest() {
+        if (folder != null && folder.exists()) {
+            delete(folder);
+        }
+    }
+
+    private static void delete(File folder) {
+        File[] files = folder.listFiles();
+        for (File f : files) {
+            if (f.isDirectory()) delete(f);
+            else f.delete();
+        }
+        folder.delete();
     }
 }

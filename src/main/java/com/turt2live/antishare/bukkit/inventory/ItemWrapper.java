@@ -33,6 +33,11 @@ public class ItemWrapper extends ASItem {
     }
 
     @Override
+    public int hashCode() {
+        return stack.hashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || !(o instanceof ItemWrapper)) return false;
@@ -47,10 +52,5 @@ public class ItemWrapper extends ASItem {
     @Override
     public ItemWrapper clone() {
         return new ItemWrapper(stack.clone());
-    }
-
-    @Override
-    public int hashCode() {
-        return stack.hashCode();
     }
 }
