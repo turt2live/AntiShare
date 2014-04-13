@@ -36,20 +36,17 @@ public class EngineTest {
 
         Engine.getInstance().setLogger(logger);
         assertEquals(logger, Engine.getInstance().getLogger());
-
-        Engine.getInstance().setLogger(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAddNullLogger() {
+    public void testNullLogger() {
         Engine.getInstance().setLogger(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddListener() {
         EngineListener listener = mock(EngineListener.class);
         Engine.getInstance().addListener(listener);
-        Engine.getInstance().addListener(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -83,8 +80,6 @@ public class EngineTest {
         WorldEngine unloaded = Engine.getInstance().getEngine("test");
 
         assertNotNull(unloaded);
-        assertEquals(created, unloaded);
-        assertEquals(fetched, unloaded);
 
         // Should be ok to unload an engine twice
         Engine.getInstance().unloadWorldEngine("test");
@@ -139,6 +134,7 @@ public class EngineTest {
         verify(fakeListener, atLeast(2)).onWorldEngineCreate(any(WorldEngine.class));
 
         // Calling again should ensure that a new engine can be prepared at any time
+        Engine.getInstance().addListener(fakeListener); // Re-add to be sure...
         Engine.getInstance().prepareShutdown();
         verify(fakeListener, atMost(2)).onEngineShutdown();
         verify(fakeListener, atMost(2)).onWorldEngineCreate(any(WorldEngine.class));
@@ -200,20 +196,14 @@ public class EngineTest {
         Engine.getInstance().setCacheIncrement(-1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testSaveInterval() {
         assertEquals(Engine.DEFAULT_SAVE_INTERVAL, Engine.getInstance().getSaveInterval());
         Engine.getInstance().setSaveInterval(Engine.DEFAULT_SAVE_INTERVAL + 1);
         assertEquals(Engine.DEFAULT_SAVE_INTERVAL + 1, Engine.getInstance().getSaveInterval());
-    }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testSaveIntervalRange1() {
+        // <=0 means no save
         Engine.getInstance().setSaveInterval(0);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSaveIntervalRange2() {
         Engine.getInstance().setSaveInterval(-1);
     }
 

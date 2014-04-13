@@ -24,7 +24,7 @@ public class WorldEngineTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInstance2(){
+    public void testInstance2() {
         new WorldEngine(null);
     }
 
@@ -78,17 +78,18 @@ public class WorldEngineTest {
 
     @Test
     public void testProcess() {
-        ASLocation location = new ASLocation(0, 90, 0);
         BlockTypeList list = mock(BlockTypeList.class);
         BlockManager manager = mock(BlockManager.class);
         WorldEngine engine = new WorldEngine("test");
-
-        when(list.isTracked(location)).thenReturn(true);
+        engine.setBlockManager(manager);
+        engine.setTrackedBlocks(ASGameMode.ADVENTURE, list);
 
         engine.processBlockPlace(new ASLocation(90, 90, 90), BlockType.ADVENTURE);
-        verifyZeroInteractions(manager);
+        verify(manager, never()).setBlockType(any(ASLocation.class), any(BlockType.class));
 
-        engine.processBlockPlace(location, BlockType.ADVENTURE);
+        when(list.isTracked(any(ASLocation.class))).thenReturn(true);
+
+        engine.processBlockPlace(new ASLocation(90, 90, 90), BlockType.ADVENTURE);
         verify(manager).setBlockType(any(ASLocation.class), any(BlockType.class));
     }
 
