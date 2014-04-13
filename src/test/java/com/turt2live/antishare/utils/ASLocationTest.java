@@ -1,19 +1,16 @@
 package com.turt2live.antishare.utils;
 
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ASLocationTest {
 
     @Test
-    public void aTestCreate() {
+    public void testCreate() {
         for (int x = -2; x < 2; x++) {
             for (int y = -2; y < 2; y++) {
                 for (int z = -2; z < 2; z++) {
@@ -27,7 +24,7 @@ public class ASLocationTest {
     }
 
     @Test
-    public void aTestEquality() {
+    public void testEquality() {
         ASLocation location1 = new ASLocation(1, 2, 3);
         ASLocation location2 = new ASLocation(1, 2, 3);
         ASLocation location3 = new ASLocation(2, 3, 4);

@@ -3,11 +3,9 @@ package com.turt2live.antishare.io.flatfile;
 import com.turt2live.antishare.utils.BlockType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
 import java.io.File;
 import java.util.HashMap;
@@ -17,7 +15,6 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FileBlockManagerTest {
 
     private static File folder;
@@ -28,7 +25,7 @@ public class FileBlockManagerTest {
     private static Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
 
     @Test
-    public void aTestRanges() {
+    public void testRanges() {
         FileBlockManager manager = new FileBlockManager(80, folder);
         assertEquals(expectedMin, manager.getSmallestBlockSize());
         assertEquals(expectedMax, manager.getLargestBlockSize());

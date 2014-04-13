@@ -1,21 +1,18 @@
 package com.turt2live.antishare.collections;
 
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SimpleListTest {
 
     @Test
-    public void aTestAdd() {
+    public void testAdd() {
         SimpleList<Integer> numbers = new SimpleList<Integer>();
         numbers.addItem(19);
 
@@ -24,7 +21,7 @@ public class SimpleListTest {
     }
 
     @Test
-    public void bTestRemove() {
+    public void testRemove() {
         SimpleList<Integer> numbers = new SimpleList<Integer>();
         numbers.addItem(19);
         numbers.addItem(20);
@@ -40,7 +37,7 @@ public class SimpleListTest {
     }
 
     @Test
-    public void cTestConvert() {
+    public void testConvert() {
         SimpleList<Integer> numbers = new SimpleList<Integer>();
         numbers.addItem(19);
         numbers.addItem(20);
@@ -54,7 +51,7 @@ public class SimpleListTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void dTestModify() {
+    public void testModify() {
         SimpleList<Integer> numbers = new SimpleList<Integer>();
         numbers.addItem(19);
         numbers.addItem(20);
@@ -65,19 +62,19 @@ public class SimpleListTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void eTestNull1() {
+    public void testNull1() {
         SimpleList<Integer> numbers = new SimpleList<Integer>();
         numbers.addItem(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void fTestNull2() {
+    public void testNull2() {
         SimpleList<Integer> numbers = new SimpleList<Integer>();
         numbers.removeItem(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void gTestNull3() {
+    public void testNull3() {
         SimpleList<Integer> numbers = new SimpleList<Integer>();
         numbers.hasItem(null);
     }

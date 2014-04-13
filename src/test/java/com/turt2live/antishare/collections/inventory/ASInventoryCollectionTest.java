@@ -4,11 +4,9 @@ import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.utils.ASGameMode;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +18,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ASInventoryCollectionTest {
 
     private static ASInventory<ASItem> inv1, inv2, inv3;
     private static ASGameMode unused;
 
     @Test
-    public void aTestNothing() {
+    public void testNothing() {
         UUID uuid = UUID.randomUUID();
         ASInventoryCollection<ASItem> collection = new ASInventoryCollection<ASItem>(uuid, new HashMap<ASGameMode, ASInventory<ASItem>>());
 
@@ -39,22 +36,22 @@ public class ASInventoryCollectionTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void bTestNull1() {
+    public void testNull1() {
         new ASInventoryCollection<ASItem>(null, new HashMap<ASGameMode, ASInventory<ASItem>>());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void cTestNull2() {
+    public void testNull2() {
         new ASInventoryCollection<ASItem>(UUID.randomUUID(), null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void dTestNull13() {
+    public void testNull13() {
         new ASInventoryCollection<ASItem>(null, null);
     }
 
     @Test
-    public void eTestFill() {
+    public void testFill() {
         Map<ASGameMode, ASInventory<ASItem>> items = new HashMap<ASGameMode, ASInventory<ASItem>>();
         items.put(inv1.getGameMode(), inv1);
         items.put(inv2.getGameMode(), inv2);
@@ -68,7 +65,7 @@ public class ASInventoryCollectionTest {
     }
 
     @Test
-    public void fTestReassociate() {
+    public void testReassociate() {
         Map<ASGameMode, ASInventory<ASItem>> items = new HashMap<ASGameMode, ASInventory<ASItem>>();
         items.put(inv2.getGameMode(), inv1);
         items.put(inv3.getGameMode(), inv2);

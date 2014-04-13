@@ -2,11 +2,9 @@ package com.turt2live.antishare.inventory.defaults;
 
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.utils.ASGameMode;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
 import java.util.UUID;
 
@@ -15,29 +13,28 @@ import static org.junit.Assert.assertTrue;
 
 
 @RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DefaultASInventoryTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void aTestCreation1() {
+    public void testCreation1() {
         // A default ASInventory should be a pass-through, therefore it should pass as expected
         new DefaultASInventory(null, "test", ASGameMode.ADVENTURE);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void bTestCreation2() {
+    public void testCreation2() {
         // A default ASInventory should be a pass-through, therefore it should pass as expected
         new DefaultASInventory(UUID.randomUUID(), null, ASGameMode.ADVENTURE);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void cTestCreation3() {
+    public void testCreation3() {
         // A default ASInventory should be a pass-through, therefore it should pass as expected
         new DefaultASInventory(UUID.randomUUID(), "test", null);
     }
 
     @Test
-    public void dTestClone() {
+    public void testClone() {
         DefaultASInventory inventory = new DefaultASInventory(UUID.randomUUID(), "testworld", ASGameMode.ADVENTURE);
 
         for (int i = 0; i < 10; i++) {

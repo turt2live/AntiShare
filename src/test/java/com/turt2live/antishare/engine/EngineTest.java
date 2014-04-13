@@ -1,11 +1,9 @@
 package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.economy.ASEconomy;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
 import java.util.logging.Logger;
 
@@ -13,16 +11,15 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EngineTest {
 
     @Test
-    public void aTestInstance() {
+    public void testInstance() {
         assertNotNull(Engine.getInstance());
     }
 
     @Test
-    public void bTestEconomy() {
+    public void testEconomy() {
         assertNull(Engine.getInstance().getEconomy());
 
         Engine.getInstance().setEconomy(mock(ASEconomy.class));
@@ -32,8 +29,8 @@ public class EngineTest {
         assertNull(Engine.getInstance().getEconomy());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void cTestLogger() {
+    @Test
+    public void testLogger() {
         Logger logger = Logger.getLogger("test-case");
         assertNotNull(Engine.getInstance().getLogger());
 
@@ -44,21 +41,35 @@ public class EngineTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void dTestAddListener() {
+    public void testAddNullLogger() {
+        Engine.getInstance().setLogger(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddListener() {
         EngineListener listener = mock(EngineListener.class);
         Engine.getInstance().addListener(listener);
         Engine.getInstance().addListener(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void eTestRemoveListener() {
+    public void testAddNullListener() {
+        Engine.getInstance().addListener(null);
+    }
+
+    @Test
+    public void testRemoveListener() {
         EngineListener listener = mock(EngineListener.class);
         Engine.getInstance().removeListener(listener);
-        Engine.getInstance().removeListener(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void fTestWorldEngine() {
+    public void testRemoveNullListener() {
+        Engine.getInstance().removeListener(null);
+    }
+
+    @Test
+    public void testWorldEngine() {
         WorldEngine created = Engine.getInstance().createWorldEngine("test");
         WorldEngine fetched = Engine.getInstance().getEngine("test");
         WorldEngine fetched2 = Engine.getInstance().getEngine("test2");
@@ -78,22 +89,25 @@ public class EngineTest {
         // Should be ok to unload an engine twice
         Engine.getInstance().unloadWorldEngine("test");
         Engine.getInstance().unloadWorldEngine("test");
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testWorldEngineNull() {
         Engine.getInstance().getEngine(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void gTestWorldEngineNull1() {
+    public void testWorldEngineNull1() {
         Engine.getInstance().createWorldEngine(null);
     }
 
     @Test
-    public void hTestWorldEngineNull2() {
+    public void testWorldEngineNull2() {
         Engine.getInstance().unloadWorldEngine(null);
     }
 
     @Test
-    public void fTestListenerEvents() {
+    public void testListenerEvents() {
         EngineListener fakeListener = mock(EngineListener.class);
         Engine.getInstance().addListener(fakeListener);
         verifyZeroInteractions(fakeListener);
@@ -152,43 +166,55 @@ public class EngineTest {
         verify(fakeListener, atLeast(2)).onWorldEngineCreate(any(WorldEngine.class));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void gTestCacheMaxiumum() {
+    @Test
+    public void testCacheMaxiumum() {
         assertEquals(Engine.DEFAULT_CACHE_MAXIMUM, Engine.getInstance().getCacheMaximum());
         Engine.getInstance().setCacheMaximum(Engine.DEFAULT_CACHE_MAXIMUM + 1);
         assertEquals(Engine.DEFAULT_CACHE_MAXIMUM + 1, Engine.getInstance().getCacheMaximum());
-        Engine.getInstance().setCacheIncrement(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void hTestCacheMaximumRange1() {
-        Engine.getInstance().setCacheIncrement(0);
+    public void testCacheMaximumRange1() {
+        Engine.getInstance().setCacheMaximum(0);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void iTestCacheIncrement() {
+    public void testCacheMaximumRange2() {
+        Engine.getInstance().setCacheMaximum(-1);
+    }
+
+    @Test
+    public void testCacheIncrement() {
         assertEquals(Engine.DEFAULT_CACHE_INCREMENT, Engine.getInstance().getCacheIncrement());
         Engine.getInstance().setCacheIncrement(Engine.DEFAULT_CACHE_INCREMENT + 1);
         assertEquals(Engine.DEFAULT_CACHE_INCREMENT + 1, Engine.getInstance().getCacheIncrement());
-        Engine.getInstance().setCacheIncrement(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void jTestCacheIncrementRange1() {
+    public void testCacheIncrementRange1() {
         Engine.getInstance().setCacheIncrement(0);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void kTestSaveInterval() {
-        assertEquals(Engine.DEFAULT_SAVE_INTERVAL, Engine.getInstance().getSaveInterval());
-        Engine.getInstance().setSaveInterval(Engine.DEFAULT_SAVE_INTERVAL + 1);
-        assertEquals(Engine.DEFAULT_SAVE_INTERVAL + 1, Engine.getInstance().getSaveInterval());
-        Engine.getInstance().setSaveInterval(-1);
+    public void testCacheIncrementRange2() {
+        Engine.getInstance().setCacheIncrement(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void lTestSaveIntervalRange1() {
+    public void testSaveInterval() {
+        assertEquals(Engine.DEFAULT_SAVE_INTERVAL, Engine.getInstance().getSaveInterval());
+        Engine.getInstance().setSaveInterval(Engine.DEFAULT_SAVE_INTERVAL + 1);
+        assertEquals(Engine.DEFAULT_SAVE_INTERVAL + 1, Engine.getInstance().getSaveInterval());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSaveIntervalRange1() {
         Engine.getInstance().setSaveInterval(0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSaveIntervalRange2() {
+        Engine.getInstance().setSaveInterval(-1);
     }
 
 }

@@ -1,39 +1,36 @@
 package com.turt2live.antishare.economy;
 
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BalanceModifierTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void aTestNull() {
+    public void testNull1() {
         new BalanceModifier(null, "", 12);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void bTestNull() {
+    public void testNull2() {
         new BalanceModifier(BalanceModifier.ModifierType.FINE, null, 12);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void cTestSmall() {
+    public void testSmall1() {
         new BalanceModifier(BalanceModifier.ModifierType.FINE, "", -10);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void dTestSmall() {
+    public void testSmall2() {
         new BalanceModifier(BalanceModifier.ModifierType.FINE, "", 0);
     }
 
     @Test
-    public void eTestConstructor() {
+    public void testConstructor() {
         BalanceModifier modifier = new BalanceModifier(BalanceModifier.ModifierType.FINE, "account", 10);
         assertEquals("account", modifier.getAccount());
         assertEquals(BalanceModifier.ModifierType.FINE, modifier.getType());
@@ -41,7 +38,7 @@ public class BalanceModifierTest {
     }
 
     @Test
-    public void fTestScaled(){
+    public void testScaled(){
         BalanceModifier modifier = new BalanceModifier(BalanceModifier.ModifierType.FINE,"",10);
         assertEquals(-10.0, modifier.getScaledAmount(), 0);
 

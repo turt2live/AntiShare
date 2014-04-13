@@ -1,11 +1,9 @@
 package com.turt2live.antishare.inventory.defaults;
 
 import com.turt2live.antishare.inventory.ASItem;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
 import java.util.Random;
 
@@ -13,11 +11,10 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 @RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DefaultASItemTest {
 
     @Test
-    public void aTestUnlimitedRange() {
+    public void testUnlimitedRange() {
         DefaultASItem item1 = new DefaultASItem(-1);
         assertEquals(-1, item1.getId());
 
@@ -29,7 +26,7 @@ public class DefaultASItemTest {
     }
 
     @Test
-    public void bTestClone() {
+    public void testClone() {
         DefaultASItem[] items = new DefaultASItem[10];
         DefaultASItem[] cloned = new DefaultASItem[items.length];
 
@@ -53,7 +50,7 @@ public class DefaultASItemTest {
     }
 
     @Test
-    public void cTestEquals() {
+    public void testEquals() {
         DefaultASItem item1 = new DefaultASItem(12);
         DefaultASItem item2 = new DefaultASItem(12);
         DefaultASItem item3 = new DefaultASItem(13);
