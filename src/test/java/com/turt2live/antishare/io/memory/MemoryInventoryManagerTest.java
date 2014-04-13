@@ -17,7 +17,7 @@ public class MemoryInventoryManagerTest {
     public void testCreate1() {
         new MemoryInventoryManager("test");
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testCreate2() {
         new MemoryInventoryManager(null);
