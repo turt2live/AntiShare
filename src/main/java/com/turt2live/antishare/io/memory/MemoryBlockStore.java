@@ -10,7 +10,6 @@ import com.turt2live.antishare.io.generics.GenericBlockStore;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public class MemoryBlockStore extends GenericBlockStore {
 
     /**
