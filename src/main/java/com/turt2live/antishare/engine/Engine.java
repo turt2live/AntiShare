@@ -14,15 +14,19 @@ import java.util.logging.Logger;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public final class Engine {
+
+    // TODO: Docs
+    public static final long DEFAULT_CACHE_MAXIMUM = 120000; // 120 seconds
+    public static final long DEFAULT_CACHE_INCREMENT = 60000; // 60 seconds
+    public static final long DEFAULT_SAVE_INTERVAL = 0; // Default no save
 
     private static Engine instance;
     private CopyOnWriteArrayList<EngineListener> listeners = new CopyOnWriteArrayList<EngineListener>();
     private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<String, WorldEngine>();
-    private long cacheMaximum = 120000; // 120 seconds
-    private long cacheIncrement = 60000; // 60 seconds
-    private long saveInterval = 0; // Default no save
+    private long cacheMaximum = DEFAULT_CACHE_MAXIMUM;
+    private long cacheIncrement = DEFAULT_CACHE_INCREMENT;
+    private long saveInterval = DEFAULT_SAVE_INTERVAL;
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
     private ASEconomy economy;
