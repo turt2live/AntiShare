@@ -16,9 +16,17 @@ import java.util.logging.Logger;
  */
 public final class Engine {
 
-    // TODO: Docs
+    /**
+     * The default cache maximum time (120 seconds)
+     */
     public static final long DEFAULT_CACHE_MAXIMUM = 120000; // 120 seconds
+    /**
+     * The default cache increment (60 seconds)
+     */
     public static final long DEFAULT_CACHE_INCREMENT = 60000; // 60 seconds
+    /**
+     * The default save interval (0, off)
+     */
     public static final long DEFAULT_SAVE_INTERVAL = 0; // Default no save
 
     private static Engine instance;
