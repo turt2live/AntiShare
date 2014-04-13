@@ -25,6 +25,7 @@ public class ASUtilsTest {
         assertEquals(ASGameMode.SURVIVAL, ASUtils.toGamemode(BlockType.SURVIVAL));
         assertEquals(ASGameMode.CREATIVE, ASUtils.toGamemode(BlockType.CREATIVE));
         assertEquals(ASGameMode.SPECTATOR, ASUtils.toGamemode(BlockType.SPECTATOR));
+        assertNull(ASUtils.toGamemode(BlockType.UNKNOWN));
         assertNull(ASUtils.toGamemode(null));
     }
 

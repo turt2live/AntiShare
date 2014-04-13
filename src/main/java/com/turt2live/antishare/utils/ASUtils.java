@@ -15,6 +15,8 @@ public final class ASUtils {
      * @return the block type
      */
     public static BlockType toBlockType(ASGameMode gamemode) {
+        if (gamemode == null) return BlockType.UNKNOWN;
+
         switch (gamemode) {
             case ADVENTURE:
                 return BlockType.ADVENTURE;
@@ -38,6 +40,8 @@ public final class ASUtils {
      * @return the gamemode
      */
     public static ASGameMode toGamemode(BlockType type) {
+        if (type == null) return null;
+
         switch (type) {
             case ADVENTURE:
                 return ASGameMode.ADVENTURE;
