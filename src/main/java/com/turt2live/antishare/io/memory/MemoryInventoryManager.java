@@ -19,7 +19,6 @@ import java.util.UUID;
  * @param <T> the type of inventory item
  * @author turt2live
  */
-// TODO: Unit test
 public class MemoryInventoryManager<T extends ASItem> extends GenericInventoryManager<T> {
 
     /**
