@@ -20,6 +20,7 @@ public final class BalanceModifier {
          */
         REWARD;
     }
+
     private String account;
     private ModifierType type;
     private double amount;

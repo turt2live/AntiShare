@@ -38,11 +38,11 @@ public class BalanceModifierTest {
     }
 
     @Test
-    public void testScaled(){
-        BalanceModifier modifier = new BalanceModifier(BalanceModifier.ModifierType.FINE,"",10);
+    public void testScaled() {
+        BalanceModifier modifier = new BalanceModifier(BalanceModifier.ModifierType.FINE, "", 10);
         assertEquals(-10.0, modifier.getScaledAmount(), 0);
 
-        modifier=new BalanceModifier(BalanceModifier.ModifierType.REWARD,"",10);
+        modifier = new BalanceModifier(BalanceModifier.ModifierType.REWARD, "", 10);
         assertEquals(10.0, modifier.getScaledAmount(), 0);
     }
 

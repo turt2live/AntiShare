@@ -55,6 +55,7 @@ public final class BlockListGenerator implements BlockTypeList {
                     '}';
         }
     }
+
     private List<BInfo> information = new ArrayList<BInfo>();
     private String world;
 
