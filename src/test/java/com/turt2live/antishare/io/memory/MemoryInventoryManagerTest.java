@@ -14,6 +14,16 @@ import static org.junit.Assert.assertNotNull;
 public class MemoryInventoryManagerTest {
 
     @Test
+    public void testCreate1() {
+        new MemoryInventoryManager("test");
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreate2() {
+        new MemoryInventoryManager(null);
+    }
+
+    @Test
     public void testLoad() {
         MemoryInventoryManager manager = new MemoryInventoryManager("test");
 
