@@ -210,6 +210,7 @@ public final class Engine {
         if (cacheIncrement <= 0)
             throw new IllegalArgumentException("cache increment must not be less than or equal to zero");
 
+        this.cacheIncrement = cacheIncrement;
         newCacheTimer();
         cacheTimer.schedule(new TimerTask() {
             @Override
