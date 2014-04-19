@@ -61,7 +61,7 @@
         </dependency>
         <dependency>
             <groupId>com.turt2live.antishare</groupId>
-            <artifactId>AntiShare-Bukkit-Abstraction</artifactId>
+            <artifactId>AntiShare-Bukkit-vPre</artifactId>
             <version>Bukkit-vPre</version>
             <type>jar</type>
         </dependency>
@@ -150,10 +150,6 @@
             <id>vault-repo</id>
             <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
         </repository>
-        <repository>
-            <id>turt2live-repo</id>
-            <url>http://repo.turt2live.com</url>
-        </repository>
     </repositories>
 
     <build>
@@ -182,7 +178,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.turt2live.hurtle</pattern>
-                                    <shadedPattern>com.turt2live.antishare.hurtle</shadedPattern>
+                                    <shadedPattern>com.turt2live.antishare.bukkit.hurtle</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
