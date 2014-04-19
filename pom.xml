@@ -11,7 +11,7 @@
 
     <modules>
         <module>AntiShare-API</module>
-        
+
         <module>Bukkit/Abstraction</module>
         <module>Bukkit/Abstraction-vPre</module>
         <module>Bukkit/Abstraction-v1_4_5</module>
