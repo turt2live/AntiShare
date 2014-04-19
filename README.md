@@ -17,8 +17,7 @@ POM Information:
 <dependency>
     <groupId>com.turt2live.antishare</groupId>
     <artifactId>AntiShare</artifactId>
-    <!-- Please tell turt2live if this is out of date -->
-    <version>5.4.0</version>
+    <version>LATEST</version>
     <type>jar</type>
     <scope>compile</scope>
 </dependency>
@@ -40,7 +39,7 @@ Other Information
 
 Released under GNU LGPL v2.1
 
-Thanks feildmaster for your Enhanced Configuration! 
+Thanks feildmaster for your Enhanced Configuration!
 [Link to his library](https://github.com/feildmaster/Configuration-Library)
 
 Thanks to Sleaker for your help with regions and your code on the update check!
