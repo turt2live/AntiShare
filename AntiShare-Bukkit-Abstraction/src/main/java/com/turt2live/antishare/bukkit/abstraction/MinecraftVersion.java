@@ -1,5 +1,8 @@
 package com.turt2live.antishare.bukkit.abstraction;
 
+import com.turt2live.antishare.utils.ASGameMode;
+import com.turt2live.antishare.utils.BlockType;
+import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
@@ -42,5 +45,30 @@ public interface MinecraftVersion {
      * @return the player's name, or null if not found
      */
     public String getName(OfflinePlayer player);
+
+
+    /**
+     * Converts a Bukkit Game Mode to an AntiShare Game Mode
+     *
+     * @param gamemode the gamemode to convert
+     * @return the AntiShare gamemode. If the passed gamemode was null, this will be null
+     */
+    public ASGameMode toGameMode(GameMode gamemode);
+
+    /**
+     * Converts an AntiShare Game Mode to a Bukkit Game Mode
+     *
+     * @param gamemode the gamemode to convert
+     * @return the Bukkit gamemode. If the passed gamemode was null, this will be null
+     */
+    public GameMode toGamemode(ASGameMode gamemode);
+
+    /**
+     * Converts a Bukkit Game Mode to an AntiShare Block Type
+     *
+     * @param gamemode the gamemode to convert
+     * @return the block type
+     */
+    public BlockType toBlockType(GameMode gamemode);
 
 }

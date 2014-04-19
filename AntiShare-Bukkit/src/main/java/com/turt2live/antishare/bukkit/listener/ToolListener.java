@@ -2,6 +2,7 @@ package com.turt2live.antishare.bukkit.listener;
 
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.PermissionNode;
+import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.utils.ASUtils;
@@ -77,7 +78,7 @@ public class ToolListener implements Listener {
                 event.setCancelled(true);
 
                 if (!rclick) {
-                    BukkitUtils.getBlockManager(player.getWorld()).setBlockType(BukkitUtils.toLocation(block.getLocation()), ASUtils.toBlockType(BukkitUtils.toGameMode(player.getGameMode())));
+                    BukkitUtils.getBlockManager(player.getWorld()).setBlockType(BukkitUtils.toLocation(block.getLocation()), ASUtils.toBlockType(VersionSelector.getMinecraft().toGameMode(player.getGameMode())));
 
                     String strRep = ASUtils.toUpperWords(player.getGameMode().name());
 

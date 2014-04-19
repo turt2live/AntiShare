@@ -12,6 +12,8 @@
     <modules>
         <module>AntiShare-API</module>
         <module>AntiShare-Bukkit</module>
+        <module>AntiShare-Bukkit-Abstraction</module>
+        <module>AntiShare-Bukkit-vPre</module>
     </modules>
 
     <repositories>

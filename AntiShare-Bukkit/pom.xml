@@ -28,7 +28,6 @@
             <artifactId>AntiShare-API</artifactId>
             <version>API</version>
             <type>jar</type>
-            <optional>true</optional>
         </dependency>
 
         <!-- Bukkit -->
@@ -51,6 +50,21 @@
             <artifactId>Hurtle</artifactId>
             <version>0.0.2-SNAPSHOT</version>
         </dependency>
+
+        <!-- == START ANTISHARE ABSTRACTION == -->
+
+        <dependency>
+            <groupId>com.turt2live.antishare</groupId>
+            <artifactId>AntiShare-Bukkit-Abstraction</artifactId>
+            <version>Bukkit-Abstraction</version>
+        </dependency>
+        <dependency>
+            <groupId>com.turt2live.antishare</groupId>
+            <artifactId>AntiShare-Bukkit-vPre</artifactId>
+            <version>Bukkit-vPre</version>
+        </dependency>
+
+        <!-- == END ANTISHARE ABSTRACTION == -->
     </dependencies>
 
     <repositories>
@@ -80,7 +94,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
+                            <minimizeJar>false</minimizeJar>
                             <artifactSet>
                                 <includes>
                                     <include>com.turt2live:Hurtle</include>

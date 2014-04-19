@@ -1,6 +1,7 @@
 package com.turt2live.antishare.bukkit.listener;
 
 import com.turt2live.antishare.bukkit.BukkitUtils;
+import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.utils.ASLocation;
 import com.turt2live.antishare.utils.ASUtils;
@@ -32,7 +33,7 @@ public class EngineListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         ASLocation location = BukkitUtils.toLocation(event.getBlock().getLocation());
-        BlockType type = ASUtils.toBlockType(BukkitUtils.toGameMode(event.getPlayer().getGameMode()));
+        BlockType type = ASUtils.toBlockType(VersionSelector.getMinecraft().toGameMode(event.getPlayer().getGameMode()));
 
         engine.getEngine(event.getPlayer().getWorld().getName()).processBlockPlace(location, type);
     }
