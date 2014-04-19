@@ -51,3 +51,8 @@ Please see the post about AntiShare for more information.
 [Bukkit Forums](http://forums.bukkit.org/threads/56523)
 
 Feel free to copy/use my work, just link back to here. :)
+
+Credits
+------------------
+
+Thanks to mbaxter for walking me through the maven module thingy.

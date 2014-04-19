@@ -1,10 +1,10 @@
 package com.turt2live.antishare.io.generics;
 
+import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.utils.ASLocation;
 import com.turt2live.antishare.utils.BlockType;
-import com.turt2live.hurtle.utils.ArrayArrayList;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,17 +42,10 @@ public class GenericBlockManagerTest {
             return new ArrayArrayList<BlockStore>(store);
         }
     }
-
-    private static int CREATE_CALLS = 0;
     private static final int BLOCK_SIZE = 1023;
+    private static int CREATE_CALLS = 0;
     private static GenericBlockManager manager;
     private static BlockStore store;
-
-    @BeforeClass
-    public static void before() {
-        store = mock(BlockStore.class);
-        manager = new TestManager(store, BLOCK_SIZE);
-    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidBlockStore1() {
@@ -163,6 +156,12 @@ public class GenericBlockManagerTest {
     @Test(expected = IllegalArgumentException.class)
     public void testNullSetType() {
         manager.setBlockType(null, BlockType.ADVENTURE); // Null block type tested elsewhere
+    }
+
+    @BeforeClass
+    public static void before() {
+        store = mock(BlockStore.class);
+        manager = new TestManager(store, BLOCK_SIZE);
     }
 
 }

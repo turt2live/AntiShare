@@ -23,14 +23,13 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
      */
     protected final UUID uuid;
     /**
-     * The serializer this inventory store is using
-     */
-    protected InventorySerializer serializer;
-    /**
      * The world this store is being used by
      */
     protected final String world;
-
+    /**
+     * The serializer this inventory store is using
+     */
+    protected InventorySerializer serializer;
     private volatile long lastAccess = 0;
     private String loadedSerializerClass;
     private ConcurrentMap<ASGameMode, ASInventory<T>> inventories = new ConcurrentHashMap<ASGameMode, ASInventory<T>>();

@@ -1,11 +1,11 @@
 package com.turt2live.antishare.io.memory;
 
+import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.collections.inventory.ASInventoryCollection;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.io.InventoryStore;
 import com.turt2live.antishare.io.generics.GenericInventoryManager;
 import com.turt2live.antishare.utils.ASGameMode;
-import com.turt2live.hurtle.utils.ArrayArrayList;
 
 import java.util.List;
 import java.util.UUID;

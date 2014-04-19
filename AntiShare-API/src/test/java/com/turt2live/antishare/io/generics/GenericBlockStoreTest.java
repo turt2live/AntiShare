@@ -21,12 +21,6 @@ public class GenericBlockStoreTest {
 
     private static GenericBlockStore store;
 
-    @BeforeClass
-    public static void before() {
-        store = mock(GenericBlockStore.class, Mockito.CALLS_REAL_METHODS);
-        store.initTest();
-    }
-
     @Test
     public void testSetGet() {
         reset(store);
@@ -146,6 +140,12 @@ public class GenericBlockStoreTest {
     @Test(expected = IllegalArgumentException.class)
     public void testNullSet() {
         store.setType(null, BlockType.ADVENTURE); // null block type tested elsewhere
+    }
+
+    @BeforeClass
+    public static void before() {
+        store = mock(GenericBlockStore.class, Mockito.CALLS_REAL_METHODS);
+        store.initTest();
     }
 
 }

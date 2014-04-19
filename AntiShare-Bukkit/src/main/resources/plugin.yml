@@ -1,5 +1,5 @@
 name: AntiShare
-main: com.turt2live.antishare.bukkit.AntiShare
+main: AntiShare
 version: maven-version-number
 description: Create social awkwardness for creative-mode players
 author: turt2live

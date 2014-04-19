@@ -17,24 +17,23 @@ import java.util.logging.Logger;
 public final class Engine {
 
     /**
-     * The default cache maximum time (120 seconds)
-     */
-    public static final long DEFAULT_CACHE_MAXIMUM = 120000; // 120 seconds
-    /**
      * The default cache increment (60 seconds)
      */
     public static final long DEFAULT_CACHE_INCREMENT = 60000; // 60 seconds
+    private long cacheIncrement = DEFAULT_CACHE_INCREMENT;
+    /**
+     * The default cache maximum time (120 seconds)
+     */
+    public static final long DEFAULT_CACHE_MAXIMUM = 120000; // 120 seconds
+    private long cacheMaximum = DEFAULT_CACHE_MAXIMUM;
     /**
      * The default save interval (0, off)
      */
     public static final long DEFAULT_SAVE_INTERVAL = 0; // Default no save
-
+    private long saveInterval = DEFAULT_SAVE_INTERVAL;
     private static Engine instance;
     private CopyOnWriteArrayList<EngineListener> listeners = new CopyOnWriteArrayList<EngineListener>();
     private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<String, WorldEngine>();
-    private long cacheMaximum = DEFAULT_CACHE_MAXIMUM;
-    private long cacheIncrement = DEFAULT_CACHE_INCREMENT;
-    private long saveInterval = DEFAULT_SAVE_INTERVAL;
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
     private ASEconomy economy;

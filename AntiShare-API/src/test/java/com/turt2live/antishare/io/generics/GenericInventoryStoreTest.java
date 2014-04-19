@@ -50,16 +50,16 @@ public class GenericInventoryStoreTest {
     private static final String WORLD = "world";
     private static TestStore store;
 
-    @BeforeClass
-    public static void before() {
-        store = new TestStore(UID, WORLD);
-    }
-
     @Test
     public void testMisc() {
         assertEquals(UID, store.getUUID());
         assertEquals(WORLD, store.getWorld());
         assertEquals(SERIALZER_CLASS, store.getDefaultSerializerClass());
+    }
+
+    @BeforeClass
+    public static void before() {
+        store = new TestStore(UID, WORLD);
     }
 
     // TODO: Continue test
