@@ -7,6 +7,11 @@ AntiShare is a plugin designed to target Creative Mode players and stop them fro
 
 Check out the [BukkitDev page](http://dev.bukkit.org/server-mods/antishare) or the [Bukkit Forum post](http://forums.bukkit.org/threads/56523) for more information such as commands.
 
+Enterprise Operation
+-----
+
+AntiShare is designed for high-profile servers (or servers with lots of players). This is to enhance the server's ability to operate without having to worry about creative mode players. AntiShare can still be run on smaller servers, but those servers will not see a significant gain from the performance enhancements within AntiShare.
+
 Maven
 -----
 
@@ -23,7 +28,7 @@ POM Information:
 </dependency>
 ...
 <repository>
-	<id>antishare-repo</id>
+	<id>turt2live-repo</id>
 	<url>http://repo.turt2live.com</url>
 </repository>
 ...
@@ -38,11 +43,6 @@ Other Information
 -----------------
 
 Released under GNU LGPL v2.1
-
-Thanks feildmaster for your Enhanced Configuration!
-[Link to his library](https://github.com/feildmaster/Configuration-Library)
-
-Thanks to Sleaker for your help with regions and your code on the update check!
 
 Please see the post about AntiShare for more information.
 
