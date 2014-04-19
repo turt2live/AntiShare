@@ -16,8 +16,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Used by replacement plugin to inject build number -->
-        <BUILD_NUMBER>local</BUILD_NUMBER>
     </properties>
 
     <dependencies>
