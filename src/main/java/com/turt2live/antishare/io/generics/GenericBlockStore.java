@@ -14,11 +14,16 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public abstract class GenericBlockStore implements BlockStore {
 
     private ConcurrentMap<ASLocation, BlockType> types = new ConcurrentHashMap<ASLocation, BlockType>();
     private volatile long lastAccess = 0;
+
+    // Test entry point. Should not be used elsewhere
+    void initTest() {
+        if (types != null) throw new IllegalArgumentException("Collection not null!");
+        this.types = new ConcurrentHashMap<ASLocation, BlockType>();
+    }
 
     @Override
     public BlockType getType(int x, int y, int z) {
@@ -33,6 +38,8 @@ public abstract class GenericBlockStore implements BlockStore {
     @Override
     public BlockType getType(ASLocation location) {
         updateLastAccess();
+
+        if (location == null) throw new IllegalArgumentException("location cannot be null");
 
         BlockType type = types.get(location);
         return type == null ? BlockType.UNKNOWN : type;
