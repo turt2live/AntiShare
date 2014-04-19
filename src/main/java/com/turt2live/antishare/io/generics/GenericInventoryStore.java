@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentMap;
  * @param <T> the type of item to store
  * @author turt2live
  */
-// TODO: Unit test
 public abstract class GenericInventoryStore<T extends ASItem> implements InventoryStore<T> {
 
     /**
@@ -30,7 +29,7 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
     /**
      * The world this store is being used by
      */
-    protected String world;
+    protected final String world;
 
     private volatile long lastAccess = 0;
     private String loadedSerializerClass;
@@ -92,6 +91,7 @@ public abstract class GenericInventoryStore<T extends ASItem> implements Invento
         if (serializer == null) throw new IllegalArgumentException();
 
         this.serializer = serializer;
+        this.loadedSerializerClass = this.serializer.getClass().getName();
         updateLastAccess();
     }
 
