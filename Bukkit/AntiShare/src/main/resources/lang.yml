@@ -1,0 +1,49 @@
+# -------------------------------------------------------
+# AntiShare language file
+# -------------------------------------------------------
+# This file contains all the messages used within the plugin. All. Of. Them.
+# You will find things such as item names, error messages, etc all within this
+# file. Some sections are commented while others are not.
+# -------------------------------------------------------
+# Variables:
+# -------------------------------------------------------
+#  @p          - Applicable player, if any
+#  @v          - Generic variable, if any
+#  @g          - Applicable Game Mode, if any
+#  @u          - Applicable UUID, if any
+# -------------------------------------------------------
+# Formatting Color Codes:
+# -------------------------------------------------------
+# (these are standard on most plugins: &<color code>, but listed here for convenience)
+#
+# &0 - Black           &8 - Dark Gray
+# &1 - Dark Blue       &9 - Blue
+# &2 - Dark Green      &a - Green
+# &3 - Dark Aqua       &b - Aqua
+# &4 - Dark Red        &c - Red
+# &5 - Dark Purple     &d - Light Purple
+# &6 - Gold            &e - Yellow
+# &7 - Gray            &f - White
+# -------------------------------------------------------
+prefix: '&7[&aAntiShare&7]'
+tools:
+    check-title: '&bAntiShare Check Tool'
+    set-title: '&bAntiShare Set Tool'
+    check-lore:
+    - '&eClick a block to see what'
+    - '&egamemode it is.'
+    set-lore:
+    - '&eLeft click a block to set'
+    - '&ethe gamemode of the block'
+    - '&6Right click a block to clear'
+    - '&6the gamemode of the block'
+    on-check: '&9That is a &b@g &9block'
+    on-set: '&9Block set as &b@g'
+    on-unset: '&9Block type removed, was &b@g'
+    on-get: '&2You now have the AntiShare tools'
+errors:
+    internal: '&cSevere internal error. Please contact your administrator.'
+    not-a-player: '&cYou are not a player!'
+    permission: '&cYou do not have permission to do that.'
+    syntax: '&cInvalid syntax. Try &e@v'
+    help-suggest: '&cDid you mean &e/as help&c?'

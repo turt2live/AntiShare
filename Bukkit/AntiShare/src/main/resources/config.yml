@@ -1,0 +1,34 @@
+# AntiShare - High performance creative protection
+# -------------------------------------------------
+#
+# AntiShare internal caching settings. These settings are generally
+# not touched unless you are looking to fine tune how AntiShare
+# operates in regards to the block game mode cache system.
+caching:
+    # The total number of blocks per axis to permit. To determine
+    # the total of blocks per file/storage object, take this to the
+    # power three (eg: 256 x 256 x 256). Values less than or equal
+    # to zero inherit a default of 256.
+    block-size: 256
+    # The periodic save function can be used to help assist in data
+    # recovery in the event of a crash or otherwise unclean shutdown
+    # of AntiShare. The value here is in milliseconds (seconds x1000)
+    # and values less than or equal to zero will disable the feature.
+    # The lower this number, the more often all AntiShare data is saved
+    # to the storage system.
+    periodic-save: 0
+    # The length of time something is permitted to remain stale in memory.
+    # This value, in milliseconds (seconds x1000), is used to determine
+    # if a stale object (unmodified) should be removed from memory. For
+    # example, the block system records when a particular block-size section
+    # was last touched; if the cache timer ticks and determines that section
+    # to be stale (untouched) for the recorded time or greater, it is saved
+    # and removed from memory. Values less than or equal to zero inherit
+    # the default of 120000 (2 minutes).
+    cache-expiration: 120000
+    # The period of time, in milliseconds (seconds x1000), by which the cache
+    # timer should tick. This means that after the recoreded number of
+    # milliseconds, the cache timer is triggered and all stale and expired
+    # objects are removed from memory. Values less than or equal to zero
+    # inherit a default of 60000 (1 minute).
+    cache-timer-interval: 60000

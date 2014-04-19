@@ -1,0 +1,16 @@
+name: AntiShare
+main: AntiShare
+version: 5.5.3-SNAPSHOT
+description: Create social awkwardness for creative-mode players
+author: turt2live
+website: http://dev.bukkit.org/server-mods/antishare
+build: local
+softdepend: [Vault]
+commands:
+    antishare:
+        aliases: [as, ashare, antis, turt2live]
+        description: AntiShare core command. See /antishare help for more information
+permissions:
+    antishare.tools:
+        default: op
+        description: Allows the use of the AntiShare tools

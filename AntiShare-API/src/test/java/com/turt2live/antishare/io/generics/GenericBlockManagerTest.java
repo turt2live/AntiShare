@@ -42,6 +42,7 @@ public class GenericBlockManagerTest {
             return new ArrayArrayList<BlockStore>(store);
         }
     }
+
     private static final int BLOCK_SIZE = 1023;
     private static int CREATE_CALLS = 0;
     private static GenericBlockManager manager;
