@@ -68,17 +68,6 @@
         <defaultGoal>package</defaultGoal>
         <finalName>${project.name}</finalName>
 
-        <!-- Distribution Management -->
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ftp</artifactId>
-                <version>1.0-alpha-6</version>
-            </extension>
-        </extensions>
-
-        <!-- BUILD PLUGINS -->
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
