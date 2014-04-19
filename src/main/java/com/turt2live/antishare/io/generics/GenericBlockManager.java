@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public abstract class GenericBlockManager implements BlockManager {
 
     /**
@@ -36,6 +35,15 @@ public abstract class GenericBlockManager implements BlockManager {
         this.blocksPerStore = blocksPerStore;
     }
 
+    /**
+     * Gets the number of blocks per store
+     *
+     * @return the number of blocks per store
+     */
+    public int getBlocksPerStore() {
+        return blocksPerStore;
+    }
+
     @Override
     public BlockStore getStore(int x, int y, int z) {
         return getStore(new ASLocation(x, y, z));
@@ -45,15 +53,15 @@ public abstract class GenericBlockManager implements BlockManager {
     public BlockStore getStore(ASLocation location) {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
-        int sx = (int) Math.floor(location.X / (double) blocksPerStore);
-        int sy = (int) Math.floor(location.Y / (double) blocksPerStore);
-        int sz = (int) Math.floor(location.Z / (double) blocksPerStore);
+        int sx = (int) Math.floor(location.X / (double) getBlocksPerStore());
+        int sy = (int) Math.floor(location.Y / (double) getBlocksPerStore());
+        int sz = (int) Math.floor(location.Z / (double) getBlocksPerStore());
         ASLocation storeLocation = new ASLocation(sx, sy, sz);
 
-        BlockStore store = stores.get(storeLocation);
+        BlockStore store = this.stores.get(storeLocation);
         if (store == null) {
             store = createStore(sx, sy, sz);
-            stores.put(storeLocation, store);
+            this.stores.put(storeLocation, store);
             store.load();
         }
         return store;
@@ -107,7 +115,7 @@ public abstract class GenericBlockManager implements BlockManager {
             long lastAccess = store.getLastAccess();
             if (now - lastAccess > Engine.getInstance().getCacheMaximum()) {
                 store.save();
-                stores.remove(location);
+                this.stores.remove(location);
             }
         }
     }
@@ -116,9 +124,9 @@ public abstract class GenericBlockManager implements BlockManager {
      * Gets the live map of the stores. The key is a encoded version of a
      * block coordinate using the following mathematical algorithm:<br/>
      * <code>
-     * int storeX = floor(blockX / {@link #blocksPerStore});<br/>
-     * int storeY = floor(blockY / {@link #blocksPerStore});<br/>
-     * int storeZ = floor(blockZ / {@link #blocksPerStore});<br/>
+     * int storeX = floor(blockX / {@link #getBlocksPerStore()});<br/>
+     * int storeY = floor(blockY / {@link #getBlocksPerStore()});<br/>
+     * int storeZ = floor(blockZ / {@link #getBlocksPerStore()});<br/>
      * {@link com.turt2live.antishare.utils.ASLocation} theKey = new {@link com.turt2live.antishare.utils.ASLocation}(storeX, storeY, storeZ);
      * </code>
      *
@@ -132,9 +140,9 @@ public abstract class GenericBlockManager implements BlockManager {
      * Creates a new store file. The invoking object is expected to load any information
      * from the resulting store as this method should be expected to not load data.
      *
-     * @param sx the store x location, as per {@link #blocksPerStore}
-     * @param sy the store y location, as per {@link #blocksPerStore}
-     * @param sz the store z location, as per {@link #blocksPerStore}
+     * @param sx the store x location, as per {@link #getBlocksPerStore()}
+     * @param sy the store y location, as per {@link #getBlocksPerStore()}
+     * @param sz the store z location, as per {@link #getBlocksPerStore()}
      * @return the new store, should not be null
      */
     protected abstract BlockStore createStore(int sx, int sy, int sz);
