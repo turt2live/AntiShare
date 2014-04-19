@@ -54,6 +54,21 @@ public class GenericBlockManagerTest {
         manager = new TestManager(store, BLOCK_SIZE);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidBlockStore1() {
+        new TestManager(store, -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidBlockStore2() {
+        new TestManager(store, 0);
+    }
+
+    @Test
+    public void testValidBlockStore() {
+        new TestManager(store, 1);
+    }
+
     @Test
     public void testGetStore() {
         BlockStore aStore = manager.getStore(0, 0, 0);
