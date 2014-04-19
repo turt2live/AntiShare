@@ -10,9 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.turt2live.antishare</groupId>
-    <artifactId>AntiShare-Bukkit-Abstraction</artifactId>
-    <name>AntiShare-Bukkit-vPre</name>
-    <version>Bukkit-vPre</version>
+    <artifactId>AntiShare-Bukkit-v1_5_R2</artifactId>
+    <name>AntiShare-Bukkit-v1_5_R2</name>
+    <version>Bukkit-v1_5_R2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.4.2-R0.2</version>
+            <version>1.5.1-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.turt2live</groupId>
