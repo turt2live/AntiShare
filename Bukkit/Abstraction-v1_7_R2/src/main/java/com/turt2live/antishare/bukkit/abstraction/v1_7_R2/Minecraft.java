@@ -1,5 +1,6 @@
 package com.turt2live.antishare.bukkit.abstraction.v1_7_R2;
 
+import com.google.common.base.Charsets;
 import com.turt2live.antishare.bukkit.abstraction.MinecraftVersion;
 import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.utils.BlockType;
@@ -27,20 +28,9 @@ public class Minecraft implements MinecraftVersion {
         }
     }
 
-    private class NameStore {
-        String name;
-        long cached;
-
-        public NameStore(String name, long cached) {
-            this.name = name;
-            this.cached = cached;
-        }
-    }
-
     private static final long CACHE_EXPIRE = 60000; // 60 seconds
 
     private final ConcurrentMap<String, UUIDStore> BY_NAME = new ConcurrentHashMap<String, UUIDStore>();
-    private final ConcurrentMap<UUID, NameStore> BY_UUID = new ConcurrentHashMap<UUID, NameStore>();
 
     @Override
     public UUID getUUID(String name) {
@@ -50,14 +40,17 @@ public class Minecraft implements MinecraftVersion {
     @Override
     public UUID getUUID(OfflinePlayer player) {
         if (player == null) throw new IllegalArgumentException("player cannot be null");
+        UUID uuid = player.getUniqueId();
+        UUID bukDef = UUID.nameUUIDFromBytes(("OfflinePlayer:" + player.getName()).getBytes(Charsets.UTF_8));
+        if (uuid != null && !uuid.equals(bukDef)) return uuid;
+
         checkCache();
         if (BY_NAME.containsKey(player.getName())) {
             return BY_NAME.get(player.getName()).uuid;
         }
-        UUID uuid = UUIDServiceProvider.getUUID(player.getName());
+        uuid = UUIDServiceProvider.getUUID(player.getName());
         if (uuid != null) {
             BY_NAME.put(player.getName(), new UUIDStore(uuid, System.currentTimeMillis()));
-            BY_UUID.put(uuid, new NameStore(player.getName(), System.currentTimeMillis()));
         }
         return uuid;
     }
@@ -65,16 +58,12 @@ public class Minecraft implements MinecraftVersion {
     @Override
     public String getName(UUID uuid) {
         if (uuid == null) throw new IllegalArgumentException("uuid cannot be null");
-        checkCache();
-        if (BY_UUID.containsKey(uuid)) {
-            return BY_UUID.get(uuid).name;
+
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        if (player.getName().equalsIgnoreCase("InvalidUUID")) {
+            return null; // This is Bukkit's bad code
         }
-        String name = UUIDServiceProvider.getName(uuid);
-        if (name != null) {
-            BY_NAME.put(name, new UUIDStore(uuid, System.currentTimeMillis()));
-            BY_UUID.put(uuid, new NameStore(name, System.currentTimeMillis()));
-        }
-        return name;
+        return player.getName();
     }
 
     @Override
@@ -140,13 +129,6 @@ public class Minecraft implements MinecraftVersion {
                         strRemove.add(entry.getKey());
                 }
                 for (String key : strRemove) BY_NAME.remove(key);
-
-                List<UUID> uidRemove = new ArrayList<UUID>();
-                for (Map.Entry<UUID, NameStore> entry : BY_UUID.entrySet()) {
-                    if (now - entry.getValue().cached > CACHE_EXPIRE)
-                        uidRemove.add(entry.getKey());
-                }
-                for (UUID key : uidRemove) BY_UUID.remove(key);
             }
         }).start();
     }
