@@ -18,20 +18,25 @@ Maven
 POM Information:
 
 ```xml
-...
+<!-- ... --->
+
+<!-- Bukkit Dependency -->
 <dependency>
     <groupId>com.turt2live.antishare</groupId>
-    <artifactId>AntiShare</artifactId>
+    <artifactId>AntiShare-Bukkit</artifactId>
     <version>LATEST</version>
     <type>jar</type>
     <scope>compile</scope>
 </dependency>
-...
+
+<!-- ... --->
+
+<!-- Repository for all dependencies -->
 <repository>
 	<id>turt2live-repo</id>
 	<url>http://repo.turt2live.com</url>
 </repository>
-...
+<!-- ... --->
 ```
 
 Compiling
