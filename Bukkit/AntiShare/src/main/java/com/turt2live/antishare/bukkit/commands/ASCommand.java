@@ -45,7 +45,8 @@ public interface ASCommand {
     public String[] getAlternatives();
 
     /**
-     * Executes this command
+     * Executes this command. Returning false prompts the CommandHandler to send
+     * and invalid syntax message to the command sender.
      *
      * @param sender the command sender
      * @param args   the arguments used

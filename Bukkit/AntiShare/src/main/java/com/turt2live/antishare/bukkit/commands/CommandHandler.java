@@ -45,7 +45,9 @@ public class CommandHandler implements CommandExecutor, ASCommand {
             ASCommand command1 = attemptFind(args[0]);
             if (command1 != null) {
                 if (canExecute(command1, sender, true)) {
-                    return command1.execute(sender, rebuildArgs(args));
+                    if (!command1.execute(sender, rebuildArgs(args))) {
+                        sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_SYNTAX)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, command1.getUsage()).build());
+                    }
                 }
             } else {
                 sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_HELP_SUGGEST)).withPrefix().build());
