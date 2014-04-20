@@ -43,6 +43,13 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>turt2live-repo</id>
+            <url>http://repo.turt2live.com</url>
+        </repository>
+    </repositories>
+
     <build>
         <defaultGoal>package</defaultGoal>
         <finalName>${project.name}</finalName>

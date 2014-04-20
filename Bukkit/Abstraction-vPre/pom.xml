@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.turt2live.antishare</groupId>
-    <artifactId>AntiShare-Bukkit-Abstraction</artifactId>
+    <artifactId>AntiShare-Bukkit-vPre</artifactId>
     <name>AntiShare-Bukkit-vPre</name>
     <version>Bukkit-vPre</version>
 
@@ -45,6 +45,10 @@
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>turt2live-repo</id>
+            <url>http://repo.turt2live.com</url>
         </repository>
     </repositories>
 

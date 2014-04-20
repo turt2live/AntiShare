@@ -46,6 +46,10 @@
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
+        <repository>
+            <id>turt2live-repo</id>
+            <url>http://repo.turt2live.com</url>
+        </repository>
     </repositories>
 
     <build>
