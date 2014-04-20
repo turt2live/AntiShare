@@ -1,6 +1,7 @@
 package com.turt2live.antishare.bukkit;
 
-import com.turt2live.antishare.bukkit.command.ASCommandHandler;
+import com.turt2live.antishare.bukkit.commands.CommandHandler;
+import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
 import com.turt2live.antishare.bukkit.inventory.MaterialProvider;
 import com.turt2live.antishare.bukkit.inventory.VaultMaterialProvider;
 import com.turt2live.antishare.bukkit.lang.Lang;
@@ -82,7 +83,11 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         getServer().getPluginManager().registerEvents(new ToolListener(), this);
 
         // Setup commands
-        getCommand("antishare").setExecutor(new ASCommandHandler(this));
+        CommandHandler handler = new CommandHandler();
+        getCommand("antishare").setExecutor(handler);
+
+        // Register commands
+        handler.registerCommand(new ToolsCommand());
 
         // Probe all currently loaded worlds
         for (World world : getServer().getWorlds()) {
