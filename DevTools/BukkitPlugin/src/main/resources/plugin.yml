@@ -1,0 +1,11 @@
+name: AntiShare-DevTools
+main: com.turt2live.antishare.bukkit.dev.AntiShare
+version: maven-version-number
+description: Development tools for AntiShare
+author: turt2live
+website: http://dev.bukkit.org/server-mods/antishare
+build: jenkins-build-number
+softdepend: [AntiShare]
+commands:
+    asdev:
+        description: AntiShare DevTools command

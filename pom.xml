@@ -26,6 +26,7 @@
         <module>Bukkit/Abstraction-v1_7_R1</module>
         <module>Bukkit/Abstraction-v1_7_R2</module>
         <module>Bukkit/Abstraction-v1_7_R3</module>
+        <module>DevTools/BukkitPlugin</module>
     </modules>
 
     <repositories>
