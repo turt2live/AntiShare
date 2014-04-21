@@ -20,6 +20,8 @@ public class Lang {
     public static final String ERROR_NOT_A_PLAYER = "errors.not-a-player";
     public static final String ERROR_NO_PERMISSION = "errors.permission";
     public static final String ERROR_SYNTAX = "errors.syntax";
+    public static final String HELP_TITLE = "help.title";
+    public static final String HELP_LINE = "help.line";
     public static final String PREFIX = "prefix";
     public static final String TOOL_CHECK_LORE = "tools.check-lore";
     public static final String TOOL_CHECK_TITLE = "tools.check-title";
@@ -29,6 +31,11 @@ public class Lang {
     public static final String TOOL_ON_UNSET = "tools.on-unset";
     public static final String TOOL_SET_LORE = "tools.set-lore";
     public static final String TOOL_SET_TITLE = "tools.set-title";
+
+    // Help strings
+    public static final String HELP_CMD_HELP = "help.command.help";
+    public static final String HELP_CMD_TOOLS = "help.command.tools";
+
     private static Lang instance;
     private FileConfiguration configuration;
 

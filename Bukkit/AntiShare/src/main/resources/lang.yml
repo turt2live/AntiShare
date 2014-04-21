@@ -8,7 +8,7 @@
 # Variables:
 # -------------------------------------------------------
 #  @p          - Applicable player, if any
-#  @v          - Generic variable, if any
+#  @v          - Generic variable, if any. May come with a number (eg: @v1)
 #  @g          - Applicable Game Mode, if any
 #  @u          - Applicable UUID, if any
 # -------------------------------------------------------
@@ -37,9 +37,9 @@ tools:
     - '&ethe gamemode of the block'
     - '&6Right click a block to clear'
     - '&6the gamemode of the block'
-    on-check: '&9That is a &b@g &9block'
-    on-set: '&9Block set as &b@g'
-    on-unset: '&9Block type removed, was &b@g'
+    on-check: '&7That is a &b@g &7block'
+    on-set: '&7Block set as &b@g'
+    on-unset: '&7Block type removed, was &b@g'
     on-get: '&2You now have the AntiShare tools'
 errors:
     internal: '&cSevere internal error. Please contact your administrator.'
@@ -47,3 +47,9 @@ errors:
     permission: '&cYou do not have permission to do that.'
     syntax: '&cInvalid syntax. Try &e@v'
     help-suggest: '&cDid you mean &e/as help&c?'
+help:
+    title: '&2=====[ &aAntiShare Help &2]====='
+    line: '&b@v1 &8- &7@v2'
+    command:
+        help: 'AntiShare Help Command'
+        tools: 'AntiShare Administration Tools'
