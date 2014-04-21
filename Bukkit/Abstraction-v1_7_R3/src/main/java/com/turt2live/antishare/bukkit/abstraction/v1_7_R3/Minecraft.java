@@ -41,8 +41,9 @@ public class Minecraft implements MinecraftVersion {
     public UUID getUUID(OfflinePlayer player) {
         if (player == null) throw new IllegalArgumentException("player cannot be null");
         UUID uuid = player.getUniqueId();
-        UUID bukDef = UUID.nameUUIDFromBytes(("OfflinePlayer:" + player.getName()).getBytes(Charsets.UTF_8));
-        if (uuid != null && !uuid.equals(bukDef)) return uuid;
+        UUID badUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + player.getName()).getBytes(Charsets.UTF_8));
+        UUID badName = UUID.nameUUIDFromBytes("InvalidUsername".getBytes(Charsets.UTF_8));
+        if (uuid != null && (uuid.equals(badUUID) || uuid.equals(badName))) return uuid;
 
         checkCache();
         if (BY_NAME.containsKey(player.getName())) {
