@@ -160,7 +160,7 @@ public class FallingSandCheck implements Listener {
         if (event.getEntity() instanceof FallingBlock) {
             double distanceThreshold = 3 * 3; // 3 blocks
             if (event.getEntity().getLocation().distanceSquared(blockLocation) <= distanceThreshold) {
-                if (event.getTo() != null && event.getTo() == Material.SAND) {
+                if (event.getTo() != null && event.getTo() == falling.get(nextFall)) {
                     Location spawned = event.getBlock().getLocation();
                     SandState state = null;
                     if (spawned.getBlockY() == blockLocation.getBlockY()) {
@@ -187,7 +187,7 @@ public class FallingSandCheck implements Listener {
         if (!enabled) return;
         double distanceThreshold = 3 * 3; // 3 blocks
         if (event.getEntity().getLocation().distanceSquared(blockLocation) <= distanceThreshold) {
-            if (event.getEntity().getItemStack().getType() == Material.SAND) {
+            if (event.getEntity().getItemStack().getType() == falling.get(nextFall)) {
                 addResult(SandState.BREAK);
                 plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
                     @Override
