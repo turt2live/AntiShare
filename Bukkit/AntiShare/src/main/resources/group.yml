@@ -1,0 +1,113 @@
+# AntiShare Group Configuration
+# -------------------------------------------------
+# This is an AntiShare Group configuration file. Within this
+# file you will find settings to control a certain group of
+# settings, applying them to players. This permits the ability
+# to have, for example, less restrictive donor ranks. However,
+# these configurations still act shadowed in the background,
+# meaning that blocks placed by one "group" will not be restricted
+# by another. These group configurations are only for specifying
+# settings for a selection of players.
+#
+# To not use group settings, simply edit the "group_main.yml" as
+# this will only have one group and no others. All new groups must
+# be named as "group_<NAME>.yml" where <NAME> must be unique. The
+# filename is not used anywhere in-game and is for your reference
+# only. The name listed below is the name of which the plugin uses.
+# Only the group_main.yml file cannot be renamed, as this is the
+# master group AntiShare uses.
+#
+# For more information, please see this document: <LINK PENDING>
+#
+#
+# General group settings. These allow for basic setup of the group
+# as well as some other minor things. Please note that editing these
+# settings on the group_main.yml file have no effect unless otherwise
+# specified.
+#
+# The group name. "none" and "main" are invalid group names as these
+# are reserved for internal operation. Only group_main.yml may have the
+# name "main".
+name: main
+# The permission node for the group. If a player has this permission,
+# they will be affected by this configuration.
+permission-enable: AntiShare.group.main
+# The enabled flag. If true, this group is in effect. If false, this
+# group is not being used. Groups which inherit this group will not
+# ignore this flag and therefore will not inherit settings if disabled.
+enabled: true
+# Inheritance tree. Any groups listed below are to be listed from the "name"
+# field above. If the group cannot be found, the entry is simply ignored. If
+# the entry is disabled, the entry is also ignored. Specify "none" for no inheritance.
+inherit:
+- none
+
+# Block configuration. This gives you the ability to customize the block
+# aspects of AntiShare. More information can be found at the link listed
+# at the top of this file.
+blocks:
+  creative:
+  - all
+  survival:
+  - all
+  adventure:
+  - none
+  spectator:
+  - none
+  gamemode-settings:
+    creative: creative
+    survival: survival
+    adventure: adventure
+    spectator: spectator
+  break:
+    attachments:
+      break-as-placed: true
+      default-break: survival
+    creative-breaking-survival:
+      deny: true
+      break-as: creative
+    creative-breaking-adventure:
+      deny: true
+      break-as: creative
+    creative-breaking-spectator:
+      deny: true
+      break-as: creative
+    creative-breaking-creative:
+      deny: false
+      break-as: creative
+    survival-breaking-creative:
+      deny: true
+      break-as: survival
+    survival-breaking-adventure:
+      deny: true
+      break-as: survival
+    survival-breaking-spectator:
+      deny: true
+      break-as: survival
+    survival-breaking-survival:
+      deny: false
+      break-as: survival
+    adventure-breaking-creative:
+      deny: true
+      break-as: adventure
+    adventure-breaking-survival:
+      deny: true
+      break-as: adventure
+    adventure-breaking-spectator:
+      deny: true
+      break-as: adventure
+    adventure-breaking-adventure:
+      deny: false
+      break-as: adventure
+    spectator-breaking-creative:
+      deny: true
+      break-as: spectator
+    spectator-breaking-survival:
+      deny: true
+      break-as: spectator
+    spectator-breaking-adventure:
+      deny: true
+      break-as: spectator
+    spectator-breaking-spectator:
+      deny: false
+      break-as: spectator

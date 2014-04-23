@@ -1,5 +1,9 @@
 # AntiShare - High performance creative protection
 # -------------------------------------------------
+# This file contains all the information needed to control the plugin,
+# but not the settings for what to reject, allow, etc. For those settings
+# please see the group_main.yml file.
+#
 #
 # AntiShare internal caching settings. These settings are generally
 # not touched unless you are looking to fine tune how AntiShare
@@ -32,3 +36,6 @@ caching:
     # objects are removed from memory. Values less than or equal to zero
     # inherit a default of 60000 (1 minute).
     cache-timer-interval: 60000
+# The default configuration group to use. For normal operation, do not change
+# this value. Please see group_main.yml for more information.
+default-group: main
