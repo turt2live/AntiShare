@@ -39,8 +39,13 @@ enabled: true
 # Inheritance tree. Any groups listed below are to be listed from the "name"
 # field above. If the group cannot be found, the entry is simply ignored. If
 # the entry is disabled, the entry is also ignored. Specify "none" for no inheritance.
+# The main configuration ignores this setting.
 inherit:
 - none
+# The worlds to apply this group to. "All" specifies "all worlds". Negation is
+# possible, such as "all except world1" using the standard negation form.
+worlds:
+- all
 
 # Block configuration. This gives you the ability to customize the block
 # aspects of AntiShare. More information can be found at the link listed
