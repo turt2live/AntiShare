@@ -57,6 +57,7 @@ public final class BlockListGenerator implements BlockTypeList {
     }
 
     private List<BInfo> information = new ArrayList<BInfo>();
+    private List<BInfo> negated = new ArrayList<BInfo>();
     private String world;
 
     private BlockListGenerator(String world) {
@@ -68,21 +69,49 @@ public final class BlockListGenerator implements BlockTypeList {
         World world = Bukkit.getWorld(this.world);
         if (world != null) {
             Block block = world.getBlockAt(BukkitUtils.toLocation(location));
-            if (block != null) {
-                Material material = block.getType();
-                if (material != Material.AIR) {
-                    byte data = block.getData();
-
-                    BInfo search = new BInfo(material, (short) data);
-                    if (information.contains(search)) return true;
-
-                    data = -1;
-                    search = new BInfo(material, (short) data);
-                    if (information.contains(search)) return true;
+            BInfo[] info = generateBlockInfo(block);
+            if (info != null) {
+                for (BInfo info1 : info) {
+                    if (information.contains(info1)) return true;
                 }
             }
         }
         return false;
+    }
+
+    @Override
+    public TrackedState getState(ASLocation location) {
+        World world = Bukkit.getWorld(this.world);
+        if (world != null) {
+            Block block = world.getBlockAt(BukkitUtils.toLocation(location));
+            BInfo[] info = generateBlockInfo(block);
+            if (info != null) {
+                for (BInfo info1 : info) {
+                    if (information.contains(info1)) return TrackedState.INCLUDED;
+                    if (negated.contains(info1)) return TrackedState.NEGATED;
+                }
+            }
+        }
+        return TrackedState.NOT_PRESENT;
+    }
+
+    private BInfo[] generateBlockInfo(Block block) {
+        if (block == null) return null;
+        BInfo[] information = new BInfo[2];
+
+        Material material = block.getType();
+        if (material != Material.AIR) {
+            byte data = block.getData();
+
+            BInfo search = new BInfo(material, (short) data);
+            information[0] = search;
+
+            data = -1;
+            search = new BInfo(material, (short) data);
+            information[1] = search;
+        }
+
+        return information;
     }
 
     /**
@@ -112,12 +141,17 @@ public final class BlockListGenerator implements BlockTypeList {
 
             if (parts[0].equalsIgnoreCase("all")) {
                 list.information.clear();
+                list.negated.clear();
                 for (Material material : Material.values()) {
                     BInfo info = new BInfo(material, (short) -1); // -1 will restrict everything
                     if (!list.information.contains(info)) list.information.add(info);
                 }
                 continue;
             } else if (parts[0].equalsIgnoreCase("none")) {
+                for (BInfo info : list.information) {
+                    if (!list.negated.contains(info))
+                        list.negated.add(info);
+                }
                 list.information.clear();
                 continue;
             } else if (parts[0].startsWith("-")) remove = true;
@@ -142,8 +176,10 @@ public final class BlockListGenerator implements BlockTypeList {
             BInfo info = new BInfo(material, d);
             if (!remove) {
                 if (!list.information.contains(info)) list.information.add(info);
+                if (list.negated.contains(info)) list.negated.remove(info);
             } else {
                 if (list.information.contains(info)) list.information.remove(info);
+                if (!list.negated.contains(info)) list.negated.add(info);
             }
         }
 
