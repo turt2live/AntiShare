@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public abstract class GroupManager {
 
     protected final ConcurrentMap<String, Group> groups = new ConcurrentHashMap<String, Group>();
@@ -63,6 +64,48 @@ public abstract class GroupManager {
         for (String name : group.getInheritedGroups()) {
             groups.addAll(getInheritances(getGroup(name)));
         }
+
+        return groups;
+    }
+
+    /**
+     * Gets all the groups for the specified world
+     *
+     * @param world           the world to lookup, null returns an empty list
+     * @param includeDisabled if true, disabled groups will be included in the result set
+     * @return the applicable groups, or an empty list
+     */
+    public List<Group> getGroupsForWorld(String world, boolean includeDisabled) {
+        if (world == null) return new ArrayList<Group>();
+
+        List<Group> groups = new ArrayList<Group>();
+        for (Group group : this.groups.values()) {
+            List<String> worlds = group.getApplicableWorlds();
+            if (worlds.contains("all") || worlds.contains(world))
+                if (group.isEnabled() || includeDisabled) groups.add(group);
+        }
+
+        List<String> worlds = mainGroup.getApplicableWorlds();
+        if (worlds.contains("all") || worlds.contains(world))
+            if (mainGroup.isEnabled() || includeDisabled) groups.add(mainGroup);
+
+        return groups;
+    }
+
+    /**
+     * Gets a list of all groups
+     *
+     * @param includeDisabled if true, disabled groups will be included in the result set
+     * @return the applicable groups, or an empty list
+     */
+    public List<Group> getAllGroups(boolean includeDisabled) {
+        List<Group> groups = new ArrayList<Group>();
+
+        for (Group group : this.groups.values()) {
+            if (group.isEnabled() || includeDisabled) groups.add(group);
+        }
+
+        if (mainGroup.isEnabled() || includeDisabled) groups.add(mainGroup);
 
         return groups;
     }

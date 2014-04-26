@@ -13,28 +13,23 @@ import java.util.List;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public abstract class Group {
 
     /**
      * The configuration object for this group
      */
     protected final Configuration configuration;
-    /**
-     * The manager object for this group
-     */
-    protected final GroupManager manager;
 
     /**
      * Creates a new group from the configuration and manager supplied
      *
      * @param configuration the configuration to be used, cannot be null
-     * @param manager       the manager to use, cannot be null
      */
-    public Group(Configuration configuration, GroupManager manager) {
-        if (configuration == null || manager == null) throw new IllegalArgumentException("arguments cannot be null");
+    public Group(Configuration configuration) {
+        if (configuration == null) throw new IllegalArgumentException("arguments cannot be null");
 
         this.configuration = configuration;
-        this.manager = manager;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.engine.defaults.DefaultBlockTypeList;
+import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
+import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.utils.ASGameMode;
@@ -8,8 +9,7 @@ import com.turt2live.antishare.utils.ASLocation;
 import com.turt2live.antishare.utils.ASUtils;
 import com.turt2live.antishare.utils.BlockType;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.List;
 
 /**
  * Represents a world engine. This is used by the core engine to handle
@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentMap;
 public final class WorldEngine {
 
     private String worldName;
-    private ConcurrentMap<ASGameMode, BlockTypeList> trackedBlocks = new ConcurrentHashMap<ASGameMode, BlockTypeList>();
     private BlockManager blockManager = new MemoryBlockManager();
 
     /**
@@ -73,26 +72,15 @@ public final class WorldEngine {
     }
 
     /**
-     * Sets the tracking list for a specified gamemode
-     *
-     * @param gamemode the gamemode, cannot be null
-     * @param list     the list, cannot be null
-     */
-    public void setTrackedBlocks(ASGameMode gamemode, BlockTypeList list) {
-        if (list == null || gamemode == null) throw new IllegalArgumentException();
-
-        trackedBlocks.put(gamemode, list);
-    }
-
-    /**
      * Gets the tracking list for a specified gamemode
      *
      * @param gamemode the gamemode, cannot be null
      * @return the list
      */
     public BlockTypeList getTrackedBlocks(ASGameMode gamemode) {
-        if (!trackedBlocks.containsKey(gamemode)) setTrackedBlocks(gamemode, new DefaultBlockTypeList());
-        return trackedBlocks.get(gamemode);
+        List<Group> allGroups = Engine.getInstance().getGroupManager().getAllGroups(false);
+        ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(allGroups);
+        return consolidatedGroup.getTrackedList(gamemode);
     }
 
     /**
@@ -102,6 +90,8 @@ public final class WorldEngine {
      * @param location the location of the block, cannot be null
      * @param gamemode the gamemode of the block, cannot be null
      */
+    @Deprecated
+    // TODO: Actual placement logic
     public void processBlockPlace(ASLocation location, BlockType gamemode) {
         if (location == null || gamemode == null) throw new IllegalArgumentException();
 

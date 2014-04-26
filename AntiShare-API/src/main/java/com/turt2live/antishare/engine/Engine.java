@@ -1,5 +1,6 @@
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.economy.ASEconomy;
 
 import java.util.Timer;
@@ -37,12 +38,23 @@ public final class Engine {
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
     private ASEconomy economy;
+    private GroupManager groupManager;
 
     private Engine() {
         newCacheTimer();
         newSaveTimer();
         setCacheIncrement(cacheIncrement);
         setSaveInterval(saveInterval);
+    }
+
+    /**
+     * Gets the group manager instance for this engine.
+     *
+     * @return the group manager
+     */
+    // TODO: Unit test
+    public GroupManager getGroupManager() {
+        return groupManager;
     }
 
     /**

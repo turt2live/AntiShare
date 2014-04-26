@@ -11,16 +11,16 @@ import java.util.List;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public abstract class MainGroup extends Group {
 
     /**
      * Creates a new main group from the configuration and manager supplied
      *
      * @param configuration the configuration to be used, cannot be null
-     * @param manager       the manager to use, cannot be null
      */
-    public MainGroup(Configuration configuration, GroupManager manager) {
-        super(configuration, manager);
+    public MainGroup(Configuration configuration) {
+        super(configuration);
     }
 
     @Override
