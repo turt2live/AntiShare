@@ -1,4 +1,4 @@
-package com.turt2live.antishare.utils;
+package com.turt2live.antishare;
 
 /**
  * Represents the various block types

@@ -1,10 +1,10 @@
 package com.turt2live.antishare.io.memory;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.inventory.ASItem;
 import com.turt2live.antishare.inventory.defaults.DefaultASInventory;
 import com.turt2live.antishare.inventory.defaults.DefaultInventorySerializer;
 import com.turt2live.antishare.io.generics.GenericInventoryStore;
-import com.turt2live.antishare.utils.ASGameMode;
 
 import java.util.UUID;
 

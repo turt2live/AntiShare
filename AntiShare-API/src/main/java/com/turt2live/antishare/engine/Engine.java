@@ -3,12 +3,14 @@ package com.turt2live.antishare.engine;
 import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.economy.ASEconomy;
 import com.turt2live.antishare.engine.defaults.DefaultGroupManager;
+import com.turt2live.antishare.events.EventDispatcher;
+import com.turt2live.antishare.events.engine.EngineShutdownEvent;
+import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -34,7 +36,6 @@ public final class Engine {
     public static final long DEFAULT_SAVE_INTERVAL = 0; // Default no save
     private long saveInterval = DEFAULT_SAVE_INTERVAL;
     private static Engine instance;
-    private CopyOnWriteArrayList<EngineListener> listeners = new CopyOnWriteArrayList<EngineListener>();
     private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<String, WorldEngine>();
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
@@ -99,29 +100,6 @@ public final class Engine {
     }
 
     /**
-     * Adds a listener to this engine. If the listener is already registered, the
-     * listener is not re-registered.
-     *
-     * @param listener the listener to register, cannot be null
-     */
-    public void addListener(EngineListener listener) {
-        if (listener == null) throw new IllegalArgumentException("listener may not be null");
-
-        if (!listeners.contains(listener)) listeners.add(listener);
-    }
-
-    /**
-     * Removes a listener from the engine
-     *
-     * @param listener the listener to remove, cannot be null
-     */
-    public void removeListener(EngineListener listener) {
-        if (listener == null) throw new IllegalArgumentException("listener may not be null");
-
-        listeners.remove(listener);
-    }
-
-    /**
      * Gets the engine for the specified world. If none exists, a new WorldEngine is
      * created and registered.
      *
@@ -150,8 +128,7 @@ public final class Engine {
         WorldEngine engine = new WorldEngine(world);
         engines.put(world, engine);
 
-        for (EngineListener listener : listeners)
-            listener.onWorldEngineCreate(engine);
+        EventDispatcher.dispatch(new WorldEngineCreateEvent(engine));
 
         return engine;
     }
@@ -177,15 +154,13 @@ public final class Engine {
      * cache timer, and revoke all listeners.
      */
     public void prepareShutdown() {
-        for (EngineListener listener : listeners)
-            listener.onEngineShutdown();
+        EventDispatcher.dispatch(new EngineShutdownEvent());
 
         newCacheTimer(); // Cancels internally, resetting the timer to no task
         newSaveTimer(); // Cancels internally, resetting the timer to no task
         for (WorldEngine engine : engines.values())
             engine.prepareShutdown();
         engines.clear();
-        listeners.clear();
     }
 
     /**

@@ -1,10 +1,10 @@
 package com.turt2live.antishare.engine.defaults;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.MainGroup;
 import com.turt2live.antishare.engine.BlockTypeList;
-import com.turt2live.antishare.utils.ASGameMode;
 
 /**
  * Default main group

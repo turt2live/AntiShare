@@ -1,5 +1,8 @@
 package com.turt2live.antishare.utils;
 
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.BlockType;
+
 /**
  * Various AntiShare utilities
  *

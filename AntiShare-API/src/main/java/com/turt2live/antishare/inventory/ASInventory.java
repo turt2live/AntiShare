@@ -1,7 +1,7 @@
 package com.turt2live.antishare.inventory;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.collections.SlottedCollection;
-import com.turt2live.antishare.utils.ASGameMode;
 
 import java.util.Collections;
 import java.util.Map;

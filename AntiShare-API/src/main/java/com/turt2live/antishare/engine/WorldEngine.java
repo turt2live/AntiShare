@@ -3,6 +3,8 @@ package com.turt2live.antishare.engine;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.engine.defaults.DefaultBlockTypeList;
+import com.turt2live.antishare.events.EventDispatcher;
+import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.utils.ASGameMode;
@@ -38,6 +40,7 @@ public final class WorldEngine {
      * Prepares this world engine for shutdown
      */
     public void prepareShutdown() {
+        EventDispatcher.dispatch(new WorldEngineShutdownEvent(this));
         blockManager.saveAll();
     }
 

@@ -1,7 +1,7 @@
 package com.turt2live.antishare.io;
 
+import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.utils.ASLocation;
-import com.turt2live.antishare.utils.BlockType;
 
 import java.util.List;
 

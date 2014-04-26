@@ -1,9 +1,9 @@
 package com.turt2live.antishare.configuration.groups;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.engine.BlockTypeList;
-import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.utils.ASLocation;
 
 import java.util.ArrayList;
