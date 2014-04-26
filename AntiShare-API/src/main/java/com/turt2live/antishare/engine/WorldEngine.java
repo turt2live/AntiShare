@@ -2,6 +2,7 @@ package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
+import com.turt2live.antishare.engine.defaults.DefaultBlockTypeList;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.utils.ASGameMode;
@@ -77,8 +78,10 @@ public final class WorldEngine {
      * @param gamemode the gamemode, cannot be null
      * @return the list
      */
+    // TODO: Unit test
     public BlockTypeList getTrackedBlocks(ASGameMode gamemode) {
-        List<Group> allGroups = Engine.getInstance().getGroupManager().getAllGroups(false);
+        List<Group> allGroups = Engine.getInstance().getGroupManager().getGroupsForWorld(getWorldName(), false);
+        if (allGroups == null || allGroups.size() <= 0) return new DefaultBlockTypeList();
         ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(allGroups);
         return consolidatedGroup.getTrackedList(gamemode);
     }

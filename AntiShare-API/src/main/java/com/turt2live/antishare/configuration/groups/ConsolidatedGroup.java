@@ -19,6 +19,7 @@ import java.util.List;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public class ConsolidatedGroup {
 
     private List<Group> groups;

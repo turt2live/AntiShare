@@ -23,6 +23,7 @@ import java.util.List;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public class ConsolidatedBlockTypeList implements BlockTypeList {
 
     private List<BlockTypeList> lists = new ArrayList<BlockTypeList>();

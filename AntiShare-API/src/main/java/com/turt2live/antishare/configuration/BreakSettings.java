@@ -7,6 +7,7 @@ import com.turt2live.antishare.utils.ASGameMode;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public final class BreakSettings {
 
     /**
