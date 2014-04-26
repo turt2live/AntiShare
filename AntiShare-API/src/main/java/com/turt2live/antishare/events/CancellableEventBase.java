@@ -2,9 +2,10 @@ package com.turt2live.antishare.events;
 
 /**
  * An implementation of a CancellableEvent
+ *
  * @author turt2live
  */
-public abstract class CancellableEventBase implements CancellableEvent{
+public abstract class CancellableEventBase implements CancellableEvent {
 
     /**
      * The cancelled state, default false

@@ -1,5 +1,7 @@
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.engine.defaults.DefaultBlockTypeList;
@@ -7,10 +9,8 @@ import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
-import com.turt2live.antishare.utils.ASGameMode;
 import com.turt2live.antishare.utils.ASLocation;
 import com.turt2live.antishare.utils.ASUtils;
-import com.turt2live.antishare.utils.BlockType;
 
 import java.util.List;
 
