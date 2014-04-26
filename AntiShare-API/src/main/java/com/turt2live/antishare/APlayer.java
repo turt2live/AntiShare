@@ -9,7 +9,6 @@ import java.util.UUID;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public interface APlayer {
 
     /**
