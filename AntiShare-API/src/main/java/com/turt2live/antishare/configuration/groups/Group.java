@@ -1,5 +1,6 @@
 package com.turt2live.antishare.configuration.groups;
 
+import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.engine.BlockTypeList;
 import com.turt2live.antishare.utils.ASGameMode;
@@ -74,13 +75,13 @@ public abstract class Group {
     }
 
     /**
-     * Gets the block list for a specified GameMode. This does not include
+     * Gets the block tracking list for a specified GameMode. This does not include
      * inherited groups.
      *
      * @param gameMode the gamemode to lookup
      * @return the block list
      */
-    public abstract BlockTypeList getBlockList(ASGameMode gameMode);
+    public abstract BlockTypeList getTrackedList(ASGameMode gameMode);
 
     /**
      * Gets the acting gamemode for a specified gamemode. This does not include
@@ -90,5 +91,15 @@ public abstract class Group {
      * @return the gamemode the specified gamemode should act as
      */
     public abstract ASGameMode getActingMode(ASGameMode gameMode);
+
+    /**
+     * Gets the break settings for this group for a specified gamemode
+     * breaking a specified gamemode's block.
+     *
+     * @param gamemode the gamemode breaking the block, cannot be null
+     * @param breaking the gamemode of the block, cannot be null
+     * @return the applicable break settings
+     */
+    public abstract BreakSettings getBreakSettings(ASGameMode gamemode, ASGameMode breaking);
 
 }
