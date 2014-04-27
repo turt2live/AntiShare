@@ -1,9 +1,11 @@
 package com.turt2live.antishare.bukkit;
 
+import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.AWorld;
+import com.turt2live.antishare.bukkit.impl.BukkitWorld;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.io.BlockManager;
-import com.turt2live.antishare.ASLocation;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -23,7 +25,12 @@ public final class BukkitUtils {
     public static ASLocation toLocation(Location location) {
         if (location == null) return null;
 
-        return new ASLocation(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        AWorld world = null;
+        if (location.getWorld() != null) {
+            world = new BukkitWorld(location.getWorld());
+        }
+
+        return new ASLocation(world, location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 
     /**

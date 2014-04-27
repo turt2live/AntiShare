@@ -14,4 +14,10 @@ public interface ABlock {
      */
     public ASLocation getLocation();
 
+    /**
+     * Gets the world of this block
+     *
+     * @return the world
+     */
+    public AWorld getWorld();
 }

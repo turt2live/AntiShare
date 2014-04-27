@@ -1,8 +1,7 @@
 package com.turt2live.antishare.bukkit;
 
-import com.turt2live.antishare.bukkit.inventory.MaterialProvider;
-import com.turt2live.antishare.engine.BlockTypeList;
 import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.engine.BlockTypeList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;

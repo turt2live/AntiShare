@@ -1,11 +1,11 @@
 package com.turt2live.antishare.bukkit.listener;
 
-import com.turt2live.antishare.BlockType;
-import com.turt2live.antishare.bukkit.BukkitUtils;
-import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
+import com.turt2live.antishare.ABlock;
+import com.turt2live.antishare.APlayer;
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.bukkit.impl.BukkitBlock;
+import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.engine.Engine;
-import com.turt2live.antishare.ASLocation;
-import com.turt2live.antishare.utils.ASUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -30,12 +30,15 @@ public class EngineListener implements Listener {
         engine = Engine.getInstance();
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        ASLocation location = BukkitUtils.toLocation(event.getBlock().getLocation());
-        BlockType type = ASUtils.toBlockType(VersionSelector.getMinecraft().toGameMode(event.getPlayer().getGameMode()));
+        ABlock block = new BukkitBlock(event.getBlock());
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        ASGameMode gamemode = player.getGameMode();
 
-        engine.getEngine(event.getPlayer().getWorld().getName()).processBlockPlace(location, type);
+        if (engine.getEngine(block.getWorld().getName()).processBlockPlace(player, block, gamemode)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

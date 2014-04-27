@@ -1,4 +1,4 @@
-package com.turt2live.antishare.bukkit.inventory;
+package com.turt2live.antishare.bukkit;
 
 import net.milkbowl.vault.item.ItemInfo;
 import net.milkbowl.vault.item.Items;

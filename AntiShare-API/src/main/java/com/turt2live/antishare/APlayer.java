@@ -46,7 +46,8 @@ public interface APlayer {
     public boolean hasPermission(String permission);
 
     /**
-     * Sends a chat message to the player
+     * Sends a chat message to the player. Internally chat colors are converted as
+     * appropriate.
      *
      * @param message the message to send, cannot be null
      */

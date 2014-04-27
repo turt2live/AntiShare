@@ -3,8 +3,6 @@ package com.turt2live.antishare.bukkit;
 import com.turt2live.antishare.bukkit.commands.CommandHandler;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
 import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
-import com.turt2live.antishare.bukkit.inventory.MaterialProvider;
-import com.turt2live.antishare.bukkit.inventory.VaultMaterialProvider;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
@@ -27,6 +25,11 @@ import java.io.File;
  * @author turt2live
  */
 public class AntiShare extends JavaPlugin {
+
+    /**
+     * Color char identifier
+     */
+    public static final char COLOR_REPLACE_CHAR = '&';
 
     private static AntiShare instance;
     private File dataFolder;
