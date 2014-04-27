@@ -8,7 +8,7 @@ import org.junit.runners.JUnit4;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 @RunWith(JUnit4.class)
 public class EngineTest {
@@ -43,27 +43,6 @@ public class EngineTest {
         Engine.getInstance().setLogger(null);
     }
 
-    @Test
-    public void testAddListener() {
-        EngineListener listener = mock(EngineListener.class);
-        Engine.getInstance().addListener(listener);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddNullListener() {
-        Engine.getInstance().addListener(null);
-    }
-
-    @Test
-    public void testRemoveListener() {
-        EngineListener listener = mock(EngineListener.class);
-        Engine.getInstance().removeListener(listener);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testRemoveNullListener() {
-        Engine.getInstance().removeListener(null);
-    }
 
     @Test
     public void testWorldEngine() {
@@ -99,67 +78,6 @@ public class EngineTest {
     @Test
     public void testWorldEngineNull2() {
         Engine.getInstance().unloadWorldEngine(null);
-    }
-
-    @Test
-    public void testListenerEvents() {
-        EngineListener fakeListener = mock(EngineListener.class);
-        Engine.getInstance().addListener(fakeListener);
-        verifyZeroInteractions(fakeListener);
-
-        verify(fakeListener, atMost(0)).onEngineShutdown();
-        verify(fakeListener, atMost(0)).onWorldEngineCreate(any(WorldEngine.class));
-
-        Engine.getInstance().createWorldEngine("test");
-        verify(fakeListener, atMost(0)).onEngineShutdown();
-        verify(fakeListener, atMost(1)).onWorldEngineCreate(any(WorldEngine.class));
-        verify(fakeListener, atLeast(1)).onWorldEngineCreate(any(WorldEngine.class));
-
-        // same world should yield only one call, as it should be cached
-        Engine.getInstance().createWorldEngine("test");
-        verify(fakeListener, atMost(0)).onEngineShutdown();
-        verify(fakeListener, atMost(1)).onWorldEngineCreate(any(WorldEngine.class));
-        verify(fakeListener, atLeast(1)).onWorldEngineCreate(any(WorldEngine.class));
-
-        Engine.getInstance().unloadWorldEngine("test"); // Unload ensures we create a new one
-        Engine.getInstance().createWorldEngine("test");
-        verify(fakeListener, atMost(0)).onEngineShutdown();
-        verify(fakeListener, atMost(2)).onWorldEngineCreate(any(WorldEngine.class));
-        verify(fakeListener, atLeast(2)).onWorldEngineCreate(any(WorldEngine.class));
-
-        Engine.getInstance().prepareShutdown();
-        verify(fakeListener, atMost(1)).onEngineShutdown();
-        verify(fakeListener, atMost(2)).onWorldEngineCreate(any(WorldEngine.class));
-        verify(fakeListener, atLeast(1)).onEngineShutdown();
-        verify(fakeListener, atLeast(2)).onWorldEngineCreate(any(WorldEngine.class));
-
-        // Calling again should ensure that a new engine can be prepared at any time
-        Engine.getInstance().addListener(fakeListener); // Re-add to be sure...
-        Engine.getInstance().prepareShutdown();
-        verify(fakeListener, atMost(2)).onEngineShutdown();
-        verify(fakeListener, atMost(2)).onWorldEngineCreate(any(WorldEngine.class));
-        verify(fakeListener, atLeast(2)).onEngineShutdown();
-        verify(fakeListener, atLeast(2)).onWorldEngineCreate(any(WorldEngine.class));
-
-        // Now to see what happens if it's removed
-        Engine.getInstance().removeListener(fakeListener);
-        verify(fakeListener, atMost(2)).onEngineShutdown();
-        verify(fakeListener, atMost(2)).onWorldEngineCreate(any(WorldEngine.class));
-        verify(fakeListener, atLeast(2)).onEngineShutdown();
-        verify(fakeListener, atLeast(2)).onWorldEngineCreate(any(WorldEngine.class));
-
-        Engine.getInstance().prepareShutdown();
-        verify(fakeListener, atMost(2)).onEngineShutdown();
-        verify(fakeListener, atMost(2)).onWorldEngineCreate(any(WorldEngine.class));
-        verify(fakeListener, atLeast(2)).onEngineShutdown();
-        verify(fakeListener, atLeast(2)).onWorldEngineCreate(any(WorldEngine.class));
-
-        Engine.getInstance().unloadWorldEngine("test"); // Unload ensures we create a new one
-        Engine.getInstance().createWorldEngine("test");
-        verify(fakeListener, atMost(2)).onEngineShutdown();
-        verify(fakeListener, atMost(2)).onWorldEngineCreate(any(WorldEngine.class));
-        verify(fakeListener, atLeast(2)).onEngineShutdown();
-        verify(fakeListener, atLeast(2)).onWorldEngineCreate(any(WorldEngine.class));
     }
 
     @Test

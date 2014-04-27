@@ -1,8 +1,8 @@
 package com.turt2live.antishare.io.generics;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASItem;
-import com.turt2live.antishare.utils.ASGameMode;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

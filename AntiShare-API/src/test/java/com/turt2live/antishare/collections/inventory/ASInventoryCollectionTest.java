@@ -1,8 +1,9 @@
 package com.turt2live.antishare.collections.inventory;
 
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.collections.ASInventoryCollection;
 import com.turt2live.antishare.inventory.ASInventory;
 import com.turt2live.antishare.inventory.ASItem;
-import com.turt2live.antishare.utils.ASGameMode;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
