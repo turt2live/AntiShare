@@ -1,6 +1,6 @@
 package com.turt2live.antishare.bukkit.commands.command;
 
-import com.turt2live.antishare.bukkit.PermissionNode;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.bukkit.commands.ASCommand;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
@@ -15,7 +15,7 @@ public class ToolsCommand implements ASCommand {
 
     @Override
     public String getPermission() {
-        return PermissionNode.TOOLS;
+        return PermissionNodes.TOOLS;
     }
 
     @Override

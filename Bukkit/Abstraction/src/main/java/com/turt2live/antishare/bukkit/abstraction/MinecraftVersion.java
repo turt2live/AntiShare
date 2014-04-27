@@ -1,7 +1,7 @@
 package com.turt2live.antishare.bukkit.abstraction;
 
-import com.turt2live.antishare.utils.ASGameMode;
-import com.turt2live.antishare.utils.BlockType;
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.BlockType;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 

@@ -1,9 +1,9 @@
 package com.turt2live.antishare.bukkit.abstraction.v1_7_R2;
 
 import com.google.common.base.Charsets;
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.bukkit.abstraction.MinecraftVersion;
-import com.turt2live.antishare.utils.ASGameMode;
-import com.turt2live.antishare.utils.BlockType;
 import com.turt2live.hurtle.uuid.UUIDServiceProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

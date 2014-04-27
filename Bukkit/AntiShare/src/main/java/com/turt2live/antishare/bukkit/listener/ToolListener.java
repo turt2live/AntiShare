@@ -1,12 +1,12 @@
 package com.turt2live.antishare.bukkit.listener;
 
+import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.bukkit.BukkitUtils;
-import com.turt2live.antishare.bukkit.PermissionNode;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.utils.ASUtils;
-import com.turt2live.antishare.utils.BlockType;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -64,7 +64,7 @@ public class ToolListener implements Listener {
         Player player = event.getPlayer();
         ItemStack hand = player.getItemInHand();
 
-        if (hand != null && player.hasPermission(PermissionNode.TOOLS)) {
+        if (hand != null && player.hasPermission(PermissionNodes.TOOLS)) {
             if (hand.isSimilar(CHECK_TEMPLATE)) {
                 event.setCancelled(true);
 

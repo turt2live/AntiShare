@@ -7,26 +7,25 @@ import com.turt2live.antishare.bukkit.inventory.VaultMaterialProvider;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
-import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
+import com.turt2live.antishare.events.EventDispatcher;
+import com.turt2live.antishare.events.EventListener;
+import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 import com.turt2live.antishare.io.flatfile.FileBlockManager;
-import com.turt2live.antishare.utils.ASGameMode;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * The AntiShare Bukkit Plugin main class
  *
  * @author turt2live
  */
-public class AntiShare extends JavaPlugin implements com.turt2live.antishare.engine.EngineListener {
+public class AntiShare extends JavaPlugin {
 
     private static AntiShare instance;
     private File dataFolder;
@@ -57,6 +56,9 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         getConfig().setDefaults(configuration);
         saveDefaultConfig();
 
+        // Setup AntiShare events
+        EventDispatcher.register(this);
+
         // Start lang
         Lang.getInstance();
 
@@ -72,7 +74,6 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         if (cacheInterval <= 0) cacheInterval = 60000;
 
         // Setup engine
-        Engine.getInstance().addListener(this);
         Engine.getInstance().setLogger(this.getLogger());
         Engine.getInstance().setCacheMaximum(cacheMax);
         Engine.getInstance().setCacheIncrement(cacheInterval);
@@ -101,46 +102,15 @@ public class AntiShare extends JavaPlugin implements com.turt2live.antishare.eng
         }
     }
 
-    @Override
-    public void onWorldEngineCreate(WorldEngine engine) {
-        File storeLocation = new File(dataFolder, engine.getWorldName());
+    @EventListener
+    public void onWorldEngineCreate(WorldEngineCreateEvent event) {
+        WorldEngine engine = event.getEngine();
 
+        File storeLocation = new File(dataFolder, engine.getWorldName());
         if (!storeLocation.exists()) storeLocation.mkdirs();
 
         getLogger().info("Indexing '" + engine.getWorldName() + "'...");
         engine.setBlockManager(new FileBlockManager(blockSize, storeLocation));
-
-        FileConfiguration configuration = createBlockConfig();
-
-        for (ASGameMode gameMode : ASGameMode.values()) {
-            List<String> values = configuration.getStringList(gameMode.name().toLowerCase());
-            if (values == null) values = new ArrayArrayList<String>(new String[]{"none"});
-
-            BlockListGenerator listing = BlockListGenerator.fromList(values, engine.getWorldName());
-            engine.setTrackedBlocks(gameMode, listing);
-        }
-    }
-
-    @Override
-    public void onEngineShutdown() {
-        // Ignore this event
-    }
-
-    private FileConfiguration createBlockConfig() {
-        File toFile = new File(AntiShare.getInstance().getDataFolder(), "group.yml");
-
-        FileConfiguration config = YamlConfiguration.loadConfiguration(toFile);
-        FileConfiguration defaults = YamlConfiguration.loadConfiguration(AntiShare.getInstance().getResource("group.yml"));
-        config.setDefaults(defaults);
-        config.options().copyDefaults(true);
-
-        try {
-            config.save(toFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return config;
     }
 
     /**
