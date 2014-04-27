@@ -1,10 +1,10 @@
 package com.turt2live.antishare.io.generics;
 
+import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.BlockStore;
-import com.turt2live.antishare.ASLocation;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
