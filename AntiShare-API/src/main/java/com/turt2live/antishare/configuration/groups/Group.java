@@ -69,14 +69,12 @@ public abstract class Group {
         return configuration.getBoolean("enabled", true);
     }
 
-    /**
-     * Gets the block tracking list for a specified GameMode. This does not include
-     * inherited groups.
-     *
-     * @param gameMode the gamemode to lookup
-     * @return the block list
+    /*
+    TODO: HANDLE THIS
+    blocks.break.attachments:
+      break-as-placed: true
+      default-break: survival
      */
-    public abstract BlockTypeList getTrackedList(ASGameMode gameMode);
 
     /**
      * Gets the acting gamemode for a specified gamemode. This does not include
@@ -85,7 +83,13 @@ public abstract class Group {
      * @param gameMode the gamemode to lookup
      * @return the gamemode the specified gamemode should act as
      */
-    public abstract ASGameMode getActingMode(ASGameMode gameMode);
+    public ASGameMode getActingMode(ASGameMode gameMode) {
+        if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
+        String acting = configuration.getString("blocks.gamemode-settings." + gameMode.name().toLowerCase(), gameMode.name().toLowerCase());
+        ASGameMode gm1 = ASGameMode.fromString(acting);
+        if (gm1 != null) return gm1;
+        return gameMode;
+    }
 
     /**
      * Gets the break settings for this group for a specified gamemode
@@ -95,6 +99,23 @@ public abstract class Group {
      * @param breaking the gamemode of the block, cannot be null
      * @return the applicable break settings
      */
-    public abstract BreakSettings getBreakSettings(ASGameMode gamemode, ASGameMode breaking);
+    public BreakSettings getBreakSettings(ASGameMode gamemode, ASGameMode breaking) {
+        if (gamemode == null || breaking == null) throw new IllegalArgumentException("gamemodes cannot be null");
+        String breakingStr = gamemode.name().toLowerCase() + "-breaking-" + breaking.name().toLowerCase();
+        boolean deny = configuration.getBoolean("blocks.break." + breakingStr + ".deny", true);
+        String breakAsStr = configuration.getString("blocks.break." + breakingStr + ".break-as", breaking.name().toLowerCase());
+        ASGameMode breakAs = ASGameMode.fromString(breakAsStr);
+        if (breakAs == null) breakAs = breaking;
+        return new BreakSettings(deny, breakAs);
+    }
+
+    /**
+     * Gets the block tracking list for a specified GameMode. This does not include
+     * inherited groups.
+     *
+     * @param gameMode the gamemode to lookup
+     * @return the block list
+     */
+    public abstract BlockTypeList getTrackedList(ASGameMode gameMode);
 
 }

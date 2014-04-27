@@ -60,6 +60,20 @@ public final class Engine {
     }
 
     /**
+     * Sets the new group manager for this engine to use. This will internally call
+     * {@link com.turt2live.antishare.configuration.groups.GroupManager#loadAll()}.
+     *
+     * @param manager the new group manager, cannot be null
+     */
+    // TODO: Unit test
+    public void setGroupManager(GroupManager manager) {
+        if (manager == null) throw new IllegalArgumentException("group manager cannot be null");
+
+        this.groupManager = manager;
+        this.groupManager.loadAll();
+    }
+
+    /**
      * Gets the economy engine for this engine. If economy support is
      * not configured or not enabled, this will return null
      *

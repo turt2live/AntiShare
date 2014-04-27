@@ -121,6 +121,7 @@ public final class BlockListGenerator implements BlockTypeList {
      * @param world  the world. if null, null is returned
      * @return the list. If null or invalid values were passed, an empty list is returned
      */
+    // TODO: Remove world argument
     public static BlockListGenerator fromList(List<String> values, String world) {
         if (world == null) return null;
         if (values == null) return new BlockListGenerator(world);

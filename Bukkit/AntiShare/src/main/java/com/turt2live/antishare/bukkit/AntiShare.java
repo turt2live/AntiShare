@@ -2,6 +2,7 @@ package com.turt2live.antishare.bukkit;
 
 import com.turt2live.antishare.bukkit.commands.CommandHandler;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
+import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
 import com.turt2live.antishare.bukkit.inventory.MaterialProvider;
 import com.turt2live.antishare.bukkit.inventory.VaultMaterialProvider;
 import com.turt2live.antishare.bukkit.lang.Lang;
@@ -78,6 +79,7 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setCacheMaximum(cacheMax);
         Engine.getInstance().setCacheIncrement(cacheInterval);
         Engine.getInstance().setSaveInterval(periodicSave);
+        Engine.getInstance().setGroupManager(new BukkitGroupManager());
 
         // Setup listeners
         getServer().getPluginManager().registerEvents(new EngineListener(), this);
