@@ -1,6 +1,5 @@
-package com.turt2live.antishare.engine.defaults;
+package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.engine.BlockTypeList;
 import com.turt2live.antishare.ASLocation;
 
 /**

@@ -1,5 +1,7 @@
 package com.turt2live.antishare.configuration.groups;
 
+import com.turt2live.antishare.APlayer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -108,5 +110,38 @@ public abstract class GroupManager {
         if (mainGroup.isEnabled() || includeDisabled) groups.add(mainGroup);
 
         return groups;
+    }
+
+    /**
+     * Gets a listing of applicable groups to a player, including inherited groups
+     *
+     * @param player          the player to lookup, cannot be null
+     * @param includeDisabled if true, disabled groups will be included in the result set
+     * @return the list of groups. May be empty but never null
+     */
+    public List<Group> getGroupsForPlayer(APlayer player, boolean includeDisabled) {
+        List<Group> groups = new ArrayList<Group>();
+
+        for (Group group : this.groups.values()) {
+            if (player.hasPermission(group.getPermission())) {
+                if (group.isEnabled() || includeDisabled) {
+                    addIfNotFound(groups, group);
+                    addIfNotFound(groups, getInheritances(group).toArray(new Group[0])); // All inherited groups are automatic
+                }
+            }
+        }
+
+        if (player.hasPermission(mainGroup.getPermission()) && (mainGroup.isEnabled() || includeDisabled)) {
+            addIfNotFound(groups, mainGroup);
+            addIfNotFound(groups, getInheritances(mainGroup).toArray(new Group[0])); // All inherited groups are automatic
+        }
+
+        return groups;
+    }
+
+    private void addIfNotFound(List<Group> list, Group... groups) {
+        for (Group group : groups) {
+            if (!list.contains(group)) list.add(group);
+        }
     }
 }

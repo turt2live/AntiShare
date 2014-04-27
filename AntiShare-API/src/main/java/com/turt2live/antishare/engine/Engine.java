@@ -2,7 +2,6 @@ package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.economy.ASEconomy;
-import com.turt2live.antishare.engine.defaults.DefaultGroupManager;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
@@ -24,29 +23,37 @@ public final class Engine {
      * The default cache increment (60 seconds)
      */
     public static final long DEFAULT_CACHE_INCREMENT = 60000; // 60 seconds
-    private long cacheIncrement = DEFAULT_CACHE_INCREMENT;
     /**
      * The default cache maximum time (120 seconds)
      */
     public static final long DEFAULT_CACHE_MAXIMUM = 120000; // 120 seconds
-    private long cacheMaximum = DEFAULT_CACHE_MAXIMUM;
     /**
      * The default save interval (0, off)
      */
     public static final long DEFAULT_SAVE_INTERVAL = 0; // Default no save
-    private long saveInterval = DEFAULT_SAVE_INTERVAL;
+
     private static Engine instance;
+
+    private long saveInterval = DEFAULT_SAVE_INTERVAL;
+    private long cacheMaximum = DEFAULT_CACHE_MAXIMUM;
+    private long cacheIncrement = DEFAULT_CACHE_INCREMENT;
     private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<String, WorldEngine>();
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
     private ASEconomy economy;
-    private GroupManager groupManager = new DefaultGroupManager();
+    private GroupManager groupManager = null;
 
     private Engine() {
         newCacheTimer();
         newSaveTimer();
         setCacheIncrement(cacheIncrement);
         setSaveInterval(saveInterval);
+    }
+
+    private boolean isReady() {
+        if (groupManager == null) return false;
+
+        return true;
     }
 
     /**
@@ -56,6 +63,8 @@ public final class Engine {
      */
     // TODO: Unit test
     public GroupManager getGroupManager() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
         return groupManager;
     }
 
@@ -80,6 +89,8 @@ public final class Engine {
      * @return the economy instance, or null for none
      */
     public ASEconomy getEconomy() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
         return economy;
     }
 
@@ -99,6 +110,8 @@ public final class Engine {
      * @return the logger
      */
     public Logger getLogger() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
         return logger;
     }
 
@@ -121,6 +134,7 @@ public final class Engine {
      * @return the world engine
      */
     public WorldEngine getEngine(String world) {
+        if (!isReady()) throw new EngineNotInitializedException();
         if (world == null) throw new IllegalArgumentException("world cannot be null");
 
         WorldEngine engine = engines.get(world);
@@ -136,6 +150,7 @@ public final class Engine {
      * @return the world engine
      */
     public WorldEngine createWorldEngine(String world) {
+        if (!isReady()) throw new EngineNotInitializedException();
         if (world == null) throw new IllegalArgumentException("world cannot be null");
         if (engines.containsKey(world)) return engines.get(world);
 
@@ -154,6 +169,7 @@ public final class Engine {
      * @param world the world to unload
      */
     public void unloadWorldEngine(String world) {
+        if (!isReady()) throw new EngineNotInitializedException();
         if (world != null) {
             WorldEngine engine = engines.get(world);
             if (engine != null) {
@@ -183,6 +199,8 @@ public final class Engine {
      * @return the maximum cache time, in milliseconds
      */
     public long getCacheMaximum() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
         return cacheMaximum;
     }
 
@@ -204,6 +222,8 @@ public final class Engine {
      * @return the milliseconds for a tick
      */
     public long getCacheIncrement() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
         return cacheIncrement;
     }
 
@@ -240,6 +260,8 @@ public final class Engine {
      * @return the save interval
      */
     public long getSaveInterval() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
         return saveInterval;
     }
 

@@ -1,15 +1,14 @@
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.ABlock;
+import com.turt2live.antishare.APlayer;
 import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
-import com.turt2live.antishare.engine.defaults.DefaultBlockTypeList;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
-import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.utils.ASUtils;
 
 import java.util.List;
@@ -90,21 +89,30 @@ public final class WorldEngine {
     }
 
     /**
-     * Processes a block place action. This method assumes the blocking/restricting
-     * portion of the code has been completed.
+     * Processes a block placement, ensuring the player is allowed to place the block as well
+     * as running the tracking logic.
      *
-     * @param location the location of the block, cannot be null
-     * @param gamemode the gamemode of the block, cannot be null
+     * @param player  the player placing the block, cannot be null
+     * @param block   the block being placed, cannot be null
+     * @param placeAs the gamemode placing the block
+     * @return returns true if the block placement was rejected, false otherwise
      */
-    @Deprecated
-    // TODO: Actual placement logic
-    public void processBlockPlace(ASLocation location, BlockType gamemode) {
-        if (location == null || gamemode == null) throw new IllegalArgumentException();
+    public boolean processBlockPlace(APlayer player, ABlock block, ASGameMode placeAs) {
+        if (player == null || block == null || placeAs == null) throw new IllegalArgumentException();
 
-        // TODO: Expand to actually do all the processing (permissions, etc)
-
-        if (getTrackedBlocks(ASUtils.toGamemode(gamemode)).isTracked(location)) {
-            blockManager.setBlockType(location, gamemode);
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        BlockTypeList list = new DefaultBlockTypeList();
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+            list = consolidatedGroup.getTrackedList(placeAs);
         }
+
+        // TODO: Placement permissions, logic, etc
+
+        if (list.isTracked(block.getLocation())) {
+            blockManager.setBlockType(block.getLocation(), ASUtils.toBlockType(placeAs));
+        }
+
+        return false;
     }
 }

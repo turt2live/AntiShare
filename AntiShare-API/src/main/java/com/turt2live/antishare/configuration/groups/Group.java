@@ -69,6 +69,15 @@ public abstract class Group {
         return configuration.getBoolean("enabled", true);
     }
 
+    /**
+     * Gets the permission required to apply this group to a player
+     *
+     * @return the required permission
+     */
+    public String getPermission() {
+        return configuration.getString("permission-enable", "AntiShare.group." + getName());
+    }
+
     /*
     TODO: HANDLE THIS
     blocks.break.attachments:
@@ -117,5 +126,4 @@ public abstract class Group {
      * @return the block list
      */
     public abstract BlockTypeList getTrackedList(ASGameMode gameMode);
-
 }

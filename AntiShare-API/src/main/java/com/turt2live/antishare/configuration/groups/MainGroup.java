@@ -24,22 +24,22 @@ public abstract class MainGroup extends Group {
     }
 
     @Override
-    public List<String> getInheritedGroups() {
+    public final List<String> getInheritedGroups() {
         return new ArrayList<String>();
     }
 
     @Override
-    public List<String> getApplicableWorlds() {
+    public final List<String> getApplicableWorlds() {
         return new ArrayArrayList<String>(new String[]{"all"});
     }
 
     @Override
-    public String getName() {
+    public final String getName() {
         return "main";
     }
 
     @Override
-    public boolean isEnabled() {
+    public final boolean isEnabled() {
         return true;
     }
 
