@@ -1,6 +1,6 @@
 package com.turt2live.antishare.engine.defaults;
 
-import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.ASLocation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

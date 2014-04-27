@@ -4,7 +4,7 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.engine.BlockTypeList;
-import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.ASLocation;
 
 import java.util.ArrayList;
 import java.util.Collections;

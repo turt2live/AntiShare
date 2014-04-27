@@ -3,7 +3,7 @@ package com.turt2live.antishare.bukkit;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.io.BlockManager;
-import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.ASLocation;
 import org.bukkit.Location;
 import org.bukkit.World;
 

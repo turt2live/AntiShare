@@ -37,4 +37,19 @@ public interface APlayer {
      */
     public void setGameMode(ASGameMode gameMode);
 
+    /**
+     * Determines if a player has a permission
+     *
+     * @param permission the permission to check, cannot be null
+     * @return true if the player has the permission, false otherwise
+     */
+    public boolean hasPermission(String permission);
+
+    /**
+     * Sends a chat message to the player
+     *
+     * @param message the message to send, cannot be null
+     */
+    public void sendMessage(String message);
+
 }

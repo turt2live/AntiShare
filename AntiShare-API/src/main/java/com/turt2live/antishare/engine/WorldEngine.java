@@ -9,7 +9,7 @@ import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
-import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.utils.ASUtils;
 
 import java.util.List;

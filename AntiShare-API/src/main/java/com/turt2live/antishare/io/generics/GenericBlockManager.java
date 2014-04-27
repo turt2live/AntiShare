@@ -4,7 +4,7 @@ import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.BlockStore;
-import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.ASLocation;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -127,7 +127,7 @@ public abstract class GenericBlockManager implements BlockManager {
      * int storeX = floor(blockX / {@link #getBlocksPerStore()});<br/>
      * int storeY = floor(blockY / {@link #getBlocksPerStore()});<br/>
      * int storeZ = floor(blockZ / {@link #getBlocksPerStore()});<br/>
-     * {@link com.turt2live.antishare.utils.ASLocation} theKey = new {@link com.turt2live.antishare.utils.ASLocation}(storeX, storeY, storeZ);
+     * {@link com.turt2live.antishare.ASLocation} theKey = new {@link com.turt2live.antishare.ASLocation}(storeX, storeY, storeZ);
      * </code>
      *
      * @return the live map

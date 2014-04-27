@@ -1,4 +1,4 @@
-package com.turt2live.antishare.utils;
+package com.turt2live.antishare;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

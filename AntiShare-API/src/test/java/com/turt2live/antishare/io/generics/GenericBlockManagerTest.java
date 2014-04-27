@@ -4,7 +4,7 @@ import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockStore;
-import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.ASLocation;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

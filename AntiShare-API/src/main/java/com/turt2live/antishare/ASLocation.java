@@ -1,6 +1,4 @@
-package com.turt2live.antishare.utils;
-
-import com.turt2live.antishare.AWorld;
+package com.turt2live.antishare;
 
 /**
  * Represents an X, Y, Z location

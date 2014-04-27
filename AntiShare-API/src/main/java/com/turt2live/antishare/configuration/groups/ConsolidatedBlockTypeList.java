@@ -2,7 +2,7 @@ package com.turt2live.antishare.configuration.groups;
 
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.engine.BlockTypeList;
-import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.ASLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * A block type list consisting of many block type lists. This uses a
  * voting-like system to determine what is tracked and what is not.
  * <p/>
- * Internally when {@link #getState(com.turt2live.antishare.utils.ASLocation)}
+ * Internally when {@link #getState(com.turt2live.antishare.ASLocation)}
  * is called a poll of all lists is activated to determine how many lists
  * determine a location to be tracked and how many lists determine a list
  * to be not tracked. An additional flag for "is tracked" is kept to ensure

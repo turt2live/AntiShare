@@ -3,7 +3,7 @@ package com.turt2live.antishare.io.flatfile;
 import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockStore;
-import com.turt2live.antishare.utils.ASLocation;
+import com.turt2live.antishare.ASLocation;
 
 import java.io.File;
 import java.util.List;
