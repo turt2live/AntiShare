@@ -3,6 +3,7 @@ package com.turt2live.antishare.engine;
 import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.APlayer;
 import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.events.EventDispatcher;
@@ -109,7 +110,7 @@ public final class WorldEngine {
 
         // TODO: Placement permissions, logic, etc
 
-        if (list.isTracked(block.getLocation())) {
+        if (list.isTracked(block.getLocation()) && !player.hasPermission(PermissionNodes.FREE_PLACE)) {
             blockManager.setBlockType(block.getLocation(), ASUtils.toBlockType(placeAs));
         }
 
