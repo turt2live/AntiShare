@@ -5,7 +5,6 @@ package com.turt2live.antishare;
  *
  * @author turt2live
  */
-// TODO: Unit test world
 public class ASLocation implements Cloneable {
 
     /**
