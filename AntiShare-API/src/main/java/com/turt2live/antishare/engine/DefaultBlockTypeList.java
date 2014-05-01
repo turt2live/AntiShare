@@ -15,7 +15,6 @@ public class DefaultBlockTypeList implements BlockTypeList {
     }
 
     @Override
-    // TODO: Unit test
     public TrackedState getState(ASLocation location) {
         return TrackedState.NOT_PRESENT;
     }
