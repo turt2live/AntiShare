@@ -1,92 +1,88 @@
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.ABlock;
+import com.turt2live.antishare.APlayer;
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.configuration.groups.GroupManager;
+import com.turt2live.antishare.io.BlockManager;
+import com.turt2live.antishare.io.memory.MemoryBlockManager;
+import junit.framework.AssertionFailedError;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+
 @RunWith(JUnit4.class)
 public class WorldEngineTest {
 
-    @Test
-    public void no() {
+    private static WorldEngine testEngine;
 
+    @BeforeClass
+    public static void before() {
+        testEngine = new WorldEngine("test");
+
+        // Force initialization
+        Engine.getInstance().setGroupManager(mock(GroupManager.class));
     }
 
-// TODO: Re-enable tests
-//    @Test
-//    public void testInstance1() {
-//        WorldEngine engine = new WorldEngine("test");
-//        assertEquals("test", engine.getWorldName());
-//    }
-//
-//    @Test(expected = IllegalArgumentException.class)
-//    public void testInstance2() {
-//        new WorldEngine(null);
-//    }
-//
-//    @Test
-//    public void testBlockManager() {
-//        WorldEngine engine = new WorldEngine("test");
-//        assertTrue(engine.getBlockManager() instanceof MemoryBlockManager);
-//
-//        BlockManager manager = mock(BlockManager.class);
-//        engine.setBlockManager(manager);
-//        assertEquals(manager, engine.getBlockManager());
-//    }
-//
-//    @Test(expected = IllegalArgumentException.class)
-//    public void testBlockManagerNull() {
-//        WorldEngine engine = new WorldEngine("test");
-//        engine.setBlockManager(null);
-//    }
-//
-//    @Test
-//    public void testBlockList() {
-//        WorldEngine engine = new WorldEngine("test");
-//        for (ASGameMode gameMode : ASGameMode.values()) {
-//            assertTrue(engine.getTrackedBlocks(gameMode) instanceof DefaultBlockTypeList);
-//        }
-//
-//        for (ASGameMode gameMode : ASGameMode.values()) {
-//            BlockTypeList list = mock(BlockTypeList.class);
-//            engine.setTrackedBlocks(gameMode, list);
-//            assertEquals(list, engine.getTrackedBlocks(gameMode));
-//        }
-//    }
-//
-//    @Test
-//    public void testProcess() {
-//        BlockTypeList list = mock(BlockTypeList.class);
-//        BlockManager manager = mock(BlockManager.class);
-//        WorldEngine engine = new WorldEngine("test");
-//        engine.setBlockManager(manager);
-//        engine.setTrackedBlocks(ASGameMode.ADVENTURE, list);
-//
-//        engine.processBlockPlace(new ASLocation(90, 90, 90), BlockType.ADVENTURE);
-//        verify(manager, never()).setBlockType(any(ASLocation.class), any(BlockType.class));
-//
-//        when(list.isTracked(any(ASLocation.class))).thenReturn(true);
-//
-//        engine.processBlockPlace(new ASLocation(90, 90, 90), BlockType.ADVENTURE);
-//        verify(manager).setBlockType(any(ASLocation.class), any(BlockType.class));
-//    }
-//
-//    @Test(expected = IllegalArgumentException.class)
-//    public void testProcessNull1() {
-//        WorldEngine engine = new WorldEngine("test");
-//        engine.processBlockPlace(null, BlockType.ADVENTURE);
-//    }
-//
-//    @Test(expected = IllegalArgumentException.class)
-//    public void testProcessNull2() {
-//        WorldEngine engine = new WorldEngine("test");
-//        engine.processBlockPlace(new ASLocation(0, 0, 0), null);
-//    }
-//
-//    @Test(expected = IllegalArgumentException.class)
-//    public void testProcessNull3() {
-//        WorldEngine engine = new WorldEngine("test");
-//        engine.processBlockPlace(null, null);
-//    }
+    @Test
+    public void testInstance1() {
+        WorldEngine engine = new WorldEngine("test");
+        assertEquals("test", engine.getWorldName());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInstance2() {
+        new WorldEngine(null);
+    }
+
+    @Test
+    public void testBlockManager() {
+        assertTrue(testEngine.getBlockManager() instanceof MemoryBlockManager);
+
+        BlockManager manager = mock(BlockManager.class);
+        testEngine.setBlockManager(manager);
+        assertEquals(manager, testEngine.getBlockManager());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testBlockManagerNull() {
+        testEngine.setBlockManager(null);
+    }
+
+    @Test
+    public void testBlockList() {
+        for (ASGameMode gameMode : ASGameMode.values()) {
+            assertNotNull(testEngine.getTrackedBlocks(gameMode));
+        }
+        // No further tests needed, this is handled by the block type list (or the consolidation)
+    }
+
+    @Test
+    public void testProcessNull() {
+        APlayer player;
+        ABlock block;
+        ASGameMode gameMode;
+        for (boolean flag1 = true; flag1; flag1 = !flag1) {
+            for (boolean flag2 = true; flag2; flag2 = !flag2) {
+                for (boolean flag3 = true; flag3; flag3 = !flag3) {
+                    player = flag1 ? mock(APlayer.class) : null;
+                    block = flag2 ? mock(ABlock.class) : null;
+                    gameMode = flag3 ? ASGameMode.ADVENTURE : null;
+
+                    boolean expected = player == null || block == null || gameMode == null;
+                    try {
+                        testEngine.processBlockPlace(player, block, gameMode);
+                        if (expected) throw new AssertionFailedError("Expected an exception");
+                    } catch (IllegalArgumentException e) {
+                        if (!expected) throw new AssertionFailedError("Expected no exception");
+                    }
+                }
+            }
+        }
+    }
 
 }

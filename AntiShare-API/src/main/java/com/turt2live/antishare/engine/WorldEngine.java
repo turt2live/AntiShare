@@ -81,7 +81,6 @@ public final class WorldEngine {
      * @param gamemode the gamemode, cannot be null
      * @return the list
      */
-    // TODO: Unit test
     public BlockTypeList getTrackedBlocks(ASGameMode gamemode) {
         List<Group> allGroups = Engine.getInstance().getGroupManager().getGroupsForWorld(getWorldName(), false);
         if (allGroups == null || allGroups.size() <= 0) return new DefaultBlockTypeList();
