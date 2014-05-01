@@ -50,7 +50,22 @@ public final class Engine {
         setSaveInterval(saveInterval);
     }
 
-    private boolean isReady() {
+    /**
+     * @deprecated For use by tests only
+     */
+    @Deprecated
+    void forceNotInitialized() {
+        groupManager = null;
+    }
+
+    /**
+     * Determines if this engine is ready or not. If this engine
+     * is not ready, {@link com.turt2live.antishare.engine.EngineNotInitializedException}
+     * may be thrown from various methods.
+     *
+     * @return true if ready, false otherwise.
+     */
+    public boolean isReady() {
         if (groupManager == null) return false;
 
         return true;
@@ -61,7 +76,6 @@ public final class Engine {
      *
      * @return the group manager
      */
-    // TODO: Unit test
     public GroupManager getGroupManager() {
         if (!isReady()) throw new EngineNotInitializedException();
 
@@ -74,7 +88,6 @@ public final class Engine {
      *
      * @param manager the new group manager, cannot be null
      */
-    // TODO: Unit test
     public void setGroupManager(GroupManager manager) {
         if (manager == null) throw new IllegalArgumentException("group manager cannot be null");
 
@@ -190,6 +203,7 @@ public final class Engine {
         newSaveTimer(); // Cancels internally, resetting the timer to no task
         for (WorldEngine engine : engines.values())
             engine.prepareShutdown();
+
         engines.clear();
     }
 
