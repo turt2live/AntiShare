@@ -31,7 +31,7 @@
 name: main
 # The permission node for the group. If a player has this permission,
 # they will be affected by this configuration.
-permission-enable: AntiShare.group.main
+permission-enable: antishare.group.main
 # The enabled flag. If true, this group is in effect. If false, this
 # group is not being used. Groups which inherit this group will not
 # ignore this flag and therefore will not inherit settings if disabled.

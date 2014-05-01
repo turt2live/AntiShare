@@ -136,6 +136,11 @@ public abstract class GroupManager {
             addIfNotFound(groups, getInheritances(mainGroup).toArray(new Group[0])); // All inherited groups are automatic
         }
 
+        if (groups.size() <= 0) {
+            addIfNotFound(groups, mainGroup);
+            addIfNotFound(groups, getInheritances(mainGroup).toArray(new Group[0])); // All inherited groups are automatic
+        }
+
         return groups;
     }
 

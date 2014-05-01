@@ -14,3 +14,9 @@ permissions:
     antishare.tools:
         default: op
         description: Allows the use of the AntiShare tools
+    antishare.freeplace:
+        default: op
+        description: Allows the target to place blocks without tracking
+    antishare.group.main:
+        default: true
+        description: Default main group permission

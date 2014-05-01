@@ -50,7 +50,7 @@ public class ToolListener implements Listener {
         SET_TEMPLATE.setItemMeta(meta);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onInteract(PlayerInteractEvent event) {
         switch (event.getAction()) {
             case RIGHT_CLICK_AIR:
