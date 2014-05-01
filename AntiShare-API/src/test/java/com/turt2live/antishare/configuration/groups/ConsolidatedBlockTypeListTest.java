@@ -9,6 +9,9 @@ import org.junit.runners.JUnit4;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -40,6 +43,26 @@ public class ConsolidatedBlockTypeListTest {
         when(list2.isTracked(any(ASLocation.class))).then(new ReturnIsTrackedWorkaround());
         when(list3.isTracked(any(ASLocation.class))).then(new ReturnIsTrackedWorkaround());
         when(list4.isTracked(any(ASLocation.class))).then(new ReturnIsTrackedWorkaround());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateEmpty1(){
+        new ConsolidatedBlockTypeList(new ArrayList<BlockTypeList>());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateEmpty2(){
+        new ConsolidatedBlockTypeList(new BlockTypeList[0]);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateNull1(){
+        new ConsolidatedBlockTypeList((List<BlockTypeList>)null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateNull2(){
+        new ConsolidatedBlockTypeList((BlockTypeList[])null);
     }
 
     @Test
