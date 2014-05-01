@@ -41,7 +41,6 @@ public interface BlockTypeList {
      * @param location the location to lookup
      * @return the tracking state
      */
-    // TODO: Unit test
     public TrackedState getState(ASLocation location);
 
 }
