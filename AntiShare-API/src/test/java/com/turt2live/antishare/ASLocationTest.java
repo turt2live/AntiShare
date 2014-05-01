@@ -42,7 +42,7 @@ public class ASLocationTest {
     @Test
     public void testNullWorldCreate() {
         ASLocation location = new ASLocation(null, 0, 0, 0);
-        assertNotNull(location.world);
+        assertNull(location.world);
     }
 
     @Test
