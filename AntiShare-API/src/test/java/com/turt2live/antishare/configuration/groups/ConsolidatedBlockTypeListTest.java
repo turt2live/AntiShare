@@ -46,23 +46,23 @@ public class ConsolidatedBlockTypeListTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreateEmpty1(){
+    public void testCreateEmpty1() {
         new ConsolidatedBlockTypeList(new ArrayList<BlockTypeList>());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreateEmpty2(){
+    public void testCreateEmpty2() {
         new ConsolidatedBlockTypeList(new BlockTypeList[0]);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreateNull1(){
-        new ConsolidatedBlockTypeList((List<BlockTypeList>)null);
+    public void testCreateNull1() {
+        new ConsolidatedBlockTypeList((List<BlockTypeList>) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreateNull2(){
-        new ConsolidatedBlockTypeList((BlockTypeList[])null);
+    public void testCreateNull2() {
+        new ConsolidatedBlockTypeList((BlockTypeList[]) null);
     }
 
     @Test
