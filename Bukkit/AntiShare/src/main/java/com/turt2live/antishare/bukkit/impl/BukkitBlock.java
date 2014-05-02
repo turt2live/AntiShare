@@ -36,29 +36,26 @@ public class BukkitBlock implements ABlock {
     }
 
     private TrackedState permissionCheck(RejectionList.ListType type, APlayer player) {
-        String allowPermission = PermissionNodes.getPermissionNode(true, type);
-        String denyPermission = PermissionNodes.getPermissionNode(false, type);
-
-        boolean allow = player.hasPermission(allowPermission);
-        boolean deny = player.hasPermission(denyPermission);
+        // Stage One: Check general permissions
+        boolean allow = player.hasPermission(PermissionNodes.getPermissionNode(true, type));
+        boolean deny = player.hasPermission(PermissionNodes.getPermissionNode(false, type));
         TrackedState stageOne = TrackedState.NOT_PRESENT;
 
-        if ((allow && deny) || (!allow && !deny)) stageOne = TrackedState.NOT_PRESENT;
+        if (allow == deny) stageOne = TrackedState.NOT_PRESENT;
         else if (allow) stageOne = TrackedState.INCLUDED;
         else if (deny) stageOne = TrackedState.NEGATED;
 
-        allowPermission = PermissionNodes.getPermissionNode(true, type) + "." + getFriendlyName();
-        denyPermission = PermissionNodes.getPermissionNode(false, type) + "." + getFriendlyName();
-
-        allow = player.hasPermission(allowPermission);
-        deny = player.hasPermission(denyPermission);
+        // Stage Two: Check specific permissions
+        allow = player.hasPermission(PermissionNodes.getPermissionNode(true, type) + "." + getFriendlyName());
+        deny = player.hasPermission(PermissionNodes.getPermissionNode(false, type) + "." + getFriendlyName());
         TrackedState stageTwo = TrackedState.NOT_PRESENT;
 
-        if ((allow && deny) || (!allow && !deny)) stageTwo = TrackedState.NOT_PRESENT;
+        if (allow == deny) stageTwo = TrackedState.NOT_PRESENT;
         else if (allow) stageTwo = TrackedState.INCLUDED;
         else if (deny) stageTwo = TrackedState.NEGATED;
 
         /*
+        Stage Three: Combination logic for merging stages one and two
         Logic:
 
         G = stageOne, general scope
