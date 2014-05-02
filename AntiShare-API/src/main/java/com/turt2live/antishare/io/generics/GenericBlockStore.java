@@ -41,6 +41,9 @@ public abstract class GenericBlockStore implements BlockStore {
 
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
+        // Remove world from location store
+        location = new ASLocation(null, location.X, location.Y, location.Z);
+
         BlockType type = types.get(location);
         return type == null ? BlockType.UNKNOWN : type;
     }
@@ -50,6 +53,9 @@ public abstract class GenericBlockStore implements BlockStore {
         updateLastAccess();
 
         if (location == null) throw new IllegalArgumentException("location cannot be null");
+
+        // Remove world from location store
+        location = new ASLocation(null, location.X, location.Y, location.Z);
 
         if (type == null || type == BlockType.UNKNOWN) types.remove(location);
         else types.put(location, type);
