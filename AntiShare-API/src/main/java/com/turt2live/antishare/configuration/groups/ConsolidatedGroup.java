@@ -72,13 +72,13 @@ public class ConsolidatedGroup {
         return new ConsolidatedBlockTypeList(lists);
     }
 
-    public ConsolidatedRejectionList getRejectionList(RejectionList.ListType type){
-        if(type==null)throw new IllegalArgumentException();
+    public ConsolidatedRejectionList getRejectionList(RejectionList.ListType type) {
+        if (type == null) throw new IllegalArgumentException();
 
         List<RejectionList> lists = new ArrayList<RejectionList>();
-        for(Group group : groups){
+        for (Group group : groups) {
             RejectionList list = group.getRejectionList(type);
-            if(list!=null)lists.add(list);
+            if (list != null) lists.add(list);
         }
 
         return new ConsolidatedRejectionList(lists);
