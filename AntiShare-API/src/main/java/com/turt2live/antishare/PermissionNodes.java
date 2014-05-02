@@ -1,5 +1,7 @@
 package com.turt2live.antishare;
 
+import com.turt2live.antishare.engine.RejectionList;
+
 /**
  * AntiShare Permission Nodes
  *
@@ -17,6 +19,24 @@ public final class PermissionNodes {
     public static final String FREE_PLACE = "antishare.freeplace";
 
     private PermissionNodes() {
+    }
+
+    /**
+     * Gets the permission node for the specified settings. This does not include the
+     * final period character.
+     *
+     * @param allow true for generating an "allow" node, false otherwise
+     * @param list  the list to use, cannot be null
+     * @return the generated node
+     */
+    public static String getPermissionNode(boolean allow, RejectionList.ListType list) {
+        if (list == null) throw new IllegalArgumentException();
+
+        StringBuilder permission = new StringBuilder("antishare.");
+        permission.append(allow ? "allow." : "deny.");
+        permission.append(list.name().toLowerCase());
+
+        return permission.toString();
     }
 
 }

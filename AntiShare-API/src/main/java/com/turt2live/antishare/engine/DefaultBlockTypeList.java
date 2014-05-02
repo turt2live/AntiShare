@@ -1,6 +1,7 @@
 package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.TrackedState;
 
 /**
  * Default block list

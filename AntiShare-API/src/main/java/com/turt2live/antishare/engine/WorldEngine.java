@@ -1,9 +1,6 @@
 package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.ABlock;
-import com.turt2live.antishare.APlayer;
-import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.PermissionNodes;
+import com.turt2live.antishare.*;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.events.EventDispatcher;
@@ -101,13 +98,22 @@ public final class WorldEngine {
         if (player == null || block == null || placeAs == null) throw new IllegalArgumentException();
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+
+        TrackedState playerReaction = block.canPlace(player); // See javadocs
         BlockTypeList list = new DefaultBlockTypeList();
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.BLOCK_PLACE);
+
         if (groups != null && groups.size() > 0) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
             list = consolidatedGroup.getTrackedList(placeAs);
+            reject = consolidatedGroup.getRejectionList(reject.getType());
         }
 
-        // TODO: Placement permissions, logic, etc
+        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+        if (reject.isBlocked(block) && playerReaction == TrackedState.NOT_PRESENT) { // No allow permission & is denied
+            return true;
+        }
 
         if (list.isTracked(block.getLocation()) && !player.hasPermission(PermissionNodes.FREE_PLACE)) {
             blockManager.setBlockType(block.getLocation(), ASUtils.toBlockType(placeAs));

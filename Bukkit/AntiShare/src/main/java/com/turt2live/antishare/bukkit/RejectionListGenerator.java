@@ -1,8 +1,9 @@
 package com.turt2live.antishare.bukkit;
 
-import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.TrackedState;
-import com.turt2live.antishare.engine.BlockTypeList;
+import com.turt2live.antishare.bukkit.impl.BukkitBlock;
+import com.turt2live.antishare.engine.RejectionList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Creates a block list from a list
+ * Bukkit rejection list generator
  *
  * @author turt2live
  */
-public final class BlockListGenerator implements BlockTypeList {
+public class RejectionListGenerator implements RejectionList {
 
     private static class BInfo {
         final Material material;
@@ -59,16 +60,17 @@ public final class BlockListGenerator implements BlockTypeList {
     private List<BInfo> information = new ArrayList<BInfo>();
     private List<BInfo> negated = new ArrayList<BInfo>();
     private String world;
+    private ListType type;
 
-    private BlockListGenerator(String world) {
+    private RejectionListGenerator(String world, ListType type) {
         this.world = world;
+        this.type = type;
     }
 
     @Override
-    public boolean isTracked(ASLocation location) {
+    public boolean isBlocked(ABlock block) {
         World world = Bukkit.getWorld(this.world);
         if (world != null) {
-            Block block = world.getBlockAt(BukkitUtils.toLocation(location));
             BInfo[] info = generateBlockInfo(block);
             if (info != null) {
                 for (BInfo info1 : info) {
@@ -80,10 +82,9 @@ public final class BlockListGenerator implements BlockTypeList {
     }
 
     @Override
-    public TrackedState getState(ASLocation location) {
+    public TrackedState getState(ABlock block) {
         World world = Bukkit.getWorld(this.world);
         if (world != null) {
-            Block block = world.getBlockAt(BukkitUtils.toLocation(location));
             BInfo[] info = generateBlockInfo(block);
             if (info != null) {
                 for (BInfo info1 : info) {
@@ -95,8 +96,14 @@ public final class BlockListGenerator implements BlockTypeList {
         return TrackedState.NOT_PRESENT;
     }
 
-    private BInfo[] generateBlockInfo(Block block) {
-        if (block == null) return null;
+    @Override
+    public ListType getType() {
+        return type;
+    }
+
+    private BInfo[] generateBlockInfo(ABlock ablock) {
+        if (ablock == null || !(ablock instanceof BukkitBlock)) return null;
+        Block block = ((BukkitBlock) ablock).getBlock();
         BInfo[] information = new BInfo[2];
 
         Material material = block.getType();
@@ -122,12 +129,12 @@ public final class BlockListGenerator implements BlockTypeList {
      * @return the list. If null or invalid values were passed, an empty list is returned
      */
     // TODO: Remove world argument
-    // TODO: Merge logic with rejection list generator?
-    public static BlockListGenerator fromList(List<String> values, String world) {
+    // TODO: Merge logic with block list generator?
+    public static RejectionListGenerator fromList(List<String> values, String world, ListType type) {
         if (world == null) return null;
-        if (values == null) return new BlockListGenerator(world);
+        if (values == null) return new RejectionListGenerator(world, type);
         MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-        BlockListGenerator list = new BlockListGenerator(world);
+        RejectionListGenerator list = new RejectionListGenerator(world, type);
 
         for (String value : values) {
             String[] parts = value.split(":");
@@ -187,5 +194,4 @@ public final class BlockListGenerator implements BlockTypeList {
 
         return list;
     }
-
 }

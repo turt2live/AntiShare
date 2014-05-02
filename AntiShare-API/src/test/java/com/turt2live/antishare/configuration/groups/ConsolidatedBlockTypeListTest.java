@@ -1,6 +1,7 @@
 package com.turt2live.antishare.configuration.groups;
 
 import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.TrackedState;
 import com.turt2live.antishare.engine.BlockTypeList;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class ConsolidatedBlockTypeListTest {
         @Override
         public Boolean answer(InvocationOnMock invocation) throws Throwable {
             // Workaround for ensuring isTracked() works
-            return ((BlockTypeList) invocation.getMock()).getState((ASLocation) invocation.getArguments()[0]) == BlockTypeList.TrackedState.INCLUDED;
+            return ((BlockTypeList) invocation.getMock()).getState((ASLocation) invocation.getArguments()[0]) == TrackedState.INCLUDED;
         }
     }
 
@@ -68,84 +69,84 @@ public class ConsolidatedBlockTypeListTest {
     @Test
     public void testBias() throws Exception {
         // Ensure equal balance of tracked & negated results in "not tracked"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
 
-        assertEquals(BlockTypeList.TrackedState.NOT_PRESENT, consolidated.getState(testLocation));
+        assertEquals(TrackedState.NOT_PRESENT, consolidated.getState(testLocation));
         assertEquals(false, consolidated.isTracked(testLocation));
 
         // When nothing is included, result should be "not tracked"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
 
-        assertEquals(BlockTypeList.TrackedState.NOT_PRESENT, consolidated.getState(testLocation));
+        assertEquals(TrackedState.NOT_PRESENT, consolidated.getState(testLocation));
         assertEquals(false, consolidated.isTracked(testLocation));
 
         // When at least one is included, result should be "included"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
 
-        assertEquals(BlockTypeList.TrackedState.INCLUDED, consolidated.getState(testLocation));
+        assertEquals(TrackedState.INCLUDED, consolidated.getState(testLocation));
         assertEquals(true, consolidated.isTracked(testLocation));
 
         // Ensure equal balance of tracked & negated results in "not tracked"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
 
-        assertEquals(BlockTypeList.TrackedState.NOT_PRESENT, consolidated.getState(testLocation));
+        assertEquals(TrackedState.NOT_PRESENT, consolidated.getState(testLocation));
         assertEquals(false, consolidated.isTracked(testLocation));
 
         // When at least one is negated, result should be "negated"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
 
-        assertEquals(BlockTypeList.TrackedState.NEGATED, consolidated.getState(testLocation));
+        assertEquals(TrackedState.NEGATED, consolidated.getState(testLocation));
         assertEquals(false, consolidated.isTracked(testLocation));
 
         // When a majority are negated, the result should be "negated"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
 
-        assertEquals(BlockTypeList.TrackedState.NEGATED, consolidated.getState(testLocation));
+        assertEquals(TrackedState.NEGATED, consolidated.getState(testLocation));
         assertEquals(false, consolidated.isTracked(testLocation));
 
         // When a majority are negated, the result should be "negated"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
 
-        assertEquals(BlockTypeList.TrackedState.NEGATED, consolidated.getState(testLocation));
+        assertEquals(TrackedState.NEGATED, consolidated.getState(testLocation));
         assertEquals(false, consolidated.isTracked(testLocation));
 
         // When a majority are included, the result should be "included"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NEGATED);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.NEGATED);
 
-        assertEquals(BlockTypeList.TrackedState.INCLUDED, consolidated.getState(testLocation));
+        assertEquals(TrackedState.INCLUDED, consolidated.getState(testLocation));
         assertEquals(true, consolidated.isTracked(testLocation));
 
         // When a majority are included, the result should be "included"
-        when(list1.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list2.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list3.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.INCLUDED);
-        when(list4.getState(any(ASLocation.class))).thenReturn(BlockTypeList.TrackedState.NOT_PRESENT);
+        when(list1.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list2.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list3.getState(any(ASLocation.class))).thenReturn(TrackedState.INCLUDED);
+        when(list4.getState(any(ASLocation.class))).thenReturn(TrackedState.NOT_PRESENT);
 
-        assertEquals(BlockTypeList.TrackedState.INCLUDED, consolidated.getState(testLocation));
+        assertEquals(TrackedState.INCLUDED, consolidated.getState(testLocation));
         assertEquals(true, consolidated.isTracked(testLocation));
     }
 

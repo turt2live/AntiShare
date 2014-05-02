@@ -47,6 +47,14 @@ inherit:
 worlds:
 - all
 
+# The rejection lists for player "denied interactions"
+lists:
+    place:
+    - diamond block
+    - gold block
+    - iron block
+    - bedrock
+
 # Block configuration. This gives you the ability to customize the block
 # aspects of AntiShare. More information can be found at the link listed
 # at the top of this file.

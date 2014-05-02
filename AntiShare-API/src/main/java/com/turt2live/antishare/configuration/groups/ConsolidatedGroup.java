@@ -5,6 +5,7 @@ import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.engine.BlockTypeList;
+import com.turt2live.antishare.engine.RejectionList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,6 +70,18 @@ public class ConsolidatedGroup {
         for (Group group : groups) lists.add(group.getTrackedList(gameMode));
 
         return new ConsolidatedBlockTypeList(lists);
+    }
+
+    public ConsolidatedRejectionList getRejectionList(RejectionList.ListType type){
+        if(type==null)throw new IllegalArgumentException();
+
+        List<RejectionList> lists = new ArrayList<RejectionList>();
+        for(Group group : groups){
+            RejectionList list = group.getRejectionList(type);
+            if(list!=null)lists.add(list);
+        }
+
+        return new ConsolidatedRejectionList(lists);
     }
 
     /**

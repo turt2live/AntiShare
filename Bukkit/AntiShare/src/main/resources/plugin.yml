@@ -20,3 +20,6 @@ permissions:
     antishare.group.main:
         default: true
         description: Default main group permission
+    antishare.allow.block_place:
+        default: op
+        description: Allows all blocks to be placed, regardless of group settings

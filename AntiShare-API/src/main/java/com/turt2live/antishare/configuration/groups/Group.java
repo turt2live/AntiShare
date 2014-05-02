@@ -4,6 +4,7 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.engine.BlockTypeList;
+import com.turt2live.antishare.engine.RejectionList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,4 +126,12 @@ public abstract class Group {
      * @return the block list
      */
     public abstract BlockTypeList getTrackedList(ASGameMode gameMode);
+
+    /**
+     * Gets the rejection list for a specified list type
+     *
+     * @param list the list type
+     * @return the list found, or null if none exists
+     */
+    public abstract RejectionList getRejectionList(RejectionList.ListType list);
 }

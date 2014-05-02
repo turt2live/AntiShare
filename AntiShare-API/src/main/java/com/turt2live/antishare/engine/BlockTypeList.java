@@ -1,6 +1,7 @@
 package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.TrackedState;
 
 /**
  * A block type list, used for tracking
@@ -8,21 +9,6 @@ import com.turt2live.antishare.ASLocation;
  * @author turt2live
  */
 public interface BlockTypeList {
-
-    public enum TrackedState {
-        /**
-         * Indicates the record was negated from the list
-         */
-        NEGATED,
-        /**
-         * Indicates the record is 'tracked'
-         */
-        INCLUDED,
-        /**
-         * Indicates the record is not present in a list
-         */
-        NOT_PRESENT;
-    }
 
     /**
      * Determines if a specified block at a specified location is tracked

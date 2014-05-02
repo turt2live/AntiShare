@@ -4,6 +4,7 @@ import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.AWorld;
 import com.turt2live.antishare.bukkit.impl.BukkitWorld;
 import com.turt2live.antishare.engine.Engine;
+import com.turt2live.antishare.engine.RejectionList;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.io.BlockManager;
 import org.bukkit.Location;
@@ -65,6 +66,23 @@ public final class BukkitUtils {
      */
     public static BlockManager getBlockManager(World world) {
         return getWorldEngine(world).getBlockManager();
+    }
+
+    /**
+     * Gets the string name for the rejection list type in terms of configuration.
+     *
+     * @param listType the list type to lookup
+     * @return the string equivalent, or null if no match
+     */
+    public static String getStringName(RejectionList.ListType listType) {
+        if (listType == null) return null;
+
+        switch (listType) {
+            case BLOCK_PLACE:
+                return "place";
+            default:
+                return null;
+        }
     }
 
 }
