@@ -6,7 +6,6 @@ import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
-import com.turt2live.antishare.bukkit.listener.antishare.AlertListener;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.events.EventDispatcher;
@@ -36,7 +35,6 @@ public class AntiShare extends JavaPlugin {
     private File dataFolder;
     private int blockSize;
     private MaterialProvider materialProvider = new MaterialProvider();
-    private AlertListener alerts;
 
     @Override
     public void onLoad() {
@@ -50,9 +48,6 @@ public class AntiShare extends JavaPlugin {
     public void onDisable() {
         // Save everything
         Engine.getInstance().prepareShutdown();
-
-        // Remove AntiShare listeners
-        EventDispatcher.deregister(alerts);
 
         // Cleanup
         getServer().getScheduler().cancelTasks(this);
@@ -92,10 +87,6 @@ public class AntiShare extends JavaPlugin {
         // Setup listeners
         getServer().getPluginManager().registerEvents(new EngineListener(), this);
         getServer().getPluginManager().registerEvents(new ToolListener(), this);
-
-        // Setup AntiShare listeners
-        alerts = new AlertListener();
-        EventDispatcher.register(alerts);
 
         // Setup commands
         CommandHandler handler = new CommandHandler();
