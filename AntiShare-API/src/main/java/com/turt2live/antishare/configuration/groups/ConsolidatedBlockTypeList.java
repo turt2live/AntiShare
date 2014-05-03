@@ -1,6 +1,6 @@
 package com.turt2live.antishare.configuration.groups;
 
-import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.TrackedState;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.engine.BlockTypeList;
@@ -12,7 +12,7 @@ import java.util.List;
  * A block type list consisting of many block type lists. This uses a
  * voting-like system to determine what is tracked and what is not.
  * <p/>
- * Internally when {@link #getState(com.turt2live.antishare.ASLocation)}
+ * Internally when {@link #getState(com.turt2live.antishare.ABlock)}
  * is called a poll of all lists is activated to determine how many lists
  * determine a location to be tracked and how many lists determine a list
  * to be not tracked. An additional flag for "is tracked" is kept to ensure
@@ -48,15 +48,15 @@ public class ConsolidatedBlockTypeList implements BlockTypeList {
     }
 
     @Override
-    public TrackedState getState(ASLocation location) {
-        if (location == null) throw new IllegalArgumentException("location cannot be null");
+    public TrackedState getState(ABlock block) {
+        if (block == null) throw new IllegalArgumentException("block cannot be null");
 
         int tracked = 0;
         int negated = 0;
         boolean included = false;
 
         for (BlockTypeList list : lists) {
-            TrackedState state = list.getState(location);
+            TrackedState state = list.getState(block);
             switch (state) {
                 case INCLUDED:
                     tracked++;
@@ -75,7 +75,7 @@ public class ConsolidatedBlockTypeList implements BlockTypeList {
     }
 
     @Override
-    public boolean isTracked(ASLocation location) {
-        return getState(location) == TrackedState.INCLUDED; // The one time it is okay to do this...
+    public boolean isTracked(ABlock block) {
+        return getState(block) == TrackedState.INCLUDED; // The one time it is okay to do this...
     }
 }

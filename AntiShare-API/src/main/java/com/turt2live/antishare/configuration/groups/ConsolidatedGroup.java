@@ -1,7 +1,7 @@
 package com.turt2live.antishare.configuration.groups;
 
+import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.engine.BlockTypeList;
@@ -48,13 +48,13 @@ public class ConsolidatedGroup {
      * Determines if a specified location is tracked under a GameMode
      *
      * @param gameMode the gamemode to lookup, cannot be null
-     * @param location the location to lookup, cannot be null
+     * @param block    the block to lookup, cannot be null
      * @return true if tracked, false otherwise
      */
-    public boolean isTracked(ASGameMode gameMode, ASLocation location) {
-        if (gameMode == null || location == null) throw new IllegalArgumentException("arguments cannot be null");
+    public boolean isTracked(ASGameMode gameMode, ABlock block) {
+        if (gameMode == null || block == null) throw new IllegalArgumentException("arguments cannot be null");
 
-        return getTrackedList(gameMode).isTracked(location);
+        return getTrackedList(gameMode).isTracked(block);
     }
 
     /**

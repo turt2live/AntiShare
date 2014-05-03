@@ -1,6 +1,6 @@
 package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.TrackedState;
 
 /**
@@ -11,22 +11,22 @@ import com.turt2live.antishare.TrackedState;
 public interface BlockTypeList {
 
     /**
-     * Determines if a specified block at a specified location is tracked
+     * Determines if a specified block is tracked
      *
-     * @param location the location to lookup
+     * @param block the block to lookup
      * @return true if this block should be tracked, false otherwise
      */
-    public boolean isTracked(ASLocation location);
+    public boolean isTracked(ABlock block);
 
     /**
-     * Gets the tracking state of a specified block at a location. This is generally
+     * Gets the tracking state of a specified block. This is generally
      * used by plugin operations for determining what data this list has rather
-     * than being used to indicate whether or not a location should be tracked. A
-     * better alternative for determining tracking status would be {@link #isTracked(com.turt2live.antishare.ASLocation)}.
+     * than being used to indicate whether or not a block should be tracked. A
+     * better alternative for determining tracking status would be {@link #isTracked(com.turt2live.antishare.ABlock)}.
      *
-     * @param location the location to lookup
+     * @param block the block to lookup
      * @return the tracking state
      */
-    public TrackedState getState(ASLocation location);
+    public TrackedState getState(ABlock block);
 
 }

@@ -1,6 +1,6 @@
 package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.TrackedState;
 
 /**
@@ -11,12 +11,12 @@ import com.turt2live.antishare.TrackedState;
 public class DefaultBlockTypeList implements BlockTypeList {
 
     @Override
-    public boolean isTracked(ASLocation location) {
+    public boolean isTracked(ABlock block) {
         return false;
     }
 
     @Override
-    public TrackedState getState(ASLocation location) {
+    public TrackedState getState(ABlock block) {
         return TrackedState.NOT_PRESENT;
     }
 

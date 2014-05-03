@@ -47,7 +47,7 @@ public class ProcessingTest {
         @Override
         public Boolean answer(InvocationOnMock invocation) throws Throwable {
             // Workaround for ensuring isTracked() works
-            return ((BlockTypeList) invocation.getMock()).getState((ASLocation) invocation.getArguments()[0]) == TrackedState.INCLUDED;
+            return ((BlockTypeList) invocation.getMock()).getState((ABlock) invocation.getArguments()[0]) == TrackedState.INCLUDED;
         }
     }
 
@@ -62,10 +62,10 @@ public class ProcessingTest {
     @BeforeClass
     public static void before() {
         blockTypeList = mock(BlockTypeList.class);
-        when(blockTypeList.isTracked(any(ASLocation.class))).then(new ReturnIsTrackedWorkaround());
-        when(blockTypeList.getState(test1)).thenReturn(TrackedState.INCLUDED);
-        when(blockTypeList.getState(test2)).thenReturn(TrackedState.NEGATED);
-        when(blockTypeList.getState(test3)).thenReturn(TrackedState.NOT_PRESENT);
+        when(blockTypeList.isTracked(any(ABlock.class))).then(new ReturnIsTrackedWorkaround());
+//        when(blockTypeList.getState(test1)).thenReturn(TrackedState.INCLUDED);
+//        when(blockTypeList.getState(test2)).thenReturn(TrackedState.NEGATED);
+//        when(blockTypeList.getState(test3)).thenReturn(TrackedState.NOT_PRESENT);
 
         rejectionList = mock(RejectionList.class);
         // TODO: Initialize rejection list

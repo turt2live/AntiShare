@@ -20,9 +20,12 @@ permissions:
     antishare.group.main:
         default: true
         description: Default main group permission
-    antishare.allow.block_place:
-        default: op
-        description: Allows all blocks to be placed, regardless of group settings
     antishare.alerts:
         default: op
         description: Allows the target to get alerts about naughty actions
+    antishare.allow.block_place:
+        default: op
+        description: Allows all blocks to be placed, regardless of group settings
+    antishare.deny.block_place:
+        default: false
+        description: Denies all blocks to be placed, regardless of group settings
