@@ -3,9 +3,13 @@ package com.turt2live.antishare.bukkit.listener;
 import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.APlayer;
 import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.AlertManager;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
+import com.turt2live.antishare.bukkit.lang.Lang;
+import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.engine.Engine;
+import com.turt2live.antishare.events.general.AlertEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -38,6 +42,9 @@ public class EngineListener implements Listener {
 
         if (engine.getEngine(block.getWorld().getName()).processBlockPlace(player, block, gamemode)) {
             event.setCancelled(true);
+            String blockType = event.getBlock().getType().name().toLowerCase(); // TODO: PLAYER-FRIENDLY
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PLACE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
+            AlertManager.triggerAlert(AlertEvent.AlertType.ADMIN_BLOCK_PLACE, player, block);
         }
     }
 

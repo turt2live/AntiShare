@@ -17,6 +17,10 @@ public final class PermissionNodes {
      * Ignores block placement tracking for players with this permission node
      */
     public static final String FREE_PLACE = "antishare.freeplace";
+    /**
+     * If enabled, the player will get notifications of illegal actions performed by players
+     */
+    public static final String GET_ALERTS = "antishare.alerts";
 
     private PermissionNodes() {
     }

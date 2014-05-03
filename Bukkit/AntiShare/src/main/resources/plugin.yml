@@ -23,3 +23,6 @@ permissions:
     antishare.allow.block_place:
         default: op
         description: Allows all blocks to be placed, regardless of group settings
+    antishare.alerts:
+        default: op
+        description: Allows the target to get alerts about naughty actions

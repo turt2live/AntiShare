@@ -26,6 +26,12 @@
 # &7 - Gray            &f - White
 # -------------------------------------------------------
 prefix: '&7[&aAntiShare&7]'
+naughty:
+    admin:
+        default: '&c@p did a bad thing'
+        place: '&c@p &7tried to place a &c@v'
+    place: '&cYou cannot place that &4@v'
+
 tools:
     check-title: '&bAntiShare Check Tool'
     set-title: '&bAntiShare Set Tool'
