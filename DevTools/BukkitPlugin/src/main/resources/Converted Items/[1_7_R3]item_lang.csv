@@ -1,0 +1,586 @@
+#version: AntiShare
+#This file is used for mapping data values to player-friendly names
+#name:data,player-friendly
+STONE:0,Stone
+GRASS:0,Grass
+DIRT:0,Dirt
+COBBLESTONE:0,Cobblestone
+WOOD:0,Wooden Plank
+WOOD:1,Spruce Wooden Plank
+WOOD:2,Birch Wooden Plank
+WOOD:3,Jungle Wooden Plank
+WOOD:4,Acacia Wooden Plank
+WOOD:5,Dark Oak Wooden Plank
+SAPLING:0,Sapling
+SAPLING:1,Sapling Spruce
+SAPLING:2,Sapling Birch
+SAPLING:3,Sapling Jungle
+BEDROCK:0,Bedrock
+WATER:0,Water
+STATIONARY_WATER:0,Stationary Water
+LAVA:0,Lava
+STATIONARY_LAVA:0,Stationary Lava
+SAND:0,Sand
+SAND:1,Red Sand
+GRAVEL:0,Gravel
+GOLD_ORE:0,Gold Ore
+IRON_ORE:0,Iron Ore
+COAL_ORE:0,Coal Ore
+LOG:0,Wood Oak
+LOG:1,Wood Spruce
+LOG:2,Wood Birch
+LOG:3,Wood Jungle
+LEAVES:0,Leaves
+LEAVES:1,Leaves Spruce
+LEAVES:2,Leaves Birch
+LEAVES:3,Leaves Jungle
+SPONGE:0,Sponge
+GLASS:0,Glass
+LAPIS_ORE:0,Lapis Lazuli Ore
+LAPIS_BLOCK:0,Lapis lazuli Block
+DISPENSER:0,Dispenser
+SANDSTONE:0,Sandstone
+SANDSTONE:1,Chiseled Sandstone
+SANDSTONE:2,Smooth Sandstone
+NOTE_BLOCK:0,Note Block
+BED_BLOCK:0,Bed Block
+POWERED_RAIL:0,Powered Rail
+DETECTOR_RAIL:0,Detector Rail
+PISTON_STICKY_BASE:0,Sticky Piston
+WEB:0,Web Block
+LONG_GRASS:0,Tall Dead Shrub
+LONG_GRASS:1,Tall Grass
+LONG_GRASS:2,Live Shrub
+DEAD_BUSH:0,Dead Shrub
+PISTON_BASE:0,Piston
+PISTON_EXTENSION:0,Piston Head
+WOOL:0,White Wool
+WOOL:1,Orange Wool
+WOOL:2,Magenta Wool
+WOOL:3,Light Blue Wool
+WOOL:4,Yellow Wool
+WOOL:5,Lime Wool
+WOOL:6,Pink Wool
+WOOL:7,Gray Wool
+WOOL:8,Light Gray Wool
+WOOL:9,Cyan Wool
+WOOL:10,Purple Wool
+WOOL:11,Blue Wool
+WOOL:12,Brown Wool
+WOOL:13,Green Wool
+WOOL:14,Red Wool
+WOOL:15,Black Wool
+YELLOW_FLOWER:0,Dandelion
+RED_ROSE:0,Rose
+RED_ROSE:1,Blue Orchid
+RED_ROSE:2,Allium
+RED_ROSE:4,Red Tulip
+RED_ROSE:5,Orange Tulip
+RED_ROSE:6,White Tulip
+RED_ROSE:7,Pink Tulip
+RED_ROSE:8,Oxeye Daisy
+BROWN_MUSHROOM:0,Brown Mushroom
+RED_MUSHROOM:0,Red Mushroom
+GOLD_BLOCK:0,Gold Block
+IRON_BLOCK:0,Iron Block
+DOUBLE_STEP:0,Double Stone Slab
+DOUBLE_STEP:1,Double Sandstone Slab
+DOUBLE_STEP:2,Double Wooden Slab
+DOUBLE_STEP:3,Double Cobblestone Slab
+DOUBLE_STEP:4,Double Brick Slab
+DOUBLE_STEP:5,Double Stone Brick Slab
+DOUBLE_STEP:6,Double Nether Brick Slab
+DOUBLE_STEP:7,Double Quartz Slab
+STEP:0,Stone Slab
+STEP:1,Sandstone Slab
+STEP:2,Wooden Slab
+STEP:3,Cobblestone Slab
+STEP:4,Brick Slab
+STEP:5,Stone Brick Slab
+STEP:6,Nether Brick Slab
+STEP:7,Quartz Slab
+BRICK:0,Brick
+TNT:0,TNT
+BOOKSHELF:0,Bookshelf
+MOSSY_COBBLESTONE:0,Mossy Stone
+OBSIDIAN:0,Obsidian
+TORCH:0,Torch
+FIRE:0,Fire
+MOB_SPAWNER:0,Monster Spawner
+WOOD_STAIRS:0,Wood Stairs
+CHEST:0,Chest
+REDSTONE_WIRE:0,Redstone Wire
+DIAMOND_ORE:0,Diamond Ore
+DIAMOND_BLOCK:0,Diamond Block
+WORKBENCH:0,Crafting Table
+CROPS:0,Crops
+SOIL:0,Farmland
+FURNACE:0,Furnace
+BURNING_FURNACE:0,Burning Furnace
+SIGN_POST:0,Sign Post
+WOODEN_DOOR:0,Wooden Door
+LADDER:0,Ladder
+RAILS:0,Rail
+COBBLESTONE_STAIRS:0,Cobblestone Stairs
+WALL_SIGN:0,Wall Sign
+LEVER:0,Lever
+STONE_PLATE:0,Stone Pressure Plate
+IRON_DOOR_BLOCK:0,Iron Door
+WOOD_PLATE:0,Wooden Pressure Plate
+REDSTONE_ORE:0,Redstone Ore
+GLOWING_REDSTONE_ORE:0,Glowing Redstone Ore
+REDSTONE_TORCH_OFF:0,Redstone Torch Off
+REDSTONE_TORCH_ON:0,Redstone Torch On
+STONE_BUTTON:0,Stone Button
+SNOW:0,Snow
+ICE:0,Ice
+SNOW_BLOCK:0,Snow Block
+CACTUS:0,Cactus
+CLAY:0,Clay Block
+SUGAR_CANE_BLOCK:0,Sugar Cane Block
+JUKEBOX:0,Jukebox
+FENCE:0,Fence
+PUMPKIN:0,Pumpkin
+NETHERRACK:0,Netherrack
+SOUL_SAND:0,Soul Sand
+GLOWSTONE:0,Glowstone Block
+PORTAL:0,Portal
+JACK_O_LANTERN:0,Jack O Lantern
+CAKE_BLOCK:0,Cake Block
+DIODE_BLOCK_OFF:0,Redstone Repeater Block Off
+DIODE_BLOCK_ON:0,Redstone Repeater Block On
+STAINED_GLASS:14,Red Stained Glass
+STAINED_GLASS:15,Black Stained Glass
+STAINED_GLASS:12,Brown Stained Glass
+STAINED_GLASS:13,Green Stained Glass
+STAINED_GLASS:10,Purple Stained Glass
+STAINED_GLASS:11,Blue Stained Glass
+STAINED_GLASS:8,Light Gray Stained Glass
+STAINED_GLASS:9,Cyan Stained Glass
+STAINED_GLASS:6,Pink Stained Glass
+STAINED_GLASS:7,Gray Stained Glass
+STAINED_GLASS:4,Yellow Stained Glass
+STAINED_GLASS:5,Lime Stained Glass
+STAINED_GLASS:2,Magenta Stained Glass
+STAINED_GLASS:3,Light Blue Stained Glass
+STAINED_GLASS:0,White Stained Glass
+STAINED_GLASS:1,Orange Stained Glass
+TRAP_DOOR:0,Trapdoor
+MONSTER_EGGS:0,Stone Monster Egg
+MONSTER_EGGS:1,Cobblestone Monster Egg
+MONSTER_EGGS:2,Stone Brick Monster Egg
+MONSTER_EGGS:3,Mossy Stone Brick Monster Egg
+MONSTER_EGGS:4,Cracked Stone Monster Egg
+MONSTER_EGGS:5,Chiseled Stone Monster Egg
+SMOOTH_BRICK:0,Stone Bricks
+SMOOTH_BRICK:1,Mossy Stone Brick
+SMOOTH_BRICK:2,Cracked Stone Brick
+HUGE_MUSHROOM_1:0,Brown Mushroom Cap
+HUGE_MUSHROOM_2:0,Red Mushroom Cap
+IRON_FENCE:0,Iron Bars
+THIN_GLASS:0,Glass Pane
+MELON_BLOCK:0,Melon Block
+PUMPKIN_STEM:0,Pumpkin Stem
+MELON_STEM:0,Melon Stem
+VINE:0,Vine
+FENCE_GATE:0,Fence Gate
+BRICK_STAIRS:0,Brick Stairs
+SMOOTH_STAIRS:0,Stone Brick Stairs
+MYCEL:0,Mycelium
+WATER_LILY:0,Lily Pad
+NETHER_BRICK:0,Nether brick
+NETHER_FENCE:0,Nether Brick Fence
+NETHER_BRICK_STAIRS:0,Nether Brick Stairs
+NETHER_WARTS:0,Nether Wart
+ENCHANTMENT_TABLE:0,Enchantment Table
+BREWING_STAND:0,Brewing Stand Block
+CAULDRON:0,Cauldron
+ENDER_PORTAL:0,End Portal
+ENDER_PORTAL_FRAME:0,End Portal Frame
+ENDER_STONE:0,End Stone
+DRAGON_EGG:0,Dragon Egg
+REDSTONE_LAMP_OFF:0,Redstone Lamp Off
+REDSTONE_LAMP_ON:0,Redstone Lamp On
+WOOD_DOUBLE_STEP:0,Double Oak Wooden Slab
+WOOD_STEP:0,Wooden Slab Block
+COCOA:0,Cocoa Plant
+SANDSTONE_STAIRS:0,Sandstone Stairs
+EMERALD_ORE:0,Emerald Ore
+ENDER_CHEST:0,Ender Chest
+TRIPWIRE_HOOK:0,Tripwire Hook
+TRIPWIRE:0,Tripwire
+EMERALD_BLOCK:0,Emerald Block
+SPRUCE_WOOD_STAIRS:0,Spruce Wood Stairs
+BIRCH_WOOD_STAIRS:0,Birch Wood Stairs
+JUNGLE_WOOD_STAIRS:0,Jungle Wood Stairs
+COMMAND:0,Command Block
+BEACON:0,Beacon
+COBBLE_WALL:0,Cobblestone Wall
+COBBLE_WALL:1,Mossy Cobblestone Wall
+FLOWER_POT:0,Flower Pot Block
+CARROT:0,Carrot Block
+POTATO:0,Potato Block
+WOOD_BUTTON:0,Wooden Button
+SKULL:0,Mob Head
+ANVIL:0,Anvil
+TRAPPED_CHEST:0,Trapped Chest
+GOLD_PLATE:0,Weighted Pressure Plate Light
+IRON_PLATE:0,Weighted Pressure Plate Heavy
+REDSTONE_COMPARATOR_OFF:0,Redstone Comparator Inactive
+REDSTONE_COMPARATOR_ON:0,Redstone Comparator Active
+DAYLIGHT_DETECTOR:0,Daylight Sensor
+REDSTONE_BLOCK:0,Redstone Block
+QUARTZ_ORE:0,Nether Quartz Ore
+HOPPER:0,Hopper
+QUARTZ_BLOCK:2,Pillar Quartz Block
+QUARTZ_BLOCK:0,Quartz Block
+QUARTZ_BLOCK:1,Chiseled Quartz Block
+QUARTZ_STAIRS:0,Quartz Stairs
+ACTIVATOR_RAIL:0,Activator Rail
+DROPPER:0,Dropper
+STAINED_CLAY:14,Red Stained Clay
+STAINED_CLAY:15,Black Stained Clay
+STAINED_CLAY:12,Brown Stained Clay
+STAINED_CLAY:13,Green Stained Clay
+STAINED_CLAY:10,Purple Stained Clay
+STAINED_CLAY:11,Blue Stained Clay
+STAINED_CLAY:8,Light Gray Stained Clay
+STAINED_CLAY:9,Cyan Stained Clay
+STAINED_CLAY:6,Pink Stained Clay
+STAINED_CLAY:7,Gray Stained Clay
+STAINED_CLAY:4,Yellow Stained Clay
+STAINED_CLAY:5,Lime Stained Clay
+STAINED_CLAY:2,Magenta Stained Clay
+STAINED_CLAY:3,Light Blue Stained Clay
+STAINED_CLAY:0,White Stained Clay
+STAINED_CLAY:1,Orange Stained Clay
+STAINED_GLASS_PANE:14,Red Stained Glass Pane
+STAINED_GLASS_PANE:15,Black Stained Glass Pane
+STAINED_GLASS_PANE:12,Brown Stained Glass Pane
+STAINED_GLASS_PANE:13,Green Stained Glass Pane
+STAINED_GLASS_PANE:10,Purple Stained Glass Pane
+STAINED_GLASS_PANE:11,Blue Stained Glass Pane
+STAINED_GLASS_PANE:8,Light Gray Stained Glass Pane
+STAINED_GLASS_PANE:9,Cyan Stained Glass Pane
+STAINED_GLASS_PANE:6,Pink Stained Glass Pane
+STAINED_GLASS_PANE:7,Gray Stained Glass Pane
+STAINED_GLASS_PANE:4,Yellow Stained Glass Pane
+STAINED_GLASS_PANE:5,Lime Stained Glass Pane
+STAINED_GLASS_PANE:2,Magenta Stained Glass Pane
+STAINED_GLASS_PANE:3,Light Blue Stained Glass Pane
+STAINED_GLASS_PANE:0,White Stained Glass Pane
+STAINED_GLASS_PANE:1,Orange Stained Glass Pane
+LOG_2:0,Acacia Wood
+LOG_2:1,Dark Oak Wood
+ACACIA_STAIRS:0,Acacia Wood Stairs
+DARK_OAK_STAIRS:0,Dark Oak Wood Stairs
+HAY_BLOCK:0,Hay Bale
+CARPET:15,Black Carpet
+CARPET:10,Purple Carpet
+CARPET:11,Blue Carpet
+CARPET:12,Brown Carpet
+CARPET:13,Green Carpet
+CARPET:14,Red Carpet
+CARPET:8,Light Gray Carpet
+CARPET:9,Cyan Carpet
+CARPET:6,Pink Carpet
+CARPET:7,Gray Carpet
+CARPET:4,Yellow Carpet
+CARPET:5,Lime Carpet
+CARPET:0,White Carpet
+CARPET:1,Orange Carpet
+CARPET:2,Magenta Carpet
+CARPET:3,Light Blue Carpet
+HARD_CLAY:0,Hardened Clay
+COAL_BLOCK:0,Block Of Coal
+PACKED_ICE:0,Packed Ice
+DOUBLE_PLANT:1,Lilac
+DOUBLE_PLANT:2,Double Tallgrass
+DOUBLE_PLANT:3,Large Fern
+DOUBLE_PLANT:4,Rose Bush
+DOUBLE_PLANT:5,Peony
+DOUBLE_PLANT:0,Sunflower
+IRON_SPADE:0,Iron Shovel
+IRON_PICKAXE:0,Iron Pickaxe
+IRON_AXE:0,Iron Axe
+FLINT_AND_STEEL:0,Flint and Steel
+APPLE:0,Apple
+BOW:0,Bow
+ARROW:0,Arrow
+COAL:0,Coal
+COAL:1,Charcoal
+DIAMOND:0,Diamond
+IRON_INGOT:0,Iron Ignot
+GOLD_INGOT:0,Gold Ignot
+IRON_SWORD:0,Iron Sword
+WOOD_SWORD:0,Wooden Sword
+WOOD_SPADE:0,Wooden Shovel
+WOOD_PICKAXE:0,Wooden Pickaxe
+WOOD_AXE:0,Wooden Axe
+STONE_SWORD:0,Stone Sword
+STONE_SPADE:0,Stone Shovel
+STONE_PICKAXE:0,Stone Pickaxe
+STONE_AXE:0,Stone Axe
+DIAMOND_SWORD:0,Diamond Sword
+DIAMOND_SPADE:0,Diamond Shovel
+DIAMOND_PICKAXE:0,Diamond Pickaxe
+DIAMOND_AXE:0,Diamond Axe
+STICK:0,Stick
+BOWL:0,Bowl
+MUSHROOM_SOUP:0,Mushroom Stew
+GOLD_SWORD:0,Gold Sword
+GOLD_SPADE:0,Gold Shovel
+GOLD_PICKAXE:0,Gold Pickaxe
+GOLD_AXE:0,Gold Axe
+STRING:0,String
+FEATHER:0,Feather
+SULPHUR:0,Gunpowder
+WOOD_HOE:0,Wooden Hoe
+STONE_HOE:0,Stone Hoe
+IRON_HOE:0,Iron Hoe
+DIAMOND_HOE:0,Diamond Hoe
+GOLD_HOE:0,Gold Hoe
+SEEDS:0,Wheat Seeds
+WHEAT:0,Wheat
+BREAD:0,Bread
+LEATHER_HELMET:0,Leather Cap
+LEATHER_CHESTPLATE:0,Leather Tunic
+LEATHER_LEGGINGS:0,Leather Pants
+LEATHER_BOOTS:0,Leather Boots
+CHAINMAIL_HELMET:0,Chainmail Helmet
+CHAINMAIL_CHESTPLATE:0,Chainmail Chestplate
+CHAINMAIL_LEGGINGS:0,Chainmail Leggings
+CHAINMAIL_BOOTS:0,Chainmail Boots
+IRON_HELMET:0,Iron Helmet
+IRON_CHESTPLATE:0,Iron Chestplate
+IRON_LEGGINGS:0,Iron Leggings
+IRON_BOOTS:0,Iron Boots
+DIAMOND_HELMET:0,Diamond Helmet
+DIAMOND_CHESTPLATE:0,Diamond Chestplate
+DIAMOND_LEGGINGS:0,Diamond Leggings
+DIAMOND_BOOTS:0,Diamond Boots
+GOLD_HELMET:0,Gold Helmet
+GOLD_CHESTPLATE:0,Gold Chestplate
+GOLD_LEGGINGS:0,Gold Legggings
+GOLD_BOOTS:0,Gold Boots
+FLINT:0,Flint
+PORK:0,Raw Porkchop
+GRILLED_PORK:0,Cooked Porkchop
+PAINTING:0,Painting
+GOLDEN_APPLE:0,Golden Apple
+SIGN:0,Sign
+WOOD_DOOR:0,Wooden Door
+BUCKET:0,Bucket
+WATER_BUCKET:0,Bucket of Water
+LAVA_BUCKET:0,Bucket of Lava
+MINECART:0,Minecart
+SADDLE:0,Saddle
+IRON_DOOR:0,Iron Door
+REDSTONE:0,Redstone Dust
+SNOW_BALL:0,SnowBall
+BOAT:0,Boat
+LEATHER:0,Leather
+MILK_BUCKET:0,Bucket of Milk
+CLAY_BRICK:0,Clay Brick
+CLAY_BALL:0,Clay
+SUGAR_CANE:0,Sugar Cane
+PAPER:0,Paper
+BOOK:0,Book
+SLIME_BALL:0,Slime Ball
+STORAGE_MINECART:0,Minecart With Furnace
+POWERED_MINECART:0,Minecart With Chest
+EGG:0,Egg
+COMPASS:0,Compass
+FISHING_ROD:0,Fishing Rod
+WATCH:0,Watch
+GLOWSTONE_DUST:0,Glowstone Dust
+RAW_FISH:0,Raw Fish
+RAW_FISH:1,Raw Salmon
+RAW_FISH:2,Clownfish
+RAW_FISH:3,Pufferfish
+COOKED_FISH:0,Cooked Fish
+COOKED_FISH:1,Cooked Salmon
+INK_SACK:0,Ink Sack
+INK_SACK:1,Rose Red Dye
+INK_SACK:10,Lime Dye
+INK_SACK:11,Dandelion Yellow Dye
+INK_SACK:12,Light Blue Dye
+INK_SACK:13,Pink Dye
+INK_SACK:14,Orange Dye
+INK_SACK:15,Bone Meal
+INK_SACK:2,Cactus Green
+INK_SACK:3,Cocoa Bean
+INK_SACK:4,Lapis Lazuli
+INK_SACK:5,Purple Dye
+INK_SACK:6,Cyan Dye
+INK_SACK:7,Light Gray Dye
+INK_SACK:8,Gray Dye
+INK_SACK:9,Magenta Dye
+BONE:0,Bone
+SUGAR:0,Sugar
+CAKE:0,Cake
+BED:0,Bed
+DIODE:0,Redstone Repeater
+COOKIE:0,Cookie
+MAP:0,Map
+SHEARS:0,Shears
+MELON:0,Melon
+PUMPKIN_SEEDS:0,Pumpkin Seeds
+MELON_SEEDS:0,Melon Seeds
+RAW_BEEF:0,Raw Beef
+COOKED_BEEF:0,Steak
+RAW_CHICKEN:0,Raw Chicken
+COOKED_CHICKEN:0,Cooked Chicken
+ROTTEN_FLESH:0,Rotten Flesh
+ENDER_PEARL:0,Ender Pearl
+BLAZE_ROD:0,Blaze Rod
+GHAST_TEAR:0,Ghast Tear
+GOLD_NUGGET:0,Gold Nugget
+NETHER_STALK:0,Nether Wart Seeds
+POTION:0,Water Bottle
+POTION:16,Awkward Potion
+POTION:32,Thick Potion
+POTION:64,Mundane Potion
+POTION:8195,Fire Resistance Potion 3:00
+POTION:8259,Fire Resistance Potion 8:00
+POTION:8204,Harming Potion
+POTION:8236,Harming Potion 2
+POTION:8197,Healing Potion
+POTION:8229,Healing Potion 2
+POTION:8206,Invisibility Potion 3:00
+POTION:8270,Invisibility Potion 8:00
+POTION:8198,Night Vision Potion 3:00
+POTION:8262,Night Vision Potion 8:00
+POTION:8196,Poison Potion 0:45
+POTION:8260,Poison Potion 2:00
+POTION:8228,Poison Potion 2 0:22
+POTION:8292,Poison Potion 2 1:00
+POTION:8193,Regeneration Potion 0:45
+POTION:8257,Regeneration Potion 2:00
+POTION:8225,Regeneration Potion 2 0:22
+POTION:8289,Regeneration Potion 2 1:00
+POTION:8202,Slowness Potion 1:30
+POTION:8266,Slowness Potion 4:00
+POTION:8201,Strength Potion 3:00
+POTION:8265,Strength Potion 8:00
+POTION:8233,Strength Potion 2 1:30
+POTION:8297,Strength Potion 2 4:00
+POTION:8194,Swiftness Potion 3:00
+POTION:8258,Swiftness Potion 8:00
+POTION:8226,Swiftness Potion 2 1:30
+POTION:8290,Swiftness Potion 2 4:00
+POTION:8205,Water Breathing Potion 3:00
+POTION:8269,Water Breathing Potion 8:00
+POTION:8200,Weakness Potion 1:30
+POTION:8264,Weakness Potion 4:00
+POTION:16387,Fire Resistance Splash 2:15
+POTION:16451,Fire Resistance Splash 6:00
+POTION:16396,Harming Splash
+POTION:16428,Harming Splash 2
+POTION:16389,Healing Splash
+POTION:16421,Healing Splash 2
+POTION:16398,Invisibility Splash 2:15
+POTION:16462,Invisibility Splash 6:00
+POTION:16390,Night Vision Splash 2:15
+POTION:16454,Night Vision Splash 6:00
+POTION:16388,Poison Splash 0:33
+POTION:16452,Poison Splash 1:30
+POTION:16420,Poison Splash 2 0:16
+POTION:16484,Poison Splash 2 0:45
+POTION:16385,Regeneration Splash 0:33
+POTION:16449,Regeneration Splash 1:30
+POTION:16417,Regeneration Splash 2 0:16
+POTION:16481,Regeneration Splash 2 0:45
+POTION:16394,Slowness Splash 1:07
+POTION:16458,Slowness Splash 3:00
+POTION:16393,Strength Splash 2:15
+POTION:16457,Strength Splash 6:00
+POTION:16425,Strength Splash 2 1:07
+POTION:16489,Strength Splash 2 3:00
+POTION:16386,Swiftness Splash 2:15
+POTION:16450,Swiftness Splash 6:00
+POTION:16418,Swiftness Splash 2 1:07
+POTION:16482,Swiftness Splash 2 3:00
+POTION:16397,Water Breathing Splash 2:15
+POTION:16461,Water Breathing Splash 6:00
+POTION:16392,Weakness Splash 1:07
+POTION:16456,Weakness Splash 3:00
+GLASS_BOTTLE:0,Glass Bottle
+SPIDER_EYE:0,Spider Eye
+FERMENTED_SPIDER_EYE:0,Fermented Spider Eye
+BLAZE_POWDER:0,Blaze Powder
+MAGMA_CREAM:0,Magma Cream
+BREWING_STAND_ITEM:0,Brewing Stand
+CAULDRON_ITEM:0,Cauldron
+EYE_OF_ENDER:0,Eye Of Ender
+SPECKLED_MELON:0,Glistering Melon
+MONSTER_EGG:50,Spawn Creeper
+MONSTER_EGG:51,Spawn Skeleton
+MONSTER_EGG:52,Spawn Spider
+MONSTER_EGG:54,Spawn Zombie
+MONSTER_EGG:55,Spawn Slime
+MONSTER_EGG:56,Spawn Ghast
+MONSTER_EGG:57,Spawn Zombie Pigman
+MONSTER_EGG:58,Spawn Enderman
+MONSTER_EGG:59,Spawn Cave Spider
+MONSTER_EGG:60,Spawn Silverfish
+MONSTER_EGG:61,Spawn Blaze
+MONSTER_EGG:62,Spawn Magma Cube
+MONSTER_EGG:90,Spawn Pig
+MONSTER_EGG:91,Spawn Sheep
+MONSTER_EGG:92,Spawn Cow
+MONSTER_EGG:93,Spawn Chicken
+MONSTER_EGG:94,Spawn Squid
+MONSTER_EGG:95,Spawn Wolf
+MONSTER_EGG:96,Spawn Mooshroom
+MONSTER_EGG:98,Spawn Ocelot
+MONSTER_EGG:120,Spawn Villager
+MONSTER_EGG:66,Spawn Witch
+MONSTER_EGG:65,Spawn Bat
+MONSTER_EGG:100,Spawn Horse
+EXP_BOTTLE:0,Experience Potion
+FIREBALL:0,Fire Charge
+BOOK_AND_QUILL:0,Book And Quill
+WRITTEN_BOOK:0,Written Book
+EMERALD:0,Emerald
+ITEM_FRAME:0,Item Frame
+FLOWER_POT_ITEM:0,Flower Pot
+CARROT_ITEM:0,Carrot
+POTATO_ITEM:0,Potato
+BAKED_POTATO:0,Baked Potato
+POISONOUS_POTATO:0,Poisonous Potato
+EMPTY_MAP:0,Empty Map
+GOLDEN_CARROT:0,Golden Carrot
+SKULL_ITEM:0,Skeleton Head
+SKULL_ITEM:1,Wither Skeleton Skull
+SKULL_ITEM:2,Zombie Head
+SKULL_ITEM:3,Mob Head
+SKULL_ITEM:4,Creeper Head
+CARROT_STICK:0,Carrot On A Stick
+NETHER_STAR:0,Nether Star
+PUMPKIN_PIE:0,Pumpkin Pie
+FIREWORK:0,Firework Rocket
+FIREWORK_CHARGE:0,Firework Star
+ENCHANTED_BOOK:0,Enchanted Book
+REDSTONE_COMPARATOR:0,Redstone Comparator
+NETHER_BRICK_ITEM:0,Nether Brick-Item
+QUARTZ:0,Nether Quartz
+EXPLOSIVE_MINECART:0,Minecart With TNT
+HOPPER_MINECART:0,Minecart With Hopper
+IRON_BARDING:0,Iron Horse Armor
+GOLD_BARDING:0,Gold Horse Armor
+DIAMOND_BARDING:0,Diamond Horse Armor
+LEASH:0,Lead
+NAME_TAG:0,Name Tag
+GOLD_RECORD:0,Music Disk 13
+GREEN_RECORD:0,Music Disk Cat
+RECORD_3:0,Music Disk Blocks
+RECORD_4:0,Music Disk Chirp
+RECORD_5:0,Music Disk Far
+RECORD_6:0,Music Disk Maill
+RECORD_7:0,Music Disk Mellohi
+RECORD_8:0,Music Disk Stal
+RECORD_9:0,Music Disk Strad
+RECORD_10:0,Music Disk Ward
+RECORD_11:0,Music Disk 11
+RECORD_12:0,Music Disk Wait

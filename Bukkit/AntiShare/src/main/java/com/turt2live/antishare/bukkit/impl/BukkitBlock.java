@@ -1,6 +1,7 @@
 package com.turt2live.antishare.bukkit.impl;
 
 import com.turt2live.antishare.*;
+import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.engine.RejectionList;
 import org.bukkit.block.Block;
@@ -81,7 +82,7 @@ public class BukkitBlock implements ABlock {
 
     // Used for permission checks
     private String getFriendlyName() {
-        return block.getType().name().toLowerCase(); // TODO: Better friendly name
+        return AntiShare.getInstance().getMaterialProvider().getPlayerFriendlyName(block);
     }
 
     /**

@@ -24,6 +24,10 @@ public class AntiShare extends JavaPlugin {
                 sender.sendMessage(ChatColor.GREEN + "Running falling sand check...");
                 FallingSandCheck check = new FallingSandCheck(this);
                 check.begin();
+            }else if(args[0].equalsIgnoreCase("items")){
+                sender.sendMessage(ChatColor.GREEN+"Translating items.csv from Essentials format...");
+                EssentialsToAntiShare check = new EssentialsToAntiShare(this);
+                check.begin();
             } else
                 sender.sendMessage(ChatColor.RED + "Unknown command.");
         } else

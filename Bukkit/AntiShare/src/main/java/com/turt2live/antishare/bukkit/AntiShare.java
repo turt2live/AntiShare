@@ -12,12 +12,16 @@ import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.EventListener;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 import com.turt2live.antishare.io.flatfile.FileBlockManager;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * The AntiShare Bukkit Plugin main class
@@ -42,6 +46,60 @@ public class AntiShare extends JavaPlugin {
 
         dataFolder = new File(getDataFolder(), "data");
         if (!dataFolder.exists()) dataFolder.mkdirs();
+
+        // Load material defaults
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("item_aliases.csv")));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.startsWith("#")) continue;
+
+                String[] parts = line.split(",");
+                if (parts.length != 2) continue;
+
+                String name = parts[0].trim();
+                String material = parts[1].trim();
+
+                Material mat = Material.matchMaterial(material);
+                if (mat == null) continue;
+
+                materialProvider.insertAlias(name, mat);
+            }
+            reader.close();
+        } catch (IOException e) {
+            getLogger().warning("Could not load internal item_aliases.csv, you may have weird errors");
+        }
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("item_lang.csv")));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.startsWith("#")) continue;
+
+                String[] parts = line.split(",", 2);
+
+                String idCombo = parts[0];
+                String playerName = parts[1];
+
+                parts = idCombo.split(":", 2);
+                String materialName = parts[0];
+                String dataName = parts[1];
+
+                try {
+                    short data = Short.parseShort(dataName);
+                    Material material = Material.matchMaterial(materialName);
+
+                    if (material == null) continue;
+
+                    materialProvider.insertPlayerFriendly(material, data, playerName);
+                } catch (NumberFormatException e) {
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            getLogger().warning("Could not load internal item_lang.csv, you may have weird errors");
+        }
     }
 
     @Override
@@ -103,7 +161,6 @@ public class AntiShare extends JavaPlugin {
         // Load economy hook
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             Engine.getInstance().setEconomy(new VaultEconomy());
-            materialProvider = new VaultMaterialProvider();
         }
     }
 

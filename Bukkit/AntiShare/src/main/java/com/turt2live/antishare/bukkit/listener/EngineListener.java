@@ -4,6 +4,7 @@ import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.APlayer;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.PermissionNodes;
+import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
@@ -45,7 +46,7 @@ public class EngineListener implements Listener {
 
         if (engine.getEngine(block.getWorld().getName()).processBlockPlace(player, block, gamemode)) {
             event.setCancelled(true);
-            String blockType = event.getBlock().getType().name().toLowerCase(); // TODO: PLAYER-FRIENDLY
+            String blockType = AntiShare.getInstance().getMaterialProvider().getPlayerFriendlyName(event.getBlock());
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PLACE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
             alert(Lang.NAUGHTY_ADMIN_PLACE, event.getPlayer(), event.getBlock());
         }
@@ -63,7 +64,7 @@ public class EngineListener implements Listener {
 
     private void alert(String langNode, Player player, Block block) {
         if (langNode == null || player == null || block == null) return;
-        alert(langNode, player.getName(), block.getType().name().toLowerCase()); // TODO: Player-friendly
+        alert(langNode, player.getName(), AntiShare.getInstance().getMaterialProvider().getPlayerFriendlyName(block));
     }
 
     private void alert(String langNode, String playerName, String variable) {
