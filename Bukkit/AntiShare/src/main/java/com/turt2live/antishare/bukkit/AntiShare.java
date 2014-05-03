@@ -157,11 +157,6 @@ public class AntiShare extends JavaPlugin {
         for (World world : getServer().getWorlds()) {
             Engine.getInstance().createWorldEngine(world.getName());
         }
-
-        // Load economy hook
-        if (getServer().getPluginManager().getPlugin("Vault") != null) {
-            Engine.getInstance().setEconomy(new VaultEconomy());
-        }
     }
 
     @EventListener

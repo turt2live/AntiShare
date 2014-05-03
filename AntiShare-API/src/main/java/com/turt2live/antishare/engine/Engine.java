@@ -1,7 +1,6 @@
 package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.configuration.groups.GroupManager;
-import com.turt2live.antishare.economy.ASEconomy;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
@@ -40,7 +39,6 @@ public final class Engine {
     private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<String, WorldEngine>();
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
-    private ASEconomy economy;
     private GroupManager groupManager = null;
 
     private Engine() {
@@ -93,28 +91,6 @@ public final class Engine {
 
         this.groupManager = manager;
         this.groupManager.loadAll();
-    }
-
-    /**
-     * Gets the economy engine for this engine. If economy support is
-     * not configured or not enabled, this will return null
-     *
-     * @return the economy instance, or null for none
-     */
-    public ASEconomy getEconomy() {
-        if (!isReady()) throw new EngineNotInitializedException();
-
-        return economy;
-    }
-
-    /**
-     * Sets the economy instance to use for this enngine. If null, it is assumed
-     * the behaviour of "no economy" is applicable.
-     *
-     * @param economy the economy, may be null
-     */
-    public void setEconomy(ASEconomy economy) {
-        this.economy = economy;
     }
 
     /**

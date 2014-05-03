@@ -1,7 +1,6 @@
 package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.configuration.groups.GroupManager;
-import com.turt2live.antishare.economy.ASEconomy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,17 +48,6 @@ public class EngineTest {
     @Test(expected = IllegalArgumentException.class)
     public void testNullGroupManager() {
         Engine.getInstance().setGroupManager(null);
-    }
-
-    @Test
-    public void testEconomy() {
-        assertNull(Engine.getInstance().getEconomy());
-
-        Engine.getInstance().setEconomy(mock(ASEconomy.class));
-        assertNotNull(Engine.getInstance().getEconomy());
-
-        Engine.getInstance().setEconomy(null);
-        assertNull(Engine.getInstance().getEconomy());
     }
 
     @Test
