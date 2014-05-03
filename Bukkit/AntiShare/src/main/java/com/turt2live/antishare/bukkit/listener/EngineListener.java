@@ -3,13 +3,16 @@ package com.turt2live.antishare.bukkit.listener;
 import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.APlayer;
 import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.AlertManager;
+import com.turt2live.antishare.PermissionNodes;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.engine.Engine;
-import com.turt2live.antishare.events.general.AlertEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -44,7 +47,7 @@ public class EngineListener implements Listener {
             event.setCancelled(true);
             String blockType = event.getBlock().getType().name().toLowerCase(); // TODO: PLAYER-FRIENDLY
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PLACE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
-            AlertManager.triggerAlert(AlertEvent.AlertType.ADMIN_BLOCK_PLACE, player, block);
+            alert(Lang.NAUGHTY_ADMIN_PLACE, event.getPlayer(), event.getBlock());
         }
     }
 
@@ -56,6 +59,22 @@ public class EngineListener implements Listener {
     @EventHandler
     public void onWorldUnload(WorldUnloadEvent event) {
         engine.unloadWorldEngine(event.getWorld().getName());
+    }
+
+    private void alert(String langNode, Player player, Block block) {
+        if (langNode == null || player == null || block == null) return;
+        alert(langNode, player.getName(), block.getType().name().toLowerCase()); // TODO: Player-friendly
+    }
+
+    private void alert(String langNode, String playerName, String variable) {
+        String compiled = new LangBuilder(Lang.getInstance().getFormat(langNode)).withPrefix()
+                .setReplacement(LangBuilder.SELECTOR_PLAYER, playerName)
+                .setReplacement(LangBuilder.SELECTOR_VARIABLE, variable)
+                .build();
+
+        if (ChatColor.stripColor(compiled).equalsIgnoreCase("disabled")) return;
+
+        Bukkit.broadcast(compiled, PermissionNodes.GET_ALERTS);
     }
 
 }

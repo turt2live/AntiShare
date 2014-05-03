@@ -27,8 +27,9 @@
 # -------------------------------------------------------
 prefix: '&7[&bAntiShare&7]'
 naughty:
+    # To disabled an admin broadcast, set the message to 'disabled' and the
+    # plugin will handle the rest.
     admin:
-        default: '&c@p did a bad thing'
         place: '&c@p &7tried to place a &c@v'
     place: '&cYou cannot place that &4@v'
 
