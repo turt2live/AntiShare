@@ -15,12 +15,12 @@ public class BukkitBlockList extends GenericBlockInformationList implements Bloc
     private ListType type = ListType.CUSTOM;
 
     public BukkitBlockList(MaterialProvider provider) {
-        this(provider,null);
+        this(provider, null);
     }
 
     public BukkitBlockList(MaterialProvider provider, ListType type) {
         super(provider);
-        if(type==null)type = ListType.CUSTOM;
+        if (type == null) type = ListType.CUSTOM;
         this.type = type;
     }
 

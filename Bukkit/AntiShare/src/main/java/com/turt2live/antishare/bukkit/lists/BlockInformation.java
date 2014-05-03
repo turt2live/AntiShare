@@ -17,14 +17,15 @@ public class BlockInformation {
 
     /**
      * Determines if this information is higher priority than the other
+     *
      * @param other the other
      * @return true if this is higher, false otherwise
      */
-    public boolean isHigher(BlockInformation other){
-        if(other==null)return true;
-        if(other.priority<=0&&this.priority>0) return true;
-        if(other.priority>0&&this.priority<=0)return false;
-        return other.priority>this.priority; // Higher number = lower priority
+    public boolean isHigher(BlockInformation other) {
+        if (other == null) return true;
+        if (other.priority <= 0 && this.priority > 0) return true;
+        if (other.priority > 0 && this.priority <= 0) return false;
+        return other.priority > this.priority; // Higher number = lower priority
     }
 
     @Override
