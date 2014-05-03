@@ -10,15 +10,15 @@ import org.bukkit.block.Block;
 
 import java.util.List;
 
-public class BukkitBlockList extends GenericBlockInformationList implements BlockTypeList, RejectionList {
+public class BukkitBlockList1 extends GenericBlockInformationList implements BlockTypeList, RejectionList {
 
     private ListType type = ListType.CUSTOM;
 
-    public BukkitBlockList(MaterialProvider provider) {
+    public BukkitBlockList1(MaterialProvider provider) {
         this(provider,null);
     }
 
-    public BukkitBlockList(MaterialProvider provider, ListType type) {
+    public BukkitBlockList1(MaterialProvider provider, ListType type) {
         super(provider);
         if(type==null)type = ListType.CUSTOM;
         this.type = type;
