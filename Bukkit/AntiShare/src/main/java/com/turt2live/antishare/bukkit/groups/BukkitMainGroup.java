@@ -4,7 +4,7 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.MaterialProvider;
-import com.turt2live.antishare.bukkit.lists.BukkitBlockList1;
+import com.turt2live.antishare.bukkit.lists.BukkitBlockList;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.MainGroup;
 import com.turt2live.antishare.engine.BlockTypeList;
@@ -32,7 +32,7 @@ public class BukkitMainGroup extends MainGroup {
     public BlockTypeList getTrackedList(ASGameMode gameMode) {
         if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
         MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-        BukkitBlockList1 list = new BukkitBlockList1(provider);
+        BukkitBlockList list = new BukkitBlockList(provider);
         list.populateBlocks(super.configuration.getStringList("blocks." + gameMode.name().toLowerCase(), new ArrayList<String>()));
         return list;
     }
@@ -42,7 +42,7 @@ public class BukkitMainGroup extends MainGroup {
         if (type == null) throw new IllegalArgumentException("list type cannot be null");
         String configKey = BukkitUtils.getStringName(type);
         MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-        BukkitBlockList1 list = new BukkitBlockList1(provider, type);
+        BukkitBlockList list = new BukkitBlockList(provider, type);
         list.populateBlocks(super.configuration.getStringList("lists." + configKey, new ArrayList<String>()));
         return list;
     }
