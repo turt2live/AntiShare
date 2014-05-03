@@ -25,7 +25,7 @@
 # &6 - Gold            &e - Yellow
 # &7 - Gray            &f - White
 # -------------------------------------------------------
-prefix: '&7[&aAntiShare&7]'
+prefix: '&7[&bAntiShare&7]'
 naughty:
     admin:
         default: '&c@p did a bad thing'
