@@ -17,9 +17,9 @@ import java.util.concurrent.ConcurrentMap;
 
 public class Minecraft implements MinecraftVersion {
 
-    private class UUIDStore {
-        UUID uuid;
-        long cached;
+    protected class UUIDStore {
+        public UUID uuid;
+        public long cached;
 
         public UUIDStore(UUID uuid, long cached) {
             this.uuid = uuid;
@@ -27,7 +27,7 @@ public class Minecraft implements MinecraftVersion {
         }
     }
 
-    private class NameStore {
+    protected class NameStore {
         String name;
         long cached;
 
@@ -37,10 +37,10 @@ public class Minecraft implements MinecraftVersion {
         }
     }
 
-    private static final long CACHE_EXPIRE = 60000; // 60 seconds
+    protected static final long CACHE_EXPIRE = 60000; // 60 seconds
 
-    private final ConcurrentMap<String, UUIDStore> BY_NAME = new ConcurrentHashMap<String, UUIDStore>();
-    private final ConcurrentMap<UUID, NameStore> BY_UUID = new ConcurrentHashMap<UUID, NameStore>();
+    protected final ConcurrentMap<String, UUIDStore> BY_NAME = new ConcurrentHashMap<String, UUIDStore>();
+    protected final ConcurrentMap<UUID, NameStore> BY_UUID = new ConcurrentHashMap<UUID, NameStore>();
 
     @Override
     public UUID getUUID(String name) {
@@ -128,7 +128,7 @@ public class Minecraft implements MinecraftVersion {
         }
     }
 
-    private void checkCache() {
+    protected void checkCache() {
         new Thread(new Runnable() {
             @Override
             public void run() {
