@@ -172,6 +172,7 @@ public final class WorldEngine {
      *
      * @param blocks the blocks affected by the blast, cannot be null
      */
+    // TODO: Unit test
     public void processExplosion(Map<ABlock, Boolean> blocks) {
         if (blocks == null) throw new IllegalArgumentException();
 
