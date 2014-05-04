@@ -35,6 +35,13 @@ blocks:
         # created block inherits the gamemode settings of the block
         # it grew from. Set to false to ignore this setting.
         grow-with-gamemode: true
+    hoppers:
+        # If true, hoppers will be denied cross-gamemode contamination.
+        # This means that 'creative' hoppers cannot transfer items
+        # to 'survival' hoppers, but would be able to transfer items
+        # to 'creative' or 'natural' hoppers. If false, hoppers are
+        # left untouched.
+        deny-mixed: true
 
 # AntiShare internal caching settings. These settings are generally
 # not touched unless you are looking to fine tune how AntiShare

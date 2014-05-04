@@ -1,6 +1,7 @@
 package com.turt2live.antishare.bukkit.abstraction;
 
 import com.turt2live.antishare.bukkit.AntiShare;
+import org.bukkit.event.Listener;
 
 /**
  * Used for abstracting the Minecraft version
@@ -44,6 +45,11 @@ public final class VersionSelector {
         }
         minecraft = mc;
         AntiShare.getInstance().getLogger().info("Loading support for " + (version.equals("pre") ? "v1_4_5_pre" : version));
+
+        // Register per-version events
+        if (minecraft instanceof Listener) {
+            AntiShare.getInstance().getServer().getPluginManager().registerEvents((Listener) minecraft, AntiShare.getInstance());
+        }
     }
 
     private static MinecraftVersion init(String version) {

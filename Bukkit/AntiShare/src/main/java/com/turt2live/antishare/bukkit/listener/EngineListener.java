@@ -2,6 +2,7 @@ package com.turt2live.antishare.bukkit.listener;
 
 import com.turt2live.antishare.*;
 import com.turt2live.antishare.bukkit.AntiShare;
+import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareExplodeEvent;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
@@ -222,6 +223,16 @@ public class EngineListener implements Listener {
     @EventHandler
     public void onWorldUnload(WorldUnloadEvent event) {
         engine.unloadWorldEngine(event.getWorld().getName());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onInventoryMoveCheck(AntiShareInventoryTransferEvent event) {
+        ABlock block1 = new BukkitBlock(event.getBlock1());
+        ABlock block2 = new BukkitBlock(event.getBlock2());
+
+        if (!engine.getEngine(block1.getWorld().getName()).processBlockInteraction(block1, block2)) {
+            event.setCancelled(true);
+        }
     }
 
     private void alert(String langNode, Player player, Block block) {

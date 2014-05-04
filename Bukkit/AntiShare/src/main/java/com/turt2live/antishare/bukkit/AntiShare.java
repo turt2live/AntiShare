@@ -143,6 +143,7 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setGroupManager(new BukkitGroupManager());
         Engine.getInstance().setPhysicsSettings(getConfig().getBoolean("blocks.physics.grow-with-gamemode", true), getConfig().getBoolean("blocks.physics.block-item-drop", true));
         Engine.getInstance().setAttachmentSettings(getConfig().getBoolean("blocks.attachments.break-as-placed", true), getConfig().getBoolean("blocks.attachments.deny-break", false));
+        Engine.getInstance().setHoppersDenyMixed(getConfig().getBoolean("blocks.hoppers.deny-mixed", true));
 
         // Setup listeners
         getServer().getPluginManager().registerEvents(new EngineListener(), this);

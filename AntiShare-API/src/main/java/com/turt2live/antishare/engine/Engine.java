@@ -44,6 +44,7 @@ public final class Engine {
     private boolean attachmentsDeny = false; // Mismatched attachments versus block break deny flag
     private boolean physicsGrow = false; // grow-with-gamemode flag
     private boolean physicsBlockItems = false; // drop items (physics) as gamemode placed flag
+    private boolean hoppersMixed = false; // hopper mixing of gamemodes flag
 
     private Engine() {
         newCacheTimer();
@@ -371,6 +372,34 @@ public final class Engine {
     // TODO: Unit test
     public boolean isAttachmentsDenyMismatchBreak() {
         return attachmentsDeny;
+    }
+
+    /**
+     * Sets whether or not hoppers (and other inventory transfers) are permitted
+     * to pull/push items between blocks of differing gamemodes. If the flag is
+     * set to true, inventory transfers will be denied for blocks which are of
+     * different gamemodes (such as a 'creative' hopper to a 'survival' hopper),
+     * however if at least one of the blocks is of type 'none' or both are the
+     * same type, interaction is not restricted. If the flag is set as false, natural
+     * hopper/item transfer behaviour can occur.
+     *
+     * @param flag the flag for hopper interaction mixing
+     */
+    // TODO: Unit test
+    public void setHoppersDenyMixed(boolean flag) {
+        this.hoppersMixed = flag;
+    }
+
+    /**
+     * Determines if hopper interaction between block types is
+     * denied.
+     *
+     * @return true if denied, false otherwise
+     * @see #setHoppersDenyMixed(boolean)
+     */
+    // TODO: Unit test
+    public boolean isHopperMixedInteractionDenied() {
+        return hoppersMixed;
     }
 
     private void newCacheTimer() {

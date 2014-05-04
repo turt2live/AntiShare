@@ -158,6 +158,7 @@ public final class WorldEngine {
      * @param spawned the spawned block, cannot be null
      * @param stems   the possible stems for the spawned block, cannot be null
      */
+    // TODO: Unit test
     public void processBlockStems(ABlock spawned, List<ABlock> stems) {
         if (spawned == null || stems == null) throw new IllegalArgumentException();
 
@@ -285,7 +286,7 @@ public final class WorldEngine {
     }
 
     /**
-     * Process a structure growth (such as a tree) by taking the source block
+     * Processes a structure growth (such as a tree) by taking the source block
      * and all applicable blocks into consideration.
      *
      * @param source    the source block, cannot be null
@@ -301,5 +302,46 @@ public final class WorldEngine {
                 blockManager.setBlockType(block.getLocation(), type);
             }
         }
+    }
+
+    /**
+     * Processes block interaction between two blocks. This may be two hoppers (for
+     * example) where items are being transferred between the two. Assuming the setting
+     * in the Engine is set, this will run through various checks (as outlined below) to
+     * determine if the interaction should be blocked. This will return 'false' to indicate
+     * the action should be BLOCKED and 'true' to indicate the action is permitted.
+     * <p/>
+     * The order of the arguments is not important as the cases are applied regardless of
+     * the 'source'. Order dependency must be determined, if needed, by the implementation.
+     * <p/>
+     * Assuming the {@link com.turt2live.antishare.engine.Engine#isHopperMixedInteractionDenied()}
+     * flag is set...
+     * <ul>
+     * <li>Case: Non-natural to Non-natural of different types: Denied</li>
+     * <li>Case: Non-natural to Non-natural of same types: Allowed</li>
+     * <li>Case: Non-natural to Natural: Allowed</li>
+     * <li>Case: Natural to Non-natural: Allowed</li>
+     * <li>Case: Natural to Natural: Allowed</li>
+     * </ul>
+     * <p/>
+     * Assuming the flag is false...
+     * <ul>
+     * <li>All cases allowed</li>
+     * </ul>
+     *
+     * @param block1 the first block, cannot be null
+     * @param block2 the second block, cannot be null
+     * @return the permitted flag; true for allowed, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processBlockInteraction(ABlock block1, ABlock block2) {
+        if (block1 == null || block2 == null) throw new IllegalArgumentException();
+
+        BlockType type1 = blockManager.getBlockType(block1.getLocation());
+        BlockType type2 = blockManager.getBlockType(block2.getLocation());
+
+        if (type1 == type2 || type1 == BlockType.UNKNOWN || type2 == BlockType.UNKNOWN)
+            return true;
+        else return false;
     }
 }

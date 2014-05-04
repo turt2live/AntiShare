@@ -12,6 +12,7 @@ import java.util.UUID;
  *
  * @author turt2live
  */
+// TODO: Find a way to do a tiered system to avoid a bunch of copy/paste
 public interface MinecraftVersion {
 
     /**
