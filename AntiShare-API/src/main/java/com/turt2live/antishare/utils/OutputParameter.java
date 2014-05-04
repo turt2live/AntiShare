@@ -1,4 +1,4 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.utils;
 
 /**
  * Represents an output parameter which can be used similar to C#'s out keyword
