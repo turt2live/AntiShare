@@ -101,22 +101,21 @@ public final class WorldEngine {
 
         BlockTypeList list = new DefaultBlockTypeList();
         RejectionList reject = new DefaultRejectionList(RejectionList.ListType.BLOCK_PLACE);
-        ASGameMode gamemode = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             list = consolidatedGroup.getTrackedList(placeAs);
             reject = consolidatedGroup.getRejectionList(reject.getType());
-            gamemode = consolidatedGroup.getActingMode(gamemode);
+            placeAs = consolidatedGroup.getActingMode(placeAs);
         }
 
-        if (gamemode != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
-
-        TrackedState playerReaction = block.canPlace(player); // See javadocs
-        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
-        if (reject.isBlocked(block) && playerReaction == TrackedState.NOT_PRESENT) { // No allow permission & is denied
-            return true;
+        if (placeAs == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
+            TrackedState playerReaction = block.canPlace(player); // See javadocs
+            if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+            if (reject.isBlocked(block) && playerReaction == TrackedState.NOT_PRESENT) { // No allow permission & is denied
+                return true;
+            }
         }
 
         if (list.isTracked(block) && !player.hasPermission(PermissionNodes.FREE_PLACE)) {
@@ -124,5 +123,43 @@ public final class WorldEngine {
         }
 
         return false;
+    }
+
+    /**
+     * Processes a block grow event. This will internally determine what needs to be done
+     * to maintain plugin settings as well as systems operation. There is no need for
+     * a cancel flag as this event is purely informational.
+     *
+     * @param parent the parent block, cannot be null
+     * @param child  the child block, cannot be null
+     */
+    // TODO: Unit test
+    public void processBlockGrow(ABlock parent, ABlock child) {
+        if (parent == null || child == null) throw new IllegalArgumentException();
+
+        if (Engine.getInstance().isPhysicsGrowWithGamemode()) {
+            BlockType current = blockManager.getBlockType(parent.getLocation());
+            blockManager.setBlockType(child.getLocation(), current);
+        }
+    }
+
+    /**
+     * Processes a 'random' block break due to physics (such as water breaking seeds
+     * or sand breaking torches). Internally this will determine whether or not drops
+     * should be dropped (returning the appropriate return value) and update the system
+     * to maintain accuracy.
+     *
+     * @param block the block being broken, cannot be null
+     * @return true if there should be block drops, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processBlockPhysicsBreak(ABlock block) {
+        if (block == null) throw new IllegalArgumentException();
+
+        BlockType current = blockManager.getBlockType(block.getLocation());
+        if (Engine.getInstance().isPhysicsBreakAsGamemode()) {
+            return current != BlockType.CREATIVE;
+        }
+        return true;
     }
 }

@@ -3,8 +3,39 @@
 # This file contains all the information needed to control the plugin,
 # but not the settings for what to reject, allow, etc. For those settings
 # please see the group_main.yml file.
-#
-#
+
+
+# The default configuration group to use. For normal operation, do not change
+# this value. Please see group_main.yml for more information.
+default-group: main
+
+# Block settings for AntiShare
+blocks:
+    attachments:
+        # Indicates whether or not attached blocks (such as
+        # torches) should be broken as they were placed. If
+        # this is false, they will be broken as Minecraft
+        # says they will be (just fall off).
+        break-as-placed: true
+        # If an attached block is not of the gamemode for the
+        # person breaking the block, should they be denied
+        # breaking the block? If yes, set this to true.
+        deny-break: false
+    physics:
+        # If true, blocks that 'randomly' break due to world
+        # conditions (like cacti) will be 'broken' as placed
+        # when they attempt to spawn an item. For example, with
+        # cacti, when they are broken due to another block the
+        # resulting items from the block break would be as per
+        # the placed gamemode (meaning if the cacti was placed
+        # in creative mode, it will drop nothing). Set to false
+        # to have the default Minecraft action occur.
+        block-item-drop: true
+        # If true, when a block 'grows' (such as vines) the newly
+        # created block inherits the gamemode settings of the block
+        # it grew from. Set to false to ignore this setting.
+        grow-with-gamemode: true
+
 # AntiShare internal caching settings. These settings are generally
 # not touched unless you are looking to fine tune how AntiShare
 # operates in regards to the block game mode cache system.
@@ -36,6 +67,3 @@ caching:
     # objects are removed from memory. Values less than or equal to zero
     # inherit a default of 60000 (1 minute).
     cache-timer-interval: 60000
-# The default configuration group to use. For normal operation, do not change
-# this value. Please see group_main.yml for more information.
-default-group: main

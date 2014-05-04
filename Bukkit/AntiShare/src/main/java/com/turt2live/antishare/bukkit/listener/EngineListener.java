@@ -1,9 +1,6 @@
 package com.turt2live.antishare.bukkit.listener;
 
-import com.turt2live.antishare.ABlock;
-import com.turt2live.antishare.APlayer;
-import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.PermissionNodes;
+import com.turt2live.antishare.*;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
@@ -12,12 +9,15 @@ import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.engine.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 
@@ -50,6 +50,52 @@ public class EngineListener implements Listener {
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PLACE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
             alert(Lang.NAUGHTY_ADMIN_PLACE, event.getPlayer(), event.getBlock());
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onSpawn(ItemSpawnEvent event) {
+        // TODO: Better detection...
+        ABlock block = new BukkitBlock(event.getLocation().getBlock());
+        if (!engine.getEngine(block.getWorld().getName()).processBlockPhysicsBreak(block)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockGrow(BlockGrowEvent event) {
+        Block source = event.getBlock().getRelative(BlockFace.DOWN);
+        Block child = event.getNewState().getBlock();
+
+        // TODO: Handle crops (pumpkins)
+
+        if (source.getType() == Material.CACTUS || source.getType() == Material.SUGAR_CANE_BLOCK) {
+            engine.getEngine(source.getWorld().getName()).processBlockGrow(new BukkitBlock(source), new BukkitBlock(child));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockSpread(BlockSpreadEvent event) {
+        ABlock source = new BukkitBlock(event.getSource());
+        ABlock child = new BukkitBlock(event.getBlock());
+        engine.getEngine(source.getWorld().getName()).processBlockGrow(source, child);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBurn(BlockBurnEvent event) {
+        ABlock block = new BukkitBlock(event.getBlock());
+        engine.getEngine(block.getWorld().getName()).getBlockManager().setBlockType(block.getLocation(), BlockType.UNKNOWN);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onFade(BlockFadeEvent event) {
+        ABlock block = new BukkitBlock(event.getBlock());
+        engine.getEngine(block.getWorld().getName()).getBlockManager().setBlockType(block.getLocation(), BlockType.UNKNOWN);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onDecay(LeavesDecayEvent event) {
+        ABlock block = new BukkitBlock(event.getBlock());
+        engine.getEngine(block.getWorld().getName()).getBlockManager().setBlockType(block.getLocation(), BlockType.UNKNOWN);
     }
 
     @EventHandler

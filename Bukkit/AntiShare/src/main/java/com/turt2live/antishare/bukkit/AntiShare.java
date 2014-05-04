@@ -141,6 +141,8 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setCacheIncrement(cacheInterval);
         Engine.getInstance().setSaveInterval(periodicSave);
         Engine.getInstance().setGroupManager(new BukkitGroupManager());
+        Engine.getInstance().setPhysicsSettings(getConfig().getBoolean("blocks.physics.grow-with-gamemode", true), getConfig().getBoolean("blocks.physics.block-item-drop", true));
+        Engine.getInstance().setAttachmentSettings(getConfig().getBoolean("blocks.attachments.break-as-placed", true), getConfig().getBoolean("blocks.attachments.deny-break", false));
 
         // Setup listeners
         getServer().getPluginManager().registerEvents(new EngineListener(), this);

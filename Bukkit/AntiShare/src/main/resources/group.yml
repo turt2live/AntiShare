@@ -73,9 +73,6 @@ blocks:
     adventure: adventure
     spectator: spectator
   break:
-    attachments:
-      break-as-placed: true
-      default-break: survival
     creative-breaking-survival:
       deny: true
       break-as: creative

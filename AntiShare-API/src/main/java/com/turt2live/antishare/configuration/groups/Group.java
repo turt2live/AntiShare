@@ -78,13 +78,6 @@ public abstract class Group {
         return configuration.getString("permission-enable", "AntiShare.group." + getName());
     }
 
-    /*
-    TODO: HANDLE THIS
-    blocks.break.attachments:
-      break-as-placed: true
-      default-break: survival
-     */
-
     /**
      * Gets the acting gamemode for a specified gamemode. This does not include
      * inherited groups.

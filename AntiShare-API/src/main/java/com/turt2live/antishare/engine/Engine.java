@@ -40,6 +40,10 @@ public final class Engine {
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
     private GroupManager groupManager = null;
+    private boolean attachmentsAsPlaced = false; // break attachments as placed flag
+    private boolean attachmentsDeny = false; // Mismatched attachments versus block break deny flag
+    private boolean physicsGrow = false; // grow-with-gamemode flag
+    private boolean physicsBlockItems = false; // drop items (physics) as gamemode placed flag
 
     private Engine() {
         newCacheTimer();
@@ -278,6 +282,95 @@ public final class Engine {
                 }
             }, 0, saveInterval);
         }
+    }
+
+    /**
+     * Sets the physics settings for the AntiShare engine.
+     * <p/>
+     * 'growWithGamemode' is the flag used to determine whether or not 'growing' blocks
+     * will grow with the gamemode inherited from their parent (source) block. If true,
+     * a creative vine (for example) will grow to have a creative child. If false, the
+     * child block will have no stored gamemode.
+     * <p/>
+     * 'dropAsGamemode' is the flag used for determining how items should be spawned due
+     * to 'random' events (such as cacti breaking). If this is true, then the 'random' events
+     * will be modified to have their drops conform to how the placed block state was. If false,
+     * Minecraft is left to do it's damage.
+     *
+     * @param growWithGamemode the flag for block growing
+     * @param dropAsGamemode   the flag for block drops
+     */
+    // TODO: Unit test
+    public void setPhysicsSettings(boolean growWithGamemode, boolean dropAsGamemode) {
+        this.physicsGrow = growWithGamemode;
+        this.physicsBlockItems = dropAsGamemode;
+    }
+
+    /**
+     * Determines if the flag for growing blocks with inherited gamemodes is set
+     *
+     * @return the flag setting
+     * @see #setPhysicsSettings(boolean, boolean)
+     */
+    // TODO: Unit test
+    public boolean isPhysicsGrowWithGamemode() {
+        return physicsGrow;
+    }
+
+    /**
+     * Determines if the flag for 'random' block breaks breaking as placed gamemode
+     * is set
+     *
+     * @return the flag setting
+     * @see #setPhysicsSettings(boolean, boolean)
+     */
+    // TODO: Unit test
+    public boolean isPhysicsBreakAsGamemode() {
+        return physicsBlockItems;
+    }
+
+    /**
+     * Sets the attachment settings for the AntiShare engine.
+     * <p/>
+     * 'breakAsPlaced' represents whether or not any attachments on the sides of
+     * blocks should be broken as they were placed (such as creative attachments
+     * dropping nothing). This is only applicable is 'denyMismatchBreak' is false.
+     * <p/>
+     * 'denyMismatchBreak' represents the flag for denying a block break due to it's
+     * attachments. For example, a natural block with a creative attachment being broken
+     * by a survival player will result in the block being denied (if this flag is true).
+     * If false, this flag simply forwards the logic to 'breakAsPlaced'.
+     *
+     * @param breakAsPlaced     the break-as-placed flag
+     * @param denyMismatchBreak the deny-break flag
+     */
+    // TODO: Unit test
+    public void setAttachmentSettings(boolean breakAsPlaced, boolean denyMismatchBreak) {
+        this.attachmentsAsPlaced = breakAsPlaced;
+        this.attachmentsDeny = denyMismatchBreak;
+    }
+
+    /**
+     * Determines if attached blocks should be broken as placed, or not.
+     *
+     * @return true for 'break as placed', false otherwise
+     * @see #setAttachmentSettings(boolean, boolean)
+     * @see #isAttachmentsDenyMismatchBreak()
+     */
+    // TODO: Unit test
+    public boolean isAttachmentsBreakAsPlaced() {
+        return attachmentsAsPlaced;
+    }
+
+    /**
+     * Determines if attached blocks will also prevent blocks from being broken
+     *
+     * @return true to deny breaking due to attachments, false otherwise
+     * @see #setAttachmentSettings(boolean, boolean)
+     */
+    // TODO: Unit test
+    public boolean isAttachmentsDenyMismatchBreak() {
+        return attachmentsDeny;
     }
 
     private void newCacheTimer() {
