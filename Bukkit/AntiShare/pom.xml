@@ -171,7 +171,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.turt2live.hurtle</pattern>
-                                    <shadedPattern>com.turt2live.antishare.bukkit.hurtle</shadedPattern>
+                                    <shadedPattern>com.turt2live.antishare.bukkit.libs.hurtle</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
