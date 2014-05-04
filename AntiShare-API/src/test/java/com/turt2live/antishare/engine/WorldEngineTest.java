@@ -14,6 +14,7 @@ import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
 public class WorldEngineTest {
@@ -72,6 +73,10 @@ public class WorldEngineTest {
                     player = flag1 ? mock(APlayer.class) : null;
                     block = flag2 ? mock(ABlock.class) : null;
                     gameMode = flag3 ? ASGameMode.ADVENTURE : null;
+
+                    if (block != null) {
+                        when(block.getChestType()).thenReturn(ABlock.ChestType.NONE);
+                    }
 
                     boolean expected = player == null || block == null || gameMode == null;
                     try {

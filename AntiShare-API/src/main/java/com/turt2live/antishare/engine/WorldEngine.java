@@ -9,6 +9,7 @@ import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.utils.ASUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,11 +97,11 @@ public final class WorldEngine {
      * @param placeAs the gamemode placing the block
      * @return returns true if the block placement was rejected, false otherwise
      */
+    // TODO: Update unit test
     public boolean processBlockPlace(APlayer player, ABlock block, ASGameMode placeAs) {
         if (player == null || block == null || placeAs == null) throw new IllegalArgumentException();
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-
         BlockTypeList list = new DefaultBlockTypeList();
         RejectionList reject = new DefaultRejectionList(RejectionList.ListType.BLOCK_PLACE);
 
@@ -112,6 +113,9 @@ public final class WorldEngine {
             placeAs = consolidatedGroup.getActingMode(placeAs);
         }
 
+        BlockType blockType = ASUtils.toBlockType(placeAs);
+
+        // Check rejection lists
         if (placeAs == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
             TrackedState playerReaction = block.canPlace(player); // See javadocs
             if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
@@ -120,8 +124,67 @@ public final class WorldEngine {
             }
         }
 
-        if (list.isTracked(block) && !player.hasPermission(PermissionNodes.FREE_PLACE)) {
-            blockManager.setBlockType(block.getLocation(), ASUtils.toBlockType(placeAs));
+        // Check for block type insertion
+        if (player.hasPermission(PermissionNodes.FREE_PLACE)) blockType = BlockType.UNKNOWN;
+
+        // Check for double chests
+        ABlock.ChestType blockChest = block.getChestType();
+        ABlock additional = null; // Additional block to be assigned the BlockType
+        switch (blockChest) {
+            // They are double chests at this moment in time
+            case DOUBLE_NORMAL:
+            case DOUBLE_TRAPPED:
+                // We only need to check these two for combination states
+
+                ASLocation location1 = block.getLocation().add(1, 0, 0);
+                ASLocation location2 = block.getLocation().add(-1, 0, 0);
+                ASLocation location3 = block.getLocation().add(0, 0, 1);
+                ASLocation location4 = block.getLocation().add(0, 0, -1);
+
+                List<ABlock> blocks = new ArrayList<ABlock>();
+                blocks.add(block.getWorld().getBlock(location1));
+                blocks.add(block.getWorld().getBlock(location2));
+                blocks.add(block.getWorld().getBlock(location3));
+                blocks.add(block.getWorld().getBlock(location4));
+
+                /*
+                Minecraft will only allow one chest to be linked, and the logic below
+                leverages that to ensure that the proper block types are assigned.
+
+                 In the following image, red boxes indicates where Minecraft will deny
+                 placement (too many chests) while green indicates where Minecraft will
+                 allow placement (just one chest). The code below will therefore test
+                 the 'green' conditions.
+
+                 http://imgur.com/Alm3F9i
+                 */
+
+                for (ABlock block1 : blocks) {
+                    if (block1.getChestType() == blockChest) {
+                        BlockType type = blockManager.getBlockType(block1.getLocation());
+                        if (type != blockType && type != BlockType.UNKNOWN) {
+                            // Override deny action for mismatch gamemode on 'op-place'
+                            if (blockType == BlockType.UNKNOWN) {
+                                additional = block1;
+                                break;
+                            }
+                            return true; // Mismatch gamemode
+                        } else if (type == BlockType.UNKNOWN) {
+                            additional = block1;
+                            break; // We're done here, green condition check complete
+                        }
+                    }
+                }
+
+                break;
+            default:
+                break;
+        }
+
+        // If we made it this far, the block is OK, so just add it and return
+        if (list.isTracked(block) || additional != null) {
+            blockManager.setBlockType(block.getLocation(), blockType);
+            if (additional != null) blockManager.setBlockType(additional.getLocation(), blockType);
         }
 
         return false;

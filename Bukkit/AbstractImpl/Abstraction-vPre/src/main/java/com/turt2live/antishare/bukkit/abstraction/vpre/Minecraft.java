@@ -1,12 +1,18 @@
 package com.turt2live.antishare.bukkit.abstraction.vpre;
 
+import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.bukkit.abstraction.MinecraftVersion;
 import com.turt2live.hurtle.uuid.UUIDServiceProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.inventory.DoubleChestInventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +47,25 @@ public class Minecraft implements MinecraftVersion {
 
     protected final ConcurrentMap<String, UUIDStore> BY_NAME = new ConcurrentHashMap<String, UUIDStore>();
     protected final ConcurrentMap<UUID, NameStore> BY_UUID = new ConcurrentHashMap<UUID, NameStore>();
+
+    @Override
+    public ABlock.ChestType getChestType(Block block) {
+        if (block == null) throw new IllegalArgumentException();
+
+        if (block.getType() == Material.CHEST) {
+            BlockState state = block.getState();
+            if (state instanceof Chest && ((Chest) state).getInventory() instanceof DoubleChestInventory) {
+                return ABlock.ChestType.DOUBLE_NORMAL;
+            }
+            return ABlock.ChestType.NORMAL;
+        } else if (block.getType() == Material.ENDER_CHEST) {
+            return ABlock.ChestType.ENDER;
+        } else if (block.getType() == Material.LOCKED_CHEST) {
+            return ABlock.ChestType.LOCKED;
+        }
+
+        return ABlock.ChestType.NONE;
+    }
 
     @Override
     public UUID getUUID(String name) {

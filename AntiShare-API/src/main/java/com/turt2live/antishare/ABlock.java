@@ -8,6 +8,57 @@ package com.turt2live.antishare;
 public interface ABlock {
 
     /**
+     * Represents the various chest states
+     */
+    public static enum ChestType {
+        /**
+         * A single standard chest
+         */
+        NORMAL,
+        /**
+         * A single trapped chest
+         */
+        TRAPPED,
+        /**
+         * Two standard chests merged into one large standard chest
+         */
+        DOUBLE_NORMAL,
+        /**
+         * Two trapped chests merged into one large trapped chest
+         */
+        DOUBLE_TRAPPED,
+        /**
+         * An ender chest
+         */
+        ENDER,
+        /**
+         * A locked chest (April Fool's Joke)
+         *
+         * @deprecated No longer used in newer versions
+         */
+        @Deprecated
+        LOCKED,
+        /**
+         * Not a chest
+         */
+        NONE;
+    }
+
+    /**
+     * Gets the facing direction of this block. May be null if not applicable
+     *
+     * @return the facing direction, or null
+     */
+    public Facing getFacingDirection();
+
+    /**
+     * Gets the applicable chest type for this block
+     *
+     * @return the applicable chest type, returning {@link com.turt2live.antishare.ABlock.ChestType#NONE} for 'not a chest'
+     */
+    public ChestType getChestType();
+
+    /**
      * Gets the block's location
      *
      * @return the block location

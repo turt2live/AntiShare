@@ -3,8 +3,12 @@ package com.turt2live.antishare.bukkit.impl;
 import com.turt2live.antishare.*;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
+import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.engine.RejectionList;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.material.Directional;
+import org.bukkit.material.MaterialData;
 
 /**
  * Bukkit block
@@ -19,6 +23,25 @@ public class BukkitBlock implements ABlock {
         if (block == null) throw new IllegalArgumentException();
 
         this.block = block;
+    }
+
+    @Override
+    public Facing getFacingDirection() {
+        BlockState state = block.getState();
+        MaterialData data = state.getData();
+        if (data != null && data instanceof Directional) {
+            for (Facing facing : Facing.values()) {
+                if (facing.name().equalsIgnoreCase(((Directional) data).getFacing().name())) {
+                    return facing;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ChestType getChestType() {
+        return VersionSelector.getMinecraft().getChestType(block);
     }
 
     @Override

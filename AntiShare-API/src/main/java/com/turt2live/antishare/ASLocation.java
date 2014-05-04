@@ -53,6 +53,31 @@ public class ASLocation implements Cloneable {
         this.world = world;
     }
 
+    /**
+     * Adds one location to this location. This will ignore the
+     * world components and return a copy of this location (including
+     * world) with the desired transformation applied. This does
+     * not edit the current location and instead creates a new location.
+     *
+     * @param location the location to add to this one, cannot be null
+     * @return the new location, with this world
+     */
+    public ASLocation add(ASLocation location) {
+        if (location == null) throw new IllegalArgumentException();
+        int x = this.X + location.X;
+        int y = this.Y + location.Y;
+        int z = this.Z + location.Z;
+
+        return new ASLocation(world, x, y, z);
+    }
+
+    /**
+     * @see #add(ASLocation)
+     */
+    public ASLocation add(int x, int y, int z) {
+        return add(new ASLocation(x, y, z));
+    }
+
     @Override
     public ASLocation clone() {
         return new ASLocation(world, X, Y, Z);
