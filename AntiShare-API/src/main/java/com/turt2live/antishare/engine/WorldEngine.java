@@ -10,6 +10,7 @@ import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.utils.ASUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a world engine. This is used by the core engine to handle
@@ -161,5 +162,27 @@ public final class WorldEngine {
             return current != BlockType.CREATIVE;
         }
         return true;
+    }
+
+    /**
+     * Processes an explosion from the world. This takes in a map of blocks which
+     * are affected by the blast with boolean flags of whether or not they should
+     * be exposed to the blast's effects (IE: Drop items). The flag will be set to
+     * FALSE if a particular block should NOT drop items due to the blast.
+     *
+     * @param blocks the blocks affected by the blast, cannot be null
+     */
+    public void processExplosion(Map<ABlock, Boolean> blocks) {
+        if (blocks == null) throw new IllegalArgumentException();
+
+        if (!Engine.getInstance().isPhysicsBreakAsGamemode()) return; // Don't handle this if we aren't supposed to
+
+        for (Map.Entry<ABlock, Boolean> entry : blocks.entrySet()) {
+            BlockType current = blockManager.getBlockType(entry.getKey().getLocation());
+            blockManager.setBlockType(entry.getKey().getLocation(), BlockType.UNKNOWN);
+            if (current == BlockType.CREATIVE) {
+                entry.setValue(false); // Set flag off
+            }
+        }
     }
 }

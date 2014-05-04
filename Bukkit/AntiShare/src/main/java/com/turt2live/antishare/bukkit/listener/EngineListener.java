@@ -23,10 +23,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * AntiShare Bukkit Listener for the AntiShare Engine. This listener will only
@@ -60,7 +64,24 @@ public class EngineListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onExplosion(EntityExplodeEvent event) {
+        Map<ABlock, Boolean> keep = new HashMap<ABlock, Boolean>();
+        for (Block block : event.blockList()) {
+            keep.put(new BukkitBlock(block), true);
+        }
+        engine.getEngine(event.getEntity().getWorld().getName()).processExplosion(keep);
+        for (Map.Entry<ABlock, Boolean> entry : keep.entrySet()) {
+            if (!entry.getValue()) {
+                Block block = ((BukkitBlock) entry.getKey()).getBlock();
+                event.blockList().remove(block);
+                block.setType(Material.AIR); // TODO: Block-logging plugins!
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFallingBlock(EntityChangeBlockEvent event) {
+        // TODO: add a .process call!! (need to un-set gamemode on 'spawning')
         Entity eventEntity = event.getEntity();
         WorldEngine engine = this.engine.getEngine(eventEntity.getWorld().getName());
         ASLocation location = BukkitUtils.toLocation(event.getBlock().getLocation());
