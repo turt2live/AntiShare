@@ -3,7 +3,7 @@ package com.turt2live.antishare.bukkit.listener;
 import com.turt2live.antishare.*;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
-import com.turt2live.antishare.bukkit.hooks.events.AntiShareExplodeEvent;
+import com.turt2live.antishare.bukkit.events.AntiShareExplodeEvent;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
