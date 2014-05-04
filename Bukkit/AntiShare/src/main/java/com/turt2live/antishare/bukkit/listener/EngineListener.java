@@ -3,6 +3,7 @@ package com.turt2live.antishare.bukkit.listener;
 import com.turt2live.antishare.*;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
+import com.turt2live.antishare.bukkit.hooks.events.AntiShareExplodeEvent;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
@@ -29,7 +30,9 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,23 +68,37 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExplosion(EntityExplodeEvent event) {
+        if (event instanceof AntiShareExplodeEvent) return; // Don't handle ourselves
+
         Map<ABlock, Boolean> keep = new HashMap<ABlock, Boolean>();
         for (Block block : event.blockList()) {
             keep.put(new BukkitBlock(block), true);
         }
+
         engine.getEngine(event.getEntity().getWorld().getName()).processExplosion(keep);
+
+        List<Block> refire = new ArrayList<Block>();
         for (Map.Entry<ABlock, Boolean> entry : keep.entrySet()) {
             if (!entry.getValue()) {
                 Block block = ((BukkitBlock) entry.getKey()).getBlock();
-                event.blockList().remove(block);
-                block.setType(Material.AIR); // TODO: Block-logging plugins!
+                refire.add(block);
+            }
+        }
+
+        if (refire.size() > 0) {
+            AntiShareExplodeEvent explodeEvent = new AntiShareExplodeEvent(event.getEntity(), event.getLocation(), refire, event.getYield());
+            AntiShare.getInstance().getServer().getPluginManager().callEvent(explodeEvent);
+            if (!explodeEvent.isCancelled()) {
+                for (Block block : explodeEvent.blockList()) {
+                    event.blockList().remove(block);
+                    block.setType(Material.AIR);
+                }
             }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFallingBlock(EntityChangeBlockEvent event) {
-        // TODO: add a .process call!! (need to un-set gamemode on 'spawning')
         Entity eventEntity = event.getEntity();
         WorldEngine engine = this.engine.getEngine(eventEntity.getWorld().getName());
         ASLocation location = BukkitUtils.toLocation(event.getBlock().getLocation());
@@ -90,6 +107,7 @@ public class EngineListener implements Listener {
             if (event.getTo() == Material.AIR) {
                 // Spawning
                 BlockType current = engine.getBlockManager().getBlockType(location);
+                engine.getBlockManager().setBlockType(location, BlockType.UNKNOWN); // Clear old position
                 if (Engine.getInstance().isPhysicsBreakAsGamemode() && current == BlockType.CREATIVE) {
                     entity.setDropItem(false); // For if it hits something
                 }
