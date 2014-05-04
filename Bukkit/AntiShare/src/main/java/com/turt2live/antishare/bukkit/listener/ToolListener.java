@@ -73,6 +73,7 @@ public class ToolListener implements Listener {
 
                 player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_CHECK))
                         .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
+                        .withPrefix()
                         .build());
             } else if (hand.isSimilar(SET_TEMPLATE)) {
                 event.setCancelled(true);
@@ -84,6 +85,7 @@ public class ToolListener implements Listener {
 
                     player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_SET))
                             .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
+                            .withPrefix()
                             .build());
                 } else {
                     BlockType previous = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
@@ -93,6 +95,7 @@ public class ToolListener implements Listener {
 
                     player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_UNSET))
                             .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
+                            .withPrefix()
                             .build());
                 }
             }
