@@ -1,4 +1,4 @@
-package com.turt2live.antishare.bukkit.hooks.events;
+package com.turt2live.antishare.bukkit.events;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;

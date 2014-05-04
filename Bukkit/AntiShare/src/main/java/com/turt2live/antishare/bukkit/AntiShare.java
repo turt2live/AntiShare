@@ -3,8 +3,6 @@ package com.turt2live.antishare.bukkit;
 import com.turt2live.antishare.bukkit.commands.CommandHandler;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
 import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
-import com.turt2live.antishare.bukkit.hooks.BlockLoggerHook;
-import com.turt2live.antishare.bukkit.hooks.logger.PrismLogger;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
@@ -18,7 +16,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -42,7 +39,6 @@ public class AntiShare extends JavaPlugin {
     private File dataFolder;
     private int blockSize;
     private MaterialProvider materialProvider = new MaterialProvider();
-    private BlockLoggerHook blockLoggers = new BlockLoggerHook();
 
     @Override
     public void onLoad() {
@@ -113,7 +109,6 @@ public class AntiShare extends JavaPlugin {
 
         // Cleanup
         getServer().getScheduler().cancelTasks(this);
-        blockLoggers.clearLoggers();
     }
 
     @Override
@@ -163,14 +158,6 @@ public class AntiShare extends JavaPlugin {
         // Probe all currently loaded worlds
         for (World world : getServer().getWorlds()) {
             Engine.getInstance().createWorldEngine(world.getName());
-        }
-
-        // Load plugin hooks
-        for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
-            if (plugin.getName().equalsIgnoreCase("Prism")) {
-                getLogger().info("Hooking Prism...");
-                blockLoggers.addLogger(new PrismLogger(plugin));
-            }
         }
     }
 
