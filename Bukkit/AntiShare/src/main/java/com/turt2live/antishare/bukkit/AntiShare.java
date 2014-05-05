@@ -93,6 +93,7 @@ public class AntiShare extends JavaPlugin {
                     if (material == null) continue;
 
                     materialProvider.insertPlayerFriendly(material, data, playerName);
+                    materialProvider.insertPlayerFriendly(material, (short) -1, playerName);
                 } catch (NumberFormatException e) {
                 }
             }
