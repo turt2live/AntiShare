@@ -50,7 +50,7 @@ public class EngineListener implements Listener {
     /**
      * Cause the BlockFace enum is weird
      */
-    private static final BlockFace[] TRUE_FACES = new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
+    public static final BlockFace[] TRUE_FACES = new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
 
     private AntiShare plugin = AntiShare.getInstance();
     private Engine engine;

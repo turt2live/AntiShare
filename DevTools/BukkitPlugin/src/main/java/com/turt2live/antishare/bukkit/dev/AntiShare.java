@@ -1,12 +1,18 @@
 package com.turt2live.antishare.bukkit.dev;
 
+import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.bukkit.BukkitUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Random;
+
 public class AntiShare extends JavaPlugin {
+
+    public static final Random RANDOM = new Random();
 
     @Override
     public void onEnable() {
@@ -38,6 +44,18 @@ public class AntiShare extends JavaPlugin {
                 } else {
                     sender.sendMessage(ChatColor.RED + "Not for console.");
                 }
+            } else if (args[0].equalsIgnoreCase("stress")) {
+                sender.sendMessage(ChatColor.GREEN + "Starting stress test...");
+                StressTest check = new StressTest(this);
+                check.begin();
+            } else if (args[0].equalsIgnoreCase("bomb")) {
+                ASLocation start = new ASLocation(RANDOM.nextInt(2048) * (RANDOM.nextBoolean() ? -1 : 1), 0, RANDOM.nextInt(2048) * (RANDOM.nextBoolean() ? -1 : 1));
+                if (sender instanceof Player) {
+                    start = BukkitUtils.toLocation(((Player) sender).getLocation());
+                }
+                sender.sendMessage(ChatColor.GREEN + "Starting: " + start);
+                GameModeBomb check = new GameModeBomb(this, start);
+                check.begin();
             } else
                 sender.sendMessage(ChatColor.RED + "Unknown command.");
         } else

@@ -29,3 +29,9 @@ permissions:
     antishare.deny.block_place:
         default: false
         description: Denies all blocks to be placed, regardless of group settings
+    antishare.allow.block_break:
+        default: op
+        description: Allows all blocks to be broken, regardless of group settings
+    antishare.deny.block_break:
+        default: false
+        description: Denies all blocks to be broken, regardless of group settings
