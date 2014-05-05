@@ -49,6 +49,46 @@ public class Minecraft implements MinecraftVersion {
     protected final ConcurrentMap<UUID, NameStore> BY_UUID = new ConcurrentHashMap<UUID, NameStore>();
 
     @Override
+    public List<Material> getBrokenOnTop() {
+        List<Material> list = new ArrayList<Material>();
+        list.add(Material.SAPLING);
+        list.add(Material.POWERED_RAIL);
+        list.add(Material.DETECTOR_RAIL);
+        list.add(Material.LONG_GRASS);
+        list.add(Material.DEAD_BUSH);
+        list.add(Material.YELLOW_FLOWER);
+        list.add(Material.RED_ROSE);
+        list.add(Material.BROWN_MUSHROOM);
+        list.add(Material.RED_MUSHROOM);
+        list.add(Material.TORCH);
+        list.add(Material.FIRE);
+        list.add(Material.REDSTONE_WIRE);
+        list.add(Material.CROPS);
+        list.add(Material.SIGN_POST);
+        list.add(Material.WOODEN_DOOR);
+        list.add(Material.RAILS);
+        list.add(Material.WALL_SIGN);
+        list.add(Material.LEVER);
+        list.add(Material.STONE_PLATE);
+        list.add(Material.IRON_DOOR_BLOCK);
+        list.add(Material.WOOD_PLATE);
+        list.add(Material.REDSTONE_TORCH_OFF);
+        list.add(Material.REDSTONE_TORCH_ON);
+        list.add(Material.SNOW);
+        list.add(Material.CAKE_BLOCK);
+        list.add(Material.DIODE_BLOCK_OFF);
+        list.add(Material.DIODE_BLOCK_ON);
+        list.add(Material.PUMPKIN_STEM);
+        list.add(Material.MELON_STEM);
+        list.add(Material.WATER_LILY);
+        list.add(Material.NETHER_WARTS);
+        list.add(Material.TRIPWIRE);
+        list.add(Material.CARROT);
+        list.add(Material.POTATO);
+        return list;
+    }
+
+    @Override
     public ABlock.ChestType getChestType(Block block) {
         if (block == null) throw new IllegalArgumentException();
 

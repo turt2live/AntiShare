@@ -41,6 +41,8 @@ public class BukkitGroup extends Group {
     public RejectionList getRejectionList(RejectionList.ListType type) {
         if (type == null) throw new IllegalArgumentException("list type cannot be null");
         String configKey = BukkitUtils.getStringName(type);
+        if (configKey == null)
+            throw new NullPointerException("Yell at turt2live to add this: " + type.name());
         MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
         BukkitBlockList list = new BukkitBlockList(provider, type);
         list.populateBlocks(super.configuration.getStringList("lists." + configKey, new ArrayList<String>()));

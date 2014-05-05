@@ -15,6 +15,7 @@ public interface RejectionList {
      */
     public static enum ListType {
         BLOCK_PLACE,
+        BLOCK_BREAK,
 
         /**
          * CUSTOM should only be used for out-of-plugin operations

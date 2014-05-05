@@ -3,6 +3,7 @@ package com.turt2live.antishare.bukkit.listener;
 import com.turt2live.antishare.*;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
+import com.turt2live.antishare.bukkit.events.AntiShareBlockBreakEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareExplodeEvent;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
@@ -75,6 +76,41 @@ public class EngineListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (event instanceof AntiShareBlockBreakEvent) return; // Don't handle ourselves
+
+        ABlock block = new BukkitBlock(event.getBlock());
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        ASGameMode gameMode = player.getGameMode();
+
+        OutputParameter<List<ABlock>> additionalBreak = new OutputParameter<List<ABlock>>();
+        OutputParameter<BlockType> breakAs = new OutputParameter<BlockType>();
+        if (engine.getEngine(block.getWorld().getName()).processBlockBreak(player, block, gameMode, additionalBreak, breakAs)) {
+            event.setCancelled(true);
+            String blockType = plugin.getMaterialProvider().getPlayerFriendlyName(event.getBlock());
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_BREAK)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
+            alert(Lang.NAUGHTY_ADMIN_BREAK, event.getPlayer(), event.getBlock());
+        } else if (additionalBreak.hasValue()) {
+            if (breakAs.hasValue() && breakAs.getValue() == BlockType.CREATIVE) {
+                event.getBlock().getDrops().clear(); // Yea, fuck you.
+                event.setExpToDrop(0);
+            }
+            for (ABlock addBlock : additionalBreak.getValue()) {
+                if (addBlock instanceof BukkitBlock) {
+                    BukkitBlock bukkitBlock = (BukkitBlock) addBlock;
+                    Block block1 = bukkitBlock.getBlock();
+
+                    AntiShareBlockBreakEvent breakEvent = new AntiShareBlockBreakEvent(block1, event.getPlayer());
+                    plugin.getServer().getPluginManager().callEvent(breakEvent);
+                    if (!breakEvent.isCancelled()) {
+                        engine.getEngine(event.getBlock().getWorld().getName()).processFade(bukkitBlock);
+                    }
+                }
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExplosion(EntityExplodeEvent event) {
         if (event instanceof AntiShareExplodeEvent) return; // Don't handle ourselves
@@ -91,6 +127,7 @@ public class EngineListener implements Listener {
             if (!entry.getValue()) {
                 Block block = ((BukkitBlock) entry.getKey()).getBlock();
                 refire.add(block);
+                event.blockList().remove(block);
             }
         }
 
@@ -99,8 +136,7 @@ public class EngineListener implements Listener {
             plugin.getServer().getPluginManager().callEvent(explodeEvent);
             if (!explodeEvent.isCancelled()) {
                 for (Block block : explodeEvent.blockList()) {
-                    event.blockList().remove(block);
-                    block.setType(Material.AIR);
+                    engine.getEngine(event.getEntity().getWorld().getName()).processFade(new BukkitBlock(block));
                 }
             }
         }
@@ -200,20 +236,17 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBurn(BlockBurnEvent event) {
-        ABlock block = new BukkitBlock(event.getBlock());
-        engine.getEngine(block.getWorld().getName()).getBlockManager().setBlockType(block.getLocation(), BlockType.UNKNOWN);
+        engine.getEngine(event.getBlock().getWorld().getName()).processFade(new BukkitBlock(event.getBlock()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFade(BlockFadeEvent event) {
-        ABlock block = new BukkitBlock(event.getBlock());
-        engine.getEngine(block.getWorld().getName()).getBlockManager().setBlockType(block.getLocation(), BlockType.UNKNOWN);
+        engine.getEngine(event.getBlock().getWorld().getName()).processFade(new BukkitBlock(event.getBlock()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDecay(LeavesDecayEvent event) {
-        ABlock block = new BukkitBlock(event.getBlock());
-        engine.getEngine(block.getWorld().getName()).getBlockManager().setBlockType(block.getLocation(), BlockType.UNKNOWN);
+        engine.getEngine(event.getBlock().getWorld().getName()).processFade(new BukkitBlock(event.getBlock()));
     }
 
     @EventHandler

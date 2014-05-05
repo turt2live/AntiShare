@@ -3,6 +3,7 @@ package com.turt2live.antishare.bukkit.dev;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AntiShare extends JavaPlugin {
@@ -28,6 +29,15 @@ public class AntiShare extends JavaPlugin {
                 sender.sendMessage(ChatColor.GREEN + "Translating items.csv from Essentials format...");
                 EssentialsToAntiShare check = new EssentialsToAntiShare(this);
                 check.begin();
+            } else if (args[0].equalsIgnoreCase("supports")) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    player.sendMessage(ChatColor.BLUE + "Running support sequence...");
+                    SupportCheck check = new SupportCheck(player, this);
+                    check.begin();
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Not for console.");
+                }
             } else
                 sender.sendMessage(ChatColor.RED + "Unknown command.");
         } else

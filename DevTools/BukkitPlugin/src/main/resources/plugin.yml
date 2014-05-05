@@ -1,6 +1,6 @@
 name: AntiShare-DevTools
 main: com.turt2live.antishare.bukkit.dev.AntiShare
-version: maven-version-number
+version: DevTools
 description: Development tools for AntiShare
 author: turt2live
 website: http://dev.bukkit.org/server-mods/antishare

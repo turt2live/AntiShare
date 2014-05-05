@@ -7,7 +7,20 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.DoubleChestInventory;
 
+import java.util.List;
+
 public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_4_R1.Minecraft {
+
+    @Override
+    public List<Material> getBrokenOnTop() {
+        List<Material> list = super.getBrokenOnTop();
+        list.add(Material.GOLD_PLATE);
+        list.add(Material.IRON_PLATE);
+        list.add(Material.REDSTONE_COMPARATOR_OFF);
+        list.add(Material.REDSTONE_COMPARATOR_ON);
+        list.add(Material.ACTIVATOR_RAIL);
+        return list;
+    }
 
     @Override
     public ABlock.ChestType getChestType(Block block) {

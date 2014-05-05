@@ -31,7 +31,9 @@ naughty:
     # plugin will handle the rest.
     admin:
         place: '&c@p &7tried to place a &c@v'
+        break: '&c@p &7tried to break &c@v'
     place: '&cYou cannot place that &4@v'
+    break: '&cYou cannot break that &4@v'
 
 tools:
     check-title: '&bAntiShare Check Tool'

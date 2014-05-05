@@ -4,9 +4,11 @@ import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.BlockType;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,6 +17,14 @@ import java.util.UUID;
  * @author turt2live
  */
 public interface MinecraftVersion {
+
+    /**
+     * Gets a list of materials that will break if the block under
+     * them goes missing.
+     *
+     * @return a list of materials
+     */
+    public List<Material> getBrokenOnTop();
 
     /**
      * Gets the applicable chest type for a specified block

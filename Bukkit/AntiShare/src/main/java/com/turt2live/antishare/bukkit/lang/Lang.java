@@ -32,7 +32,9 @@ public class Lang {
     public static final String TOOL_SET_LORE = "tools.set-lore";
     public static final String TOOL_SET_TITLE = "tools.set-title";
     public static final String NAUGHTY_PLACE = "naughty.place";
+    public static final String NAUGHTY_BREAK = "naughty.break";
     public static final String NAUGHTY_ADMIN_PLACE = "naughty.admin.place";
+    public static final String NAUGHTY_ADMIN_BREAK = "naughty.admin.break";
 
     // Help strings
     public static final String HELP_CMD_HELP = "help.command.help";

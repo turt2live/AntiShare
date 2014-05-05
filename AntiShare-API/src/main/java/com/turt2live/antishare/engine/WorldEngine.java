@@ -137,16 +137,12 @@ public final class WorldEngine {
             case DOUBLE_TRAPPED:
                 // We only need to check these two for combination states
 
-                ASLocation location1 = block.getLocation().add(1, 0, 0);
-                ASLocation location2 = block.getLocation().add(-1, 0, 0);
-                ASLocation location3 = block.getLocation().add(0, 0, 1);
-                ASLocation location4 = block.getLocation().add(0, 0, -1);
 
                 List<ABlock> blocks = new ArrayList<ABlock>();
-                blocks.add(block.getWorld().getBlock(location1));
-                blocks.add(block.getWorld().getBlock(location2));
-                blocks.add(block.getWorld().getBlock(location3));
-                blocks.add(block.getWorld().getBlock(location4));
+                blocks.add(block.getWorld().getBlock(block.getLocation().add(1, 0, 0)));
+                blocks.add(block.getWorld().getBlock(block.getLocation().add(-1, 0, 0)));
+                blocks.add(block.getWorld().getBlock(block.getLocation().add(0, 0, 1)));
+                blocks.add(block.getWorld().getBlock(block.getLocation().add(0, 0, -1)));
 
                 /*
                 Minecraft will only allow one chest to be linked, and the logic below
@@ -189,6 +185,90 @@ public final class WorldEngine {
         }
 
         return false;
+    }
+
+    /**
+     * Processes the block break, running the required logic to break blocks as the player. This will
+     * also, if the player is permitted, check attached blocks to be sure that the player is capable
+     * of breaking the block as well. This will run several internal checks. The output parameter, if
+     * supplied, will always be populated.
+     *
+     * @param player          the player breaking the block, cannot be null
+     * @param block           the block being broken, cannot be null
+     * @param breakAs         the gamemode the player is breaking the block as, cannot be null
+     * @param additionalBreak the optional output for additional blocks to break with NO DROPS, can be null
+     * @param eventBreakAs    the optional output for what type the block was before it was removed from the system
+     * @return returns true if the block break was rejected, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processBlockBreak(APlayer player, ABlock block, ASGameMode breakAs, OutputParameter<List<ABlock>> additionalBreak, OutputParameter<BlockType> eventBreakAs) {
+        if (player == null || block == null || breakAs == null) throw new IllegalArgumentException();
+
+        List<ABlock> additional = new ArrayList<ABlock>();
+        if (additionalBreak != null) additionalBreak.setValue(additional);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.BLOCK_BREAK);
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            breakAs = consolidatedGroup.getActingMode(breakAs);
+        }
+
+        BlockType blockType = ASUtils.toBlockType(breakAs);
+
+        // Check rejection lists
+        if (breakAs == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
+            TrackedState playerReaction = block.canBreak(player); // See javadocs
+            if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+            if (reject.isBlocked(block) && playerReaction == TrackedState.NOT_PRESENT) { // No allow permission & is denied
+                return true;
+            }
+        }
+
+        BlockType blockType1 = blockManager.getBlockType(block.getLocation());
+        if (blockType1 != blockType && blockType1 != BlockType.UNKNOWN) return true; // Mixed gamemode
+
+        List<ABlock> possibleAttachments = new ArrayList<ABlock>();
+        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(1, 0, 0)));
+        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(-1, 0, 0)));
+        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 0, 1)));
+        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 0, -1)));
+        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 1, 0))); // Above
+
+        for (ABlock possibleAttachment : possibleAttachments) {
+            if (possibleAttachment.isAttached(block)) {
+                BlockType attachType = blockManager.getBlockType(possibleAttachment.getLocation());
+                if (attachType == BlockType.UNKNOWN) continue; // Let it break normally
+
+                if (Engine.getInstance().isAttachmentsDenyMismatchBreak() && attachType != blockType1 && blockType1 != BlockType.UNKNOWN) {
+                    return true; // As the owner wishes...
+                }
+                if (Engine.getInstance().isAttachmentsBreakAsPlaced() && attachType == BlockType.CREATIVE) { // TODO: Possible 'affect'?
+                    additional.add(possibleAttachment);
+                }// Implementation has to handle the removal. IE: Fade or 'disappear'
+            }
+        }
+
+        if (eventBreakAs != null) {
+            eventBreakAs.setValue(blockType1);
+        }
+
+        blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
+        return false; // Break was processed
+    }
+
+    /**
+     * Processes a block 'disappearing' or 'fading'
+     *
+     * @param block the block, cannot be null
+     */
+    public void processFade(ABlock block) {
+        if (block == null) throw new IllegalArgumentException();
+
+        blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
     }
 
     /**

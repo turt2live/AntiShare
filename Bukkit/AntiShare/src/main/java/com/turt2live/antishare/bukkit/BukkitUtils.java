@@ -80,6 +80,8 @@ public final class BukkitUtils {
         switch (listType) {
             case BLOCK_PLACE:
                 return "place";
+            case BLOCK_BREAK:
+                return "break";
             default:
                 return null;
         }
