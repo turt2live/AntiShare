@@ -1,6 +1,8 @@
-package com.turt2live.antishare.bukkit.dev;
+package com.turt2live.antishare.bukkit.dev.check;
 
 import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
+import com.turt2live.antishare.bukkit.dev.AntiShare;
+import com.turt2live.antishare.bukkit.dev.CheckBase;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -19,18 +21,16 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class StressTest implements Runnable {
-
-    private static Random random = new Random();
-    private AntiShare plugin;
+public class StressTest extends CheckBase implements Runnable {
 
     public StressTest(AntiShare plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
+    @Override
     public void begin() {
+        Bukkit.broadcastMessage(ChatColor.GREEN + "Starting stress test...");
         // 30 seconds of solid lag :D
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "timings reset");
         final BukkitTask task = plugin.getServer().getScheduler().runTaskTimer(plugin, this, 0L, 20L);
@@ -74,7 +74,7 @@ public class StressTest implements Runnable {
     }
 
     private Block growStem() {
-        Material crop = random.nextBoolean() ? Material.PUMPKIN : Material.MELON_BLOCK;
+        Material crop = AntiShare.RANDOM.nextBoolean() ? Material.PUMPKIN : Material.MELON_BLOCK;
         Material stemType = crop == Material.PUMPKIN ? Material.PUMPKIN_STEM : Material.MELON_STEM;
 
         Block block = block();
@@ -113,11 +113,11 @@ public class StressTest implements Runnable {
 
     private GameMode gamemode() {
         GameMode[] modes = GameMode.values();
-        return modes[random.nextInt(modes.length)];
+        return modes[AntiShare.RANDOM.nextInt(modes.length)];
     }
 
     private ItemStack itemStack() {
-        ItemStack itemStack = new ItemStack(Material.DIAMOND, random.nextInt(10) + 2);
+        ItemStack itemStack = new ItemStack(Material.DIAMOND, AntiShare.RANDOM.nextInt(10) + 2);
         return itemStack;
     }
 
@@ -132,7 +132,7 @@ public class StressTest implements Runnable {
 
     private List<Block> blocks() {
         List<Block> blocks = new ArrayList<Block>();
-        for (int i = 0; i < random.nextInt(20) + 5; i++) {
+        for (int i = 0; i < AntiShare.RANDOM.nextInt(20) + 5; i++) {
             blocks.add(block());
         }
         return blocks;
@@ -140,14 +140,14 @@ public class StressTest implements Runnable {
 
     private Player player() {
         Player[] players = plugin.getServer().getOnlinePlayers();
-        return players[random.nextInt(players.length)];
+        return players[AntiShare.RANDOM.nextInt(players.length)];
     }
 
     private Block block() {
         Location location = player().getLocation();
-        double dx = (random.nextDouble() * 1000) * (random.nextBoolean() ? -1 : 1);
-        double dy = (random.nextDouble() * 10) * (random.nextBoolean() ? -1 : 1);
-        double dz = (random.nextDouble() * 1000) * (random.nextBoolean() ? -1 : 1);
+        double dx = (AntiShare.RANDOM.nextDouble() * 1000) * (AntiShare.RANDOM.nextBoolean() ? -1 : 1);
+        double dy = (AntiShare.RANDOM.nextDouble() * 10) * (AntiShare.RANDOM.nextBoolean() ? -1 : 1);
+        double dz = (AntiShare.RANDOM.nextDouble() * 1000) * (AntiShare.RANDOM.nextBoolean() ? -1 : 1);
         location.add(dx, dy, dz);
         return location.getBlock();
     }

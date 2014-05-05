@@ -1,14 +1,12 @@
-package com.turt2live.antishare.bukkit.dev;
+package com.turt2live.antishare.bukkit.dev.check;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import com.turt2live.antishare.bukkit.dev.AntiShare;
+import com.turt2live.antishare.bukkit.dev.CheckBase;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
-import org.bukkit.conversations.ValidatingPrompt;
 import org.bukkit.entity.Player;
 
 import java.io.BufferedWriter;
@@ -18,23 +16,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Checks for support stuff
- */
-public class SupportCheck extends ValidatingPrompt {
+// Finds blocks that will fall because of the block under them being broken
+public class SupportCheck extends CheckBase implements Prompt {
 
     private Player player;
     private int nextMaterial = -1;
     private Material[] materials = Material.values();
-    private AntiShare plugin;
     private List<Material> breaks = new ArrayList<Material>();
 
-    public SupportCheck(Player player, AntiShare plugin) {
+    public SupportCheck(AntiShare plugin, Player player) {
+        super(plugin);
         this.player = player;
-        this.plugin = plugin;
     }
 
     public void begin() {
+        Bukkit.broadcastMessage(ChatColor.BLUE + "Running support sequence...");
         prepareCube(10, new Location(player.getWorld(), 0, 70, 0));
         player.teleport(new Location(player.getWorld(), 0, 72, 0));
         player.beginConversation(new ConversationFactory(plugin)
@@ -93,12 +89,17 @@ public class SupportCheck extends ValidatingPrompt {
     }
 
     @Override
-    protected boolean isInputValid(ConversationContext conversationContext, String s) {
-        return s.equalsIgnoreCase("no") || s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("n") || s.equalsIgnoreCase("y") || nextMaterial < 0;
+    public String getPromptText(ConversationContext conversationContext) {
+        return nextMaterial < 0 ? ChatColor.AQUA + "Enter anything to begin." : ChatColor.AQUA + "Break the stone. Does the top drop? [Y/N]";
     }
 
     @Override
-    protected Prompt acceptValidatedInput(ConversationContext conversationContext, String s) {
+    public boolean blocksForInput(ConversationContext conversationContext) {
+        return true; // Need input
+    }
+
+    @Override
+    public Prompt acceptInput(ConversationContext conversationContext, String s) {
         if (nextMaterial >= 0) {
             if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("y")) {
                 this.breaks.add(this.materials[nextMaterial]);
@@ -112,11 +113,6 @@ public class SupportCheck extends ValidatingPrompt {
             player.sendRawMessage(ChatColor.AQUA + "Done!");
         }
         return done ? null : this;
-    }
-
-    @Override
-    public String getPromptText(ConversationContext conversationContext) {
-        return nextMaterial < 0 ? ChatColor.AQUA + "Enter anything to begin." : ChatColor.AQUA + "Break the stone. Does the top drop? [Y/N]";
     }
 
     private void prepareCube(int radius, Location location) {

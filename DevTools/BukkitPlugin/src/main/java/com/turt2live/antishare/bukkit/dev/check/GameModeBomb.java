@@ -1,26 +1,26 @@
-package com.turt2live.antishare.bukkit.dev;
+package com.turt2live.antishare.bukkit.dev.check;
 
 import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.bukkit.dev.AntiShare;
+import com.turt2live.antishare.bukkit.dev.CheckBase;
 import com.turt2live.antishare.engine.Engine;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.util.Random;
+public class GameModeBomb extends CheckBase {
 
-public class GameModeBomb {
-
-    private static Random random = new Random();
-    private AntiShare plugin;
     private ASLocation start;
     private BlockType[] values = new BlockType[]{BlockType.CREATIVE, BlockType.SURVIVAL, BlockType.ADVENTURE, BlockType.SPECTATOR};
 
     public GameModeBomb(AntiShare plugin, ASLocation start) {
-        this.plugin = plugin;
+        super(plugin);
         this.start = start;
     }
 
+    @Override
     public void begin() {
+        Bukkit.broadcastMessage(ChatColor.GREEN + "Starting: " + start);
         String world = "world";
         int creative = 0, survival = 0, adventure = 0, spectator = 0;
         int bombRadius = 50;
@@ -28,7 +28,7 @@ public class GameModeBomb {
             for (int z = -bombRadius; z < bombRadius; z++) {
                 for (int y = 0; y < 256; y++) {
                     ASLocation offset = new ASLocation(start.X + x, y, start.Z + z);
-                    BlockType type = values[random.nextInt(values.length)];
+                    BlockType type = values[AntiShare.RANDOM.nextInt(values.length)];
                     Engine.getInstance().getEngine(world).getBlockManager().setBlockType(offset, type);
 
                     switch (type) {

@@ -1,19 +1,22 @@
-package com.turt2live.antishare.bukkit.dev;
+package com.turt2live.antishare.bukkit.dev.check;
 
+import com.turt2live.antishare.bukkit.dev.AntiShare;
+import com.turt2live.antishare.bukkit.dev.CheckBase;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 import java.io.*;
 
-public class EssentialsToAntiShare {
-
-    private AntiShare plugin;
+public class EssentialsToAntiShare extends CheckBase {
 
     public EssentialsToAntiShare(AntiShare plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
+    @Override
     public void begin() {
+        Bukkit.broadcastMessage(ChatColor.GREEN + "Translating items.csv from Essentials format...");
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(plugin.getResource("items.csv")));
             BufferedWriter writer = new BufferedWriter(new FileWriter(new File(plugin.getDataFolder(), "item_aliases.csv"), false));

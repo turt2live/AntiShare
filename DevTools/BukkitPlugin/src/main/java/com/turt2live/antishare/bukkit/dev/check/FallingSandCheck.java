@@ -1,9 +1,8 @@
-package com.turt2live.antishare.bukkit.dev;
+package com.turt2live.antishare.bukkit.dev.check;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import com.turt2live.antishare.bukkit.dev.AntiShare;
+import com.turt2live.antishare.bukkit.dev.CheckBase;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FallingSandCheck implements Listener {
+public class FallingSandCheck extends CheckBase implements Listener {
 
     private enum SandState {
         DISSOLVE, // Sand "eats" or "dissolves" the test block
@@ -29,7 +28,6 @@ public class FallingSandCheck implements Listener {
     }
 
     private boolean enabled = false;
-    private AntiShare plugin;
     private int nextMaterial = 0; // AIR
     private Material[] materials = Material.values();
     private Location blockLocation, sandLocation;
@@ -38,8 +36,8 @@ public class FallingSandCheck implements Listener {
     private List<Material> falling = new ArrayList<Material>();
 
     public FallingSandCheck(AntiShare plugin) {
+        super(plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        this.plugin = plugin;
 
         for (Material material : materials) {
             if (material.hasGravity()) {
@@ -48,7 +46,9 @@ public class FallingSandCheck implements Listener {
         }
     }
 
+    @Override
     public void begin() {
+        Bukkit.broadcastMessage(ChatColor.GREEN + "Running falling sand check...");
         plugin.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + "WARNING: SERVER LAG INCOMING");
 
         World world = plugin.getServer().getWorlds().get(0);
