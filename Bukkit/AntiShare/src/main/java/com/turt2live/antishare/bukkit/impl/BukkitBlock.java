@@ -33,30 +33,30 @@ public class BukkitBlock implements ABlock {
 
     @Override
     public boolean isAttached(ABlock host) {
-        if(host==null)return false;
+        if (host == null) return false;
 
-        if(host instanceof BukkitBlock){
-            Block bkBlock = ((BukkitBlock)host).getBlock();
+        if (host instanceof BukkitBlock) {
+            Block bkBlock = ((BukkitBlock) host).getBlock();
             BlockState state = bkBlock.getState();
             MaterialData data = state.getData();
 
             // Check one: The obvious
-            if(data instanceof Attachable){
+            if (data instanceof Attachable) {
                 BlockFace attached = ((Attachable) data).getAttachedFace();
                 Location attachedLoc = this.block.getRelative(attached).getLocation();
                 Location sourceLocation = bkBlock.getLocation();
 
-                if(attachedLoc.distanceSquared(sourceLocation)==0){
+                if (attachedLoc.distanceSquared(sourceLocation) == 0) {
                     return true;
                 }
             }
 
             // Check two: Things that break when their support goes missing
             Block under = this.block.getRelative(BlockFace.DOWN);
-            if(under.getLocation().distanceSquared(bkBlock.getLocation())==0){
+            if (under.getLocation().distanceSquared(bkBlock.getLocation()) == 0) {
                 // Well, we know that we're above the source at least
                 List<Material> canBeBroken = VersionSelector.getMinecraft().getBrokenOnTop();
-                if(canBeBroken.contains(this.block.getType())){
+                if (canBeBroken.contains(this.block.getType())) {
                     return true; // We'll go missing :(
                 }
             }
