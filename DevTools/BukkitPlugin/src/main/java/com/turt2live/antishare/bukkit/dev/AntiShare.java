@@ -23,7 +23,7 @@ public class AntiShare extends JavaPlugin {
         getLogger().warning(" These tools have NO permission checks and CAN damage a server! ");
         getLogger().warning(" USE THESE TOOLS AT YOUR OWN RISK. THERE IS NO SUPPORT FOR THESE TOOLS.");
         getLogger().warning("============= ANTISHARE =============");
-        
+
         getServer().getPluginManager().registerEvents(new DevListener(), this);
     }
 
