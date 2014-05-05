@@ -18,11 +18,6 @@ public final class PermissionNodes {
      */
     public static final String FREE_PLACE = "antishare.freeplace";
     /**
-     * Ignores block break rules for the player such as mixed gamemode. Other permissions
-     * may override this.
-     */
-    public static final String FREE_BREAK = "antishare.freebreak";
-    /**
      * If enabled, the player will get notifications of illegal actions performed by players
      */
     public static final String GET_ALERTS = "antishare.alerts";
