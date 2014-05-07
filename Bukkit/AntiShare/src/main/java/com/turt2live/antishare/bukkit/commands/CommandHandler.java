@@ -3,6 +3,7 @@ package com.turt2live.antishare.bukkit.commands;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
+import com.turt2live.antishare.engine.DevEngine;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -39,6 +40,7 @@ public class CommandHandler implements CommandExecutor, ASCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        DevEngine.log("[Commands] " + sender.getName() + " ran command /" + command.getName() + " with args = " + args);
         if (args == null || args.length == 0) {
             sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_HELP_SUGGEST)).withPrefix().build());
         } else {

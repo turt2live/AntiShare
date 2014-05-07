@@ -94,6 +94,8 @@ public final class Engine {
     public void setGroupManager(GroupManager manager) {
         if (manager == null) throw new IllegalArgumentException("group manager cannot be null");
 
+        DevEngine.log("[Engine] New group manager: " + manager.getClass().getName());
+
         this.groupManager = manager;
         this.groupManager.loadAll();
     }
@@ -116,6 +118,8 @@ public final class Engine {
      */
     public void setLogger(Logger logger) {
         if (logger == null) throw new IllegalArgumentException("logger may not be null");
+
+        DevEngine.log("[Engine] New logger: " + logger.getClass().getName());
 
         this.logger = logger;
     }
@@ -148,6 +152,8 @@ public final class Engine {
         if (world == null) throw new IllegalArgumentException("world cannot be null");
         if (engines.containsKey(world)) return engines.get(world);
 
+        DevEngine.log("[Engine] Creating world engine for '" + world + "'...");
+
         WorldEngine engine = new WorldEngine(world);
         engines.put(world, engine);
 
@@ -167,6 +173,7 @@ public final class Engine {
         if (world != null) {
             WorldEngine engine = engines.get(world);
             if (engine != null) {
+                DevEngine.log("[Engine] Unloading world engine for '" + world + "'...");
                 engine.prepareShutdown();
                 engines.remove(world);
             }
@@ -179,6 +186,8 @@ public final class Engine {
      */
     public void prepareShutdown() {
         EventDispatcher.dispatch(new EngineShutdownEvent());
+
+        DevEngine.log("[Engine] Shutting down");
 
         newCacheTimer(); // Cancels internally, resetting the timer to no task
         newSaveTimer(); // Cancels internally, resetting the timer to no task
@@ -208,6 +217,8 @@ public final class Engine {
     public void setCacheMaximum(long cacheMaximum) {
         if (cacheMaximum <= 0) throw new IllegalArgumentException("maximum cannot be less than or equal to zero");
 
+        DevEngine.log("[Engine] New cache maximum: " + cacheMaximum);
+
         this.cacheMaximum = cacheMaximum;
     }
 
@@ -233,6 +244,8 @@ public final class Engine {
     public void setCacheIncrement(long cacheIncrement) {
         if (cacheIncrement <= 0)
             throw new IllegalArgumentException("cache increment must not be less than or equal to zero");
+
+        DevEngine.log("[Engine] New cache increment: " + cacheIncrement);
 
         this.cacheIncrement = cacheIncrement;
         newCacheTimer();
@@ -271,6 +284,8 @@ public final class Engine {
      * @param saveInterval the new save interval
      */
     public void setSaveInterval(long saveInterval) {
+        DevEngine.log("[Engine] New save interval: " + saveInterval);
+
         this.saveInterval = saveInterval;
         newSaveTimer();
         if (saveInterval > 0) {
@@ -303,6 +318,8 @@ public final class Engine {
      */
     // TODO: Unit test
     public void setPhysicsSettings(boolean growWithGamemode, boolean dropAsGamemode) {
+        DevEngine.log("[Engine] New physics settings: growWithGamemode(" + growWithGamemode + "), dropAsGamemode(" + dropAsGamemode + ")");
+
         this.physicsGrow = growWithGamemode;
         this.physicsBlockItems = dropAsGamemode;
     }
@@ -347,6 +364,8 @@ public final class Engine {
      */
     // TODO: Unit test
     public void setAttachmentSettings(boolean breakAsPlaced, boolean denyMismatchBreak) {
+        DevEngine.log("[Engine] New attachment settings: breakAsPlaced(" + breakAsPlaced + "), denyMismatchBreak(" + denyMismatchBreak + ")");
+
         this.attachmentsAsPlaced = breakAsPlaced;
         this.attachmentsDeny = denyMismatchBreak;
     }
@@ -387,6 +406,8 @@ public final class Engine {
      */
     // TODO: Unit test
     public void setHoppersDenyMixed(boolean flag) {
+        DevEngine.log("[Engine] New hopper deny mixed: " + flag);
+
         this.hoppersMixed = flag;
     }
 

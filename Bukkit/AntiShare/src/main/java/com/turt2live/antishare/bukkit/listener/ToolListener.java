@@ -6,6 +6,7 @@ import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
+import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.utils.ASUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -75,6 +76,12 @@ public class ToolListener implements Listener {
                         .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
                         .withPrefix()
                         .build());
+
+                DevEngine.log("[Tools] Check completed (" + player.getName() + ")",
+                        "[Tools] \t\tCheck on: " + block,
+                        "[Tools] \t\tWith: " + hand,
+                        "[Tools] \t\tRClick: " + rclick,
+                        "[Tools] \t\tResult: " + type + " (" + strRep + ")");
             } else if (hand.isSimilar(SET_TEMPLATE)) {
                 event.setCancelled(true);
 
@@ -87,6 +94,12 @@ public class ToolListener implements Listener {
                             .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
                             .withPrefix()
                             .build());
+
+                    DevEngine.log("[Tools] Set completed (" + player.getName() + ")",
+                            "[Tools] \t\tCheck on: " + block,
+                            "[Tools] \t\tWith: " + hand,
+                            "[Tools] \t\tRClick: " + rclick,
+                            "[Tools] \t\tResult: to " + player.getGameMode() + " (" + strRep + ")");
                 } else {
                     BlockType previous = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
                     String strRep = ASUtils.toUpperWords(previous == BlockType.UNKNOWN ? "Natural" : previous.name());
@@ -97,6 +110,12 @@ public class ToolListener implements Listener {
                             .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
                             .withPrefix()
                             .build());
+
+                    DevEngine.log("[Tools] Unset completed (" + player.getName() + ")",
+                            "[Tools] \t\tCheck on: " + block,
+                            "[Tools] \t\tWith: " + hand,
+                            "[Tools] \t\tRClick: " + rclick,
+                            "[Tools] \t\tResult: was " + previous + " (" + strRep + ")");
                 }
             }
         }

@@ -41,6 +41,7 @@ public final class WorldEngine {
      * Prepares this world engine for shutdown
      */
     public void prepareShutdown() {
+        DevEngine.log("[WorldEngine:" + worldName + "] Shutting down");
         EventDispatcher.dispatch(new WorldEngineShutdownEvent(this));
         blockManager.saveAll();
     }
@@ -73,6 +74,7 @@ public final class WorldEngine {
     public void setBlockManager(BlockManager blockManager) {
         if (blockManager == null) throw new IllegalArgumentException("block manager cannot be null");
 
+        DevEngine.log("[WorldEngine:" + worldName + "] New block manager: " + blockManager.getClass().getName());
         this.blockManager = blockManager;
     }
 
@@ -101,6 +103,11 @@ public final class WorldEngine {
     // TODO: Update unit test
     public boolean processBlockPlace(APlayer player, ABlock block, ASGameMode placeAs) {
         if (player == null || block == null || placeAs == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing block place",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tblock = " + block,
+                "[WorldEngine:" + worldName + "] \t\tplaceAs = " + placeAs);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
         BlockTypeList list = new DefaultBlockTypeList();
@@ -204,6 +211,13 @@ public final class WorldEngine {
     public boolean processBlockBreak(APlayer player, ABlock block, ASGameMode breakAs, OutputParameter<List<ABlock>> additionalBreak, OutputParameter<BlockType> eventBreakAs) {
         if (player == null || block == null || breakAs == null) throw new IllegalArgumentException();
 
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing block break",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tblock = " + block,
+                "[WorldEngine:" + worldName + "] \t\tbreakAs = " + breakAs,
+                "[WorldEngine:" + worldName + "] \t\tadditionalBreak = " + additionalBreak,
+                "[WorldEngine:" + worldName + "] \t\teventBreakAs = " + eventBreakAs);
+
         List<ABlock> additional = new ArrayList<ABlock>();
         if (additionalBreak != null) additionalBreak.setValue(additional);
 
@@ -268,6 +282,9 @@ public final class WorldEngine {
     public void processFade(ABlock block) {
         if (block == null) throw new IllegalArgumentException();
 
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing block fade",
+                "[WorldEngine:" + worldName + "] \t\tblock = " + block);
+
         blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
     }
 
@@ -282,6 +299,10 @@ public final class WorldEngine {
     // TODO: Unit test
     public void processBlockGrow(ABlock parent, ABlock child) {
         if (parent == null || child == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing block grow",
+                "[WorldEngine:" + worldName + "] \t\tparent = " + parent,
+                "[WorldEngine:" + worldName + "] \t\tchild = " + child);
 
         if (Engine.getInstance().isPhysicsGrowWithGamemode()) {
             BlockType current = blockManager.getBlockType(parent.getLocation());
@@ -305,6 +326,10 @@ public final class WorldEngine {
     // TODO: Unit test
     public void processBlockStems(ABlock spawned, List<ABlock> stems) {
         if (spawned == null || stems == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing block stems",
+                "[WorldEngine:" + worldName + "] \t\tspawned = " + spawned,
+                "[WorldEngine:" + worldName + "] \t\tstems = " + stems);
 
         if (!Engine.getInstance().isPhysicsGrowWithGamemode()) return;
 
@@ -360,6 +385,9 @@ public final class WorldEngine {
     public boolean processBlockPhysicsBreak(ABlock block) {
         if (block == null) throw new IllegalArgumentException();
 
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing block physics (break)",
+                "[WorldEngine:" + worldName + "] \t\tblock = " + block);
+
         BlockType current = blockManager.getBlockType(block.getLocation());
         if (Engine.getInstance().isPhysicsBreakAsGamemode()) {
             return current != BlockType.CREATIVE;
@@ -378,6 +406,9 @@ public final class WorldEngine {
     // TODO: Unit test
     public void processExplosion(Map<ABlock, Boolean> blocks) {
         if (blocks == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing explosion",
+                "[WorldEngine:" + worldName + "] \t\tblocks = " + blocks);
 
         if (!Engine.getInstance().isPhysicsBreakAsGamemode()) return; // Don't handle this if we aren't supposed to
 
@@ -403,6 +434,10 @@ public final class WorldEngine {
     public boolean processFallingBlockSpawn(ABlock block, OutputParameter<BlockType> type) {
         if (block == null) throw new IllegalArgumentException();
 
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing falling block spawn",
+                "[WorldEngine:" + worldName + "] \t\tblock = " + block,
+                "[WorldEngine:" + worldName + "] \t\ttype = " + type);
+
         BlockType current = blockManager.getBlockType(block.getLocation());
         blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
         if (type != null) {
@@ -426,6 +461,10 @@ public final class WorldEngine {
         if (block == null) throw new IllegalArgumentException();
         if (type == null) type = BlockType.UNKNOWN;
 
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing falling block land",
+                "[WorldEngine:" + worldName + "] \t\tblock = " + block,
+                "[WorldEngine:" + worldName + "] \t\ttype = " + type);
+
         blockManager.setBlockType(block.getLocation(), type);
     }
 
@@ -439,6 +478,10 @@ public final class WorldEngine {
     // TODO: Unit test
     public void processStructure(ABlock source, List<ABlock> structure) {
         if (source == null || structure == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing structure",
+                "[WorldEngine:" + worldName + "] \t\tsource = " + source,
+                "[WorldEngine:" + worldName + "] \t\tstructure = " + structure);
 
         BlockType type = blockManager.getBlockType(source.getLocation());
         if (Engine.getInstance().isPhysicsGrowWithGamemode()) {
@@ -480,6 +523,10 @@ public final class WorldEngine {
     // TODO: Unit test
     public boolean processBlockInteraction(ABlock block1, ABlock block2) {
         if (block1 == null || block2 == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing block interaction",
+                "[WorldEngine:" + worldName + "] \t\tblock1 = " + block1,
+                "[WorldEngine:" + worldName + "] \t\tblock2 = " + block2);
 
         BlockType type1 = blockManager.getBlockType(block1.getLocation());
         BlockType type2 = blockManager.getBlockType(block2.getLocation());

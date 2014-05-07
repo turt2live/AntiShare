@@ -1,5 +1,6 @@
 package com.turt2live.antishare.bukkit;
 
+import com.turt2live.antishare.engine.DevEngine;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -36,6 +37,14 @@ public class MaterialProvider {
             result = 31 * result + (int) data;
             return result;
         }
+
+        @Override
+        public String toString() {
+            return "MaterialInformation{" +
+                    "material=" + material +
+                    ", data=" + data +
+                    '}';
+        }
     }
 
     private Map<String, Material> materials = new HashMap<String, Material>();
@@ -48,11 +57,13 @@ public class MaterialProvider {
         information.data = data;
 
         playerFriendly.put(information, name);
+        DevEngine.log("[Materials] Loaded player friendly (" + name + "): " + information);
     }
 
     void insertAlias(String alias, Material material) {
         if (alias == null || material == null) return;
         materials.put(alias, material);
+        DevEngine.log("[Materials] Loaded alias (" + alias + "): " + material);
     }
 
     /**

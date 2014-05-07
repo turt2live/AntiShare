@@ -9,6 +9,7 @@ import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
+import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.utils.OutputParameter;
@@ -22,6 +23,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,6 +36,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +67,8 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
+        printDebugEvent(event);
+
         ABlock block = new BukkitBlock(event.getBlock());
         APlayer player = new BukkitPlayer(event.getPlayer());
         ASGameMode gamemode = player.getGameMode();
@@ -78,6 +83,8 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        printDebugEvent(event);
+
         if (event instanceof AntiShareBlockBreakEvent) return; // Don't handle ourselves
 
         ABlock block = new BukkitBlock(event.getBlock());
@@ -113,6 +120,8 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExplosion(EntityExplodeEvent event) {
+        printDebugEvent(event);
+
         if (event instanceof AntiShareExplodeEvent) return; // Don't handle ourselves
 
         Map<ABlock, Boolean> keep = new HashMap<ABlock, Boolean>();
@@ -144,6 +153,8 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFallingBlock(EntityChangeBlockEvent event) {
+        printDebugEvent(event);
+
         Entity eventEntity = event.getEntity();
         WorldEngine engine = this.engine.getEngine(eventEntity.getWorld().getName());
         if (eventEntity.getType() == EntityType.FALLING_BLOCK) {
@@ -171,6 +182,8 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSpawn(ItemSpawnEvent event) {
+        printDebugEvent(event);
+
         Block bkBlock = event.getLocation().getBlock();
         if (bkBlock.getType() != Material.AIR) { // TODO: Add similarity check
             ABlock block = new BukkitBlock(event.getLocation().getBlock());
@@ -182,6 +195,8 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockGrow(BlockGrowEvent event) {
+        printDebugEvent(event);
+
         Block source = event.getBlock().getRelative(BlockFace.DOWN);
         Block child = event.getNewState().getBlock();
         BlockState childState = event.getNewState();
@@ -217,6 +232,8 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onStructureGrow(StructureGrowEvent event) {
+        printDebugEvent(event);
+
         ABlock source = new BukkitBlock(event.getLocation().getBlock());
         List<ABlock> structure = new ArrayList<ABlock>();
 
@@ -229,6 +246,8 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockSpread(BlockSpreadEvent event) {
+        printDebugEvent(event);
+
         ABlock source = new BukkitBlock(event.getSource());
         ABlock child = new BukkitBlock(event.getBlock());
         engine.getEngine(source.getWorld().getName()).processBlockGrow(source, child);
@@ -236,31 +255,43 @@ public class EngineListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBurn(BlockBurnEvent event) {
+        printDebugEvent(event);
+
         engine.getEngine(event.getBlock().getWorld().getName()).processFade(new BukkitBlock(event.getBlock()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFade(BlockFadeEvent event) {
+        printDebugEvent(event);
+
         engine.getEngine(event.getBlock().getWorld().getName()).processFade(new BukkitBlock(event.getBlock()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDecay(LeavesDecayEvent event) {
+        printDebugEvent(event);
+
         engine.getEngine(event.getBlock().getWorld().getName()).processFade(new BukkitBlock(event.getBlock()));
     }
 
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
+        printDebugEvent(event);
+
         engine.createWorldEngine(event.getWorld().getName()); // Force-creates the world engine
     }
 
     @EventHandler
     public void onWorldUnload(WorldUnloadEvent event) {
+        printDebugEvent(event);
+
         engine.unloadWorldEngine(event.getWorld().getName());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryMoveCheck(AntiShareInventoryTransferEvent event) {
+        printDebugEvent(event);
+
         ABlock block1 = new BukkitBlock(event.getBlock1());
         ABlock block2 = new BukkitBlock(event.getBlock2());
 
@@ -269,11 +300,25 @@ public class EngineListener implements Listener {
         }
     }
 
+    /**
+     * Sends an alert
+     *
+     * @param langNode the alert node in the lang file
+     * @param player   the player
+     * @param block    the block
+     */
     private void alert(String langNode, Player player, Block block) {
         if (langNode == null || player == null || block == null) return;
         alert(langNode, player.getName(), plugin.getMaterialProvider().getPlayerFriendlyName(block));
     }
 
+    /**
+     * Sends an alert
+     *
+     * @param langNode   the alert node in the lang file
+     * @param playerName the player name
+     * @param variable   a variable to replace ({@link com.turt2live.antishare.bukkit.lang.LangBuilder#SELECTOR_VARIABLE})
+     */
     private void alert(String langNode, String playerName, String variable) {
         String compiled = new LangBuilder(Lang.getInstance().getFormat(langNode)).withPrefix()
                 .setReplacement(LangBuilder.SELECTOR_PLAYER, playerName)
@@ -283,6 +328,27 @@ public class EngineListener implements Listener {
         if (ChatColor.stripColor(compiled).equalsIgnoreCase("disabled")) return;
 
         Bukkit.broadcast(compiled, PermissionNodes.GET_ALERTS);
+    }
+
+    /**
+     * Prints debug information for an event to the DevEngine
+     *
+     * @param event the event to write
+     */
+    private void printDebugEvent(Event event) {
+        if (event != null && DevEngine.isEnabled()) { // No event or no DevEngine - Don't bother
+            DevEngine.log("[Bukkit Event] " + event.getClass().getName() + " :: EventName:" + event.getEventName());
+            Method[] methods = event.getClass().getMethods();
+            for (Method method : methods) {
+                if (method.getParameterTypes().length == 0) {
+                    try {
+                        DevEngine.log("[Bukkit Event]\t\t" + method.getName() + "() = " + method.invoke(event));
+                    } catch (Exception e) {
+                        // Consume
+                    }
+                }
+            }
+        }
     }
 
 }

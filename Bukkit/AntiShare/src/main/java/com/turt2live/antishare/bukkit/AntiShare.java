@@ -176,6 +176,7 @@ public class AntiShare extends JavaPlugin {
             getLogger().warning("  **** Enabling Debug Support ****");
             getLogger().warning("============= ANTISHARE =============");
             DevEngine.setEnabled(true);
+            DevEngine.setLogDirectory(new File(getDataFolder(), "devlogs"));
         }
     }
 
