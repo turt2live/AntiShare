@@ -167,6 +167,9 @@
                                     <include>com.turt2live:Hurtle</include>
                                     <include>com.turt2live.antishare:*</include>
                                 </includes>
+                                <excludes>
+                                    <exclude>com.turt2live.antishare:AntiShare-DevTools-API</exclude>
+                                </excludes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
