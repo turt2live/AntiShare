@@ -6,6 +6,7 @@ import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
+import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.events.EventDispatcher;
@@ -110,6 +111,12 @@ public class AntiShare extends JavaPlugin {
 
         // Cleanup
         getServer().getScheduler().cancelTasks(this);
+
+        // Shutdown DevEngine
+        if (DevEngine.isEnabled()) {
+            getLogger().info("DevEngine shutdown");
+            DevEngine.setEnabled(false);
+        }
     }
 
     @Override
@@ -160,6 +167,15 @@ public class AntiShare extends JavaPlugin {
         // Probe all currently loaded worlds
         for (World world : getServer().getWorlds()) {
             Engine.getInstance().createWorldEngine(world.getName());
+        }
+
+        // Check for developer tools
+        if (getServer().getPluginManager().getPlugin("AntiShare-DevTools") != null) {
+            getLogger().warning("============= ANTISHARE =============");
+            getLogger().warning("   -- DEVELOPMENT TOOLS FOUND --");
+            getLogger().warning("  **** Enabling Debug Support ****");
+            getLogger().warning("============= ANTISHARE =============");
+            DevEngine.setEnabled(true);
         }
     }
 

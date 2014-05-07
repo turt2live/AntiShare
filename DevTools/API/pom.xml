@@ -10,37 +10,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.turt2live.antishare</groupId>
-    <artifactId>AntiShare-DevTools-BukkitPlugin</artifactId>
-    <name>AntiShare-DevTools-BukkitPlugin</name>
-    <version>DevTools-BukkitPlugin</version>
+    <artifactId>AntiShare-DevTools-API</artifactId>
+    <name>AntiShare-DevTools-API</name>
+    <version>DevTools-API</version>
 
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Used by replacement plugin to inject build number -->
-        <BUILD_NUMBER>local</BUILD_NUMBER>
     </properties>
 
     <dependencies>
-        <!-- AntiShare Bukkit Plugin -->
+        <!-- JSSC -->
         <dependency>
-            <groupId>com.turt2live.antishare</groupId>
-            <artifactId>AntiShare-Bukkit</artifactId>
-            <version>5.5.3-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-
-        <!-- Bukkit -->
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.7.9-R0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.turt2live.antishare</groupId>
-            <artifactId>AntiShare-DevTools-API</artifactId>
-            <version>DevTools-API</version>
+            <groupId>org.scream3r</groupId>
+            <artifactId>jssc</artifactId>
+            <version>2.8.0</version>
         </dependency>
     </dependencies>
 
@@ -84,39 +68,12 @@
                             <minimizeJar>false</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <include>com.turt2live.antishare:AntiShare-DevTools-API</include>
+                                    <include>org.scream3r:*</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>maven-replacer-plugin</artifactId>
-                <version>1.3.8</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <file>target/classes/plugin.yml</file>
-                    <replacements>
-                        <replacement>
-                            <token>maven-version-number</token>
-                            <value>${project.version}</value>
-                        </replacement>
-                        <replacement>
-                            <token>jenkins-build-number</token>
-                            <value>${BUILD_NUMBER}</value>
-                        </replacement>
-                    </replacements>
-                </configuration>
             </plugin>
         </plugins>
     </build>

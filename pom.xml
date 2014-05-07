@@ -27,6 +27,7 @@
         <module>Bukkit/AbstractImpl/Abstraction-v1_7_R2</module>
         <module>Bukkit/AbstractImpl/Abstraction-v1_7_R3</module>
         <module>DevTools/BukkitPlugin</module>
+        <module>DevTools/API</module>
     </modules>
 
     <repositories>

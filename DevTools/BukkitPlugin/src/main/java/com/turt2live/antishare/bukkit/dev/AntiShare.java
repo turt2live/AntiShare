@@ -3,6 +3,7 @@ package com.turt2live.antishare.bukkit.dev;
 import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.dev.check.*;
+import com.turt2live.antishare.engine.DevEngine;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -50,10 +51,17 @@ public class AntiShare extends JavaPlugin {
                     start = BukkitUtils.toLocation(((Player) sender).getLocation());
                 }
                 check = new GameModeBomb(this, start);
-            } else if (args[0].equalsIgnoreCase("serial")) {
-                if (args.length < 2) sender.sendMessage(ChatColor.RED + "Try again");
-                else {
-                    new DevPort(args[1]);
+            } else if (args[0].equalsIgnoreCase("devengine")) {
+                if (getServer().getPluginManager().getPlugin("AntiShare") != null) {
+                    if (args.length >= 2) {
+                        boolean state = args[1].equalsIgnoreCase("on") || args[1].equalsIgnoreCase("true");
+                        DevEngine.setEnabled(state);
+                        sender.sendMessage(ChatColor.AQUA + "DevEngine is now " + (state ? ChatColor.GREEN + "ENABLED" : ChatColor.RED + "DISABLED"));
+                    } else {
+                        sender.sendMessage(ChatColor.AQUA + "DevEngine is " + (DevEngine.isEnabled() ? ChatColor.GREEN + "ENABLED" : ChatColor.RED + "DISABLED"));
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.RED + "No DevEngine to access");
                 }
             } else
                 sender.sendMessage(ChatColor.RED + "Unknown command.");
