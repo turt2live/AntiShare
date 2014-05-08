@@ -1,12 +1,16 @@
 package com.turt2live.antishare.io.flatfile;
 
 import com.turt2live.antishare.BlockType;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 

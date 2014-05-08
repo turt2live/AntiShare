@@ -7,8 +7,12 @@ import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.engine.RejectionList;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.*;
-import org.bukkit.material.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.material.Attachable;
+import org.bukkit.material.Directional;
+import org.bukkit.material.MaterialData;
 
 import java.util.List;
 

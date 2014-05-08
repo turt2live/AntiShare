@@ -1,13 +1,23 @@
 package com.turt2live.antishare.bukkit.abstraction.vpre;
 
-import com.turt2live.antishare.*;
+import com.turt2live.antishare.ABlock;
+import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.BlockType;
 import com.turt2live.antishare.bukkit.abstraction.MinecraftVersion;
 import com.turt2live.hurtle.uuid.UUIDServiceProvider;
-import org.bukkit.*;
-import org.bukkit.block.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.inventory.DoubleChestInventory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 

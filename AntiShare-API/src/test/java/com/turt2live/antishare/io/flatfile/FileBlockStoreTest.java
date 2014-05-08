@@ -1,7 +1,10 @@
 package com.turt2live.antishare.io.flatfile;
 
 import com.turt2live.antishare.BlockType;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;

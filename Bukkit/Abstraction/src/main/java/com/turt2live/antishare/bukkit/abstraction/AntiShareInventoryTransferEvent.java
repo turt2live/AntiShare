@@ -1,7 +1,9 @@
 package com.turt2live.antishare.bukkit.abstraction;
 
 import org.bukkit.block.Block;
-import org.bukkit.event.*;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 /**
  * AntiShare event for triggering an inventory transfer event check
