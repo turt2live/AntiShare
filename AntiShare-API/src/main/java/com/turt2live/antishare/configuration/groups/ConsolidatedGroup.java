@@ -7,9 +7,7 @@ import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.engine.BlockTypeList;
 import com.turt2live.antishare.engine.RejectionList;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a ruleset for a collection of groups. The ruleset applied

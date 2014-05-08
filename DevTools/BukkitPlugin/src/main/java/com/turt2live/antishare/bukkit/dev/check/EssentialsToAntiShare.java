@@ -2,9 +2,7 @@ package com.turt2live.antishare.bukkit.dev.check;
 
 import com.turt2live.antishare.bukkit.dev.AntiShare;
 import com.turt2live.antishare.bukkit.dev.CheckBase;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 
 import java.io.*;
 

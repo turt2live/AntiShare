@@ -1,8 +1,6 @@
 package com.turt2live.antishare.collections;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a simple list for objects
