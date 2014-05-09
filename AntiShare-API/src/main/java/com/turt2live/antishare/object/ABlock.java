@@ -1,5 +1,7 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.object;
 
+import com.turt2live.antishare.object.attribute.Facing;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.engine.list.Rejectable;
 
 /**
@@ -66,7 +68,7 @@ public interface ABlock extends Rejectable {
     /**
      * Gets the applicable chest type for this block
      *
-     * @return the applicable chest type, returning {@link com.turt2live.antishare.ABlock.ChestType#NONE} for 'not a chest'
+     * @return the applicable chest type, returning {@link ABlock.ChestType#NONE} for 'not a chest'
      */
     public ChestType getChestType();
 
@@ -89,12 +91,12 @@ public interface ABlock extends Rejectable {
      * strictly a lookup of permissions without validating with any
      * engine components or through the rejection lists.
      * <p/>
-     * This uses the tri-state enum {@link com.turt2live.antishare.TrackedState}
+     * This uses the tri-state enum {@link com.turt2live.antishare.object.attribute.TrackedState}
      * to represent various states, as outlined below.
      * <p/>
-     * {@link com.turt2live.antishare.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
-     * {@link com.turt2live.antishare.TrackedState#INCLUDED} - Allow permission found<br/>
-     * {@link com.turt2live.antishare.TrackedState#NEGATED} - Deny permission found
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#INCLUDED} - Allow permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
      *
      * @param player the player, cannot be null
      * @return the appropriate tracking state as defined
@@ -106,12 +108,12 @@ public interface ABlock extends Rejectable {
      * strictly a lookup of permissions without validating with any
      * engine components or through the rejection lists.
      * <p/>
-     * This uses the tri-state enum {@link com.turt2live.antishare.TrackedState}
+     * This uses the tri-state enum {@link com.turt2live.antishare.object.attribute.TrackedState}
      * to represent various states, as outlined below.
      * <p/>
-     * {@link com.turt2live.antishare.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
-     * {@link com.turt2live.antishare.TrackedState#INCLUDED} - Allow permission found<br/>
-     * {@link com.turt2live.antishare.TrackedState#NEGATED} - Deny permission found
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#INCLUDED} - Allow permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
      *
      * @param player the player, cannot be null
      * @return the appropriate tracking state as defined

@@ -1,7 +1,7 @@
 package com.turt2live.antishare.bukkit;
 
-import com.turt2live.antishare.ASLocation;
-import com.turt2live.antishare.AWorld;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.AWorld;
 import com.turt2live.antishare.bukkit.impl.BukkitWorld;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.list.RejectionList;

@@ -1,8 +1,8 @@
 package com.turt2live.antishare.engine.list;
 
-import com.turt2live.antishare.APlayer;
-import com.turt2live.antishare.PermissionNodes;
-import com.turt2live.antishare.TrackedState;
+import com.turt2live.antishare.APermission;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.attribute.TrackedState;
 
 /**
  * Represents a command which may be rejected
@@ -80,19 +80,19 @@ public class RejectableCommand implements Rejectable {
      * called by the internal logic of AntiShare and will be alongside other
      * checks such as list inclusion.
      * <p/>
-     * This uses the tri-state enum {@link com.turt2live.antishare.TrackedState}
+     * This uses the tri-state enum {@link com.turt2live.antishare.object.attribute.TrackedState}
      * to represent various states, as outlined below.
      * <p/>
-     * {@link com.turt2live.antishare.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
-     * {@link com.turt2live.antishare.TrackedState#INCLUDED} - Allow permission found<br/>
-     * {@link com.turt2live.antishare.TrackedState#NEGATED} - Deny permission found
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#INCLUDED} - Allow permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
      *
      * @param player the player to check, cannot be null
      * @return the state of this player's permissions as defined
      */
     public TrackedState canExecute(APlayer player) {
-        boolean allow = player.hasPermission(PermissionNodes.getPermissionNode(true, RejectionList.ListType.COMMANDS));
-        boolean deny = player.hasPermission(PermissionNodes.getPermissionNode(false, RejectionList.ListType.COMMANDS));
+        boolean allow = player.hasPermission(APermission.getPermissionNode(true, RejectionList.ListType.COMMANDS));
+        boolean deny = player.hasPermission(APermission.getPermissionNode(false, RejectionList.ListType.COMMANDS));
 
         if (allow == deny) return TrackedState.NOT_PRESENT;
         else if (allow) return TrackedState.INCLUDED;

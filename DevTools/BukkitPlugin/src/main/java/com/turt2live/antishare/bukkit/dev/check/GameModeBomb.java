@@ -1,7 +1,7 @@
 package com.turt2live.antishare.bukkit.dev.check;
 
-import com.turt2live.antishare.ASLocation;
-import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.bukkit.dev.AntiShare;
 import com.turt2live.antishare.bukkit.dev.CheckBase;
 import com.turt2live.antishare.engine.Engine;

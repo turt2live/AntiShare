@@ -5,6 +5,12 @@ import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.AWorld;
+import com.turt2live.antishare.object.attribute.Facing;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -106,8 +112,8 @@ public class BukkitBlock implements ABlock {
 
     private TrackedState permissionCheck(RejectionList.ListType type, APlayer player) {
         // Stage One: Check general permissions
-        boolean allow = player.hasPermission(PermissionNodes.getPermissionNode(true, type));
-        boolean deny = player.hasPermission(PermissionNodes.getPermissionNode(false, type));
+        boolean allow = player.hasPermission(APermission.getPermissionNode(true, type));
+        boolean deny = player.hasPermission(APermission.getPermissionNode(false, type));
         TrackedState stageOne = TrackedState.NOT_PRESENT;
 
         if (allow == deny) stageOne = TrackedState.NOT_PRESENT;
@@ -115,8 +121,8 @@ public class BukkitBlock implements ABlock {
         else if (deny) stageOne = TrackedState.NEGATED;
 
         // Stage Two: Check specific permissions
-        allow = player.hasPermission(PermissionNodes.getPermissionNode(true, type) + "." + getFriendlyName());
-        deny = player.hasPermission(PermissionNodes.getPermissionNode(false, type) + "." + getFriendlyName());
+        allow = player.hasPermission(APermission.getPermissionNode(true, type) + "." + getFriendlyName());
+        deny = player.hasPermission(APermission.getPermissionNode(false, type) + "." + getFriendlyName());
         TrackedState stageTwo = TrackedState.NOT_PRESENT;
 
         if (allow == deny) stageTwo = TrackedState.NOT_PRESENT;

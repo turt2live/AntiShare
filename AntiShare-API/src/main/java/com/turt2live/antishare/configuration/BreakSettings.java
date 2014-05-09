@@ -1,6 +1,6 @@
 package com.turt2live.antishare.configuration;
 
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.object.attribute.ASGameMode;
 
 /**
  * Small class for holding information about break settings

@@ -1,6 +1,6 @@
 package com.turt2live.antishare.engine.list;
 
-import com.turt2live.antishare.TrackedState;
+import com.turt2live.antishare.object.attribute.TrackedState;
 
 /**
  * A rejection list for items and/or blocks

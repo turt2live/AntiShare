@@ -7,7 +7,7 @@ import com.turt2live.antishare.engine.list.RejectionList;
  *
  * @author turt2live
  */
-public final class PermissionNodes {
+public final class APermission {
 
     /**
      * Allows the use of the AntiShare tools
@@ -22,7 +22,7 @@ public final class PermissionNodes {
      */
     public static final String GET_ALERTS = "antishare.alerts";
 
-    private PermissionNodes() {
+    private APermission() {
     }
 
     /**

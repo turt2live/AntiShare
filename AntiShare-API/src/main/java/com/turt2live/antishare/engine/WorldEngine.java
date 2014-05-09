@@ -11,6 +11,11 @@ import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.attribute.ASGameMode;
+import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.utils.ASUtils;
 import com.turt2live.antishare.utils.OutputParameter;
 
@@ -137,7 +142,7 @@ public final class WorldEngine {
         }
 
         // Check for block type insertion
-        if (player.hasPermission(PermissionNodes.FREE_PLACE)) blockType = BlockType.UNKNOWN;
+        if (player.hasPermission(APermission.FREE_PLACE)) blockType = BlockType.UNKNOWN;
 
         // Check for double chests
         ABlock.ChestType blockChest = block.getChestType();
@@ -458,7 +463,7 @@ public final class WorldEngine {
      * into the block manager. Other checks may be performed.
      *
      * @param block the block location which is landing, cannot be null
-     * @param type  the block type, null is interpretted as {@link com.turt2live.antishare.BlockType#UNKNOWN}
+     * @param type  the block type, null is interpretted as {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}
      */
     // TODO: Unit test
     public void processFallingBlockLand(ABlock block, BlockType type) {

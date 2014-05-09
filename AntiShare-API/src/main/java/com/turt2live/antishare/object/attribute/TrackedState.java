@@ -1,8 +1,8 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.object.attribute;
 
 /**
  * Tracking states for lists. This is also used by the can* checks
- * in {@link com.turt2live.antishare.ABlock} for tri-state purposes. See
+ * in {@link com.turt2live.antishare.object.ABlock} for tri-state purposes. See
  * ABlock for more information.
  *
  * @author turt2live

@@ -1,7 +1,7 @@
 package com.turt2live.antishare.io.generics;
 
-import com.turt2live.antishare.ASLocation;
-import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.BlockStore;
@@ -127,7 +127,7 @@ public abstract class GenericBlockManager implements BlockManager {
      * int storeX = floor(blockX / {@link #getBlocksPerStore()});<br/>
      * int storeY = floor(blockY / {@link #getBlocksPerStore()});<br/>
      * int storeZ = floor(blockZ / {@link #getBlocksPerStore()});<br/>
-     * {@link com.turt2live.antishare.ASLocation} theKey = new {@link com.turt2live.antishare.ASLocation}(storeX, storeY, storeZ);
+     * {@link com.turt2live.antishare.object.ASLocation} theKey = new {@link com.turt2live.antishare.object.ASLocation}(storeX, storeY, storeZ);
      * </code>
      *
      * @return the live map

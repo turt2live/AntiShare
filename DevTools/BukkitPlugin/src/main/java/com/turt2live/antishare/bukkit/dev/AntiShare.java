@@ -1,6 +1,6 @@
 package com.turt2live.antishare.bukkit.dev;
 
-import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.dev.check.*;
 import com.turt2live.antishare.engine.DevEngine;

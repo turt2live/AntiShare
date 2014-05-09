@@ -1,6 +1,6 @@
 package com.turt2live.antishare.bukkit.groups;
 
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.MaterialProvider;

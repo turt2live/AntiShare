@@ -1,8 +1,8 @@
 package com.turt2live.antishare.bukkit.impl;
 
-import com.turt2live.antishare.AColor;
-import com.turt2live.antishare.APlayer;
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.object.attribute.AColor;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import org.bukkit.ChatColor;

@@ -1,6 +1,6 @@
 package com.turt2live.antishare.io.flatfile;
 
-import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.object.attribute.BlockType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;

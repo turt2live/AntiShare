@@ -1,7 +1,7 @@
 package com.turt2live.antishare.utils;
 
-import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.BlockType;
+import com.turt2live.antishare.object.attribute.ASGameMode;
+import com.turt2live.antishare.object.attribute.BlockType;
 
 /**
  * Various AntiShare utilities
@@ -12,7 +12,7 @@ public final class ASUtils {
 
     /**
      * Converts an AntiShare GameMode to a BlockType. If the passed gamemode
-     * is null, this returns {@link com.turt2live.antishare.BlockType#UNKNOWN}.
+     * is null, this returns {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}.
      *
      * @param gamemode the gamemode
      * @return the block type
@@ -36,7 +36,7 @@ public final class ASUtils {
 
     /**
      * Converts an AntiShare BlockType to a GameMode. If the passed
-     * block type is null or {@link com.turt2live.antishare.BlockType#UNKNOWN}, this
+     * block type is null or {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}, this
      * returns null.
      *
      * @param type the block type

@@ -12,6 +12,10 @@ import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.attribute.ASGameMode;
+import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.utils.OutputParameter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -327,7 +331,7 @@ public class EngineListener implements Listener {
 
         if (ChatColor.stripColor(compiled).equalsIgnoreCase("disabled")) return;
 
-        Bukkit.broadcast(compiled, PermissionNodes.GET_ALERTS);
+        Bukkit.broadcast(compiled, APermission.GET_ALERTS);
     }
 
     /**

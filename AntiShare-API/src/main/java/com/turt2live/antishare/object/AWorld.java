@@ -1,4 +1,4 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.object;
 
 /**
  * An AntiShare world

@@ -1,10 +1,15 @@
 package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.*;
 import com.turt2live.antishare.configuration.MemoryConfiguration;
 import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.engine.list.BlockTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.AWorld;
+import com.turt2live.antishare.object.attribute.ASGameMode;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

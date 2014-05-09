@@ -1,4 +1,4 @@
-package com.turt2live.antishare;
+package com.turt2live.antishare.object;
 
 /**
  * Represents an X, Y, Z location

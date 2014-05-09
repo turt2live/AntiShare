@@ -1,7 +1,7 @@
 package com.turt2live.antishare.engine.list;
 
-import com.turt2live.antishare.ABlock;
-import com.turt2live.antishare.TrackedState;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.attribute.TrackedState;
 
 /**
  * Default block list

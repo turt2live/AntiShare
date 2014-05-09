@@ -1,6 +1,6 @@
 package com.turt2live.antishare.configuration.groups;
 
-import com.turt2live.antishare.APlayer;
+import com.turt2live.antishare.object.APlayer;
 
 import java.util.ArrayList;
 import java.util.List;

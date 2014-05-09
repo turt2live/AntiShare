@@ -1,6 +1,6 @@
 package com.turt2live.antishare.io.flatfile;
 
-import com.turt2live.antishare.ASLocation;
+import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.io.generics.GenericBlockManager;
 

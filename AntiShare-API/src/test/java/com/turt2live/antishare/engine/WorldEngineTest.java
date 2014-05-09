@@ -1,8 +1,8 @@
 package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.ABlock;
-import com.turt2live.antishare.APlayer;
-import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;

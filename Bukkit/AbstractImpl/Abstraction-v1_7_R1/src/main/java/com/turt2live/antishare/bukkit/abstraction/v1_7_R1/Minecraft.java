@@ -1,6 +1,6 @@
 package com.turt2live.antishare.bukkit.abstraction.v1_7_R1;
 
-import com.turt2live.antishare.ABlock;
+import com.turt2live.antishare.object.ABlock;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 

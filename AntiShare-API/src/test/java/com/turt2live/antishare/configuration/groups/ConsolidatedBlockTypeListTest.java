@@ -1,8 +1,8 @@
 package com.turt2live.antishare.configuration.groups;
 
-import com.turt2live.antishare.ABlock;
-import com.turt2live.antishare.ASLocation;
-import com.turt2live.antishare.TrackedState;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.engine.list.BlockTypeList;
 import org.junit.BeforeClass;
 import org.junit.Test;
