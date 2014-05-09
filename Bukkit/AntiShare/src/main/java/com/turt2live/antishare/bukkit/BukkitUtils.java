@@ -4,7 +4,7 @@ import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.AWorld;
 import com.turt2live.antishare.bukkit.impl.BukkitWorld;
 import com.turt2live.antishare.engine.Engine;
-import com.turt2live.antishare.engine.RejectionList;
+import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.io.BlockManager;
 import org.bukkit.Location;

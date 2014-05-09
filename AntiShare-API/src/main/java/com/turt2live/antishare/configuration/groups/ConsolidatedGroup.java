@@ -4,8 +4,8 @@ import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
-import com.turt2live.antishare.engine.BlockTypeList;
-import com.turt2live.antishare.engine.RejectionList;
+import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.RejectionList;
 
 import java.util.ArrayList;
 import java.util.Collections;

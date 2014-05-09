@@ -3,7 +3,7 @@ package com.turt2live.antishare.configuration.groups;
 import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.TrackedState;
 import com.turt2live.antishare.collections.ArrayArrayList;
-import com.turt2live.antishare.engine.RejectionList;
+import com.turt2live.antishare.engine.list.RejectionList;
 
 import java.util.ArrayList;
 import java.util.List;

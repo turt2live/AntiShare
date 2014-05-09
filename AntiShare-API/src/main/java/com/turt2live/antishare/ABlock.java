@@ -1,11 +1,13 @@
 package com.turt2live.antishare;
 
+import com.turt2live.antishare.engine.list.Rejectable;
+
 /**
  * An AntiShare Block.
  *
  * @author turt2live
  */
-public interface ABlock {
+public interface ABlock extends Rejectable {
 
     /**
      * Represents the various chest states

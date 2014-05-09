@@ -3,6 +3,8 @@ package com.turt2live.antishare.engine;
 import com.turt2live.antishare.*;
 import com.turt2live.antishare.configuration.MemoryConfiguration;
 import com.turt2live.antishare.configuration.groups.GroupManager;
+import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.RejectionList;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

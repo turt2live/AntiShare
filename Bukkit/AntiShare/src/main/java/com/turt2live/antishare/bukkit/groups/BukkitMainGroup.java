@@ -7,8 +7,8 @@ import com.turt2live.antishare.bukkit.MaterialProvider;
 import com.turt2live.antishare.bukkit.lists.BukkitBlockList;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.MainGroup;
-import com.turt2live.antishare.engine.BlockTypeList;
-import com.turt2live.antishare.engine.RejectionList;
+import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.RejectionList;
 
 import java.util.ArrayList;
 

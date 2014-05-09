@@ -1,14 +1,14 @@
-package com.turt2live.antishare.engine;
+package com.turt2live.antishare.engine.list;
 
-import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.TrackedState;
 
 /**
  * A rejection list for items and/or blocks
  *
+ * @param <T> the type of rejection
  * @author turt2live
  */
-public interface RejectionList {
+public interface RejectionList<T extends Rejectable> {
 
     /**
      * Various rejection lists used by the plugin
@@ -16,6 +16,7 @@ public interface RejectionList {
     public static enum ListType {
         BLOCK_PLACE,
         BLOCK_BREAK,
+        COMMANDS,
 
         /**
          * CUSTOM should only be used for out-of-plugin operations
@@ -28,20 +29,20 @@ public interface RejectionList {
     }
 
     /**
-     * Determines if a block is allowed to be used.
+     * Determines if an item is allowed to be used.
      *
-     * @param block the block, cannot be null
+     * @param item the item to lookup, cannot be null
      * @return true if denied, false otherwise
      */
-    public boolean isBlocked(ABlock block);
+    public boolean isBlocked(T item);
 
     /**
-     * Gets the tracking state of a block in this list
+     * Gets the tracking state of an item in this list
      *
-     * @param block the block, cannot be null
+     * @param item the item to lookup, cannot be null
      * @return the tracking state, never null
      */
-    public TrackedState getState(ABlock block);
+    public TrackedState getState(T item);
 
     /**
      * Gets the list type of this list
@@ -49,7 +50,5 @@ public interface RejectionList {
      * @return the list type
      */
     public ListType getType();
-
-    // TODO: Items
 
 }

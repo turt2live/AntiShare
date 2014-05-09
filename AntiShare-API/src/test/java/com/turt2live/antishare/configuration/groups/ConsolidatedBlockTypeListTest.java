@@ -3,7 +3,7 @@ package com.turt2live.antishare.configuration.groups;
 import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.ASLocation;
 import com.turt2live.antishare.TrackedState;
-import com.turt2live.antishare.engine.BlockTypeList;
+import com.turt2live.antishare.engine.list.BlockTypeList;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

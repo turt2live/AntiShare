@@ -4,8 +4,8 @@ import com.turt2live.antishare.ABlock;
 import com.turt2live.antishare.TrackedState;
 import com.turt2live.antishare.bukkit.MaterialProvider;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
-import com.turt2live.antishare.engine.BlockTypeList;
-import com.turt2live.antishare.engine.RejectionList;
+import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.RejectionList;
 import org.bukkit.block.Block;
 
 import java.util.List;

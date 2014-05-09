@@ -4,7 +4,7 @@ import com.turt2live.antishare.*;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
-import com.turt2live.antishare.engine.RejectionList;
+import com.turt2live.antishare.engine.list.RejectionList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

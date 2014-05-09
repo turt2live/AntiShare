@@ -1,6 +1,6 @@
 package com.turt2live.antishare;
 
-import com.turt2live.antishare.engine.RejectionList;
+import com.turt2live.antishare.engine.list.RejectionList;
 
 /**
  * AntiShare Permission Nodes
