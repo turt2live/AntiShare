@@ -1,16 +1,16 @@
 package com.turt2live.antishare.bukkit.lists;
 
-import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.bukkit.MaterialProvider;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.engine.list.BlockTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import org.bukkit.block.Block;
 
 import java.util.List;
 
-public class BukkitBlockList extends GenericBlockInformationList implements BlockTypeList, RejectionList {
+public class BukkitBlockList extends GenericBlockInformationList implements BlockTypeList, RejectionList<ABlock> {
 
     private ListType type = ListType.CUSTOM;
 

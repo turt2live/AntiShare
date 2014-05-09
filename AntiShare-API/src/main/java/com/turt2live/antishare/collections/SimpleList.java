@@ -8,6 +8,7 @@ import java.util.List;
  * Represents a simple list for objects
  *
  * @param <T> the simple list type
+ *
  * @author turt2live
  */
 public class SimpleList<T> {
@@ -40,6 +41,7 @@ public class SimpleList<T> {
      * Gets whether or not this simple list contains the specified item
      *
      * @param t the item to lookup
+     *
      * @return true if contained, false otherwise
      */
     public boolean hasItem(T t) {

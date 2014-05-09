@@ -18,6 +18,7 @@ public interface BlockStore {
      * @param x the x location
      * @param y the y location
      * @param z the z location
+     *
      * @return the block type
      */
     public BlockType getType(int x, int y, int z);
@@ -36,6 +37,7 @@ public interface BlockStore {
      * Gets the block type for a specified location
      *
      * @param location the location, cannot be null
+     *
      * @return the block type
      */
     public BlockType getType(ASLocation location);

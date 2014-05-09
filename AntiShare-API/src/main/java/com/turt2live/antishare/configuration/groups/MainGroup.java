@@ -29,7 +29,7 @@ public abstract class MainGroup extends Group {
 
     @Override
     public final List<String> getApplicableWorlds() {
-        return new ArrayArrayList<String>(new String[]{"all"});
+        return new ArrayArrayList<String>(new String[] {"all"});
     }
 
     @Override

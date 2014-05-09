@@ -14,6 +14,7 @@ public interface BlockTypeList {
      * Determines if a specified block is tracked
      *
      * @param block the block to lookup
+     *
      * @return true if this block should be tracked, false otherwise
      */
     public boolean isTracked(ABlock block);
@@ -25,6 +26,7 @@ public interface BlockTypeList {
      * better alternative for determining tracking status would be {@link #isTracked(com.turt2live.antishare.object.ABlock)}.
      *
      * @param block the block to lookup
+     *
      * @return the tracking state
      */
     public TrackedState getState(ABlock block);

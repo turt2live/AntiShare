@@ -88,6 +88,7 @@ public class RejectableCommand implements Rejectable {
      * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
      *
      * @param player the player to check, cannot be null
+     *
      * @return the state of this player's permissions as defined
      */
     public TrackedState canExecute(APlayer player) {
@@ -113,7 +114,9 @@ public class RejectableCommand implements Rejectable {
      *
      * @param other the other rejectable command, cannot be null
      * @param flags the flags applicable, unknown flags are ignored
+     *
      * @return true if this rejectable command matches the other based upon the flags
+     *
      * @see #FLAG_STARTS_WITH
      * @see #FLAG_ENDS_WITH
      * @see #FLAG_EXACTLY

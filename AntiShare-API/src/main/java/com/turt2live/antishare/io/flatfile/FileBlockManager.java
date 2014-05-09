@@ -1,8 +1,8 @@
 package com.turt2live.antishare.io.flatfile;
 
-import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.io.generics.GenericBlockManager;
+import com.turt2live.antishare.object.ASLocation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -225,7 +225,9 @@ public class FileBlockManager extends GenericBlockManager {
      * for the specified file stores and will not attempt to load the entire file.
      *
      * @param blockSize the block size to look for. Value must be greater than 0. See {@link FileBlockStore} for more information
+     *
      * @return the list of block stores. Never null but may be empty
+     *
      * @see FileBlockStore
      */
     public List<BlockStore> getStoresOfSize(int blockSize) {

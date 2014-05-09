@@ -7,6 +7,7 @@ import java.util.Map;
  * be used similar to an inventory system.
  *
  * @param <T> the collection type
+ *
  * @author turt2live
  */
 public interface SlottedCollection<T> {
@@ -23,6 +24,7 @@ public interface SlottedCollection<T> {
      * Gets the object contained in a slot
      *
      * @param slot the slot to lookup
+     *
      * @return the object, or null if not found
      */
     public T get(int slot);

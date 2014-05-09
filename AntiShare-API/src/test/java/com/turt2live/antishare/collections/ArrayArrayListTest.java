@@ -20,7 +20,7 @@ public class ArrayArrayListTest {
 
     @Test
     public void testCreate2() {
-        ArrayArrayList<Integer> numbers = new ArrayArrayList<Integer>(new Integer[]{9, 10, 11});
+        ArrayArrayList<Integer> numbers = new ArrayArrayList<Integer>(new Integer[] {9, 10, 11});
         assertEquals(3, numbers.size());
         assertEquals(new Integer(9), numbers.get(0));
         assertEquals(new Integer(10), numbers.get(1));

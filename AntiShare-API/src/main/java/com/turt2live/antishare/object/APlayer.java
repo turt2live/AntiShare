@@ -43,6 +43,7 @@ public interface APlayer {
      * Determines if a player has a permission
      *
      * @param permission the permission to check, cannot be null
+     *
      * @return true if the player has the permission, false otherwise
      */
     public boolean hasPermission(String permission);

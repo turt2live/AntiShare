@@ -60,6 +60,7 @@ public class ASLocation implements Cloneable {
      * not edit the current location and instead creates a new location.
      *
      * @param location the location to add to this one, cannot be null
+     *
      * @return the new location, with this world
      */
     public ASLocation add(ASLocation location) {

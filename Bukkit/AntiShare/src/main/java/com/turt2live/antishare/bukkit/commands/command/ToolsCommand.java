@@ -35,7 +35,7 @@ public class ToolsCommand implements ASCommand {
 
     @Override
     public String[] getAlternatives() {
-        return new String[]{"toolbox", "tools"};
+        return new String[] {"toolbox", "tools"};
     }
 
     @Override

@@ -1,17 +1,17 @@
 package com.turt2live.antishare.bukkit.dev.check;
 
-import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.bukkit.dev.AntiShare;
 import com.turt2live.antishare.bukkit.dev.CheckBase;
 import com.turt2live.antishare.engine.Engine;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.BlockType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class GameModeBomb extends CheckBase {
 
     private ASLocation start;
-    private BlockType[] values = new BlockType[]{BlockType.CREATIVE, BlockType.SURVIVAL, BlockType.ADVENTURE, BlockType.SPECTATOR};
+    private BlockType[] values = new BlockType[] {BlockType.CREATIVE, BlockType.SURVIVAL, BlockType.ADVENTURE, BlockType.SPECTATOR};
 
     public GameModeBomb(AntiShare plugin, ASLocation start) {
         super(plugin);

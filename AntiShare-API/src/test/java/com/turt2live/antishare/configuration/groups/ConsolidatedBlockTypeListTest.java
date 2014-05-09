@@ -1,9 +1,9 @@
 package com.turt2live.antishare.configuration.groups;
 
+import com.turt2live.antishare.engine.list.BlockTypeList;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.object.attribute.TrackedState;
-import com.turt2live.antishare.engine.list.BlockTypeList;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +20,7 @@ import static org.mockito.Mockito.mock;
 public class ConsolidatedBlockTypeListTest {
 
     private static class ReturnIsTrackedWorkaround implements Answer<Boolean> {
+
         @Override
         public Boolean answer(InvocationOnMock invocation) throws Throwable {
             // Workaround for ensuring isTracked() works

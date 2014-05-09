@@ -1,9 +1,9 @@
 package com.turt2live.antishare.io.generics;
 
-import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.io.BlockStore;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.BlockType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

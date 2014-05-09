@@ -8,4 +8,5 @@ import com.turt2live.antishare.events.Event;
  * @author turt2live
  */
 public abstract class EngineEvent implements Event {
+
 }

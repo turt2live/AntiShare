@@ -1,8 +1,8 @@
 package com.turt2live.antishare.object;
 
+import com.turt2live.antishare.engine.list.Rejectable;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.TrackedState;
-import com.turt2live.antishare.engine.list.Rejectable;
 
 /**
  * An AntiShare Block.
@@ -54,6 +54,7 @@ public interface ABlock extends Rejectable {
      * return false.
      *
      * @param block the block to check, if null: false is returned
+     *
      * @return whether or not this block is attached to the specified block
      */
     public boolean isAttached(ABlock block);
@@ -99,6 +100,7 @@ public interface ABlock extends Rejectable {
      * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
      *
      * @param player the player, cannot be null
+     *
      * @return the appropriate tracking state as defined
      */
     public TrackedState canPlace(APlayer player);
@@ -116,6 +118,7 @@ public interface ABlock extends Rejectable {
      * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
      *
      * @param player the player, cannot be null
+     *
      * @return the appropriate tracking state as defined
      */
     public TrackedState canBreak(APlayer player);

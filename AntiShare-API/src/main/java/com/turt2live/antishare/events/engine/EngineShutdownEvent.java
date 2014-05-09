@@ -6,4 +6,5 @@ package com.turt2live.antishare.events.engine;
  * @author turt2live
  */
 public class EngineShutdownEvent extends EngineEvent {
+
 }

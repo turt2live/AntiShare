@@ -1,6 +1,6 @@
 package com.turt2live.antishare.engine;
 
-import com.turt2live.antishare.*;
+import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.engine.list.BlockTypeList;
@@ -91,6 +91,7 @@ public final class WorldEngine {
      * Gets the tracking list for a specified gamemode
      *
      * @param gamemode the gamemode, cannot be null
+     *
      * @return the list
      */
     public BlockTypeList getTrackedBlocks(ASGameMode gamemode) {
@@ -107,6 +108,7 @@ public final class WorldEngine {
      * @param player  the player placing the block, cannot be null
      * @param block   the block being placed, cannot be null
      * @param placeAs the gamemode placing the block
+     *
      * @return returns true if the block placement was rejected, false otherwise
      */
     // TODO: Update unit test
@@ -214,6 +216,7 @@ public final class WorldEngine {
      * @param breakAs         the gamemode the player is breaking the block as, cannot be null
      * @param additionalBreak the optional output for additional blocks to break with NO DROPS, can be null
      * @param eventBreakAs    the optional output for what type the block was before it was removed from the system
+     *
      * @return returns true if the block break was rejected, false otherwise
      */
     // TODO: Unit test
@@ -388,6 +391,7 @@ public final class WorldEngine {
      * to maintain accuracy.
      *
      * @param block the block being broken, cannot be null
+     *
      * @return true if there should be block drops, false otherwise
      */
     // TODO: Unit test
@@ -437,6 +441,7 @@ public final class WorldEngine {
      *
      * @param block the block being removed (spawning the falling block), cannot be null
      * @param type  the output parameter for the block type, may be null
+     *
      * @return whether or not the resulting falling block should drop items (true for drop, false otherwise)
      */
     // TODO: Unit test
@@ -527,6 +532,7 @@ public final class WorldEngine {
      *
      * @param block1 the first block, cannot be null
      * @param block2 the second block, cannot be null
+     *
      * @return the permitted flag; true for allowed, false otherwise
      */
     // TODO: Unit test

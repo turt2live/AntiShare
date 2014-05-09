@@ -36,6 +36,7 @@ public abstract class GroupManager {
      * Gets a group by name
      *
      * @param name the group name
+     *
      * @return the group, or null if not found
      */
     public Group getGroup(String name) {
@@ -56,6 +57,7 @@ public abstract class GroupManager {
      * Gets a listing of all groups a specified group inherits from
      *
      * @param group the group to get the inheritance tree from. Returns an empty list on null input
+     *
      * @return the inherited groups, never null but may be empty
      */
     public List<Group> getInheritances(Group group) {
@@ -75,6 +77,7 @@ public abstract class GroupManager {
      *
      * @param world           the world to lookup, null returns an empty list
      * @param includeDisabled if true, disabled groups will be included in the result set
+     *
      * @return the applicable groups, or an empty list
      */
     public List<Group> getGroupsForWorld(String world, boolean includeDisabled) {
@@ -98,6 +101,7 @@ public abstract class GroupManager {
      * Gets a list of all groups
      *
      * @param includeDisabled if true, disabled groups will be included in the result set
+     *
      * @return the applicable groups, or an empty list
      */
     public List<Group> getAllGroups(boolean includeDisabled) {
@@ -117,6 +121,7 @@ public abstract class GroupManager {
      *
      * @param player          the player to lookup, cannot be null
      * @param includeDisabled if true, disabled groups will be included in the result set
+     *
      * @return the list of groups. May be empty but never null
      */
     public List<Group> getGroupsForPlayer(APlayer player, boolean includeDisabled) {

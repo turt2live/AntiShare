@@ -28,6 +28,7 @@ import static org.mockito.Mockito.when;
 public class ProcessingTest {
 
     private class MainGroup extends com.turt2live.antishare.configuration.groups.MainGroup {
+
         public MainGroup() {
             super(new MemoryConfiguration());
         }
@@ -44,6 +45,7 @@ public class ProcessingTest {
     }
 
     private class TestGroupManager extends GroupManager {
+
         @Override
         public void loadAll() {
             mainGroup = new MainGroup();
@@ -51,6 +53,7 @@ public class ProcessingTest {
     }
 
     private static class ReturnIsTrackedWorkaround implements Answer<Boolean> {
+
         @Override
         public Boolean answer(InvocationOnMock invocation) throws Throwable {
             // Workaround for ensuring isTracked() works

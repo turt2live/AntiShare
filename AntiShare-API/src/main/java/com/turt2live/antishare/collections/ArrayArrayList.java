@@ -7,6 +7,7 @@ import java.util.List;
  * Represents an array list that takes an array
  *
  * @param <T> the type of list
+ *
  * @author turt2live
  */
 public class ArrayArrayList<T> extends ArrayList<T> {

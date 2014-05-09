@@ -6,4 +6,5 @@ package com.turt2live.antishare.events;
  * @author turt2live
  */
 public interface Event {
+
 }

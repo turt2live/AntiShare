@@ -33,6 +33,7 @@ public abstract class Configuration {
      *
      * @param key the key to lookup, cannot be null
      * @param def the default value to use if the key cannot be found
+     *
      * @return the object or the default value if not found
      */
     public abstract Object getObject(String key, Object def);
@@ -42,6 +43,7 @@ public abstract class Configuration {
      *
      * @param key the key to lookup, cannot be null
      * @param def the default value to use if the key cannot be found
+     *
      * @return the integer or the default value if not found
      */
     public abstract int getInt(String key, int def);
@@ -51,6 +53,7 @@ public abstract class Configuration {
      *
      * @param key the key to lookup, cannot be null
      * @param def the default value to use if the key cannot be found
+     *
      * @return the double or the default value if not found
      */
     public abstract double getDouble(String key, double def);
@@ -60,6 +63,7 @@ public abstract class Configuration {
      *
      * @param key the key to lookup, cannot be null
      * @param def the default value to use if the key cannot be found
+     *
      * @return the string or the default value if not found
      */
     public abstract String getString(String key, String def);
@@ -69,6 +73,7 @@ public abstract class Configuration {
      *
      * @param key the key to lookup, cannot be null
      * @param def the default value to use if the key cannot be found
+     *
      * @return the list of strings or the default value if not found
      */
     public abstract List<String> getStringList(String key, List<String> def);
@@ -78,6 +83,7 @@ public abstract class Configuration {
      *
      * @param key the key to lookup, cannot be null
      * @param def the default value to use if the key cannot be found
+     *
      * @return the boolean or the default value if not found
      */
     public abstract boolean getBoolean(String key, boolean def);

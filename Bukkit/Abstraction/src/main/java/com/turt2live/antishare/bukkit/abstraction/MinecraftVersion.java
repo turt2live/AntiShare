@@ -30,6 +30,7 @@ public interface MinecraftVersion {
      * Gets the applicable chest type for a specified block
      *
      * @param block the block, cannot be null
+     *
      * @return the applicable chest type, never null
      */
     public ABlock.ChestType getChestType(Block block);
@@ -38,6 +39,7 @@ public interface MinecraftVersion {
      * Gets the UUID for the specified name
      *
      * @param name the player name to lookup, cannot be null
+     *
      * @return the player's UUID, or null if not found
      */
     public UUID getUUID(String name);
@@ -46,6 +48,7 @@ public interface MinecraftVersion {
      * Gets the UUID for the specified player
      *
      * @param player the player to lookup, cannot be null
+     *
      * @return the player's UUID, or null if not found
      */
     public UUID getUUID(OfflinePlayer player);
@@ -54,6 +57,7 @@ public interface MinecraftVersion {
      * Gets the player name for the specified UUID
      *
      * @param uuid the UUID to lookup, cannot be null
+     *
      * @return the player's name, or null if not found
      */
     public String getName(UUID uuid);
@@ -62,6 +66,7 @@ public interface MinecraftVersion {
      * Gets the player name for the specified player
      *
      * @param player the player to lookup, cannot be null
+     *
      * @return the player's name, or null if not found
      */
     public String getName(OfflinePlayer player);
@@ -71,6 +76,7 @@ public interface MinecraftVersion {
      * Converts a Bukkit Game Mode to an AntiShare Game Mode
      *
      * @param gamemode the gamemode to convert
+     *
      * @return the AntiShare gamemode. If the passed gamemode was null, this will be null
      */
     public ASGameMode toGameMode(GameMode gamemode);
@@ -79,6 +85,7 @@ public interface MinecraftVersion {
      * Converts an AntiShare Game Mode to a Bukkit Game Mode
      *
      * @param gamemode the gamemode to convert
+     *
      * @return the Bukkit gamemode. If the passed gamemode was null, this will be null
      */
     public GameMode toGamemode(ASGameMode gamemode);
@@ -87,6 +94,7 @@ public interface MinecraftVersion {
      * Converts a Bukkit Game Mode to an AntiShare Block Type
      *
      * @param gamemode the gamemode to convert
+     *
      * @return the block type
      */
     public BlockType toBlockType(GameMode gamemode);

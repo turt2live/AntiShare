@@ -10,15 +10,19 @@ import static org.junit.Assert.assertEquals;
 public class EventDispatcherTest {
 
     public class TestEvent1 implements Event {
+
     }
 
     public class TestEvent2 implements Event {
+
     }
 
     public class InheritedEvent extends TestEvent1 {
+
     }
 
     public class Listener {
+
         public int GENERAL_FIRES = 0;
         public int TEST1_FIRES = 0;
         public int TEST2_FIRES = 0;

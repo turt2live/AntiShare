@@ -15,6 +15,7 @@ import java.util.Map;
 public class MaterialProvider {
 
     private static class MaterialInformation {
+
         public Material material;
         public short data;
 
@@ -70,6 +71,7 @@ public class MaterialProvider {
      * Attempts to get the player friendly name for a block
      *
      * @param block the block to lookup. If null, "AIR" is returned
+     *
      * @return the player friendly name. never null but will default to the block's type
      */
     public String getPlayerFriendlyName(Block block) {
@@ -94,6 +96,7 @@ public class MaterialProvider {
      * Attempts to get a material from a string
      *
      * @param string the string to lookup. If null, AIR is returned
+     *
      * @return the material or AIR if not found
      */
     public Material fromString(String string) {

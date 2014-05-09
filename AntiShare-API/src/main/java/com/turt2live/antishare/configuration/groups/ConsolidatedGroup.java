@@ -1,11 +1,11 @@
 package com.turt2live.antishare.configuration.groups;
 
-import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.engine.list.BlockTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.attribute.ASGameMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +49,7 @@ public class ConsolidatedGroup {
      *
      * @param gameMode the gamemode to lookup, cannot be null
      * @param block    the block to lookup, cannot be null
+     *
      * @return true if tracked, false otherwise
      */
     public boolean isTracked(ASGameMode gameMode, ABlock block) {
@@ -61,6 +62,7 @@ public class ConsolidatedGroup {
      * Gets the consolidated block tracking list for a specified game mode
      *
      * @param gameMode the gamemode to lookup, cannot be null
+     *
      * @return the consolidated block tracking list
      */
     public ConsolidatedBlockTypeList getTrackedList(ASGameMode gameMode) {
@@ -88,6 +90,7 @@ public class ConsolidatedGroup {
      * Gets the acting gamemode for the top level (index 0) group
      *
      * @param gameMode the gamemode to lookup
+     *
      * @return the acting gamemode
      */
     public ASGameMode getActingMode(ASGameMode gameMode) {
@@ -100,6 +103,7 @@ public class ConsolidatedGroup {
      *
      * @param gamemode the gamemode breaking the block, cannot be null
      * @param breaking the gamemode of the block, cannot be null
+     *
      * @return the applicable break settings
      */
     public BreakSettings getBreakSettings(ASGameMode gamemode, ASGameMode breaking) {

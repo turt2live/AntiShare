@@ -1,6 +1,6 @@
 package com.turt2live.antishare.bukkit.impl;
 
-import com.turt2live.antishare.*;
+import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;

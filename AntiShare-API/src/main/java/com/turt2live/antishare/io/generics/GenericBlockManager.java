@@ -1,10 +1,10 @@
 package com.turt2live.antishare.io.generics;
 
-import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.BlockStore;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.BlockType;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -143,6 +143,7 @@ public abstract class GenericBlockManager implements BlockManager {
      * @param sx the store x location, as per {@link #getBlocksPerStore()}
      * @param sy the store y location, as per {@link #getBlocksPerStore()}
      * @param sz the store z location, as per {@link #getBlocksPerStore()}
+     *
      * @return the new store, should not be null
      */
     protected abstract BlockStore createStore(int sx, int sy, int sz);

@@ -7,4 +7,5 @@ package com.turt2live.antishare.engine.list;
  * @author turt2live
  */
 public interface Rejectable {
+
 }

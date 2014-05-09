@@ -1,8 +1,8 @@
 package com.turt2live.antishare.bukkit.lists;
 
-import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.MaterialProvider;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 

@@ -1,9 +1,9 @@
 package com.turt2live.antishare.configuration.groups;
 
-import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.collections.ArrayArrayList;
+import com.turt2live.antishare.engine.list.Rejectable;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.object.attribute.TrackedState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author turt2live
  */
-public class ConsolidatedRejectionList implements RejectionList {
+public class ConsolidatedRejectionList<T extends Rejectable> implements RejectionList<T> {
 
     private List<RejectionList> lists = new ArrayList<RejectionList>();
 
@@ -53,20 +53,20 @@ public class ConsolidatedRejectionList implements RejectionList {
     }
 
     @Override
-    public boolean isBlocked(ABlock block) {
-        return getState(block) == TrackedState.INCLUDED; // Tee hee
+    public boolean isBlocked(T item) {
+        return getState(item) == TrackedState.INCLUDED; // Tee hee
     }
 
     @Override
-    public TrackedState getState(ABlock block) {
-        if (block == null) throw new IllegalArgumentException("location cannot be null");
+    public TrackedState getState(T item) {
+        if (item == null) throw new IllegalArgumentException("location cannot be null");
 
         int tracked = 0;
         int negated = 0;
         boolean included = false;
 
         for (RejectionList list : lists) {
-            TrackedState state = list.getState(block);
+            TrackedState state = list.getState(item);
             switch (state) {
                 case INCLUDED:
                     tracked++;

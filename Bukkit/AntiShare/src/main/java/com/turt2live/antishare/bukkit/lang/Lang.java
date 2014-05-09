@@ -71,6 +71,7 @@ public class Lang {
      * Gets the format for a specified key
      *
      * @param key the key to lookup
+     *
      * @return the format from the file. If the key is null or not found, this returns null
      */
     public String getFormat(String key) {
@@ -83,6 +84,7 @@ public class Lang {
      * Gets the format, as a list, for a specified key
      *
      * @param key the key to lookup
+     *
      * @return the format from the file. If the key is null or not found, this returns null
      */
     public List<String> getFormatList(String key) {

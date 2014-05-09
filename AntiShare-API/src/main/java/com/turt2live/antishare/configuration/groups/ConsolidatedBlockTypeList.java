@@ -1,9 +1,9 @@
 package com.turt2live.antishare.configuration.groups;
 
-import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.attribute.TrackedState;
 
 import java.util.ArrayList;
 import java.util.List;

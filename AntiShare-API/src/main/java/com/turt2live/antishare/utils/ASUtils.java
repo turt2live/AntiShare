@@ -15,6 +15,7 @@ public final class ASUtils {
      * is null, this returns {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}.
      *
      * @param gamemode the gamemode
+     *
      * @return the block type
      */
     public static BlockType toBlockType(ASGameMode gamemode) {
@@ -40,6 +41,7 @@ public final class ASUtils {
      * returns null.
      *
      * @param type the block type
+     *
      * @return the gamemode
      */
     public static ASGameMode toGamemode(BlockType type) {
@@ -64,6 +66,7 @@ public final class ASUtils {
      * are considered the same and therefore will create words as such.
      *
      * @param input the input, cannot be null
+     *
      * @return the output as upper case words
      */
     public static String toUpperWords(String input) {

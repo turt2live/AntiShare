@@ -27,6 +27,7 @@ public enum ASGameMode {
      * Attempts to match a string to an ASGameMode
      *
      * @param s the string to lookup
+     *
      * @return the matching gamemode, or null if not found
      */
     public static ASGameMode fromString(String s) {

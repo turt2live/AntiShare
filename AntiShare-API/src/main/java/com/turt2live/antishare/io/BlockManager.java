@@ -18,6 +18,7 @@ public interface BlockManager {
      * @param x the x location
      * @param y the y location
      * @param z the z location
+     *
      * @return the block store for the specified location, may be null
      */
     public BlockStore getStore(int x, int y, int z);
@@ -26,6 +27,7 @@ public interface BlockManager {
      * Gets the store for a specified location
      *
      * @param location the location, cannot be null
+     *
      * @return the block store for the specified location, may be null
      */
     public BlockStore getStore(ASLocation location);
@@ -54,6 +56,7 @@ public interface BlockManager {
      * @param x the X location
      * @param y the Y location
      * @param z the Z location
+     *
      * @return the block type
      */
     public BlockType getBlockType(int x, int y, int z);
@@ -62,6 +65,7 @@ public interface BlockManager {
      * Gets the block type for the given location
      *
      * @param location the location, cannot be null
+     *
      * @return the block type
      */
     public BlockType getBlockType(ASLocation location);

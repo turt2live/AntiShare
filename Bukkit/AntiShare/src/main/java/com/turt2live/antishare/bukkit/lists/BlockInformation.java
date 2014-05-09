@@ -4,6 +4,7 @@ package com.turt2live.antishare.bukkit.lists;
 import org.bukkit.Material;
 
 public class BlockInformation {
+
     final Material material;
     final short damage;
     final String world;
@@ -19,6 +20,7 @@ public class BlockInformation {
      * Determines if this information is higher priority than the other
      *
      * @param other the other
+     *
      * @return true if this is higher, false otherwise
      */
     public boolean isHigher(BlockInformation other) {

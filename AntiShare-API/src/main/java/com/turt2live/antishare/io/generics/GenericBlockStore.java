@@ -1,8 +1,8 @@
 package com.turt2live.antishare.io.generics;
 
+import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.object.attribute.BlockType;
-import com.turt2live.antishare.io.BlockStore;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,9 +1,9 @@
 package com.turt2live.antishare.io.flatfile;
 
-import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.generics.GenericBlockStore;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.BlockType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -76,7 +76,7 @@ public class FileBlockStore extends GenericBlockStore {
         if (file == null) throw new IllegalArgumentException("file cannot be null");
 
         this.file = file;
-        header = new int[]{sx, sy, sz, blocks};
+        header = new int[] {sx, sy, sz, blocks};
 
         refreshFile();
     }
@@ -293,6 +293,7 @@ public class FileBlockStore extends GenericBlockStore {
      * Converts a block type to a byte flag
      *
      * @param type the type to convert. Null is assumed to be {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}
+     *
      * @return the byte flag representation of the block type
      */
     public static byte typeToByte(BlockType type) {
@@ -317,6 +318,7 @@ public class FileBlockStore extends GenericBlockStore {
      * Converts a byte flag to a block type
      *
      * @param type the byte flag to convert. Unknown values return {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}
+     *
      * @return the block type, never null
      */
     public static BlockType byteToType(byte type) {

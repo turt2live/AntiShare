@@ -50,6 +50,7 @@ public interface ASCommand {
      *
      * @param sender the command sender
      * @param args   the arguments used
+     *
      * @return true for success, false otherwise
      */
     public boolean execute(CommandSender sender, String[] args);

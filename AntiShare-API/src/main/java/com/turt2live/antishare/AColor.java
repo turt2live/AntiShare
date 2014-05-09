@@ -101,7 +101,7 @@ public enum AColor {
 
     private AColor(char code) {
         this.code = code;
-        this.toString = new String(new char[]{COLOR_CHAR, code});
+        this.toString = new String(new char[] {COLOR_CHAR, code});
     }
 
     /**
@@ -110,7 +110,7 @@ public enum AColor {
      * @return the Bukkit format
      */
     public String toBukkit() {
-        return new String(new char[]{COLOR_CHAR_BUKKIT, code});
+        return new String(new char[] {COLOR_CHAR_BUKKIT, code});
     }
 
     @Override
@@ -126,6 +126,7 @@ public enum AColor {
      *
      * @param altColorChar    The alternate color code character to replace. Ex: &
      * @param textToTranslate Text containing the alternate color code character.
+     *
      * @return Text containing the {@link #COLOR_CHAR} color code character.
      */
     public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
@@ -144,6 +145,7 @@ public enum AColor {
      * Converts colors in a string to Bukkit format
      *
      * @param input the input string
+     *
      * @return the Bukkit-colored string, or null on null input
      */
     public static String toBukkit(String input) {

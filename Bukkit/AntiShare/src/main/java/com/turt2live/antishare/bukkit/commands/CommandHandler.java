@@ -115,7 +115,7 @@ public class CommandHandler implements CommandExecutor, ASCommand {
 
     @Override
     public String[] getAlternatives() {
-        return new String[]{"help", "?", "what", "how2plugin"};
+        return new String[] {"help", "?", "what", "how2plugin"};
     }
 
     @Override

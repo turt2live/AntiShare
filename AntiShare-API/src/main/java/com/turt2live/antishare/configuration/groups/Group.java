@@ -1,10 +1,10 @@
 package com.turt2live.antishare.configuration.groups;
 
-import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.engine.list.BlockTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.object.attribute.ASGameMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +83,7 @@ public abstract class Group {
      * inherited groups.
      *
      * @param gameMode the gamemode to lookup
+     *
      * @return the gamemode the specified gamemode should act as
      */
     public ASGameMode getActingMode(ASGameMode gameMode) {
@@ -99,6 +100,7 @@ public abstract class Group {
      *
      * @param gamemode the gamemode breaking the block, cannot be null
      * @param breaking the gamemode of the block, cannot be null
+     *
      * @return the applicable break settings
      */
     public BreakSettings getBreakSettings(ASGameMode gamemode, ASGameMode breaking) {
@@ -116,6 +118,7 @@ public abstract class Group {
      * inherited groups.
      *
      * @param gameMode the gamemode to lookup
+     *
      * @return the block list
      */
     public abstract BlockTypeList getTrackedList(ASGameMode gameMode);
@@ -124,6 +127,7 @@ public abstract class Group {
      * Gets the rejection list for a specified list type
      *
      * @param list the list type
+     *
      * @return the list found, or null if none exists
      */
     public abstract RejectionList getRejectionList(RejectionList.ListType list);

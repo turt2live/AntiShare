@@ -18,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class EventDispatcher {
 
     private static class Listener {
+
         Method method;
         Object object;
         Class<? extends Event> eventClass;

@@ -6,6 +6,7 @@ import com.turt2live.antishare.object.attribute.TrackedState;
  * A rejection list for items and/or blocks
  *
  * @param <T> the type of rejection
+ *
  * @author turt2live
  */
 public interface RejectionList<T extends Rejectable> {
@@ -32,6 +33,7 @@ public interface RejectionList<T extends Rejectable> {
      * Determines if an item is allowed to be used.
      *
      * @param item the item to lookup, cannot be null
+     *
      * @return true if denied, false otherwise
      */
     public boolean isBlocked(T item);
@@ -40,6 +42,7 @@ public interface RejectionList<T extends Rejectable> {
      * Gets the tracking state of an item in this list
      *
      * @param item the item to lookup, cannot be null
+     *
      * @return the tracking state, never null
      */
     public TrackedState getState(T item);

@@ -5,8 +5,9 @@ import com.turt2live.antishare.object.attribute.TrackedState;
 /**
  * Default implementation of a rejection list. This rejects nothing.
  *
- * @author turt2live
  * @param <T> the type of rejection
+ *
+ * @author turt2live
  */
 public class DefaultRejectionList<T extends Rejectable> implements RejectionList<T> {
 

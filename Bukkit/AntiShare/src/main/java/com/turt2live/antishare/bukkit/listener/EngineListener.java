@@ -1,6 +1,6 @@
 package com.turt2live.antishare.bukkit.listener;
 
-import com.turt2live.antishare.*;
+import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareBlockBreakEvent;
@@ -57,7 +57,7 @@ public class EngineListener implements Listener {
     /**
      * Cause the BlockFace enum is weird
      */
-    public static final BlockFace[] TRUE_FACES = new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
+    public static final BlockFace[] TRUE_FACES = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
 
     private AntiShare plugin = AntiShare.getInstance();
     private Engine engine;

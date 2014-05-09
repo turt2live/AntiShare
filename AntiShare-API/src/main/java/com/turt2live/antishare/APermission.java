@@ -31,6 +31,7 @@ public final class APermission {
      *
      * @param allow true for generating an "allow" node, false otherwise
      * @param list  the list to use, cannot be null
+     *
      * @return the generated node
      */
     public static String getPermissionNode(boolean allow, RejectionList.ListType list) {

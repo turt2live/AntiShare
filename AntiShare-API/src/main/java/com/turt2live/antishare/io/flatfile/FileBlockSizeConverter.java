@@ -1,9 +1,9 @@
 package com.turt2live.antishare.io.flatfile;
 
-import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockStore;
+import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.BlockType;
 
 import java.io.File;
 import java.util.List;

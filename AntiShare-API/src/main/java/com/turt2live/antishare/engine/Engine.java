@@ -129,6 +129,7 @@ public final class Engine {
      * created and registered.
      *
      * @param world the world to lookup, cannot be null
+     *
      * @return the world engine
      */
     public WorldEngine getEngine(String world) {
@@ -145,6 +146,7 @@ public final class Engine {
      * the existing world engine is created.
      *
      * @param world the world to create an engine for
+     *
      * @return the world engine
      */
     public WorldEngine createWorldEngine(String world) {
@@ -328,6 +330,7 @@ public final class Engine {
      * Determines if the flag for growing blocks with inherited gamemodes is set
      *
      * @return the flag setting
+     *
      * @see #setPhysicsSettings(boolean, boolean)
      */
     // TODO: Unit test
@@ -340,6 +343,7 @@ public final class Engine {
      * is set
      *
      * @return the flag setting
+     *
      * @see #setPhysicsSettings(boolean, boolean)
      */
     // TODO: Unit test
@@ -374,6 +378,7 @@ public final class Engine {
      * Determines if attached blocks should be broken as placed, or not.
      *
      * @return true for 'break as placed', false otherwise
+     *
      * @see #setAttachmentSettings(boolean, boolean)
      * @see #isAttachmentsDenyMismatchBreak()
      */
@@ -386,6 +391,7 @@ public final class Engine {
      * Determines if attached blocks will also prevent blocks from being broken
      *
      * @return true to deny breaking due to attachments, false otherwise
+     *
      * @see #setAttachmentSettings(boolean, boolean)
      */
     // TODO: Unit test
@@ -416,6 +422,7 @@ public final class Engine {
      * denied.
      *
      * @return true if denied, false otherwise
+     *
      * @see #setHoppersDenyMixed(boolean)
      */
     // TODO: Unit test

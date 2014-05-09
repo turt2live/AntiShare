@@ -51,6 +51,7 @@ public class LangBuilder {
      *
      * @param replace     the value, cannot be null
      * @param replaceWith the replacement, cannot be null
+     *
      * @return this, for chaining
      */
     public LangBuilder setReplacement(String replace, String replaceWith) {
@@ -91,6 +92,7 @@ public class LangBuilder {
      * Converts color codes in a list
      *
      * @param list the list to convert, null values yield null results
+     *
      * @return the colorized list
      */
     public static List<String> colorize(List<String> list) {
