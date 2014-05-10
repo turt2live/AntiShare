@@ -20,6 +20,7 @@ package com.turt2live.antishare.bukkit.dev.check;
 import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
 import com.turt2live.antishare.bukkit.dev.AntiShare;
 import com.turt2live.antishare.bukkit.dev.CheckBase;
+import com.turt2live.antishare.bukkit.dev.util.FakeWorld;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -32,6 +33,8 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.world.StructureGrowEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitTask;
@@ -81,7 +84,8 @@ public class StressTest extends CheckBase implements Runnable {
             man.callEvent(new BlockFadeEvent(block(), block().getState()));
             man.callEvent(new LeavesDecayEvent(block()));
             man.callEvent(new AntiShareInventoryTransferEvent(block(), block()));
-            // TODO: world (un)load
+            man.callEvent(new WorldLoadEvent(new FakeWorld("testWorld" + (i % 2 == 0 ? "1" : "2"))));
+            man.callEvent(new WorldUnloadEvent(new FakeWorld("testWorld" + (i % 2 == 0 ? "2" : "1"))));
         }
     }
 
