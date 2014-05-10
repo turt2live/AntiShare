@@ -82,7 +82,7 @@ public class PistonCheck extends CheckBase implements Prompt {
             writer.write("List<Material> materials = new ArrayList<Material>();\n");
 
             for (Material material : this.breaks) {
-                writer.write("materials.add(Material."+material+");");
+                writer.write("materials.add(Material." + material + ");");
                 writer.newLine();
             }
 

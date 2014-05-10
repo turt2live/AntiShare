@@ -56,16 +56,17 @@ public class BlockTypeTransaction {
      * type is NOT of type UNKNOWN (or not found), the entry will NOT be
      * overwritten. Instead, only entries which do not exist or are UNKNOWN
      * will be written to the transaction.
+     *
      * @param location the location to process, cannot be null
-     * @param type the block type being set. Null equates to UNKNOWN
+     * @param type     the block type being set. Null equates to UNKNOWN
      */
-    public void safeAdd(ASLocation location, BlockType type){
-        if(location==null)throw new IllegalArgumentException();
+    public void safeAdd(ASLocation location, BlockType type) {
+        if (location == null) throw new IllegalArgumentException();
 
-        BlockType existing = types.containsKey(location)?types.get(location):BlockType.UNKNOWN;
+        BlockType existing = types.containsKey(location) ? types.get(location) : BlockType.UNKNOWN;
 
-        if(existing==BlockType.UNKNOWN){
-            add(location,type);
+        if (existing == BlockType.UNKNOWN) {
+            add(location, type);
         }
     }
 
