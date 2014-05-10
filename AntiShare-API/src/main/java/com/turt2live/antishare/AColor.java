@@ -119,7 +119,7 @@ public enum AColor {
     private AColor(char code) {
         this.code = code;
         this.toString = new String(new char[] {COLOR_CHAR, code});
-        this.toStringBukkit = new String(new char[]{COLOR_CHAR_BUKKIT,code});
+        this.toStringBukkit = new String(new char[] {COLOR_CHAR_BUKKIT, code});
     }
 
     /**

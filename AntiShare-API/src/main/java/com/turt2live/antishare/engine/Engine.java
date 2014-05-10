@@ -336,7 +336,6 @@ public final class Engine {
      * @param growWithGamemode the flag for block growing
      * @param dropAsGamemode   the flag for block drops
      */
-    // TODO: Unit test
     public void setPhysicsSettings(boolean growWithGamemode, boolean dropAsGamemode) {
         DevEngine.log("[Engine] New physics settings: growWithGamemode(" + growWithGamemode + "), dropAsGamemode(" + dropAsGamemode + ")");
 
@@ -351,7 +350,6 @@ public final class Engine {
      *
      * @see #setPhysicsSettings(boolean, boolean)
      */
-    // TODO: Unit test
     public boolean isPhysicsGrowWithGamemode() {
         return physicsGrow;
     }
@@ -364,7 +362,6 @@ public final class Engine {
      *
      * @see #setPhysicsSettings(boolean, boolean)
      */
-    // TODO: Unit test
     public boolean isPhysicsBreakAsGamemode() {
         return physicsBlockItems;
     }
@@ -384,7 +381,6 @@ public final class Engine {
      * @param breakAsPlaced     the break-as-placed flag
      * @param denyMismatchBreak the deny-break flag
      */
-    // TODO: Unit test
     public void setAttachmentSettings(boolean breakAsPlaced, boolean denyMismatchBreak) {
         DevEngine.log("[Engine] New attachment settings: breakAsPlaced(" + breakAsPlaced + "), denyMismatchBreak(" + denyMismatchBreak + ")");
 
@@ -400,7 +396,6 @@ public final class Engine {
      * @see #setAttachmentSettings(boolean, boolean)
      * @see #isAttachmentsDenyMismatchBreak()
      */
-    // TODO: Unit test
     public boolean isAttachmentsBreakAsPlaced() {
         return attachmentsAsPlaced;
     }
@@ -412,7 +407,6 @@ public final class Engine {
      *
      * @see #setAttachmentSettings(boolean, boolean)
      */
-    // TODO: Unit test
     public boolean isAttachmentsDenyMismatchBreak() {
         return attachmentsDeny;
     }
@@ -428,7 +422,6 @@ public final class Engine {
      *
      * @param flag the flag for hopper interaction mixing
      */
-    // TODO: Unit test
     public void setHoppersDenyMixed(boolean flag) {
         DevEngine.log("[Engine] New hopper deny mixed: " + flag);
 
@@ -443,7 +436,6 @@ public final class Engine {
      *
      * @see #setHoppersDenyMixed(boolean)
      */
-    // TODO: Unit test
     public boolean isHopperMixedInteractionDenied() {
         return hoppersMixed;
     }
@@ -458,7 +450,6 @@ public final class Engine {
      *
      * @param flag the flag value
      */
-    // TODO: Unit test
     public void setPistonDenyMismatch(boolean flag) {
         DevEngine.log("[Engine] New piston deny mixed: " + flag);
 
@@ -472,7 +463,6 @@ public final class Engine {
      *
      * @see #setPistonDenyMismatch(boolean)
      */
-    // TODO: Unit test
     public boolean isPistonDenyMismatch() {
         return this.pistonMixed;
     }

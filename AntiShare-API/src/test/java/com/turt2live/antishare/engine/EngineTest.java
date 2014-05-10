@@ -162,4 +162,70 @@ public class EngineTest {
         Engine.getInstance().setSaveInterval(-1);
     }
 
+    @Test
+    public void testPhysicSettings() {
+        assertFalse(Engine.getInstance().isPhysicsGrowWithGamemode());
+        assertFalse(Engine.getInstance().isPhysicsBreakAsGamemode());
+
+        Engine.getInstance().setPhysicsSettings(true, true);
+        assertTrue(Engine.getInstance().isPhysicsGrowWithGamemode());
+        assertTrue(Engine.getInstance().isPhysicsBreakAsGamemode());
+
+        Engine.getInstance().setPhysicsSettings(true, false);
+        assertTrue(Engine.getInstance().isPhysicsGrowWithGamemode());
+        assertFalse(Engine.getInstance().isPhysicsBreakAsGamemode());
+
+        Engine.getInstance().setPhysicsSettings(false, true);
+        assertFalse(Engine.getInstance().isPhysicsGrowWithGamemode());
+        assertTrue(Engine.getInstance().isPhysicsBreakAsGamemode());
+
+        Engine.getInstance().setPhysicsSettings(false, false);
+        assertFalse(Engine.getInstance().isPhysicsGrowWithGamemode());
+        assertFalse(Engine.getInstance().isPhysicsBreakAsGamemode());
+    }
+
+    @Test
+    public void testAttachmentSettings() {
+        assertFalse(Engine.getInstance().isAttachmentsBreakAsPlaced());
+        assertFalse(Engine.getInstance().isAttachmentsDenyMismatchBreak());
+
+        Engine.getInstance().setAttachmentSettings(true, true);
+        assertTrue(Engine.getInstance().isAttachmentsBreakAsPlaced());
+        assertTrue(Engine.getInstance().isAttachmentsDenyMismatchBreak());
+
+        Engine.getInstance().setAttachmentSettings(true, false);
+        assertTrue(Engine.getInstance().isAttachmentsBreakAsPlaced());
+        assertFalse(Engine.getInstance().isAttachmentsDenyMismatchBreak());
+
+        Engine.getInstance().setAttachmentSettings(false, true);
+        assertFalse(Engine.getInstance().isAttachmentsBreakAsPlaced());
+        assertTrue(Engine.getInstance().isAttachmentsDenyMismatchBreak());
+
+        Engine.getInstance().setAttachmentSettings(false, false);
+        assertFalse(Engine.getInstance().isAttachmentsBreakAsPlaced());
+        assertFalse(Engine.getInstance().isAttachmentsDenyMismatchBreak());
+    }
+
+    @Test
+    public void testHopperSettings() {
+        assertFalse(Engine.getInstance().isHopperMixedInteractionDenied());
+
+        Engine.getInstance().setHoppersDenyMixed(true);
+        assertTrue(Engine.getInstance().isHopperMixedInteractionDenied());
+
+        Engine.getInstance().setHoppersDenyMixed(false);
+        assertFalse(Engine.getInstance().isHopperMixedInteractionDenied());
+    }
+
+    @Test
+    public void testPistonSettings() {
+        assertFalse(Engine.getInstance().isPistonDenyMismatch());
+
+        Engine.getInstance().setPistonDenyMismatch(true);
+        assertTrue(Engine.getInstance().isPistonDenyMismatch());
+
+        Engine.getInstance().setPistonDenyMismatch(false);
+        assertFalse(Engine.getInstance().isPistonDenyMismatch());
+    }
+
 }
