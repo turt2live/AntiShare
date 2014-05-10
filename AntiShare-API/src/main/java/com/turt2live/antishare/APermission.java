@@ -35,6 +35,10 @@ public final class APermission {
      */
     public static final String FREE_PLACE = "antishare.freeplace";
     /**
+     * Ignores misc checks for denial when breaking blocks
+     */
+    public static final String FREE_BREAK = "antishare.freebreak";
+    /**
      * If enabled, the player will get notifications of illegal actions performed by players
      */
     public static final String GET_ALERTS = "antishare.alerts";

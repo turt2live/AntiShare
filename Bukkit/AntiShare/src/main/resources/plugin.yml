@@ -17,6 +17,9 @@ permissions:
     antishare.freeplace:
         default: op
         description: Allows the target to place blocks without tracking
+    antishare.freeplace:
+        default: op
+        description: Allows the target to break blocks regardless of attachments or dis-similar gamemodes
     antishare.group.main:
         default: true
         description: Default main group permission

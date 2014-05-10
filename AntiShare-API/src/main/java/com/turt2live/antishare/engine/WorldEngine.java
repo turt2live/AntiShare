@@ -273,26 +273,29 @@ public final class WorldEngine {
         }
 
         BlockType blockType1 = blockManager.getBlockType(block.getLocation());
-        if (blockType1 != blockType && blockType1 != BlockType.UNKNOWN) return true; // Mixed gamemode
+        if (!player.hasPermission(APermission.FREE_BREAK)) {
+            if (blockType1 != blockType && blockType1 != BlockType.UNKNOWN)
+                return true; // Mixed gamemode
 
-        List<ABlock> possibleAttachments = new ArrayList<ABlock>();
-        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(1, 0, 0)));
-        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(-1, 0, 0)));
-        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 0, 1)));
-        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 0, -1)));
-        possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 1, 0))); // Above
+            List<ABlock> possibleAttachments = new ArrayList<ABlock>();
+            possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(1, 0, 0)));
+            possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(-1, 0, 0)));
+            possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 0, 1)));
+            possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 0, -1)));
+            possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 1, 0))); // Above
 
-        for (ABlock possibleAttachment : possibleAttachments) {
-            if (possibleAttachment.isAttached(block)) {
-                BlockType attachType = blockManager.getBlockType(possibleAttachment.getLocation());
-                if (attachType == BlockType.UNKNOWN) continue; // Let it break normally
+            for (ABlock possibleAttachment : possibleAttachments) {
+                if (possibleAttachment.isAttached(block)) {
+                    BlockType attachType = blockManager.getBlockType(possibleAttachment.getLocation());
+                    if (attachType == BlockType.UNKNOWN) continue; // Let it break normally
 
-                if (Engine.getInstance().isAttachmentsDenyMismatchBreak() && attachType != blockType1 && blockType1 != BlockType.UNKNOWN) {
-                    return true; // As the owner wishes...
+                    if (Engine.getInstance().isAttachmentsDenyMismatchBreak() && attachType != blockType1 && blockType1 != BlockType.UNKNOWN) {
+                        return true; // As the owner wishes...
+                    }
+                    if (Engine.getInstance().isAttachmentsBreakAsPlaced() && attachType == BlockType.CREATIVE) { // TODO: Possible 'affect'?
+                        additional.add(possibleAttachment);
+                    }// Implementation has to handle the removal. IE: Fade or 'disappear'
                 }
-                if (Engine.getInstance().isAttachmentsBreakAsPlaced() && attachType == BlockType.CREATIVE) { // TODO: Possible 'affect'?
-                    additional.add(possibleAttachment);
-                }// Implementation has to handle the removal. IE: Fade or 'disappear'
             }
         }
 
