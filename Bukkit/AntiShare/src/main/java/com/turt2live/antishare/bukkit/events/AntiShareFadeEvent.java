@@ -15,17 +15,20 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.bukkit.dev;
+package com.turt2live.antishare.bukkit.events;
 
-public abstract class CheckBase {
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.event.block.BlockFadeEvent;
 
-    protected AntiShare plugin;
+/**
+ * AntiShare Fade Event
+ *
+ * @author turt2live
+ */
+public class AntiShareFadeEvent extends BlockFadeEvent {
 
-    public CheckBase(AntiShare plugin) {
-        this.plugin = plugin;
-        if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdirs();
+    public AntiShareFadeEvent(Block block, BlockState newState) {
+        super(block, newState);
     }
-
-    public abstract void begin();
-
 }

@@ -118,6 +118,13 @@ public class BukkitBlock implements ABlock {
     }
 
     @Override
+    public ABlock getRelative(Facing relative) {
+        if (relative == null) throw new IllegalArgumentException();
+        BlockFace face = BukkitUtils.getFacing(relative);
+        return new BukkitBlock(block.getRelative(face));
+    }
+
+    @Override
     public TrackedState canPlace(APlayer player) {
         return permissionCheck(RejectionList.ListType.BLOCK_PLACE, player);
     }
@@ -183,5 +190,10 @@ public class BukkitBlock implements ABlock {
      */
     public Block getBlock() {
         return block;
+    }
+
+    @Override
+    public String toString() {
+        return "BukkitBlock{block=" + block.toString() + "}";
     }
 }

@@ -30,10 +30,13 @@ import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.utils.ASUtils;
+import com.turt2live.antishare.utils.BlockTypeTransaction;
 import com.turt2live.antishare.utils.OutputParameter;
 
 import java.util.ArrayList;
@@ -566,5 +569,70 @@ public final class WorldEngine {
         if (type1 == type2 || type1 == BlockType.UNKNOWN || type2 == BlockType.UNKNOWN)
             return true;
         else return false;
+    }
+
+    /**
+     * Processes a piston move (retract or extend). This will internally check to see which
+     * blocks are being affected by the move and adjust accordingly. This will return a true
+     * or false value based upon the 'allowance' of the piston move ('false' for denied). If
+     * this does not determine that the action is prohibited, the blocks associated with the
+     * move will be updated internally as needed.
+     * <p/>
+     * The list of blocks is assumed to be moving 1 block in the facing direction of the piston.
+     * If the 'retract' flag is set to true, then this will check the 'sticky' flag. If the piston
+     * is considered 'sticky', then the blocks will be assumed to be moving 1 block in the opposite
+     * direction of the piston facing direction. If the piston is retracting and is not sticky, this
+     * will do nothing.
+     * <p/>
+     * This will not verify that the chain will not cause damage to existing blocks. This behaviour
+     * is considered the "+1 bug" and is present in CraftBukkit. This will not accomodate for the +1
+     * bug.
+     *
+     * @param piston    the piston that is moving, cannot be null
+     * @param blocks    the blocks being moved by the piston, cannot be null. Empty lists are ignored.
+     * @param direction the direction the piston is extending/retracting in, cannot be null
+     * @param retract   flag for piston retraction
+     * @param sticky    flag for a piston being sticky (or not)
+     *
+     * @return true if this piston is permitted to move, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processPistonMove(ABlock piston, List<ABlock> blocks, Facing direction, boolean retract, boolean sticky) {
+        if (piston == null || blocks == null || direction == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing piston move",
+                "[WorldEngine:" + worldName + "] \t\tpiston = " + piston,
+                "[WorldEngine:" + worldName + "] \t\tblocks = " + blocks,
+                "[WorldEngine:" + worldName + "] \t\tdirection = " + direction,
+                "[WorldEngine:" + worldName + "] \t\tretract = " + retract,
+                "[WorldEngine:" + worldName + "] \t\tsticky = " + sticky);
+
+        if (retract && !sticky) return true;
+        if (blocks.isEmpty()) return true;
+
+        BlockTypeTransaction transaction = new BlockTypeTransaction();
+        BlockType pistonType = blockManager.getBlockType(piston.getLocation());
+        if (pistonType != BlockType.UNKNOWN && Engine.getInstance().isPistonDenyMismatch()) {
+            // Now we have to check all the block types
+            for (ABlock block : blocks) {
+                BlockType type = blockManager.getBlockType(block.getLocation());
+                if (type != BlockType.UNKNOWN && type != pistonType)
+                    return false;  // Mismatch piston & block, deny
+            }
+        }
+
+        // If we made it here, all we have to do is update the block types
+        for (ABlock block : blocks) {
+            BlockType old = blockManager.getBlockType(block.getLocation());
+            ASLocation newLocation = block.getRelative(direction).getLocation();
+
+            if (old == BlockType.UNKNOWN) continue; // Don't overwrite blocks (duplicate events in Bukkit)
+
+            blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
+            transaction.add(newLocation, old);
+        }
+        transaction.commit(blockManager);
+
+        return true;
     }
 }

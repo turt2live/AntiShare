@@ -33,6 +33,14 @@ public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_6_R
     }
 
     @Override
+    public List<Material> getPistonBreak() {
+        List<Material> materials = super.getPistonBreak();
+        materials.add(Material.LEAVES_2);
+        materials.add(Material.DOUBLE_PLANT);
+        return materials;
+    }
+
+    @Override
     public ABlock.ChestType getChestType(Block block) {
         ABlock.ChestType type = super.getChestType(block);
 

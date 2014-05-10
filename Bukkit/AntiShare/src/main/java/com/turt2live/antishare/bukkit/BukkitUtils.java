@@ -24,8 +24,10 @@ import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.object.AWorld;
+import com.turt2live.antishare.object.attribute.Facing;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 
 /**
  * AntiShare to/from Bukkit Utilities
@@ -87,6 +89,60 @@ public final class BukkitUtils {
      */
     public static BlockManager getBlockManager(World world) {
         return getWorldEngine(world).getBlockManager();
+    }
+
+    /**
+     * Gets the facing direction from a block face
+     *
+     * @param face the block face direction. Null input is a null return
+     *
+     * @return the facing direction, or null if not found
+     */
+    public static Facing getFacing(BlockFace face) {
+        if (face == null) return null;
+        switch (face) {
+            case NORTH:
+                return Facing.NORTH;
+            case SOUTH:
+                return Facing.SOUTH;
+            case EAST:
+                return Facing.EAST;
+            case WEST:
+                return Facing.WEST;
+            case UP:
+                return Facing.UP;
+            case DOWN:
+                return Facing.DOWN;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Gets the block face direction from a facing direction
+     *
+     * @param face the facing direction. Null input is a null return
+     *
+     * @return the block face direction, or null if not found
+     */
+    public static BlockFace getFacing(Facing face) {
+        if (face == null) return null;
+        switch (face) {
+            case NORTH:
+                return BlockFace.NORTH;
+            case SOUTH:
+                return BlockFace.SOUTH;
+            case EAST:
+                return BlockFace.EAST;
+            case WEST:
+                return BlockFace.WEST;
+            case UP:
+                return BlockFace.UP;
+            case DOWN:
+                return BlockFace.DOWN;
+            default:
+                return null;
+        }
     }
 
     /**

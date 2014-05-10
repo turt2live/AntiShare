@@ -108,6 +108,67 @@ public class Minecraft implements MinecraftVersion {
     }
 
     @Override
+    public List<Material> getPistonVanish() {
+        List<Material> materials = new ArrayList<Material>();
+        materials.add(Material.STATIONARY_WATER);
+        materials.add(Material.WATER);
+        materials.add(Material.STATIONARY_LAVA);
+        materials.add(Material.LAVA);
+        materials.add(Material.LONG_GRASS);
+        materials.add(Material.DEAD_BUSH);
+        materials.add(Material.FIRE);
+        materials.add(Material.SNOW);
+        materials.add(Material.CAKE_BLOCK);
+        return materials;
+    }
+
+    @Override
+    public List<Material> getPistonBreak() {
+        List<Material> materials = new ArrayList<Material>();
+        materials.add(Material.SAPLING);
+        materials.add(Material.LEAVES);
+        materials.add(Material.BED_BLOCK);
+        materials.add(Material.WEB);
+        materials.add(Material.YELLOW_FLOWER);
+        materials.add(Material.RED_ROSE);
+        materials.add(Material.BROWN_MUSHROOM);
+        materials.add(Material.RED_MUSHROOM);
+        materials.add(Material.TORCH);
+        materials.add(Material.REDSTONE_WIRE);
+        materials.add(Material.CROPS);
+        materials.add(Material.WOODEN_DOOR);
+        materials.add(Material.LADDER);
+        materials.add(Material.LEVER);
+        materials.add(Material.STONE_PLATE);
+        materials.add(Material.IRON_DOOR_BLOCK);
+        materials.add(Material.WOOD_PLATE);
+        materials.add(Material.REDSTONE_TORCH_OFF);
+        materials.add(Material.REDSTONE_TORCH_ON);
+        materials.add(Material.CACTUS);
+        materials.add(Material.SUGAR_CANE_BLOCK);
+        materials.add(Material.PUMPKIN);
+        materials.add(Material.JACK_O_LANTERN);
+        materials.add(Material.DIODE_BLOCK_OFF);
+        materials.add(Material.DIODE_BLOCK_ON);
+        materials.add(Material.TRAP_DOOR);
+        materials.add(Material.MELON_BLOCK);
+        materials.add(Material.PUMPKIN_STEM);
+        materials.add(Material.MELON_STEM);
+        materials.add(Material.WATER_LILY);
+        materials.add(Material.NETHER_WARTS);
+        materials.add(Material.DRAGON_EGG);
+        materials.add(Material.COCOA);
+        materials.add(Material.TRIPWIRE_HOOK);
+        materials.add(Material.TRIPWIRE);
+        materials.add(Material.FLOWER_POT);
+        materials.add(Material.CARROT);
+        materials.add(Material.POTATO);
+        materials.add(Material.WOOD_BUTTON);
+        materials.add(Material.SKULL);
+        return materials;
+    }
+
+    @Override
     public ABlock.ChestType getChestType(Block block) {
         if (block == null) throw new IllegalArgumentException();
 

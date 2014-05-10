@@ -45,4 +45,29 @@ public enum Facing {
      * Facing down
      */
     DOWN;
+
+    /**
+     * Gets the opposite facing direction relative to this
+     * facing direction.
+     *
+     * @return the opposite facing direction
+     */
+    public Facing opposite() {
+        switch (this) {
+            case NORTH:
+                return SOUTH;
+            case SOUTH:
+                return NORTH;
+            case WEST:
+                return EAST;
+            case EAST:
+                return WEST;
+            case UP:
+                return DOWN;
+            case DOWN:
+                return UP;
+            default:
+                return null;
+        }
+    }
 }

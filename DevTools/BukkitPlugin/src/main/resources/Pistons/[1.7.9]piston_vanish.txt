@@ -1,0 +1,11 @@
+List<Material> materials = new ArrayList<Material>();
+materials.add(Material.STATIONARY_WATER);
+materials.add(Material.WATER);
+materials.add(Material.STATIONARY_LAVA);
+materials.add(Material.LAVA);
+materials.add(Material.LONG_GRASS);
+materials.add(Material.DEAD_BUSH);
+materials.add(Material.FIRE);
+materials.add(Material.SNOW);
+materials.add(Material.CAKE_BLOCK);
+return materials;

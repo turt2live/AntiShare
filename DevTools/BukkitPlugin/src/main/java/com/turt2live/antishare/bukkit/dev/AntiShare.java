@@ -80,6 +80,13 @@ public class AntiShare extends JavaPlugin {
                 } else {
                     sender.sendMessage(ChatColor.RED + "No DevEngine to access");
                 }
+            } else if (args[0].equalsIgnoreCase("piston")) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    check = new PistonCheck(this, player);
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Not for console.");
+                }
             } else
                 sender.sendMessage(ChatColor.RED + "Unknown command.");
 

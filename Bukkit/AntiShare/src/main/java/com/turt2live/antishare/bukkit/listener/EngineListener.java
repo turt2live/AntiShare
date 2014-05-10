@@ -19,9 +19,12 @@ package com.turt2live.antishare.bukkit.listener;
 
 import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.bukkit.AntiShare;
+import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
+import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.bukkit.events.AntiShareBlockBreakEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareExplodeEvent;
+import com.turt2live.antishare.bukkit.events.AntiShareFadeEvent;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
@@ -33,6 +36,7 @@ import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.utils.OutputParameter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -285,6 +289,8 @@ public class EngineListener implements Listener {
     public void onFade(BlockFadeEvent event) {
         printDebugEvent(event);
 
+        if (event instanceof AntiShareFadeEvent) return; // Don't handle ourselves
+
         engine.getEngine(event.getBlock().getWorld().getName()).processFade(new BukkitBlock(event.getBlock()));
     }
 
@@ -317,6 +323,60 @@ public class EngineListener implements Listener {
         ABlock block2 = new BukkitBlock(event.getBlock2());
 
         if (!engine.getEngine(block1.getWorld().getName()).processBlockInteraction(block1, block2)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPistonExtend(BlockPistonExtendEvent event) {
+        printDebugEvent(event);
+
+        ABlock piston = new BukkitBlock(event.getBlock());
+        Facing direction = BukkitUtils.getFacing(event.getDirection());
+        List<ABlock> blocks = new ArrayList<ABlock>();
+
+        // TODO: 1.8 slime blocks (may need extra handling)
+
+        for (Block block : event.getBlocks()) {
+            blocks.add(new BukkitBlock(block));
+        }
+
+        if (!engine.getEngine(piston.getWorld().getName()).processPistonMove(piston, blocks, direction, false, event.isSticky())) {
+            event.setCancelled(true);
+        } else {
+            // Event permitted, check the +1
+            Block plusOne = event.getBlock().getRelative(event.getDirection(), event.getLength() + 1);
+
+            // Process as 'vanish' or 'drop item'
+            if (VersionSelector.getMinecraft().getPistonVanish().contains(plusOne.getType())) {
+                engine.getEngine(piston.getWorld().getName()).processFade(new BukkitBlock(plusOne));
+
+                plusOne.setType(Material.AIR);
+                plugin.getServer().getPluginManager().callEvent(new AntiShareFadeEvent(plusOne, plusOne.getState()));
+            } else if (VersionSelector.getMinecraft().getPistonBreak().contains(plusOne.getType())) {
+                if (!engine.getEngine(piston.getWorld().getName()).processBlockPhysicsBreak(new BukkitBlock(plusOne))) {
+                    plusOne.setType(Material.AIR);
+                    plugin.getServer().getPluginManager().callEvent(new AntiShareFadeEvent(plusOne, plusOne.getState()));
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPistonRetract(BlockPistonRetractEvent event) {
+        printDebugEvent(event);
+
+        ABlock piston = new BukkitBlock(event.getBlock());
+        Facing direction = BukkitUtils.getFacing(event.getDirection()).opposite(); // Need to flip for correct processing
+        List<ABlock> blocks = new ArrayList<ABlock>();
+
+        // TODO: 1.8 slime blocks (may need extra handling)
+
+        // Find the affected block
+        Block moving = event.getRetractLocation().getBlock();
+        if (moving.getType() != Material.AIR) blocks.add(new BukkitBlock(moving));
+
+        if (!engine.getEngine(piston.getWorld().getName()).processPistonMove(piston, blocks, direction, true, event.isSticky())) {
             event.setCancelled(true);
         }
     }

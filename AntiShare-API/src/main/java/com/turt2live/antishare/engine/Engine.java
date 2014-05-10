@@ -62,6 +62,7 @@ public final class Engine {
     private boolean physicsGrow = false; // grow-with-gamemode flag
     private boolean physicsBlockItems = false; // drop items (physics) as gamemode placed flag
     private boolean hoppersMixed = false; // hopper mixing of gamemodes flag
+    private boolean pistonMixed = false; // piston mismatch deny flag
 
     private Engine() {
         newCacheTimer();
@@ -445,6 +446,35 @@ public final class Engine {
     // TODO: Unit test
     public boolean isHopperMixedInteractionDenied() {
         return hoppersMixed;
+    }
+
+    /**
+     * Sets the piston deny mismatch flag. If true, pistons not of
+     * 'natural' type will check their affected block lists to determine
+     * if the blocks are all of the same type (or natural) before allowing
+     * the move. If there is a block which is not of the same type as the
+     * non-natural piston, the move will be denied. If this is set to false,
+     * this checking will not occur.
+     *
+     * @param flag the flag value
+     */
+    // TODO: Unit test
+    public void setPistonDenyMismatch(boolean flag) {
+        DevEngine.log("[Engine] New piston deny mixed: " + flag);
+
+        this.pistonMixed = flag;
+    }
+
+    /**
+     * Determines if pistons are allowed to move mismatched blocks.
+     *
+     * @return true if denied, false otherwise
+     *
+     * @see #setPistonDenyMismatch(boolean)
+     */
+    // TODO: Unit test
+    public boolean isPistonDenyMismatch() {
+        return this.pistonMixed;
     }
 
     private void newCacheTimer() {

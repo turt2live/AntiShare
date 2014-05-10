@@ -42,6 +42,14 @@ blocks:
         # to 'creative' or 'natural' hoppers. If false, hoppers are
         # left untouched.
         deny-mixed: true
+    pistons:
+        # If true, pistons will not be allowed to move blocks that are
+        # not of the same type as the piston. For example, a 'creative'
+        # piston will not be able to move 'survival' blocks. If the piston
+        # does not have a gamemode applied to it, blocks will be permitted
+        # to move (and will update accordingly). If this is false, blocks
+        # are simply updated to maintain their state.
+        deny-mismatch: true
 
 # AntiShare internal caching settings. These settings are generally
 # not touched unless you are looking to fine tune how AntiShare

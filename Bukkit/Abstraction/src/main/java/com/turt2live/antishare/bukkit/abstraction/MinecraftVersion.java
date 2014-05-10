@@ -44,6 +44,22 @@ public interface MinecraftVersion {
     public List<Material> getBrokenOnTop();
 
     /**
+     * Gets a list of materials that simply vanish when the last
+     * block of a piston chain crosses over them.
+     *
+     * @return a list of materials
+     */
+    public List<Material> getPistonVanish();
+
+    /**
+     * Gets a list of materials that will be broken when a piston
+     * (chain or not) steps into their space.
+     *
+     * @return a list of materials
+     */
+    public List<Material> getPistonBreak();
+
+    /**
      * Gets the applicable chest type for a specified block
      *
      * @param block the block, cannot be null

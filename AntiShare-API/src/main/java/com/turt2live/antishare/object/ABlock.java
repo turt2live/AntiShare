@@ -105,6 +105,17 @@ public interface ABlock extends Rejectable {
     public AWorld getWorld();
 
     /**
+     * Gets the block relative to this block. For example, if this
+     * is passed {@link com.turt2live.antishare.object.attribute.Facing#NORTH}, the
+     * block immediately NORTH of this block will be returned.
+     *
+     * @param relative the direction to get the relative block from, cannot be null
+     *
+     * @return the relative block
+     */
+    public ABlock getRelative(Facing relative);
+
+    /**
      * Determines if a player can place this block. This should be
      * strictly a lookup of permissions without validating with any
      * engine components or through the rejection lists.
