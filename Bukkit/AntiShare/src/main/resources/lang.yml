@@ -32,8 +32,10 @@ naughty:
     admin:
         place: '&c@p &7tried to place a &c@v'
         break: '&c@p &7tried to break &c@v'
+        command: '&c@p &7tried to use the command &c@v'
     place: '&cYou cannot place that &4@v'
     break: '&cYou cannot break that &4@v'
+    command: '&cYou cannot use the command &4@v'
 
 tools:
     check-title: '&bAntiShare Check Tool'

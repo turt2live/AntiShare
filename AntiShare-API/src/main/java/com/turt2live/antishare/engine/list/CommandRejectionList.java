@@ -17,6 +17,7 @@
 
 package com.turt2live.antishare.engine.list;
 
+import com.turt2live.antishare.object.RejectableCommand;
 import com.turt2live.antishare.object.attribute.TrackedState;
 
 import java.util.ArrayList;

@@ -34,6 +34,7 @@ import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.RejectableCommand;
 import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.object.attribute.Facing;
@@ -56,6 +57,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -378,6 +380,21 @@ public class EngineListener implements Listener {
 
         if (!engine.getEngine(piston.getWorld().getName()).processPistonMove(piston, blocks, direction, true, event.isSticky())) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
+    public void onCommand(PlayerCommandPreprocessEvent event){
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        RejectableCommand command = new RejectableCommand(event.getMessage());
+
+        if(engine.getEngine(event.getPlayer().getWorld().getName()).processCommandExecution(player,command)){
+            event.setCancelled(true);
+
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_COMMAND)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, command.getCommandString()).build());
+            alert(Lang.NAUGHTY_ADMIN_COMMAND, event.getPlayer().getName(), command.getCommandString());
         }
     }
 

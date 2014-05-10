@@ -35,3 +35,9 @@ permissions:
     antishare.deny.block_break:
         default: false
         description: Denies all blocks to be broken, regardless of group settings
+    antishare.allow.commands:
+        default: op
+        description: Allows all commands to be used, regardless of group settings
+    antishare.deny.commands:
+        default: false
+        description: Denies all command usage, regardless of group settings

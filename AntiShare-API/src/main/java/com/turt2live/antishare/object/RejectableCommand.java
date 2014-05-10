@@ -15,10 +15,10 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.engine.list;
+package com.turt2live.antishare.object;
 
 import com.turt2live.antishare.APermission;
-import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.attribute.TrackedState;
 
 /**
@@ -177,4 +177,31 @@ public class RejectableCommand implements Rejectable {
         return (int) Math.ceil(nflags / 2.0);
     }
 
+    @Override
+    public String toString() {
+        return "RejectableCommand{" +
+                "commandString='" + commandString + '\'' +
+                ", isNegated=" + isNegated +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RejectableCommand)) return false;
+
+        RejectableCommand that = (RejectableCommand) o;
+
+        if (isNegated != that.isNegated) return false;
+        if (!commandString.equals(that.commandString)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = commandString.hashCode();
+        result = 31 * result + (isNegated ? 1 : 0);
+        return result;
+    }
 }

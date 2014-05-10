@@ -160,6 +160,8 @@ public final class BukkitUtils {
                 return "place";
             case BLOCK_BREAK:
                 return "break";
+            case COMMANDS:
+                return "commands";
             default:
                 return null;
         }

@@ -20,10 +20,7 @@ package com.turt2live.antishare.engine;
 import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
-import com.turt2live.antishare.engine.list.BlockTypeList;
-import com.turt2live.antishare.engine.list.DefaultBlockTypeList;
-import com.turt2live.antishare.engine.list.DefaultRejectionList;
-import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.engine.list.*;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
@@ -31,6 +28,7 @@ import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.RejectableCommand;
 import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.object.attribute.Facing;
@@ -635,5 +633,42 @@ public final class WorldEngine {
         transaction.commit(blockManager);
 
         return true;
+    }
+
+    /**
+     * Processes a player executing a command. This will internally determine if the player
+     * is permitted to do so. If not, 'true' is returned to indicate 'deny'. 'false' is used
+     * to indicate 'all is well'.
+     *
+     * @param player  the player executing the command, cannot be null
+     * @param command the command being executed, cannot be null
+     *
+     * @return denial status, true being denied
+     */
+    // TODO: Unit test
+    public boolean processCommandExecution(APlayer player, RejectableCommand command) {
+        if (player == null || command == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing command",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tcommand = " + command);
+
+        if (player.getGameMode() != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new CommandRejectionList();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+        }
+
+        // Check lists and permissions
+        TrackedState playerReaction = command.canExecute(player);
+        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+        if (reject.isBlocked(command) && playerReaction == TrackedState.NOT_PRESENT)
+            return true; // Rejected & no allow permission
+        return false; // Allowed
     }
 }

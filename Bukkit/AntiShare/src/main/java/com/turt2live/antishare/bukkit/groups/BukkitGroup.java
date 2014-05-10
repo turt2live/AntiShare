@@ -24,10 +24,13 @@ import com.turt2live.antishare.bukkit.lists.BukkitBlockList;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.CommandRejectionList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.object.RejectableCommand;
 import com.turt2live.antishare.object.attribute.ASGameMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bukkit group
@@ -47,22 +50,55 @@ public class BukkitGroup extends Group {
 
     @Override
     public BlockTypeList getTrackedList(ASGameMode gameMode) {
-        if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
-        MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-        BukkitBlockList list = new BukkitBlockList(provider);
-        list.populateBlocks(super.configuration.getStringList("blocks." + gameMode.name().toLowerCase(), new ArrayList<String>()));
-        return list;
+        return getTrackedList(gameMode, super.configuration);
     }
 
     @Override
     public RejectionList getRejectionList(RejectionList.ListType type) {
+        return getRejectionList(type, super.configuration);
+    }
+
+    static BlockTypeList getTrackedList(ASGameMode gameMode, Configuration configuration) {
+        if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
+
+        MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
+        BukkitBlockList list = new BukkitBlockList(provider);
+        list.populateBlocks(configuration.getStringList("blocks." + gameMode.name().toLowerCase(), new ArrayList<String>()));
+
+        return list;
+    }
+
+    static RejectionList getRejectionList(RejectionList.ListType type, Configuration configuration) {
         if (type == null) throw new IllegalArgumentException("list type cannot be null");
+
         String configKey = BukkitUtils.getStringName(type);
         if (configKey == null)
             throw new NullPointerException("Yell at turt2live to add this: " + type.name());
-        MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-        BukkitBlockList list = new BukkitBlockList(provider, type);
-        list.populateBlocks(super.configuration.getStringList("lists." + configKey, new ArrayList<String>()));
+
+        RejectionList list;
+        switch (type) {
+            case BLOCK_BREAK:
+            case BLOCK_PLACE:
+                MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
+                list = new BukkitBlockList(provider, type);
+                ((BukkitBlockList) list).populateBlocks(configuration.getStringList("lists." + configKey, new ArrayList<String>()));
+                break;
+            case COMMANDS:
+                list = new CommandRejectionList();
+                List<String> commands = configuration.getStringList("lists." + configKey, new ArrayList<String>());
+                List<RejectableCommand> rejectableCommands = new ArrayList<RejectableCommand>();
+                for (String command : commands) {
+                    rejectableCommands.add(new RejectableCommand(command));
+                }
+                ((CommandRejectionList) list).populate(rejectableCommands);
+                break;
+            default:
+                list = null;
+        }
+
+        if (list == null)
+            throw new NullPointerException("List not implemented: " + type.name());
+
         return list;
     }
 }

@@ -18,7 +18,7 @@
 package com.turt2live.antishare.configuration.groups;
 
 import com.turt2live.antishare.collections.ArrayArrayList;
-import com.turt2live.antishare.engine.list.Rejectable;
+import com.turt2live.antishare.object.Rejectable;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.attribute.TrackedState;
 
@@ -56,7 +56,7 @@ public class ConsolidatedRejectionList<T extends Rejectable> implements Rejectio
      *
      * @param lists the lists to include. Cannot be null and must have at least one record
      */
-    public ConsolidatedRejectionList(List<RejectionList> lists) {
+    public ConsolidatedRejectionList(List<RejectionList<T>> lists) {
         if (lists == null || lists.isEmpty()) throw new IllegalArgumentException("lists cannot be null or empty");
         this.lists.addAll(lists);
     }

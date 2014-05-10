@@ -56,6 +56,9 @@ lists:
     - bedrock
     break:
     - bedrock
+    commands:
+    - 'onecommand'
+    - '/two command'
 
 # Block configuration. This gives you the ability to customize the block
 # aspects of AntiShare. More information can be found at the link listed

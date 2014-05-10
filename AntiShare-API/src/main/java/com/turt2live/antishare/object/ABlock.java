@@ -17,7 +17,6 @@
 
 package com.turt2live.antishare.object;
 
-import com.turt2live.antishare.engine.list.Rejectable;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.TrackedState;
 

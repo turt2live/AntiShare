@@ -15,11 +15,11 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.engine.list;
+package com.turt2live.antishare.object;
 
 /**
  * Represents an object which may participate in a
- * {@link RejectionList}
+ * {@link com.turt2live.antishare.engine.list.RejectionList}
  *
  * @author turt2live
  */
