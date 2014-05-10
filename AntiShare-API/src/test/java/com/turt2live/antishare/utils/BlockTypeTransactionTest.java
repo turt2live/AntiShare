@@ -42,7 +42,7 @@ public class BlockTypeTransactionTest {
 
         for (int i = 0; i < 100; i++) {
             ASLocation location = mock(ASLocation.class);
-            BlockType type = mock(BlockType.class);
+            BlockType type = BlockType.CREATIVE;
 
             transaction.add(location, type);
             typeMap.put(location, type);
@@ -59,7 +59,7 @@ public class BlockTypeTransactionTest {
 
         for (int i = 0; i < 100; i++) {
             ASLocation location = mock(ASLocation.class);
-            BlockType type = mock(BlockType.class);
+            BlockType type = BlockType.CREATIVE;
 
             BlockType existing = typeMap.containsKey(location) ? typeMap.get(location) : BlockType.UNKNOWN;
 
@@ -78,12 +78,12 @@ public class BlockTypeTransactionTest {
 
         for (int i = 0; i < 100; i++) {
             ASLocation location = mock(ASLocation.class);
-            BlockType type = mock(BlockType.class);
+            BlockType type = BlockType.CREATIVE;
             transaction.add(location, type);
         }
 
         transaction.commit(manager);
-        verify(manager).setBlockType(any(ASLocation.class), any(BlockType.class));
+        verify(manager, times(100)).setBlockType(any(ASLocation.class), any(BlockType.class));
         transaction.commit(manager);
         verifyNoMoreInteractions(manager);
     }
@@ -96,10 +96,10 @@ public class BlockTypeTransactionTest {
     @Test(expected = IllegalArgumentException.class)
     public void testAddNull1() {
         BlockTypeTransaction transaction = new BlockTypeTransaction();
-        transaction.add(null, mock(BlockType.class));
+        transaction.add(null, BlockType.CREATIVE);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddNull2() {
         BlockTypeTransaction transaction = new BlockTypeTransaction();
         BlockManager manager = mock(BlockManager.class);
@@ -113,10 +113,10 @@ public class BlockTypeTransactionTest {
     @Test(expected = IllegalArgumentException.class)
     public void testSafeAddNull1() {
         BlockTypeTransaction transaction = new BlockTypeTransaction();
-        transaction.safeAdd(null, mock(BlockType.class));
+        transaction.safeAdd(null, BlockType.CREATIVE);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testSafeAddNull2() {
         BlockTypeTransaction transaction = new BlockTypeTransaction();
         BlockManager manager = mock(BlockManager.class);

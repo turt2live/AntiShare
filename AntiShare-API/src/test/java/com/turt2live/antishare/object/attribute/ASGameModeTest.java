@@ -32,7 +32,7 @@ public class ASGameModeTest {
         for (ASGameMode gameMode : ASGameMode.values()) {
             assertEquals(gameMode, ASGameMode.fromString(gameMode.name().toLowerCase()));
             assertEquals(gameMode, ASGameMode.fromString(gameMode.name()));
-            assertEquals(gameMode, ASGameMode.fromString(gameMode.name().substring(0, 4).toLowerCase() + gameMode.name().substring(5)));
+            assertEquals(gameMode, ASGameMode.fromString(gameMode.name().substring(0, 4).toLowerCase() + gameMode.name().substring(4)));
         }
 
         assertNull(ASGameMode.fromString(null));
