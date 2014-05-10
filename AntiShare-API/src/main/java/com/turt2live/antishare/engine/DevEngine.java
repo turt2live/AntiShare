@@ -42,8 +42,6 @@ public class DevEngine {
     private static File LOG_FOLDER = new File("logs");
     private static DevEngine INSTANCE = null;
 
-    // TODO: Make use of the DevTools API
-
     private DevEngine() {
     }
 

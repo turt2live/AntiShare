@@ -28,7 +28,6 @@ import com.turt2live.antishare.object.AWorld;
 import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.object.attribute.TrackedState;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.invocation.InvocationOnMock;
@@ -80,9 +79,9 @@ public class ProcessingTest {
 
     private static BlockTypeList blockTypeList;
     private static RejectionList rejectionList;
-    private static ASLocation test1 = new ASLocation(0, 0, 1);
-    private static ASLocation test2 = new ASLocation(0, 1, 0);
-    private static ASLocation test3 = new ASLocation(1, 0, 0);
+    private static ABlock test1;
+    private static ABlock test2;
+    private static ABlock test3;
     private static ABlock block;
     private static APlayer player;
 
@@ -90,49 +89,23 @@ public class ProcessingTest {
     public static void before() {
         blockTypeList = mock(BlockTypeList.class);
         when(blockTypeList.isTracked(any(ABlock.class))).then(new ReturnIsTrackedWorkaround());
-//        when(blockTypeList.getState(test1)).thenReturn(TrackedState.INCLUDED);
-//        when(blockTypeList.getState(test2)).thenReturn(TrackedState.NEGATED);
-//        when(blockTypeList.getState(test3)).thenReturn(TrackedState.NOT_PRESENT);
+        when(blockTypeList.getState(test1)).thenReturn(TrackedState.INCLUDED);
+        when(blockTypeList.getState(test2)).thenReturn(TrackedState.NEGATED);
+        when(blockTypeList.getState(test3)).thenReturn(TrackedState.NOT_PRESENT);
+
+        test1 = mock(ABlock.class);
+        test2 = mock(ABlock.class);
+        test3 = mock(ABlock.class);
 
         rejectionList = mock(RejectionList.class);
-        // TODO: Initialize rejection list
+        // TODO: Initialize rejection list (if needed)
 
         block = mock(ABlock.class);
-        when(block.getLocation()).thenReturn(test1);
+        when(block.getLocation()).thenReturn(new ASLocation(0, 0, 1));
         when(block.getWorld()).thenReturn(mock(AWorld.class));
 
         player = mock(APlayer.class);
         when(player.hasPermission(any(String.class))).thenReturn(false);
-    }
-
-    @Test
-    public void testBlockPlace() {
-        // TODO: Test complex logic
-//        Engine.getInstance().forceNotInitialized();
-//
-//        Engine.getInstance().setGroupManager(new TestGroupManager());
-//        WorldEngine engineTest = Engine.getInstance().getEngine("test-engine");
-//        engineTest.setBlockManager(new MemoryBlockManager());
-//
-//        engineTest.processBlockPlace(player, block, ASGameMode.ADVENTURE);
-//        assertEquals(BlockType.ADVENTURE, engineTest.getBlockManager().getBlockType(block.getLocation()));
-//
-//        when(block.getLocation()).thenReturn(test2);
-//        engineTest.processBlockPlace(player, block, ASGameMode.ADVENTURE);
-//        assertEquals(BlockType.UNKNOWN, engineTest.getBlockManager().getBlockType(block.getLocation()));
-//
-//        engineTest.setBlockManager(new MemoryBlockManager()); // Reset
-//
-//        when(block.getLocation()).thenReturn(test1);
-//        when(player.hasPermission(any(String.class))).thenReturn(true);
-//        engineTest.processBlockPlace(player, block, ASGameMode.ADVENTURE);
-//        assertEquals(BlockType.UNKNOWN, engineTest.getBlockManager().getBlockType(block.getLocation()));
-//
-//        when(block.getLocation()).thenReturn(test2);
-//        engineTest.processBlockPlace(player, block, ASGameMode.ADVENTURE);
-//        assertEquals(BlockType.UNKNOWN, engineTest.getBlockManager().getBlockType(block.getLocation()));
-//
-//        Engine.getInstance().forceNotInitialized();
     }
 
 }
