@@ -32,6 +32,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -51,16 +52,23 @@ public class ToolListener implements Listener {
      */
 
     private static final ItemStack CHECK_TEMPLATE;
+    private static final ItemStack CHECK_TEMPLATE_BLOCK;
     private static final ItemStack SET_TEMPLATE;
 
     static {
         CHECK_TEMPLATE = new ItemStack(Material.BLAZE_ROD);
         SET_TEMPLATE = new ItemStack(Material.BLAZE_POWDER);
+        CHECK_TEMPLATE_BLOCK = new ItemStack(Material.LAPIS_BLOCK);
 
         ItemMeta meta = CHECK_TEMPLATE.getItemMeta();
         meta.setDisplayName(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_CHECK_TITLE)).build());
         meta.setLore(LangBuilder.colorize(Lang.getInstance().getFormatList(Lang.TOOL_CHECK_LORE)));
         CHECK_TEMPLATE.setItemMeta(meta);
+
+        meta = CHECK_TEMPLATE_BLOCK.getItemMeta();
+        meta.setDisplayName(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_CHECK_TITLE)).build());
+        meta.setLore(LangBuilder.colorize(Lang.getInstance().getFormatList(Lang.TOOL_CHECK_LORE)));
+        CHECK_TEMPLATE_BLOCK.setItemMeta(meta);
 
         meta = SET_TEMPLATE.getItemMeta();
         meta.setDisplayName(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_SET_TITLE)).build());
@@ -138,6 +146,34 @@ public class ToolListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (!DevEngine.isEnabled()) return; // Ignore if not debugging
+        
+        Block block = event.getBlock();
+        Player player = event.getPlayer();
+        ItemStack hand = player.getItemInHand();
+
+        if (hand != null && player.hasPermission(APermission.TOOLS)) {
+            if (hand.isSimilar(CHECK_TEMPLATE_BLOCK)) {
+                event.setCancelled(true);
+
+                BlockType type = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
+                String strRep = ASUtils.toUpperWords(type == BlockType.UNKNOWN ? "Natural" : type.name());
+
+                player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_CHECK))
+                        .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
+                        .withPrefix()
+                        .build());
+
+                DevEngine.log("[Tools] Check completed (" + player.getName() + ")",
+                        "[Tools] \t\tCheck on: " + block,
+                        "[Tools] \t\tWith: " + hand,
+                        "[Tools] \t\tResult: " + type + " (" + strRep + ")");
+            }
+        }
+    }
+
     /**
      * Gives the toolkit to a specified player. This does not validate the
      * player's permissions
@@ -155,6 +191,14 @@ public class ToolListener implements Listener {
         inventory.setItem(1, setTool);
         if (slot1 != null) inventory.addItem(slot1);
         if (slot2 != null) inventory.addItem(slot2);
+
+        // Debugging tools :D
+        if (DevEngine.isEnabled()) {
+            ItemStack checkBlockTool = CHECK_TEMPLATE_BLOCK.clone();
+            ItemStack slot3 = inventory.getItem(2);
+            inventory.setItem(2, checkBlockTool);
+            if (slot3 != null) inventory.addItem(slot3);
+        }
 
         player.updateInventory();
     }
