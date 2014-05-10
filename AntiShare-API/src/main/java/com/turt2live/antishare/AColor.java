@@ -113,12 +113,13 @@ public enum AColor {
     public static final char COLOR_CHAR = '\u00B7';
     public static final char COLOR_CHAR_BUKKIT = '\u00A7';
 
-    private final char code;
-    private final String toString;
+    final char code;
+    private final String toString, toStringBukkit;
 
     private AColor(char code) {
         this.code = code;
         this.toString = new String(new char[] {COLOR_CHAR, code});
+        this.toStringBukkit = new String(new char[]{COLOR_CHAR_BUKKIT,code});
     }
 
     /**
@@ -127,7 +128,7 @@ public enum AColor {
      * @return the Bukkit format
      */
     public String toBukkit() {
-        return new String(new char[] {COLOR_CHAR_BUKKIT, code});
+        return toStringBukkit;
     }
 
     @Override

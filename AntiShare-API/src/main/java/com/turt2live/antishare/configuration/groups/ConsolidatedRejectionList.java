@@ -46,6 +46,7 @@ import java.util.List;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public class ConsolidatedRejectionList<T extends Rejectable> implements RejectionList<T> {
 
     private List<RejectionList> lists = new ArrayList<RejectionList>();

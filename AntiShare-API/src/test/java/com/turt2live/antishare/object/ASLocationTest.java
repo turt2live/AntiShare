@@ -15,10 +15,8 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare;
+package com.turt2live.antishare.object;
 
-import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.AWorld;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

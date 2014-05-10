@@ -27,6 +27,7 @@ import java.util.List;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public class CommandRejectionList implements RejectionList<RejectableCommand> {
 
     private List<RejectableCommand> commands = new ArrayList<RejectableCommand>();

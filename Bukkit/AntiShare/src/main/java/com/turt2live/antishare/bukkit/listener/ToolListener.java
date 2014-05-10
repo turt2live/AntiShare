@@ -149,7 +149,7 @@ public class ToolListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!DevEngine.isEnabled()) return; // Ignore if not debugging
-        
+
         Block block = event.getBlock();
         Player player = event.getPlayer();
         ItemStack hand = player.getItemInHand();
