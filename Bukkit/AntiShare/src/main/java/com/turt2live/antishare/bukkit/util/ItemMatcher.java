@@ -18,7 +18,7 @@
 package com.turt2live.antishare.bukkit.util;
 
 import com.turt2live.antishare.bukkit.AntiShare;
-import com.turt2live.hurtle.utils.ArrayArrayList;
+import com.turt2live.antishare.collections.ArrayArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
