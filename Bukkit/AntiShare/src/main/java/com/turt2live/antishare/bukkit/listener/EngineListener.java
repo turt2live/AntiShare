@@ -479,6 +479,23 @@ public class EngineListener implements Listener {
                 item = Material.EYE_OF_ENDER;
             } else if (projectile instanceof Snowball) {
                 item = Material.SNOW_BALL;
+            } else if (projectile instanceof WitherSkull) {
+                item = Material.SKULL_ITEM;
+            } else if (projectile instanceof Arrow) {
+                item = Material.ARROW;
+            } else if (projectile instanceof Fireball) {
+                item = Material.FIREBALL;
+            } else if (projectile instanceof ThrownExpBottle) {
+                item = Material.EXP_BOTTLE;
+            } else if (projectile instanceof ThrownPotion) {
+                item = Material.POTION;
+            } else if (projectile instanceof Egg) {
+                item = Material.EGG;
+            }
+
+            // Entities we ignore
+            if (projectile instanceof Fish) {
+                return;
             }
 
             if (item != null) {
