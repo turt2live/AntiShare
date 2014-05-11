@@ -5,15 +5,17 @@ description: Create social awkwardness for creative-mode players
 author: turt2live
 website: http://dev.bukkit.org/server-mods/antishare
 build: jenkins-build-number
-softdepend: [Prism]
 commands:
     antishare:
-        aliases: [as, ashare, antis, turt2live]
+        aliases: [as, ashare, antis, thatgamemodeplugin]
         description: AntiShare core command. See /antishare help for more information
 permissions:
     antishare.tools:
         default: op
         description: Allows the use of the AntiShare tools
+    antishare.reload:
+        default: op
+        description: Allows the use of the reload command
     antishare.freeplace:
         default: op
         description: Allows the target to place blocks without tracking

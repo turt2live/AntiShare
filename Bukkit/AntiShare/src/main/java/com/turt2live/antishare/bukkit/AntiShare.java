@@ -18,6 +18,7 @@
 package com.turt2live.antishare.bukkit;
 
 import com.turt2live.antishare.bukkit.commands.CommandHandler;
+import com.turt2live.antishare.bukkit.commands.command.ReloadCommand;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
 import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
 import com.turt2live.antishare.bukkit.lang.Lang;
@@ -52,6 +53,9 @@ public class AntiShare extends JavaPlugin {
      * Color char identifier
      */
     public static final char COLOR_REPLACE_CHAR = '&';
+
+    // The number of reloads recorded
+    private static int RELOADS = 0;
 
     private static AntiShare instance;
     private File dataFolder;
@@ -128,6 +132,7 @@ public class AntiShare extends JavaPlugin {
 
         // Cleanup
         getServer().getScheduler().cancelTasks(this);
+        EventDispatcher.deregister(this);
 
         // Shutdown DevEngine
         if (DevEngine.isEnabled()) {
@@ -138,6 +143,8 @@ public class AntiShare extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this; // For reload support
+
         // Setup configuration
         FileConfiguration configuration = YamlConfiguration.loadConfiguration(getResource("config.yml"));
         getConfig().setDefaults(configuration);
@@ -149,6 +156,33 @@ public class AntiShare extends JavaPlugin {
         // Start lang
         Lang.getInstance();
 
+        // Start the engines
+        initEngine();
+
+        // Setup listeners
+        getServer().getPluginManager().registerEvents(new EngineListener(), this);
+        getServer().getPluginManager().registerEvents(new ToolListener(), this);
+
+        // Setup commands
+        CommandHandler handler = new CommandHandler();
+        getCommand("antishare").setExecutor(handler);
+
+        // Register commands
+        handler.registerCommand(new ToolsCommand());
+        handler.registerCommand(new ReloadCommand());
+
+        // Check for developer tools
+        if (getServer().getPluginManager().getPlugin("AntiShare-DevTools") != null) {
+            getLogger().warning("============= ANTISHARE =============");
+            getLogger().warning("   -- DEVELOPMENT TOOLS FOUND --");
+            getLogger().warning("  **** Enabling Debug Support ****");
+            getLogger().warning("============= ANTISHARE =============");
+            DevEngine.setEnabled(true);
+            DevEngine.setLogDirectory(new File(getDataFolder(), "devlogs"));
+        }
+    }
+
+    private void initEngine() {
         // Load engine variables
         blockSize = getConfig().getInt("caching.block-size", 256);
         long cacheMax = getConfig().getLong("caching.cache-expiration", 120000);
@@ -171,31 +205,34 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setHoppersDenyMixed(getConfig().getBoolean("blocks.hoppers.deny-mixed", true));
         Engine.getInstance().setPistonDenyMismatch(getConfig().getBoolean("blocks.pistons.deny-mismatch", true));
 
-        // Setup listeners
-        getServer().getPluginManager().registerEvents(new EngineListener(), this);
-        getServer().getPluginManager().registerEvents(new ToolListener(), this);
-
-        // Setup commands
-        CommandHandler handler = new CommandHandler();
-        getCommand("antishare").setExecutor(handler);
-
-        // Register commands
-        handler.registerCommand(new ToolsCommand());
-
         // Probe all currently loaded worlds
         for (World world : getServer().getWorlds()) {
             Engine.getInstance().createWorldEngine(world.getName());
         }
+    }
 
-        // Check for developer tools
-        if (getServer().getPluginManager().getPlugin("AntiShare-DevTools") != null) {
-            getLogger().warning("============= ANTISHARE =============");
-            getLogger().warning("   -- DEVELOPMENT TOOLS FOUND --");
-            getLogger().warning("  **** Enabling Debug Support ****");
-            getLogger().warning("============= ANTISHARE =============");
-            DevEngine.setEnabled(true);
-            DevEngine.setLogDirectory(new File(getDataFolder(), "devlogs"));
-        }
+    /**
+     * Reloads the AntiShare plugin, saving all data before re-enabling all services.
+     *
+     * @return returns the number of counted reloads
+     */
+    public int reloadPlugin() {
+        getLogger().info("Reloading plugin...");
+        DevEngine.log("[Bukkit Plugin] Reload issued. Reloads until now: " + RELOADS);
+
+        // Restart the engine
+        DevEngine.log("[Bukkit Plugin] Reloading engine...");
+        Engine.getInstance().prepareShutdown();
+        initEngine();
+
+        // Restart language
+        DevEngine.log("[Bukkit Plugin] Reloading language...");
+        Lang.getInstance().reload();
+
+        RELOADS++;
+        DevEngine.log("[Bukkit Plugin] Reload completed. Reloads until now: " + RELOADS);
+
+        return RELOADS;
     }
 
     @EventListener
@@ -216,15 +253,6 @@ public class AntiShare extends JavaPlugin {
      */
     public MaterialProvider getMaterialProvider() {
         return materialProvider;
-    }
-
-    /**
-     * Gets the block size this AntiShare plugin is using
-     *
-     * @return the block size
-     */
-    public int getBlockSize() {
-        return blockSize;
     }
 
     /**

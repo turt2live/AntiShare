@@ -36,7 +36,21 @@ naughty:
     place: '&cYou cannot place that &4@v'
     break: '&cYou cannot break that &4@v'
     command: '&cYou cannot use the command &4@v'
-
+general:
+    reloading: '&7Reloading'
+    reloaded: '&aReload completed!'
+    reload-warning:
+    - '&4 -------------------------------------'
+    - '&c  Reloading a lot can cause problems.'
+    - '&f  Please consider a server restart.'
+    - '&7  You have reloaded @v times'
+    - '&4 -------------------------------------'
+    reload-critical:
+    - '&4 -------------------------------------'
+    - '&c  Reloading this much is a bad idea.'
+    - '&d  A server restart is ideal.'
+    - '&7  You have reloaded &c@v &7times'
+    - '&4 -------------------------------------'
 tools:
     check-title: '&bAntiShare Check Tool'
     set-title: '&bAntiShare Set Tool'
@@ -64,3 +78,4 @@ help:
     command:
         help: 'AntiShare Help Command'
         tools: 'AntiShare Administration Tools'
+        reload: 'Reloads the plugin, saving all data'

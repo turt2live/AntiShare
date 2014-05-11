@@ -42,6 +42,10 @@ public final class APermission {
      * If enabled, the player will get notifications of illegal actions performed by players
      */
     public static final String GET_ALERTS = "antishare.alerts";
+    /**
+     * Allows the ability to reload the plugin
+     */
+    public static final String PLUGIN_RELOAD = "antishare.reload";
 
     private APermission() {
     }

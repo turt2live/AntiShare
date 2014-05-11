@@ -18,6 +18,7 @@
 package com.turt2live.antishare.bukkit.lang;
 
 import com.turt2live.antishare.bukkit.AntiShare;
+import com.turt2live.antishare.collections.ArrayArrayList;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -32,14 +33,23 @@ import java.util.List;
  */
 public class Lang {
 
+    // Misc strings
+    public static final String PREFIX = "prefix";
+
+    // General strings
+    public static final String GENERAL_RELOADING = "general.reloading";
+    public static final String GENERAL_RELOADED = "general.reloaded";
+    public static final String GENERAL_RELOAD_WARNING = "general.reload-warning";
+    public static final String GENERAL_RELOAD_CRITICAL = "general.reload-critical";
+
+    // Error strings
     public static final String ERROR_HELP_SUGGEST = "errors.help-suggest";
     public static final String ERROR_INTERNAL = "errors.internal";
     public static final String ERROR_NOT_A_PLAYER = "errors.not-a-player";
     public static final String ERROR_NO_PERMISSION = "errors.permission";
     public static final String ERROR_SYNTAX = "errors.syntax";
-    public static final String HELP_TITLE = "help.title";
-    public static final String HELP_LINE = "help.line";
-    public static final String PREFIX = "prefix";
+
+    // Tool strings
     public static final String TOOL_CHECK_LORE = "tools.check-lore";
     public static final String TOOL_CHECK_TITLE = "tools.check-title";
     public static final String TOOL_ON_CHECK = "tools.on-check";
@@ -48,16 +58,23 @@ public class Lang {
     public static final String TOOL_ON_UNSET = "tools.on-unset";
     public static final String TOOL_SET_LORE = "tools.set-lore";
     public static final String TOOL_SET_TITLE = "tools.set-title";
+
+    // Naughty action strings
     public static final String NAUGHTY_PLACE = "naughty.place";
     public static final String NAUGHTY_BREAK = "naughty.break";
     public static final String NAUGHTY_COMMAND = "naughty.command";
+
+    // Naught admin alert strings
     public static final String NAUGHTY_ADMIN_PLACE = "naughty.admin.place";
     public static final String NAUGHTY_ADMIN_BREAK = "naughty.admin.break";
     public static final String NAUGHTY_ADMIN_COMMAND = "naughty.admin.command";
 
     // Help strings
+    public static final String HELP_TITLE = "help.title";
+    public static final String HELP_LINE = "help.line";
     public static final String HELP_CMD_HELP = "help.command.help";
     public static final String HELP_CMD_TOOLS = "help.command.tools";
+    public static final String HELP_CMD_RELOAD = "help.command.reload";
 
     private static Lang instance;
     private FileConfiguration configuration;
@@ -91,12 +108,12 @@ public class Lang {
      *
      * @param key the key to lookup
      *
-     * @return the format from the file. If the key is null or not found, this returns null
+     * @return the format from the file. If the key is null or not found, this returns a default message
      */
     public String getFormat(String key) {
         if (key == null) return null;
 
-        return configuration.getString(key);
+        return configuration.getString(key, "Corrupt/missing key: " + key + ". Try /as reload?");
     }
 
     /**
@@ -104,12 +121,16 @@ public class Lang {
      *
      * @param key the key to lookup
      *
-     * @return the format from the file. If the key is null or not found, this returns null
+     * @return the format from the file. If the key is null or not found, this returns a default list
      */
     public List<String> getFormatList(String key) {
         if (key == null) return null;
 
-        return configuration.getStringList(key);
+        List<String> list = configuration.getStringList(key);
+        if (list == null)
+            list = new ArrayArrayList<String>("Corrupt/missing key: " + key + ". Try /as reload?");
+
+        return list;
     }
 
     /**
