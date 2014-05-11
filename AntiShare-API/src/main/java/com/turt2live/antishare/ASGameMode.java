@@ -15,7 +15,7 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.object.attribute;
+package com.turt2live.antishare;
 
 /**
  * Represents an AntiShare GameMode
