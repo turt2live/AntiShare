@@ -101,9 +101,10 @@ public class EngineListener implements Listener {
 
         if (engine.getEngine(block.getWorld().getName()).processBlockPlace(player, block, gamemode)) {
             event.setCancelled(true);
+
             String blockType = plugin.getMaterialProvider().getPlayerFriendlyName(event.getBlock());
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PLACE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
-            alert(Lang.NAUGHTY_ADMIN_PLACE, event.getPlayer(), event.getBlock());
+            alert(Lang.NAUGHTY_ADMIN_PLACE, event.getPlayer().getName(), blockType);
         }
     }
 
@@ -121,9 +122,10 @@ public class EngineListener implements Listener {
         OutputParameter<BlockType> breakAs = new OutputParameter<BlockType>();
         if (engine.getEngine(block.getWorld().getName()).processBlockBreak(player, block, gameMode, additionalBreak, breakAs)) {
             event.setCancelled(true);
+
             String blockType = plugin.getMaterialProvider().getPlayerFriendlyName(event.getBlock());
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_BREAK)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
-            alert(Lang.NAUGHTY_ADMIN_BREAK, event.getPlayer(), event.getBlock());
+            alert(Lang.NAUGHTY_ADMIN_BREAK, event.getPlayer().getName(), blockType);
         } else if (additionalBreak.hasValue()) {
             if (breakAs.hasValue() && breakAs.getValue() == BlockType.CREATIVE) {
                 event.getBlock().getDrops().clear(); // Yea, fuck you.
@@ -412,7 +414,7 @@ public class EngineListener implements Listener {
 
             String name = plugin.getMaterialProvider().getPlayerFriendlyName(event.getClickedBlock());
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_INTERACTION)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
-            alert(Lang.NAUGHTY_ADMIN_INTERACTION, event.getPlayer(), event.getClickedBlock());
+            alert(Lang.NAUGHTY_ADMIN_INTERACTION, player.getName(), name);
         }
     }
 
@@ -550,18 +552,6 @@ public class EngineListener implements Listener {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Sends an alert
-     *
-     * @param langNode the alert node in the lang file
-     * @param player   the player
-     * @param block    the block
-     */
-    private void alert(String langNode, Player player, Block block) {
-        if (langNode == null || player == null || block == null) return;
-        alert(langNode, player.getName(), plugin.getMaterialProvider().getPlayerFriendlyName(block));
     }
 
     /**
