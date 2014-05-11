@@ -83,6 +83,10 @@ public class Lang {
 
     private Lang() {
         reload();
+
+        // TODO: Find out what causes this to fail otherwise... wtf.
+        reload();
+        reload();
     }
 
     /**
