@@ -19,7 +19,7 @@ package com.turt2live.antishare.bukkit.impl;
 
 import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.bukkit.AntiShare;
-import com.turt2live.antishare.bukkit.BukkitUtils;
+import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.ABlock;
@@ -132,6 +132,11 @@ public class BukkitBlock implements ABlock {
     @Override
     public TrackedState canBreak(APlayer player) {
         return permissionCheck(RejectionList.ListType.BLOCK_BREAK, player);
+    }
+
+    @Override
+    public TrackedState canInteract(APlayer player) {
+        return permissionCheck(RejectionList.ListType.INTERACTION,player);
     }
 
     private TrackedState permissionCheck(RejectionList.ListType type, APlayer player) {

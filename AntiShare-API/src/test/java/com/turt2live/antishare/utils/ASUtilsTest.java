@@ -17,7 +17,7 @@
 
 package com.turt2live.antishare.utils;
 
-import com.turt2live.antishare.object.attribute.ASGameMode;
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.object.attribute.BlockType;
 import org.junit.Test;
 import org.junit.runner.RunWith;

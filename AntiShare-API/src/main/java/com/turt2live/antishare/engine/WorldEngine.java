@@ -674,4 +674,52 @@ public final class WorldEngine {
             return true; // Rejected & no allow permission
         return false; // Allowed
     }
+
+    /**
+     * Processes an interaction between a player and a block. This will determine
+     * whether or not the player is permitted to use the block. If the player is
+     * NOT allowed to use the block, true is returned. False is returned for all
+     * other values.
+     *
+     * @param player the player interacting, cannot be null
+     * @param block  the victimized block, cannot be null
+     *
+     * @return true if the action is denied, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processInteraction(APlayer player, ABlock block) {
+        if (player == null || block == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing interaction",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tblock = " + block);
+
+        BlockType otherType = blockManager.getBlockType(block.getLocation());
+        BlockType interactAs = ASUtils.toBlockType(player.getGameMode());
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.INTERACTION);
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            interactAs = ASUtils.toBlockType(consolidatedGroup.getActingMode(player.getGameMode()));
+        }
+
+        // First, check for inter-gamemode
+        if (!player.hasPermission(APermission.FREE_TOUCH)) {
+            if (interactAs != otherType && otherType != BlockType.UNKNOWN) {
+                return true; // Inter-gamemode interaction, denied
+            }
+        }
+
+        if (player.getGameMode() != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
+
+        // Check lists and permissions
+        TrackedState playerReaction = block.canInteract(player);
+        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+        if (reject.isBlocked(block) && playerReaction == TrackedState.NOT_PRESENT)
+            return true; // Rejected & no allow permission
+        return false; // Allowed
+    }
 }

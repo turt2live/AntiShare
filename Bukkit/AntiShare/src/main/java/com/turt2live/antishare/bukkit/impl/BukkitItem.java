@@ -15,28 +15,33 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.object.attribute;
+package com.turt2live.antishare.bukkit.impl;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import com.turt2live.antishare.object.AItem;
+import org.bukkit.inventory.ItemStack;
 
-import static junit.framework.Assert.assertNull;
-import static org.junit.Assert.assertEquals;
+/**
+ * A Bukkit ItemStack
+ *
+ * @author turt2live
+ */
+public class BukkitItem implements AItem {
 
-@RunWith(JUnit4.class)
-public class ASGameModeTest {
+    private ItemStack stack;
 
-    @Test
-    public void testFromString() {
-        for (ASGameMode gameMode : ASGameMode.values()) {
-            assertEquals(gameMode, ASGameMode.fromString(gameMode.name().toLowerCase()));
-            assertEquals(gameMode, ASGameMode.fromString(gameMode.name()));
-            assertEquals(gameMode, ASGameMode.fromString(gameMode.name().substring(0, 4).toLowerCase() + gameMode.name().substring(4)));
-        }
+    public BukkitItem(ItemStack stack) {
+        if (stack == null) throw new IllegalArgumentException();
 
-        assertNull(ASGameMode.fromString(null));
-        assertNull(ASGameMode.fromString("not a gamemode"));
+        this.stack = stack;
+    }
+
+    /**
+     * Gets the Bukkit ItemStack
+     *
+     * @return the Bukkit ItemStack
+     */
+    public ItemStack getStack() {
+        return stack;
     }
 
 }

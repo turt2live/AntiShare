@@ -22,6 +22,9 @@ permissions:
     antishare.freeplace:
         default: op
         description: Allows the target to break blocks regardless of attachments or dis-similar gamemodes
+    antishare.freetouch:
+        default: op
+        description: Allows the target to interact with blocks and entities without inter-gamemode restrictions
     antishare.group.main:
         default: true
         description: Default main group permission

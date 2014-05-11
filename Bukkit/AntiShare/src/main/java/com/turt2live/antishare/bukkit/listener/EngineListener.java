@@ -18,8 +18,8 @@
 package com.turt2live.antishare.bukkit.listener;
 
 import com.turt2live.antishare.APermission;
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
-import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.bukkit.events.AntiShareBlockBreakEvent;
@@ -29,13 +29,13 @@ import com.turt2live.antishare.bukkit.impl.BukkitBlock;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
+import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.RejectableCommand;
-import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.utils.OutputParameter;
@@ -58,6 +58,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -395,6 +396,25 @@ public class EngineListener implements Listener {
 
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_COMMAND)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, command.getCommandString()).build());
             alert(Lang.NAUGHTY_ADMIN_COMMAND, event.getPlayer().getName(), command.getCommandString());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onInteract(PlayerInteractEvent event) {
+        printDebugEvent(event);
+
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        ABlock interaction = new BukkitBlock(event.getClickedBlock());
+
+        if (engine.getEngine(interaction.getWorld().getName()).processInteraction(player, interaction)) {
+            event.setCancelled(true);
+
+            String name = plugin.getMaterialProvider().getPlayerFriendlyName(event.getClickedBlock());
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_INTERACTION)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+            alert(Lang.NAUGHTY_ADMIN_INTERACTION, event.getPlayer(), event.getClickedBlock());
         }
     }
 

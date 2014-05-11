@@ -17,9 +17,9 @@
 
 package com.turt2live.antishare.bukkit.abstraction.vpre;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.abstraction.MinecraftVersion;
 import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.hurtle.uuid.UUIDServiceProvider;
 import org.bukkit.Bukkit;

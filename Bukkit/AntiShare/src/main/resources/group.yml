@@ -59,6 +59,9 @@ lists:
     commands:
     - 'onecommand'
     - '/two command'
+    interaction:
+    - chest
+    - furnace
 
 # Block configuration. This gives you the ability to customize the block
 # aspects of AntiShare. More information can be found at the link listed

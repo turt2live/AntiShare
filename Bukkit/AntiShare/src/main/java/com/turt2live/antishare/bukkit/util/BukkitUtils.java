@@ -15,7 +15,7 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.bukkit;
+package com.turt2live.antishare.bukkit.util;
 
 import com.turt2live.antishare.bukkit.impl.BukkitWorld;
 import com.turt2live.antishare.engine.Engine;
@@ -162,6 +162,8 @@ public final class BukkitUtils {
                 return "break";
             case COMMANDS:
                 return "commands";
+            case INTERACTION:
+                return "interaction";
             default:
                 return null;
         }

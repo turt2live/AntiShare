@@ -17,17 +17,17 @@
 
 package com.turt2live.antishare.bukkit.groups;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
-import com.turt2live.antishare.bukkit.BukkitUtils;
 import com.turt2live.antishare.bukkit.MaterialProvider;
 import com.turt2live.antishare.bukkit.lists.BukkitBlockList;
+import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.engine.list.BlockTypeList;
 import com.turt2live.antishare.engine.list.CommandRejectionList;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.RejectableCommand;
-import com.turt2live.antishare.object.attribute.ASGameMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +79,7 @@ public class BukkitGroup extends Group {
         switch (type) {
             case BLOCK_BREAK:
             case BLOCK_PLACE:
+            case INTERACTION:
                 MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
                 list = new BukkitBlockList(provider, type);
                 ((BukkitBlockList) list).populateBlocks(configuration.getStringList("lists." + configKey, new ArrayList<String>()));

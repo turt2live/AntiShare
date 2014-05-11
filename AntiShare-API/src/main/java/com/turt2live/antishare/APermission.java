@@ -39,6 +39,10 @@ public final class APermission {
      */
     public static final String FREE_BREAK = "antishare.freebreak";
     /**
+     * Ignores inter-gamemode checks when interacting with blocks/entities
+     */
+    public static final String FREE_TOUCH = "antishare.freetouch";
+    /**
      * If enabled, the player will get notifications of illegal actions performed by players
      */
     public static final String GET_ALERTS = "antishare.alerts";

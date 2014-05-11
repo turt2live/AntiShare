@@ -18,7 +18,7 @@
 package com.turt2live.antishare.bukkit.listener;
 
 import com.turt2live.antishare.APermission;
-import com.turt2live.antishare.bukkit.BukkitUtils;
+import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;

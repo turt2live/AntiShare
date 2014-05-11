@@ -15,33 +15,28 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.configuration;
+package com.turt2live.antishare;
 
-import com.turt2live.antishare.ASGameMode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class BreakSettingsTest {
+public class ASGameModeTest {
 
     @Test
-    public void testCreate() {
+    public void testFromString() {
         for (ASGameMode gameMode : ASGameMode.values()) {
-            BreakSettings settings = new BreakSettings(true, gameMode);
-            assertEquals(true, settings.denyAction);
-            assertEquals(gameMode, settings.breakAs);
-
-            settings = new BreakSettings(false, gameMode);
-            assertEquals(false, settings.denyAction);
-            assertEquals(gameMode, settings.breakAs);
+            assertEquals(gameMode, ASGameMode.fromString(gameMode.name().toLowerCase()));
+            assertEquals(gameMode, ASGameMode.fromString(gameMode.name()));
+            assertEquals(gameMode, ASGameMode.fromString(gameMode.name().substring(0, 4).toLowerCase() + gameMode.name().substring(4)));
         }
+
+        assertNull(ASGameMode.fromString(null));
+        assertNull(ASGameMode.fromString("not a gamemode"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateNull() {
-        new BreakSettings(false, null);
-    }
 }
