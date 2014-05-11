@@ -656,16 +656,18 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
                 "[WorldEngine:" + worldName + "] \t\tcommand = " + command);
 
-        if (player.getGameMode() != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
-
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
         RejectionList reject = new CommandRejectionList();
+        ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
         }
+
+        if (playerGM != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
 
         // Check lists and permissions
         TrackedState playerReaction = command.canExecute(player);
@@ -698,12 +700,14 @@ public final class WorldEngine {
         BlockType interactAs = ASUtils.toBlockType(player.getGameMode());
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
         RejectionList reject = new DefaultRejectionList(RejectionList.ListType.INTERACTION);
+        ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
             interactAs = ASUtils.toBlockType(consolidatedGroup.getActingMode(player.getGameMode()));
+            playerGM = consolidatedGroup.getActingMode(playerGM);
         }
 
         // First, check for inter-gamemode
@@ -713,7 +717,7 @@ public final class WorldEngine {
             }
         }
 
-        if (player.getGameMode() != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
+        if (playerGM != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
 
         // Check lists and permissions
         TrackedState playerReaction = block.canInteract(player);
