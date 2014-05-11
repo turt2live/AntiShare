@@ -17,7 +17,7 @@
 
 package com.turt2live.antishare.object;
 
-import com.turt2live.antishare.object.attribute.ASGameMode;
+import com.turt2live.antishare.ASGameMode;
 
 import java.util.UUID;
 

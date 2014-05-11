@@ -17,11 +17,11 @@
 
 package com.turt2live.antishare.configuration.groups;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.engine.list.BlockTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
-import com.turt2live.antishare.object.attribute.ASGameMode;
 
 import java.util.ArrayList;
 import java.util.List;

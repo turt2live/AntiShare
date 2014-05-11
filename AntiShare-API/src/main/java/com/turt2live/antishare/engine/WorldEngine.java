@@ -18,6 +18,7 @@
 package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.APermission;
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.engine.list.*;
@@ -29,7 +30,6 @@ import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.object.RejectableCommand;
-import com.turt2live.antishare.object.attribute.ASGameMode;
 import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.TrackedState;
