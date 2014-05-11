@@ -17,6 +17,7 @@
 
 package com.turt2live.antishare.bukkit.util;
 
+import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.hurtle.utils.ArrayArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -111,10 +112,11 @@ public class ItemMatcher {
 
             parts = parts[0].split(":");
             String itemName = parts[0];
-            int itemId = tryParse(parts[0]);
-            Material type = Material.matchMaterial(itemName);
-            if (type == null) type = Material.getMaterial(itemId);
-            if (type == null) return null;
+
+            // AntiShare start - Change material lookup
+            Material type = AntiShare.getInstance().getMaterialProvider().fromString(itemName);
+            if (type == null || type == Material.AIR) return null;
+            // AntiShare end
 
             short data = 0;
             if (parts.length > 1) data = (short) tryParse(parts[1]);
