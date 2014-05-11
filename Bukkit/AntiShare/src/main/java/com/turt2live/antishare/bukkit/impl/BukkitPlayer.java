@@ -22,6 +22,7 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.AWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -74,5 +75,10 @@ public class BukkitPlayer implements APlayer {
         message = AColor.toBukkit(message);
         message = ChatColor.translateAlternateColorCodes(AntiShare.COLOR_REPLACE_CHAR, message);
         player.sendMessage(message);
+    }
+
+    @Override
+    public AWorld getWorld() {
+        return new BukkitWorld(player.getWorld());
     }
 }

@@ -134,7 +134,8 @@ public abstract class GroupManager {
     }
 
     /**
-     * Gets a listing of applicable groups to a player, including inherited groups
+     * Gets a listing of applicable groups to a player, including inherited groups. This will
+     * only include groups for the player's current world.
      *
      * @param player          the player to lookup, cannot be null
      * @param includeDisabled if true, disabled groups will be included in the result set
@@ -142,6 +143,35 @@ public abstract class GroupManager {
      * @return the list of groups. May be empty but never null
      */
     public List<Group> getGroupsForPlayer(APlayer player, boolean includeDisabled) {
+        List<Group> groups = getAllGroupsForPlayer(player, includeDisabled);
+        List<Group> applicable = new ArrayList<Group>();
+
+        for (Group group : groups) {
+            List<String> worlds = group.getApplicableWorlds();
+            if (contains(worlds, "all") || contains(worlds, player.getWorld().getName())) {
+                applicable.add(group);
+            }
+        }
+
+        return applicable;
+    }
+
+    private boolean contains(List<String> strings, String value) {
+        for (String s : strings) {
+            if (s.equalsIgnoreCase(value)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Gets a listing of applicable groups to a player, including inherited groups
+     *
+     * @param player          the player to lookup, cannot be null
+     * @param includeDisabled if true, disabled groups will be included in the result set
+     *
+     * @return the list of groups. May be empty but never null
+     */
+    public List<Group> getAllGroupsForPlayer(APlayer player, boolean includeDisabled) {
         List<Group> groups = new ArrayList<Group>();
 
         for (Group group : this.groups.values()) {

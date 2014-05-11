@@ -73,4 +73,11 @@ public interface APlayer {
      */
     public void sendMessage(String message);
 
+    /**
+     * Gets the player's current world
+     *
+     * @return the player's current world
+     */
+    public AWorld getWorld();
+
 }

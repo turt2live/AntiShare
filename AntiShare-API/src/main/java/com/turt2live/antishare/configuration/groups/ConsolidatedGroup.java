@@ -22,7 +22,6 @@ import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.engine.list.BlockTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
-import com.turt2live.antishare.object.ABlock;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,20 +58,6 @@ public class ConsolidatedGroup {
      */
     public ConsolidatedGroup(Group... groups) {
         this(new ArrayArrayList<Group>(groups));
-    }
-
-    /**
-     * Determines if a specified location is tracked under a GameMode
-     *
-     * @param gameMode the gamemode to lookup, cannot be null
-     * @param block    the block to lookup, cannot be null
-     *
-     * @return true if tracked, false otherwise
-     */
-    public boolean isTracked(ASGameMode gameMode, ABlock block) {
-        if (gameMode == null || block == null) throw new IllegalArgumentException("arguments cannot be null");
-
-        return getTrackedList(gameMode).isTracked(block);
     }
 
     /**
