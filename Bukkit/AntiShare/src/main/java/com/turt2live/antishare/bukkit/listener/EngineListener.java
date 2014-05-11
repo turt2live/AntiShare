@@ -41,7 +41,6 @@ import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.utils.OutputParameter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -567,7 +566,7 @@ public class EngineListener implements Listener {
                 .setReplacement(LangBuilder.SELECTOR_VARIABLE, variable)
                 .build();
 
-        if (ChatColor.stripColor(compiled).equalsIgnoreCase("disabled")) return;
+        if (Lang.getInstance().getFormat(langNode).trim().equalsIgnoreCase("disabled")) return;
 
         Bukkit.broadcast(compiled, APermission.GET_ALERTS);
     }
