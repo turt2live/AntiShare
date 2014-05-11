@@ -20,6 +20,7 @@ package com.turt2live.antishare.bukkit;
 import com.turt2live.antishare.bukkit.commands.CommandHandler;
 import com.turt2live.antishare.bukkit.commands.command.ReloadCommand;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
+import com.turt2live.antishare.bukkit.configuration.BukkitConfiguration;
 import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
@@ -200,10 +201,7 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setCacheIncrement(cacheInterval);
         Engine.getInstance().setSaveInterval(periodicSave);
         Engine.getInstance().setGroupManager(new BukkitGroupManager());
-        Engine.getInstance().setPhysicsSettings(getConfig().getBoolean("blocks.physics.grow-with-gamemode", true), getConfig().getBoolean("blocks.physics.block-item-drop", true));
-        Engine.getInstance().setAttachmentSettings(getConfig().getBoolean("blocks.attachments.break-as-placed", true), getConfig().getBoolean("blocks.attachments.deny-break", false));
-        Engine.getInstance().setHoppersDenyMixed(getConfig().getBoolean("blocks.hoppers.deny-mixed", true));
-        Engine.getInstance().setPistonDenyMismatch(getConfig().getBoolean("blocks.pistons.deny-mismatch", true));
+        Engine.getInstance().setConfiguration(new BukkitConfiguration(new File(getDataFolder(), "config.yml")));
 
         // Probe all currently loaded worlds
         for (World world : getServer().getWorlds()) {

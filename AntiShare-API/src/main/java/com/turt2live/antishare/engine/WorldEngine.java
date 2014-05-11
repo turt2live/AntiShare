@@ -289,10 +289,10 @@ public final class WorldEngine {
                     BlockType attachType = blockManager.getBlockType(possibleAttachment.getLocation());
                     if (attachType == BlockType.UNKNOWN) continue; // Let it break normally
 
-                    if (Engine.getInstance().isAttachmentsDenyMismatchBreak() && attachType != blockType1 && blockType1 != BlockType.UNKNOWN) {
+                    if (Engine.getInstance().getFlag(Engine.CONFIG_MISMATCHED_ATTACHMENTS_DENY, true) && attachType != blockType1 && blockType1 != BlockType.UNKNOWN) {
                         return true; // As the owner wishes...
                     }
-                    if (Engine.getInstance().isAttachmentsBreakAsPlaced() && attachType == BlockType.CREATIVE) { // TODO: Possible 'affect'?
+                    if (Engine.getInstance().getFlag(Engine.CONFIG_BREAK_ATTACHMENTS_AS_PLACED, true) && attachType == BlockType.CREATIVE) { // TODO: Possible 'affect'?
                         additional.add(possibleAttachment);
                     }// Implementation has to handle the removal. IE: Fade or 'disappear'
                 }
@@ -338,7 +338,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tparent = " + parent,
                 "[WorldEngine:" + worldName + "] \t\tchild = " + child);
 
-        if (Engine.getInstance().isPhysicsGrowWithGamemode()) {
+        if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_GROW_WITH_GAMEMODE, true)) {
             BlockType current = blockManager.getBlockType(parent.getLocation());
             blockManager.setBlockType(child.getLocation(), current);
         }
@@ -365,7 +365,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tspawned = " + spawned,
                 "[WorldEngine:" + worldName + "] \t\tstems = " + stems);
 
-        if (!Engine.getInstance().isPhysicsGrowWithGamemode()) return;
+        if (!Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_GROW_WITH_GAMEMODE, true)) return;
 
         Map<BlockType, Integer> votes = new HashMap<BlockType, Integer>();
         for (ABlock stem : stems) {
@@ -424,7 +424,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tblock = " + block);
 
         BlockType current = blockManager.getBlockType(block.getLocation());
-        if (Engine.getInstance().isPhysicsBreakAsGamemode()) {
+        if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true)) {
             return current != BlockType.CREATIVE;
         }
         return true;
@@ -445,7 +445,8 @@ public final class WorldEngine {
         DevEngine.log("[WorldEngine:" + worldName + "] Processing explosion",
                 "[WorldEngine:" + worldName + "] \t\tblocks = " + blocks);
 
-        if (!Engine.getInstance().isPhysicsBreakAsGamemode()) return; // Don't handle this if we aren't supposed to
+        if (!Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true))
+            return; // Don't handle this if we aren't supposed to
 
         for (Map.Entry<ABlock, Boolean> entry : blocks.entrySet()) {
             BlockType current = blockManager.getBlockType(entry.getKey().getLocation());
@@ -479,7 +480,7 @@ public final class WorldEngine {
         if (type != null) {
             type.setValue(current);
         }
-        if (Engine.getInstance().isPhysicsBreakAsGamemode() && current == BlockType.CREATIVE) {
+        if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true) && current == BlockType.CREATIVE) {
             return false;
         }
         return true;
@@ -520,7 +521,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tstructure = " + structure);
 
         BlockType type = blockManager.getBlockType(source.getLocation());
-        if (Engine.getInstance().isPhysicsGrowWithGamemode()) {
+        if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_GROW_WITH_GAMEMODE, true)) {
             for (ABlock block : structure) {
                 blockManager.setBlockType(block.getLocation(), type);
             }
@@ -537,7 +538,7 @@ public final class WorldEngine {
      * The order of the arguments is not important as the cases are applied regardless of
      * the 'source'. Order dependency must be determined, if needed, by the implementation.
      * <p/>
-     * Assuming the {@link com.turt2live.antishare.engine.Engine#isHopperMixedInteractionDenied()}
+     * Assuming the {@link com.turt2live.antishare.engine.Engine#CONFIG_HOPPER_MISMATCH_INTERACTION}
      * flag is set...
      * <ul>
      * <li>Case: Non-natural to Non-natural of different types: Denied</li>
@@ -567,6 +568,8 @@ public final class WorldEngine {
 
         BlockType type1 = blockManager.getBlockType(block1.getLocation());
         BlockType type2 = blockManager.getBlockType(block2.getLocation());
+
+        if (!Engine.getInstance().getFlag(Engine.CONFIG_HOPPER_MISMATCH_INTERACTION, true)) return false;
 
         if (type1 == type2 || type1 == BlockType.UNKNOWN || type2 == BlockType.UNKNOWN)
             return true;
@@ -614,7 +617,7 @@ public final class WorldEngine {
 
         BlockTypeTransaction transaction = new BlockTypeTransaction();
         BlockType pistonType = blockManager.getBlockType(piston.getLocation());
-        if (pistonType != BlockType.UNKNOWN && Engine.getInstance().isPistonDenyMismatch()) {
+        if (pistonType != BlockType.UNKNOWN && Engine.getInstance().getFlag(Engine.CONFIG_PISTON_MISMATCH, true)) {
             // Now we have to check all the block types
             for (ABlock block : blocks) {
                 BlockType type = blockManager.getBlockType(block.getLocation());
@@ -678,6 +681,42 @@ public final class WorldEngine {
     }
 
     /**
+     * Processes a player opening a container, such as a chest. This will internally
+     * handle the appropriate flags for the event. This is a reactionary event and
+     * has no deny/allow nodes. This will assume that the passed container is a
+     * container.
+     *
+     * @param player    the player interacting, cannot be null
+     * @param container the container being opened, cannot be null
+     */
+    public void processContainerOpen(APlayer player, ABlock container) {
+        if (player == null || container == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing container",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tcontainer = " + container);
+
+        if (Engine.getInstance().getFlag(Engine.CONFIG_INTERACT_CONTAINER_INHERIT, true)) {
+            if (!player.hasPermission(APermission.FREE_TOUCH)) {
+                List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+                ASGameMode playerGM = player.getGameMode();
+
+                if (groups != null && groups.size() > 0) {
+                    ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+                    playerGM = consolidatedGroup.getActingMode(playerGM);
+                }
+
+                if (blockManager.getBlockType(container.getLocation()) == BlockType.UNKNOWN) {
+                    blockManager.setBlockType(container.getLocation(), ASUtils.toBlockType(playerGM));
+                    if (container.getOtherChest() != null)
+                        blockManager.setBlockType(container.getOtherChest().getLocation(), ASUtils.toBlockType(playerGM));
+                }
+            }
+        }
+    }
+
+    /**
      * Processes an interaction between a player and a block. This will determine
      * whether or not the player is permitted to use the block. If the player is
      * NOT allowed to use the block, true is returned. False is returned for all
@@ -710,20 +749,53 @@ public final class WorldEngine {
             playerGM = consolidatedGroup.getActingMode(playerGM);
         }
 
-        // First, check for inter-gamemode
-        if (!player.hasPermission(APermission.FREE_TOUCH)) {
-            if (interactAs != otherType && otherType != BlockType.UNKNOWN) {
-                return true; // Inter-gamemode interaction, denied
+        if (Engine.getInstance().getFlag(Engine.CONFIG_INTERACT_CLASSIC_MODE, false)) {
+            // Classic mode - Check the list and exit
+            if (playerGM == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
+                TrackedState playerReaction = block.canInteract(player);
+                if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+                if (reject.isBlocked(block) && playerReaction == TrackedState.NOT_PRESENT)
+                    return true; // Rejected & no allow permission
+            }
+        } else {
+            // Non-classic mode - Start handling containers and stuff
+
+            /*
+            If the block is a container, then we should see if the container is natural.
+            If the container is natural, and natural containers are denied, then we
+            should deny. If the container is natural, and natural containers are permitted,
+            then we should allow the interaction. We also ensure that the gamemode of the
+            container matches the player gamemode.
+
+            If the block is not a container, then we should see if it is on the blacklist.
+            If it is on the blacklist, then we deny (if player is in creative mode).
+
+            If the block is not a container and not on the blacklist, then we permit the action.
+             */
+
+            if (block.isContainer()) {
+                if (!player.hasPermission(APermission.FREE_TOUCH)) {
+                    if (interactAs != otherType && otherType != BlockType.UNKNOWN) {
+                        return true; // Inter-gamemode interaction, denied
+                    }
+
+                    if (playerGM == ASGameMode.CREATIVE && otherType == BlockType.UNKNOWN) {
+                        if (!Engine.getInstance().getFlag(Engine.CONFIG_INTERACT_NATURAL_CONTAINERS, false)) {
+                            return true; // Creative players can't interact with natural containers
+                        }
+                    }
+                }
+            } else {
+                // Default as 'classic mode'
+                if (playerGM == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
+                    TrackedState playerReaction = block.canInteract(player);
+                    if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+                    if (reject.isBlocked(block) && playerReaction == TrackedState.NOT_PRESENT)
+                        return true; // Rejected & no allow permission
+                }
             }
         }
 
-        if (playerGM != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
-
-        // Check lists and permissions
-        TrackedState playerReaction = block.canInteract(player);
-        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
-        if (reject.isBlocked(block) && playerReaction == TrackedState.NOT_PRESENT)
-            return true; // Rejected & no allow permission
         return false; // Allowed
     }
 }

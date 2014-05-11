@@ -18,7 +18,7 @@
 package com.turt2live.antishare.bukkit.groups;
 
 import com.turt2live.antishare.bukkit.AntiShare;
-import com.turt2live.antishare.bukkit.configuration.YamlConfiguration;
+import com.turt2live.antishare.bukkit.configuration.BukkitConfiguration;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.configuration.groups.MainGroup;
@@ -42,7 +42,7 @@ public class BukkitGroupManager extends com.turt2live.antishare.configuration.gr
         if (files != null) {
             for (File file : files) {
                 if (file.isFile() && file.getName().toLowerCase().startsWith("group_") && file.getName().toLowerCase().endsWith(".yml")) {
-                    Configuration groupConfig = new YamlConfiguration(file);
+                    Configuration groupConfig = new BukkitConfiguration(file);
                     if (file.getName().equalsIgnoreCase("group_main.yml")) {
                         MainGroup main = new BukkitMainGroup(groupConfig);
                         super.mainGroup = main;
@@ -64,7 +64,7 @@ public class BukkitGroupManager extends com.turt2live.antishare.configuration.gr
             } catch (InvalidConfigurationException e) {
                 e.printStackTrace();
             }
-            Configuration groupConfig = new YamlConfiguration(file);
+            Configuration groupConfig = new BukkitConfiguration(file);
             MainGroup main = new BukkitMainGroup(groupConfig);
             super.mainGroup = main;
         }

@@ -36,6 +36,13 @@ import java.util.UUID;
 public interface MinecraftVersion {
 
     /**
+     * Gets a list of materials that are considered containers.
+     *
+     * @return a list of materials
+     */
+    public List<Material> getContainerTypes();
+
+    /**
      * Gets a list of materials that will break if the block under
      * them goes missing.
      *

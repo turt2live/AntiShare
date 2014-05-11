@@ -17,6 +17,8 @@
 
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.configuration.Configuration;
+import com.turt2live.antishare.configuration.MemoryConfiguration;
 import com.turt2live.antishare.configuration.groups.GroupManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,6 +29,7 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @RunWith(JUnit4.class)
 public class EngineTest {
@@ -163,69 +166,22 @@ public class EngineTest {
     }
 
     @Test
-    public void testPhysicSettings() {
-        assertFalse(Engine.getInstance().isPhysicsGrowWithGamemode());
-        assertFalse(Engine.getInstance().isPhysicsBreakAsGamemode());
+    public void testConfiguration(){
+        assertNotNull(Engine.getInstance().getConfiguration());
 
-        Engine.getInstance().setPhysicsSettings(true, true);
-        assertTrue(Engine.getInstance().isPhysicsGrowWithGamemode());
-        assertTrue(Engine.getInstance().isPhysicsBreakAsGamemode());
+        Configuration config = mock(Configuration.class);
+        Engine.getInstance().setConfiguration(config);
 
-        Engine.getInstance().setPhysicsSettings(true, false);
-        assertTrue(Engine.getInstance().isPhysicsGrowWithGamemode());
-        assertFalse(Engine.getInstance().isPhysicsBreakAsGamemode());
+        assertEquals(config,Engine.getInstance().getConfiguration());
+        verify(config).load();
 
-        Engine.getInstance().setPhysicsSettings(false, true);
-        assertFalse(Engine.getInstance().isPhysicsGrowWithGamemode());
-        assertTrue(Engine.getInstance().isPhysicsBreakAsGamemode());
-
-        Engine.getInstance().setPhysicsSettings(false, false);
-        assertFalse(Engine.getInstance().isPhysicsGrowWithGamemode());
-        assertFalse(Engine.getInstance().isPhysicsBreakAsGamemode());
+        Engine.getInstance().setConfiguration(new MemoryConfiguration());
+        assertTrue(Engine.getInstance().getConfiguration() instanceof  MemoryConfiguration);
     }
 
-    @Test
-    public void testAttachmentSettings() {
-        assertFalse(Engine.getInstance().isAttachmentsBreakAsPlaced());
-        assertFalse(Engine.getInstance().isAttachmentsDenyMismatchBreak());
-
-        Engine.getInstance().setAttachmentSettings(true, true);
-        assertTrue(Engine.getInstance().isAttachmentsBreakAsPlaced());
-        assertTrue(Engine.getInstance().isAttachmentsDenyMismatchBreak());
-
-        Engine.getInstance().setAttachmentSettings(true, false);
-        assertTrue(Engine.getInstance().isAttachmentsBreakAsPlaced());
-        assertFalse(Engine.getInstance().isAttachmentsDenyMismatchBreak());
-
-        Engine.getInstance().setAttachmentSettings(false, true);
-        assertFalse(Engine.getInstance().isAttachmentsBreakAsPlaced());
-        assertTrue(Engine.getInstance().isAttachmentsDenyMismatchBreak());
-
-        Engine.getInstance().setAttachmentSettings(false, false);
-        assertFalse(Engine.getInstance().isAttachmentsBreakAsPlaced());
-        assertFalse(Engine.getInstance().isAttachmentsDenyMismatchBreak());
-    }
-
-    @Test
-    public void testHopperSettings() {
-        assertFalse(Engine.getInstance().isHopperMixedInteractionDenied());
-
-        Engine.getInstance().setHoppersDenyMixed(true);
-        assertTrue(Engine.getInstance().isHopperMixedInteractionDenied());
-
-        Engine.getInstance().setHoppersDenyMixed(false);
-        assertFalse(Engine.getInstance().isHopperMixedInteractionDenied());
-    }
-
-    @Test
-    public void testPistonSettings() {
-        assertFalse(Engine.getInstance().isPistonDenyMismatch());
-
-        Engine.getInstance().setPistonDenyMismatch(true);
-        assertTrue(Engine.getInstance().isPistonDenyMismatch());
-
-        Engine.getInstance().setPistonDenyMismatch(false);
-        assertFalse(Engine.getInstance().isPistonDenyMismatch());
+    @Test(expected = IllegalArgumentException.class)
+    public void testNullConfiguration(){
+        Engine.getInstance().setConfiguration(null);
     }
 
 }

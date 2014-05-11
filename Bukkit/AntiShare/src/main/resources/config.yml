@@ -50,6 +50,30 @@ blocks:
         # to move (and will update accordingly). If this is false, blocks
         # are simply updated to maintain their state.
         deny-mismatch: true
+    interaction:
+        # If true, AntiShare assumes 'classic mode' where the interaction
+        # lists defined are hard-set rules of 'you cannot do this, period.'
+        # However, if this is false, AntiShare assumes a more relaxed condition
+        # of checking the gamemode of the interacted block before denying the
+        # interaction. This would mean that AntiShare checks the gamemode of
+        # the block being interacted with. If the block gamemode does NOT
+        # match that of the player, they are denied the interaction. This
+        # would also mean that creative players can open creative chests
+        # (and only creative chests, not survival chests). Any non-container
+        # block would still follow the strict 'you can't do this' ruling.
+        classic-mode: false
+        # If 'classic-mode' is false, this will apply. This particular flag
+        # is used to determine whether or not 'natural' or 'no gamemode'
+        # containers (like chests) can be used by creative players. If this
+        # is true, then creative players will be ALLOWED to use 'natural'
+        # containers. Set this to false to DENY 'natural' containers.
+        creative-natural-containers: false
+        # If 'classic-mode' is false, this will apply. This flag is used to
+        # determine if 'natural' (no applied gamemode) containers (chests)
+        # are to 'absorb' or 'inherit' the gamemode of the player upon opening.
+        # If this flag is true, then containers will inherit the gamemode. If
+        # false, then they will not inherit the gamemode.
+        natural-container-absorb-gamemode: true
 
 # AntiShare internal caching settings. These settings are generally
 # not touched unless you are looking to fine tune how AntiShare

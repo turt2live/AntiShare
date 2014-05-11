@@ -29,6 +29,15 @@ import java.util.List;
 public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_4_R1.Minecraft {
 
     @Override
+    public List<Material> getContainerTypes() {
+        List<Material>list = super.getContainerTypes();
+        list.add(Material.TRAPPED_CHEST);
+        list.add(Material.DROPPER);
+        list.add(Material.HOPPER);
+        return list;
+    }
+
+    @Override
     public List<Material> getBrokenOnTop() {
         List<Material> list = super.getBrokenOnTop();
         list.add(Material.GOLD_PLATE);

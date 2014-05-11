@@ -19,8 +19,8 @@ package com.turt2live.antishare.bukkit.impl;
 
 import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.bukkit.AntiShare;
-import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
+import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.APlayer;
@@ -52,6 +52,11 @@ public class BukkitBlock implements ABlock {
         if (block == null) throw new IllegalArgumentException();
 
         this.block = block;
+    }
+
+    @Override
+    public boolean isContainer() {
+        return VersionSelector.getMinecraft().getContainerTypes().contains(block.getType());
     }
 
     @Override
@@ -108,6 +113,29 @@ public class BukkitBlock implements ABlock {
     }
 
     @Override
+    public ABlock getOtherChest() {
+        switch (getChestType()) {
+            case DOUBLE_NORMAL:
+            case DOUBLE_TRAPPED:
+                break;
+            default:
+                return null;
+        }
+
+        ABlock n = getRelative(Facing.NORTH),
+                s = getRelative(Facing.SOUTH),
+                e = getRelative(Facing.EAST),
+                w = getRelative(Facing.WEST);
+
+        if (n.getChestType() == getChestType()) return n;
+        else if (s.getChestType() == getChestType()) return s;
+        else if (e.getChestType() == getChestType()) return e;
+        else if (w.getChestType() == getChestType()) return w;
+
+        return null;
+    }
+
+    @Override
     public ASLocation getLocation() {
         return BukkitUtils.toLocation(block.getLocation());
     }
@@ -136,7 +164,7 @@ public class BukkitBlock implements ABlock {
 
     @Override
     public TrackedState canInteract(APlayer player) {
-        return permissionCheck(RejectionList.ListType.INTERACTION,player);
+        return permissionCheck(RejectionList.ListType.INTERACTION, player);
     }
 
     private TrackedState permissionCheck(RejectionList.ListType type, APlayer player) {

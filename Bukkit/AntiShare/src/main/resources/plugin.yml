@@ -49,3 +49,9 @@ permissions:
     antishare.deny.commands:
         default: false
         description: Denies all command usage, regardless of group settings
+    antishare.allow.interaction:
+        default: op
+        description: Allows all block interactions, regardless of group settings
+    antishare.deny.interaction:
+        default: false
+        description: Denies all block interactions, regardless of group settings

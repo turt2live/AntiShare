@@ -17,6 +17,8 @@
 
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.configuration.Configuration;
+import com.turt2live.antishare.configuration.MemoryConfiguration;
 import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
@@ -47,6 +49,44 @@ public final class Engine {
      * The default save interval (0, off)
      */
     public static final long DEFAULT_SAVE_INTERVAL = 0; // Default no save
+    /**
+     * Configuration key for 'break attachments as placed'
+     */
+    public static final String CONFIG_BREAK_ATTACHMENTS_AS_PLACED = "blocks.attachemnts.break-as-placed";
+    /**
+     * Configuration key for 'deny break if attachment type mismatch'
+     */
+    public static final String CONFIG_MISMATCHED_ATTACHMENTS_DENY = "blocks.attachments.deny-break";
+    /**
+     * Configuration key for 'block spread with gamemode'
+     */
+    public static final String CONFIG_PHYSICS_GROW_WITH_GAMEMODE = "blocks.physics.grow-with-gamemode";
+    /**
+     * Configuration key for 'random break as gamemode'
+     */
+    public static final String CONFIG_PHYSICS_BREAK_AS_GAMEMODE = "blocks.physics.block-item-drop";
+    /**
+     * Configuration key for 'hopper mismatch type transfer'
+     */
+    public static final String CONFIG_HOPPER_MISMATCH_INTERACTION = "blocks.hoppers.deny-mixed";
+    /**
+     * Configuration key for 'deny pistons if lineup mismatch'
+     */
+    public static final String CONFIG_PISTON_MISMATCH = "blocks.pistons.deny-mismatch";
+    /**
+     * Configuration key for 'classic mode interaction' handling
+     */
+    public static final String CONFIG_INTERACT_CLASSIC_MODE = "blocks.interaction.classic-mode";
+    /**
+     * Configuration key for 'if not classic mode, can creative players open natural containers?'
+     *
+     * This will be 'true' to ALLOW the interaction.
+     */
+    public static final String CONFIG_INTERACT_NATURAL_CONTAINERS = "blocks.interaction.creative-natural-containers";
+    /**
+     * Configuration key for 'if not classic mode, will containers inherit gamemodes from players?'
+     */
+    public static final String CONFIG_INTERACT_CONTAINER_INHERIT = "blocks.interaction.natural-container-absorb-gamemode";
 
     private static Engine instance;
 
@@ -57,12 +97,7 @@ public final class Engine {
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
     private GroupManager groupManager = null;
-    private boolean attachmentsAsPlaced = false; // break attachments as placed flag
-    private boolean attachmentsDeny = false; // Mismatched attachments versus block break deny flag
-    private boolean physicsGrow = false; // grow-with-gamemode flag
-    private boolean physicsBlockItems = false; // drop items (physics) as gamemode placed flag
-    private boolean hoppersMixed = false; // hopper mixing of gamemodes flag
-    private boolean pistonMixed = false; // piston mismatch deny flag
+    private Configuration configuration = new MemoryConfiguration();
 
     private Engine() {
         newCacheTimer();
@@ -321,150 +356,36 @@ public final class Engine {
     }
 
     /**
-     * Sets the physics settings for the AntiShare engine.
-     * <p/>
-     * 'growWithGamemode' is the flag used to determine whether or not 'growing' blocks
-     * will grow with the gamemode inherited from their parent (source) block. If true,
-     * a creative vine (for example) will grow to have a creative child. If false, the
-     * child block will have no stored gamemode.
-     * <p/>
-     * 'dropAsGamemode' is the flag used for determining how items should be spawned due
-     * to 'random' events (such as cacti breaking). If this is true, then the 'random' events
-     * will be modified to have their drops conform to how the placed block state was. If false,
-     * Minecraft is left to do it's damage.
+     * Gets the active Engine configuration
      *
-     * @param growWithGamemode the flag for block growing
-     * @param dropAsGamemode   the flag for block drops
+     * @return the engine configuration
      */
-    public void setPhysicsSettings(boolean growWithGamemode, boolean dropAsGamemode) {
-        DevEngine.log("[Engine] New physics settings: growWithGamemode(" + growWithGamemode + "), dropAsGamemode(" + dropAsGamemode + ")");
-
-        this.physicsGrow = growWithGamemode;
-        this.physicsBlockItems = dropAsGamemode;
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
     /**
-     * Determines if the flag for growing blocks with inherited gamemodes is set
+     * Sets the configuration for this Engine to use. This will call load()
+     * internally.
      *
-     * @return the flag setting
-     *
-     * @see #setPhysicsSettings(boolean, boolean)
+     * @param configuration the configuration to use, cannot be null
      */
-    public boolean isPhysicsGrowWithGamemode() {
-        return physicsGrow;
+    public void setConfiguration(Configuration configuration) {
+        if (configuration == null) throw new IllegalArgumentException();
+
+        this.configuration = configuration;
+        configuration.load();
     }
 
     /**
-     * Determines if the flag for 'random' block breaks breaking as placed gamemode
-     * is set
-     *
-     * @return the flag setting
-     *
-     * @see #setPhysicsSettings(boolean, boolean)
+     * Gets a particular flag setting from the internal configuration of this
+     * engine. If the key is not found, the default is returned.
+     * @param configKey the configuration key to lookup, cannot be null
+     * @param def the default to use if not found
+     * @return the flag or the default setting
      */
-    public boolean isPhysicsBreakAsGamemode() {
-        return physicsBlockItems;
-    }
-
-    /**
-     * Sets the attachment settings for the AntiShare engine.
-     * <p/>
-     * 'breakAsPlaced' represents whether or not any attachments on the sides of
-     * blocks should be broken as they were placed (such as creative attachments
-     * dropping nothing). This is only applicable is 'denyMismatchBreak' is false.
-     * <p/>
-     * 'denyMismatchBreak' represents the flag for denying a block break due to it's
-     * attachments. For example, a natural block with a creative attachment being broken
-     * by a survival player will result in the block being denied (if this flag is true).
-     * If false, this flag simply forwards the logic to 'breakAsPlaced'.
-     *
-     * @param breakAsPlaced     the break-as-placed flag
-     * @param denyMismatchBreak the deny-break flag
-     */
-    public void setAttachmentSettings(boolean breakAsPlaced, boolean denyMismatchBreak) {
-        DevEngine.log("[Engine] New attachment settings: breakAsPlaced(" + breakAsPlaced + "), denyMismatchBreak(" + denyMismatchBreak + ")");
-
-        this.attachmentsAsPlaced = breakAsPlaced;
-        this.attachmentsDeny = denyMismatchBreak;
-    }
-
-    /**
-     * Determines if attached blocks should be broken as placed, or not.
-     *
-     * @return true for 'break as placed', false otherwise
-     *
-     * @see #setAttachmentSettings(boolean, boolean)
-     * @see #isAttachmentsDenyMismatchBreak()
-     */
-    public boolean isAttachmentsBreakAsPlaced() {
-        return attachmentsAsPlaced;
-    }
-
-    /**
-     * Determines if attached blocks will also prevent blocks from being broken
-     *
-     * @return true to deny breaking due to attachments, false otherwise
-     *
-     * @see #setAttachmentSettings(boolean, boolean)
-     */
-    public boolean isAttachmentsDenyMismatchBreak() {
-        return attachmentsDeny;
-    }
-
-    /**
-     * Sets whether or not hoppers (and other inventory transfers) are permitted
-     * to pull/push items between blocks of differing gamemodes. If the flag is
-     * set to true, inventory transfers will be denied for blocks which are of
-     * different gamemodes (such as a 'creative' hopper to a 'survival' hopper),
-     * however if at least one of the blocks is of type 'none' or both are the
-     * same type, interaction is not restricted. If the flag is set as false, natural
-     * hopper/item transfer behaviour can occur.
-     *
-     * @param flag the flag for hopper interaction mixing
-     */
-    public void setHoppersDenyMixed(boolean flag) {
-        DevEngine.log("[Engine] New hopper deny mixed: " + flag);
-
-        this.hoppersMixed = flag;
-    }
-
-    /**
-     * Determines if hopper interaction between block types is
-     * denied.
-     *
-     * @return true if denied, false otherwise
-     *
-     * @see #setHoppersDenyMixed(boolean)
-     */
-    public boolean isHopperMixedInteractionDenied() {
-        return hoppersMixed;
-    }
-
-    /**
-     * Sets the piston deny mismatch flag. If true, pistons not of
-     * 'natural' type will check their affected block lists to determine
-     * if the blocks are all of the same type (or natural) before allowing
-     * the move. If there is a block which is not of the same type as the
-     * non-natural piston, the move will be denied. If this is set to false,
-     * this checking will not occur.
-     *
-     * @param flag the flag value
-     */
-    public void setPistonDenyMismatch(boolean flag) {
-        DevEngine.log("[Engine] New piston deny mixed: " + flag);
-
-        this.pistonMixed = flag;
-    }
-
-    /**
-     * Determines if pistons are allowed to move mismatched blocks.
-     *
-     * @return true if denied, false otherwise
-     *
-     * @see #setPistonDenyMismatch(boolean)
-     */
-    public boolean isPistonDenyMismatch() {
-        return this.pistonMixed;
+    public boolean getFlag(String configKey, boolean def){
+        return configuration.getBoolean(configKey,def); // Does it's own null check
     }
 
     private void newCacheTimer() {

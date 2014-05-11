@@ -418,6 +418,21 @@ public class EngineListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onContainerOpen(PlayerInteractEvent event) {
+        printDebugEvent(event);
+
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        ABlock block = new BukkitBlock(event.getClickedBlock());
+
+        if (block.isContainer()) {
+            engine.getEngine(block.getWorld().getName()).processContainerOpen(player, block);
+        }
+    }
+
     /**
      * Sends an alert
      *

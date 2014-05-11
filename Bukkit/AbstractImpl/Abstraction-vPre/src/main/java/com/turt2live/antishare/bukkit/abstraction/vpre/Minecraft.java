@@ -68,6 +68,23 @@ public class Minecraft implements MinecraftVersion {
     protected final ConcurrentMap<UUID, NameStore> BY_UUID = new ConcurrentHashMap<UUID, NameStore>();
 
     @Override
+    public List<Material> getContainerTypes() {
+        List<Material> list = new ArrayList<Material>();
+        list.add(Material.CHEST);
+        list.add(Material.LOCKED_CHEST);
+        list.add(Material.ENDER_CHEST);
+        list.add(Material.ANVIL);
+        list.add(Material.WORKBENCH);
+        list.add(Material.FURNACE);
+        list.add(Material.BURNING_FURNACE);
+        list.add(Material.DISPENSER);
+        list.add(Material.ENCHANTMENT_TABLE);
+        list.add(Material.BREWING_STAND);
+        list.add(Material.BEACON);
+        return list;
+    }
+
+    @Override
     public List<Material> getBrokenOnTop() {
         List<Material> list = new ArrayList<Material>();
         list.add(Material.SAPLING);

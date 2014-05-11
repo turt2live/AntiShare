@@ -65,6 +65,13 @@ public interface ABlock extends Rejectable {
     }
 
     /**
+     * Determines if this block is considered a container.
+     *
+     * @return true if this block is a container, false otherwise
+     */
+    public boolean isContainer();
+
+    /**
      * Determines if this block is attached to the supplied block.
      * If this block cannot be attached to blocks, this will
      * return false.
@@ -88,6 +95,15 @@ public interface ABlock extends Rejectable {
      * @return the applicable chest type, returning {@link ABlock.ChestType#NONE} for 'not a chest'
      */
     public ChestType getChestType();
+
+    /**
+     * Gets the other part of this chest if {@link #getChestType()} returns
+     * a double chest (or similar) value. If this is not a chest, or not a
+     * double chest, this returns null.
+     *
+     * @return the partner chest, or null
+     */
+    public ABlock getOtherChest();
 
     /**
      * Gets the block's location

@@ -27,12 +27,12 @@ import java.util.List;
 /**
  * AntiShare to/from Bukkit YAML wrapper
  */
-public class YamlConfiguration extends Configuration {
+public class BukkitConfiguration extends Configuration {
 
     private org.bukkit.configuration.file.YamlConfiguration bukkit;
     private File file;
 
-    public YamlConfiguration(File file) {
+    public BukkitConfiguration(File file) {
         if (file == null) throw new IllegalArgumentException("arguments cannot be null");
         this.bukkit = new org.bukkit.configuration.file.YamlConfiguration();
         this.file = file;
