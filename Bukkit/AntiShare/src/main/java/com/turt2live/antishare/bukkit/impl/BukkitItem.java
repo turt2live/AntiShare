@@ -17,7 +17,11 @@
 
 package com.turt2live.antishare.bukkit.impl;
 
+import com.turt2live.antishare.bukkit.AntiShare;
+import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.AItem;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -25,7 +29,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author turt2live
  */
-public class BukkitItem implements AItem {
+public class BukkitItem extends BukkitObject  implements AItem {
 
     private ItemStack stack;
 
@@ -44,4 +48,13 @@ public class BukkitItem implements AItem {
         return stack;
     }
 
+    @Override
+    public TrackedState canUse(APlayer player) {
+        return permissionCheck(RejectionList.ListType.ITEM_USE,player);
+    }
+
+    @Override
+    protected String getFriendlyName() {
+        return AntiShare.getInstance().getMaterialProvider().getPlayerFriendlyName(stack);
+    }
 }

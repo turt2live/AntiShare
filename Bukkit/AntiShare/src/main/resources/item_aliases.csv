@@ -2062,7 +2062,7 @@ sfsmoothstone,MONSTER_EGGS
 sfsstone,MONSTER_EGGS
 trapsmoothstone,MONSTER_EGGS
 trapsstone,MONSTER_EGGS
-monsteregg,MONSTER_EGGS
+monsteregg,MONSTER_EGG
 monstereggsmoothstone,MONSTER_EGGS
 monstereggsstone,MONSTER_EGGS
 meggsmoothstone,MONSTER_EGGS

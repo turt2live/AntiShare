@@ -24,6 +24,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +36,21 @@ import java.util.UUID;
  * @author turt2live
  */
 public interface MinecraftVersion {
+
+    /**
+     * Finds a player from an attacking entity recursively. This can be
+     * used to find the true player behind an attack without the need for
+     * complex analysis of events and possibilities.<br/>
+     * If a player can be found from the passed entity then it is returned.
+     * If no valid player is found, then a null object is returned. This
+     * will explore all possible cases (including tamed pets, arrow, etc)
+     * to find the player who is responsible for the action.
+     *
+     * @param damager the damager to analyze, such as an arrow. Passing null simply returns null.
+     *
+     * @return the player behind the attacking (passed) entity, or null if not found
+     */
+    public Player getPlayerAttacker(Entity damager);
 
     /**
      * Gets a list of materials that are considered containers.

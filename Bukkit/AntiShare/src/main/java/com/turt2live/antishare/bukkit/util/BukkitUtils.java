@@ -164,6 +164,8 @@ public final class BukkitUtils {
                 return "commands";
             case INTERACTION:
                 return "interaction";
+            case ITEM_USE:
+                return "item-use";
             default:
                 return null;
         }

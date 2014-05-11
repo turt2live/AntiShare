@@ -55,3 +55,9 @@ permissions:
     antishare.deny.interaction:
         default: false
         description: Denies all block interactions, regardless of group settings
+    antishare.allow.item_use:
+        default: op
+        description: Allows all item use, regardless of group settings
+    antishare.deny.item_use:
+        default: false
+        description: Denies all item use, regardless of group settings

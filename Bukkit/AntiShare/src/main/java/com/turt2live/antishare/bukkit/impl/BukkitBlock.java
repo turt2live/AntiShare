@@ -17,7 +17,6 @@
 
 package com.turt2live.antishare.bukkit.impl;
 
-import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
@@ -44,7 +43,7 @@ import java.util.List;
  *
  * @author turt2live
  */
-public class BukkitBlock implements ABlock {
+public class BukkitBlock extends BukkitObject implements ABlock {
 
     private final Block block;
 
@@ -167,52 +166,8 @@ public class BukkitBlock implements ABlock {
         return permissionCheck(RejectionList.ListType.INTERACTION, player);
     }
 
-    private TrackedState permissionCheck(RejectionList.ListType type, APlayer player) {
-        // Stage One: Check general permissions
-        boolean allow = player.hasPermission(APermission.getPermissionNode(true, type));
-        boolean deny = player.hasPermission(APermission.getPermissionNode(false, type));
-        TrackedState stageOne = TrackedState.NOT_PRESENT;
-
-        if (allow == deny) stageOne = TrackedState.NOT_PRESENT;
-        else if (allow) stageOne = TrackedState.INCLUDED;
-        else if (deny) stageOne = TrackedState.NEGATED;
-
-        // Stage Two: Check specific permissions
-        allow = player.hasPermission(APermission.getPermissionNode(true, type) + "." + getFriendlyName());
-        deny = player.hasPermission(APermission.getPermissionNode(false, type) + "." + getFriendlyName());
-        TrackedState stageTwo = TrackedState.NOT_PRESENT;
-
-        if (allow == deny) stageTwo = TrackedState.NOT_PRESENT;
-        else if (allow) stageTwo = TrackedState.INCLUDED;
-        else if (deny) stageTwo = TrackedState.NEGATED;
-
-        /*
-        Stage Three: Combination logic for merging stages one and two
-        Logic:
-
-        G = stageOne, general scope
-        S = stageTwo, specific scope
-
-        if(G[allow] && S[allow])    [allow]  // Favour: G || S      [C2] <-- Covered by return, doesn't matter
-        if(G[allow] && S[deny])     [deny]   // Favour: S           [RE]
-        if(G[allow] && S[none])     [allow]  // Favour: G           [C1]
-
-        if(G[deny] && S[allow])     [allow]  // Favour: S           [RE]
-        if(G[deny] && S[deny])      [deny]   // Favour: G || S      [C2] <-- Covered by return, doesn't matter
-        if(G[deny] && S[none])      [deny]   // Favour: G           [C1]
-
-        if(G[none] && S[allow])     [allow]  // Favour: S           [RE]
-        if(G[none] && S[deny])      [deny]   // Favour: S           [RE]
-        if(G[none] && S[none])      [none]   // Favour: G || S      [C2] <-- Covered by return, doesn't matter
-         */
-
-        if (stageTwo == TrackedState.NOT_PRESENT) return stageOne; // [C1] In all cases, stageOne is favoured
-        //if (stageTwo == stageOne) return stageOne; // [C2] Doesn't matter
-        return stageTwo; // [RE] Remaining cases are all stageTwo favoured
-    }
-
-    // Used for permission checks
-    private String getFriendlyName() {
+@Override
+    protected String getFriendlyName() {
         return AntiShare.getInstance().getMaterialProvider().getPlayerFriendlyName(block);
     }
 

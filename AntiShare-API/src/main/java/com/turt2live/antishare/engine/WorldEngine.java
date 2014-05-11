@@ -26,10 +26,7 @@ import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
-import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.APlayer;
-import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.RejectableCommand;
+import com.turt2live.antishare.object.*;
 import com.turt2live.antishare.object.attribute.BlockType;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.TrackedState;
@@ -689,6 +686,7 @@ public final class WorldEngine {
      * @param player    the player interacting, cannot be null
      * @param container the container being opened, cannot be null
      */
+    // TODO: Unit test
     public void processContainerOpen(APlayer player, ABlock container) {
         if (player == null || container == null) throw new IllegalArgumentException();
 
@@ -797,5 +795,41 @@ public final class WorldEngine {
         }
 
         return false; // Allowed
+    }
+
+    /**
+     * Process an item use initiated by a player. This will internally determine
+     * whether or not the player is allowed to use the item and return 'true' to
+     * represent denial and 'false' to represent allowance.
+     * @param player the player using the item, cannot be null
+     * @param item the item in question, cannot be null
+     * @return true for denial, false otherwise
+     */
+    public boolean processItemUse(APlayer player, AItem item){
+        if (player == null || item == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing player use",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\titem = " + item);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ITEM_USE);
+        ASGameMode playerGM = player.getGameMode();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
+        }
+
+        if (playerGM != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
+
+        // Check lists and permissions
+        TrackedState playerReaction = item.canUse(player);
+        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+        if (reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT)
+            return true; // Rejected & no allow permission
+        return false;
     }
 }

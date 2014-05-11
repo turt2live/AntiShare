@@ -20,10 +20,31 @@ package com.turt2live.antishare.bukkit.abstraction.v1_7_R1;
 import com.turt2live.antishare.object.ABlock;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.*;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.List;
 
 public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_6_R3.Minecraft {
+
+    @Override
+    public Player getPlayerAttacker(Entity damager) {
+        if (damager == null) {
+            return null;
+        } else if (damager instanceof Player) {
+            return (Player) damager;
+        } else if (damager instanceof Tameable) {
+            AnimalTamer tamer = ((Tameable) damager).getOwner();
+            if (tamer instanceof Entity) {
+                return getPlayerAttacker((Entity) tamer);
+            }
+        } else if (damager instanceof Projectile) {
+            ProjectileSource source = ((Projectile) damager).getShooter();
+            if (!(source instanceof Entity)) return null;
+            return getPlayerAttacker((Entity) source);
+        }
+        return null;
+    }
 
     @Override
     public List<Material> getContainerTypes() {

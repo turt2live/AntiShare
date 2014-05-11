@@ -1,0 +1,7 @@
+# Listing of items that can be matched to multiple elements
+# This is used by the item matcher to determine what can be counted by an item stack
+skull
+dye
+monsteregg
+map
+potion

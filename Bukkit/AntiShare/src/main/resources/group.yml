@@ -62,6 +62,9 @@ lists:
     interaction:
     - chest
     - furnace
+    item-use:
+    - flint and steel
+    - exp bottle
 
 # Block configuration. This gives you the ability to customize the block
 # aspects of AntiShare. More information can be found at the link listed

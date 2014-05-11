@@ -124,6 +124,18 @@ public class AntiShare extends JavaPlugin {
         } catch (IOException e) {
             getLogger().warning("Could not load internal item_lang.csv, you may have weird errors");
         }
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("item_similars.txt")));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.startsWith("#")) continue;
+                materialProvider.insertExtra(line);
+            }
+            reader.close();
+        } catch (IOException e) {
+            getLogger().warning("Could not load internal item_similars.txt, you may have weird errors");
+        }
     }
 
     @Override

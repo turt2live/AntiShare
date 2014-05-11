@@ -37,6 +37,7 @@ public interface RejectionList<T extends Rejectable> {
         BLOCK_BREAK,
         COMMANDS,
         INTERACTION,
+        ITEM_USE,
 
         /**
          * CUSTOM should only be used for out-of-plugin operations

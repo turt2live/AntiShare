@@ -42,6 +42,8 @@ public class GenericBlockInformationList {
         this.provider = provider;
     }
 
+    // TODO: ALL lists should implement this world stuffs!
+
     public void populateBlocks(List<String> strings) {
         includedBlocks.clear();
         negatedBlocks.clear();

@@ -21,6 +21,7 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.MaterialProvider;
 import com.turt2live.antishare.bukkit.lists.BukkitBlockList;
+import com.turt2live.antishare.bukkit.lists.BukkitItemList;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
@@ -92,6 +93,11 @@ public class BukkitGroup extends Group {
                     rejectableCommands.add(new RejectableCommand(command));
                 }
                 ((CommandRejectionList) list).populate(rejectableCommands);
+                break;
+            case ITEM_USE:
+                list = new BukkitItemList(type);
+                List<String> items = configuration.getStringList("lists." + configKey, new ArrayList<String>());
+                ((BukkitItemList) list).load(items);
                 break;
             default:
                 list = null;

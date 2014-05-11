@@ -64,12 +64,14 @@ public class Lang {
     public static final String NAUGHTY_BREAK = "naughty.break";
     public static final String NAUGHTY_COMMAND = "naughty.command";
     public static final String NAUGHTY_INTERACTION = "naughty.interact";
+    public static final String NAUGHTY_USE = "naughty.use";
 
     // Naught admin alert strings
     public static final String NAUGHTY_ADMIN_PLACE = "naughty.admin.place";
     public static final String NAUGHTY_ADMIN_BREAK = "naughty.admin.break";
     public static final String NAUGHTY_ADMIN_COMMAND = "naughty.admin.command";
     public static final String NAUGHTY_ADMIN_INTERACTION = "naughty.admin.interact";
+    public static final String NAUGHTY_ADMIN_USE = "naughty.admin.use";
 
     // Help strings
     public static final String HELP_TITLE = "help.title";

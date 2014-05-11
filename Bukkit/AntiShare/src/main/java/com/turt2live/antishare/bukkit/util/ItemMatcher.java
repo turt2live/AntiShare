@@ -100,6 +100,7 @@ public class ItemMatcher {
         if (input == null) return null;
 
         String[] parts = input.split(";", 2);
+        if (parts.length != 2) parts = new String[] {parts[0], "1"}; // AntiShare - For semantics
         if (parts.length == 2) {
             Map<MetaKey, String> attributes = new HashMap<MetaKey, String>();
             String[] amountParts = parts[1].split("\\|", 2);

@@ -1,5 +1,6 @@
 #version: TeamCity
 #If you change this file, it will not be automatically updated after the next release.
+# TODO: ALWAYS CHANGE THE MONSTER_EGGS (monsteregg) KEY TO MONSTER_EGG (383)
 #item,id,metadata
 stone,1,0
 sstone,1,0
@@ -2062,7 +2063,7 @@ sfsmoothstone,97,0
 sfsstone,97,0
 trapsmoothstone,97,0
 trapsstone,97,0
-monsteregg,97,0
+monsteregg,383,0
 monstereggsmoothstone,97,0
 monstereggsstone,97,0
 meggsmoothstone,97,0

@@ -26,6 +26,7 @@ import com.turt2live.antishare.bukkit.events.AntiShareBlockBreakEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareExplodeEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareFadeEvent;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
+import com.turt2live.antishare.bukkit.impl.BukkitItem;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
@@ -45,23 +46,20 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.lang.reflect.Method;
@@ -431,6 +429,127 @@ public class EngineListener implements Listener {
         if (block.isContainer()) {
             engine.getEngine(block.getWorld().getName()).processContainerOpen(player, block);
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerUse(PlayerInteractEvent event) {
+        printDebugEvent(event);
+
+        if (event.getItem() == null) return;
+
+        if (processGenericUse(event.getPlayer(), event.getItem())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onExpBottleUse(ExpBottleEvent event) {
+        printDebugEvent(event);
+
+        Player shooter = VersionSelector.getMinecraft().getPlayerAttacker(event.getEntity());
+        if (shooter != null) {
+            if (processGenericUse(shooter, new ItemStack(Material.EXP_BOTTLE))) {
+                event.setExperience(0);
+                event.setShowEffect(false);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEggUse(PlayerEggThrowEvent event) {
+        printDebugEvent(event);
+
+        if (processGenericUse(event.getPlayer(), new ItemStack(Material.EGG))) {
+            event.setHatching(false);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onProjectileUse(ProjectileLaunchEvent event) {
+        printDebugEvent(event);
+
+        Player shooter = VersionSelector.getMinecraft().getPlayerAttacker(event.getEntity());
+        if (shooter != null) {
+            Projectile projectile = event.getEntity();
+            Material item = null;
+            if (projectile instanceof EnderPearl) {
+                item = Material.ENDER_PEARL;
+            } else if (projectile instanceof EnderSignal) {
+                item = Material.EYE_OF_ENDER;
+            } else if (projectile instanceof Snowball) {
+                item = Material.SNOW_BALL;
+            }
+
+            if (item != null) {
+                ItemStack stack = new ItemStack(item);
+
+                if (processGenericUse(shooter, stack)) {
+                    event.setCancelled(true);
+                }
+            } else
+                throw new IllegalStateException("Unknown projectile, cannot be mapped! Entity Type: " + projectile.getType());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPotionSplashUse(PotionSplashEvent event) {
+        printDebugEvent(event);
+
+        Player shooter = VersionSelector.getMinecraft().getPlayerAttacker(event.getPotion());
+        if (shooter != null) {
+            ItemStack item = new ItemStack(Material.POTION);
+
+            if (processGenericUse(shooter, item)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    public void onPossibleWaterUse(PlayerInteractEvent event) {
+        printDebugEvent(event);
+
+        if (event.isCancelled() && event.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_AIR
+                && event.getClickedBlock() == null && event.getItem() != null) {
+            // It is almost certainly water.
+            Player player = event.getPlayer();
+            List<Block> blocks = player.getLineOfSight(null, 10); // TODO: Better method?
+            boolean water = false;
+
+            for (Block block : blocks) {
+                if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER) {
+                    water = true;
+                    break;
+                }
+            }
+
+            // It was a water use!
+            if (water) {
+                if (processGenericUse(player, event.getItem())) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    /**
+     * Used for processing of generic ITEM_USE events (like exp bottles, eggs, etc).
+     * This will send the applicable alerts as well
+     *
+     * @param player the player
+     * @param stack  the item (representation if needed)
+     *
+     * @return true if denied, false otherwise
+     */
+    private boolean processGenericUse(Player player, ItemStack stack) {
+        if (engine.getEngine(player.getWorld().getName()).processItemUse(new BukkitPlayer(player), new BukkitItem(stack))) {
+            String name = plugin.getMaterialProvider().getPlayerFriendlyName(stack);
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_USE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+            alert(Lang.NAUGHTY_ADMIN_USE, player.getName(), name);
+
+            return true;
+        }
+        return false;
     }
 
     /**

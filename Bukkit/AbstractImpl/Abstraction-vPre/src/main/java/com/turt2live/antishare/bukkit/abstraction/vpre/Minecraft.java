@@ -29,6 +29,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.DoubleChestInventory;
 
 import java.util.ArrayList;
@@ -66,6 +67,23 @@ public class Minecraft implements MinecraftVersion {
 
     protected final ConcurrentMap<String, UUIDStore> BY_NAME = new ConcurrentHashMap<String, UUIDStore>();
     protected final ConcurrentMap<UUID, NameStore> BY_UUID = new ConcurrentHashMap<UUID, NameStore>();
+
+    @Override
+    public Player getPlayerAttacker(Entity damager) {
+        if (damager == null) {
+            return null;
+        } else if (damager instanceof Player) {
+            return (Player) damager;
+        } else if (damager instanceof Tameable) {
+            AnimalTamer tamer = ((Tameable) damager).getOwner();
+            if (tamer instanceof Entity) {
+                return getPlayerAttacker((Entity) tamer);
+            }
+        } else if (damager instanceof Projectile) {
+            return getPlayerAttacker(((Projectile) damager).getShooter());
+        }
+        return null;
+    }
 
     @Override
     public List<Material> getContainerTypes() {

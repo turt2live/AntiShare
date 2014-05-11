@@ -20,8 +20,11 @@ package com.turt2live.antishare.bukkit;
 import com.turt2live.antishare.engine.DevEngine;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,6 +69,7 @@ public class MaterialProvider {
     }
 
     private Map<String, Material> materials = new HashMap<String, Material>();
+    private List<String> additionalData = new ArrayList<String>();
     private Map<MaterialInformation, String> playerFriendly = new HashMap<MaterialInformation, String>();
 
     void insertPlayerFriendly(Material material, short data, String name) {
@@ -78,10 +82,29 @@ public class MaterialProvider {
         DevEngine.log("[Materials] Loaded player friendly (" + name + "): " + information);
     }
 
+    void insertExtra(String alias) {
+        if (alias == null) return;
+
+        alias = alias.toLowerCase();
+        if (!additionalData.contains(alias)) additionalData.add(alias);
+    }
+
     void insertAlias(String alias, Material material) {
         if (alias == null || material == null) return;
         materials.put(alias, material);
         DevEngine.log("[Materials] Loaded alias (" + alias + "): " + material);
+    }
+
+    /**
+     * Determines if a specified alias has additional item data
+     *
+     * @param alias the alias to lookup, null returns false
+     *
+     * @return true if there is data, false otherwise
+     */
+    public boolean hasAdditionalData(String alias) {
+        if (alias != null) return additionalData.contains(alias.toLowerCase());
+        return false;
     }
 
     /**
@@ -110,6 +133,31 @@ public class MaterialProvider {
     }
 
     /**
+     * Attempts to get the player friendly name for a item
+     *
+     * @param stack the item to lookup. If null, "AIR" is returned
+     *
+     * @return the player friendly name. never null but will default to the item's type
+     */
+    public String getPlayerFriendlyName(ItemStack stack) {
+        if (stack == null) return "AIR";
+
+        MaterialInformation info1 = new MaterialInformation(), info2 = new MaterialInformation();
+        info1.material = stack.getType();
+        info1.data = (short) stack.getData().getData();
+        info2.material = stack.getType();
+        info2.data = -1;
+
+        String specific = playerFriendly.get(info1);
+        String general = playerFriendly.get(info2);
+        String def = stack.getType().name();
+
+        if (specific != null) return specific;
+        if (general != null) return general;
+        return def;
+    }
+
+    /**
      * Attempts to get a material from a string
      *
      * @param string the string to lookup. If null, AIR is returned
@@ -119,6 +167,7 @@ public class MaterialProvider {
     public Material fromString(String string) {
         if (string == null) return Material.AIR;
         if (string.contains(":")) string = string.split(":")[0];
+        string = string.trim().toLowerCase();
 
         Material material = Material.matchMaterial(string);
         if (material != null) return material;
@@ -130,7 +179,10 @@ public class MaterialProvider {
             }
         }
 
-        Material lookup = materials.get(string.toLowerCase());
+        Material lookup = materials.get(string);
+        if (lookup != null) return lookup;
+
+        lookup = materials.get(string.replaceAll(" ", ""));
         if (lookup != null) return lookup;
 
         return Material.AIR;

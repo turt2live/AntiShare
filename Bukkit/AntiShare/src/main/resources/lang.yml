@@ -34,10 +34,12 @@ naughty:
         break: '&c@p &7tried to break &c@v'
         command: '&c@p &7tried to use the command &c@v'
         interact: '&c@p &7tried to interact with &c@v'
+        use: '&c@p &7tried to use &c@v'
     place: '&cYou cannot place that &4@v'
     break: '&cYou cannot break that &4@v'
     command: '&cYou cannot use the command &4@v'
     interact: '&cYou cannot interact with that &4@v'
+    use: '&cYou cannot use that &4@v'
 general:
     reloading: '&7Reloading'
     reloaded: '&aReload completed!'
