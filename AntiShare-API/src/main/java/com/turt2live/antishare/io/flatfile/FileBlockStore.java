@@ -72,7 +72,6 @@ import java.util.concurrent.ConcurrentMap;
  * This type of data store is designed to be used with the {@link FileBlockManager}
  *
  * @author turt2live
- * @see FileBlockStore
  */
 public class FileBlockStore extends GenericBlockStore {
 

@@ -383,14 +383,14 @@ public class EngineListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
-    public void onCommand(PlayerCommandPreprocessEvent event){
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onCommand(PlayerCommandPreprocessEvent event) {
         printDebugEvent(event);
 
         APlayer player = new BukkitPlayer(event.getPlayer());
         RejectableCommand command = new RejectableCommand(event.getMessage());
 
-        if(engine.getEngine(event.getPlayer().getWorld().getName()).processCommandExecution(player,command)){
+        if (engine.getEngine(event.getPlayer().getWorld().getName()).processCommandExecution(player, command)) {
             event.setCancelled(true);
 
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_COMMAND)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, command.getCommandString()).build());

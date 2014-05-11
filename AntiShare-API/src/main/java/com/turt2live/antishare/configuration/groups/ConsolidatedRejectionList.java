@@ -18,8 +18,8 @@
 package com.turt2live.antishare.configuration.groups;
 
 import com.turt2live.antishare.collections.ArrayArrayList;
-import com.turt2live.antishare.object.Rejectable;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.object.Rejectable;
 import com.turt2live.antishare.object.attribute.TrackedState;
 
 import java.util.ArrayList;
