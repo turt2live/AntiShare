@@ -24,6 +24,7 @@ import com.turt2live.antishare.object.attribute.TrackedState;
 
 /**
  * A common set of methods for Bukkit objects
+ *
  * @author turt2live
  */
 public abstract class BukkitObject {

@@ -166,7 +166,7 @@ public class BukkitBlock extends BukkitObject implements ABlock {
         return permissionCheck(RejectionList.ListType.INTERACTION, player);
     }
 
-@Override
+    @Override
     protected String getFriendlyName() {
         return AntiShare.getInstance().getMaterialProvider().getPlayerFriendlyName(block);
     }

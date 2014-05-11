@@ -801,11 +801,13 @@ public final class WorldEngine {
      * Process an item use initiated by a player. This will internally determine
      * whether or not the player is allowed to use the item and return 'true' to
      * represent denial and 'false' to represent allowance.
+     *
      * @param player the player using the item, cannot be null
-     * @param item the item in question, cannot be null
+     * @param item   the item in question, cannot be null
+     *
      * @return true for denial, false otherwise
      */
-    public boolean processItemUse(APlayer player, AItem item){
+    public boolean processItemUse(APlayer player, AItem item) {
         if (player == null || item == null) throw new IllegalArgumentException();
 
         DevEngine.log("[WorldEngine:" + worldName + "] Processing player use",

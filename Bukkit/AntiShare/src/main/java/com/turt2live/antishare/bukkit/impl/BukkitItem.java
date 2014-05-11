@@ -29,7 +29,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author turt2live
  */
-public class BukkitItem extends BukkitObject  implements AItem {
+public class BukkitItem extends BukkitObject implements AItem {
 
     private ItemStack stack;
 
@@ -50,7 +50,7 @@ public class BukkitItem extends BukkitObject  implements AItem {
 
     @Override
     public TrackedState canUse(APlayer player) {
-        return permissionCheck(RejectionList.ListType.ITEM_USE,player);
+        return permissionCheck(RejectionList.ListType.ITEM_USE, player);
     }
 
     @Override
