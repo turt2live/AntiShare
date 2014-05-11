@@ -56,11 +56,6 @@
             <artifactId>AntiShare-Bukkit-v1_7_R2</artifactId>
             <version>Bukkit-v1_7_R2</version>
         </dependency>
-        <dependency>
-            <groupId>com.turt2live</groupId>
-            <artifactId>Hurtle</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <repositories>

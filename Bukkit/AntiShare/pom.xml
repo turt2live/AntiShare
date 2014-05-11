@@ -54,13 +54,6 @@
             <version>1.4.5-R1.0</version>
         </dependency>
 
-        <!-- Hurtle -->
-        <dependency>
-            <groupId>com.turt2live</groupId>
-            <artifactId>Hurtle</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
-        </dependency>
-
         <!-- == START ANTISHARE ABSTRACTION == -->
 
         <dependency>
@@ -181,16 +174,9 @@
                             <minimizeJar>false</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <include>com.turt2live:Hurtle</include>
                                     <include>com.turt2live.antishare:*</include>
                                 </includes>
                             </artifactSet>
-                            <relocations>
-                                <relocation>
-                                    <pattern>com.turt2live.hurtle</pattern>
-                                    <shadedPattern>com.turt2live.antishare.bukkit.libs.hurtle</shadedPattern>
-                                </relocation>
-                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

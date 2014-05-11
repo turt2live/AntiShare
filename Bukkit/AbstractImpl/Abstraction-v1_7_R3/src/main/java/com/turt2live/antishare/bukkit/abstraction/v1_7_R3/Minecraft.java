@@ -18,7 +18,7 @@
 package com.turt2live.antishare.bukkit.abstraction.v1_7_R3;
 
 import com.google.common.base.Charsets;
-import com.turt2live.hurtle.uuid.UUIDServiceProvider;
+import com.turt2live.antishare.bukkit.abstraction.util.UUIDServiceProvider;
 import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
