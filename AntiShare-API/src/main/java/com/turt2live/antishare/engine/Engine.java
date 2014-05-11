@@ -79,7 +79,7 @@ public final class Engine {
     public static final String CONFIG_INTERACT_CLASSIC_MODE = "blocks.interaction.classic-mode";
     /**
      * Configuration key for 'if not classic mode, can creative players open natural containers?'
-     *
+     * <p/>
      * This will be 'true' to ALLOW the interaction.
      */
     public static final String CONFIG_INTERACT_NATURAL_CONTAINERS = "blocks.interaction.creative-natural-containers";
@@ -380,12 +380,14 @@ public final class Engine {
     /**
      * Gets a particular flag setting from the internal configuration of this
      * engine. If the key is not found, the default is returned.
+     *
      * @param configKey the configuration key to lookup, cannot be null
-     * @param def the default to use if not found
+     * @param def       the default to use if not found
+     *
      * @return the flag or the default setting
      */
-    public boolean getFlag(String configKey, boolean def){
-        return configuration.getBoolean(configKey,def); // Does it's own null check
+    public boolean getFlag(String configKey, boolean def) {
+        return configuration.getBoolean(configKey, def); // Does it's own null check
     }
 
     private void newCacheTimer() {

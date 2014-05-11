@@ -166,21 +166,21 @@ public class EngineTest {
     }
 
     @Test
-    public void testConfiguration(){
+    public void testConfiguration() {
         assertNotNull(Engine.getInstance().getConfiguration());
 
         Configuration config = mock(Configuration.class);
         Engine.getInstance().setConfiguration(config);
 
-        assertEquals(config,Engine.getInstance().getConfiguration());
+        assertEquals(config, Engine.getInstance().getConfiguration());
         verify(config).load();
 
         Engine.getInstance().setConfiguration(new MemoryConfiguration());
-        assertTrue(Engine.getInstance().getConfiguration() instanceof  MemoryConfiguration);
+        assertTrue(Engine.getInstance().getConfiguration() instanceof MemoryConfiguration);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNullConfiguration(){
+    public void testNullConfiguration() {
         Engine.getInstance().setConfiguration(null);
     }
 

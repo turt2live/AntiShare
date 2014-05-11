@@ -30,7 +30,7 @@ public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_4_R
 
     @Override
     public List<Material> getContainerTypes() {
-        List<Material>list = super.getContainerTypes();
+        List<Material> list = super.getContainerTypes();
         list.add(Material.TRAPPED_CHEST);
         list.add(Material.DROPPER);
         list.add(Material.HOPPER);
