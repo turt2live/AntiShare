@@ -585,9 +585,24 @@ public class EngineListener implements Listener {
         if (engine.getEngine(player.getWorld().getName()).processItemPickup(player, item)) {
             event.setCancelled(true);
 
-            String name = plugin.getMaterialProvider().getPlayerFriendlyName(event.getItem().getItemStack());
-            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PICKUP)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
-            alert(Lang.NAUGHTY_ADMIN_PICKUP, player.getName(), name);
+            Player pl = event.getPlayer();
+            boolean alert = true;
+            if (pl.hasMetadata("ANTISHARE-PICKUP-SPAM") && pl.hasMetadata("ANTISHARE-PICKUP-SPAM-TS")) {
+                Material last = (Material) pl.getMetadata("ANTISHARE-PICKUP-SPAM").get(0).value();
+                long timestamp = pl.getMetadata("ANTISHARE-PICKUP-SPAM-TS").get(0).asLong();
+
+                if (last == event.getItem().getItemStack().getType() && System.currentTimeMillis() - timestamp < 1000)
+                    alert = false;
+            }
+
+            if (alert) {
+                pl.setMetadata("ANTISHARE-PICKUP-SPAM", new FixedMetadataValue(plugin, event.getItem().getItemStack().getType()));
+                pl.setMetadata("ANTISHARE-PICKUP-SPAM-TS", new FixedMetadataValue(plugin, System.currentTimeMillis()));
+
+                String name = plugin.getMaterialProvider().getPlayerFriendlyName(event.getItem().getItemStack());
+                player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PICKUP)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+                alert(Lang.NAUGHTY_ADMIN_PICKUP, player.getName(), name);
+            }
         }
     }
 
