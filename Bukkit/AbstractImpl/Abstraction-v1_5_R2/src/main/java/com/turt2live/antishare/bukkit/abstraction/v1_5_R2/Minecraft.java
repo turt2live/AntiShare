@@ -28,7 +28,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_5_R1.Minecraft  {
+public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_5_R1.Minecraft {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryMoveItem(InventoryMoveItemEvent event) {

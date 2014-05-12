@@ -39,6 +39,7 @@ public final class UUIDServiceProvider {
      * return null.
      *
      * @param s the string to convert. Must be exactly 32 characters.
+     *
      * @return the converted string, or null for invalid input
      */
     public static String insertDashes(String s) {
@@ -50,6 +51,7 @@ public final class UUIDServiceProvider {
      * Gets the name of a player for the specified UUID.
      *
      * @param uuid the uuid to lookup, cannot be null
+     *
      * @return the player's name, or null if not found or for invalid input
      */
     public static String getName(UUID uuid) {
@@ -97,6 +99,7 @@ public final class UUIDServiceProvider {
      * Gets the UUID of a player name.
      *
      * @param name the name, cannot be null
+     *
      * @return the UUID for the player, or null if not found or for invalid input
      */
     public static UUID getUUID(String name) {
@@ -146,6 +149,7 @@ public final class UUIDServiceProvider {
      * approximate date they stopped using that name).
      *
      * @param uuid the uuid to lookup, cannot be null
+     *
      * @return a map of names and dates (UTC), or an empty map for invalid input or unknown/non-existent history
      */
     public static Map<String, Date> getHistory(UUID uuid) {
