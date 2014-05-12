@@ -15,7 +15,7 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.bukkit.abstraction;
+package com.turt2live.antishare.bukkit.abstraction.event;
 
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;

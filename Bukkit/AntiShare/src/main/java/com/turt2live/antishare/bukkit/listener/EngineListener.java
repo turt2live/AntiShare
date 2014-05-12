@@ -20,8 +20,9 @@ package com.turt2live.antishare.bukkit.listener;
 import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
-import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
+import com.turt2live.antishare.bukkit.abstraction.event.AntiShareEatEvent;
+import com.turt2live.antishare.bukkit.abstraction.event.AntiShareInventoryTransferEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareBlockBreakEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareExplodeEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareFadeEvent;
@@ -547,6 +548,15 @@ public class EngineListener implements Listener {
                     event.setCancelled(true);
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEatUse(AntiShareEatEvent event) {
+        printDebugEvent(event);
+
+        if (processGenericUse(event.getPlayer(), event.getItem())) {
+            event.setCancelled(true);
         }
     }
 

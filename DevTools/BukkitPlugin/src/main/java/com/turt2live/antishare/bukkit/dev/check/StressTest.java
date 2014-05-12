@@ -17,7 +17,7 @@
 
 package com.turt2live.antishare.bukkit.dev.check;
 
-import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
+import com.turt2live.antishare.bukkit.abstraction.event.AntiShareInventoryTransferEvent;
 import com.turt2live.antishare.bukkit.dev.AntiShare;
 import com.turt2live.antishare.bukkit.dev.CheckBase;
 import com.turt2live.antishare.bukkit.dev.util.FakeWorld;

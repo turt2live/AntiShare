@@ -17,16 +17,30 @@
 
 package com.turt2live.antishare.bukkit.abstraction.v1_5_R1;
 
+import com.turt2live.antishare.bukkit.abstraction.event.AntiShareEatEvent;
 import com.turt2live.antishare.object.ABlock;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.DoubleChestInventory;
 
 import java.util.List;
 
 public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_4_R1.Minecraft {
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerEat(PlayerItemConsumeEvent event) {
+        AntiShareEatEvent asevent = new AntiShareEatEvent(event.getPlayer(), event.getItem());
+        Bukkit.getServer().getPluginManager().callEvent(asevent);
+        if (asevent.isCancelled()) {
+            event.setCancelled(true);
+        }
+    }
 
     @Override
     public List<Material> getContainerTypes() {

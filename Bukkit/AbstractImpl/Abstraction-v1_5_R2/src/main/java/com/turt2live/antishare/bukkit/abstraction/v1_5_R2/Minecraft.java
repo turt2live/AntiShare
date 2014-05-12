@@ -17,19 +17,18 @@
 
 package com.turt2live.antishare.bukkit.abstraction.v1_5_R2;
 
-import com.turt2live.antishare.bukkit.abstraction.AntiShareInventoryTransferEvent;
+import com.turt2live.antishare.bukkit.abstraction.event.AntiShareInventoryTransferEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_5_R1.Minecraft implements Listener {
+public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_5_R1.Minecraft  {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryMoveItem(InventoryMoveItemEvent event) {

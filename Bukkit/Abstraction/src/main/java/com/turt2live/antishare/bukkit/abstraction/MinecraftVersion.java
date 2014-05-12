@@ -26,6 +26,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +36,7 @@ import java.util.UUID;
  *
  * @author turt2live
  */
-public interface MinecraftVersion {
+public interface MinecraftVersion extends Listener {
 
     /**
      * Finds a player from an attacking entity recursively. This can be
