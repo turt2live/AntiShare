@@ -38,6 +38,8 @@ public interface RejectionList<T extends Rejectable> {
         COMMANDS,
         INTERACTION,
         ITEM_USE,
+        ITEM_DROP,
+        ITEM_PICKUP,
 
         /**
          * CUSTOM should only be used for out-of-plugin operations

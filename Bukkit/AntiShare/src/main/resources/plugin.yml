@@ -61,3 +61,15 @@ permissions:
     antishare.deny.item_use:
         default: false
         description: Denies all item use, regardless of group settings
+    antishare.allow.item_drop:
+        default: op
+        description: Allows all item drops, regardless of group settings
+    antishare.deny.item_drop:
+        default: false
+        description: Denies all item drops, regardless of group settings
+    antishare.allow.item_pickup:
+        default: op
+        description: Allows all item pickups, regardless of group settings
+    antishare.deny.item_pickup:
+        default: false
+        description: Denies all item pickups, regardless of group settings

@@ -69,6 +69,31 @@ public class BukkitItemList implements RejectionList<BukkitItem> {
                 workingCopy = entry.substring(1);
             }
 
+            if (workingCopy.equalsIgnoreCase("all")) {
+                this.negatedAll.clear();
+                this.negatedAll.clear();
+                this.included.clear();
+                this.includedAll.clear();
+
+                for (Material material : Material.values()) {
+                    ItemStack item = new ItemStack(material);
+                    if (!contains2(this.includedAll, item)) this.includedAll.add(item);
+                }
+                continue;
+            } else if (workingCopy.equalsIgnoreCase("none")) {
+                this.negated.clear();
+                this.negatedAll.clear();
+
+                for (ItemStack item : this.included)
+                    if (!contains2(this.negatedAll, item)) this.negatedAll.add(item);
+                for (ItemStack item : this.includedAll)
+                    if (!contains2(this.negatedAll, item)) this.negatedAll.add(item);
+
+                this.included.clear();
+                this.includedAll.clear();
+                continue;
+            }
+
             ItemStack stack = ItemMatcher.getItem(workingCopy);
             if (stack == null || stack.getType() == Material.AIR) {
                 AntiShare.getInstance().getLogger().warning("Unknown item: " + workingCopy);
@@ -78,11 +103,11 @@ public class BukkitItemList implements RejectionList<BukkitItem> {
 
             if (AntiShare.getInstance().getMaterialProvider().hasAdditionalData(workingCopy)) {
                 if (negated) {
-                    if (contains(this.includedAll, stack)) this.includedAll.remove(stack);
-                    if (!contains(this.negatedAll, stack)) this.negatedAll.add(stack);
+                    if (contains2(this.includedAll, stack)) this.includedAll.remove(stack);
+                    if (!contains2(this.negatedAll, stack)) this.negatedAll.add(stack);
                 } else {
-                    if (!contains(this.includedAll, stack)) this.includedAll.add(stack);
-                    if (contains(this.negatedAll, stack)) this.negatedAll.remove(stack);
+                    if (!contains2(this.includedAll, stack)) this.includedAll.add(stack);
+                    if (contains2(this.negatedAll, stack)) this.negatedAll.remove(stack);
                 }
             }
 

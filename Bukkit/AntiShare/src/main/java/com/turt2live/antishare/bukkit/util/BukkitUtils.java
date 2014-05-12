@@ -166,6 +166,10 @@ public final class BukkitUtils {
                 return "interaction";
             case ITEM_USE:
                 return "item-use";
+            case ITEM_DROP:
+                return "drop";
+            case ITEM_PICKUP:
+                return "pickup";
             default:
                 return null;
         }

@@ -54,6 +54,16 @@ public class BukkitItem extends BukkitObject implements AItem {
     }
 
     @Override
+    public TrackedState canDrop(APlayer player) {
+        return permissionCheck(RejectionList.ListType.ITEM_DROP, player);
+    }
+
+    @Override
+    public TrackedState canPickup(APlayer player) {
+        return permissionCheck(RejectionList.ListType.ITEM_PICKUP, player);
+    }
+
+    @Override
     protected String getFriendlyName() {
         return AntiShare.getInstance().getMaterialProvider().getPlayerFriendlyName(stack);
     }

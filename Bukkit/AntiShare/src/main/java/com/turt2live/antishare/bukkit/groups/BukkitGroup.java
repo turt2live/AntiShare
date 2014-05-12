@@ -95,6 +95,8 @@ public class BukkitGroup extends Group {
                 ((CommandRejectionList) list).populate(rejectableCommands);
                 break;
             case ITEM_USE:
+            case ITEM_DROP:
+            case ITEM_PICKUP:
                 list = new BukkitItemList(type);
                 List<String> items = configuration.getStringList("lists." + configKey, new ArrayList<String>());
                 ((BukkitItemList) list).load(items);

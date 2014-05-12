@@ -36,6 +36,7 @@ import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.AItem;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.RejectableCommand;
 import com.turt2live.antishare.object.attribute.BlockType;
@@ -53,9 +54,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -557,6 +556,38 @@ public class EngineListener implements Listener {
 
         if (processGenericUse(event.getPlayer(), event.getItem())) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onItemDrop(PlayerDropItemEvent event) {
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        AItem item = new BukkitItem(event.getItemDrop().getItemStack());
+
+        if (engine.getEngine(player.getWorld().getName()).processItemDrop(player, item)) {
+            event.setCancelled(true);
+
+            String name = plugin.getMaterialProvider().getPlayerFriendlyName(event.getItemDrop().getItemStack());
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_DROP)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+            alert(Lang.NAUGHTY_ADMIN_DROP, player.getName(), name);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onItemPickup(PlayerPickupItemEvent event) {
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        AItem item = new BukkitItem(event.getItem().getItemStack());
+
+        if (engine.getEngine(player.getWorld().getName()).processItemPickup(player, item)) {
+            event.setCancelled(true);
+
+            String name = plugin.getMaterialProvider().getPlayerFriendlyName(event.getItem().getItemStack());
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PICKUP)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+            alert(Lang.NAUGHTY_ADMIN_PICKUP, player.getName(), name);
         }
     }
 

@@ -65,6 +65,8 @@ public class Lang {
     public static final String NAUGHTY_COMMAND = "naughty.command";
     public static final String NAUGHTY_INTERACTION = "naughty.interact";
     public static final String NAUGHTY_USE = "naughty.use";
+    public static final String NAUGHTY_DROP = "naughty.drop";
+    public static final String NAUGHTY_PICKUP = "naughty.pickup";
 
     // Naught admin alert strings
     public static final String NAUGHTY_ADMIN_PLACE = "naughty.admin.place";
@@ -72,6 +74,8 @@ public class Lang {
     public static final String NAUGHTY_ADMIN_COMMAND = "naughty.admin.command";
     public static final String NAUGHTY_ADMIN_INTERACTION = "naughty.admin.interact";
     public static final String NAUGHTY_ADMIN_USE = "naughty.admin.use";
+    public static final String NAUGHTY_ADMIN_DROP = "naughty.admin.drop";
+    public static final String NAUGHTY_ADMIN_PICKUP = "naughty.admin.pickup";
 
     // Help strings
     public static final String HELP_TITLE = "help.title";

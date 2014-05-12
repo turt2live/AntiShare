@@ -834,4 +834,80 @@ public final class WorldEngine {
             return true; // Rejected & no allow permission
         return false;
     }
+
+    /**
+     * Process an item drop initiated by a player. This will internally determine
+     * whether or not the player is allowed to drop the item and return 'true' to
+     * represent denial and 'false' to represent allowance.
+     *
+     * @param player the player dropping the item, cannot be null
+     * @param item   the item in question, cannot be null
+     *
+     * @return true for denial, false otherwise
+     */
+    public boolean processItemDrop(APlayer player, AItem item) {
+        if (player == null || item == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing player drop",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\titem = " + item);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ITEM_DROP);
+        ASGameMode playerGM = player.getGameMode();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
+        }
+
+        if (playerGM != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
+
+        // Check lists and permissions
+        TrackedState playerReaction = item.canDrop(player);
+        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+        if (reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT)
+            return true; // Rejected & no allow permission
+        return false;
+    }
+
+    /**
+     * Process an item throw initiated by a player. This will internally determine
+     * whether or not the player is allowed to throw the item and return 'true' to
+     * represent denial and 'false' to represent allowance.
+     *
+     * @param player the player throwing the item, cannot be null
+     * @param item   the item in question, cannot be null
+     *
+     * @return true for denial, false otherwise
+     */
+    public boolean processItemPickup(APlayer player, AItem item) {
+        if (player == null || item == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing player pickup",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\titem = " + item);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ITEM_PICKUP);
+        ASGameMode playerGM = player.getGameMode();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
+        }
+
+        if (playerGM != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
+
+        // Check lists and permissions
+        TrackedState playerReaction = item.canPickup(player);
+        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+        if (reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT)
+            return true; // Rejected & no allow permission
+        return false;
+    }
 }
