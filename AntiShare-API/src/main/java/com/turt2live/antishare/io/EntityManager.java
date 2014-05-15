@@ -19,7 +19,6 @@ package com.turt2live.antishare.io;
 
 import com.turt2live.antishare.object.attribute.ObjectType;
 
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -47,14 +46,6 @@ public interface EntityManager {
     public void setType(UUID uuid, ObjectType type);
 
     /**
-     * Gets all known entities being tracked. Edits to the returned map yield
-     * no results.
-     *
-     * @return a copy of all known entities being tracked
-     */
-    public Map<UUID, ObjectType> getAll();
-
-    /**
      * Saves all the known entities
      */
     public void save();
@@ -66,17 +57,7 @@ public interface EntityManager {
     public void load();
 
     /**
-     * Runs a cleanup (on the current thread) on the EntityManager. This will remove
-     * any excess objects which have not been touched from the manager by cleanly
-     * unloading them.
+     * Clears all records from memory, eliminating all records
      */
-    public void cleanup();
-
-    /**
-     * Gets the time (in milliseconds) this entity store was last accessed
-     *
-     * @return the last time this store was accessed
-     */
-    public long getLastAccess();
-
+    public void clear();
 }
