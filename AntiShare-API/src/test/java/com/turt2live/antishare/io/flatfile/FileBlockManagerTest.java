@@ -17,7 +17,7 @@
 
 package com.turt2live.antishare.io.flatfile;
 
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -67,7 +67,7 @@ public class FileBlockManagerTest {
         for (int i = 0; i < 100; i++) {
             int size = random.nextInt(100) + 1;
             FileBlockStore store = new FileBlockStore(new File(folder, i + ".dat"), 0, 0, 0, size);
-            store.setType(0, 0, 0, BlockType.ADVENTURE); // Required : FileBlockStore doesn't save nothing
+            store.setType(0, 0, 0, ObjectType.ADVENTURE); // Required : FileBlockStore doesn't save nothing
             store.save();
 
             if (size < expectedMin) expectedMin = size;

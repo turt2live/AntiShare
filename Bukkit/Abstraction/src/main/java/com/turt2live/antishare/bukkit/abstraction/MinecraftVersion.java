@@ -19,7 +19,7 @@ package com.turt2live.antishare.bukkit.abstraction;
 
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -155,6 +155,6 @@ public interface MinecraftVersion extends Listener {
      *
      * @return the block type
      */
-    public BlockType toBlockType(GameMode gamemode);
+    public ObjectType toBlockType(GameMode gamemode);
 
 }

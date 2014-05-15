@@ -27,7 +27,7 @@ import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
 import com.turt2live.antishare.object.*;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.TrackedState;
 import com.turt2live.antishare.utils.ASUtils;
@@ -147,7 +147,7 @@ public final class WorldEngine {
             placeAs = consolidatedGroup.getActingMode(placeAs);
         }
 
-        BlockType blockType = ASUtils.toBlockType(placeAs);
+        ObjectType objectType = ASUtils.toBlockType(placeAs);
 
         // Check rejection lists
         if (placeAs == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
@@ -159,11 +159,11 @@ public final class WorldEngine {
         }
 
         // Check for block type insertion
-        if (player.hasPermission(APermission.FREE_PLACE)) blockType = BlockType.UNKNOWN;
+        if (player.hasPermission(APermission.FREE_PLACE)) objectType = ObjectType.UNKNOWN;
 
         // Check for double chests
         ABlock.ChestType blockChest = block.getChestType();
-        ABlock additional = null; // Additional block to be assigned the BlockType
+        ABlock additional = null; // Additional block to be assigned the ObjectType
         switch (blockChest) {
             // They are double chests at this moment in time
             case DOUBLE_NORMAL:
@@ -191,15 +191,15 @@ public final class WorldEngine {
 
                 for (ABlock block1 : blocks) {
                     if (block1.getChestType() == blockChest) {
-                        BlockType type = blockManager.getBlockType(block1.getLocation());
-                        if (type != blockType && type != BlockType.UNKNOWN) {
+                        ObjectType type = blockManager.getBlockType(block1.getLocation());
+                        if (type != objectType && type != ObjectType.UNKNOWN) {
                             // Override deny action for mismatch gamemode on 'op-place'
-                            if (blockType == BlockType.UNKNOWN) {
+                            if (objectType == ObjectType.UNKNOWN) {
                                 additional = block1;
                                 break;
                             }
                             return true; // Mismatch gamemode
-                        } else if (type == BlockType.UNKNOWN) {
+                        } else if (type == ObjectType.UNKNOWN) {
                             additional = block1;
                             break; // We're done here, green condition check complete
                         }
@@ -213,8 +213,8 @@ public final class WorldEngine {
 
         // If we made it this far, the block is OK, so just add it and return
         if (list.isTracked(block) || additional != null) {
-            blockManager.setBlockType(block.getLocation(), blockType);
-            if (additional != null) blockManager.setBlockType(additional.getLocation(), blockType);
+            blockManager.setBlockType(block.getLocation(), objectType);
+            if (additional != null) blockManager.setBlockType(additional.getLocation(), objectType);
         }
 
         return false;
@@ -235,7 +235,7 @@ public final class WorldEngine {
      * @return returns true if the block break was rejected, false otherwise
      */
     // TODO: Unit test
-    public boolean processBlockBreak(APlayer player, ABlock block, ASGameMode breakAs, OutputParameter<List<ABlock>> additionalBreak, OutputParameter<BlockType> eventBreakAs) {
+    public boolean processBlockBreak(APlayer player, ABlock block, ASGameMode breakAs, OutputParameter<List<ABlock>> additionalBreak, OutputParameter<ObjectType> eventBreakAs) {
         if (player == null || block == null || breakAs == null) throw new IllegalArgumentException();
 
         DevEngine.log("[WorldEngine:" + worldName + "] Processing block break",
@@ -258,7 +258,7 @@ public final class WorldEngine {
             breakAs = consolidatedGroup.getActingMode(breakAs);
         }
 
-        BlockType blockType = ASUtils.toBlockType(breakAs);
+        ObjectType objectType = ASUtils.toBlockType(breakAs);
 
         // Check rejection lists
         if (breakAs == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
@@ -269,9 +269,9 @@ public final class WorldEngine {
             }
         }
 
-        BlockType blockType1 = blockManager.getBlockType(block.getLocation());
+        ObjectType objectType1 = blockManager.getBlockType(block.getLocation());
         if (!player.hasPermission(APermission.FREE_BREAK)) {
-            if (blockType1 != blockType && blockType1 != BlockType.UNKNOWN)
+            if (objectType1 != objectType && objectType1 != ObjectType.UNKNOWN)
                 return true; // Mixed gamemode
 
             List<ABlock> possibleAttachments = new ArrayList<ABlock>();
@@ -283,13 +283,13 @@ public final class WorldEngine {
 
             for (ABlock possibleAttachment : possibleAttachments) {
                 if (possibleAttachment.isAttached(block)) {
-                    BlockType attachType = blockManager.getBlockType(possibleAttachment.getLocation());
-                    if (attachType == BlockType.UNKNOWN) continue; // Let it break normally
+                    ObjectType attachType = blockManager.getBlockType(possibleAttachment.getLocation());
+                    if (attachType == ObjectType.UNKNOWN) continue; // Let it break normally
 
-                    if (Engine.getInstance().getFlag(Engine.CONFIG_MISMATCHED_ATTACHMENTS_DENY, true) && attachType != blockType1 && blockType1 != BlockType.UNKNOWN) {
+                    if (Engine.getInstance().getFlag(Engine.CONFIG_MISMATCHED_ATTACHMENTS_DENY, true) && attachType != objectType1 && objectType1 != ObjectType.UNKNOWN) {
                         return true; // As the owner wishes...
                     }
-                    if (Engine.getInstance().getFlag(Engine.CONFIG_BREAK_ATTACHMENTS_AS_PLACED, true) && attachType == BlockType.CREATIVE) { // TODO: Possible 'affect'?
+                    if (Engine.getInstance().getFlag(Engine.CONFIG_BREAK_ATTACHMENTS_AS_PLACED, true) && attachType == ObjectType.CREATIVE) { // TODO: Possible 'affect'?
                         additional.add(possibleAttachment);
                     }// Implementation has to handle the removal. IE: Fade or 'disappear'
                 }
@@ -297,10 +297,10 @@ public final class WorldEngine {
         }
 
         if (eventBreakAs != null) {
-            eventBreakAs.setValue(blockType1);
+            eventBreakAs.setValue(objectType1);
         }
 
-        blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
+        blockManager.setBlockType(block.getLocation(), ObjectType.UNKNOWN);
         return false; // Break was processed
     }
 
@@ -316,7 +316,7 @@ public final class WorldEngine {
         DevEngine.log("[WorldEngine:" + worldName + "] Processing block fade",
                 "[WorldEngine:" + worldName + "] \t\tblock = " + block);
 
-        blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
+        blockManager.setBlockType(block.getLocation(), ObjectType.UNKNOWN);
     }
 
     /**
@@ -336,7 +336,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tchild = " + child);
 
         if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_GROW_WITH_GAMEMODE, true)) {
-            BlockType current = blockManager.getBlockType(parent.getLocation());
+            ObjectType current = blockManager.getBlockType(parent.getLocation());
             blockManager.setBlockType(child.getLocation(), current);
         }
     }
@@ -346,7 +346,7 @@ public final class WorldEngine {
      * when (example) pumpkins are spawned with a pumpkin seed stem. This will
      * handle a single stem as expected but will perform a merge-like process
      * on multiple stem scenarios (such as multiple possible stems). This means
-     * that if there is a majority of a particular BlockType of stems, that block
+     * that if there is a majority of a particular ObjectType of stems, that block
      * type will be applied to the spawned block. This also means that if all stems
      * are of the same type (being none or otherwise), the spawned block will
      * inherit that type.
@@ -364,9 +364,9 @@ public final class WorldEngine {
 
         if (!Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_GROW_WITH_GAMEMODE, true)) return;
 
-        Map<BlockType, Integer> votes = new HashMap<BlockType, Integer>();
+        Map<ObjectType, Integer> votes = new HashMap<ObjectType, Integer>();
         for (ABlock stem : stems) {
-            BlockType type = blockManager.getBlockType(stem.getLocation());
+            ObjectType type = blockManager.getBlockType(stem.getLocation());
             int amount = votes.containsKey(type) ? votes.get(type) : 0;
             amount++;
             votes.put(type, amount);
@@ -374,14 +374,14 @@ public final class WorldEngine {
 
         // First check for all equal
         if (votes.size() == 0) {
-            blockManager.setBlockType(spawned.getLocation(), BlockType.UNKNOWN); // For sanity
+            blockManager.setBlockType(spawned.getLocation(), ObjectType.UNKNOWN); // For sanity
         } else if (votes.size() == 1) {
             blockManager.setBlockType(spawned.getLocation(), votes.keySet().iterator().next());
         } else {
-            BlockType highest = null;
+            ObjectType highest = null;
             int count = 0;
             boolean allSame = true;
-            for (Map.Entry<BlockType, Integer> vote : votes.entrySet()) {
+            for (Map.Entry<ObjectType, Integer> vote : votes.entrySet()) {
                 if (highest == null) {
                     highest = vote.getKey();
                     count = vote.getValue();
@@ -398,7 +398,7 @@ public final class WorldEngine {
             if (!allSame) {
                 blockManager.setBlockType(spawned.getLocation(), highest);
             } else {
-                blockManager.setBlockType(spawned.getLocation(), BlockType.UNKNOWN); // For sanity
+                blockManager.setBlockType(spawned.getLocation(), ObjectType.UNKNOWN); // For sanity
             }
         }
     }
@@ -420,9 +420,9 @@ public final class WorldEngine {
         DevEngine.log("[WorldEngine:" + worldName + "] Processing block physics (break)",
                 "[WorldEngine:" + worldName + "] \t\tblock = " + block);
 
-        BlockType current = blockManager.getBlockType(block.getLocation());
+        ObjectType current = blockManager.getBlockType(block.getLocation());
         if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true)) {
-            return current != BlockType.CREATIVE;
+            return current != ObjectType.CREATIVE;
         }
         return true;
     }
@@ -446,9 +446,9 @@ public final class WorldEngine {
             return; // Don't handle this if we aren't supposed to
 
         for (Map.Entry<ABlock, Boolean> entry : blocks.entrySet()) {
-            BlockType current = blockManager.getBlockType(entry.getKey().getLocation());
-            blockManager.setBlockType(entry.getKey().getLocation(), BlockType.UNKNOWN);
-            if (current == BlockType.CREATIVE) {
+            ObjectType current = blockManager.getBlockType(entry.getKey().getLocation());
+            blockManager.setBlockType(entry.getKey().getLocation(), ObjectType.UNKNOWN);
+            if (current == ObjectType.CREATIVE) {
                 entry.setValue(false); // Set flag off
             }
         }
@@ -465,19 +465,19 @@ public final class WorldEngine {
      * @return whether or not the resulting falling block should drop items (true for drop, false otherwise)
      */
     // TODO: Unit test
-    public boolean processFallingBlockSpawn(ABlock block, OutputParameter<BlockType> type) {
+    public boolean processFallingBlockSpawn(ABlock block, OutputParameter<ObjectType> type) {
         if (block == null) throw new IllegalArgumentException();
 
         DevEngine.log("[WorldEngine:" + worldName + "] Processing falling block spawn",
                 "[WorldEngine:" + worldName + "] \t\tblock = " + block,
                 "[WorldEngine:" + worldName + "] \t\ttype = " + type);
 
-        BlockType current = blockManager.getBlockType(block.getLocation());
-        blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
+        ObjectType current = blockManager.getBlockType(block.getLocation());
+        blockManager.setBlockType(block.getLocation(), ObjectType.UNKNOWN);
         if (type != null) {
             type.setValue(current);
         }
-        if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true) && current == BlockType.CREATIVE) {
+        if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true) && current == ObjectType.CREATIVE) {
             return false;
         }
         return true;
@@ -488,12 +488,12 @@ public final class WorldEngine {
      * into the block manager. Other checks may be performed.
      *
      * @param block the block location which is landing, cannot be null
-     * @param type  the block type, null is interpretted as {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}
+     * @param type  the block type, null is interpretted as {@link com.turt2live.antishare.object.attribute.ObjectType#UNKNOWN}
      */
     // TODO: Unit test
-    public void processFallingBlockLand(ABlock block, BlockType type) {
+    public void processFallingBlockLand(ABlock block, ObjectType type) {
         if (block == null) throw new IllegalArgumentException();
-        if (type == null) type = BlockType.UNKNOWN;
+        if (type == null) type = ObjectType.UNKNOWN;
 
         DevEngine.log("[WorldEngine:" + worldName + "] Processing falling block land",
                 "[WorldEngine:" + worldName + "] \t\tblock = " + block,
@@ -517,7 +517,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tsource = " + source,
                 "[WorldEngine:" + worldName + "] \t\tstructure = " + structure);
 
-        BlockType type = blockManager.getBlockType(source.getLocation());
+        ObjectType type = blockManager.getBlockType(source.getLocation());
         if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_GROW_WITH_GAMEMODE, true)) {
             for (ABlock block : structure) {
                 blockManager.setBlockType(block.getLocation(), type);
@@ -563,12 +563,12 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tblock1 = " + block1,
                 "[WorldEngine:" + worldName + "] \t\tblock2 = " + block2);
 
-        BlockType type1 = blockManager.getBlockType(block1.getLocation());
-        BlockType type2 = blockManager.getBlockType(block2.getLocation());
+        ObjectType type1 = blockManager.getBlockType(block1.getLocation());
+        ObjectType type2 = blockManager.getBlockType(block2.getLocation());
 
         if (!Engine.getInstance().getFlag(Engine.CONFIG_HOPPER_MISMATCH_INTERACTION, true)) return false;
 
-        if (type1 == type2 || type1 == BlockType.UNKNOWN || type2 == BlockType.UNKNOWN)
+        if (type1 == type2 || type1 == ObjectType.UNKNOWN || type2 == ObjectType.UNKNOWN)
             return true;
         else return false;
     }
@@ -613,24 +613,24 @@ public final class WorldEngine {
         if (blocks.isEmpty()) return true;
 
         BlockTypeTransaction transaction = new BlockTypeTransaction();
-        BlockType pistonType = blockManager.getBlockType(piston.getLocation());
-        if (pistonType != BlockType.UNKNOWN && Engine.getInstance().getFlag(Engine.CONFIG_PISTON_MISMATCH, true)) {
+        ObjectType pistonType = blockManager.getBlockType(piston.getLocation());
+        if (pistonType != ObjectType.UNKNOWN && Engine.getInstance().getFlag(Engine.CONFIG_PISTON_MISMATCH, true)) {
             // Now we have to check all the block types
             for (ABlock block : blocks) {
-                BlockType type = blockManager.getBlockType(block.getLocation());
-                if (type != BlockType.UNKNOWN && type != pistonType)
+                ObjectType type = blockManager.getBlockType(block.getLocation());
+                if (type != ObjectType.UNKNOWN && type != pistonType)
                     return false;  // Mismatch piston & block, deny
             }
         }
 
         // If we made it here, all we have to do is update the block types
         for (ABlock block : blocks) {
-            BlockType old = blockManager.getBlockType(block.getLocation());
+            ObjectType old = blockManager.getBlockType(block.getLocation());
             ASLocation newLocation = block.getRelative(direction).getLocation();
 
-            if (old == BlockType.UNKNOWN) continue; // Don't overwrite blocks (duplicate events in Bukkit)
+            if (old == ObjectType.UNKNOWN) continue; // Don't overwrite blocks (duplicate events in Bukkit)
 
-            blockManager.setBlockType(block.getLocation(), BlockType.UNKNOWN);
+            blockManager.setBlockType(block.getLocation(), ObjectType.UNKNOWN);
             transaction.add(newLocation, old);
         }
         transaction.commit(blockManager);
@@ -705,7 +705,7 @@ public final class WorldEngine {
                     playerGM = consolidatedGroup.getActingMode(playerGM);
                 }
 
-                if (blockManager.getBlockType(container.getLocation()) == BlockType.UNKNOWN) {
+                if (blockManager.getBlockType(container.getLocation()) == ObjectType.UNKNOWN) {
                     blockManager.setBlockType(container.getLocation(), ASUtils.toBlockType(playerGM));
                     if (container.getOtherChest() != null)
                         blockManager.setBlockType(container.getOtherChest().getLocation(), ASUtils.toBlockType(playerGM));
@@ -733,8 +733,8 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
                 "[WorldEngine:" + worldName + "] \t\tblock = " + block);
 
-        BlockType otherType = blockManager.getBlockType(block.getLocation());
-        BlockType interactAs = ASUtils.toBlockType(player.getGameMode());
+        ObjectType otherType = blockManager.getBlockType(block.getLocation());
+        ObjectType interactAs = ASUtils.toBlockType(player.getGameMode());
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
         RejectionList reject = new DefaultRejectionList(RejectionList.ListType.INTERACTION);
         ASGameMode playerGM = player.getGameMode();
@@ -773,11 +773,11 @@ public final class WorldEngine {
 
             if (block.isContainer()) {
                 if (!player.hasPermission(APermission.FREE_TOUCH)) {
-                    if (interactAs != otherType && otherType != BlockType.UNKNOWN) {
+                    if (interactAs != otherType && otherType != ObjectType.UNKNOWN) {
                         return true; // Inter-gamemode interaction, denied
                     }
 
-                    if (playerGM == ASGameMode.CREATIVE && otherType == BlockType.UNKNOWN) {
+                    if (playerGM == ASGameMode.CREATIVE && otherType == ObjectType.UNKNOWN) {
                         if (!Engine.getInstance().getFlag(Engine.CONFIG_INTERACT_NATURAL_CONTAINERS, false)) {
                             return true; // Creative players can't interact with natural containers
                         }

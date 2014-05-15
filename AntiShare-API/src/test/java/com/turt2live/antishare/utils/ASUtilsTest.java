@@ -18,7 +18,7 @@
 package com.turt2live.antishare.utils;
 
 import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -31,20 +31,20 @@ public class ASUtilsTest {
 
     @Test
     public void testToBlock() {
-        assertEquals(BlockType.ADVENTURE, ASUtils.toBlockType(ASGameMode.ADVENTURE));
-        assertEquals(BlockType.SURVIVAL, ASUtils.toBlockType(ASGameMode.SURVIVAL));
-        assertEquals(BlockType.CREATIVE, ASUtils.toBlockType(ASGameMode.CREATIVE));
-        assertEquals(BlockType.SPECTATOR, ASUtils.toBlockType(ASGameMode.SPECTATOR));
-        assertEquals(BlockType.UNKNOWN, ASUtils.toBlockType(null));
+        assertEquals(ObjectType.ADVENTURE, ASUtils.toBlockType(ASGameMode.ADVENTURE));
+        assertEquals(ObjectType.SURVIVAL, ASUtils.toBlockType(ASGameMode.SURVIVAL));
+        assertEquals(ObjectType.CREATIVE, ASUtils.toBlockType(ASGameMode.CREATIVE));
+        assertEquals(ObjectType.SPECTATOR, ASUtils.toBlockType(ASGameMode.SPECTATOR));
+        assertEquals(ObjectType.UNKNOWN, ASUtils.toBlockType(null));
     }
 
     @Test
     public void testToGamemode() {
-        assertEquals(ASGameMode.ADVENTURE, ASUtils.toGamemode(BlockType.ADVENTURE));
-        assertEquals(ASGameMode.SURVIVAL, ASUtils.toGamemode(BlockType.SURVIVAL));
-        assertEquals(ASGameMode.CREATIVE, ASUtils.toGamemode(BlockType.CREATIVE));
-        assertEquals(ASGameMode.SPECTATOR, ASUtils.toGamemode(BlockType.SPECTATOR));
-        assertNull(ASUtils.toGamemode(BlockType.UNKNOWN));
+        assertEquals(ASGameMode.ADVENTURE, ASUtils.toGamemode(ObjectType.ADVENTURE));
+        assertEquals(ASGameMode.SURVIVAL, ASUtils.toGamemode(ObjectType.SURVIVAL));
+        assertEquals(ASGameMode.CREATIVE, ASUtils.toGamemode(ObjectType.CREATIVE));
+        assertEquals(ASGameMode.SPECTATOR, ASUtils.toGamemode(ObjectType.SPECTATOR));
+        assertNull(ASUtils.toGamemode(ObjectType.UNKNOWN));
         assertNull(ASUtils.toGamemode(null));
     }
 

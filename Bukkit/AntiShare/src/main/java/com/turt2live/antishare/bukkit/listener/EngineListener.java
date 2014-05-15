@@ -39,7 +39,7 @@ import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.AItem;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.RejectableCommand;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.utils.OutputParameter;
 import org.bukkit.Bukkit;
@@ -118,7 +118,7 @@ public class EngineListener implements Listener {
         ASGameMode gameMode = player.getGameMode();
 
         OutputParameter<List<ABlock>> additionalBreak = new OutputParameter<List<ABlock>>();
-        OutputParameter<BlockType> breakAs = new OutputParameter<BlockType>();
+        OutputParameter<ObjectType> breakAs = new OutputParameter<ObjectType>();
         if (engine.getEngine(block.getWorld().getName()).processBlockBreak(player, block, gameMode, additionalBreak, breakAs)) {
             event.setCancelled(true);
 
@@ -126,7 +126,7 @@ public class EngineListener implements Listener {
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_BREAK)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
             alert(Lang.NAUGHTY_ADMIN_BREAK, event.getPlayer().getName(), blockType);
         } else if (additionalBreak.hasValue()) {
-            if (breakAs.hasValue() && breakAs.getValue() == BlockType.CREATIVE) {
+            if (breakAs.hasValue() && breakAs.getValue() == ObjectType.CREATIVE) {
                 event.getBlock().getDrops().clear(); // Yea, fuck you.
                 event.setExpToDrop(0);
             }
@@ -188,17 +188,17 @@ public class EngineListener implements Listener {
             FallingBlock entity = (FallingBlock) eventEntity;
             if (event.getTo() == Material.AIR) {
                 // Spawning
-                OutputParameter<BlockType> current = new OutputParameter<BlockType>(BlockType.UNKNOWN);
+                OutputParameter<ObjectType> current = new OutputParameter<ObjectType>(ObjectType.UNKNOWN);
                 if (!engine.processFallingBlockSpawn(new BukkitBlock(event.getBlock()), current)) {
                     entity.setDropItem(false);
                 }
                 entity.setMetadata("ANTISHARE_SAND", new FixedMetadataValue(plugin, current.getValue()));
             } else {
                 // Landing
-                BlockType previous = BlockType.UNKNOWN;
+                ObjectType previous = ObjectType.UNKNOWN;
                 if (entity.hasMetadata("ANTISHARE_SAND")) {
                     try {
-                        previous = (BlockType) entity.getMetadata("ANTISHARE_SAND").get(0).value();
+                        previous = (ObjectType) entity.getMetadata("ANTISHARE_SAND").get(0).value();
                     } catch (Exception e) { // I'm lazy
                     }
                 }

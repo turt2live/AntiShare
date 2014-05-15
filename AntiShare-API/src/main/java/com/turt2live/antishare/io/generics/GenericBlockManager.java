@@ -21,7 +21,7 @@ import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -85,15 +85,15 @@ public abstract class GenericBlockManager implements BlockManager {
     }
 
     @Override
-    public void setBlockType(int x, int y, int z, BlockType type) {
+    public void setBlockType(int x, int y, int z, ObjectType type) {
         setBlockType(new ASLocation(x, y, z), type);
     }
 
     @Override
-    public void setBlockType(ASLocation location, BlockType type) {
+    public void setBlockType(ASLocation location, ObjectType type) {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
-        if (type == null) type = BlockType.UNKNOWN;
+        if (type == null) type = ObjectType.UNKNOWN;
 
         BlockStore store = getStore(location);
         if (store != null)
@@ -101,16 +101,16 @@ public abstract class GenericBlockManager implements BlockManager {
     }
 
     @Override
-    public BlockType getBlockType(int x, int y, int z) {
+    public ObjectType getBlockType(int x, int y, int z) {
         return getBlockType(new ASLocation(x, y, z));
     }
 
     @Override
-    public BlockType getBlockType(ASLocation location) {
+    public ObjectType getBlockType(ASLocation location) {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
         BlockStore store = getStore(location);
-        if (store == null) return BlockType.UNKNOWN;
+        if (store == null) return ObjectType.UNKNOWN;
 
         return store.getType(location);
     }

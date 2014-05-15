@@ -20,7 +20,7 @@ package com.turt2live.antishare.io.flatfile;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.generics.GenericBlockStore;
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,10 +63,10 @@ import java.util.concurrent.ConcurrentMap;
  * (X, Y, or Z) by the block size.
  * <br/><br/>
  * After the header is continuous data representing block information. The block
- * information consists of a byte flag for the {@link com.turt2live.antishare.object.attribute.BlockType} and 3 4 byte integers
+ * information consists of a byte flag for the {@link com.turt2live.antishare.object.attribute.ObjectType} and 3 4 byte integers
  * for the location of the block (13 bytes total). The data is formatted as flag, block X,
  * block Y, block Z with no leading or trailing bits. The methods {@link #byteToType(byte)}
- * and {@link #typeToByte(com.turt2live.antishare.object.attribute.BlockType)} can be used to convert
+ * and {@link #typeToByte(com.turt2live.antishare.object.attribute.ObjectType)} can be used to convert
  * between the byte flag and block type.
  * <br/><br/>
  * This type of data store is designed to be used with the {@link FileBlockManager}
@@ -158,10 +158,10 @@ public class FileBlockStore extends GenericBlockStore {
             out.putInt(header[3]);
 
             // Write blocks
-            ConcurrentMap<ASLocation, BlockType> blocks = getLiveMap();
-            for (Map.Entry<ASLocation, BlockType> entry : blocks.entrySet()) {
+            ConcurrentMap<ASLocation, ObjectType> blocks = getLiveMap();
+            for (Map.Entry<ASLocation, ObjectType> entry : blocks.entrySet()) {
                 // Don't save "unknown" or otherwise "free" blocks
-                if (entry.getValue() != BlockType.UNKNOWN) {
+                if (entry.getValue() != ObjectType.UNKNOWN) {
                     byte typeByte = typeToByte(entry.getValue());
                     ASLocation location = entry.getKey();
 
@@ -197,7 +197,7 @@ public class FileBlockStore extends GenericBlockStore {
             // Read blocks
             while (in.remaining() >= 13) {
                 byte gmbyte = in.get();
-                BlockType type = byteToType(gmbyte);
+                ObjectType type = byteToType(gmbyte);
                 int x = in.getInt();
                 int y = in.getInt();
                 int z = in.getInt();
@@ -218,8 +218,8 @@ public class FileBlockStore extends GenericBlockStore {
                     engine.getLogger().severe("    GameMode Byte = " + Integer.toHexString(gmbyte));
                     engine.getLogger().severe("Please ensure that the file you have saved is supported by your version of AntiShare.");
                 } else {
-                    BlockType previous = getType(x, y, z);
-                    if (previous != BlockType.UNKNOWN && previous != type) {
+                    ObjectType previous = getType(x, y, z);
+                    if (previous != ObjectType.UNKNOWN && previous != type) {
                         // Duplicate entry - Print out both to console and save latest
                         // Note: The above check also ensures the previous type is not the same
                         // as the new type. This is because the data hasn't changed otherwise,
@@ -249,7 +249,7 @@ public class FileBlockStore extends GenericBlockStore {
     }
 
     @Override
-    public BlockType getType(ASLocation location) {
+    public ObjectType getType(ASLocation location) {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
         // Validate block size range
@@ -264,7 +264,7 @@ public class FileBlockStore extends GenericBlockStore {
     }
 
     @Override
-    public void setType(ASLocation location, BlockType type) {
+    public void setType(ASLocation location, ObjectType type) {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
         // Validate block size range
@@ -308,12 +308,12 @@ public class FileBlockStore extends GenericBlockStore {
     /**
      * Converts a block type to a byte flag
      *
-     * @param type the type to convert. Null is assumed to be {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}
+     * @param type the type to convert. Null is assumed to be {@link com.turt2live.antishare.object.attribute.ObjectType#UNKNOWN}
      *
      * @return the byte flag representation of the block type
      */
-    public static byte typeToByte(BlockType type) {
-        if (type == null) type = BlockType.UNKNOWN;
+    public static byte typeToByte(ObjectType type) {
+        if (type == null) type = ObjectType.UNKNOWN;
         switch (type) {
             case CREATIVE:
                 return 0x01;
@@ -333,22 +333,22 @@ public class FileBlockStore extends GenericBlockStore {
     /**
      * Converts a byte flag to a block type
      *
-     * @param type the byte flag to convert. Unknown values return {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}
+     * @param type the byte flag to convert. Unknown values return {@link com.turt2live.antishare.object.attribute.ObjectType#UNKNOWN}
      *
      * @return the block type, never null
      */
-    public static BlockType byteToType(byte type) {
+    public static ObjectType byteToType(byte type) {
         switch (type) {
             case 0x01:
-                return BlockType.CREATIVE;
+                return ObjectType.CREATIVE;
             case 0x02:
-                return BlockType.SURVIVAL;
+                return ObjectType.SURVIVAL;
             case 0x03:
-                return BlockType.ADVENTURE;
+                return ObjectType.ADVENTURE;
             case 0x04:
-                return BlockType.SPECTATOR;
+                return ObjectType.SPECTATOR;
             case 0x05:
-                return BlockType.UNKNOWN;
+                return ObjectType.UNKNOWN;
             default:
                 return null;
         }

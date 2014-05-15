@@ -22,7 +22,7 @@ package com.turt2live.antishare.object.attribute;
  *
  * @author turt2live
  */
-public enum BlockType {
+public enum ObjectType {
     /**
      * Creative mode block
      */

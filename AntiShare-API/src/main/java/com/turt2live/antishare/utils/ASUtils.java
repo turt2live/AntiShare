@@ -18,7 +18,7 @@
 package com.turt2live.antishare.utils;
 
 import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 
 /**
  * Various AntiShare utilities
@@ -28,40 +28,40 @@ import com.turt2live.antishare.object.attribute.BlockType;
 public final class ASUtils {
 
     /**
-     * Converts an AntiShare GameMode to a BlockType. If the passed gamemode
-     * is null, this returns {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}.
+     * Converts an AntiShare GameMode to a ObjectType. If the passed gamemode
+     * is null, this returns {@link com.turt2live.antishare.object.attribute.ObjectType#UNKNOWN}.
      *
      * @param gamemode the gamemode
      *
      * @return the block type
      */
-    public static BlockType toBlockType(ASGameMode gamemode) {
-        if (gamemode == null) return BlockType.UNKNOWN;
+    public static ObjectType toBlockType(ASGameMode gamemode) {
+        if (gamemode == null) return ObjectType.UNKNOWN;
 
         switch (gamemode) {
             case ADVENTURE:
-                return BlockType.ADVENTURE;
+                return ObjectType.ADVENTURE;
             case SURVIVAL:
-                return BlockType.SURVIVAL;
+                return ObjectType.SURVIVAL;
             case CREATIVE:
-                return BlockType.CREATIVE;
+                return ObjectType.CREATIVE;
             case SPECTATOR:
-                return BlockType.SPECTATOR;
+                return ObjectType.SPECTATOR;
             default:
-                return BlockType.UNKNOWN;
+                return ObjectType.UNKNOWN;
         }
     }
 
     /**
-     * Converts an AntiShare BlockType to a GameMode. If the passed
-     * block type is null or {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}, this
+     * Converts an AntiShare ObjectType to a GameMode. If the passed
+     * block type is null or {@link com.turt2live.antishare.object.attribute.ObjectType#UNKNOWN}, this
      * returns null.
      *
      * @param type the block type
      *
      * @return the gamemode
      */
-    public static ASGameMode toGamemode(BlockType type) {
+    public static ASGameMode toGamemode(ObjectType type) {
         if (type == null) return null;
 
         switch (type) {

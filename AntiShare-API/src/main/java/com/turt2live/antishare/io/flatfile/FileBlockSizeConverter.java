@@ -20,7 +20,7 @@ package com.turt2live.antishare.io.flatfile;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 
 import java.io.File;
 import java.util.List;
@@ -71,13 +71,13 @@ public class FileBlockSizeConverter {
         List<BlockStore> stores = managerFrom.loadAll();
 
         for (BlockStore store : stores) {
-            Map<ASLocation, BlockType> types = store.getAll();
-            for (Map.Entry<ASLocation, BlockType> entry : types.entrySet()) {
+            Map<ASLocation, ObjectType> types = store.getAll();
+            for (Map.Entry<ASLocation, ObjectType> entry : types.entrySet()) {
                 ASLocation location = entry.getKey();
-                BlockType type = entry.getValue();
+                ObjectType type = entry.getValue();
 
-                BlockType existing = managerTo.getBlockType(location);
-                if (existing != type && existing != BlockType.UNKNOWN) {
+                ObjectType existing = managerTo.getBlockType(location);
+                if (existing != type && existing != ObjectType.UNKNOWN) {
                     Engine.getInstance().getLogger().warning("Duplicate found at " + location.toString() + ", ignoring");
                 } else {
                     managerTo.setBlockType(location, type);

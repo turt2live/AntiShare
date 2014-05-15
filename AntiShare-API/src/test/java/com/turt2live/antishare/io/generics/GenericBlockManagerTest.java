@@ -21,7 +21,7 @@ import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.BlockStore;
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -107,19 +107,19 @@ public class GenericBlockManagerTest {
     @Test
     public void testSetBlock() {
         // int, int, int should forward to ASLocation methods
-        manager.setBlockType(0, 0, 0, BlockType.ADVENTURE);
-        verify(store, times(1)).setType(any(ASLocation.class), eq(BlockType.ADVENTURE));
+        manager.setBlockType(0, 0, 0, ObjectType.ADVENTURE);
+        verify(store, times(1)).setType(any(ASLocation.class), eq(ObjectType.ADVENTURE));
         manager.setBlockType(0, 0, 0, null);
-        verify(store, times(1)).setType(any(ASLocation.class), eq(BlockType.UNKNOWN));
-        manager.setBlockType(0, 0, 0, BlockType.UNKNOWN);
-        verify(store, times(2)).setType(any(ASLocation.class), eq(BlockType.UNKNOWN));
+        verify(store, times(1)).setType(any(ASLocation.class), eq(ObjectType.UNKNOWN));
+        manager.setBlockType(0, 0, 0, ObjectType.UNKNOWN);
+        verify(store, times(2)).setType(any(ASLocation.class), eq(ObjectType.UNKNOWN));
 
-        manager.setBlockType(new ASLocation(0, 0, 0), BlockType.ADVENTURE);
-        verify(store, times(2)).setType(any(ASLocation.class), eq(BlockType.ADVENTURE));
+        manager.setBlockType(new ASLocation(0, 0, 0), ObjectType.ADVENTURE);
+        verify(store, times(2)).setType(any(ASLocation.class), eq(ObjectType.ADVENTURE));
         manager.setBlockType(new ASLocation(0, 0, 0), null);
-        verify(store, times(3)).setType(any(ASLocation.class), eq(BlockType.UNKNOWN));
-        manager.setBlockType(new ASLocation(0, 0, 0), BlockType.UNKNOWN);
-        verify(store, times(4)).setType(any(ASLocation.class), eq(BlockType.UNKNOWN));
+        verify(store, times(3)).setType(any(ASLocation.class), eq(ObjectType.UNKNOWN));
+        manager.setBlockType(new ASLocation(0, 0, 0), ObjectType.UNKNOWN);
+        verify(store, times(4)).setType(any(ASLocation.class), eq(ObjectType.UNKNOWN));
     }
 
     @Test
@@ -172,7 +172,7 @@ public class GenericBlockManagerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullSetType() {
-        manager.setBlockType(null, BlockType.ADVENTURE); // Null block type tested elsewhere
+        manager.setBlockType(null, ObjectType.ADVENTURE); // Null block type tested elsewhere
     }
 
     @BeforeClass

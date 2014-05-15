@@ -18,7 +18,7 @@
 package com.turt2live.antishare.io.generics;
 
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,48 +40,48 @@ public class GenericBlockStoreTest {
     @Test
     public void testSetGet() {
         reset(store);
-        store.setType(0, 0, 0, BlockType.ADVENTURE);
-        verify(store).setType(any(ASLocation.class), eq(BlockType.ADVENTURE));
-        BlockType type = store.getType(0, 0, 0);
+        store.setType(0, 0, 0, ObjectType.ADVENTURE);
+        verify(store).setType(any(ASLocation.class), eq(ObjectType.ADVENTURE));
+        ObjectType type = store.getType(0, 0, 0);
         verify(store).getType(any(ASLocation.class));
-        assertEquals(BlockType.ADVENTURE, type);
+        assertEquals(ObjectType.ADVENTURE, type);
 
         reset(store);
-        store.setType(new ASLocation(0, 0, 2), BlockType.CREATIVE);
-        assertEquals(BlockType.CREATIVE, store.getType(new ASLocation(0, 0, 2)));
+        store.setType(new ASLocation(0, 0, 2), ObjectType.CREATIVE);
+        assertEquals(ObjectType.CREATIVE, store.getType(new ASLocation(0, 0, 2)));
 
-        assertEquals(BlockType.UNKNOWN, store.getType(new ASLocation(0, 2, 3)));
+        assertEquals(ObjectType.UNKNOWN, store.getType(new ASLocation(0, 2, 3)));
     }
 
     @Test
     public void testOverwrite() {
-        store.setType(new ASLocation(0, 9, 9), BlockType.CREATIVE);
-        assertEquals(BlockType.CREATIVE, store.getType(new ASLocation(0, 9, 9)));
-        store.setType(new ASLocation(0, 9, 9), BlockType.SURVIVAL);
-        assertEquals(BlockType.SURVIVAL, store.getType(new ASLocation(0, 9, 9)));
+        store.setType(new ASLocation(0, 9, 9), ObjectType.CREATIVE);
+        assertEquals(ObjectType.CREATIVE, store.getType(new ASLocation(0, 9, 9)));
+        store.setType(new ASLocation(0, 9, 9), ObjectType.SURVIVAL);
+        assertEquals(ObjectType.SURVIVAL, store.getType(new ASLocation(0, 9, 9)));
         store.setType(new ASLocation(0, 9, 9), null);
-        assertEquals(BlockType.UNKNOWN, store.getType(new ASLocation(0, 9, 9)));
-        store.setType(new ASLocation(0, 9, 9), BlockType.SPECTATOR);
-        assertEquals(BlockType.SPECTATOR, store.getType(new ASLocation(0, 9, 9)));
-        store.setType(new ASLocation(0, 9, 9), BlockType.UNKNOWN);
-        assertEquals(BlockType.UNKNOWN, store.getType(new ASLocation(0, 9, 9)));
+        assertEquals(ObjectType.UNKNOWN, store.getType(new ASLocation(0, 9, 9)));
+        store.setType(new ASLocation(0, 9, 9), ObjectType.SPECTATOR);
+        assertEquals(ObjectType.SPECTATOR, store.getType(new ASLocation(0, 9, 9)));
+        store.setType(new ASLocation(0, 9, 9), ObjectType.UNKNOWN);
+        assertEquals(ObjectType.UNKNOWN, store.getType(new ASLocation(0, 9, 9)));
     }
 
     @Test
     public void testClearGetALl() {
-        store.setType(new ASLocation(0, 2, 2), BlockType.SPECTATOR);
-        assertEquals(BlockType.SPECTATOR, store.getType(new ASLocation(0, 2, 2)));
+        store.setType(new ASLocation(0, 2, 2), ObjectType.SPECTATOR);
+        assertEquals(ObjectType.SPECTATOR, store.getType(new ASLocation(0, 2, 2)));
         store.clear();
-        assertEquals(BlockType.UNKNOWN, store.getType(new ASLocation(0, 2, 2)));
+        assertEquals(ObjectType.UNKNOWN, store.getType(new ASLocation(0, 2, 2)));
 
-        ConcurrentMap<ASLocation, BlockType> map = store.getLiveMap();
-        Map<ASLocation, BlockType> map2 = store.getAll();
+        ConcurrentMap<ASLocation, ObjectType> map = store.getLiveMap();
+        Map<ASLocation, ObjectType> map2 = store.getAll();
         assertNotNull(map);
         assertEquals(0, map.size());
         assertNotNull(map2);
         assertEquals(0, map2.size());
 
-        store.setType(new ASLocation(0, 0, 0), BlockType.SPECTATOR);
+        store.setType(new ASLocation(0, 0, 0), ObjectType.SPECTATOR);
         map = store.getLiveMap();
         map2 = store.getAll();
         assertNotNull(map);
@@ -89,7 +89,7 @@ public class GenericBlockStoreTest {
         assertNotNull(map2);
         assertEquals(1, map2.size());
 
-        store.setType(new ASLocation(0, 0, 0), BlockType.UNKNOWN);
+        store.setType(new ASLocation(0, 0, 0), ObjectType.UNKNOWN);
         map = store.getLiveMap();
         map2 = store.getAll();
         assertNotNull(map);
@@ -106,7 +106,7 @@ public class GenericBlockStoreTest {
         long curr = System.currentTimeMillis();
         while (curr == System.currentTimeMillis()) ;
 
-        store.setType(0, 0, 0, BlockType.UNKNOWN);
+        store.setType(0, 0, 0, ObjectType.UNKNOWN);
         assertTrue(last < store.getLastAccess());
         last = store.getLastAccess();
 
@@ -155,7 +155,7 @@ public class GenericBlockStoreTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullSet() {
-        store.setType(null, BlockType.ADVENTURE); // null block type tested elsewhere
+        store.setType(null, ObjectType.ADVENTURE); // null block type tested elsewhere
     }
 
     @BeforeClass

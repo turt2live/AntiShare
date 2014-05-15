@@ -17,7 +17,7 @@
 
 package com.turt2live.antishare.io.flatfile;
 
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -38,18 +38,18 @@ public class FileBlockStoreTest {
 
     private static File folder;
     private static File testFile1;
-    private static BlockType[][][] expected;
+    private static ObjectType[][][] expected;
 
     @Test
     public void aTestWrite() {
         FileBlockStore store = new FileBlockStore(testFile1, 10, 11, 12, 60);
         Random random = new Random();
-        BlockType[] types = BlockType.values();
-        expected = new BlockType[60][60][60];
+        ObjectType[] types = ObjectType.values();
+        expected = new ObjectType[60][60][60];
         for (int x = 0; x < 60; x++)
             for (int y = 0; y < 60; y++)
                 for (int z = 0; z < 60; z++) {
-                    BlockType type = types[random.nextInt(types.length)];
+                    ObjectType type = types[random.nextInt(types.length)];
                     store.setType(600 + x, 660 + y, 720 + z, type);
                     expected[x][y][z] = type;
                 }
@@ -88,7 +88,7 @@ public class FileBlockStoreTest {
     public void dTestWriteOverflow() {
         // Intentionally try to write past the block size
         FileBlockStore store = new FileBlockStore(testFile1, 10, 11, 12, 60);
-        store.setType(6000, 6600, 7200, BlockType.ADVENTURE);
+        store.setType(6000, 6600, 7200, ObjectType.ADVENTURE);
         store.save();
     }
 
@@ -103,7 +103,7 @@ public class FileBlockStoreTest {
     public void fTestWriteUnderflow() {
         // Intentionally try to write below the block size
         FileBlockStore store = new FileBlockStore(testFile1, 10, 11, 12, 60);
-        store.setType(1, 1, 1, BlockType.CREATIVE);
+        store.setType(1, 1, 1, ObjectType.CREATIVE);
         store.save();
     }
 
@@ -111,7 +111,7 @@ public class FileBlockStoreTest {
     public void gTestReadOverflow() {
         // Intentionally try to read under the block size
         FileBlockStore store = new FileBlockStore(testFile1, 10, 11, 12, 60);
-        BlockType[] types = BlockType.values();
+        ObjectType[] types = ObjectType.values();
         store.getType(-1, -1, -1);
     }
 

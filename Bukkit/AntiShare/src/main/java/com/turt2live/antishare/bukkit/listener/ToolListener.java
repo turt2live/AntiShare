@@ -23,7 +23,7 @@ import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.engine.DevEngine;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import com.turt2live.antishare.utils.ASUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -94,8 +94,8 @@ public class ToolListener implements Listener {
             if (hand.isSimilar(CHECK_TEMPLATE)) {
                 event.setCancelled(true);
 
-                BlockType type = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
-                String strRep = ASUtils.toUpperWords(type == BlockType.UNKNOWN ? "Natural" : type.name());
+                ObjectType type = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
+                String strRep = ASUtils.toUpperWords(type == ObjectType.UNKNOWN ? "Natural" : type.name());
 
                 player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_CHECK))
                         .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
@@ -126,10 +126,10 @@ public class ToolListener implements Listener {
                             "[Tools] \t\tRClick: " + rclick,
                             "[Tools] \t\tResult: to " + player.getGameMode() + " (" + strRep + ")");
                 } else {
-                    BlockType previous = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
-                    String strRep = ASUtils.toUpperWords(previous == BlockType.UNKNOWN ? "Natural" : previous.name());
+                    ObjectType previous = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
+                    String strRep = ASUtils.toUpperWords(previous == ObjectType.UNKNOWN ? "Natural" : previous.name());
 
-                    BukkitUtils.getBlockManager(player.getWorld()).setBlockType(BukkitUtils.toLocation(block.getLocation()), BlockType.UNKNOWN);
+                    BukkitUtils.getBlockManager(player.getWorld()).setBlockType(BukkitUtils.toLocation(block.getLocation()), ObjectType.UNKNOWN);
 
                     player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_UNSET))
                             .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
@@ -158,8 +158,8 @@ public class ToolListener implements Listener {
             if (hand.isSimilar(CHECK_TEMPLATE_BLOCK)) {
                 event.setCancelled(true);
 
-                BlockType type = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
-                String strRep = ASUtils.toUpperWords(type == BlockType.UNKNOWN ? "Natural" : type.name());
+                ObjectType type = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
+                String strRep = ASUtils.toUpperWords(type == ObjectType.UNKNOWN ? "Natural" : type.name());
 
                 player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_CHECK))
                         .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)

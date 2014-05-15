@@ -19,7 +19,7 @@ package com.turt2live.antishare.utils;
 
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class BlockTypeTransaction {
 
-    private Map<ASLocation, BlockType> types = new HashMap<ASLocation, BlockType>();
+    private Map<ASLocation, ObjectType> types = new HashMap<ASLocation, ObjectType>();
 
     /**
      * Adds a location to this transaction
@@ -45,9 +45,9 @@ public class BlockTypeTransaction {
      * @param location the location to process, cannot be null
      * @param type     the block type being set. Null equates to UNKNOWN
      */
-    public void add(ASLocation location, BlockType type) {
+    public void add(ASLocation location, ObjectType type) {
         if (location == null) throw new IllegalArgumentException();
-        types.put(location, type == null ? BlockType.UNKNOWN : type);
+        types.put(location, type == null ? ObjectType.UNKNOWN : type);
     }
 
     /**
@@ -60,12 +60,12 @@ public class BlockTypeTransaction {
      * @param location the location to process, cannot be null
      * @param type     the block type being set. Null equates to UNKNOWN
      */
-    public void safeAdd(ASLocation location, BlockType type) {
+    public void safeAdd(ASLocation location, ObjectType type) {
         if (location == null) throw new IllegalArgumentException();
 
-        BlockType existing = types.containsKey(location) ? types.get(location) : BlockType.UNKNOWN;
+        ObjectType existing = types.containsKey(location) ? types.get(location) : ObjectType.UNKNOWN;
 
-        if (existing == BlockType.UNKNOWN) {
+        if (existing == ObjectType.UNKNOWN) {
             add(location, type);
         }
     }
@@ -81,7 +81,7 @@ public class BlockTypeTransaction {
     public void commit(BlockManager manager) {
         if (manager == null) throw new IllegalArgumentException();
 
-        for (Map.Entry<ASLocation, BlockType> entry : types.entrySet()) {
+        for (Map.Entry<ASLocation, ObjectType> entry : types.entrySet()) {
             manager.setBlockType(entry.getKey(), entry.getValue());
         }
 

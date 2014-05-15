@@ -17,7 +17,7 @@
 
 package com.turt2live.antishare.io;
 
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 
 import java.util.Map;
 import java.util.UUID;
@@ -36,7 +36,7 @@ public interface EntityManager {
      *
      * @return the type of entity, never null
      */
-    public BlockType getType(UUID uuid);
+    public ObjectType getType(UUID uuid);
 
     /**
      * Sets the type of an entity in the internal cache
@@ -44,7 +44,7 @@ public interface EntityManager {
      * @param uuid the entity UUID, cannot be null
      * @param type the entity type, null is interpreted as UNKNOWN
      */
-    public void setType(UUID uuid, BlockType type);
+    public void setType(UUID uuid, ObjectType type);
 
     /**
      * Gets all known entities being tracked. Edits to the returned map yield
@@ -52,7 +52,7 @@ public interface EntityManager {
      *
      * @return a copy of all known entities being tracked
      */
-    public Map<UUID, BlockType> getAll();
+    public Map<UUID, ObjectType> getAll();
 
     /**
      * Saves all the known entities

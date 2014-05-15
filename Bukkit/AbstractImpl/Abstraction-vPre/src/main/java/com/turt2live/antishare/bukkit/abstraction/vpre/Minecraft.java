@@ -21,7 +21,7 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.abstraction.MinecraftVersion;
 import com.turt2live.antishare.bukkit.abstraction.util.UUIDServiceProvider;
 import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -294,17 +294,17 @@ public class Minecraft implements MinecraftVersion {
     }
 
     @Override
-    public BlockType toBlockType(GameMode gamemode) {
-        if (gamemode == null) return BlockType.UNKNOWN;
+    public ObjectType toBlockType(GameMode gamemode) {
+        if (gamemode == null) return ObjectType.UNKNOWN;
         switch (gamemode) {
             case ADVENTURE:
-                return BlockType.ADVENTURE;
+                return ObjectType.ADVENTURE;
             case SURVIVAL:
-                return BlockType.SURVIVAL;
+                return ObjectType.SURVIVAL;
             case CREATIVE:
-                return BlockType.CREATIVE;
+                return ObjectType.CREATIVE;
             default:
-                return BlockType.UNKNOWN;
+                return ObjectType.UNKNOWN;
         }
     }
 

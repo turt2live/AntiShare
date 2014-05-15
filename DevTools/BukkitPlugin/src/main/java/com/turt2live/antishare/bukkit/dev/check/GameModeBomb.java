@@ -21,14 +21,14 @@ import com.turt2live.antishare.bukkit.dev.AntiShare;
 import com.turt2live.antishare.bukkit.dev.CheckBase;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class GameModeBomb extends CheckBase {
 
     private ASLocation start;
-    private BlockType[] values = new BlockType[] {BlockType.CREATIVE, BlockType.SURVIVAL, BlockType.ADVENTURE, BlockType.SPECTATOR};
+    private ObjectType[] values = new ObjectType[] {ObjectType.CREATIVE, ObjectType.SURVIVAL, ObjectType.ADVENTURE, ObjectType.SPECTATOR};
 
     public GameModeBomb(AntiShare plugin, ASLocation start) {
         super(plugin);
@@ -45,7 +45,7 @@ public class GameModeBomb extends CheckBase {
             for (int z = -bombRadius; z < bombRadius; z++) {
                 for (int y = 0; y < 256; y++) {
                     ASLocation offset = new ASLocation(start.X + x, y, start.Z + z);
-                    BlockType type = values[AntiShare.RANDOM.nextInt(values.length)];
+                    ObjectType type = values[AntiShare.RANDOM.nextInt(values.length)];
                     Engine.getInstance().getEngine(world).getBlockManager().setBlockType(offset, type);
 
                     switch (type) {

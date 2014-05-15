@@ -19,7 +19,7 @@ package com.turt2live.antishare.utils;
 
 import com.turt2live.antishare.io.BlockManager;
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -38,18 +38,18 @@ public class BlockTypeTransactionTest {
         BlockTypeTransaction transaction = new BlockTypeTransaction();
         BlockManager manager = mock(BlockManager.class);
 
-        Map<ASLocation, BlockType> typeMap = new HashMap<ASLocation, BlockType>();
+        Map<ASLocation, ObjectType> typeMap = new HashMap<ASLocation, ObjectType>();
 
         for (int i = 0; i < 100; i++) {
             ASLocation location = mock(ASLocation.class);
-            BlockType type = BlockType.CREATIVE;
+            ObjectType type = ObjectType.CREATIVE;
 
             transaction.add(location, type);
             typeMap.put(location, type);
         }
 
         transaction.commit(manager);
-        verify(manager, times(typeMap.size())).setBlockType(any(ASLocation.class), any(BlockType.class));
+        verify(manager, times(typeMap.size())).setBlockType(any(ASLocation.class), any(ObjectType.class));
 
         // Safe add begin
 
@@ -59,16 +59,16 @@ public class BlockTypeTransactionTest {
 
         for (int i = 0; i < 100; i++) {
             ASLocation location = mock(ASLocation.class);
-            BlockType type = BlockType.CREATIVE;
+            ObjectType type = ObjectType.CREATIVE;
 
-            BlockType existing = typeMap.containsKey(location) ? typeMap.get(location) : BlockType.UNKNOWN;
+            ObjectType existing = typeMap.containsKey(location) ? typeMap.get(location) : ObjectType.UNKNOWN;
 
             transaction.add(location, type);
-            if (existing == BlockType.UNKNOWN) typeMap.put(location, type);
+            if (existing == ObjectType.UNKNOWN) typeMap.put(location, type);
         }
 
         transaction.commit(manager);
-        verify(manager, times(typeMap.size())).setBlockType(any(ASLocation.class), any(BlockType.class));
+        verify(manager, times(typeMap.size())).setBlockType(any(ASLocation.class), any(ObjectType.class));
     }
 
     @Test
@@ -78,12 +78,12 @@ public class BlockTypeTransactionTest {
 
         for (int i = 0; i < 100; i++) {
             ASLocation location = mock(ASLocation.class);
-            BlockType type = BlockType.CREATIVE;
+            ObjectType type = ObjectType.CREATIVE;
             transaction.add(location, type);
         }
 
         transaction.commit(manager);
-        verify(manager, times(100)).setBlockType(any(ASLocation.class), any(BlockType.class));
+        verify(manager, times(100)).setBlockType(any(ASLocation.class), any(ObjectType.class));
         transaction.commit(manager);
         verifyNoMoreInteractions(manager);
     }
@@ -96,7 +96,7 @@ public class BlockTypeTransactionTest {
     @Test(expected = IllegalArgumentException.class)
     public void testAddNull1() {
         BlockTypeTransaction transaction = new BlockTypeTransaction();
-        transaction.add(null, BlockType.CREATIVE);
+        transaction.add(null, ObjectType.CREATIVE);
     }
 
     @Test
@@ -107,13 +107,13 @@ public class BlockTypeTransactionTest {
         transaction.add(mock(ASLocation.class), null);
 
         transaction.commit(manager);
-        verify(manager, times(1)).setBlockType(any(ASLocation.class), eq(BlockType.UNKNOWN));
+        verify(manager, times(1)).setBlockType(any(ASLocation.class), eq(ObjectType.UNKNOWN));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testSafeAddNull1() {
         BlockTypeTransaction transaction = new BlockTypeTransaction();
-        transaction.safeAdd(null, BlockType.CREATIVE);
+        transaction.safeAdd(null, ObjectType.CREATIVE);
     }
 
     @Test
@@ -124,7 +124,7 @@ public class BlockTypeTransactionTest {
         transaction.safeAdd(mock(ASLocation.class), null);
 
         transaction.commit(manager);
-        verify(manager, times(1)).setBlockType(any(ASLocation.class), eq(BlockType.UNKNOWN));
+        verify(manager, times(1)).setBlockType(any(ASLocation.class), eq(ObjectType.UNKNOWN));
     }
 
 }

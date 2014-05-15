@@ -18,7 +18,7 @@
 package com.turt2live.antishare.io;
 
 import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.attribute.BlockType;
+import com.turt2live.antishare.object.attribute.ObjectType;
 
 import java.util.Map;
 
@@ -38,7 +38,7 @@ public interface BlockStore {
      *
      * @return the block type
      */
-    public BlockType getType(int x, int y, int z);
+    public ObjectType getType(int x, int y, int z);
 
     /**
      * Sets the type of a block
@@ -46,9 +46,9 @@ public interface BlockStore {
      * @param x    the x location
      * @param y    the y location
      * @param z    the z location
-     * @param type the new block type. Null is assumed to be {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}
+     * @param type the new block type. Null is assumed to be {@link com.turt2live.antishare.object.attribute.ObjectType#UNKNOWN}
      */
-    public void setType(int x, int y, int z, BlockType type);
+    public void setType(int x, int y, int z, ObjectType type);
 
     /**
      * Gets the block type for a specified location
@@ -57,22 +57,22 @@ public interface BlockStore {
      *
      * @return the block type
      */
-    public BlockType getType(ASLocation location);
+    public ObjectType getType(ASLocation location);
 
     /**
      * Sets the type of a block
      *
      * @param location the location, cannot be null
-     * @param type     the new block type. Null is assumed to be {@link com.turt2live.antishare.object.attribute.BlockType#UNKNOWN}
+     * @param type     the new block type. Null is assumed to be {@link com.turt2live.antishare.object.attribute.ObjectType#UNKNOWN}
      */
-    public void setType(ASLocation location, BlockType type);
+    public void setType(ASLocation location, ObjectType type);
 
     /**
      * Gets all the location/block type combinations known as a copied map
      *
      * @return the map of values
      */
-    public Map<ASLocation, BlockType> getAll();
+    public Map<ASLocation, ObjectType> getAll();
 
     /**
      * Saves the store
