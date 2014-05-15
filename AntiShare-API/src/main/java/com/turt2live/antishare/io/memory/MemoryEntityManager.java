@@ -23,9 +23,10 @@ import com.turt2live.antishare.io.generics.GenericEntityManager;
  * Represents an EntityManager which loads and saves no data. So long
  * as this manager is in memory, it's records will stay in-tact. Data
  * from this manager cannot be saved or loaded from anywhere besides memory.
+ *
  * @author turt2live
  */
-public class MemoryEntityManager extends GenericEntityManager{
+public class MemoryEntityManager extends GenericEntityManager {
 
     @Override
     public void save() {
