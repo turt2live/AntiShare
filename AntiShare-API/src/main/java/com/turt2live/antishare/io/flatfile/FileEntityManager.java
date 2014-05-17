@@ -63,7 +63,6 @@ import java.util.UUID;
  * @see com.turt2live.antishare.io.flatfile.FileBlockStore#typeToByte(com.turt2live.antishare.object.attribute.ObjectType)
  * @see com.turt2live.antishare.io.flatfile.FileBlockStore#byteToType(byte)
  */
-// TODO: Unit test
 public class FileEntityManager extends GenericEntityManager {
 
     private File file;
@@ -131,7 +130,7 @@ public class FileEntityManager extends GenericEntityManager {
             Engine engine = Engine.getInstance();
             boolean hasError = false;
 
-            while (in.remaining() > 17) {
+            while (in.remaining() >= 17) {
                 long uuidMost = in.getLong();
                 long uuidLeast = in.getLong();
                 byte gmbyte = in.get();

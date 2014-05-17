@@ -34,7 +34,6 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author turt2live
  */
-// TODO: Unit test?
 public abstract class GenericEntityManager implements EntityManager {
 
     private ConcurrentMap<UUID, ObjectType> records = new ConcurrentHashMap<UUID, ObjectType>();
