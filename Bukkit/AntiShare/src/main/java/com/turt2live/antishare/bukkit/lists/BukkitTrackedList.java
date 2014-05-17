@@ -20,7 +20,7 @@ package com.turt2live.antishare.bukkit.lists;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.MaterialProvider;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
-import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.attribute.TrackedState;
@@ -30,18 +30,18 @@ import org.bukkit.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BukkitBlockList implements BlockTypeList, RejectionList<ABlock> {
+public class BukkitTrackedList implements TrackedTypeList, RejectionList<ABlock> {
 
     private List<BlockInformation> includedBlocks = new ArrayList<BlockInformation>();
     private List<BlockInformation> negatedBlocks = new ArrayList<BlockInformation>();
     private final MaterialProvider provider;
     private ListType type = ListType.CUSTOM;
 
-    public BukkitBlockList(MaterialProvider provider) {
+    public BukkitTrackedList(MaterialProvider provider) {
         this(provider, null);
     }
 
-    public BukkitBlockList(MaterialProvider provider, ListType type) {
+    public BukkitTrackedList(MaterialProvider provider, ListType type) {
         if (provider == null) throw new IllegalArgumentException();
 
         this.provider = provider;

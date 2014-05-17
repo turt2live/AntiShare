@@ -17,24 +17,35 @@
 
 package com.turt2live.antishare.engine.list;
 
-import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.Rejectable;
 import com.turt2live.antishare.object.attribute.TrackedState;
 
 /**
- * Default block list
+ * A tracked type list, used for tracking objects
  *
  * @author turt2live
  */
-public class DefaultBlockTypeList implements BlockTypeList {
+public interface TrackedTypeList<T extends Rejectable> {
 
-    @Override
-    public boolean isTracked(ABlock block) {
-        return false;
-    }
+    /**
+     * Determines if a specified object is tracked
+     *
+     * @param object the object to lookup
+     *
+     * @return true if this object should be tracked, false otherwise
+     */
+    public boolean isTracked(T object);
 
-    @Override
-    public TrackedState getState(ABlock block) {
-        return TrackedState.NOT_PRESENT;
-    }
+    /**
+     * Gets the tracking state of a specified object. This is generally
+     * used by plugin operations for determining what data this list has rather
+     * than being used to indicate whether or not a object should be tracked. A
+     * better alternative for determining tracking status would be {@link #isTracked(com.turt2live.antishare.object.Rejectable)}.
+     *
+     * @param object the object to lookup
+     *
+     * @return the tracking state
+     */
+    public TrackedState getState(T object);
 
 }

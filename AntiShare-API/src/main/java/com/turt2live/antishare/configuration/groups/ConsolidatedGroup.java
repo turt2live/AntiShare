@@ -20,7 +20,7 @@ package com.turt2live.antishare.configuration.groups;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
-import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
 
 import java.util.ArrayList;
@@ -67,13 +67,13 @@ public class ConsolidatedGroup {
      *
      * @return the consolidated block tracking list
      */
-    public ConsolidatedBlockTypeList getTrackedList(ASGameMode gameMode) {
+    public ConsolidatedTrackedTypeList getTrackedList(ASGameMode gameMode) {
         if (gameMode == null) throw new IllegalArgumentException("arguments cannot be null");
 
-        List<BlockTypeList> lists = new ArrayList<BlockTypeList>();
+        List<TrackedTypeList> lists = new ArrayList<TrackedTypeList>();
         for (Group group : groups) lists.add(group.getTrackedList(gameMode));
 
-        return new ConsolidatedBlockTypeList(lists);
+        return new ConsolidatedTrackedTypeList(lists);
     }
 
     public ConsolidatedRejectionList getRejectionList(RejectionList.ListType type) {

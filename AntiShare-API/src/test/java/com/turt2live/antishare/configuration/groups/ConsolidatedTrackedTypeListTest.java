@@ -17,7 +17,7 @@
 
 package com.turt2live.antishare.configuration.groups;
 
-import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.attribute.TrackedState;
 import org.junit.BeforeClass;
@@ -36,30 +36,30 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
-public class ConsolidatedBlockTypeListTest {
+public class ConsolidatedTrackedTypeListTest {
 
     private static class ReturnIsTrackedWorkaround implements Answer<Boolean> {
 
         @Override
         public Boolean answer(InvocationOnMock invocation) throws Throwable {
             // Workaround for ensuring isTracked() works
-            return ((BlockTypeList) invocation.getMock()).getState((ABlock) invocation.getArguments()[0]) == TrackedState.INCLUDED;
+            return ((TrackedTypeList) invocation.getMock()).getState((ABlock) invocation.getArguments()[0]) == TrackedState.INCLUDED;
         }
     }
 
-    private static BlockTypeList list1, list2, list3, list4;
-    private static ConsolidatedBlockTypeList consolidated;
+    private static TrackedTypeList list1, list2, list3, list4;
+    private static ConsolidatedTrackedTypeList consolidated;
     private static ABlock testBlock;
 
     @BeforeClass
     public static void beforeTest() {
-        list1 = mock(BlockTypeList.class);
-        list2 = mock(BlockTypeList.class);
-        list3 = mock(BlockTypeList.class);
-        list4 = mock(BlockTypeList.class);
+        list1 = mock(TrackedTypeList.class);
+        list2 = mock(TrackedTypeList.class);
+        list3 = mock(TrackedTypeList.class);
+        list4 = mock(TrackedTypeList.class);
         testBlock = mock(ABlock.class);
 
-        consolidated = new ConsolidatedBlockTypeList(list1, list2, list3, list4);
+        consolidated = new ConsolidatedTrackedTypeList(list1, list2, list3, list4);
 
         when(list1.isTracked(any(ABlock.class))).then(new ReturnIsTrackedWorkaround());
         when(list2.isTracked(any(ABlock.class))).then(new ReturnIsTrackedWorkaround());
@@ -69,22 +69,22 @@ public class ConsolidatedBlockTypeListTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateEmpty1() {
-        new ConsolidatedBlockTypeList(new ArrayList<BlockTypeList>());
+        new ConsolidatedTrackedTypeList(new ArrayList<TrackedTypeList>());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateEmpty2() {
-        new ConsolidatedBlockTypeList(new BlockTypeList[0]);
+        new ConsolidatedTrackedTypeList(new TrackedTypeList[0]);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateNull1() {
-        new ConsolidatedBlockTypeList((List<BlockTypeList>) null);
+        new ConsolidatedTrackedTypeList((List<TrackedTypeList>) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateNull2() {
-        new ConsolidatedBlockTypeList((BlockTypeList[]) null);
+        new ConsolidatedTrackedTypeList((TrackedTypeList[]) null);
     }
 
     @Test

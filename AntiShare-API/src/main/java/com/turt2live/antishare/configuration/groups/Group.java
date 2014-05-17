@@ -20,7 +20,7 @@ package com.turt2live.antishare.configuration.groups;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.configuration.Configuration;
-import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
 
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public abstract class Group {
      */
     public ASGameMode getActingMode(ASGameMode gameMode) {
         if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
-        String acting = configuration.getString("blocks.gamemode-settings." + gameMode.name().toLowerCase(), gameMode.name().toLowerCase());
+        String acting = configuration.getString("gamemode-settings." + gameMode.name().toLowerCase(), gameMode.name().toLowerCase());
         ASGameMode gm1 = ASGameMode.fromString(acting);
         if (gm1 != null) return gm1;
         return gameMode;
@@ -138,7 +138,7 @@ public abstract class Group {
      *
      * @return the block list
      */
-    public abstract BlockTypeList getTrackedList(ASGameMode gameMode);
+    public abstract TrackedTypeList getTrackedList(ASGameMode gameMode);
 
     /**
      * Gets the rejection list for a specified list type

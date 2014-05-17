@@ -69,6 +69,19 @@ lists:
     - all
     pickup:
     - all
+    entity-interact:
+    - villager
+    entity-attack:
+    - pig
+
+# Settings for gamemode-related actions. These control how to
+# handle certain gamemode actions, such as what gamemode to
+# place blocks as dependent on the player's gamemode.
+gamemode-settings:
+  creative: creative
+  survival: survival
+  adventure: adventure
+  spectator: spectator
 
 # Block configuration. This gives you the ability to customize the block
 # aspects of AntiShare. More information can be found at the link listed
@@ -82,11 +95,6 @@ blocks:
   - none
   spectator:
   - none
-  gamemode-settings:
-    creative: creative
-    survival: survival
-    adventure: adventure
-    spectator: spectator
   break:
     creative-breaking-survival:
       deny: true
@@ -136,3 +144,33 @@ blocks:
     spectator-breaking-spectator:
       deny: false
       break-as: spectator
+
+# Entity configuration. This gives you the ability to customize the entity
+# aspects of AntiShare. More information can be found at the link listed
+# at the top of this file.
+entities:
+  creative:
+  - all
+  survival:
+  - all
+  adventure:
+  - none
+  spectator:
+  - none
+  break:
+    creative-breaking-survival: true
+    creative-breaking-adventure: true
+    creative-breaking-spectator: true
+    creative-breaking-creative: false
+    survival-breaking-creative: true
+    survival-breaking-adventure: true
+    survival-breaking-spectator: true
+    survival-breaking-survival: false
+    adventure-breaking-creative: true
+    adventure-breaking-survival: true
+    adventure-breaking-spectator: true
+    adventure-breaking-adventure: false
+    spectator-breaking-creative: true
+    spectator-breaking-survival: true
+    spectator-breaking-adventure: true
+    spectator-breaking-spectator: false

@@ -18,8 +18,8 @@
 package com.turt2live.antishare.configuration.groups;
 
 import com.turt2live.antishare.collections.ArrayArrayList;
-import com.turt2live.antishare.engine.list.BlockTypeList;
-import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
+import com.turt2live.antishare.object.Rejectable;
 import com.turt2live.antishare.object.attribute.TrackedState;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
  * A block type list consisting of many block type lists. This uses a
  * voting-like system to determine what is tracked and what is not.
  * <p/>
- * Internally when {@link #getState(com.turt2live.antishare.object.ABlock)}
+ * Internally when {@link #getState(com.turt2live.antishare.object.Rejectable)}
  * is called a poll of all lists is activated to determine how many lists
  * determine a location to be tracked and how many lists determine a list
  * to be not tracked. An additional flag for "is tracked" is kept to ensure
@@ -41,39 +41,39 @@ import java.util.List;
  *
  * @author turt2live
  */
-public class ConsolidatedBlockTypeList implements BlockTypeList {
+public class ConsolidatedTrackedTypeList<T extends Rejectable> implements TrackedTypeList<T> {
 
-    private List<BlockTypeList> lists = new ArrayList<BlockTypeList>();
+    private List<TrackedTypeList<T>> lists = new ArrayList<TrackedTypeList<T>>();
 
     /**
      * Creates a new consolidated block type list
      *
      * @param lists the lists to include. Cannot be null and must have at least one record
      */
-    public ConsolidatedBlockTypeList(List<BlockTypeList> lists) {
+    public ConsolidatedTrackedTypeList(List<TrackedTypeList<T>> lists) {
         if (lists == null || lists.isEmpty()) throw new IllegalArgumentException("lists cannot be null or empty");
         this.lists.addAll(lists);
     }
 
     /**
-     * Creates a new consolidated block type list
+     * Creates a new consolidated object type list
      *
      * @param lists the lists to include. Cannot be null and must have at least one record
      */
-    public ConsolidatedBlockTypeList(BlockTypeList... lists) {
+    public ConsolidatedTrackedTypeList(TrackedTypeList<T>... lists) {
         this(new ArrayArrayList(lists));
     }
 
     @Override
-    public TrackedState getState(ABlock block) {
-        if (block == null) throw new IllegalArgumentException("block cannot be null");
+    public TrackedState getState(T object) {
+        if (object == null) throw new IllegalArgumentException("object cannot be null");
 
         int tracked = 0;
         int negated = 0;
         boolean included = false;
 
-        for (BlockTypeList list : lists) {
-            TrackedState state = list.getState(block);
+        for (TrackedTypeList list : lists) {
+            TrackedState state = list.getState(object);
             switch (state) {
                 case INCLUDED:
                     tracked++;
@@ -92,7 +92,7 @@ public class ConsolidatedBlockTypeList implements BlockTypeList {
     }
 
     @Override
-    public boolean isTracked(ABlock block) {
-        return getState(block) == TrackedState.INCLUDED; // The one time it is okay to do this...
+    public boolean isTracked(T object) {
+        return getState(object) == TrackedState.INCLUDED; // The one time it is okay to do this...
     }
 }

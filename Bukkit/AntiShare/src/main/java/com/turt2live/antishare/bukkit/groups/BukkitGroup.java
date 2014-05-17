@@ -20,12 +20,12 @@ package com.turt2live.antishare.bukkit.groups;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.MaterialProvider;
-import com.turt2live.antishare.bukkit.lists.BukkitBlockList;
+import com.turt2live.antishare.bukkit.lists.BukkitTrackedList;
 import com.turt2live.antishare.bukkit.lists.BukkitItemList;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
-import com.turt2live.antishare.engine.list.BlockTypeList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.engine.list.CommandRejectionList;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.RejectableCommand;
@@ -50,7 +50,7 @@ public class BukkitGroup extends Group {
     }
 
     @Override
-    public BlockTypeList getTrackedList(ASGameMode gameMode) {
+    public TrackedTypeList getTrackedList(ASGameMode gameMode) {
         return getTrackedList(gameMode, super.configuration);
     }
 
@@ -59,11 +59,11 @@ public class BukkitGroup extends Group {
         return getRejectionList(type, super.configuration);
     }
 
-    static BlockTypeList getTrackedList(ASGameMode gameMode, Configuration configuration) {
+    static TrackedTypeList getTrackedList(ASGameMode gameMode, Configuration configuration) {
         if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
 
         MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-        BukkitBlockList list = new BukkitBlockList(provider);
+        BukkitTrackedList list = new BukkitTrackedList(provider);
         list.populateBlocks(configuration.getStringList("blocks." + gameMode.name().toLowerCase(), new ArrayList<String>()));
 
         return list;
@@ -82,8 +82,8 @@ public class BukkitGroup extends Group {
             case BLOCK_PLACE:
             case INTERACTION:
                 MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-                list = new BukkitBlockList(provider, type);
-                ((BukkitBlockList) list).populateBlocks(configuration.getStringList("lists." + configKey, new ArrayList<String>()));
+                list = new BukkitTrackedList(provider, type);
+                ((BukkitTrackedList) list).populateBlocks(configuration.getStringList("lists." + configKey, new ArrayList<String>()));
                 break;
             case COMMANDS:
                 list = new CommandRejectionList();

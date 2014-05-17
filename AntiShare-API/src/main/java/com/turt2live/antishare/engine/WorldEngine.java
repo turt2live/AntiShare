@@ -136,9 +136,9 @@ public final class WorldEngine {
      *
      * @return the list
      */
-    public BlockTypeList getTrackedBlocks(ASGameMode gamemode) {
+    public TrackedTypeList getTrackedBlocks(ASGameMode gamemode) {
         List<Group> allGroups = Engine.getInstance().getGroupManager().getGroupsForWorld(getWorldName(), false);
-        if (allGroups == null || allGroups.size() <= 0) return new DefaultBlockTypeList();
+        if (allGroups == null || allGroups.size() <= 0) return new DefaultTrackedTypeList();
         ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(allGroups);
         return consolidatedGroup.getTrackedList(gamemode);
     }
@@ -163,7 +163,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tplaceAs = " + placeAs);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        BlockTypeList list = new DefaultBlockTypeList();
+        TrackedTypeList list = new DefaultTrackedTypeList();
         RejectionList reject = new DefaultRejectionList(RejectionList.ListType.BLOCK_PLACE);
 
         if (groups != null && groups.size() > 0) {
