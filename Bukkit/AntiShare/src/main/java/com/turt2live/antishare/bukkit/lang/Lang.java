@@ -52,10 +52,13 @@ public class Lang {
     // Tool strings
     public static final String TOOL_CHECK_LORE = "tools.check-lore";
     public static final String TOOL_CHECK_TITLE = "tools.check-title";
-    public static final String TOOL_ON_CHECK = "tools.on-check";
     public static final String TOOL_ON_GET = "tools.on-get";
+    public static final String TOOL_ON_CHECK = "tools.on-check";
     public static final String TOOL_ON_SET = "tools.on-set";
     public static final String TOOL_ON_UNSET = "tools.on-unset";
+    public static final String TOOL_ON_CHECK_ENTITY = "tools.on-check-entities";
+    public static final String TOOL_ON_SET_ENTITY = "tools.on-set-entities";
+    public static final String TOOL_ON_UNSET_ENTITY = "tools.on-unset-entities";
     public static final String TOOL_SET_LORE = "tools.set-lore";
     public static final String TOOL_SET_TITLE = "tools.set-title";
 

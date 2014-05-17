@@ -27,12 +27,15 @@ import com.turt2live.antishare.object.attribute.ObjectType;
 import com.turt2live.antishare.utils.ASUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -50,6 +53,8 @@ public class ToolListener implements Listener {
     are administrators/staff of the server - not random players. If the staff start spreading
     the tools around the server, that's out of scope of this plugin.
      */
+
+    // TODO: This needs cleaning up
 
     private static final ItemStack CHECK_TEMPLATE;
     private static final ItemStack CHECK_TEMPLATE_BLOCK;
@@ -74,6 +79,95 @@ public class ToolListener implements Listener {
         meta.setDisplayName(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_SET_TITLE)).build());
         meta.setLore(LangBuilder.colorize(Lang.getInstance().getFormatList(Lang.TOOL_SET_LORE)));
         SET_TEMPLATE.setItemMeta(meta);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onInteractEntity(PlayerInteractEntityEvent event) {
+        Entity entity = event.getRightClicked();
+        Player player = event.getPlayer();
+        ItemStack hand = player.getItemInHand();
+
+        if (hand != null && player.hasPermission(APermission.TOOLS)) {
+            if (hand.isSimilar(CHECK_TEMPLATE)) {
+                event.setCancelled(true);
+
+                ObjectType type = BukkitUtils.getEntityManager(player.getWorld()).getType(entity.getUniqueId());
+                String strRep = ASUtils.toUpperWords(type == ObjectType.UNKNOWN ? "Natural" : type.name());
+
+                player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_CHECK_ENTITY))
+                        .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
+                        .withPrefix()
+                        .build());
+
+                DevEngine.log("[Tools] Entity check completed (" + player.getName() + ")",
+                        "[Tools] \t\tCheck on: " + entity.getType() + " (" + entity.getUniqueId() + ")",
+                        "[Tools] \t\tWith: " + hand,
+                        "[Tools] \t\tResult: " + type + " (" + strRep + ")");
+            } else if (hand.isSimilar(SET_TEMPLATE)) {
+                event.setCancelled(true);
+
+                ObjectType previous = BukkitUtils.getEntityManager(player.getWorld()).getType(entity.getUniqueId());
+                String strRep = ASUtils.toUpperWords(previous == ObjectType.UNKNOWN ? "Natural" : previous.name());
+
+                BukkitUtils.getEntityManager(player.getWorld()).setType(entity.getUniqueId(), ObjectType.UNKNOWN);
+
+                player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_UNSET_ENTITY))
+                        .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
+                        .withPrefix()
+                        .build());
+
+                DevEngine.log("[Tools] Entity unset completed (" + player.getName() + ")",
+                        "[Tools] \t\tCheck on: " + entity.getType() + " (" + entity.getUniqueId() + ")",
+                        "[Tools] \t\tWith: " + hand,
+                        "[Tools] \t\tResult: was " + previous + " (" + strRep + ")");
+
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onAttack(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            Entity entity = event.getEntity();
+            ItemStack hand = player.getItemInHand();
+
+            if (hand != null && player.hasPermission(APermission.TOOLS)) {
+                if (hand.isSimilar(CHECK_TEMPLATE)) {
+                    event.setCancelled(true);
+
+                    ObjectType type = BukkitUtils.getEntityManager(player.getWorld()).getType(entity.getUniqueId());
+                    String strRep = ASUtils.toUpperWords(type == ObjectType.UNKNOWN ? "Natural" : type.name());
+
+                    player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_CHECK_ENTITY))
+                            .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
+                            .withPrefix()
+                            .build());
+
+                    DevEngine.log("[Tools] Entity check completed (" + player.getName() + ")",
+                            "[Tools] \t\tCheck on: " + entity.getType() + " (" + entity.getUniqueId() + ")",
+                            "[Tools] \t\tWith: " + hand,
+                            "[Tools] \t\tResult: " + type + " (" + strRep + ")");
+                } else if (hand.isSimilar(SET_TEMPLATE)) {
+                    event.setCancelled(true);
+
+                    BukkitUtils.getEntityManager(player.getWorld()).setType(entity.getUniqueId(), ASUtils.toBlockType(VersionSelector.getMinecraft().toGameMode(player.getGameMode())));
+
+                    String strRep = ASUtils.toUpperWords(player.getGameMode().name());
+
+                    player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.TOOL_ON_SET_ENTITY))
+                            .setReplacement(LangBuilder.SELECTOR_GAMEMODE, strRep)
+                            .withPrefix()
+                            .build());
+
+                    DevEngine.log("[Tools] Entity set completed (" + player.getName() + ")",
+                            "[Tools] \t\tCheck on: " + entity.getType() + " (" + entity.getUniqueId() + ")",
+                            "[Tools] \t\tWith: " + hand,
+                            "[Tools] \t\tResult: to " + player.getGameMode() + " (" + strRep + ")");
+
+                }
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)

@@ -31,7 +31,9 @@ import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.EventListener;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
+import com.turt2live.antishare.io.EntityManager;
 import com.turt2live.antishare.io.flatfile.FileBlockManager;
+import com.turt2live.antishare.io.flatfile.FileEntityManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -250,10 +252,18 @@ public class AntiShare extends JavaPlugin {
         WorldEngine engine = event.getEngine();
 
         File storeLocation = new File(dataFolder, engine.getWorldName());
+        File blockStore = new File(storeLocation, "blockdata");
+        File entityStore = new File(storeLocation, "entities.dat");
+
         if (!storeLocation.exists()) storeLocation.mkdirs();
+        if (!blockStore.exists()) blockStore.mkdirs();
 
         getLogger().info("Indexing '" + engine.getWorldName() + "'...");
-        engine.setBlockManager(new FileBlockManager(blockSize, storeLocation));
+        engine.setBlockManager(new FileBlockManager(blockSize, blockStore));
+
+        EntityManager entityManager = new FileEntityManager(entityStore);
+        entityManager.load();
+        engine.setEntityManager(entityManager);
     }
 
     /**

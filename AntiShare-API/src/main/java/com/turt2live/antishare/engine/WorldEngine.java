@@ -25,7 +25,9 @@ import com.turt2live.antishare.engine.list.*;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
+import com.turt2live.antishare.io.EntityManager;
 import com.turt2live.antishare.io.memory.MemoryBlockManager;
+import com.turt2live.antishare.io.memory.MemoryEntityManager;
 import com.turt2live.antishare.object.*;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.ObjectType;
@@ -49,6 +51,7 @@ public final class WorldEngine {
 
     private String worldName;
     private BlockManager blockManager = new MemoryBlockManager();
+    private EntityManager entityManager = new MemoryEntityManager();
 
     /**
      * Creates a new world engine
@@ -68,6 +71,7 @@ public final class WorldEngine {
         DevEngine.log("[WorldEngine:" + worldName + "] Shutting down");
         EventDispatcher.dispatch(new WorldEngineShutdownEvent(this));
         blockManager.saveAll();
+        entityManager.save();
     }
 
     /**
@@ -100,6 +104,29 @@ public final class WorldEngine {
 
         DevEngine.log("[WorldEngine:" + worldName + "] New block manager: " + blockManager.getClass().getName());
         this.blockManager = blockManager;
+    }
+
+    /**
+     * Gets the entity manager for this engine
+     *
+     * @return the entity manager
+     */
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    /**
+     * Sets the entity manager to use. This will overwrite the previous one and NOT perform
+     * any save routines on the previous manager, nor will this perform any load operations
+     * on the new manager.
+     *
+     * @param manager the new manager, cannot be null
+     */
+    public void setEntityManager(EntityManager manager) {
+        if (manager == null) throw new IllegalArgumentException("entity manager cannot be null");
+
+        DevEngine.log("[WorldEngine:" + worldName + "] New entity manager: " + manager.getClass().getName());
+        this.entityManager = manager;
     }
 
     /**

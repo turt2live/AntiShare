@@ -22,6 +22,7 @@ import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.io.BlockManager;
+import com.turt2live.antishare.io.EntityManager;
 import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.object.AWorld;
 import com.turt2live.antishare.object.attribute.Facing;
@@ -89,6 +90,17 @@ public final class BukkitUtils {
      */
     public static BlockManager getBlockManager(World world) {
         return getWorldEngine(world).getBlockManager();
+    }
+
+    /**
+     * Gets the entity manager for the specified world
+     *
+     * @param world the world, cannot be null
+     *
+     * @return the entity manager
+     */
+    public static EntityManager getEntityManager(World world) {
+        return getWorldEngine(world).getEntityManager();
     }
 
     /**
