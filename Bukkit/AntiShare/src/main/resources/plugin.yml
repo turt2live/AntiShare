@@ -25,6 +25,9 @@ permissions:
     antishare.freetouch:
         default: op
         description: Allows the target to interact with blocks and entities without inter-gamemode restrictions
+    antishare.freeattack:
+        default: op
+        description: Allows the target to attack entities without inter-gamemode restrictions
     antishare.group.main:
         default: true
         description: Default main group permission
@@ -73,3 +76,27 @@ permissions:
     antishare.deny.item_pickup:
         default: false
         description: Denies all item pickups, regardless of group settings
+    antishare.allow.entity_place:
+        default: op
+        description: Allows all entity placing, regardless of group settings
+    antishare.deny.entity_place:
+        default: false
+        description: Denies all entity placing, regardless of group settings
+    antishare.allow.entity_break:
+        default: op
+        description: Allows all entity breaking, regardless of group settings
+    antishare.deny.entity_break:
+        default: false
+        description: Denies all entity breaking, regardless of group settings
+    antishare.allow.entity_attack:
+        default: op
+        description: Allows all entity attacking, regardless of group settings
+    antishare.deny.entity_attack:
+        default: false
+        description: Denies all entity attacking, regardless of group settings
+    antishare.allow.entity_interact:
+        default: op
+        description: Allows all entity interaction, regardless of group settings
+    antishare.deny.entity_interact:
+        default: false
+        description: Denies all entity interaction, regardless of group settings

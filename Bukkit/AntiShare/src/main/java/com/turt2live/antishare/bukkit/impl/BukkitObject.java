@@ -42,8 +42,8 @@ public abstract class BukkitObject {
         else if (deny) stageOne = TrackedState.NEGATED;
 
         // Stage Two: Check specific permissions
-        allow = player.hasPermission(APermission.getPermissionNode(true, type) + "." + getFriendlyName());
-        deny = player.hasPermission(APermission.getPermissionNode(false, type) + "." + getFriendlyName());
+        allow = player.hasPermission(APermission.getPermissionNode(true, type) + "." + getFriendlyName().toLowerCase());
+        deny = player.hasPermission(APermission.getPermissionNode(false, type) + "." + getFriendlyName().toLowerCase());
         TrackedState stageTwo = TrackedState.NOT_PRESENT;
 
         if (allow == deny) stageTwo = TrackedState.NOT_PRESENT;

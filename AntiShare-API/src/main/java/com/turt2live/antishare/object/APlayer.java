@@ -19,14 +19,12 @@ package com.turt2live.antishare.object;
 
 import com.turt2live.antishare.ASGameMode;
 
-import java.util.UUID;
-
 /**
  * Represents an AntiShare player
  *
  * @author turt2live
  */
-public interface APlayer {
+public interface APlayer extends AEntity{
 
     /**
      * Gets the player's name
@@ -34,13 +32,6 @@ public interface APlayer {
      * @return the player's name
      */
     public String getName();
-
-    /**
-     * Gets the player's UUID
-     *
-     * @return the player's UUID
-     */
-    public UUID getUUID();
 
     /**
      * Gets the player's Game Mode

@@ -17,7 +17,7 @@
 
 package com.turt2live.antishare.engine.list;
 
-import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.Rejectable;
 import com.turt2live.antishare.object.attribute.TrackedState;
 
 /**
@@ -25,15 +25,15 @@ import com.turt2live.antishare.object.attribute.TrackedState;
  *
  * @author turt2live
  */
-public class DefaultTrackedTypeList implements TrackedTypeList {
+public class DefaultTrackedTypeList<T extends Rejectable> implements TrackedTypeList<T> {
 
     @Override
-    public boolean isTracked(ABlock block) {
+    public boolean isTracked(T block) {
         return false;
     }
 
     @Override
-    public TrackedState getState(ABlock block) {
+    public TrackedState getState(T block) {
         return TrackedState.NOT_PRESENT;
     }
 

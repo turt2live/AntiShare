@@ -19,6 +19,7 @@ package com.turt2live.antishare.bukkit.lists;
 
 import com.turt2live.antishare.bukkit.impl.BukkitEntity;
 import com.turt2live.antishare.engine.Engine;
+import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.object.AEntity;
 import com.turt2live.antishare.object.attribute.TrackedState;
@@ -32,10 +33,25 @@ import java.util.List;
  *
  * @author turt2live
  */
-public class BukkitEntityTrackedList implements TrackedTypeList<AEntity> {
+public class BukkitEntityTrackedList implements TrackedTypeList<AEntity>, RejectionList<AEntity> {
 
     private List<EntityType> included = new ArrayList<EntityType>();
     private List<EntityType> excluded = new ArrayList<EntityType>();
+    private ListType listType = ListType.CUSTOM;
+
+    /**
+     * Creates a new Entity list
+     *
+     * @param type  the list type, cannot be null
+     * @param items the items to populate, cannot be null
+     */
+    public BukkitEntityTrackedList(ListType type, List<String> items) {
+        this(items);
+
+        if (type == null) throw new IllegalArgumentException();
+
+        this.listType = type;
+    }
 
     /**
      * Creates a new entity tracked list
@@ -89,6 +105,11 @@ public class BukkitEntityTrackedList implements TrackedTypeList<AEntity> {
     }
 
     @Override
+    public boolean isBlocked(AEntity item) {
+        return isTracked(item);
+    }
+
+    @Override
     public TrackedState getState(AEntity object) {
         if (object == null) throw new IllegalArgumentException("Object cannot be null");
         if (!(object instanceof BukkitEntity)) return TrackedState.NOT_PRESENT;
@@ -101,5 +122,10 @@ public class BukkitEntityTrackedList implements TrackedTypeList<AEntity> {
         if (in == ex) return TrackedState.NOT_PRESENT;
         else if (in) return TrackedState.INCLUDED;
         else return TrackedState.NEGATED;
+    }
+
+    @Override
+    public ListType getType() {
+        return listType;
     }
 }

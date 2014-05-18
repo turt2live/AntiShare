@@ -117,6 +117,13 @@ public class BukkitGroup extends Group {
                 List<String> items = configuration.getStringList("lists." + configKey, new ArrayList<String>());
                 ((BukkitItemList) list).load(items);
                 break;
+            case ENTITY_ATTACK:
+            case ENTITY_PLACE:
+            case ENTITY_INTERACT:
+            case ENTITY_BREAK:
+                List<String> entities = configuration.getStringList("lists." + configKey, new ArrayList<String>());
+                list = new BukkitEntityTrackedList(type, entities);
+                break;
             default:
                 list = null;
         }

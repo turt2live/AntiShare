@@ -18,9 +18,14 @@
 package com.turt2live.antishare.bukkit.impl;
 
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
+import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.AEntity;
+import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.attribute.TrackedState;
 import org.bukkit.entity.Entity;
+
+import java.util.UUID;
 
 /**
  * A Bukkit entity
@@ -45,6 +50,31 @@ public class BukkitEntity extends BukkitObject implements AEntity {
     @Override
     public ASLocation getLocation() {
         return BukkitUtils.toLocation(entity.getLocation());
+    }
+
+    @Override
+    public UUID getUUID() {
+        return entity.getUniqueId();
+    }
+
+    @Override
+    public TrackedState canPlace(APlayer player) {
+        return permissionCheck(RejectionList.ListType.ENTITY_PLACE, player);
+    }
+
+    @Override
+    public TrackedState canBreak(APlayer player) {
+        return permissionCheck(RejectionList.ListType.ENTITY_BREAK, player);
+    }
+
+    @Override
+    public TrackedState canAttack(APlayer player) {
+        return permissionCheck(RejectionList.ListType.ENTITY_ATTACK, player);
+    }
+
+    @Override
+    public TrackedState canInteract(APlayer player) {
+        return permissionCheck(RejectionList.ListType.ENTITY_INTERACT, player);
     }
 
     @Override

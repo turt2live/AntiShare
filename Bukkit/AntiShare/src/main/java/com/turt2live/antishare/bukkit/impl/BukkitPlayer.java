@@ -34,11 +34,12 @@ import java.util.UUID;
  *
  * @author turt2live
  */
-public class BukkitPlayer implements APlayer {
+public class BukkitPlayer extends BukkitEntity implements APlayer {
 
     private final Player player;
 
     public BukkitPlayer(Player player) {
+        super(player);
         if (player == null) throw new IllegalArgumentException();
 
         this.player = player;

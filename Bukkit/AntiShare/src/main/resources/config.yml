@@ -74,6 +74,12 @@ blocks:
         # If this flag is true, then containers will inherit the gamemode. If
         # false, then they will not inherit the gamemode.
         natural-container-absorb-gamemode: true
+    entities:
+        # If true, AntiShare will restrict players from attacking players
+        # of other gamemodes. If false, players will be able to attack
+        # eachother anyways. This will also apply to any 'gamemode entities'
+        # such as a creative pig being beat on by a survival player.
+        cross-gamemode-attack: true
 
 # AntiShare internal caching settings. These settings are generally
 # not touched unless you are looking to fine tune how AntiShare

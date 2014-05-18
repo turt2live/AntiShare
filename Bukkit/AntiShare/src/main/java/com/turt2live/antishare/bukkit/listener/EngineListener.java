@@ -52,6 +52,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -611,6 +614,84 @@ public class EngineListener implements Listener {
         AEntity entity = new BukkitEntity(event.getEntity());
 
         engine.getEngine(event.getEntity().getWorld().getName()).processEntityDeath(entity);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onHangingPlace(HangingPlaceEvent event) {
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        AEntity hanging = new BukkitEntity(event.getEntity());
+
+        if (engine.getEngine(event.getPlayer().getWorld().getName()).processEntityPlace(hanging, player)) {
+            event.setCancelled(true);
+
+            String name = BukkitUtils.getPlayerFriendlyName(event.getEntity().getType());
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_ENTITY_PLACE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+            alert(Lang.NAUGHTY_ADMIN_ENTITY_PLACE, player.getName(), name);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onHangingBreakEntity(HangingBreakByEntityEvent event){
+        printDebugEvent(event);
+
+        if(event.getRemover() instanceof Player){
+            APlayer player = new BukkitPlayer((Player) event.getRemover());
+            AEntity entity = new BukkitEntity(event.getEntity());
+
+            if(engine.getEngine(event.getEntity().getWorld().getName()).processEntityBreak(player,entity)){
+                event.setCancelled(true);
+
+                String name = BukkitUtils.getPlayerFriendlyName(event.getEntity().getType());
+                player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_ENTITY_BREAK)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+                alert(Lang.NAUGHTY_ADMIN_ENTITY_BREAK, player.getName(), name);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onHangingBreak(HangingBreakEvent event) {
+        printDebugEvent(event);
+
+        AEntity entity = new BukkitEntity(event.getEntity());
+        engine.getEngine(event.getEntity().getWorld().getName()).processEntityDeath(entity);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerAttackEntity(EntityDamageByEntityEvent event) {
+        printDebugEvent(event);
+
+        Player attacker = VersionSelector.getMinecraft().getPlayerAttacker(event.getDamager());
+
+        if (attacker != null) {
+            APlayer player = new BukkitPlayer(attacker);
+            AEntity attacked = new BukkitEntity(event.getEntity());
+
+            if (engine.getEngine(attacker.getWorld().getName()).processEntityAttack(player, attacked)) {
+                event.setCancelled(true);
+
+                String name = BukkitUtils.getPlayerFriendlyName(event.getEntity().getType());
+                player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_ENTITY_ATTACK)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+                alert(Lang.NAUGHTY_ADMIN_ENTITY_ATTACK, player.getName(), name);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        AEntity entity = new BukkitEntity(event.getRightClicked());
+
+        if (engine.getEngine(event.getPlayer().getWorld().getName()).processEntityInteract(player, entity)) {
+            event.setCancelled(true);
+
+            String name = BukkitUtils.getPlayerFriendlyName(event.getRightClicked().getType());
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_ENTITY_INTERACT)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, name).build());
+            alert(Lang.NAUGHTY_ADMIN_ENTITY_INTERACT, player.getName(), name);
+        }
     }
 
     /**

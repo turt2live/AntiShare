@@ -87,6 +87,10 @@ public final class Engine {
      * Configuration key for 'if not classic mode, will containers inherit gamemodes from players?'
      */
     public static final String CONFIG_INTERACT_CONTAINER_INHERIT = "blocks.interaction.natural-container-absorb-gamemode";
+    /**
+     * Configuration key for 'can players attack cross gamemode?'
+     */
+    public static final String CONFIG_ENTITIES_CROSS_GAMEMODE_ATTACK = "blocks.entities.cross-gamemode-attack";
 
     private static Engine instance;
 

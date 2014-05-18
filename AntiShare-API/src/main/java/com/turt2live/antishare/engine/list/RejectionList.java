@@ -40,6 +40,10 @@ public interface RejectionList<T extends Rejectable> {
         ITEM_USE,
         ITEM_DROP,
         ITEM_PICKUP,
+        ENTITY_INTERACT,
+        ENTITY_ATTACK,
+        ENTITY_PLACE,
+        ENTITY_BREAK,
 
         /**
          * CUSTOM should only be used for out-of-plugin operations

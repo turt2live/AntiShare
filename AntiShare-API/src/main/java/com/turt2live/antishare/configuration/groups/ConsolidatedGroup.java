@@ -67,11 +67,27 @@ public class ConsolidatedGroup {
      *
      * @return the consolidated block tracking list
      */
-    public ConsolidatedTrackedTypeList getTrackedList(ASGameMode gameMode) {
+    public ConsolidatedTrackedTypeList getBlockTrackedList(ASGameMode gameMode) {
         if (gameMode == null) throw new IllegalArgumentException("arguments cannot be null");
 
         List<TrackedTypeList> lists = new ArrayList<TrackedTypeList>();
         for (Group group : groups) lists.add(group.getBlockTrackedList(gameMode));
+
+        return new ConsolidatedTrackedTypeList(lists);
+    }
+
+    /**
+     * Gets the consolidated entity tracking list for a specified game mode
+     *
+     * @param gameMode the gamemode to lookup, cannot be null
+     *
+     * @return the consolidated entity tracking list
+     */
+    public ConsolidatedTrackedTypeList getEntityTrackedList(ASGameMode gameMode) {
+        if (gameMode == null) throw new IllegalArgumentException("arguments cannot be null");
+
+        List<TrackedTypeList> lists = new ArrayList<TrackedTypeList>();
+        for (Group group : groups) lists.add(group.getEntityTrackedList(gameMode));
 
         return new ConsolidatedTrackedTypeList(lists);
     }

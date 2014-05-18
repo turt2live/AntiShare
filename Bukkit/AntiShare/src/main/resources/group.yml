@@ -73,6 +73,10 @@ lists:
     - villager
     entity-attack:
     - pig
+    entity-place:
+    - item frame
+    entity-break:
+    - item frame
 
 # Settings for gamemode-related actions. These control how to
 # handle certain gamemode actions, such as what gamemode to

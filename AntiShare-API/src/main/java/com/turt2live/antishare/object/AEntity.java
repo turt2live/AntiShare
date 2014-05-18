@@ -17,6 +17,8 @@
 
 package com.turt2live.antishare.object;
 
+import com.turt2live.antishare.object.attribute.TrackedState;
+
 import java.util.UUID;
 
 /**
@@ -38,5 +40,77 @@ public interface AEntity extends Rejectable {
      *
      * @return the entity's UUID
      */
-    public UUID getUniqueId();
+    public UUID getUUID();
+
+    /**
+     * Determines if a player can place this entity. This should be
+     * strictly a lookup of permissions without validating with any
+     * engine components or through the rejection lists.
+     * <p/>
+     * This uses the tri-state enum {@link com.turt2live.antishare.object.attribute.TrackedState}
+     * to represent various states, as outlined below.
+     * <p/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#INCLUDED} - Allow permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
+     *
+     * @param player the player, cannot be null
+     *
+     * @return the appropriate tracking state as defined
+     */
+    public TrackedState canPlace(APlayer player);
+
+    /**
+     * Determines if a player can break this entity. This should be
+     * strictly a lookup of permissions without validating with any
+     * engine components or through the rejection lists.
+     * <p/>
+     * This uses the tri-state enum {@link com.turt2live.antishare.object.attribute.TrackedState}
+     * to represent various states, as outlined below.
+     * <p/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#INCLUDED} - Allow permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
+     *
+     * @param player the player, cannot be null
+     *
+     * @return the appropriate tracking state as defined
+     */
+    public TrackedState canBreak(APlayer player);
+
+    /**
+     * Determines if a player can attack this entity. This should be
+     * strictly a lookup of permissions without validating with any
+     * engine components or through the rejection lists.
+     * <p/>
+     * This uses the tri-state enum {@link com.turt2live.antishare.object.attribute.TrackedState}
+     * to represent various states, as outlined below.
+     * <p/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#INCLUDED} - Allow permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
+     *
+     * @param player the player, cannot be null
+     *
+     * @return the appropriate tracking state as defined
+     */
+    public TrackedState canAttack(APlayer player);
+
+    /**
+     * Determines if a player can interact with this entity. This should be
+     * strictly a lookup of permissions without validating with any
+     * engine components or through the rejection lists.
+     * <p/>
+     * This uses the tri-state enum {@link com.turt2live.antishare.object.attribute.TrackedState}
+     * to represent various states, as outlined below.
+     * <p/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NOT_PRESENT} - Neither allow or deny permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#INCLUDED} - Allow permission found<br/>
+     * {@link com.turt2live.antishare.object.attribute.TrackedState#NEGATED} - Deny permission found
+     *
+     * @param player the player, cannot be null
+     *
+     * @return the appropriate tracking state as defined
+     */
+    public TrackedState canInteract(APlayer player);
 }

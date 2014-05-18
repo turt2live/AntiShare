@@ -140,7 +140,7 @@ public final class WorldEngine {
         List<Group> allGroups = Engine.getInstance().getGroupManager().getGroupsForWorld(getWorldName(), false);
         if (allGroups == null || allGroups.size() <= 0) return new DefaultTrackedTypeList();
         ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(allGroups);
-        return consolidatedGroup.getTrackedList(gamemode);
+        return consolidatedGroup.getBlockTrackedList(gamemode);
     }
 
     /**
@@ -169,7 +169,7 @@ public final class WorldEngine {
         if (groups != null && groups.size() > 0) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
-            list = consolidatedGroup.getTrackedList(placeAs);
+            list = consolidatedGroup.getBlockTrackedList(placeAs);
             reject = consolidatedGroup.getRejectionList(reject.getType());
             placeAs = consolidatedGroup.getActingMode(placeAs);
         }
@@ -834,6 +834,7 @@ public final class WorldEngine {
      *
      * @return true for denial, false otherwise
      */
+    // TODO: Unit test
     public boolean processItemUse(APlayer player, AItem item) {
         if (player == null || item == null) throw new IllegalArgumentException();
 
@@ -872,6 +873,7 @@ public final class WorldEngine {
      *
      * @return true for denial, false otherwise
      */
+    // TODO: Unit test
     public boolean processItemDrop(APlayer player, AItem item) {
         if (player == null || item == null) throw new IllegalArgumentException();
 
@@ -910,6 +912,7 @@ public final class WorldEngine {
      *
      * @return true for denial, false otherwise
      */
+    // TODO: Unit test
     public boolean processItemPickup(APlayer player, AItem item) {
         if (player == null || item == null) throw new IllegalArgumentException();
 
@@ -944,13 +947,217 @@ public final class WorldEngine {
      *
      * @param killed the entity that was killed, cannot be null
      */
+    // TODO: Unit test
     public void processEntityDeath(AEntity killed) {
         if (killed == null) throw new IllegalArgumentException();
 
         DevEngine.log("[WorldEngine:" + worldName + "] Processing entity death",
                 "[WorldEngine:" + worldName + "] \t\tkilled = " + killed,
-                "[WorldEngine:" + worldName + "] \t\tuid = " + killed.getUniqueId());
+                "[WorldEngine:" + worldName + "] \t\tuid = " + killed.getUUID());
 
-        getEntityManager().setType(killed.getUniqueId(), ObjectType.UNKNOWN);
+        getEntityManager().setType(killed.getUUID(), ObjectType.UNKNOWN);
+    }
+
+    /**
+     * Processes an entity placement by a player. This will internally check
+     * to see if the player is allowed to do so, and if not return 'true' to
+     * represent denial.
+     *
+     * @param entity the entity being placed, cannot be null
+     * @param player the player, cannot be null
+     *
+     * @returns true for denial, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processEntityPlace(AEntity entity, APlayer player) {
+        if (entity == null || player == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing hanging placement",
+                "[WorldEngine:" + worldName + "] \t\tentity = " + entity,
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        TrackedTypeList list = new DefaultTrackedTypeList();
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ENTITY_PLACE);
+        ASGameMode playerGM = player.getGameMode();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            list = consolidatedGroup.getEntityTrackedList(playerGM);
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
+        }
+
+        ObjectType objectType = ASUtils.toBlockType(playerGM);
+
+        // Check rejection lists
+        if (playerGM == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
+            TrackedState playerReaction = entity.canPlace(player); // See javadocs
+            if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+            if (reject.isBlocked(entity) && playerReaction == TrackedState.NOT_PRESENT) { // No allow permission & is denied
+                return true;
+            }
+        }
+
+        // Check for block type insertion
+        if (player.hasPermission(APermission.FREE_PLACE)) objectType = ObjectType.UNKNOWN;
+
+        // If we made it this far, the block is OK, so just add it and return
+        if (list.isTracked(entity)) {
+            entityManager.setType(entity.getUUID(), objectType);
+        }
+
+        return false;
+    }
+
+    /**
+     * Processes a player attacking another entity. Internally this will determine
+     * if the action is allowed, returning 'true' to indicate denial.
+     *
+     * @param player the player  cannot be null
+     * @param entity the entity being attacked, cannot be null
+     *
+     * @return true for denial, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processEntityAttack(APlayer player, AEntity entity) {
+        if (player == null || entity == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing player attack entity",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ENTITY_ATTACK);
+        ASGameMode playerGM = player.getGameMode();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
+        }
+
+        ASGameMode otherGM = ASUtils.toGamemode(entityManager.getType(entity.getUUID()));
+        if (entity instanceof APlayer) {
+            APlayer other = (APlayer) entity;
+            otherGM = other.getGameMode();
+        }
+
+        // Inter-gamemode attacking
+        if (otherGM != null && Engine.getInstance().getFlag(Engine.CONFIG_ENTITIES_CROSS_GAMEMODE_ATTACK, true)) {
+            if (otherGM != playerGM && !player.hasPermission(APermission.FREE_ATTACK))
+                return true;
+        }
+
+        if (playerGM != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
+
+        // Check lists and permissions
+        TrackedState playerReaction = entity.canAttack(player);
+        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+        if (reject.isBlocked(entity) && playerReaction == TrackedState.NOT_PRESENT)
+            return true; // Rejected & no allow permission
+        return false;
+    }
+
+    /**
+     * Processes a player interacting with another entity. Internally this will determine
+     * if the action is allowed, returning 'true' to indicate denial.
+     *
+     * @param player the player  cannot be null
+     * @param entity the entity being itneracted with, cannot be null
+     *
+     * @return true for denial, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processEntityInteract(APlayer player, AEntity entity) {
+        if (player == null || entity == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing player interact entity",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ENTITY_INTERACT);
+        ASGameMode playerGM = player.getGameMode();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
+        }
+
+        ASGameMode otherGM = ASUtils.toGamemode(entityManager.getType(entity.getUUID()));
+        if (entity instanceof APlayer) {
+            APlayer other = (APlayer) entity;
+            otherGM = other.getGameMode();
+        }
+
+        // Inter-gamemode interaction
+        if (otherGM != null && Engine.getInstance().getFlag(Engine.CONFIG_ENTITIES_CROSS_GAMEMODE_ATTACK, true)) {
+            if (otherGM != playerGM && !player.hasPermission(APermission.FREE_TOUCH))
+                return true;
+        }
+
+        if (playerGM != ASGameMode.CREATIVE) return false; // TODO: Possible implementation of 'affect'?
+
+        // Check lists and permissions
+        TrackedState playerReaction = entity.canInteract(player);
+        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+        if (reject.isBlocked(entity) && playerReaction == TrackedState.NOT_PRESENT)
+            return true; // Rejected & no allow permission
+        return false;
+    }
+
+    /**
+     * Processes an entity breaking by a player. This will internally check
+     * to see if the player is allowed to do so, and if not return 'true' to
+     * represent denial.
+     *
+     * @param entity the entity being placed, cannot be null
+     * @param player the player, cannot be null
+     *
+     * @returns true for denial, false otherwise
+     */
+    // TODO: Unit test
+    public boolean processEntityBreak(APlayer player, AEntity entity){
+        if (player == null || entity == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing entity break",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ENTITY_BREAK);
+        ASGameMode playerGM = player.getGameMode();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
+        }
+
+        ObjectType objectType = ASUtils.toBlockType(playerGM);
+
+        // Check rejection lists
+        if (playerGM == ASGameMode.CREATIVE) { // TODO: Possible implementation of 'affect'?
+            TrackedState playerReaction = entity.canBreak(player); // See javadocs
+            if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
+            if (reject.isBlocked(entity) && playerReaction == TrackedState.NOT_PRESENT) { // No allow permission & is denied
+                return true;
+            }
+        }
+
+        ObjectType objectType1 = entityManager.getType(entity.getUUID());
+        if (!player.hasPermission(APermission.FREE_BREAK)) {
+            if (objectType1 != objectType && objectType1 != ObjectType.UNKNOWN)
+                return true; // Mixed gamemode
+        }
+
+        entityManager.setType(entity.getUUID(), ObjectType.UNKNOWN);
+        return false; // Entity was processed
     }
 }

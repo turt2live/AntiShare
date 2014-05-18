@@ -50,6 +50,10 @@ public final class APermission {
      * Allows the ability to reload the plugin
      */
     public static final String PLUGIN_RELOAD = "antishare.reload";
+    /**
+     * Ignores inter-gamemode checks when attacking
+     */
+    public static final String FREE_ATTACK = "antishare.freeattack";
 
     private APermission() {
     }

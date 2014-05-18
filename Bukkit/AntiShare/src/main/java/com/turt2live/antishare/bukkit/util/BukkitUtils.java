@@ -26,9 +26,11 @@ import com.turt2live.antishare.io.EntityManager;
 import com.turt2live.antishare.object.ASLocation;
 import com.turt2live.antishare.object.AWorld;
 import com.turt2live.antishare.object.attribute.Facing;
+import com.turt2live.antishare.utils.ASUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.EntityType;
 
 /**
  * AntiShare to/from Bukkit Utilities
@@ -182,9 +184,29 @@ public final class BukkitUtils {
                 return "drop";
             case ITEM_PICKUP:
                 return "pickup";
+            case ENTITY_ATTACK:
+                return "entity-attack";
+            case ENTITY_BREAK:
+                return "entity-break";
+            case ENTITY_INTERACT:
+                return "entity-interact";
+            case ENTITY_PLACE:
+                return "entity-place";
             default:
                 return null;
         }
     }
 
+    /**
+     * Gets the player friendly name for an entity type
+     *
+     * @param entityType the entity type, cannot be null
+     *
+     * @return the player friendly name
+     */
+    public static String getPlayerFriendlyName(EntityType entityType) {
+        if (entityType == null) throw new IllegalArgumentException();
+
+        return ASUtils.toUpperWords(entityType.getName().replace('_', ' '));
+    }
 }
