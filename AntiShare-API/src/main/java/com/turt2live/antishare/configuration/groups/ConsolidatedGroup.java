@@ -71,7 +71,7 @@ public class ConsolidatedGroup {
         if (gameMode == null) throw new IllegalArgumentException("arguments cannot be null");
 
         List<TrackedTypeList> lists = new ArrayList<TrackedTypeList>();
-        for (Group group : groups) lists.add(group.getTrackedList(gameMode));
+        for (Group group : groups) lists.add(group.getBlockTrackedList(gameMode));
 
         return new ConsolidatedTrackedTypeList(lists);
     }

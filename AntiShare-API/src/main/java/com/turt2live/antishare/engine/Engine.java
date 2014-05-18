@@ -62,6 +62,10 @@ public final class Engine {
      */
     public static final String CONFIG_PHYSICS_GROW_WITH_GAMEMODE = "blocks.physics.grow-with-gamemode";
     /**
+     * Configuration key for 'entity spread with gamemode'
+     */
+    public static final String CONFIG_PHYSICS_SPAWN_WITH_GAMEMODE = "blocks.physics.spawn-with-gamemode";
+    /**
      * Configuration key for 'random break as gamemode'
      */
     public static final String CONFIG_PHYSICS_BREAK_AS_GAMEMODE = "blocks.physics.block-item-drop";

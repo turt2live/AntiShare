@@ -27,6 +27,7 @@ import com.turt2live.antishare.bukkit.events.AntiShareBlockBreakEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareExplodeEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareFadeEvent;
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
+import com.turt2live.antishare.bukkit.impl.BukkitEntity;
 import com.turt2live.antishare.bukkit.impl.BukkitItem;
 import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
 import com.turt2live.antishare.bukkit.lang.Lang;
@@ -35,10 +36,7 @@ import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
-import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.AItem;
-import com.turt2live.antishare.object.APlayer;
-import com.turt2live.antishare.object.RejectableCommand;
+import com.turt2live.antishare.object.*;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.ObjectType;
 import com.turt2live.antishare.utils.OutputParameter;
@@ -604,6 +602,15 @@ public class EngineListener implements Listener {
                 alert(Lang.NAUGHTY_ADMIN_PICKUP, player.getName(), name);
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent event) {
+        printDebugEvent(event);
+
+        AEntity entity = new BukkitEntity(event.getEntity());
+
+        engine.getEngine(event.getEntity().getWorld().getName()).processEntityDeath(entity);
     }
 
     /**

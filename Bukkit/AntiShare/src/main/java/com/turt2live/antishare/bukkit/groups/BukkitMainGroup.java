@@ -20,8 +20,9 @@ package com.turt2live.antishare.bukkit.groups;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.MainGroup;
-import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
+import com.turt2live.antishare.object.AEntity;
 
 /**
  * Main group
@@ -40,8 +41,13 @@ public class BukkitMainGroup extends MainGroup {
     }
 
     @Override
-    public TrackedTypeList getTrackedList(ASGameMode gameMode) {
-        return BukkitGroup.getTrackedList(gameMode, super.configuration);
+    public TrackedTypeList getBlockTrackedList(ASGameMode gameMode) {
+        return BukkitGroup.getBlockTrackedList(gameMode, super.configuration);
+    }
+
+    @Override
+    public TrackedTypeList<AEntity> getEntityTrackedList(ASGameMode gameMode) {
+        return BukkitGroup.getEntityTrackedList(gameMode, super.configuration);
     }
 
     @Override

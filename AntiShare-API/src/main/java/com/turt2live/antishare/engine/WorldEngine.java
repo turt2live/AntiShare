@@ -937,4 +937,20 @@ public final class WorldEngine {
             return true; // Rejected & no allow permission
         return false;
     }
+
+    /**
+     * Process an entity death, internally removing the entity from any
+     * applicable tracking systems.
+     *
+     * @param killed the entity that was killed, cannot be null
+     */
+    public void processEntityDeath(AEntity killed) {
+        if (killed == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing entity death",
+                "[WorldEngine:" + worldName + "] \t\tkilled = " + killed,
+                "[WorldEngine:" + worldName + "] \t\tuid = " + killed.getUniqueId());
+
+        getEntityManager().setType(killed.getUniqueId(), ObjectType.UNKNOWN);
+    }
 }

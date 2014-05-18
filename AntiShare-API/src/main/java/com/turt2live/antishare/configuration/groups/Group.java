@@ -20,8 +20,10 @@ package com.turt2live.antishare.configuration.groups;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.configuration.Configuration;
-import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.AEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +140,17 @@ public abstract class Group {
      *
      * @return the block list
      */
-    public abstract TrackedTypeList getTrackedList(ASGameMode gameMode);
+    public abstract TrackedTypeList<ABlock> getBlockTrackedList(ASGameMode gameMode);
+
+    /**
+     * Gets the entity tracking list for a specified GameMode. This does not include
+     * inherited groups.
+     *
+     * @param gameMode the gamemode to lookup
+     *
+     * @return the entity list
+     */
+    public abstract TrackedTypeList<AEntity> getEntityTrackedList(ASGameMode gameMode);
 
     /**
      * Gets the rejection list for a specified list type

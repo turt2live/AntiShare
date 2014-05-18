@@ -35,6 +35,9 @@ blocks:
         # created block inherits the gamemode settings of the block
         # it grew from. Set to false to ignore this setting.
         grow-with-gamemode: true
+        # Much like 'grow-with-gamemode', except for entities (like
+        # babies being spawned)
+        spawn-with-gamemode: true
     hoppers:
         # If true, hoppers will be denied cross-gamemode contamination.
         # This means that 'creative' hoppers cannot transfer items

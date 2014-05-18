@@ -21,13 +21,16 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.MaterialProvider;
 import com.turt2live.antishare.bukkit.lists.BukkitBlockTrackedList;
+import com.turt2live.antishare.bukkit.lists.BukkitEntityTrackedList;
 import com.turt2live.antishare.bukkit.lists.BukkitItemList;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
-import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.engine.list.CommandRejectionList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.AEntity;
 import com.turt2live.antishare.object.RejectableCommand;
 
 import java.util.ArrayList;
@@ -50,8 +53,13 @@ public class BukkitGroup extends Group {
     }
 
     @Override
-    public TrackedTypeList getTrackedList(ASGameMode gameMode) {
-        return getTrackedList(gameMode, super.configuration);
+    public TrackedTypeList<ABlock> getBlockTrackedList(ASGameMode gameMode) {
+        return getBlockTrackedList(gameMode, super.configuration);
+    }
+
+    @Override
+    public TrackedTypeList<AEntity> getEntityTrackedList(ASGameMode gameMode) {
+        return getEntityTrackedList(gameMode, super.configuration);
     }
 
     @Override
@@ -59,7 +67,7 @@ public class BukkitGroup extends Group {
         return getRejectionList(type, super.configuration);
     }
 
-    static TrackedTypeList getTrackedList(ASGameMode gameMode, Configuration configuration) {
+    static TrackedTypeList getBlockTrackedList(ASGameMode gameMode, Configuration configuration) {
         if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
 
         MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
@@ -67,6 +75,14 @@ public class BukkitGroup extends Group {
         list.populateBlocks(configuration.getStringList("blocks." + gameMode.name().toLowerCase(), new ArrayList<String>()));
 
         return list;
+    }
+
+    static TrackedTypeList getEntityTrackedList(ASGameMode gameMode, Configuration configuration) {
+        if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
+
+        List<String> strings = configuration.getStringList("entities." + gameMode.name().toLowerCase(), new ArrayList<String>());
+
+        return new BukkitEntityTrackedList(strings);
     }
 
     static RejectionList getRejectionList(RejectionList.ListType type, Configuration configuration) {
