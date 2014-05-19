@@ -41,6 +41,7 @@ import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.ObjectType;
 import com.turt2live.antishare.utils.OutputParameter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -725,6 +726,50 @@ public class EngineListener implements Listener {
         for (AItem item : items) {
             if (!(item instanceof BukkitItem)) continue;
             event.getDrops().add(((BukkitItem) item).getStack());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        printDebugEvent(event);
+
+        // Filter the event, we don't want to spam the engine
+        Location from = event.getFrom();
+        Location to = event.getTo();
+
+        int x1 = from.getBlockX();
+        int y1 = from.getBlockY();
+        int z1 = from.getBlockZ();
+
+        int x2 = to.getBlockX();
+        int y2 = to.getBlockY();
+        int z2 = to.getBlockZ();
+
+        if (x1 != x2 || y1 != y2 || z1 != z2) {
+            // Filtered to per-block
+
+            ASLocation aFrom = BukkitUtils.toLocation(from);
+            ASLocation aTo = BukkitUtils.toLocation(to);
+            APlayer player = new BukkitPlayer(event.getPlayer());
+
+            OutputParameter<Integer> approaching = new OutputParameter<Integer>();
+            OutputParameter<Boolean> crossed = new OutputParameter<Boolean>();
+
+            engine.getEngine(event.getPlayer().getWorld().getName()).processPlayerMove(player, aFrom, aTo, approaching, crossed);
+
+            // World split handling
+            if (approaching.wasCalled() && crossed.wasCalled()) {
+                Player bkPlayer = event.getPlayer();
+                if (crossed.getValue()) {
+                    bkPlayer.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.GENERAL_WORLDSPLIT_CROSSED)).withPrefix().build());
+                } else if (approaching.getValue() > 0) {
+                    int distance = approaching.getValue();
+
+                    if ((distance <= 16 && distance % 4 == 0) || distance <= 5)
+                        bkPlayer.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.GENERAL_WORLDSPLIT_APPROACH)).withPrefix()
+                                .setReplacement(LangBuilder.SELECTOR_VARIABLE, distance + "").build());
+                }
+            }
         }
     }
 

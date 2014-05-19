@@ -1,0 +1,27 @@
+# World splits are literal splits that span the world. A specified
+# value on an axis becomes the dividing line between two gamemodes
+# where crossing the line forces another gamemode. This is enforced
+# on a per-world basis and ensures players on either side have the
+# correct gamemode. Invalid world splits will be ignored with a
+# warning printed to your console.
+#
+# A world split is simply defined in the list below as you can see
+# in the example. If the example is not present, see the following
+# commented portion.
+#
+# Example split:
+# - world: MyWorldName
+#   axis: X
+#   value: 250
+#   positive: creative
+#   negative: survival
+#
+# The example world split simply says that at X=250, anybody on the
+# positive side (251 -> infinity) will be in creative mode and  anyone
+# on the negative side (249 -> -infinity) will be in survival mode.
+worldsplits:
+- world: MyWorldName
+  axis: X
+  value: 250
+  positive: creative
+  negative: survival

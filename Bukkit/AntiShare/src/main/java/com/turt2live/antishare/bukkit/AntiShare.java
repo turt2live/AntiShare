@@ -17,6 +17,7 @@
 
 package com.turt2live.antishare.bukkit;
 
+import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.commands.CommandHandler;
 import com.turt2live.antishare.bukkit.commands.command.ReloadCommand;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
@@ -28,6 +29,7 @@ import com.turt2live.antishare.bukkit.listener.ToolListener;
 import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.WorldEngine;
+import com.turt2live.antishare.engine.WorldSplit;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.EventListener;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
@@ -44,6 +46,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The AntiShare Bukkit Plugin main class
@@ -64,6 +68,8 @@ public class AntiShare extends JavaPlugin {
     private File dataFolder;
     private int blockSize;
     private MaterialProvider materialProvider = new MaterialProvider();
+    private YamlConfiguration worldsplits;
+    private File worldsplitsFile;
 
     @Override
     public void onLoad() {
@@ -165,6 +171,18 @@ public class AntiShare extends JavaPlugin {
         getConfig().setDefaults(configuration);
         saveDefaultConfig();
 
+        // Setup world splits
+        worldsplitsFile = new File(getDataFolder(), "worldsplits.yml");
+        worldsplits = YamlConfiguration.loadConfiguration(worldsplitsFile);
+        worldsplits.setDefaults(YamlConfiguration.loadConfiguration(getResource("worldsplits.yml")));
+        worldsplits.options().copyDefaults(true);
+        worldsplits.options().copyHeader(true);
+        try {
+            worldsplits.save(worldsplitsFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // Setup AntiShare events
         EventDispatcher.register(this);
 
@@ -232,6 +250,9 @@ public class AntiShare extends JavaPlugin {
         getLogger().info("Reloading plugin...");
         DevEngine.log("[Bukkit Plugin] Reload issued. Reloads until now: " + RELOADS);
 
+        // Reload the world splits
+        worldsplits = YamlConfiguration.loadConfiguration(worldsplitsFile);
+
         // Restart the engine
         DevEngine.log("[Bukkit Plugin] Reloading engine...");
         Engine.getInstance().prepareShutdown();
@@ -251,6 +272,7 @@ public class AntiShare extends JavaPlugin {
     public void onWorldEngineCreate(WorldEngineCreateEvent event) {
         WorldEngine engine = event.getEngine();
 
+        // Prepare world directories
         File storeLocation = new File(dataFolder, engine.getWorldName());
         File blockStore = new File(storeLocation, "blockdata");
         File entityStore = new File(storeLocation, "entities.dat");
@@ -258,12 +280,44 @@ public class AntiShare extends JavaPlugin {
         if (!storeLocation.exists()) storeLocation.mkdirs();
         if (!blockStore.exists()) blockStore.mkdirs();
 
+        // Set block manager
         getLogger().info("Indexing '" + engine.getWorldName() + "'...");
         engine.setBlockManager(new FileBlockManager(blockSize, blockStore));
 
+        // Set entity manager
         EntityManager entityManager = new FileEntityManager(entityStore);
         entityManager.load();
         engine.setEntityManager(entityManager);
+
+        // Set world split, if required
+        List<Map<?, ?>> splits = worldsplits.getMapList("worldsplits");
+        for (Map<?, ?> split : splits) {
+            try {
+                if (((String) split.get("world")).equalsIgnoreCase(engine.getWorldName())) {
+                    // We found a world split
+
+                    String positive = (String) split.get("positive");
+                    String negative = (String) split.get("negative");
+                    String axis = (String) split.get("axis");
+                    int value = (Integer) split.get("value");
+
+                    ASGameMode p = ASGameMode.fromString(positive);
+                    ASGameMode n = ASGameMode.fromString(negative);
+                    WorldSplit.Axis a = WorldSplit.Axis.valueOf(axis.toUpperCase());
+
+                    if (p == null || n == null || p == n) {
+                        getLogger().warning("[WorldSplit: " + engine.getWorldName() + "] Gamemodes must be dis-similar and real: " + p + " vs " + n);
+                        continue;
+                    }
+
+                    WorldSplit worldSplit = new WorldSplit(a, value, p, n);
+                    engine.setWorldSplit(worldSplit);
+                }
+            } catch (Exception e) {
+                getLogger().warning("Invalid world split configuration, see below for more information.");
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

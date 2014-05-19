@@ -52,6 +52,7 @@ public final class WorldEngine {
     private String worldName;
     private BlockManager blockManager = new MemoryBlockManager();
     private EntityManager entityManager = new MemoryEntityManager();
+    private WorldSplit worldSplit;
 
     /**
      * Creates a new world engine
@@ -141,6 +142,26 @@ public final class WorldEngine {
         if (allGroups == null || allGroups.size() <= 0) return new DefaultTrackedTypeList();
         ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(allGroups);
         return consolidatedGroup.getBlockTrackedList(gamemode);
+    }
+
+    /**
+     * Gets the current world split for this engine
+     *
+     * @return the world split, may be null if not set
+     */
+    // TODO: Unit test
+    public WorldSplit getWorldSplit() {
+        return worldSplit;
+    }
+
+    /**
+     * Sets the world split for this engine. Null indicates 'none'
+     *
+     * @param split the new split, may be null
+     */
+    // TODO: Unit test
+    public void setWorldSplit(WorldSplit split) {
+        this.worldSplit = split;
     }
 
     /**
@@ -1202,6 +1223,61 @@ public final class WorldEngine {
 
             if (denied) {
                 items.remove(item);
+            }
+        }
+    }
+
+    /**
+     * Processes a player movement, internally checking for whatever features
+     * it requires in order to handle this movement.
+     * <p/>
+     * In respect to world splits, there are two optional output parameters that
+     * may be used. The 'approaching' argument may be used for determining if the
+     * player is approaching the world split. This will be a negative number (-1) if
+     * they are not approaching the crossover line and will be any other number if
+     * they are. This will be zero if the player has crossed the world split during
+     * processing. The final case where a player is not applicable for the world split
+     * will also be a negative number (-2) in the 'approaching' parameter.
+     * <p/>
+     * The other world split functionality, crossing, is handled by the other optional
+     * output argument: 'crossed'. This will be true for if the player crossed the split
+     * and false otherwise.
+     * <p/>
+     * If there is no world split, neither output parameter will be touched.
+     *
+     * @param player                the player that is moving, cannot be null
+     * @param from                  the location they moved from, cannot be null
+     * @param to                    the location they moved to, cannot be null
+     * @param approachingWorldsplit the optional output parameter for 'approaching' the world split
+     * @param crossedWorldsplit     the optional output parameter for 'crossed' the world split
+     */
+    // TODO: Unit test
+    public void processPlayerMove(APlayer player, ASLocation from, ASLocation to, OutputParameter<Integer> approachingWorldsplit, OutputParameter<Boolean> crossedWorldsplit) {
+        if (player == null || to == null || from == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing player move",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\tfrom = " + from,
+                "[WorldEngine:" + worldName + "] \t\tto = " + to,
+                "[WorldEngine:" + worldName + "] \t\tapproachingWorldsplit = " + approachingWorldsplit,
+                "[WorldEngine:" + worldName + "] \t\tcrossedWorldsplit = " + crossedWorldsplit);
+
+        if (worldSplit != null) {
+            int distance = worldSplit.processMovement(player, from, to); // -1 = cross, -2 = N/A, all other = distance
+            if (distance == -1) {
+                if (approachingWorldsplit != null) approachingWorldsplit.setValue(0);
+                if (crossedWorldsplit != null) crossedWorldsplit.setValue(true);
+            } else if (distance == -2) {
+                if (approachingWorldsplit != null) approachingWorldsplit.setValue(-1);
+                if (crossedWorldsplit != null) crossedWorldsplit.setValue(false);
+            } else {
+                if (worldSplit.isApproaching(from, to)) {
+                    if (approachingWorldsplit != null) approachingWorldsplit.setValue(distance);
+                    if (crossedWorldsplit != null) crossedWorldsplit.setValue(false);
+                } else {
+                    if (approachingWorldsplit != null) approachingWorldsplit.setValue(-2);
+                    if (crossedWorldsplit != null) crossedWorldsplit.setValue(false);
+                }
             }
         }
     }

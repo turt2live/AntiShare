@@ -69,6 +69,8 @@ general:
     - '&d  A server restart is ideal.'
     - '&7  You have reloaded &c@v &7times'
     - '&4 -------------------------------------'
+    worldsplit-approach: '&cWarning: &7You are &b@v &7blocks from a world split!'
+    worldsplit-crossed: '&7You have crossed the world split'
 tools:
     check-title: '&bAntiShare Check Tool'
     set-title: '&bAntiShare Set Tool'

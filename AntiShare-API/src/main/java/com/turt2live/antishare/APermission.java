@@ -54,6 +54,10 @@ public final class APermission {
      * Ignores inter-gamemode checks when attacking
      */
     public static final String FREE_ATTACK = "antishare.freeattack";
+    /**
+     * Ignores world splits
+     */
+    public static final String FREE_ROAM = "antishare.freeroam";
 
     private APermission() {
     }

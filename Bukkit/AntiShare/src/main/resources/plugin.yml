@@ -28,6 +28,9 @@ permissions:
     antishare.freeattack:
         default: op
         description: Allows the target to attack entities without inter-gamemode restrictions
+    antishare.freeroam:
+        default: op
+        description: Allows the target to roam free around the worlds, ignoring world splits
     antishare.group.main:
         default: true
         description: Default main group permission

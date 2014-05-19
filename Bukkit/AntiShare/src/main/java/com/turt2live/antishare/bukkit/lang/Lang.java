@@ -41,6 +41,8 @@ public class Lang {
     public static final String GENERAL_RELOADED = "general.reloaded";
     public static final String GENERAL_RELOAD_WARNING = "general.reload-warning";
     public static final String GENERAL_RELOAD_CRITICAL = "general.reload-critical";
+    public static final String GENERAL_WORLDSPLIT_APPROACH = "general.worldsplit-approach";
+    public static final String GENERAL_WORLDSPLIT_CROSSED = "general.worldsplit-crossed";
 
     // Error strings
     public static final String ERROR_HELP_SUGGEST = "errors.help-suggest";
