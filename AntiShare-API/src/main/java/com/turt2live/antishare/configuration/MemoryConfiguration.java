@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public class MemoryConfiguration extends Configuration {
 
     private ConcurrentMap<String, Object> values = new ConcurrentHashMap<String, Object>();

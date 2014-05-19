@@ -24,6 +24,7 @@ import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.AEntity;
+import com.turt2live.antishare.object.Rejectable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,5 +160,5 @@ public abstract class Group {
      *
      * @return the list found, or null if none exists
      */
-    public abstract RejectionList getRejectionList(RejectionList.ListType list);
+    public abstract <T extends Rejectable> RejectionList<T> getRejectionList(RejectionList.ListType list);
 }

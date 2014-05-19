@@ -22,6 +22,9 @@ import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.engine.list.TrackedTypeList;
+import com.turt2live.antishare.object.ABlock;
+import com.turt2live.antishare.object.AEntity;
+import com.turt2live.antishare.object.Rejectable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,7 +39,6 @@ import java.util.List;
  *
  * @author turt2live
  */
-// TODO: Unit test
 public class ConsolidatedGroup {
 
     private List<Group> groups;
@@ -48,6 +50,12 @@ public class ConsolidatedGroup {
      */
     public ConsolidatedGroup(List<Group> groups) {
         if (groups == null || groups.isEmpty()) throw new IllegalArgumentException("groups cannot be null or empty");
+
+        // Check for null elements
+        for (Group group : groups) {
+            if (group == null) throw new IllegalArgumentException("Null elements not permitted.");
+        }
+
         this.groups = Collections.unmodifiableList(groups);
     }
 
@@ -67,13 +75,13 @@ public class ConsolidatedGroup {
      *
      * @return the consolidated block tracking list
      */
-    public ConsolidatedTrackedTypeList getBlockTrackedList(ASGameMode gameMode) {
+    public ConsolidatedTrackedTypeList<ABlock> getBlockTrackedList(ASGameMode gameMode) {
         if (gameMode == null) throw new IllegalArgumentException("arguments cannot be null");
 
-        List<TrackedTypeList> lists = new ArrayList<TrackedTypeList>();
+        List<TrackedTypeList<ABlock>> lists = new ArrayList<TrackedTypeList<ABlock>>();
         for (Group group : groups) lists.add(group.getBlockTrackedList(gameMode));
 
-        return new ConsolidatedTrackedTypeList(lists);
+        return new ConsolidatedTrackedTypeList<ABlock>(lists);
     }
 
     /**
@@ -83,25 +91,33 @@ public class ConsolidatedGroup {
      *
      * @return the consolidated entity tracking list
      */
-    public ConsolidatedTrackedTypeList getEntityTrackedList(ASGameMode gameMode) {
+    public ConsolidatedTrackedTypeList<AEntity> getEntityTrackedList(ASGameMode gameMode) {
         if (gameMode == null) throw new IllegalArgumentException("arguments cannot be null");
 
-        List<TrackedTypeList> lists = new ArrayList<TrackedTypeList>();
+        List<TrackedTypeList<AEntity>> lists = new ArrayList<TrackedTypeList<AEntity>>();
         for (Group group : groups) lists.add(group.getEntityTrackedList(gameMode));
 
-        return new ConsolidatedTrackedTypeList(lists);
+        return new ConsolidatedTrackedTypeList<AEntity>(lists);
     }
 
-    public ConsolidatedRejectionList getRejectionList(RejectionList.ListType type) {
+    /**
+     * Gets the consolidated rejection list for the specified list type
+     *
+     * @param type the list type to lookup, cannot be null
+     * @param <T>  the expected type of Rejectable to use
+     *
+     * @return the rejectable list
+     */
+    public <T extends Rejectable> ConsolidatedRejectionList getRejectionList(RejectionList.ListType type) {
         if (type == null) throw new IllegalArgumentException();
 
-        List<RejectionList> lists = new ArrayList<RejectionList>();
+        List<RejectionList<T>> lists = new ArrayList<RejectionList<T>>();
         for (Group group : groups) {
-            RejectionList list = group.getRejectionList(type);
+            RejectionList<T> list = group.getRejectionList(type);
             if (list != null) lists.add(list);
         }
 
-        return new ConsolidatedRejectionList(lists);
+        return new ConsolidatedRejectionList<T>(lists);
     }
 
     /**
