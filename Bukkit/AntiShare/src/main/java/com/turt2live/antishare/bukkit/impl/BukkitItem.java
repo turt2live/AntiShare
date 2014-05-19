@@ -64,7 +64,29 @@ public class BukkitItem extends BukkitObject implements AItem {
     }
 
     @Override
+    public TrackedState canDieWith(APlayer player) {
+        return permissionCheck(RejectionList.ListType.DEATH, player);
+    }
+
+    @Override
     protected String getFriendlyName() {
         return AntiShare.getInstance().getMaterialProvider().getPlayerFriendlyName(stack);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BukkitItem)) return false;
+
+        BukkitItem that = (BukkitItem) o;
+
+        if (!stack.equals(that.stack)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return stack.hashCode();
     }
 }

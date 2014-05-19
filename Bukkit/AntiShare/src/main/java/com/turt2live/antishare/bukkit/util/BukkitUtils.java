@@ -192,6 +192,8 @@ public final class BukkitUtils {
                 return "entity-interact";
             case ENTITY_PLACE:
                 return "entity-place";
+            case DEATH:
+                return "death";
             default:
                 return null;
         }

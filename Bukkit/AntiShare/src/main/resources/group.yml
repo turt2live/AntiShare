@@ -77,6 +77,8 @@ lists:
     - item frame
     entity-break:
     - item frame
+    death:
+    - diamond
 
 # Settings for gamemode-related actions. These control how to
 # handle certain gamemode actions, such as what gamemode to

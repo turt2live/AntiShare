@@ -74,6 +74,7 @@ public class Lang {
     public static final String NAUGHTY_ENTITY_BREAK = "naughty.entity-break";
     public static final String NAUGHTY_ENTITY_INTERACT = "naughty.entity-interact";
     public static final String NAUGHTY_ENTITY_ATTACK = "naughty.entity-attack";
+    public static final String NAUGHTY_DEATH = "naughty.death";
 
     // Naught admin alert strings
     public static final String NAUGHTY_ADMIN_PLACE = "naughty.admin.place";
@@ -87,6 +88,7 @@ public class Lang {
     public static final String NAUGHTY_ADMIN_ENTITY_BREAK = "naughty.admin.entity-break";
     public static final String NAUGHTY_ADMIN_ENTITY_INTERACT = "naughty.admin.entity-interact";
     public static final String NAUGHTY_ADMIN_ENTITY_ATTACK = "naughty.admin.entity-attack";
+    public static final String NAUGHTY_ADMIN_DEATH = "naughty.admin.death";
 
     // Help strings
     public static final String HELP_TITLE = "help.title";

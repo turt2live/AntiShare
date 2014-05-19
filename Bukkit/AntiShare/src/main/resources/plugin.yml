@@ -100,3 +100,9 @@ permissions:
     antishare.deny.entity_interact:
         default: false
         description: Denies all entity interaction, regardless of group settings
+    antishare.allow.death:
+        default: op
+        description: Allows all items to be dropped on death, regardless of group settings
+    antishare.deny.death:
+        default: false
+        description: Denies all items to be dropped on death, regardless of group settings

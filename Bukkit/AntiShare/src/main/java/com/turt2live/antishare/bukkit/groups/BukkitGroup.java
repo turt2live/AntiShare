@@ -113,6 +113,7 @@ public class BukkitGroup extends Group {
             case ITEM_USE:
             case ITEM_DROP:
             case ITEM_PICKUP:
+            case DEATH:
                 list = new BukkitItemList(type);
                 List<String> items = configuration.getStringList("lists." + configKey, new ArrayList<String>());
                 ((BukkitItemList) list).load(items);

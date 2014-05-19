@@ -1122,7 +1122,7 @@ public final class WorldEngine {
      * @returns true for denial, false otherwise
      */
     // TODO: Unit test
-    public boolean processEntityBreak(APlayer player, AEntity entity){
+    public boolean processEntityBreak(APlayer player, AEntity entity) {
         if (player == null || entity == null) throw new IllegalArgumentException();
 
         DevEngine.log("[WorldEngine:" + worldName + "] Processing entity break",
@@ -1159,5 +1159,50 @@ public final class WorldEngine {
 
         entityManager.setType(entity.getUUID(), ObjectType.UNKNOWN);
         return false; // Entity was processed
+    }
+
+    /**
+     * Processes a player death, determining internally which items are permitted to
+     * be dropped. Any items in the passed listed that remain after this method call
+     * are permitted to be dropped. Items that have been removed must not drop onto
+     * the ground
+     *
+     * @param player the player dying, cannot be null
+     * @param items  the items being dropped, cannot be null but may be empty
+     */
+    public void processPlayerDeath(APlayer player, List<AItem> items) {
+        if (player == null || items == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[WorldEngine:" + worldName + "] Processing player death",
+                "[WorldEngine:" + worldName + "] \t\tplayer = " + player,
+                "[WorldEngine:" + worldName + "] \t\titems = " + items);
+
+        List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
+        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.DEATH);
+        ASGameMode playerGM = player.getGameMode();
+
+        if (groups != null && groups.size() > 0) {
+            ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
+
+            reject = consolidatedGroup.getRejectionList(reject.getType());
+            playerGM = consolidatedGroup.getActingMode(playerGM);
+        }
+
+        if (playerGM != ASGameMode.CREATIVE) return; // TODO: Possible implementation of 'affect'?
+
+        List<AItem> clone = new ArrayList<AItem>(items);
+        for (AItem item : clone) {
+            boolean denied = false;
+
+            TrackedState playerReaction = item.canDieWith(player); // See javadocs
+            if (playerReaction == TrackedState.NEGATED) denied = true; // Straight up deny
+            if (reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT) { // No allow permission & is denied
+                denied = true;
+            }
+
+            if (denied) {
+                items.remove(item);
+            }
+        }
     }
 }

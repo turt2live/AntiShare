@@ -633,14 +633,14 @@ public class EngineListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onHangingBreakEntity(HangingBreakByEntityEvent event){
+    public void onHangingBreakEntity(HangingBreakByEntityEvent event) {
         printDebugEvent(event);
 
-        if(event.getRemover() instanceof Player){
+        if (event.getRemover() instanceof Player) {
             APlayer player = new BukkitPlayer((Player) event.getRemover());
             AEntity entity = new BukkitEntity(event.getEntity());
 
-            if(engine.getEngine(event.getEntity().getWorld().getName()).processEntityBreak(player,entity)){
+            if (engine.getEngine(event.getEntity().getWorld().getName()).processEntityBreak(player, entity)) {
                 event.setCancelled(true);
 
                 String name = BukkitUtils.getPlayerFriendlyName(event.getEntity().getType());
@@ -694,6 +694,40 @@ public class EngineListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        APlayer player = new BukkitPlayer(event.getEntity());
+        List<AItem> items = new ArrayList<AItem>();
+
+        for (ItemStack item : event.getDrops()) {
+            items.add(new BukkitItem(item));
+        }
+
+        engine.getEngine(event.getEntity().getWorld().getName()).processPlayerDeath(player, items);
+
+        if (items.size() != event.getDrops().size()) {
+            int stacks = event.getDrops().size() - items.size(); // stacks
+            int actual = 0;
+
+            for(ItemStack item : event.getDrops()){
+                AItem bk = new BukkitItem(item);
+                if(!items.contains(bk)) actual+=item.getAmount();
+            }
+
+            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_DEATH)).withPrefix()
+                    .setReplacement(LangBuilder.SELECTOR_VARIABLE + "1", actual + "")
+                    .setReplacement(LangBuilder.SELECTOR_VARIABLE + "2", stacks + "")
+                    .build());
+            alert(Lang.NAUGHTY_ADMIN_DEATH, player.getName(), actual + "", stacks + "");
+        }
+
+        event.getDrops().clear();
+        for (AItem item : items) {
+            if (!(item instanceof BukkitItem)) continue;
+            event.getDrops().add(((BukkitItem) item).getStack());
+        }
+    }
+
     /**
      * Used for processing of generic ITEM_USE events (like exp bottles, eggs, etc).
      * This will send the applicable alerts as well
@@ -725,6 +759,26 @@ public class EngineListener implements Listener {
         String compiled = new LangBuilder(Lang.getInstance().getFormat(langNode)).withPrefix()
                 .setReplacement(LangBuilder.SELECTOR_PLAYER, playerName)
                 .setReplacement(LangBuilder.SELECTOR_VARIABLE, variable)
+                .build();
+
+        if (Lang.getInstance().getFormat(langNode).trim().equalsIgnoreCase("disabled")) return;
+
+        Bukkit.broadcast(compiled, APermission.GET_ALERTS);
+    }
+
+    /**
+     * Sends an alert
+     *
+     * @param langNode   the alert node in the lang file
+     * @param playerName the player name
+     * @param variable1  a variable to replace ({@link com.turt2live.antishare.bukkit.lang.LangBuilder#SELECTOR_VARIABLE})
+     * @param variable2  a variable to replace ({@link com.turt2live.antishare.bukkit.lang.LangBuilder#SELECTOR_VARIABLE})
+     */
+    private void alert(String langNode, String playerName, String variable1, String variable2) {
+        String compiled = new LangBuilder(Lang.getInstance().getFormat(langNode)).withPrefix()
+                .setReplacement(LangBuilder.SELECTOR_PLAYER, playerName)
+                .setReplacement(LangBuilder.SELECTOR_VARIABLE + "1", variable1)
+                .setReplacement(LangBuilder.SELECTOR_VARIABLE + "2", variable2)
                 .build();
 
         if (Lang.getInstance().getFormat(langNode).trim().equalsIgnoreCase("disabled")) return;
