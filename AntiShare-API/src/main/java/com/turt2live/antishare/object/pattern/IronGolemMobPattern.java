@@ -30,7 +30,7 @@ import java.util.List;
  * @author turt2live
  */
 // TODO: Unit test
-public abstract class IronGolemMobPattern implements BlockPattern, MobPattern{
+public abstract class IronGolemMobPattern implements BlockPattern, MobPattern {
 
     protected enum IronGolemBlock {
         PUMPKIN,
