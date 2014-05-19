@@ -109,3 +109,9 @@ permissions:
     antishare.deny.death:
         default: false
         description: Denies all items to be dropped on death, regardless of group settings
+    antishare.allow.mob_create:
+        default: op
+        description: Allows all mobs to be created, regardless of group settings
+    antishare.deny.mob_create:
+        default: false
+        description: Denies all mobs to be created, regardless of group settings

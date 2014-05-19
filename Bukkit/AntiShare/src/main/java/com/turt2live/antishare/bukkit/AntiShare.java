@@ -23,6 +23,9 @@ import com.turt2live.antishare.bukkit.commands.command.ReloadCommand;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
 import com.turt2live.antishare.bukkit.configuration.BukkitConfiguration;
 import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
+import com.turt2live.antishare.bukkit.impl.pattern.BukkitIronGolemMobPattern;
+import com.turt2live.antishare.bukkit.impl.pattern.BukkitSnowmanPattern;
+import com.turt2live.antishare.bukkit.impl.pattern.BukkitWitherPattern;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.listener.EngineListener;
 import com.turt2live.antishare.bukkit.listener.ToolListener;
@@ -36,6 +39,7 @@ import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 import com.turt2live.antishare.io.EntityManager;
 import com.turt2live.antishare.io.flatfile.FileBlockManager;
 import com.turt2live.antishare.io.flatfile.FileEntityManager;
+import com.turt2live.antishare.object.pattern.PatternManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -234,6 +238,13 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setSaveInterval(periodicSave);
         Engine.getInstance().setGroupManager(new BukkitGroupManager());
         Engine.getInstance().setConfiguration(new BukkitConfiguration(new File(getDataFolder(), "config.yml")));
+
+        // Setup mob patterns
+        PatternManager patterns = Engine.getInstance().getPatterns();
+        patterns.clear();
+        patterns.add(new BukkitIronGolemMobPattern());
+        patterns.add(new BukkitSnowmanPattern());
+        patterns.add(new BukkitWitherPattern());
 
         // Probe all currently loaded worlds
         for (World world : getServer().getWorlds()) {

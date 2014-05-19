@@ -32,6 +32,7 @@ import com.turt2live.antishare.object.*;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.ObjectType;
 import com.turt2live.antishare.object.attribute.TrackedState;
+import com.turt2live.antishare.object.pattern.MobPattern;
 import com.turt2live.antishare.utils.ASUtils;
 import com.turt2live.antishare.utils.BlockTypeTransaction;
 import com.turt2live.antishare.utils.OutputParameter;
@@ -166,16 +167,18 @@ public final class WorldEngine {
 
     /**
      * Processes a block placement, ensuring the player is allowed to place the block as well
-     * as running the tracking logic.
+     * as running the tracking logic. If a mob pattern can be matched, then 'matched pattern'
+     * will be populated with the pattern that was found, regardless of denial status.
      *
-     * @param player  the player placing the block, cannot be null
-     * @param block   the block being placed, cannot be null
-     * @param placeAs the gamemode placing the block
+     * @param player         the player placing the block, cannot be null
+     * @param block          the block being placed, cannot be null
+     * @param placeAs        the gamemode placing the block
+     * @param matchedPattern the optional output argument for which mob pattern was matched, if any
      *
      * @return returns true if the block placement was rejected, false otherwise
      */
     // TODO: Unit test
-    public boolean processBlockPlace(APlayer player, ABlock block, ASGameMode placeAs) {
+    public boolean processBlockPlace(APlayer player, ABlock block, ASGameMode placeAs, OutputParameter<MobPattern> matchedPattern) {
         if (player == null || block == null || placeAs == null) throw new IllegalArgumentException();
 
         DevEngine.log("[WorldEngine:" + worldName + "] Processing block place",
@@ -257,6 +260,60 @@ public final class WorldEngine {
                 break;
             default:
                 break;
+        }
+
+        // Check for mob patterns
+        MobPattern pattern = (MobPattern) Engine.getInstance().getPatterns().findPattern(block, MobPattern.class);
+        if (pattern != null) {
+            List<ABlock> blocks = pattern.getInvolvedBlocks(block);
+            RejectionList.ListType type = RejectionList.ListType.MOB_CREATE;
+            TrackedState playerState;
+
+            if (matchedPattern != null) matchedPattern.setValue(pattern);
+
+            if (placeAs == ASGameMode.CREATIVE) {
+                // Stage One: Check general permissions
+                boolean allow = player.hasPermission(APermission.getPermissionNode(true, type));
+                boolean deny = player.hasPermission(APermission.getPermissionNode(false, type));
+                TrackedState stageOne = TrackedState.NOT_PRESENT;
+
+                if (allow == deny) stageOne = TrackedState.NOT_PRESENT;
+                else if (allow) stageOne = TrackedState.INCLUDED;
+                else if (deny) stageOne = TrackedState.NEGATED;
+
+                // Stage Two: Check specific permissions
+                allow = player.hasPermission(APermission.getPermissionNode(true, type) + "." + pattern.getEntityType().name().toLowerCase());
+                deny = player.hasPermission(APermission.getPermissionNode(false, type) + "." + pattern.getEntityType().name().toLowerCase());
+                TrackedState stageTwo = TrackedState.NOT_PRESENT;
+
+                if (allow == deny) stageTwo = TrackedState.NOT_PRESENT;
+                else if (allow) stageTwo = TrackedState.INCLUDED;
+                else if (deny) stageTwo = TrackedState.NEGATED;
+
+
+                if (stageTwo == TrackedState.NOT_PRESENT) playerState = stageOne;
+                else playerState = stageTwo;
+
+                RejectionList mobs = new DefaultRejectionList(RejectionList.ListType.MOB_CREATE);
+
+                if (groups != null && groups.size() > 0) {
+                    mobs = new ConsolidatedGroup(groups).getRejectionList(mobs.getType());
+                }
+
+                if (playerState == TrackedState.NEGATED) return true; // Straight up deny
+                if (mobs.isBlocked(pattern.getEntityType()) && playerState == TrackedState.NOT_PRESENT) { // No allow permission & is denied
+                    return true;
+                }
+            }
+
+            // Final check: Mixed gamemode
+            if (objectType != ObjectType.UNKNOWN) {
+                for (ABlock block1 : blocks) {
+                    ObjectType t = blockManager.getBlockType(block1.getLocation());
+                    if (t != ObjectType.UNKNOWN && t != objectType)
+                        return true; // Denied, mismatch gamemode
+                }
+            }
         }
 
         // If we made it this far, the block is OK, so just add it and return

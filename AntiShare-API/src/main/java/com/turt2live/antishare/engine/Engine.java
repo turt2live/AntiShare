@@ -23,6 +23,7 @@ import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
+import com.turt2live.antishare.object.pattern.PatternManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -102,6 +103,7 @@ public final class Engine {
     private Logger logger = Logger.getLogger(getClass().getName());
     private GroupManager groupManager = null;
     private Configuration configuration = new MemoryConfiguration();
+    private PatternManager patterns = new PatternManager();
 
     private Engine() {
         newCacheTimer();
@@ -179,6 +181,15 @@ public final class Engine {
         DevEngine.log("[Engine] New logger: " + logger.getClass().getName());
 
         this.logger = logger;
+    }
+
+    /**
+     * Gets the pattern manager for this Engine instance
+     *
+     * @return the patterns
+     */
+    public PatternManager getPatterns() {
+        return patterns;
     }
 
     /**

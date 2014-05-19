@@ -45,6 +45,7 @@ public interface RejectionList<T extends Rejectable> {
         ENTITY_PLACE,
         ENTITY_BREAK,
         DEATH,
+        MOB_CREATE,
 
         /**
          * CUSTOM should only be used for out-of-plugin operations

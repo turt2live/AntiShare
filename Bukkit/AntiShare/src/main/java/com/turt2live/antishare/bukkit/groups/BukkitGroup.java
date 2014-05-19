@@ -23,15 +23,18 @@ import com.turt2live.antishare.bukkit.MaterialProvider;
 import com.turt2live.antishare.bukkit.lists.BukkitBlockTrackedList;
 import com.turt2live.antishare.bukkit.lists.BukkitEntityTrackedList;
 import com.turt2live.antishare.bukkit.lists.BukkitItemList;
+import com.turt2live.antishare.bukkit.lists.BukkitRejectionList;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
+import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.engine.list.CommandRejectionList;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.AEntity;
 import com.turt2live.antishare.object.RejectableCommand;
+import com.turt2live.antishare.object.attribute.TrackedState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +127,23 @@ public class BukkitGroup extends Group {
             case ENTITY_BREAK:
                 List<String> entities = configuration.getStringList("lists." + configKey, new ArrayList<String>());
                 list = new BukkitEntityTrackedList(type, entities);
+                break;
+            case MOB_CREATE:
+                list = new BukkitRejectionList<AEntity.RelevantEntityType>(type);
+                List<String> strings = configuration.getStringList("lists." + configKey, new ArrayList<String>());
+                for (String s : strings) {
+                    boolean negated = false;
+                    if (s.startsWith("-")) {
+                        negated = true;
+                        s = s.substring(1);
+                    }
+                    AEntity.RelevantEntityType entityType = AEntity.RelevantEntityType.fromString(s);
+                    if (entityType != null) {
+                        ((BukkitRejectionList<AEntity.RelevantEntityType>) list).setTrackedState(entityType, negated ? TrackedState.NEGATED : TrackedState.INCLUDED);
+                    } else {
+                        Engine.getInstance().getLogger().warning("Unknown entity type for " + type + ": " + s);
+                    }
+                }
                 break;
             default:
                 list = null;

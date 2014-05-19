@@ -42,6 +42,7 @@ naughty:
         entity-attack: '&c@p &7tried to attack a &c@v'
         entity-interact: '&c@p &7tried to interact with a &c@v'
         death: '&c@p &7tried to die with &c@v1 &7illegal items &c(@v2 stacks)'
+        mob-create: '&c@p &7tried to spawn a &c@v'
     place: '&cYou cannot place that &4@v'
     break: '&cYou cannot break that &4@v'
     command: '&cYou cannot use the command &4@v'
@@ -54,6 +55,7 @@ naughty:
     entity-attack: '&cYou cannot attack that &4@v'
     entity-interact: '&cYou cannot interact with that &4@v'
     death: '&4@v1 &citems &4(@v2 stacks) &care illegal and were not dropped'
+    mob-create: '&cYou cannot spawn that &4@v'
 general:
     reloading: '&7Reloading'
     reloaded: '&aReload completed!'

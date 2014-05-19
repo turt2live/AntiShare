@@ -194,6 +194,8 @@ public final class BukkitUtils {
                 return "entity-place";
             case DEATH:
                 return "death";
+            case MOB_CREATE:
+                return "mob-create";
             default:
                 return null;
         }

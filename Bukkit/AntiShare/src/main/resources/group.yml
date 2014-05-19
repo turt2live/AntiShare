@@ -79,6 +79,10 @@ lists:
     - item frame
     death:
     - diamond
+    mob-create:
+    - snowman
+    - irongolem
+    - wither
 
 # Settings for gamemode-related actions. These control how to
 # handle certain gamemode actions, such as what gamemode to

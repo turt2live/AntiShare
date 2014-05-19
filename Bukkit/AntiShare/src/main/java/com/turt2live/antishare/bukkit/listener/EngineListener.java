@@ -39,10 +39,13 @@ import com.turt2live.antishare.engine.WorldEngine;
 import com.turt2live.antishare.object.*;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.ObjectType;
+import com.turt2live.antishare.object.pattern.MobPattern;
+import com.turt2live.antishare.utils.ASUtils;
 import com.turt2live.antishare.utils.OutputParameter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -93,19 +96,43 @@ public class EngineListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onBlockPlace(BlockPlaceEvent event) {
+    public void onBlockPlace(final BlockPlaceEvent event) {
         printDebugEvent(event);
 
-        ABlock block = new BukkitBlock(event.getBlock());
+        final ABlock block = new BukkitBlock(event.getBlock());
         APlayer player = new BukkitPlayer(event.getPlayer());
         ASGameMode gamemode = player.getGameMode();
+        final OutputParameter<MobPattern> matchedPattern = new OutputParameter<MobPattern>();
 
-        if (engine.getEngine(block.getWorld().getName()).processBlockPlace(player, block, gamemode)) {
+        if (engine.getEngine(block.getWorld().getName()).processBlockPlace(player, block, gamemode, matchedPattern)) {
             event.setCancelled(true);
 
-            String blockType = plugin.getMaterialProvider().getPlayerFriendlyName(event.getBlock());
-            player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PLACE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
-            alert(Lang.NAUGHTY_ADMIN_PLACE, event.getPlayer().getName(), blockType);
+            if (matchedPattern.hasValue()) {
+                String pattern = ASUtils.toUpperWords(matchedPattern.getValue().getEntityType().name().replace('_', ' '));
+                player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_MOB_CREATE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, pattern).build());
+                alert(Lang.NAUGHTY_ADMIN_MOB_CREATE, event.getPlayer().getName(), pattern);
+
+                // Due to a Bukkit bug, we need to send block updates 2 ticks later as well
+                plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+                    @Override
+                    public void run() {
+                        List<ABlock> blocks = matchedPattern.getValue().getInvolvedBlocks(block);
+                        for (ABlock block : blocks) {
+                            if (block instanceof BukkitBlock) {
+                                Block bk = ((BukkitBlock) block).getBlock();
+                                World world = bk.getWorld();
+                                world.refreshChunk(bk.getChunk().getX(), bk.getChunk().getZ());
+                            }
+                        }
+                        World world = event.getBlock().getWorld();
+                        world.refreshChunk(event.getBlock().getChunk().getX(), event.getBlock().getChunk().getZ());
+                    }
+                }, 2);
+            } else {
+                String blockType = plugin.getMaterialProvider().getPlayerFriendlyName(event.getBlock());
+                player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_PLACE)).withPrefix().setReplacement(LangBuilder.SELECTOR_VARIABLE, blockType).build());
+                alert(Lang.NAUGHTY_ADMIN_PLACE, event.getPlayer().getName(), blockType);
+            }
         }
     }
 

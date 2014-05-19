@@ -29,6 +29,37 @@ import java.util.UUID;
 public interface AEntity extends Rejectable {
 
     /**
+     * Represents a list of entity types which matter to the
+     * AntiShare engine. Not all types are listed here.
+     */
+    public enum RelevantEntityType implements Rejectable {
+        WITHER,
+        IRON_GOLEM,
+        SNOWMAN;
+
+        /**
+         * Attempts to match a string to an entity type
+         *
+         * @param s the string, null returns null
+         *
+         * @return the entity type, or null if not found
+         */
+        public static RelevantEntityType fromString(String s) {
+            if (s == null) return null;
+
+            String s2 = s.replace(' ', '_');
+
+            for (RelevantEntityType type : values()) {
+                if (type.name().equalsIgnoreCase(s)
+                        || type.name().equalsIgnoreCase(s2)
+                        || type.name().replace("_", "").equalsIgnoreCase(s)) return type;
+            }
+
+            return null;
+        }
+    }
+
+    /**
      * Gets the current location of this entity
      *
      * @return the current location
