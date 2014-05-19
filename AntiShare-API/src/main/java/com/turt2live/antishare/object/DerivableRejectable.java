@@ -15,29 +15,37 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.io.memory;
+package com.turt2live.antishare.object;
 
-import com.turt2live.antishare.io.BlockStore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+/**
+ * A rejectable that may be derived.
+ *
+ * @author turt2live
+ * @see DerivedRejectable
+ */
+public interface DerivableRejectable {
 
-import java.util.List;
+    /**
+     * Gets the generic rejectable instance
+     *
+     * @return the generic instance, or null if not supported
+     *
+     * @see #hasGeneric()
+     */
+    public DerivedRejectable getGeneric();
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+    /**
+     * Gets the specific rejectable instance
+     *
+     * @return the specific instance
+     */
+    public DerivedRejectable getSpecific();
 
-@RunWith(JUnit4.class)
-public class MemoryBlockManagerTest {
-
-    @Test
-    public void testLoad() {
-        MemoryBlockManager manager = new MemoryBlockManager();
-
-        List<BlockStore> list = manager.loadAll();
-
-        assertNotNull(list);
-        assertEquals(0, list.size());
-    }
+    /**
+     * Determines if this type supports a generic case
+     *
+     * @return true if supported, false otherwise
+     */
+    public boolean hasGeneric();
 
 }

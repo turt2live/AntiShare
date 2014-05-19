@@ -15,44 +15,25 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.engine.list;
+package com.turt2live.antishare.bukkit.lists;
 
 import com.turt2live.antishare.object.Rejectable;
-import com.turt2live.antishare.object.attribute.TrackedState;
+
+import java.util.List;
 
 /**
- * Default implementation of a rejection list. This rejects nothing.
- *
- * @param <T> the type of rejection
+ * Represents a Bukkit list populator
  *
  * @author turt2live
  */
-public class DefaultRejectionList<T extends Rejectable> implements RejectionList<T> {
-
-    private ListType type;
+public interface Populator<T extends Rejectable> {
 
     /**
-     * Creates a new default rejection list
+     * Populates a bukkit list from a list of strings
      *
-     * @param type the type to use, null routes to {@link com.turt2live.antishare.engine.list.RejectionList.ListType#CUSTOM}
+     * @param list    the list to populate, cannot be null
+     * @param strings the strings to populate, cannot be null
      */
-    @SuppressWarnings("deprecation")
-    public DefaultRejectionList(ListType type) {
-        this.type = type == null ? ListType.CUSTOM : type;
-    }
+    public void populateList(BukkitList<T> list, List<String> strings);
 
-    @Override
-    public boolean isBlocked(T item) {
-        return false;
-    }
-
-    @Override
-    public TrackedState getState(T item) {
-        return TrackedState.NOT_PRESENT;
-    }
-
-    @Override
-    public ListType getType() {
-        return type;
-    }
 }

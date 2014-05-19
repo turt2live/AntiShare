@@ -15,38 +15,56 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.bukkit.lists;
+package com.turt2live.antishare.bukkit.impl.derived;
 
+import com.turt2live.antishare.object.DerivedRejectable;
+import org.bukkit.inventory.ItemStack;
 
-import org.bukkit.Material;
+/**
+ * A bukkit item stack derivation
+ *
+ * @author turt2live
+ */
+public class DerivedItemStack implements DerivedRejectable {
 
-public class BlockInformation {
+    private ItemStack stack;
 
-    final Material material;
-    final short damage;
+    public DerivedItemStack(ItemStack stack) {
+        if (stack == null) throw new IllegalArgumentException();
 
-    BlockInformation(Material m, short d) {
-        material = m;
-        damage = d;
+        this.stack = stack;
+    }
+
+    /**
+     * Gets a clone of the underlying stack
+     *
+     * @return the underlying stack, cloned
+     */
+    public ItemStack getStack() {
+        return stack.clone();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BlockInformation)) return false;
+        if (!(o instanceof DerivedItemStack)) return false;
 
-        BlockInformation that = (BlockInformation) o;
+        DerivedItemStack that = (DerivedItemStack) o;
 
-        if (damage != that.damage) return false;
-        if (material != that.material) return false;
+        if (!stack.equals(that.stack)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = material != null ? material.hashCode() : 0;
-        result = 31 * result + (int) damage;
-        return result;
+        return stack.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "DerivedItemStack{" +
+                "stack=" + stack +
+                '}';
     }
 }

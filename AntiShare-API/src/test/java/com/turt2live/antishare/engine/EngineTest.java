@@ -40,6 +40,7 @@ public class EngineTest {
         Engine.getInstance().setGroupManager(mock(GroupManager.class));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testInitialization() {
         Engine.getInstance().forceNotInitialized();

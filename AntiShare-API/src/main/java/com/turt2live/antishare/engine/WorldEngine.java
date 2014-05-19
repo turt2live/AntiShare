@@ -21,7 +21,10 @@ import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.configuration.groups.ConsolidatedGroup;
 import com.turt2live.antishare.configuration.groups.Group;
-import com.turt2live.antishare.engine.list.*;
+import com.turt2live.antishare.engine.list.DefaultRejectionList;
+import com.turt2live.antishare.engine.list.DefaultTrackedTypeList;
+import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.worldengine.WorldEngineShutdownEvent;
 import com.turt2live.antishare.io.BlockManager;
@@ -187,8 +190,8 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tplaceAs = " + placeAs);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        TrackedTypeList list = new DefaultTrackedTypeList();
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.BLOCK_PLACE);
+        TrackedTypeList<ABlock> list = new DefaultTrackedTypeList<ABlock>();
+        RejectionList<ABlock> reject = new DefaultRejectionList<ABlock>(RejectionList.ListType.BLOCK_PLACE);
 
         if (groups != null && groups.size() > 0) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
@@ -275,26 +278,26 @@ public final class WorldEngine {
                 // Stage One: Check general permissions
                 boolean allow = player.hasPermission(APermission.getPermissionNode(true, type));
                 boolean deny = player.hasPermission(APermission.getPermissionNode(false, type));
-                TrackedState stageOne = TrackedState.NOT_PRESENT;
+                TrackedState stageOne;
 
                 if (allow == deny) stageOne = TrackedState.NOT_PRESENT;
                 else if (allow) stageOne = TrackedState.INCLUDED;
-                else if (deny) stageOne = TrackedState.NEGATED;
+                else stageOne = TrackedState.NEGATED;
 
                 // Stage Two: Check specific permissions
                 allow = player.hasPermission(APermission.getPermissionNode(true, type) + "." + pattern.getEntityType().name().toLowerCase());
                 deny = player.hasPermission(APermission.getPermissionNode(false, type) + "." + pattern.getEntityType().name().toLowerCase());
-                TrackedState stageTwo = TrackedState.NOT_PRESENT;
+                TrackedState stageTwo;
 
                 if (allow == deny) stageTwo = TrackedState.NOT_PRESENT;
                 else if (allow) stageTwo = TrackedState.INCLUDED;
-                else if (deny) stageTwo = TrackedState.NEGATED;
+                else stageTwo = TrackedState.NEGATED;
 
 
                 if (stageTwo == TrackedState.NOT_PRESENT) playerState = stageOne;
                 else playerState = stageTwo;
 
-                RejectionList mobs = new DefaultRejectionList(RejectionList.ListType.MOB_CREATE);
+                RejectionList<AEntity.RelevantEntityType> mobs = new DefaultRejectionList<AEntity.RelevantEntityType>(RejectionList.ListType.MOB_CREATE);
 
                 if (groups != null && groups.size() > 0) {
                     mobs = new ConsolidatedGroup(groups).getRejectionList(mobs.getType());
@@ -354,7 +357,7 @@ public final class WorldEngine {
         if (additionalBreak != null) additionalBreak.setValue(additional);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.BLOCK_BREAK);
+        RejectionList<ABlock> reject = new DefaultRejectionList<ABlock>(RejectionList.ListType.BLOCK_BREAK);
 
         if (groups != null && groups.size() > 0) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
@@ -526,10 +529,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tblock = " + block);
 
         ObjectType current = blockManager.getBlockType(block.getLocation());
-        if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true)) {
-            return current != ObjectType.CREATIVE;
-        }
-        return true;
+        return !Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true) || current != ObjectType.CREATIVE;
     }
 
     /**
@@ -582,10 +582,7 @@ public final class WorldEngine {
         if (type != null) {
             type.setValue(current);
         }
-        if (Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true) && current == ObjectType.CREATIVE) {
-            return false;
-        }
-        return true;
+        return !(Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_BREAK_AS_GAMEMODE, true) && current == ObjectType.CREATIVE);
     }
 
     /**
@@ -671,11 +668,8 @@ public final class WorldEngine {
         ObjectType type1 = blockManager.getBlockType(block1.getLocation());
         ObjectType type2 = blockManager.getBlockType(block2.getLocation());
 
-        if (!Engine.getInstance().getFlag(Engine.CONFIG_HOPPER_MISMATCH_INTERACTION, true)) return false;
+        return Engine.getInstance().getFlag(Engine.CONFIG_HOPPER_MISMATCH_INTERACTION, true) && (type1 == type2 || type1 == ObjectType.UNKNOWN || type2 == ObjectType.UNKNOWN);
 
-        if (type1 == type2 || type1 == ObjectType.UNKNOWN || type2 == ObjectType.UNKNOWN)
-            return true;
-        else return false;
     }
 
     /**
@@ -762,7 +756,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tcommand = " + command);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new CommandRejectionList();
+        RejectionList<RejectableCommand> reject = new DefaultRejectionList<RejectableCommand>(RejectionList.ListType.COMMANDS);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -776,10 +770,7 @@ public final class WorldEngine {
 
         // Check lists and permissions
         TrackedState playerReaction = command.canExecute(player);
-        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
-        if (reject.isBlocked(command) && playerReaction == TrackedState.NOT_PRESENT)
-            return true; // Rejected & no allow permission
-        return false; // Allowed
+        return playerReaction == TrackedState.NEGATED || reject.isBlocked(command) && playerReaction == TrackedState.NOT_PRESENT;
     }
 
     /**
@@ -841,7 +832,7 @@ public final class WorldEngine {
         ObjectType otherType = blockManager.getBlockType(block.getLocation());
         ObjectType interactAs = ASUtils.toBlockType(player.getGameMode());
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.INTERACTION);
+        RejectionList<ABlock> reject = new DefaultRejectionList<ABlock>(RejectionList.ListType.INTERACTION);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -921,7 +912,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\titem = " + item);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ITEM_USE);
+        RejectionList<AItem> reject = new DefaultRejectionList<AItem>(RejectionList.ListType.ITEM_USE);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -935,10 +926,7 @@ public final class WorldEngine {
 
         // Check lists and permissions
         TrackedState playerReaction = item.canUse(player);
-        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
-        if (reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT)
-            return true; // Rejected & no allow permission
-        return false;
+        return playerReaction == TrackedState.NEGATED || reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT;
     }
 
     /**
@@ -960,7 +948,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\titem = " + item);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ITEM_DROP);
+        RejectionList<AItem> reject = new DefaultRejectionList<AItem>(RejectionList.ListType.ITEM_DROP);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -974,10 +962,7 @@ public final class WorldEngine {
 
         // Check lists and permissions
         TrackedState playerReaction = item.canDrop(player);
-        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
-        if (reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT)
-            return true; // Rejected & no allow permission
-        return false;
+        return playerReaction == TrackedState.NEGATED || reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT;
     }
 
     /**
@@ -999,7 +984,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\titem = " + item);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ITEM_PICKUP);
+        RejectionList<AItem> reject = new DefaultRejectionList<AItem>(RejectionList.ListType.ITEM_PICKUP);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -1013,10 +998,7 @@ public final class WorldEngine {
 
         // Check lists and permissions
         TrackedState playerReaction = item.canPickup(player);
-        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
-        if (reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT)
-            return true; // Rejected & no allow permission
-        return false;
+        return playerReaction == TrackedState.NEGATED || reject.isBlocked(item) && playerReaction == TrackedState.NOT_PRESENT;
     }
 
     /**
@@ -1044,7 +1026,7 @@ public final class WorldEngine {
      * @param entity the entity being placed, cannot be null
      * @param player the player, cannot be null
      *
-     * @returns true for denial, false otherwise
+     * @return true for denial, false otherwise
      */
     // TODO: Unit test
     public boolean processEntityPlace(AEntity entity, APlayer player) {
@@ -1055,8 +1037,8 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tplayer = " + player);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        TrackedTypeList list = new DefaultTrackedTypeList();
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ENTITY_PLACE);
+        TrackedTypeList<AEntity> list = new DefaultTrackedTypeList<AEntity>();
+        RejectionList<AEntity> reject = new DefaultRejectionList<AEntity>(RejectionList.ListType.ENTITY_PLACE);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -1107,7 +1089,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ENTITY_ATTACK);
+        RejectionList<AEntity> reject = new DefaultRejectionList<AEntity>(RejectionList.ListType.ENTITY_ATTACK);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -1133,10 +1115,7 @@ public final class WorldEngine {
 
         // Check lists and permissions
         TrackedState playerReaction = entity.canAttack(player);
-        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
-        if (reject.isBlocked(entity) && playerReaction == TrackedState.NOT_PRESENT)
-            return true; // Rejected & no allow permission
-        return false;
+        return playerReaction == TrackedState.NEGATED || reject.isBlocked(entity) && playerReaction == TrackedState.NOT_PRESENT;
     }
 
     /**
@@ -1157,7 +1136,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ENTITY_INTERACT);
+        RejectionList<AEntity> reject = new DefaultRejectionList<AEntity>(RejectionList.ListType.ENTITY_INTERACT);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -1183,10 +1162,7 @@ public final class WorldEngine {
 
         // Check lists and permissions
         TrackedState playerReaction = entity.canInteract(player);
-        if (playerReaction == TrackedState.NEGATED) return true; // Straight up deny
-        if (reject.isBlocked(entity) && playerReaction == TrackedState.NOT_PRESENT)
-            return true; // Rejected & no allow permission
-        return false;
+        return playerReaction == TrackedState.NEGATED || reject.isBlocked(entity) && playerReaction == TrackedState.NOT_PRESENT;
     }
 
     /**
@@ -1197,7 +1173,7 @@ public final class WorldEngine {
      * @param entity the entity being placed, cannot be null
      * @param player the player, cannot be null
      *
-     * @returns true for denial, false otherwise
+     * @return true for denial, false otherwise
      */
     // TODO: Unit test
     public boolean processEntityBreak(APlayer player, AEntity entity) {
@@ -1208,7 +1184,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.ENTITY_BREAK);
+        RejectionList<AEntity> reject = new DefaultRejectionList<AEntity>(RejectionList.ListType.ENTITY_BREAK);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {
@@ -1256,7 +1232,7 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\titems = " + items);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList reject = new DefaultRejectionList(RejectionList.ListType.DEATH);
+        RejectionList<AItem> reject = new DefaultRejectionList<AItem>(RejectionList.ListType.DEATH);
         ASGameMode playerGM = player.getGameMode();
 
         if (groups != null && groups.size() > 0) {

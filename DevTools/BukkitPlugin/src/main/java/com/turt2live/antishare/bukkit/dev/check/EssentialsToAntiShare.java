@@ -25,6 +25,7 @@ import org.bukkit.Material;
 
 import java.io.*;
 
+@SuppressWarnings("deprecation")
 public class EssentialsToAntiShare extends CheckBase {
 
     public EssentialsToAntiShare(AntiShare plugin) {
@@ -61,7 +62,7 @@ public class EssentialsToAntiShare extends CheckBase {
 
                     writer.write(name + "," + material.name());
                     writer.newLine();
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException ignored) {
                 }
             }
 
@@ -94,13 +95,12 @@ public class EssentialsToAntiShare extends CheckBase {
                         material = Material.getMaterial(intId);
 
                         if (material == null) continue;
-                    } catch (NumberFormatException e) {
+                    } catch (NumberFormatException ignored) {
                     }
 
                     id = material.name() + ":" + (split.length > 1 ? split[1] : "0");
                 } else {
-                    String name = line;
-                    writer.write(id + "," + name);
+                    writer.write(id + "," + line);
                     writer.newLine();
                     id = null;
                 }

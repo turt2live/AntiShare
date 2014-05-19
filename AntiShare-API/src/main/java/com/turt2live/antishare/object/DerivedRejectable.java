@@ -15,28 +15,15 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare;
+package com.turt2live.antishare.object;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-@RunWith(JUnit4.class)
-public class ASGameModeTest {
-
-    @Test
-    public void testFromString() {
-        for (ASGameMode gameMode : ASGameMode.values()) {
-            assertEquals(gameMode, ASGameMode.fromString(gameMode.name().toLowerCase()));
-            assertEquals(gameMode, ASGameMode.fromString(gameMode.name()));
-            assertEquals(gameMode, ASGameMode.fromString(gameMode.name().substring(0, 4).toLowerCase() + gameMode.name().substring(4)));
-        }
-
-        assertNull(ASGameMode.fromString(null));
-        assertNull(ASGameMode.fromString("not a gamemode"));
-    }
+/**
+ * Represents a derived Bukkit rejectable. This has two possibilities:
+ * generic and specific. "generic" implies that this object is a general
+ * case while "specific" implies that this is a full representation.
+ *
+ * @author turt2live
+ */
+public interface DerivedRejectable {
 
 }

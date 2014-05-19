@@ -15,44 +15,46 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.engine.list;
+package com.turt2live.antishare.bukkit.impl.derived;
 
-import com.turt2live.antishare.object.Rejectable;
-import com.turt2live.antishare.object.attribute.TrackedState;
+import com.turt2live.antishare.object.DerivedRejectable;
 
 /**
- * Default implementation of a rejection list. This rejects nothing.
- *
- * @param <T> the type of rejection
+ * A bukkit derivation of a mob pattern
  *
  * @author turt2live
  */
-public class DefaultRejectionList<T extends Rejectable> implements RejectionList<T> {
+public class DerivedBukkitObject implements DerivedRejectable {
 
-    private ListType type;
+    public Object type;
 
-    /**
-     * Creates a new default rejection list
-     *
-     * @param type the type to use, null routes to {@link com.turt2live.antishare.engine.list.RejectionList.ListType#CUSTOM}
-     */
-    @SuppressWarnings("deprecation")
-    public DefaultRejectionList(ListType type) {
-        this.type = type == null ? ListType.CUSTOM : type;
+    public DerivedBukkitObject(Object type) {
+        if (type == null) throw new IllegalArgumentException();
+
+        this.type = type;
     }
 
     @Override
-    public boolean isBlocked(T item) {
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DerivedBukkitObject)) return false;
+
+        DerivedBukkitObject that = (DerivedBukkitObject) o;
+
+        if (type != that.type) return false;
+
+        return true;
     }
 
     @Override
-    public TrackedState getState(T item) {
-        return TrackedState.NOT_PRESENT;
+    public int hashCode() {
+        return type.hashCode();
     }
 
     @Override
-    public ListType getType() {
-        return type;
+    public String toString() {
+        return "DerivedBukkitObject{" +
+                "type=" + type +
+                '}';
     }
 }

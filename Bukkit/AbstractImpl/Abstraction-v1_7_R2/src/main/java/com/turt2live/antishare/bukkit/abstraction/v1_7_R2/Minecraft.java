@@ -27,6 +27,7 @@ import java.util.UUID;
 public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_7_R1.Minecraft {
 
     @Override
+    @SuppressWarnings("deprecation")
     public UUID getUUID(OfflinePlayer player) {
         if (player == null) throw new IllegalArgumentException("player cannot be null");
         UUID uuid = player.getUniqueId();
@@ -45,6 +46,7 @@ public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_7_R
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public String getName(UUID uuid) {
         if (uuid == null) throw new IllegalArgumentException("uuid cannot be null");
 

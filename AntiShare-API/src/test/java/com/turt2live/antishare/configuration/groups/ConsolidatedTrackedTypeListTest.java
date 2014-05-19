@@ -36,6 +36,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
+@SuppressWarnings("unchecked")
 public class ConsolidatedTrackedTypeListTest {
 
     private static class ReturnIsTrackedWorkaround implements Answer<Boolean> {
@@ -74,7 +75,7 @@ public class ConsolidatedTrackedTypeListTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateEmpty2() {
-        new ConsolidatedTrackedTypeList(new TrackedTypeList[0]);
+        new ConsolidatedTrackedTypeList();
     }
 
     @Test(expected = IllegalArgumentException.class)

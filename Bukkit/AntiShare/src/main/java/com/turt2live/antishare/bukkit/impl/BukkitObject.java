@@ -20,6 +20,7 @@ package com.turt2live.antishare.bukkit.impl;
 import com.turt2live.antishare.APermission;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.DerivableRejectable;
 import com.turt2live.antishare.object.attribute.TrackedState;
 
 /**
@@ -27,7 +28,7 @@ import com.turt2live.antishare.object.attribute.TrackedState;
  *
  * @author turt2live
  */
-public abstract class BukkitObject {
+public abstract class BukkitObject implements DerivableRejectable {
 
     protected abstract String getFriendlyName();
 
@@ -35,20 +36,20 @@ public abstract class BukkitObject {
         // Stage One: Check general permissions
         boolean allow = player.hasPermission(APermission.getPermissionNode(true, type));
         boolean deny = player.hasPermission(APermission.getPermissionNode(false, type));
-        TrackedState stageOne = TrackedState.NOT_PRESENT;
+        TrackedState stageOne;
 
         if (allow == deny) stageOne = TrackedState.NOT_PRESENT;
         else if (allow) stageOne = TrackedState.INCLUDED;
-        else if (deny) stageOne = TrackedState.NEGATED;
+        else stageOne = TrackedState.NEGATED;
 
         // Stage Two: Check specific permissions
         allow = player.hasPermission(APermission.getPermissionNode(true, type) + "." + getFriendlyName().toLowerCase());
         deny = player.hasPermission(APermission.getPermissionNode(false, type) + "." + getFriendlyName().toLowerCase());
-        TrackedState stageTwo = TrackedState.NOT_PRESENT;
+        TrackedState stageTwo;
 
         if (allow == deny) stageTwo = TrackedState.NOT_PRESENT;
         else if (allow) stageTwo = TrackedState.INCLUDED;
-        else if (deny) stageTwo = TrackedState.NEGATED;
+        else stageTwo = TrackedState.NEGATED;
 
         /*
         Stage Three: Combination logic for merging stages one and two

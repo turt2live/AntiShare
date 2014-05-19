@@ -15,44 +15,38 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.engine.list;
+package com.turt2live.antishare.bukkit.lists;
 
 import com.turt2live.antishare.object.Rejectable;
-import com.turt2live.antishare.object.attribute.TrackedState;
+import com.turt2live.antishare.object.RejectableCommand;
+
+import java.util.List;
 
 /**
- * Default implementation of a rejection list. This rejects nothing.
- *
- * @param <T> the type of rejection
+ * Populates a list of commands.
  *
  * @author turt2live
  */
-public class DefaultRejectionList<T extends Rejectable> implements RejectionList<T> {
-
-    private ListType type;
-
-    /**
-     * Creates a new default rejection list
-     *
-     * @param type the type to use, null routes to {@link com.turt2live.antishare.engine.list.RejectionList.ListType#CUSTOM}
-     */
-    @SuppressWarnings("deprecation")
-    public DefaultRejectionList(ListType type) {
-        this.type = type == null ? ListType.CUSTOM : type;
-    }
+public class PopulatorCommandList<T extends Rejectable> implements Populator<T> {
 
     @Override
-    public boolean isBlocked(T item) {
-        return false;
+    public void populateList(BukkitList<T> list, List<String> strings) {
+        if (list == null || strings == null) throw new IllegalArgumentException();
+
+        list.included.clear();
+        list.includedGeneric.clear();
+        list.negated.clear();
+        list.negatedGeneric.clear();
+
+        for (String value : strings) {
+            RejectableCommand command = new RejectableCommand(value);
+
+            if (command.isNegated()) {
+                if (!list.negated.contains(command)) list.negated.add(command);
+            } else {
+                if (!list.included.contains(command)) list.included.add(command);
+            }
+        }
     }
 
-    @Override
-    public TrackedState getState(T item) {
-        return TrackedState.NOT_PRESENT;
-    }
-
-    @Override
-    public ListType getType() {
-        return type;
-    }
 }

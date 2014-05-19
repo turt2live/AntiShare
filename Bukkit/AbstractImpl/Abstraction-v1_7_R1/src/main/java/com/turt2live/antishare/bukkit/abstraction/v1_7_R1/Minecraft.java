@@ -47,6 +47,7 @@ public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_6_R
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public List<Material> getContainerTypes() {
         List<Material> list = super.getContainerTypes();
         list.remove(Material.LOCKED_CHEST);
@@ -69,6 +70,7 @@ public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_6_R
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ABlock.ChestType getChestType(Block block) {
         ABlock.ChestType type = super.getChestType(block);
 

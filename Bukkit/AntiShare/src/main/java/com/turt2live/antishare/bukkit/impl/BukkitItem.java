@@ -18,9 +18,11 @@
 package com.turt2live.antishare.bukkit.impl;
 
 import com.turt2live.antishare.bukkit.AntiShare;
+import com.turt2live.antishare.bukkit.impl.derived.DerivedItemStack;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.AItem;
 import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.DerivedRejectable;
 import com.turt2live.antishare.object.attribute.TrackedState;
 import org.bukkit.inventory.ItemStack;
 
@@ -88,5 +90,20 @@ public class BukkitItem extends BukkitObject implements AItem {
     @Override
     public int hashCode() {
         return stack.hashCode();
+    }
+
+    @Override
+    public DerivedRejectable getGeneric() {
+        return new DerivedItemStack(new ItemStack(stack.getType()));
+    }
+
+    @Override
+    public DerivedRejectable getSpecific() {
+        return new DerivedItemStack(stack.clone());
+    }
+
+    @Override
+    public boolean hasGeneric() {
+        return true;
     }
 }

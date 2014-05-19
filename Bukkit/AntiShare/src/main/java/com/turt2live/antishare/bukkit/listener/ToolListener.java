@@ -274,6 +274,7 @@ public class ToolListener implements Listener {
      *
      * @param player the player to give the tools to, cannot be null
      */
+    @SuppressWarnings("deprecation")
     public static void giveTools(Player player) {
         ItemStack checkTool = CHECK_TEMPLATE.clone();
         ItemStack setTool = SET_TEMPLATE.clone();

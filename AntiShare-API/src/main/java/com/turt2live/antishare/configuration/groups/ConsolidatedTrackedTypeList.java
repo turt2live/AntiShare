@@ -61,7 +61,7 @@ public class ConsolidatedTrackedTypeList<T extends Rejectable> implements Tracke
      * @param lists the lists to include. Cannot be null and must have at least one record
      */
     public ConsolidatedTrackedTypeList(TrackedTypeList<T>... lists) {
-        this(new ArrayArrayList(lists));
+        this(new ArrayArrayList<TrackedTypeList<T>>(lists));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ConsolidatedTrackedTypeList<T extends Rejectable> implements Tracke
         int negated = 0;
         boolean included = false;
 
-        for (TrackedTypeList list : lists) {
+        for (TrackedTypeList<T> list : lists) {
             TrackedState state = list.getState(object);
             switch (state) {
                 case INCLUDED:

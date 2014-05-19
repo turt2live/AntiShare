@@ -18,23 +18,15 @@
 package com.turt2live.antishare.bukkit.groups;
 
 import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.bukkit.AntiShare;
-import com.turt2live.antishare.bukkit.MaterialProvider;
-import com.turt2live.antishare.bukkit.lists.BukkitBlockTrackedList;
-import com.turt2live.antishare.bukkit.lists.BukkitEntityTrackedList;
-import com.turt2live.antishare.bukkit.lists.BukkitItemList;
-import com.turt2live.antishare.bukkit.lists.BukkitRejectionList;
+import com.turt2live.antishare.bukkit.lists.*;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
-import com.turt2live.antishare.engine.Engine;
-import com.turt2live.antishare.engine.list.CommandRejectionList;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.object.ABlock;
 import com.turt2live.antishare.object.AEntity;
-import com.turt2live.antishare.object.RejectableCommand;
-import com.turt2live.antishare.object.attribute.TrackedState;
+import com.turt2live.antishare.object.Rejectable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,91 +58,76 @@ public class BukkitGroup extends Group {
     }
 
     @Override
-    public RejectionList getRejectionList(RejectionList.ListType type) {
+    public <T extends Rejectable> RejectionList<T> getRejectionList(RejectionList.ListType type) {
         return getRejectionList(type, super.configuration);
     }
 
-    static TrackedTypeList getBlockTrackedList(ASGameMode gameMode, Configuration configuration) {
+    static TrackedTypeList<ABlock> getBlockTrackedList(ASGameMode gameMode, Configuration configuration) {
         if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
 
-        MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-        BukkitBlockTrackedList list = new BukkitBlockTrackedList(provider);
-        list.populateBlocks(configuration.getStringList("blocks." + gameMode.name().toLowerCase(), new ArrayList<String>()));
+        List<String> strings = configuration.getStringList("blocks." + gameMode.name().toLowerCase(), new ArrayList<String>());
 
-        return list;
+        BukkitList<ABlock> blocks = new BukkitList<ABlock>();
+        new PopulatorBlockList<ABlock>().populateList(blocks, strings);
+
+        return blocks;
     }
 
-    static TrackedTypeList getEntityTrackedList(ASGameMode gameMode, Configuration configuration) {
+    static TrackedTypeList<AEntity> getEntityTrackedList(ASGameMode gameMode, Configuration configuration) {
         if (gameMode == null) throw new IllegalArgumentException("gamemode cannot be null");
 
         List<String> strings = configuration.getStringList("entities." + gameMode.name().toLowerCase(), new ArrayList<String>());
 
-        return new BukkitEntityTrackedList(strings);
+        BukkitList<AEntity> entities = new BukkitList<AEntity>();
+        new PopulatorEntityList<AEntity>().populateList(entities, strings);
+
+        return entities;
     }
 
-    static RejectionList getRejectionList(RejectionList.ListType type, Configuration configuration) {
+    static <T extends Rejectable> RejectionList<T> getRejectionList(RejectionList.ListType type, Configuration configuration) {
         if (type == null) throw new IllegalArgumentException("list type cannot be null");
 
         String configKey = BukkitUtils.getStringName(type);
         if (configKey == null)
             throw new NullPointerException("Yell at turt2live to add this: " + type.name());
 
-        RejectionList list;
+        List<String> strings = configuration.getStringList("lists." + configKey, new ArrayList<String>());
+        Populator<T> populator = null;
+
+        // Determine derived type
         switch (type) {
-            case BLOCK_BREAK:
+            case ENTITY_BREAK:
+            case ENTITY_INTERACT:
+            case ENTITY_PLACE:
+            case ENTITY_ATTACK:
+                populator = new PopulatorEntityList<T>();
+                break;
             case BLOCK_PLACE:
+            case BLOCK_BREAK:
             case INTERACTION:
-                MaterialProvider provider = AntiShare.getInstance().getMaterialProvider();
-                list = new BukkitBlockTrackedList(provider, type);
-                ((BukkitBlockTrackedList) list).populateBlocks(configuration.getStringList("lists." + configKey, new ArrayList<String>()));
+                populator = new PopulatorBlockList<T>();
                 break;
-            case COMMANDS:
-                list = new CommandRejectionList();
-                List<String> commands = configuration.getStringList("lists." + configKey, new ArrayList<String>());
-                List<RejectableCommand> rejectableCommands = new ArrayList<RejectableCommand>();
-                for (String command : commands) {
-                    rejectableCommands.add(new RejectableCommand(command));
-                }
-                ((CommandRejectionList) list).populate(rejectableCommands);
-                break;
+            case ITEM_PICKUP:
             case ITEM_USE:
             case ITEM_DROP:
-            case ITEM_PICKUP:
             case DEATH:
-                list = new BukkitItemList(type);
-                List<String> items = configuration.getStringList("lists." + configKey, new ArrayList<String>());
-                ((BukkitItemList) list).load(items);
-                break;
-            case ENTITY_ATTACK:
-            case ENTITY_PLACE:
-            case ENTITY_INTERACT:
-            case ENTITY_BREAK:
-                List<String> entities = configuration.getStringList("lists." + configKey, new ArrayList<String>());
-                list = new BukkitEntityTrackedList(type, entities);
+                populator = new PopulatorItemList<T>();
                 break;
             case MOB_CREATE:
-                list = new BukkitRejectionList<AEntity.RelevantEntityType>(type);
-                List<String> strings = configuration.getStringList("lists." + configKey, new ArrayList<String>());
-                for (String s : strings) {
-                    boolean negated = false;
-                    if (s.startsWith("-")) {
-                        negated = true;
-                        s = s.substring(1);
-                    }
-                    AEntity.RelevantEntityType entityType = AEntity.RelevantEntityType.fromString(s);
-                    if (entityType != null) {
-                        ((BukkitRejectionList<AEntity.RelevantEntityType>) list).setTrackedState(entityType, negated ? TrackedState.NEGATED : TrackedState.INCLUDED);
-                    } else {
-                        Engine.getInstance().getLogger().warning("Unknown entity type for " + type + ": " + s);
-                    }
-                }
+                break;
+            case COMMANDS:
+                populator = new PopulatorCommandList<T>();
                 break;
             default:
-                list = null;
+                populator = null;
+                break;
         }
 
-        if (list == null)
+        if (populator == null)
             throw new NullPointerException("List not implemented: " + type.name());
+
+        BukkitList<T> list = new BukkitList<T>(type);
+        populator.populateList(list, strings);
 
         return list;
     }

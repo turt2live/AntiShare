@@ -108,7 +108,7 @@ public class ConsolidatedGroup {
      *
      * @return the rejectable list
      */
-    public <T extends Rejectable> ConsolidatedRejectionList getRejectionList(RejectionList.ListType type) {
+    public <T extends Rejectable> ConsolidatedRejectionList<T> getRejectionList(RejectionList.ListType type) {
         if (type == null) throw new IllegalArgumentException();
 
         List<RejectionList<T>> lists = new ArrayList<RejectionList<T>>();

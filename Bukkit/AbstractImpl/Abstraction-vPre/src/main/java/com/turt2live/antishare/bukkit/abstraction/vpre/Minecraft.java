@@ -204,6 +204,7 @@ public class Minecraft implements MinecraftVersion {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public ABlock.ChestType getChestType(Block block) {
         if (block == null) throw new IllegalArgumentException();
 

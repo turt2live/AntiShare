@@ -19,12 +19,10 @@ package com.turt2live.antishare.bukkit.impl;
 
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
+import com.turt2live.antishare.bukkit.impl.derived.BlockInformation;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.engine.list.RejectionList;
-import com.turt2live.antishare.object.ABlock;
-import com.turt2live.antishare.object.APlayer;
-import com.turt2live.antishare.object.ASLocation;
-import com.turt2live.antishare.object.AWorld;
+import com.turt2live.antishare.object.*;
 import com.turt2live.antishare.object.attribute.Facing;
 import com.turt2live.antishare.object.attribute.TrackedState;
 import org.bukkit.Location;
@@ -183,5 +181,20 @@ public class BukkitBlock extends BukkitObject implements ABlock {
     @Override
     public String toString() {
         return "BukkitBlock{block=" + block.toString() + "}";
+    }
+
+    @Override
+    public DerivedRejectable getGeneric() {
+        return new BlockInformation(block.getType(), (short) -1);
+    }
+
+    @Override
+    public DerivedRejectable getSpecific() {
+        return new BlockInformation(block.getType(), block.getData());
+    }
+
+    @Override
+    public boolean hasGeneric() {
+        return true;
     }
 }

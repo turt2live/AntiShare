@@ -42,6 +42,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class StressTest extends CheckBase implements Runnable {
 
     public StressTest(AntiShare plugin) {

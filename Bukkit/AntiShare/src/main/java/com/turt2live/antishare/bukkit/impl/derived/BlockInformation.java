@@ -15,44 +15,46 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.engine.list;
+package com.turt2live.antishare.bukkit.impl.derived;
 
-import com.turt2live.antishare.object.Rejectable;
-import com.turt2live.antishare.object.attribute.TrackedState;
+import com.turt2live.antishare.object.DerivedRejectable;
+import org.bukkit.Material;
 
 /**
- * Default implementation of a rejection list. This rejects nothing.
- *
- * @param <T> the type of rejection
+ * Block information class
  *
  * @author turt2live
  */
-public class DefaultRejectionList<T extends Rejectable> implements RejectionList<T> {
+public class BlockInformation implements DerivedRejectable {
 
-    private ListType type;
+    final Material material;
+    final short damage;
 
-    /**
-     * Creates a new default rejection list
-     *
-     * @param type the type to use, null routes to {@link com.turt2live.antishare.engine.list.RejectionList.ListType#CUSTOM}
-     */
-    @SuppressWarnings("deprecation")
-    public DefaultRejectionList(ListType type) {
-        this.type = type == null ? ListType.CUSTOM : type;
+    public BlockInformation(Material m, short d) {
+        if (m == null) throw new IllegalArgumentException();
+
+        material = m;
+        damage = d;
     }
 
     @Override
-    public boolean isBlocked(T item) {
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BlockInformation)) return false;
+
+        BlockInformation that = (BlockInformation) o;
+
+        if (damage != that.damage) return false;
+        if (material != that.material) return false;
+
+        return true;
     }
 
     @Override
-    public TrackedState getState(T item) {
-        return TrackedState.NOT_PRESENT;
+    public int hashCode() {
+        int result = material != null ? material.hashCode() : 0;
+        result = 31 * result + (int) damage;
+        return result;
     }
 
-    @Override
-    public ListType getType() {
-        return type;
-    }
 }

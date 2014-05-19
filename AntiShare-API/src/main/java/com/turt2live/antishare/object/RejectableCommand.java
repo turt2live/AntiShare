@@ -26,7 +26,7 @@ import com.turt2live.antishare.object.attribute.TrackedState;
  *
  * @author turt2live
  */
-public class RejectableCommand implements Rejectable {
+public class RejectableCommand implements Rejectable, DerivableRejectable, DerivedRejectable {
 
     /**
      * Flag for "starts with". Example: <code>Does "/test command" start with "/test"?</code>
@@ -203,5 +203,20 @@ public class RejectableCommand implements Rejectable {
         int result = commandString.hashCode();
         result = 31 * result + (isNegated ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public DerivedRejectable getGeneric() {
+        return null;
+    }
+
+    @Override
+    public DerivedRejectable getSpecific() {
+        return this;
+    }
+
+    @Override
+    public boolean hasGeneric() {
+        return false;
     }
 }

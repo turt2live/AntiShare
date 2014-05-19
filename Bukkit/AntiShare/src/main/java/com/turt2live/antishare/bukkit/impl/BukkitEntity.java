@@ -17,11 +17,13 @@
 
 package com.turt2live.antishare.bukkit.impl;
 
+import com.turt2live.antishare.bukkit.impl.derived.DerivedEntityType;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.engine.list.RejectionList;
 import com.turt2live.antishare.object.AEntity;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.ASLocation;
+import com.turt2live.antishare.object.DerivedRejectable;
 import com.turt2live.antishare.object.attribute.TrackedState;
 import org.bukkit.entity.Entity;
 
@@ -89,5 +91,20 @@ public class BukkitEntity extends BukkitObject implements AEntity {
      */
     public Entity getEntity() {
         return entity;
+    }
+
+    @Override
+    public DerivedRejectable getGeneric() {
+        return null;
+    }
+
+    @Override
+    public DerivedRejectable getSpecific() {
+        return new DerivedEntityType(entity.getType());
+    }
+
+    @Override
+    public boolean hasGeneric() {
+        return false;
     }
 }

@@ -24,7 +24,7 @@ import com.turt2live.antishare.engine.list.TrackedTypeList;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +35,12 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(JUnit4.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ConsolidatedGroupTest {
 
     private static List<Group> GROUPS;
 
+    @SuppressWarnings("unchecked")
     @BeforeClass
     public static void setup() {
         GROUPS = new ArrayList<Group>();
