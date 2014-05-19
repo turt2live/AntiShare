@@ -75,7 +75,8 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class FileBlockStore extends GenericBlockStore {
 
-    private final int[] header;
+    private int sx, sy, sz, size;
+    private boolean headerRead = false;
     private File file;
     private RandomAccessFile raf;
 
@@ -92,9 +93,11 @@ public class FileBlockStore extends GenericBlockStore {
         if (file == null) throw new IllegalArgumentException("file cannot be null");
 
         this.file = file;
-        header = new int[] {sx, sy, sz, blocks};
-
-        refreshFile();
+        this.sx = sx;
+        this.sy = sy;
+        this.sz = sz;
+        this.size = blocks;
+        headerRead = true;
     }
 
     /**
@@ -106,45 +109,18 @@ public class FileBlockStore extends GenericBlockStore {
         if (file == null) throw new IllegalArgumentException("file cannot be null");
 
         this.file = file;
-        header = new int[4];
-
-        refreshFile();
-    }
-
-    private void refreshFile() {
-        try {
-            if (raf != null) raf.close();
-            if (!file.exists()) {
-                if (file.getParentFile() != null) file.getParentFile().mkdirs();
-                file.createNewFile();
-            }
-            raf = new RandomAccessFile(file, "rw");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Gets a cloned copy of the header information
-     *
-     * @return the header information
-     */
-    public int[] getHeader() {
-        return header.clone();
     }
 
     @Override
     public void save() {
         try {
             if (getLiveMap().size() <= 0) {
-                raf.close();
-                raf = null;
                 if (file.exists())
                     file.delete();
                 return; // Don't save nothing
             }
 
-            if (raf == null) refreshFile();
+            raf = new RandomAccessFile(file, "rw");
             long requiredSize = (getLiveMap().size() * 13) + 16;
             raf.setLength(requiredSize);
             MappedByteBuffer out = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, requiredSize);
@@ -152,10 +128,10 @@ public class FileBlockStore extends GenericBlockStore {
             out.order(ByteOrder.BIG_ENDIAN);
 
             // Write header
-            out.putInt(header[0]);
-            out.putInt(header[1]);
-            out.putInt(header[2]);
-            out.putInt(header[3]);
+            out.putInt(sx);
+            out.putInt(sy);
+            out.putInt(sz);
+            out.putInt(size);
 
             // Write blocks
             ConcurrentMap<ASLocation, ObjectType> blocks = getLiveMap();
@@ -172,6 +148,26 @@ public class FileBlockStore extends GenericBlockStore {
                     out.putInt(location.Z);
                 }
             }
+
+            raf.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadHeader() {
+        try {
+            if (!file.exists()) return;
+
+            raf = new RandomAccessFile(file, "rw");
+            MappedByteBuffer in = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, raf.length());
+            in.order(ByteOrder.BIG_ENDIAN);
+
+            loadHeader(in);
+
+            raf.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -184,7 +180,7 @@ public class FileBlockStore extends GenericBlockStore {
         try {
             if (!file.exists()) return;
 
-            if (raf == null) refreshFile();
+            raf = new RandomAccessFile(file, "rw");
             MappedByteBuffer in = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, raf.length());
             in.order(ByteOrder.BIG_ENDIAN);
 
@@ -241,6 +237,8 @@ public class FileBlockStore extends GenericBlockStore {
                 engine.getLogger().warning("All data was loaded with " + in.remaining() + " bytes left.");
             }
             if (hasError) engine.getLogger().severe("===========================================");
+
+            raf.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -248,16 +246,31 @@ public class FileBlockStore extends GenericBlockStore {
         }
     }
 
+    int[] header() {
+        if (!headerRead) loadHeader();
+        if (!headerRead) throw new RuntimeException("Failed to load header for file: " + file.getName());
+
+        return new int[] {sx, sy, sz, size};
+    }
+
+    private void loadHeader(MappedByteBuffer buffer) throws IOException {
+        sx = buffer.getInt();
+        sy = buffer.getInt();
+        sz = buffer.getInt();
+        size = buffer.getInt();
+        headerRead = true;
+    }
+
     @Override
     public ObjectType getType(ASLocation location) {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
         // Validate block size range
-        int sx = (int) Math.floor(location.X / (double) header[3]);
-        int sy = (int) Math.floor(location.Y / (double) header[3]);
-        int sz = (int) Math.floor(location.Z / (double) header[3]);
+        int sx = (int) Math.floor(location.X / (double) size);
+        int sy = (int) Math.floor(location.Y / (double) size);
+        int sz = (int) Math.floor(location.Z / (double) size);
 
-        if (sx != header[0] || sy != header[1] || sz != header[2])
+        if (sx != this.sx || sy != this.sy || sz != this.sz)
             throw new IllegalArgumentException("location is out of range");
 
         return super.getType(location);
@@ -268,41 +281,14 @@ public class FileBlockStore extends GenericBlockStore {
         if (location == null) throw new IllegalArgumentException("location cannot be null");
 
         // Validate block size range
-        int sx = (int) Math.floor(location.X / (double) header[3]);
-        int sy = (int) Math.floor(location.Y / (double) header[3]);
-        int sz = (int) Math.floor(location.Z / (double) header[3]);
+        int sx = (int) Math.floor(location.X / (double) size);
+        int sy = (int) Math.floor(location.Y / (double) size);
+        int sz = (int) Math.floor(location.Z / (double) size);
 
-        if (sx != header[0] || sy != header[1] || sz != header[2])
+        if (sx != this.sx || sy != this.sy || sz != this.sz)
             throw new IllegalArgumentException("location is out of range");
 
         super.setType(location, type);
-    }
-
-    private void loadHeader(MappedByteBuffer buffer) throws IOException {
-        header[0] = buffer.getInt();
-        header[1] = buffer.getInt();
-        header[2] = buffer.getInt();
-        header[3] = buffer.getInt();
-    }
-
-    /**
-     * Loads the header without loading the entire file's block data
-     */
-    public void loadHeader() {
-        try {
-            if (!file.exists()) return;
-
-            if (raf == null) refreshFile();
-            MappedByteBuffer in = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, 16);
-            in.order(ByteOrder.BIG_ENDIAN);
-
-            // Read header
-            loadHeader(in);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

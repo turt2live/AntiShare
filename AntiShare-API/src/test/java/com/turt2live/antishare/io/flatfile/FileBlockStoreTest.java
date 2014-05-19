@@ -70,18 +70,16 @@ public class FileBlockStoreTest {
     @Test
     public void cTestHeader() {
         FileBlockStore store = new FileBlockStore(testFile1);
-        store.loadHeader();
-        assertEquals(10, store.getHeader()[0]);
-        assertEquals(11, store.getHeader()[1]);
-        assertEquals(12, store.getHeader()[2]);
-        assertEquals(60, store.getHeader()[3]);
+        assertEquals(10, store.header()[0]);
+        assertEquals(11, store.header()[1]);
+        assertEquals(12, store.header()[2]);
+        assertEquals(60, store.header()[3]);
 
         store = new FileBlockStore(testFile1, 10, 20, 30, 40);
-        store.loadHeader();
-        assertEquals(10, store.getHeader()[0]);
-        assertEquals(11, store.getHeader()[1]);
-        assertEquals(12, store.getHeader()[2]);
-        assertEquals(60, store.getHeader()[3]);
+        assertEquals(10, store.header()[0]);
+        assertEquals(20, store.header()[1]);
+        assertEquals(30, store.header()[2]);
+        assertEquals(40, store.header()[3]);
     }
 
     @Test(expected = IllegalArgumentException.class)

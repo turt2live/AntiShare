@@ -84,11 +84,10 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.loadHeader();
 
-                if (store.getHeader()[3] != blocksPerStore) continue; // Ignore anything that does not match our size
+                if (store.header()[3] != blocksPerStore) continue; // Ignore anything that does not match our size
 
-                int[] header = store.getHeader();
+                int[] header = store.header();
                 ASLocation storeLocation = new ASLocation(header[0], header[1], header[2]);
                 stores.put(storeLocation, store);
                 store.load(); // Only load data once we know the header is OK
@@ -105,11 +104,10 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.loadHeader();
 
-                if (store.getHeader()[3] != blocksPerStore) continue; // Ignore anything that does not match our size
+                if (store.header()[3] != blocksPerStore) continue; // Ignore anything that does not match our size
 
-                int[] header = store.getHeader();
+                int[] header = store.header();
                 ASLocation storeLocation = new ASLocation(header[0], header[1], header[2]);
                 index.put(storeLocation, file.getAbsolutePath());
             }
@@ -127,8 +125,7 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.loadHeader();
-                int[] header = store.getHeader();
+                int[] header = store.header();
 
                 if (header[3] > highHeader) highHeader = header[3];
             }
@@ -148,8 +145,7 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.loadHeader();
-                int[] header = store.getHeader();
+                int[] header = store.header();
 
                 if (header[3] < highHeader) highHeader = header[3];
                 count++;
@@ -169,8 +165,7 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.loadHeader();
-                int[] header = store.getHeader();
+                int[] header = store.header();
 
                 if (counts.containsKey(header[3]))
                     counts.put(header[3], counts.get(header[3]) + 1);
@@ -204,8 +199,7 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.loadHeader();
-                int[] header = store.getHeader();
+                int[] header = store.header();
 
                 total += header[3];
                 count++;
@@ -226,8 +220,7 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.loadHeader();
-                int[] header = store.getHeader();
+                int[] header = store.header();
                 if (!sizes.contains(header[3])) sizes.add(header[3]);
             }
         }
@@ -255,8 +248,7 @@ public class FileBlockManager extends GenericBlockManager {
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
-                store.loadHeader();
-                int[] header = store.getHeader();
+                int[] header = store.header();
 
                 if (header[3] == blockSize) stores.add(store);
             }
