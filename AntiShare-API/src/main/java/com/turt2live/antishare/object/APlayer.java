@@ -24,7 +24,7 @@ import com.turt2live.antishare.ASGameMode;
  *
  * @author turt2live
  */
-public interface APlayer extends AEntity{
+public interface APlayer extends AEntity {
 
     /**
      * Gets the player's name

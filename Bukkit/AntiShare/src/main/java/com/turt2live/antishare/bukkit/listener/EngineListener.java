@@ -709,9 +709,9 @@ public class EngineListener implements Listener {
             int stacks = event.getDrops().size() - items.size(); // stacks
             int actual = 0;
 
-            for(ItemStack item : event.getDrops()){
+            for (ItemStack item : event.getDrops()) {
                 AItem bk = new BukkitItem(item);
-                if(!items.contains(bk)) actual+=item.getAmount();
+                if (!items.contains(bk)) actual += item.getAmount();
             }
 
             player.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.NAUGHTY_DEATH)).withPrefix()

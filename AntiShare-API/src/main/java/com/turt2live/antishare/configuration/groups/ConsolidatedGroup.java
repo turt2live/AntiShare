@@ -20,8 +20,8 @@ package com.turt2live.antishare.configuration.groups;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.configuration.BreakSettings;
-import com.turt2live.antishare.engine.list.TrackedTypeList;
 import com.turt2live.antishare.engine.list.RejectionList;
+import com.turt2live.antishare.engine.list.TrackedTypeList;
 
 import java.util.ArrayList;
 import java.util.Collections;
