@@ -43,6 +43,13 @@
             <version>1.2</version>
         </dependency>
 
+        <!-- Java NBT library -->
+        <dependency>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>JNBT</artifactId>
+            <version>1.4-SNAPSHOT</version>
+        </dependency>
+
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
@@ -87,12 +94,17 @@
                             <artifactSet>
                                 <includes>
                                     <include>net.minidev:json-smart</include>
+                                    <include>com.turt2live.lib:JNBT</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
-                                    <pattern>net.minidev</pattern>
+                                    <pattern>net.minidev.json</pattern>
                                     <shadedPattern>com.turt2live.antishare.lib.minidev.json</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.jnbt</pattern>
+                                    <shadedPattern>com.turt2live.antishare.lib.jnbt</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
