@@ -5,7 +5,7 @@ description: Development tools for AntiShare
 author: turt2live
 website: http://dev.bukkit.org/server-mods/antishare
 build: jenkins-build-number
-softdepend: [AntiShare]
+depend: [AntiShare]
 commands:
     asdev:
         description: AntiShare DevTools command

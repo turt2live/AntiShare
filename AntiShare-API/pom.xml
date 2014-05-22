@@ -41,6 +41,7 @@
             <groupId>net.minidev</groupId>
             <artifactId>json-smart</artifactId>
             <version>1.2</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Java NBT library -->

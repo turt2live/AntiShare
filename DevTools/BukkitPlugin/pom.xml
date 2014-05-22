@@ -45,6 +45,7 @@
             <artifactId>AntiShare-Bukkit</artifactId>
             <version>5.5.3-SNAPSHOT</version>
             <type>jar</type>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Bukkit -->

@@ -45,6 +45,7 @@
             <artifactId>AntiShare-API</artifactId>
             <version>API</version>
             <type>jar</type>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Bukkit -->
@@ -52,6 +53,7 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.4.5-R1.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- == START ANTISHARE ABSTRACTION == -->
