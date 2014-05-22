@@ -43,6 +43,7 @@
             <groupId>com.turt2live.antishare</groupId>
             <artifactId>AntiShare-Bukkit</artifactId>
             <version>5.5.3-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

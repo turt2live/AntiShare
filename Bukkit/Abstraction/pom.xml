@@ -40,11 +40,15 @@
             <groupId>com.turt2live.antishare</groupId>
             <artifactId>AntiShare-API</artifactId>
             <version>API</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>LATEST</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

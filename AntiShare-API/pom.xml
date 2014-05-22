@@ -41,6 +41,7 @@
             <groupId>net.minidev</groupId>
             <artifactId>json-smart</artifactId>
             <version>1.2</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Java NBT library -->
@@ -48,6 +49,7 @@
             <groupId>com.turt2live.lib</groupId>
             <artifactId>JNBT</artifactId>
             <version>1.4-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- JUnit -->
