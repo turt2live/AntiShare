@@ -24,6 +24,7 @@ import com.turt2live.antishare.lib.minidev.json.JSONObject;
 import com.turt2live.antishare.lib.minidev.json.JSONValue;
 import org.bukkit.*;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -101,18 +102,55 @@ public class ItemStackTest extends CheckBase {
             Map<String, Object> fullySerialized = serialize(stack);
             String json = new JSONObject(fullySerialized).toJSONString();
             jsons[n] = json;
+            System.out.println(n + " = " + json);
             n++;
         }
 
         Bukkit.broadcastMessage(ChatColor.AQUA + "Deserializing");
         // Deserialize from JSON
         for (String json : jsons) {
+            System.out.println(json);
             Map<String, Object> parsed = ((JSONObject) JSONValue.parse(json));
-            ItemStack stack = ItemStack.deserialize(parsed);
-            player.getInventory().addItem(stack);
+            Object thing = deserialize(parsed);
+            if (thing instanceof ItemStack)
+                player.getInventory().addItem((ItemStack) thing);
         }
 
         Bukkit.broadcastMessage(ChatColor.GREEN + "Done!");
+    }
+
+    private ConfigurationSerializable deserialize(Map<String, Object> map) {
+        Map<String, Object> modifiable = new HashMap<String, Object>();
+        Map<String, Object> replace = new HashMap<String, Object>();
+
+        modifiable.putAll(map);
+
+        for (Map.Entry<String, Object> entry : modifiable.entrySet()) {
+            if (entry.getValue() instanceof Map) {
+                Map<String, Object> child = (Map<String, Object>) entry.getValue();
+                if (child.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
+                    replace.put(entry.getKey(), deserialize(child));
+                }
+            } else if (entry.getValue() instanceof Object[]) {
+                Object[] array = (Object[]) entry.getValue();
+                for (int i = 0; i < array.length; i++) {
+                    Object o = array[i];
+                    if (o instanceof Map) {
+                        Map<String, Object> child = (Map<String, Object>) entry.getValue();
+                        if (child.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
+                            array[i] = deserialize(child);
+                        }
+                    }
+                }
+                replace.put(entry.getKey(), array);
+            }
+        }
+
+        for (Map.Entry<String, Object> replacement : replace.entrySet()) {
+            modifiable.put(replacement.getKey(), replacement.getValue());
+        }
+
+        return ConfigurationSerialization.deserializeObject(modifiable);
     }
 
     private Map<String, Object> serialize(ConfigurationSerializable serializable) {
@@ -122,22 +160,30 @@ public class ItemStackTest extends CheckBase {
         for (Map.Entry<String, Object> entry : serialized.entrySet()) {
             if (entry.getValue() instanceof ConfigurationSerializable) {
                 replace.put(entry.getKey(), serialize((ConfigurationSerializable) entry.getValue()));
-            }
-        }
-
-        if (replace.size() > 0) {
-            // Need to copy the map because Bukkit
-            Map<String, Object> copy = new HashMap<String, Object>();
-            for (Map.Entry<String, Object> s : serialized.entrySet()) {
-                if (replace.containsKey(s.getKey())) {
-                    copy.put(s.getKey(), replace.get(s.getKey()));
-                } else {
-                    copy.put(s.getKey(), s.getValue());
+            } else if (entry.getValue() instanceof Object[]) {
+                Object[] array = (Object[]) entry.getValue();
+                for (int i = 0; i < array.length; i++) {
+                    Object o = array[i];
+                    if (o instanceof ConfigurationSerializable) {
+                        Map<String, Object> serialize = serialize((ConfigurationSerializable) o);
+                        array[i] = serialize;
+                    }
                 }
+                replace.put(entry.getKey(), array);
             }
-            serialized = copy;
         }
 
-        return serialized;
+        // Need to copy the map because Bukkit
+        Map<String, Object> copy = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> s : serialized.entrySet()) {
+            if (replace.containsKey(s.getKey())) {
+                copy.put(s.getKey(), replace.get(s.getKey()));
+            } else {
+                copy.put(s.getKey(), s.getValue());
+            }
+        }
+
+        copy.put(ConfigurationSerialization.SERIALIZED_TYPE_KEY, ConfigurationSerialization.getAlias(serializable.getClass()));
+        return copy;
     }
 }
