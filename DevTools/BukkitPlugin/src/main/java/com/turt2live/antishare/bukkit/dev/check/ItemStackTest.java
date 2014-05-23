@@ -33,7 +33,9 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ItemStackTest extends CheckBase {
@@ -102,14 +104,12 @@ public class ItemStackTest extends CheckBase {
             Map<String, Object> fullySerialized = serialize(stack);
             String json = new JSONObject(fullySerialized).toJSONString();
             jsons[n] = json;
-            System.out.println(n + " = " + json);
             n++;
         }
 
         Bukkit.broadcastMessage(ChatColor.AQUA + "Deserializing");
         // Deserialize from JSON
         for (String json : jsons) {
-            System.out.println(json);
             Map<String, Object> parsed = ((JSONObject) JSONValue.parse(json));
             Object thing = deserialize(parsed);
             if (thing instanceof ItemStack)
@@ -120,70 +120,80 @@ public class ItemStackTest extends CheckBase {
     }
 
     private ConfigurationSerializable deserialize(Map<String, Object> map) {
-        Map<String, Object> modifiable = new HashMap<String, Object>();
-        Map<String, Object> replace = new HashMap<String, Object>();
-
-        modifiable.putAll(map);
+        Map<String, Object> modifiable = clone(map);
 
         for (Map.Entry<String, Object> entry : modifiable.entrySet()) {
             if (entry.getValue() instanceof Map) {
-                Map<String, Object> child = (Map<String, Object>) entry.getValue();
-                if (child.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
-                    replace.put(entry.getKey(), deserialize(child));
-                }
-            } else if (entry.getValue() instanceof Object[]) {
-                Object[] array = (Object[]) entry.getValue();
-                for (int i = 0; i < array.length; i++) {
-                    Object o = array[i];
-                    if (o instanceof Map) {
-                        Map<String, Object> child = (Map<String, Object>) entry.getValue();
-                        if (child.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
-                            array[i] = deserialize(child);
-                        }
-                    }
-                }
-                replace.put(entry.getKey(), array);
+                Map<String, Object> clone = deserializeMap(clone((Map<?, ?>) entry.getValue()));
+                if (clone.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY))
+                    entry.setValue(deserialize(clone));
+            } else if (entry.getValue() instanceof List) {
+                entry.setValue(deserializeList((List<?>) entry.getValue()));
             }
-        }
-
-        for (Map.Entry<String, Object> replacement : replace.entrySet()) {
-            modifiable.put(replacement.getKey(), replacement.getValue());
         }
 
         return ConfigurationSerialization.deserializeObject(modifiable);
     }
 
+    private List<Object> deserializeList(List<?> objects) {
+        List<Object> deserialized = new ArrayList<Object>();
+
+        for (Object object : objects) {
+            if (object instanceof Map) {
+                Map<String, Object> clone = clone((Map<?, ?>) object);
+                deserializeMap(clone);
+                if (clone.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY))
+                    deserialized.add(deserialize(clone((Map<?, ?>) object)));
+                else deserialized.add(clone);
+            } else if (object instanceof List) {
+                List<Object> des = deserializeList((List<?>) object);
+                deserialized.add(des);
+            } else deserialized.add(object);
+        }
+
+        return deserialized;
+    }
+
+    private Map<String, Object> deserializeMap(Map<String, Object> map) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (entry.getValue() instanceof Map) {
+                entry.setValue(deserializeMap(clone((Map<?, ?>) entry.getValue())));
+            } else if (entry.getValue() instanceof List) {
+                entry.setValue(deserializeList((List<?>) entry.getValue()));
+            }
+        }
+        return map;
+    }
+
     private Map<String, Object> serialize(ConfigurationSerializable serializable) {
-        Map<String, Object> serialized = serializable.serialize();
-        Map<String, Object> replace = new HashMap<String, Object>();
+        Map<String, Object> clone = clone(serializable.serialize());
+        clone.put(ConfigurationSerialization.SERIALIZED_TYPE_KEY, ConfigurationSerialization.getAlias(serializable.getClass()));
 
-        for (Map.Entry<String, Object> entry : serialized.entrySet()) {
+        for (Map.Entry<String, Object> entry : clone.entrySet()) {
             if (entry.getValue() instanceof ConfigurationSerializable) {
-                replace.put(entry.getKey(), serialize((ConfigurationSerializable) entry.getValue()));
-            } else if (entry.getValue() instanceof Object[]) {
-                Object[] array = (Object[]) entry.getValue();
-                for (int i = 0; i < array.length; i++) {
-                    Object o = array[i];
+                entry.setValue(serialize((ConfigurationSerializable) entry.getValue()));
+            } else if (entry.getValue() instanceof List) {
+                List<?> objects = (List<?>) entry.getValue();
+                List<Object> serialized = new ArrayList<Object>();
+                for (Object o : objects) {
                     if (o instanceof ConfigurationSerializable) {
-                        Map<String, Object> serialize = serialize((ConfigurationSerializable) o);
-                        array[i] = serialize;
-                    }
+                        serialized.add(serialize((ConfigurationSerializable) o));
+                    } else serialized.add(o);
                 }
-                replace.put(entry.getKey(), array);
+                entry.setValue(serialized);
             }
         }
 
-        // Need to copy the map because Bukkit
-        Map<String, Object> copy = new HashMap<String, Object>();
-        for (Map.Entry<String, Object> s : serialized.entrySet()) {
-            if (replace.containsKey(s.getKey())) {
-                copy.put(s.getKey(), replace.get(s.getKey()));
-            } else {
-                copy.put(s.getKey(), s.getValue());
-            }
+        return clone;
+    }
+
+    private Map<String, Object> clone(Map<?, ?> map) {
+        Map<String, Object> clone = new LinkedHashMap<String, Object>();
+
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            clone.put(entry.getKey().toString(), entry.getValue());
         }
 
-        copy.put(ConfigurationSerialization.SERIALIZED_TYPE_KEY, ConfigurationSerialization.getAlias(serializable.getClass()));
-        return copy;
+        return clone;
     }
 }
