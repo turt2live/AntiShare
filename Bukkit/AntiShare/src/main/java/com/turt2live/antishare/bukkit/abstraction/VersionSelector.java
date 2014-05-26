@@ -19,6 +19,8 @@ package com.turt2live.antishare.bukkit.abstraction;
 
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.engine.DevEngine;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.event.Listener;
 
 /**
@@ -45,6 +47,7 @@ public final class VersionSelector {
         String packageName = AntiShare.getInstance().getServer().getClass().getPackage().getName();
         // Get full package string of CraftServer.
         // org.bukkit.craftbukkit.versionstring (or for pre-refactor, just org.bukkit.craftbukkit
+        // net.glowstone for glowstone servers
         String version = packageName.substring(packageName.lastIndexOf('.') + 1);
 
         DevEngine.log("[Abstraction] Parsed package name: " + version);
@@ -52,6 +55,15 @@ public final class VersionSelector {
         // Get the last element of the package
         if (version.equals("craftbukkit")) { // If the last element of the package was "craftbukkit" we are now pre-refactor
             version = "pre";
+        } else if (version.equals("glowstone")) {
+            // Glowstone is built purely on the Bukkit API, so we can detect it's version through the version string
+            Server server = Bukkit.getServer();
+            // TODO: Cleanup/move elsewhere?
+            if (server.getBukkitVersion().equals("1.7.2-R0.2")) {
+                version = "1_7_R1";
+            } else if (server.getBukkitVersion().equals("1.7.9-R0.1")) {
+                version = "1_7_R3";
+            } else version = DEFAULT_VERSION; // Unknown glowstone version, assume default
         }
 
         DevEngine.log("[Abstraction] Attempting to load: " + version);

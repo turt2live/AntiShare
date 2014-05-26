@@ -52,6 +52,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- Item Abstraction -->
+        <dependency>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>ItemAbstraction</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
@@ -107,6 +115,7 @@
                                 <includes>
                                     <include>net.minidev:json-smart</include>
                                     <include>com.turt2live.lib:JNBT</include>
+                                    <include>com.turt2live.lib:ItemAbstraction-AllInOne</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -117,6 +126,10 @@
                                 <relocation>
                                     <pattern>org.jnbt</pattern>
                                     <shadedPattern>com.turt2live.antishare.lib.jnbt</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.turt2live.lib.itemabstraction</pattern>
+                                    <shadedPattern>com.turt2live.antishare.lib.itemabstraction</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
