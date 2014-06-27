@@ -115,7 +115,7 @@
                                 <includes>
                                     <include>net.minidev:json-smart</include>
                                     <include>com.turt2live.lib:JNBT</include>
-                                    <include>com.turt2live.lib:ItemAbstraction-AllInOne</include>
+                                    <include>com.turt2live.lib:ItemAbstraction</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -128,8 +128,8 @@
                                     <shadedPattern>com.turt2live.antishare.lib.jnbt</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>com.turt2live.lib.itemabstraction</pattern>
-                                    <shadedPattern>com.turt2live.antishare.lib.itemabstraction</shadedPattern>
+                                    <pattern>com.turt2live.lib.items</pattern>
+                                    <shadedPattern>com.turt2live.antishare.lib.items</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

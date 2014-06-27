@@ -94,6 +94,13 @@ public class AntiShare extends JavaPlugin {
                 } else {
                     sender.sendMessage(ChatColor.RED + "Not for console.");
                 }
+            } else if (args[0].equalsIgnoreCase("itemtest2")) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    check = new ItemStackTest2(this, player);
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Not for console.");
+                }
             } else if (args[0].equalsIgnoreCase("matstrings")) {
                 check = new MaterialStringsCheck(this);
             } else
