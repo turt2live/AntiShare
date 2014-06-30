@@ -24,7 +24,11 @@ import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 import com.turt2live.antishare.object.pattern.PatternManager;
+import com.turt2live.lib.items.ProviderManager;
+import com.turt2live.lib.items.provider.ItemProvider;
 
+import java.io.InputStream;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -104,6 +108,7 @@ public final class Engine {
     private GroupManager groupManager = null;
     private Configuration configuration = new MemoryConfiguration();
     private PatternManager patterns = new PatternManager();
+    private ItemProvider itemProvider = null;
 
     private Engine() {
         newCacheTimer();
@@ -131,6 +136,46 @@ public final class Engine {
         if (groupManager == null) return false;
 
         return true;
+    }
+
+    /**
+     * Gets the item provider for this engine.
+     *
+     * @return the item provider, may be null if not initialized
+     */
+    // TODO: Unit test
+    public ItemProvider getItemProvider() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
+        return itemProvider;
+    }
+
+    /**
+     * Loads the item provider for use. This depends on an optionally null
+     * stream in the correct format (as per {@link com.turt2live.lib.items.ProviderManager})
+     * to load the correct item provider. If no provider can be found,
+     * an exception is raised.
+     *
+     * @param stream the stream to use
+     *
+     * @throws java.lang.IllegalArgumentException thrown if the stream yields an invalid provider
+     */
+    // TODO: Unit test
+    public void loadItemProvider(InputStream stream) {
+        DevEngine.log("[Engine] Attempting to load item provider from stream: " + stream);
+        ProviderManager providerManager = ProviderManager.getInstance(stream);
+
+        List<ItemProvider> providers = providerManager.getProviders();
+        DevEngine.log("[Engine] There are " + providers.size() + " possible item providers.");
+        for (ItemProvider provider : providers) {
+            DevEngine.log("[Engine] Loaded item provider: " + provider.getClass().getName());
+        }
+
+        ItemProvider chosen = providerManager.getProvider();
+        if (chosen == null) throw new IllegalArgumentException("No provider loaded");
+
+        DevEngine.log("[Engine] New item provider: " + chosen.getClass().getName());
+        itemProvider = chosen;
     }
 
     /**

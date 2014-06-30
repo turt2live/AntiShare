@@ -170,6 +170,16 @@ public class AntiShare extends JavaPlugin {
     public void onEnable() {
         instance = this; // For reload support
 
+        // Check for developer tools
+        if (getServer().getPluginManager().getPlugin("AntiShare-DevTools") != null) {
+            getLogger().warning("============= ANTISHARE =============");
+            getLogger().warning("   -- DEVELOPMENT TOOLS FOUND --");
+            getLogger().warning("  **** Enabling Debug Support ****");
+            getLogger().warning("============= ANTISHARE =============");
+            DevEngine.setEnabled(true);
+            DevEngine.setLogDirectory(new File(getDataFolder(), "devlogs"));
+        }
+
         // Setup configuration
         FileConfiguration configuration = YamlConfiguration.loadConfiguration(getResource("config.yml"));
         getConfig().setDefaults(configuration);
@@ -207,16 +217,6 @@ public class AntiShare extends JavaPlugin {
         // Register commands
         handler.registerCommand(new ToolsCommand());
         handler.registerCommand(new ReloadCommand());
-
-        // Check for developer tools
-        if (getServer().getPluginManager().getPlugin("AntiShare-DevTools") != null) {
-            getLogger().warning("============= ANTISHARE =============");
-            getLogger().warning("   -- DEVELOPMENT TOOLS FOUND --");
-            getLogger().warning("  **** Enabling Debug Support ****");
-            getLogger().warning("============= ANTISHARE =============");
-            DevEngine.setEnabled(true);
-            DevEngine.setLogDirectory(new File(getDataFolder(), "devlogs"));
-        }
     }
 
     private void initEngine() {
@@ -238,6 +238,7 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setSaveInterval(periodicSave);
         Engine.getInstance().setGroupManager(new BukkitGroupManager());
         Engine.getInstance().setConfiguration(new BukkitConfiguration(new File(getDataFolder(), "config.yml")));
+        Engine.getInstance().loadItemProvider(getResource("ItemProviders.txt")); // Created by ItemProvider's Final JAR
 
         // Setup mob patterns
         PatternManager patterns = Engine.getInstance().getPatterns();

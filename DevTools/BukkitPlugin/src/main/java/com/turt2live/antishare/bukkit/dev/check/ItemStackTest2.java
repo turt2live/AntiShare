@@ -112,6 +112,9 @@ public class ItemStackTest2 extends CheckBase {
             Map<String, Object> parsed = ((JSONObject) JSONValue.parse(json));
             ItemStack thing = deserialize(parsed);
             if (thing != null) player.getInventory().addItem(thing);
+            else {
+                Bukkit.broadcastMessage(ChatColor.RED + "JSON returned null result: " + json);
+            }
         }
 
         Bukkit.broadcastMessage(ChatColor.GREEN + "Done!");
