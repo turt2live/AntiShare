@@ -30,7 +30,7 @@ import org.bukkit.event.Listener;
  */
 public final class VersionSelector {
 
-    private static final String DEFAULT_VERSION = "v1_7_R3";
+    private static final String DEFAULT_VERSION = "v1_7_R4";
     private static MinecraftVersion minecraft;
 
     /**
