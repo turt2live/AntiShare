@@ -21,9 +21,8 @@ import com.turt2live.antishare.bukkit.dev.AntiShare;
 import com.turt2live.antishare.bukkit.dev.CheckBase;
 import com.turt2live.antishare.collections.ArrayArrayList;
 import com.turt2live.antishare.lib.items.AbstractedItem;
-import com.turt2live.antishare.lib.items.ProviderManager;
 import com.turt2live.antishare.lib.items.bukkit.BukkitAbstractItem;
-import com.turt2live.antishare.lib.items.serialization.ItemSerializer;
+import com.turt2live.antishare.lib.items.serialization.ItemDeserializer;
 import com.turt2live.antishare.lib.minidev.json.JSONObject;
 import com.turt2live.antishare.lib.minidev.json.JSONValue;
 import org.bukkit.*;
@@ -122,12 +121,12 @@ public class ItemStackTest2 extends CheckBase {
 
     private ItemStack deserialize(Map<String, Object> map) {
         try {
-            AbstractedItem item = ProviderManager.getInstance().deserialize(map);
+            AbstractedItem item = ItemDeserializer.deserialize(map);
 
             if (item instanceof BukkitAbstractItem) {
                 return ((BukkitAbstractItem) item).getItemStack();
             }
-        } catch (ItemSerializer.InvalidItemException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -138,8 +137,8 @@ public class ItemStackTest2 extends CheckBase {
         AbstractedItem abstracted = new BukkitAbstractItem(item);
 
         try {
-            return ProviderManager.getInstance().serialize(abstracted);
-        } catch (ItemSerializer.InvalidItemException e) {
+            return abstracted.serialize();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -43,6 +43,7 @@
         <module>Bukkit/AbstractImpl/Abstraction-v1_7_R1</module>
         <module>Bukkit/AbstractImpl/Abstraction-v1_7_R2</module>
         <module>Bukkit/AbstractImpl/Abstraction-v1_7_R3</module>
+        <module>Bukkit/AbstractImpl/Abstraction-v1_7_R4</module>
         <module>DevTools/BukkitPlugin</module>
         <module>AntiShare-AllInOne</module>
     </modules>

@@ -238,7 +238,7 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setSaveInterval(periodicSave);
         Engine.getInstance().setGroupManager(new BukkitGroupManager());
         Engine.getInstance().setConfiguration(new BukkitConfiguration(new File(getDataFolder(), "config.yml")));
-        Engine.getInstance().loadItemProvider(getResource("ItemProviders.txt")); // Created by ItemProvider's Final JAR
+        Engine.getInstance().loadItemProvider();
 
         // Setup mob patterns
         PatternManager patterns = Engine.getInstance().getPatterns();

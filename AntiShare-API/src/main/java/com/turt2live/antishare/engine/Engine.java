@@ -24,10 +24,9 @@ import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 import com.turt2live.antishare.object.pattern.PatternManager;
-import com.turt2live.lib.items.ProviderManager;
 import com.turt2live.lib.items.provider.ItemProvider;
+import com.turt2live.lib.items.provider.ProviderManager;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -151,19 +150,14 @@ public final class Engine {
     }
 
     /**
-     * Loads the item provider for use. This depends on an optionally null
-     * stream in the correct format (as per {@link com.turt2live.lib.items.ProviderManager})
-     * to load the correct item provider. If no provider can be found,
-     * an exception is raised.
-     *
-     * @param stream the stream to use
+     * Loads the item provider for use. If no provider can be found, an exception is raised.
      *
      * @throws java.lang.IllegalArgumentException thrown if the stream yields an invalid provider
      */
     // TODO: Unit test
-    public void loadItemProvider(InputStream stream) {
-        DevEngine.log("[Engine] Attempting to load item provider from stream: " + stream);
-        ProviderManager providerManager = ProviderManager.getInstance(stream);
+    public void loadItemProvider() {
+        DevEngine.log("[Engine] Attempting to load item provider ");
+        ProviderManager providerManager = ProviderManager.getInstance();
 
         List<ItemProvider> providers = providerManager.getProviders();
         DevEngine.log("[Engine] There are " + providers.size() + " possible item providers.");

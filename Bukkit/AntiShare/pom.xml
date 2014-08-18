@@ -156,6 +156,13 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.turt2live.antishare</groupId>
+            <artifactId>AntiShare-Bukkit-v1_7_R4</artifactId>
+            <version>Bukkit-v1_7_R4</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- == END ANTISHARE ABSTRACTION == -->
     </dependencies>
