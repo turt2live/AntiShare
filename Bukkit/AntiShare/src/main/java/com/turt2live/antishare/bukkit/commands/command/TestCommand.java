@@ -106,6 +106,32 @@ public class TestCommand implements ASCommand {
 
         invMan.save(player);
 
+        // Re-load items (for testing)
+        for (int i = 0; i < 6; i++) {
+            for (ASGameMode gamemode : ASGameMode.values()) {
+                AInventory inventory = invMan.getInventory(player, gamemode, "world" + i);
+                if (inventory == null) throw new RuntimeException("null inv");
+                else {
+                    // Check contents
+                    for (AbstractedItem item : inventory.getContents().values()) {
+                        ItemStack itemStack = ((BukkitAbstractItem) item).getItemStack();
+
+                        boolean similar = false;
+                        for (ItemStack itemStack1 : this.items) {
+                            if (itemStack1.isSimilar(itemStack)) {
+                                similar = true;
+                                break;
+                            }
+                        }
+
+                        if (!similar)
+                            System.out.println("Item " + itemStack.getType() + " is NOT okay in world" + i + ", gamemode " + gamemode);
+                    }
+                }
+            }
+        }
+
+
         sender.sendMessage("Done");
         return true;
     }

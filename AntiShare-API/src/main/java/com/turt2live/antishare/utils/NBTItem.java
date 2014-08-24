@@ -19,6 +19,7 @@ package com.turt2live.antishare.utils;
 
 import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.lib.items.AbstractedItem;
+import com.turt2live.lib.items.serialization.ItemDeserializer;
 import org.jnbt.*;
 
 import java.util.*;
@@ -126,9 +127,59 @@ public class NBTItem {
     public static AbstractedItem reconstructItem(Tag tag) {
         if (tag == null) throw new IllegalArgumentException();
 
-        // TODO
+        if (tag instanceof CompoundTag) {
+            Map<String, Object> reconstructed = createMap((CompoundTag) tag);
+            return ItemDeserializer.deserialize(reconstructed);
+        }
 
         return null;
+    }
+
+    private static Map<String, Object> createMap(CompoundTag tag) {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        for (Tag t : tag.getValue().values()) {
+            map.put(t.getName(), createObject(t));
+        }
+
+        return map;
+    }
+
+    private static List<Object> createList(ListTag tag) {
+        List<Object> objs = new ArrayList<Object>();
+
+        for (Tag t : tag.getValue()) {
+            objs.add(createObject(t));
+        }
+
+        return objs;
+    }
+
+    private static Object createObject(Tag tag) {
+        if (tag instanceof CompoundTag) {
+            CompoundTag comp = (CompoundTag) tag;
+            if (comp.getValue().containsKey("ENUM_CLASS")) {
+                // Enum :D
+                String enumClass = (String) comp.getValue().get("ENUM_CLASS").getValue();
+                String enumValue = (String) comp.getValue().get("ENUM_VALUE").getValue();
+
+                try {
+                    Class<? extends Enum> enumClazz = (Class<? extends Enum>) Class.forName(enumClass);
+                    return Enum.valueOf(enumClazz, enumValue);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+            return createMap(comp);
+        } else if (tag instanceof StringTag) {
+            StringTag str = (StringTag) tag;
+            if (str.getValue().startsWith("BOOLEAN|")) {
+                return Boolean.parseBoolean(str.getValue().substring("BOOLEAN|".length()));
+            }
+            return str.getValue();
+        } else if (tag instanceof ListTag) return createList((ListTag) tag);
+        else return tag.getValue();
     }
 
 }

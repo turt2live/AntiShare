@@ -18,14 +18,15 @@
 package com.turt2live.antishare.io.flatfile;
 
 import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.utils.NBTItem;
 import com.turt2live.antishare.io.generics.GenericInventoryManager;
 import com.turt2live.antishare.io.memory.MemoryInventoryManager;
 import com.turt2live.antishare.object.AInventory;
+import com.turt2live.antishare.utils.NBTItem;
 import com.turt2live.lib.items.AbstractedItem;
 import org.jnbt.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -80,7 +81,26 @@ public class FileInventoryManager extends GenericInventoryManager {
     protected List<AInventory> loadInventories(UUID player) {
         List<AInventory> inventories = new ArrayList<AInventory>();
 
-        // TODO
+        File expected = new File(folder, player.toString() + ".dat");
+        if (expected.exists()) {
+            try {
+                NBTInputStream inputStream = new NBTInputStream(new FileInputStream(expected));
+                Tag baseTag = inputStream.readTag();
+                inputStream.close();
+
+                if (baseTag instanceof CompoundTag) {
+                    CompoundTag root = (CompoundTag) baseTag;
+                    ListTag inventoryList = (ListTag) root.getValue().get("inventories");
+
+                    for (Tag listItem : inventoryList.getValue()) {
+                        AInventory inventory = createInventory(((CompoundTag) listItem).getValue());
+                        inventories.add(inventory);
+                    }
+                } else throw new RuntimeException("Root tag is not a valid tag");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         return inventories;
     }
@@ -118,5 +138,25 @@ public class FileInventoryManager extends GenericInventoryManager {
         tags.put("items", new CompoundTag("items", items));
 
         return new CompoundTag("inventory", tags);
+    }
+
+    private AInventory createInventory(Map<String, Tag> tags) {
+        ASGameMode gamemode = ASGameMode.valueOf(((StringTag) tags.get("gamemode")).getValue());
+        String world = ((StringTag) tags.get("world")).getValue();
+
+        AInventory inventory = new MemoryInventoryManager.MemoryInventory(world, gamemode);
+
+        // Start reading items
+        CompoundTag items = (CompoundTag) tags.get("items");
+        Map<Integer, AbstractedItem> itemMap = new HashMap<Integer, AbstractedItem>();
+        for (Tag itemTag : items.getValue().values()) {
+            int slot = Integer.parseInt(itemTag.getName().substring("slot ".length()));
+            AbstractedItem item = NBTItem.reconstructItem(itemTag);
+            itemMap.put(slot, item);
+        }
+
+        inventory.setContents(itemMap);
+
+        return inventory;
     }
 }
