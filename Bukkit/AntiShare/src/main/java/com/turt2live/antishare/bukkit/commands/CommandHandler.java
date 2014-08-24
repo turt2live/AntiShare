@@ -17,7 +17,6 @@
 
 package com.turt2live.antishare.bukkit.commands;
 
-import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.engine.DevEngine;
@@ -37,7 +36,6 @@ import java.util.List;
 public class CommandHandler implements CommandExecutor, ASCommand {
 
     private List<ASCommand> commands = new ArrayList<ASCommand>();
-    private AntiShare plugin = AntiShare.getInstance();
 
     public CommandHandler() {
         registerCommand(this);

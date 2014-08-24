@@ -71,4 +71,20 @@ public interface APlayer extends AEntity {
      */
     public AWorld getWorld();
 
+    /**
+     * Gets the current inventory for this player
+     *
+     * @return the current inventory
+     */
+    public AInventory getInventory();
+
+    /**
+     * Sets the inventory of this player to the specified items. Implementations
+     * should not copy the gamemode or world of the inventory, just the contents.
+     *
+     * @param inventory the inventory for which the contents should be used. If null,
+     *                  the inventory should be cleared.
+     */
+    public void setInventory(AInventory inventory);
+
 }

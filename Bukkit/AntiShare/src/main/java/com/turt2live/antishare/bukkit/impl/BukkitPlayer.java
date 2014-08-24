@@ -21,6 +21,7 @@ import com.turt2live.antishare.AColor;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
+import com.turt2live.antishare.object.AInventory;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.AWorld;
 import org.bukkit.ChatColor;
@@ -81,5 +82,15 @@ public class BukkitPlayer extends BukkitEntity implements APlayer {
     @Override
     public AWorld getWorld() {
         return new BukkitWorld(player.getWorld());
+    }
+
+    @Override
+    public AInventory getInventory() {
+        return null; // TODO
+    }
+
+    @Override
+    public void setInventory(AInventory inventory) {
+        // TODO
     }
 }

@@ -24,6 +24,7 @@ import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 import com.turt2live.antishare.object.pattern.PatternManager;
+import com.turt2live.lib.items.AbstractedItem;
 import com.turt2live.lib.items.provider.ItemProvider;
 import com.turt2live.lib.items.provider.ProviderManager;
 
@@ -114,6 +115,10 @@ public final class Engine {
         newSaveTimer();
         setCacheIncrement(cacheIncrement);
         setSaveInterval(saveInterval);
+
+        // Setup the item provider base package
+        String packName = AbstractedItem.class.getPackage().getName();
+        ProviderManager.setBasePackage(packName);
     }
 
     /**
