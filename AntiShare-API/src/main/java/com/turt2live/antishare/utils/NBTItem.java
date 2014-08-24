@@ -15,7 +15,7 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.io.flatfile.inventory;
+package com.turt2live.antishare.utils;
 
 import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.lib.items.AbstractedItem;
@@ -69,7 +69,6 @@ public class NBTItem {
                 tags.put(entry.getKey(), created);
             } else {
                 DevEngine.log("Unknown type, cannot convert to an NBT tag: " + entry.getKey() + " = " + value.getClass().getName() + " (" + value + ")");
-                System.out.println("Unknown type, cannot convert to an NBT tag: " + entry.getKey() + " = " + value.getClass().getName() + " (" + value + ")");
             }
         }
 

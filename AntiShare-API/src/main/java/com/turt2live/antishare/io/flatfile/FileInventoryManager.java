@@ -18,7 +18,7 @@
 package com.turt2live.antishare.io.flatfile;
 
 import com.turt2live.antishare.ASGameMode;
-import com.turt2live.antishare.io.flatfile.inventory.NBTItem;
+import com.turt2live.antishare.utils.NBTItem;
 import com.turt2live.antishare.io.generics.GenericInventoryManager;
 import com.turt2live.antishare.io.memory.MemoryInventoryManager;
 import com.turt2live.antishare.object.AInventory;
