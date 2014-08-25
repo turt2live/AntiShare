@@ -20,7 +20,6 @@ package com.turt2live.antishare.bukkit;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.bukkit.commands.CommandHandler;
 import com.turt2live.antishare.bukkit.commands.command.ReloadCommand;
-import com.turt2live.antishare.bukkit.commands.command.TestCommand;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
 import com.turt2live.antishare.bukkit.configuration.BukkitConfiguration;
 import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
@@ -218,7 +217,6 @@ public class AntiShare extends JavaPlugin {
         // Register commands
         handler.registerCommand(new ToolsCommand());
         handler.registerCommand(new ReloadCommand());
-        handler.registerCommand(new TestCommand());
     }
 
     private void initEngine() {

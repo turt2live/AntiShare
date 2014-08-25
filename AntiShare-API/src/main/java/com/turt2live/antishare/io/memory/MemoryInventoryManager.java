@@ -32,6 +32,7 @@ import java.util.*;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public class MemoryInventoryManager extends GenericInventoryManager {
 
     /**

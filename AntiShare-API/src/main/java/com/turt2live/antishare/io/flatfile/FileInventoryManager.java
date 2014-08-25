@@ -36,6 +36,7 @@ import java.util.*;
  *
  * @author turt2live
  */
+// TODO: Unit test
 public class FileInventoryManager extends GenericInventoryManager {
 
     private File folder;

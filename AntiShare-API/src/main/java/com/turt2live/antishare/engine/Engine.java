@@ -42,6 +42,8 @@ import java.util.logging.Logger;
  */
 public final class Engine {
 
+    // TODO: Cleanup configuration system
+
     /**
      * The default cache increment (60 seconds)
      */
