@@ -20,6 +20,8 @@ package com.turt2live.antishare.engine;
 import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.MemoryConfiguration;
 import com.turt2live.antishare.configuration.groups.GroupManager;
+import com.turt2live.antishare.io.InventoryManager;
+import com.turt2live.antishare.object.AWorld;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,8 +30,8 @@ import org.junit.runners.JUnit4;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)
 public class EngineTest {
@@ -47,6 +49,7 @@ public class EngineTest {
         Engine.getInstance().forceNotInitialized();
         assertFalse(Engine.getInstance().isReady());
         Engine.getInstance().setGroupManager(mock(GroupManager.class));
+        assertFalse(Engine.getInstance().isReady());
         Engine.getInstance().setWorldProvider(mock(WorldProvider.class));
         assertTrue(Engine.getInstance().isReady());
     }
@@ -74,6 +77,40 @@ public class EngineTest {
     }
 
     @Test
+    public void testWorldProvider() {
+        assertNotNull(Engine.getInstance().getWorldProvider());
+        WorldProvider mocked1 = mock(WorldProvider.class);
+        WorldProvider mocked2 = mock(WorldProvider.class);
+
+        Engine.getInstance().setWorldProvider(mocked1);
+        assertNotNull(Engine.getInstance().getWorldProvider());
+        assertEquals(mocked1, Engine.getInstance().getWorldProvider());
+        assertNotEquals(mocked2, Engine.getInstance().getWorldProvider());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNullWorldProvider() {
+        Engine.getInstance().setWorldProvider(null);
+    }
+
+    @Test
+    public void testInventoryManager() {
+        assertNotNull(Engine.getInstance().getInventoryManager());
+        InventoryManager mocked1 = mock(InventoryManager.class);
+        InventoryManager mocked2 = mock(InventoryManager.class);
+
+        Engine.getInstance().setInventoryManager(mocked1);
+        assertNotNull(Engine.getInstance().getInventoryManager());
+        assertEquals(mocked1, Engine.getInstance().getInventoryManager());
+        assertNotEquals(mocked2, Engine.getInstance().getInventoryManager());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNullInventoryManager() {
+        Engine.getInstance().setInventoryManager(null);
+    }
+
+    @Test
     public void testLogger() {
         Logger logger = Logger.getLogger("test-case");
         assertNotNull(Engine.getInstance().getLogger());
@@ -85,6 +122,25 @@ public class EngineTest {
     @Test(expected = IllegalArgumentException.class)
     public void testNullLogger() {
         Engine.getInstance().setLogger(null);
+    }
+
+    @Test
+    public void testGetWorld() {
+        WorldProvider provider = mock(WorldProvider.class);
+        when(provider.getWorld(anyString())).thenReturn(null);
+        when(provider.getWorld("world1")).thenReturn(mock(AWorld.class));
+
+        Engine.getInstance().setWorldProvider(provider);
+        assertNotNull(Engine.getInstance().getWorld("world1"));
+        verify(provider).getWorld("world1");
+
+        assertNull(Engine.getInstance().getWorld("other"));
+        verify(provider).getWorld("other");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNullGetWorld() {
+        Engine.getInstance().getWorld(null);
     }
 
     @Test

@@ -157,7 +157,6 @@ public final class Engine {
      *
      * @return the world provider
      */
-    // TODO: Unit test
     public WorldProvider getWorldProvider() {
         if (!isReady()) throw new EngineNotInitializedException();
 
@@ -169,7 +168,6 @@ public final class Engine {
      *
      * @param provider the world provider, cannot be null
      */
-    // TODO: Unit test
     public void setWorldProvider(WorldProvider provider) {
         if (provider == null) throw new IllegalArgumentException();
 
@@ -185,7 +183,6 @@ public final class Engine {
      * @param name the world name to lookup, cannot be null
      * @return the world found, or null if none
      */
-    // TODO: Unit test
     public AWorld getWorld(String name) {
         if (!isReady()) throw new EngineNotInitializedException();
         if (name == null) throw new IllegalArgumentException();
@@ -193,14 +190,20 @@ public final class Engine {
         return worlds.getWorld(name);
     }
 
-    // TODO: Docs & unit test
+    /**
+     * Gets the current inventory manager
+     * @return the current inventory manager
+     */
     public InventoryManager getInventoryManager() {
         if (!isReady()) throw new EngineNotInitializedException();
 
         return inventoryManager;
     }
 
-    // TODO: Docs & unit test
+    /**
+     * Sets the inventory manager to use in this engine
+     * @param manager the new manager, cannot be null
+     */
     public void setInventoryManager(InventoryManager manager) {
         if (manager == null) throw new IllegalArgumentException();
 
@@ -214,7 +217,6 @@ public final class Engine {
      *
      * @return the item provider, may be null if not initialized
      */
-    // TODO: Unit test
     public ItemProvider getItemProvider() {
         if (!isReady()) throw new EngineNotInitializedException();
 
@@ -226,7 +228,6 @@ public final class Engine {
      *
      * @throws java.lang.IllegalArgumentException thrown if the stream yields an invalid provider
      */
-    // TODO: Unit test
     public void loadItemProvider() {
         DevEngine.log("[Engine] Attempting to load item provider ");
         ProviderManager providerManager = ProviderManager.getInstance();
