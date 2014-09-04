@@ -135,6 +135,7 @@ public final class Engine {
     @Deprecated
     void forceNotInitialized() {
         groupManager = null;
+        worlds = null;
     }
 
     /**

@@ -38,6 +38,7 @@ public class EngineTest {
     public static void before() {
         // Force initialization
         Engine.getInstance().setGroupManager(mock(GroupManager.class));
+        Engine.getInstance().setWorldProvider(mock(WorldProvider.class));
     }
 
     @SuppressWarnings("deprecation")
@@ -46,6 +47,7 @@ public class EngineTest {
         Engine.getInstance().forceNotInitialized();
         assertFalse(Engine.getInstance().isReady());
         Engine.getInstance().setGroupManager(mock(GroupManager.class));
+        Engine.getInstance().setWorldProvider(mock(WorldProvider.class));
         assertTrue(Engine.getInstance().isReady());
     }
 

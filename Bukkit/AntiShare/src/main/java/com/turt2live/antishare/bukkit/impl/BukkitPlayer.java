@@ -91,7 +91,7 @@ public class BukkitPlayer extends BukkitEntity implements APlayer {
 
     @Override
     public AInventory getInventory() {
-        BukkitInventory inventory = new BukkitInventory(player.getWorld().getName(), VersionSelector.getMinecraft().toGameMode(player.getGameMode()));
+        BukkitInventory inventory = new BukkitInventory(new BukkitWorld(player.getWorld()), VersionSelector.getMinecraft().toGameMode(player.getGameMode()));
         inventory.setContents(player.getInventory());
         return inventory;
     }

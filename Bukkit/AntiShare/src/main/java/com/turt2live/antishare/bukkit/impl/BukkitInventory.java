@@ -21,6 +21,7 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.io.memory.MemoryInventoryManager;
 import com.turt2live.antishare.lib.items.AbstractedItem;
 import com.turt2live.antishare.lib.items.bukkit.BukkitAbstractItem;
+import com.turt2live.antishare.object.AWorld;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -40,7 +41,7 @@ public class BukkitInventory extends MemoryInventoryManager.MemoryInventory {
      * @param world    the world, cannot be null
      * @param gamemode the gamemode, cannot be null
      */
-    public BukkitInventory(String world, ASGameMode gamemode) {
+    public BukkitInventory(AWorld world, ASGameMode gamemode) {
         super(world, gamemode);
     }
 
