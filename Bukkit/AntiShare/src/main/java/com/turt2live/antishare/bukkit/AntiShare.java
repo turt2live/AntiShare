@@ -24,6 +24,7 @@ import com.turt2live.antishare.bukkit.commands.command.ReloadCommand;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
 import com.turt2live.antishare.bukkit.configuration.BukkitConfiguration;
 import com.turt2live.antishare.bukkit.groups.BukkitGroupManager;
+import com.turt2live.antishare.bukkit.impl.BukkitWorldProvider;
 import com.turt2live.antishare.bukkit.impl.pattern.BukkitIronGolemMobPattern;
 import com.turt2live.antishare.bukkit.impl.pattern.BukkitSnowmanPattern;
 import com.turt2live.antishare.bukkit.impl.pattern.BukkitWitherPattern;
@@ -131,7 +132,7 @@ public class AntiShare extends JavaPlugin {
 
                     materialProvider.insertPlayerFriendly(material, data, playerName);
                     if (data == 0) materialProvider.insertPlayerFriendly(material, (short) -1, playerName);
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException ignored) {
                 }
             }
             reader.close();
@@ -262,6 +263,7 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setCacheIncrement(cacheInterval);
         Engine.getInstance().setSaveInterval(periodicSave);
         Engine.getInstance().setGroupManager(new BukkitGroupManager());
+        Engine.getInstance().setWorldProvider(new BukkitWorldProvider());
         Engine.getInstance().setConfiguration(new BukkitConfiguration(new File(getDataFolder(), "config.yml")));
         Engine.getInstance().loadItemProvider();
 
