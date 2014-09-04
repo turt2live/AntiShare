@@ -52,6 +52,11 @@ public class BukkitPlayer extends BukkitEntity implements APlayer {
     }
 
     @Override
+    public UUID getUuid() {
+        return VersionSelector.getMinecraft().getUUID(player);
+    }
+
+    @Override
     public UUID getUUID() {
         return VersionSelector.getMinecraft().getUUID(player);
     }

@@ -39,6 +39,11 @@ import java.util.UUID;
 public interface MinecraftVersion extends Listener {
 
     /**
+     * Optional method for running (re)initialization logic
+     */
+    public void initialize();
+
+    /**
      * Finds a player from an attacking entity recursively. This can be
      * used to find the true player behind an attack without the need for
      * complex analysis of events and possibilities.<br/>

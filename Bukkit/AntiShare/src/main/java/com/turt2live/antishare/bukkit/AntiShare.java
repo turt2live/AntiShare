@@ -18,6 +18,7 @@
 package com.turt2live.antishare.bukkit;
 
 import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.bukkit.abstraction.VersionSelector;
 import com.turt2live.antishare.bukkit.commands.CommandHandler;
 import com.turt2live.antishare.bukkit.commands.command.ReloadCommand;
 import com.turt2live.antishare.bukkit.commands.command.ToolsCommand;
@@ -40,6 +41,7 @@ import com.turt2live.antishare.io.EntityManager;
 import com.turt2live.antishare.io.flatfile.FileBlockManager;
 import com.turt2live.antishare.io.flatfile.FileEntityManager;
 import com.turt2live.antishare.object.pattern.PatternManager;
+import com.turt2live.antishare.uuid.UuidService;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -220,6 +222,29 @@ public class AntiShare extends JavaPlugin {
     }
 
     private void initEngine() {
+        // Complain about offline mode
+        if (!getServer().getOnlineMode()) {
+            DevEngine.log("[Bukkit Plugin] OFFLINE MODE SERVER DETECTED");
+            getLogger().warning("******************************************");
+            getLogger().warning("*           OFFLINE MODE SERVER          *");
+            getLogger().warning("* -------------------------------------- *");
+            getLogger().warning("* Your server is in offline mode. Due to *");
+            getLogger().warning("* how AntiShare operates, this means     *");
+            getLogger().warning("* that AntiShare may take extra time to  *");
+            getLogger().warning("* load/save data because it has to find  *");
+            getLogger().warning("* player UUIDs/names from a web service. *");
+            getLogger().warning("*                                        *");
+            getLogger().warning("* To correct the problem, enable online  *");
+            getLogger().warning("* mode from the server.properties.       *");
+            getLogger().warning("*                                        *");
+            getLogger().warning("* This message cannot be disabled.       *");
+            getLogger().warning("******************************************");
+        }
+
+        // Reset UUID cache service
+        UuidService.getInstance().removeSources();
+        VersionSelector.getMinecraft().initialize();
+
         // Load engine variables
         blockSize = getConfig().getInt("caching.block-size", 256);
         long cacheMax = getConfig().getLong("caching.cache-expiration", 120000);

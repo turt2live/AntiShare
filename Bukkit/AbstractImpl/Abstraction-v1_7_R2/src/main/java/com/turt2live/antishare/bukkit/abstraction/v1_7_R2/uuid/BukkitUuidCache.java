@@ -15,32 +15,42 @@
  * License along with this software; If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package com.turt2live.antishare.bukkit.abstraction.v1_7_R2;
+package com.turt2live.antishare.bukkit.abstraction.v1_7_R2.uuid;
 
-import com.turt2live.antishare.bukkit.abstraction.v1_7_R2.uuid.BukkitUuidCache;
-import com.turt2live.antishare.uuid.UuidService;
+import com.turt2live.antishare.uuid.CacheSource;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
 
-public class Minecraft extends com.turt2live.antishare.bukkit.abstraction.v1_7_R1.Minecraft {
+/**
+ * Bukkit UUID cache service
+ *
+ * @author turt2live
+ */
+public class BukkitUuidCache implements CacheSource {
 
     @Override
-    public void initialize() {
-        super.initialize(); // Just in case
-        UuidService.getInstance().addSource(new BukkitUuidCache());
+    public UUID get(String playerName) {
+        if (playerName == null) throw new IllegalArgumentException();
+
+        OfflinePlayer player = Bukkit.getServer().getOfflinePlayer(playerName);
+        if (player != null && player.hasPlayedBefore()) {
+            return player.getUniqueId();
+        }
+
+        return null;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public String getName(UUID uuid) {
-        if (uuid == null) throw new IllegalArgumentException("uuid cannot be null");
+    public String get(UUID player) {
+        if (player == null) throw new IllegalArgumentException();
 
-        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-        if (player.getName().equalsIgnoreCase("InvalidUUID")) {
-            return null; // This is Bukkit's bad code
+        OfflinePlayer oplayer = Bukkit.getOfflinePlayer(player);
+        if (oplayer != null && oplayer.hasPlayedBefore()) {
+            return oplayer.getName();
         }
-        return player.getName();
+
+        return null;
     }
 }
