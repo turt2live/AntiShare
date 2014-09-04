@@ -18,9 +18,11 @@
 package com.turt2live.antishare.io.flatfile;
 
 import com.turt2live.antishare.ASGameMode;
+import com.turt2live.antishare.engine.Engine;
 import com.turt2live.antishare.io.generics.GenericInventoryManager;
 import com.turt2live.antishare.io.memory.MemoryInventoryManager;
 import com.turt2live.antishare.object.AInventory;
+import com.turt2live.antishare.object.AWorld;
 import com.turt2live.antishare.utils.NBTItem;
 import com.turt2live.lib.items.AbstractedItem;
 import org.jnbt.*;
@@ -107,7 +109,7 @@ public class FileInventoryManager extends GenericInventoryManager {
     }
 
     @Override
-    protected AInventory createEmptyInventory(UUID player, ASGameMode gamemode, String world) {
+    protected AInventory createEmptyInventory(UUID player, ASGameMode gamemode, AWorld world) {
         return new MemoryInventoryManager.MemoryInventory(world, gamemode);
     }
 
@@ -124,7 +126,7 @@ public class FileInventoryManager extends GenericInventoryManager {
     private Tag createTag(AInventory inventory) {
         Map<String, Tag> tags = new HashMap<String, Tag>();
 
-        tags.put("world", new StringTag("world", inventory.getWorld()));
+        tags.put("world", new StringTag("world", inventory.getWorld().getName()));
         tags.put("gamemode", new StringTag("gamemode", inventory.getGameMode().name()));
 
         Map<String, Tag> items = new HashMap<String, Tag>();
@@ -144,8 +146,9 @@ public class FileInventoryManager extends GenericInventoryManager {
     private AInventory createInventory(Map<String, Tag> tags) {
         ASGameMode gamemode = ASGameMode.valueOf(((StringTag) tags.get("gamemode")).getValue());
         String world = ((StringTag) tags.get("world")).getValue();
+        AWorld aWorld = Engine.getInstance().getWorld(world);
 
-        AInventory inventory = new MemoryInventoryManager.MemoryInventory(world, gamemode);
+        AInventory inventory = new MemoryInventoryManager.MemoryInventory(aWorld, gamemode);
 
         // Start reading items
         CompoundTag items = (CompoundTag) tags.get("items");

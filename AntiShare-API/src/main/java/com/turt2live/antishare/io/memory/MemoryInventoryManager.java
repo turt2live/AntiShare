@@ -20,6 +20,7 @@ package com.turt2live.antishare.io.memory;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.io.generics.GenericInventoryManager;
 import com.turt2live.antishare.object.AInventory;
+import com.turt2live.antishare.object.AWorld;
 import com.turt2live.lib.items.AbstractedItem;
 
 import java.util.*;
@@ -41,7 +42,7 @@ public class MemoryInventoryManager extends GenericInventoryManager {
      */
     public static class MemoryInventory implements AInventory {
 
-        private String world;
+        private AWorld world;
         private ASGameMode gamemode;
         private Map<Integer, AbstractedItem> contents = new HashMap<Integer, AbstractedItem>();
 
@@ -51,18 +52,18 @@ public class MemoryInventoryManager extends GenericInventoryManager {
          * @param world    the world, cannot be null
          * @param gamemode the gamemode, cannot be null
          */
-        public MemoryInventory(String world, ASGameMode gamemode) {
+        public MemoryInventory(AWorld world, ASGameMode gamemode) {
             setWorld(world); // Validates null
             setGameMode(gamemode); // Validates null
         }
 
         @Override
-        public String getWorld() {
+        public AWorld getWorld() {
             return world;
         }
 
         @Override
-        public void setWorld(String world) {
+        public void setWorld(AWorld world) {
             if (world == null) throw new IllegalArgumentException();
 
             this.world = world;
@@ -108,7 +109,7 @@ public class MemoryInventoryManager extends GenericInventoryManager {
     }
 
     @Override
-    protected AInventory createEmptyInventory(UUID player, ASGameMode gamemode, String world) {
+    protected AInventory createEmptyInventory(UUID player, ASGameMode gamemode, AWorld world) {
         return new MemoryInventory(world, gamemode);
     }
 }

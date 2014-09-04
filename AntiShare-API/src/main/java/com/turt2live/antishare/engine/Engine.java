@@ -23,6 +23,8 @@ import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
+import com.turt2live.antishare.io.InventoryManager;
+import com.turt2live.antishare.io.memory.MemoryInventoryManager;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.AWorld;
 import com.turt2live.antishare.object.pattern.PatternManager;
@@ -112,7 +114,9 @@ public final class Engine {
     private GroupManager groupManager = null;
     private Configuration configuration = new MemoryConfiguration();
     private PatternManager patterns = new PatternManager();
+    private InventoryManager inventoryManager = new MemoryInventoryManager();
     private ItemProvider itemProvider = null;
+    private WorldProvider worlds = null;
 
     private Engine() {
         newCacheTimer();
@@ -142,8 +146,66 @@ public final class Engine {
      */
     public boolean isReady() {
         if (groupManager == null) return false;
+        if (worlds == null) return false;
 
         return true;
+    }
+
+    /**
+     * Gets the world provider.
+     *
+     * @return the world provider
+     */
+    // TODO: Unit test
+    public WorldProvider getWorldProvider() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
+        return worlds;
+    }
+
+    /**
+     * Sets the world provider.
+     *
+     * @param provider the world provider, cannot be null
+     */
+    // TODO: Unit test
+    public void setWorldProvider(WorldProvider provider) {
+        if (provider == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[Engine] New world provider: " + (provider == null ? "Null" : provider.getClass().getName()));
+
+        this.worlds = provider;
+    }
+
+    /**
+     * Gets a world by name. If the engine is not ready (does not have a
+     * world provider), then this will throw an exception.
+     *
+     * @param name the world name to lookup, cannot be null
+     * @return the world found, or null if none
+     */
+    // TODO: Unit test
+    public AWorld getWorld(String name) {
+        if (!isReady()) throw new EngineNotInitializedException();
+        if (name == null) throw new IllegalArgumentException();
+
+        return worlds.getWorld(name);
+    }
+
+    // TODO: Docs & unit test
+    public InventoryManager getInventoryManager() {
+        if (!isReady()) throw new EngineNotInitializedException();
+
+        return inventoryManager;
+    }
+
+    // TODO: Docs & unit test
+    public void setInventoryManager(InventoryManager manager) {
+        if (manager == null) throw new IllegalArgumentException();
+
+        DevEngine.log("[Engine] New inventory manager: " + manager.getClass().getName());
+
+        this.inventoryManager = manager;
     }
 
     /**
@@ -245,7 +307,6 @@ public final class Engine {
      * created and registered.
      *
      * @param world the world to lookup, cannot be null
-     *
      * @return the world engine
      */
     public WorldEngine getEngine(String world) {
@@ -262,7 +323,6 @@ public final class Engine {
      * the existing world engine is created.
      *
      * @param world the world to create an engine for
-     *
      * @return the world engine
      */
     public WorldEngine createWorldEngine(String world) {
@@ -446,7 +506,6 @@ public final class Engine {
      *
      * @param configKey the configuration key to lookup, cannot be null
      * @param def       the default to use if not found
-     *
      * @return the flag or the default setting
      */
     public boolean getFlag(String configKey, boolean def) {

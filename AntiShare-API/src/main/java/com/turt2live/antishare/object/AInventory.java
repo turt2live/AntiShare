@@ -34,14 +34,14 @@ public interface AInventory {
      *
      * @return the world
      */
-    public String getWorld();
+    public AWorld getWorld();
 
     /**
      * Sets the world this inventory is applicable for
      *
      * @param world the new world, cannot be null
      */
-    public void setWorld(String world);
+    public void setWorld(AWorld world);
 
     /**
      * Gets the gamemode this inventory is applicable for

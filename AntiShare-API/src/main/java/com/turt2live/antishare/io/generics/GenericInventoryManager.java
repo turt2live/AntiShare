@@ -20,6 +20,7 @@ package com.turt2live.antishare.io.generics;
 import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.io.InventoryManager;
 import com.turt2live.antishare.object.AInventory;
+import com.turt2live.antishare.object.AWorld;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,7 +47,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
         /**
          * The world
          */
-        public final String world;
+        public final AWorld world;
 
         /**
          * The player
@@ -60,7 +61,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
          * @param world    the world, can be null
          * @param player   the player, can be null
          */
-        public InventoryKey(ASGameMode gamemode, String world, UUID player) {
+        public InventoryKey(ASGameMode gamemode, AWorld world, UUID player) {
             this.gamemode = gamemode;
             this.world = world;
             this.player = player;
@@ -75,7 +76,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
 
             if (gamemode != that.gamemode) return false;
             if (player != null ? !player.equals(that.player) : that.player != null) return false;
-            if (world != null ? !world.equals(that.world) : that.world != null) return false;
+            if (world != null ? !world.getName().equals(that.world.getName()) : that.world != null) return false;
 
             return true;
         }
@@ -83,7 +84,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
         @Override
         public int hashCode() {
             int result = gamemode != null ? gamemode.hashCode() : 0;
-            result = 31 * result + (world != null ? world.hashCode() : 0);
+            result = 31 * result + (world != null ? world.getName().hashCode() : 0);
             result = 31 * result + (player != null ? player.hashCode() : 0);
             return result;
         }
@@ -92,7 +93,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
     private ConcurrentMap<InventoryKey, AInventory> inventories = new ConcurrentHashMap<InventoryKey, AInventory>();
 
     @Override
-    public final AInventory getInventory(UUID player, ASGameMode gamemode, String world) {
+    public final AInventory getInventory(UUID player, ASGameMode gamemode, AWorld world) {
         if (player == null || gamemode == null || world == null) throw new IllegalArgumentException();
 
         InventoryKey key = createKey(player, gamemode, world);
@@ -113,7 +114,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
     public final void setInventory(UUID player, AInventory inventory) {
         if (player == null || inventory == null) throw new IllegalArgumentException();
 
-        String world = inventory.getWorld();
+        AWorld world = inventory.getWorld();
         ASGameMode gamemode = inventory.getGameMode();
 
         InventoryKey key = createKey(player, gamemode, world);
@@ -186,9 +187,9 @@ public abstract class GenericInventoryManager implements InventoryManager {
      *
      * @return the created, empty, inventory
      */
-    protected abstract AInventory createEmptyInventory(UUID player, ASGameMode gamemode, String world);
+    protected abstract AInventory createEmptyInventory(UUID player, ASGameMode gamemode, AWorld world);
 
-    private InventoryKey createKey(UUID uuid, ASGameMode gamemode, String world) {
+    private InventoryKey createKey(UUID uuid, ASGameMode gamemode, AWorld world) {
         if (uuid == null || gamemode == null || world == null)
             throw new RuntimeException("Cannot create an inventory key from null values");
 
