@@ -153,7 +153,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
 
         if (applicable.size() > 0) {
             Map<UUID, List<AInventory>> set = new HashMap<UUID, List<AInventory>>();
-            set.put(player,applicable);
+            set.put(player, applicable);
             saveInventories(set);
 
             for (InventoryKey key : keys) inventories.remove(key);
