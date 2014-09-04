@@ -60,6 +60,13 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- UUID Utility -->
+        <dependency>
+            <groupId>com.turt2live</groupId>
+            <artifactId>UUID-Library</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
@@ -116,6 +123,7 @@
                                     <include>net.minidev:json-smart</include>
                                     <include>com.turt2live.lib:JNBT</include>
                                     <include>com.turt2live.lib:ItemAbstraction</include>
+                                    <include>com.turt2live:UUID-Library</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -130,6 +138,10 @@
                                 <relocation>
                                     <pattern>com.turt2live.lib.items</pattern>
                                     <shadedPattern>com.turt2live.antishare.lib.items</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.turt2live.uuid</pattern>
+                                    <shadedPattern>com.turt2live.antishare.lib.uuid</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
