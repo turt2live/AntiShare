@@ -23,6 +23,8 @@ import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
+import com.turt2live.antishare.object.APlayer;
+import com.turt2live.antishare.object.AWorld;
 import com.turt2live.antishare.object.pattern.PatternManager;
 import com.turt2live.lib.items.AbstractedItem;
 import com.turt2live.lib.items.provider.ItemProvider;
@@ -449,6 +451,21 @@ public final class Engine {
      */
     public boolean getFlag(String configKey, boolean def) {
         return configuration.getBoolean(configKey, def); // Does it's own null check
+    }
+
+    // TODO: World change logic
+    public void processWorldChange(APlayer player, AWorld from, AWorld to) {
+
+    }
+
+    // TODO: Player join logic
+    public void processPlayerJoin(APlayer player) {
+
+    }
+
+    // TODO: Player quit logic
+    public void processPlayerQuit(APlayer player) {
+
     }
 
     private void newCacheTimer() {

@@ -73,6 +73,7 @@ general:
     - '&4 -------------------------------------'
     worldsplit-approach: '&cWarning: &7You are &b@v &7blocks from a world split!'
     worldsplit-crossed: '&7You have crossed the world split'
+    gamemode-cooldown: '&cYou cannot change game modes for another &7@v seconds'
 tools:
     check-title: '&bAntiShare Check Tool'
     set-title: '&bAntiShare Set Tool'

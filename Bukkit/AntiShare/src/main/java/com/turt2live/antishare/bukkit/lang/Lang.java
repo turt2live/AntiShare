@@ -43,6 +43,7 @@ public class Lang {
     public static final String GENERAL_RELOAD_CRITICAL = "general.reload-critical";
     public static final String GENERAL_WORLDSPLIT_APPROACH = "general.worldsplit-approach";
     public static final String GENERAL_WORLDSPLIT_CROSSED = "general.worldsplit-crossed";
+    public static final String GENERAL_GAMEMODE_COOLDOWN = "general.gamemode-cooldown";
 
     // Error strings
     public static final String ERROR_HELP_SUGGEST = "errors.help-suggest";

@@ -1314,4 +1314,9 @@ public final class WorldEngine {
             }
         }
     }
+
+    // TODO: Gamemode change logic
+    public int processGameModeChange(APlayer player, ASGameMode from, ASGameMode to) {
+        return -1; // Number of seconds remaining on cooldown. -1 for none.
+    }
 }

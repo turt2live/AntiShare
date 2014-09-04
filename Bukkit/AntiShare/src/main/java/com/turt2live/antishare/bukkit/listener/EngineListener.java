@@ -26,10 +26,7 @@ import com.turt2live.antishare.bukkit.abstraction.event.AntiShareInventoryTransf
 import com.turt2live.antishare.bukkit.events.AntiShareBlockBreakEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareExplodeEvent;
 import com.turt2live.antishare.bukkit.events.AntiShareFadeEvent;
-import com.turt2live.antishare.bukkit.impl.BukkitBlock;
-import com.turt2live.antishare.bukkit.impl.BukkitEntity;
-import com.turt2live.antishare.bukkit.impl.BukkitItem;
-import com.turt2live.antishare.bukkit.impl.BukkitPlayer;
+import com.turt2live.antishare.bukkit.impl.*;
 import com.turt2live.antishare.bukkit.lang.Lang;
 import com.turt2live.antishare.bukkit.lang.LangBuilder;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
@@ -798,6 +795,53 @@ public class EngineListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerGamemodeChange(PlayerGameModeChangeEvent event) {
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        ASGameMode from = VersionSelector.getMinecraft().toGameMode(event.getPlayer().getGameMode());
+        ASGameMode to = VersionSelector.getMinecraft().toGameMode(event.getNewGameMode());
+
+        int seconds = engine.getEngine(event.getPlayer().getWorld().getName()).processGameModeChange(player, from, to);
+        if (seconds > -1) { // 0 still counts, -1 indicates "no cooldown"
+            event.setCancelled(true);
+
+            Player bkPlayer = event.getPlayer();
+            bkPlayer.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.GENERAL_GAMEMODE_COOLDOWN)).withPrefix()
+                    .setReplacement(LangBuilder.SELECTOR_VARIABLE, seconds + "").build());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onWorldChange(PlayerChangedWorldEvent event) {
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+        AWorld from = new BukkitWorld(event.getFrom());
+        AWorld to = new BukkitWorld(event.getPlayer().getWorld());
+
+        engine.processWorldChange(player, from, to);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+
+        engine.processPlayerJoin(player);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        printDebugEvent(event);
+
+        APlayer player = new BukkitPlayer(event.getPlayer());
+
+        engine.processPlayerJoin(player);
     }
 
     /**
