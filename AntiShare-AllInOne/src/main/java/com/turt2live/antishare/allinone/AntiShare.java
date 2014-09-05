@@ -20,6 +20,6 @@ package com.turt2live.antishare.allinone;
 /**
  * Used to identify an "all in one" JAR
  */
-public class AntiShare {
+class AntiShare {
 
 }

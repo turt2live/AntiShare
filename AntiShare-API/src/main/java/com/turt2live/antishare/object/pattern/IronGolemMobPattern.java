@@ -46,7 +46,7 @@ public abstract class IronGolemMobPattern implements BlockPattern, MobPattern {
     public List<ABlock> getInvolvedBlocks(ABlock block) {
         if (block == null) throw new IllegalArgumentException();
 
-        List<ABlock> applicable = new ArrayList<ABlock>();
+        List<ABlock> applicable = new ArrayList<>();
 
         if (getType(block) == IronGolemBlock.PUMPKIN) {
             ABlock down = block.getRelative(Facing.DOWN);

@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class MemoryConfiguration extends Configuration {
 
-    private ConcurrentMap<String, Object> values = new ConcurrentHashMap<String, Object>();
+    private ConcurrentMap<String, Object> values = new ConcurrentHashMap<>();
 
     @Override
     public void load() {
@@ -77,7 +77,7 @@ public class MemoryConfiguration extends Configuration {
         try {
             List<String> list = (List<String>) obj;
             return list;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return def;
     }

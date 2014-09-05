@@ -41,9 +41,8 @@ public class DerivedBukkitObject implements DerivedRejectable {
 
         DerivedBukkitObject that = (DerivedBukkitObject) o;
 
-        if (type != that.type) return false;
+        return type == that.type;
 
-        return true;
     }
 
     @Override

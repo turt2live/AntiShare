@@ -43,7 +43,7 @@ public class ConsolidatedGroupTest {
     @SuppressWarnings("unchecked")
     @BeforeClass
     public static void setup() {
-        GROUPS = new ArrayList<Group>();
+        GROUPS = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
             Group group = mock(Group.class);

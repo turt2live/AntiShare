@@ -74,11 +74,7 @@ public final class APermission {
     public static String getPermissionNode(boolean allow, RejectionList.ListType list) {
         if (list == null) throw new IllegalArgumentException();
 
-        StringBuilder permission = new StringBuilder("antishare.");
-        permission.append(allow ? "allow." : "deny.");
-        permission.append(list.name().toLowerCase());
-
-        return permission.toString();
+        return "antishare." + (allow ? "allow." : "deny.") + list.name().toLowerCase();
     }
 
 }

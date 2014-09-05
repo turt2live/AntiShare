@@ -217,7 +217,7 @@ public class ToolListener implements Listener {
                     DevEngine.log("[Tools] Set completed (" + player.getName() + ")",
                             "[Tools] \t\tCheck on: " + block,
                             "[Tools] \t\tWith: " + hand,
-                            "[Tools] \t\tRClick: " + rclick,
+                            "[Tools] \t\tRClick: " + false,
                             "[Tools] \t\tResult: to " + player.getGameMode() + " (" + strRep + ")");
                 } else {
                     ObjectType previous = BukkitUtils.getBlockManager(player.getWorld()).getBlockType(BukkitUtils.toLocation(block.getLocation()));
@@ -233,7 +233,7 @@ public class ToolListener implements Listener {
                     DevEngine.log("[Tools] Unset completed (" + player.getName() + ")",
                             "[Tools] \t\tCheck on: " + block,
                             "[Tools] \t\tWith: " + hand,
-                            "[Tools] \t\tRClick: " + rclick,
+                            "[Tools] \t\tRClick: " + true,
                             "[Tools] \t\tResult: was " + previous + " (" + strRep + ")");
                 }
             }

@@ -39,7 +39,7 @@ public abstract class GenericBlockManager implements BlockManager {
      */
     protected final int blocksPerStore;
 
-    private ConcurrentMap<ASLocation, BlockStore> stores = new ConcurrentHashMap<ASLocation, BlockStore>();
+    private ConcurrentMap<ASLocation, BlockStore> stores = new ConcurrentHashMap<>();
 
     /**
      * Creates a new generic block manager

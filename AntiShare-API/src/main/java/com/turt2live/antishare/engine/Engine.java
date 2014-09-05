@@ -108,7 +108,7 @@ public final class Engine {
     private long saveInterval = DEFAULT_SAVE_INTERVAL;
     private long cacheMaximum = DEFAULT_CACHE_MAXIMUM;
     private long cacheIncrement = DEFAULT_CACHE_INCREMENT;
-    private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<String, WorldEngine>();
+    private ConcurrentMap<String, WorldEngine> engines = new ConcurrentHashMap<>();
     private Timer cacheTimer, saveTimer;
     private Logger logger = Logger.getLogger(getClass().getName());
     private GroupManager groupManager = null;
@@ -147,9 +147,8 @@ public final class Engine {
      */
     public boolean isReady() {
         if (groupManager == null) return false;
-        if (worlds == null) return false;
+        return worlds != null;
 
-        return true;
     }
 
     /**
@@ -171,7 +170,7 @@ public final class Engine {
     public void setWorldProvider(WorldProvider provider) {
         if (provider == null) throw new IllegalArgumentException();
 
-        DevEngine.log("[Engine] New world provider: " + (provider == null ? "Null" : provider.getClass().getName()));
+        DevEngine.log("[Engine] New world provider: " + (provider.getClass().getName()));
 
         this.worlds = provider;
     }
@@ -181,6 +180,7 @@ public final class Engine {
      * world provider), then this will throw an exception.
      *
      * @param name the world name to lookup, cannot be null
+     *
      * @return the world found, or null if none
      */
     public AWorld getWorld(String name) {
@@ -192,6 +192,7 @@ public final class Engine {
 
     /**
      * Gets the current inventory manager
+     *
      * @return the current inventory manager
      */
     public InventoryManager getInventoryManager() {
@@ -202,6 +203,7 @@ public final class Engine {
 
     /**
      * Sets the inventory manager to use in this engine
+     *
      * @param manager the new manager, cannot be null
      */
     public void setInventoryManager(InventoryManager manager) {
@@ -309,6 +311,7 @@ public final class Engine {
      * created and registered.
      *
      * @param world the world to lookup, cannot be null
+     *
      * @return the world engine
      */
     public WorldEngine getEngine(String world) {
@@ -325,6 +328,7 @@ public final class Engine {
      * the existing world engine is created.
      *
      * @param world the world to create an engine for
+     *
      * @return the world engine
      */
     public WorldEngine createWorldEngine(String world) {
@@ -508,6 +512,7 @@ public final class Engine {
      *
      * @param configKey the configuration key to lookup, cannot be null
      * @param def       the default to use if not found
+     *
      * @return the flag or the default setting
      */
     public boolean getFlag(String configKey, boolean def) {

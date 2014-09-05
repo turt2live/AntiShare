@@ -82,9 +82,8 @@ public class BukkitItem extends BukkitObject implements AItem {
 
         BukkitItem that = (BukkitItem) o;
 
-        if (!stack.equals(that.stack)) return false;
+        return stack.equals(that.stack);
 
-        return true;
     }
 
     @Override

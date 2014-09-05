@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class SimpleList<T> {
 
-    private List<T> listing = new ArrayList<T>();
+    private List<T> listing = new ArrayList<>();
 
     /**
      * Adds an item to the simple list

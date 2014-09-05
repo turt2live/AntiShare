@@ -95,8 +95,8 @@ public class MemoryConfigurationTest {
     public void testGetSetStringList() {
         MemoryConfiguration configuration = new MemoryConfiguration();
 
-        List<String> value = new ArrayList<String>();
-        List<String> def = new ArrayList<String>();
+        List<String> value = new ArrayList<>();
+        List<String> def = new ArrayList<>();
         configuration.set("stringlist", value);
 
         assertEquals(value, configuration.getStringList("stringlist"));

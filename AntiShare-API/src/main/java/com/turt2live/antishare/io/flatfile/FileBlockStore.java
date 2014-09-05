@@ -253,7 +253,7 @@ public class FileBlockStore extends GenericBlockStore {
         return new int[] {sx, sy, sz, size};
     }
 
-    private void loadHeader(MappedByteBuffer buffer) throws IOException {
+    private void loadHeader(MappedByteBuffer buffer) {
         sx = buffer.getInt();
         sy = buffer.getInt();
         sz = buffer.getInt();

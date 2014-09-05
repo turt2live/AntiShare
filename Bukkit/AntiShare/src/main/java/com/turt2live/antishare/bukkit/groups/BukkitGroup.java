@@ -67,7 +67,7 @@ public class BukkitGroup extends Group {
 
         List<String> strings = configuration.getStringList("blocks." + gameMode.name().toLowerCase(), new ArrayList<String>());
 
-        BukkitList<ABlock> blocks = new BukkitList<ABlock>();
+        BukkitList<ABlock> blocks = new BukkitList<>();
         new PopulatorBlockList<ABlock>().populateList(blocks, strings);
 
         return blocks;
@@ -78,7 +78,7 @@ public class BukkitGroup extends Group {
 
         List<String> strings = configuration.getStringList("entities." + gameMode.name().toLowerCase(), new ArrayList<String>());
 
-        BukkitList<AEntity> entities = new BukkitList<AEntity>();
+        BukkitList<AEntity> entities = new BukkitList<>();
         new PopulatorEntityList<AEntity>().populateList(entities, strings);
 
         return entities;
@@ -100,23 +100,23 @@ public class BukkitGroup extends Group {
             case ENTITY_INTERACT:
             case ENTITY_PLACE:
             case ENTITY_ATTACK:
-                populator = new PopulatorEntityList<T>();
+                populator = new PopulatorEntityList<>();
                 break;
             case BLOCK_PLACE:
             case BLOCK_BREAK:
             case INTERACTION:
-                populator = new PopulatorBlockList<T>();
+                populator = new PopulatorBlockList<>();
                 break;
             case ITEM_PICKUP:
             case ITEM_USE:
             case ITEM_DROP:
             case DEATH:
-                populator = new PopulatorItemList<T>();
+                populator = new PopulatorItemList<>();
                 break;
             case MOB_CREATE:
                 break;
             case COMMANDS:
-                populator = new PopulatorCommandList<T>();
+                populator = new PopulatorCommandList<>();
                 break;
             default:
                 populator = null;
@@ -126,7 +126,7 @@ public class BukkitGroup extends Group {
         if (populator == null)
             throw new NullPointerException("List not implemented: " + type.name());
 
-        BukkitList<T> list = new BukkitList<T>(type);
+        BukkitList<T> list = new BukkitList<>(type);
         populator.populateList(list, strings);
 
         return list;

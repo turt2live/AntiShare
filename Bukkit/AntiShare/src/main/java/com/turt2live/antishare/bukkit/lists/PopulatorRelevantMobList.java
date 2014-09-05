@@ -24,9 +24,6 @@ import com.turt2live.antishare.object.Rejectable;
 
 import java.util.List;
 
-/**
- * Created by DTP-Travis on 19/05/14.
- */
 public class PopulatorRelevantMobList<T extends Rejectable> implements Populator<T> {
 
     @Override

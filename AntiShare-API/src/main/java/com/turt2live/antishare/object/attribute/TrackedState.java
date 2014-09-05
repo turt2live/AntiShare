@@ -36,5 +36,5 @@ public enum TrackedState {
     /**
      * Indicates the record is not present in a list
      */
-    NOT_PRESENT;
+    NOT_PRESENT
 }

@@ -39,7 +39,7 @@ public class FileBlockManagerTest {
             expectedMax = Integer.MIN_VALUE,
             expectedAvg,
             expectedMostCommon;
-    private static Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
+    private static Map<Integer, Integer> counts = new HashMap<>();
 
     @Test
     public void testRanges() {
@@ -97,7 +97,7 @@ public class FileBlockManagerTest {
 
     private static void delete(File folder) {
         File[] files = folder.listFiles();
-        for (File f : files) {
+        for (File f : files != null ? files : new File[0]) {
             if (f.isDirectory()) delete(f);
             else f.delete();
         }

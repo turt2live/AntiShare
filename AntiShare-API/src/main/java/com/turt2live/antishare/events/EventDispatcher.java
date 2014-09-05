@@ -32,7 +32,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @author turt2live
  */
-public class EventDispatcher {
+public final class EventDispatcher {
 
     private static class Listener {
 
@@ -50,9 +50,8 @@ public class EventDispatcher {
             if (eventClass != null ? !eventClass.equals(listener.eventClass) : listener.eventClass != null)
                 return false;
             if (method != null ? !method.equals(listener.method) : listener.method != null) return false;
-            if (object != null ? !object.equals(listener.object) : listener.object != null) return false;
+            return !(object != null ? !object.equals(listener.object) : listener.object != null);
 
-            return true;
         }
 
         @Override
@@ -64,7 +63,7 @@ public class EventDispatcher {
         }
     }
 
-    private static ConcurrentMap<String, List<Listener>> listeners = new ConcurrentHashMap<String, List<Listener>>();
+    private static ConcurrentMap<String, List<Listener>> listeners = new ConcurrentHashMap<>();
 
     /**
      * Registers an object with the dispatcher. Invalid methods are silently ignored.
@@ -98,7 +97,7 @@ public class EventDispatcher {
     }
 
     private static List<Listener> getListeners(Object object) {
-        List<Listener> listenerList = new ArrayList<Listener>();
+        List<Listener> listenerList = new ArrayList<>();
         Class<?> clazz = object.getClass();
 
         for (Method method : clazz.getDeclaredMethods()) {
@@ -128,7 +127,7 @@ public class EventDispatcher {
     }
 
     private static List<Class<? extends Event>> getEventClasses(Class<?> clazz) {
-        List<Class<? extends Event>> classes = new ArrayList<Class<? extends Event>>();
+        List<Class<? extends Event>> classes = new ArrayList<>();
         Class<?> sup = clazz.getSuperclass();
 
         if (Event.class.isAssignableFrom(sup)) {
@@ -150,7 +149,7 @@ public class EventDispatcher {
      */
     public static void dispatch(Event event) {
         if (event == null) throw new IllegalArgumentException("Event is null");
-        List<Class<? extends Event>> classes = new ArrayArrayList<Class<? extends Event>>(event.getClass(), Event.class);
+        List<Class<? extends Event>> classes = new ArrayArrayList<>(event.getClass(), Event.class);
 
         // Determine all subclass events (derived/generic listeners)
         classes.addAll(getEventClasses(event.getClass()));

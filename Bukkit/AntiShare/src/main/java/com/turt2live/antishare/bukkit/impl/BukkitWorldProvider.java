@@ -11,6 +11,7 @@ import org.bukkit.World;
  * @author turt2live
  */
 public class BukkitWorldProvider implements WorldProvider {
+
     @Override
     public AWorld getWorld(String name) {
         if (name == null) throw new IllegalArgumentException();

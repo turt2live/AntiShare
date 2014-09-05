@@ -99,7 +99,7 @@ public class EngineListener implements Listener {
         final ABlock block = new BukkitBlock(event.getBlock());
         APlayer player = new BukkitPlayer(event.getPlayer());
         ASGameMode gamemode = player.getGameMode();
-        final OutputParameter<MobPattern> matchedPattern = new OutputParameter<MobPattern>();
+        final OutputParameter<MobPattern> matchedPattern = new OutputParameter<>();
 
         if (engine.getEngine(block.getWorld().getName()).processBlockPlace(player, block, gamemode, matchedPattern)) {
             event.setCancelled(true);
@@ -143,8 +143,8 @@ public class EngineListener implements Listener {
         APlayer player = new BukkitPlayer(event.getPlayer());
         ASGameMode gameMode = player.getGameMode();
 
-        OutputParameter<List<ABlock>> additionalBreak = new OutputParameter<List<ABlock>>();
-        OutputParameter<ObjectType> breakAs = new OutputParameter<ObjectType>();
+        OutputParameter<List<ABlock>> additionalBreak = new OutputParameter<>();
+        OutputParameter<ObjectType> breakAs = new OutputParameter<>();
         if (engine.getEngine(block.getWorld().getName()).processBlockBreak(player, block, gameMode, additionalBreak, breakAs)) {
             event.setCancelled(true);
 
@@ -177,14 +177,14 @@ public class EngineListener implements Listener {
 
         if (event instanceof AntiShareExplodeEvent) return; // Don't handle ourselves
 
-        Map<ABlock, Boolean> keep = new HashMap<ABlock, Boolean>();
+        Map<ABlock, Boolean> keep = new HashMap<>();
         for (Block block : event.blockList()) {
             keep.put(new BukkitBlock(block), true);
         }
 
         engine.getEngine(event.getEntity().getWorld().getName()).processExplosion(keep);
 
-        List<Block> refire = new ArrayList<Block>();
+        List<Block> refire = new ArrayList<>();
         for (Map.Entry<ABlock, Boolean> entry : keep.entrySet()) {
             if (!entry.getValue()) {
                 Block block = ((BukkitBlock) entry.getKey()).getBlock();
@@ -193,7 +193,7 @@ public class EngineListener implements Listener {
             }
         }
 
-        if (refire.size() > 0) {
+        if (!refire.isEmpty()) {
             AntiShareExplodeEvent explodeEvent = new AntiShareExplodeEvent(event.getEntity(), event.getLocation(), refire, event.getYield());
             plugin.getServer().getPluginManager().callEvent(explodeEvent);
             if (!explodeEvent.isCancelled()) {
@@ -214,7 +214,7 @@ public class EngineListener implements Listener {
             FallingBlock entity = (FallingBlock) eventEntity;
             if (event.getTo() == Material.AIR) {
                 // Spawning
-                OutputParameter<ObjectType> current = new OutputParameter<ObjectType>(ObjectType.UNKNOWN);
+                OutputParameter<ObjectType> current = new OutputParameter<>(ObjectType.UNKNOWN);
                 if (!engine.processFallingBlockSpawn(new BukkitBlock(event.getBlock()), current)) {
                     entity.setDropItem(false);
                 }
@@ -268,7 +268,7 @@ public class EngineListener implements Listener {
             // engine which will figure the damn thing out.
 
             // First, what stems can we consider?
-            List<ABlock> possibleStems = new ArrayList<ABlock>();
+            List<ABlock> possibleStems = new ArrayList<>();
             for (BlockFace face : TRUE_FACES) {
                 Block possibleStem = child.getRelative(face);
                 if (possibleStem.getType() == stemType) {
@@ -277,7 +277,7 @@ public class EngineListener implements Listener {
             }
 
             // Now to process said stems
-            if (possibleStems.size() > 0) { // If there are no stems... wtf.
+            if (!possibleStems.isEmpty()) { // If there are no stems... wtf.
                 engine.getEngine(child.getWorld().getName()).processBlockStems(new BukkitBlock(child), possibleStems);
             }
         }
@@ -288,7 +288,7 @@ public class EngineListener implements Listener {
         printDebugEvent(event);
 
         ABlock source = new BukkitBlock(event.getLocation().getBlock());
-        List<ABlock> structure = new ArrayList<ABlock>();
+        List<ABlock> structure = new ArrayList<>();
 
         for (BlockState block : event.getBlocks()) {
             structure.add(new BukkitBlock(block.getBlock()));
@@ -361,7 +361,7 @@ public class EngineListener implements Listener {
 
         ABlock piston = new BukkitBlock(event.getBlock());
         Facing direction = BukkitUtils.getFacing(event.getDirection());
-        List<ABlock> blocks = new ArrayList<ABlock>();
+        List<ABlock> blocks = new ArrayList<>();
 
         // TODO: 1.8 slime blocks (may need extra handling)
 
@@ -396,7 +396,7 @@ public class EngineListener implements Listener {
 
         ABlock piston = new BukkitBlock(event.getBlock());
         Facing direction = BukkitUtils.getFacing(event.getDirection()).opposite(); // Need to flip for correct processing
-        List<ABlock> blocks = new ArrayList<ABlock>();
+        List<ABlock> blocks = new ArrayList<>();
 
         // TODO: 1.8 slime blocks (may need extra handling)
 
@@ -722,7 +722,7 @@ public class EngineListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         APlayer player = new BukkitPlayer(event.getEntity());
-        List<AItem> items = new ArrayList<AItem>();
+        List<AItem> items = new ArrayList<>();
 
         for (ItemStack item : event.getDrops()) {
             items.add(new BukkitItem(item));
@@ -776,8 +776,8 @@ public class EngineListener implements Listener {
             ASLocation aTo = BukkitUtils.toLocation(to);
             APlayer player = new BukkitPlayer(event.getPlayer());
 
-            OutputParameter<Integer> approaching = new OutputParameter<Integer>();
-            OutputParameter<Boolean> crossed = new OutputParameter<Boolean>();
+            OutputParameter<Integer> approaching = new OutputParameter<>();
+            OutputParameter<Boolean> crossed = new OutputParameter<>();
 
             engine.getEngine(event.getPlayer().getWorld().getName()).processPlayerMove(player, aFrom, aTo, approaching, crossed);
 

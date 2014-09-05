@@ -38,10 +38,10 @@ import java.util.List;
  */
 public class BukkitList<T extends Rejectable> implements RejectionList<T>, TrackedTypeList<T> {
 
-    protected List<DerivedRejectable> included = new ArrayList<DerivedRejectable>();
-    protected List<DerivedRejectable> negated = new ArrayList<DerivedRejectable>();
-    protected List<DerivedRejectable> includedGeneric = new ArrayList<DerivedRejectable>();
-    protected List<DerivedRejectable> negatedGeneric = new ArrayList<DerivedRejectable>();
+    protected List<DerivedRejectable> included = new ArrayList<>();
+    protected List<DerivedRejectable> negated = new ArrayList<>();
+    protected List<DerivedRejectable> includedGeneric = new ArrayList<>();
+    protected List<DerivedRejectable> negatedGeneric = new ArrayList<>();
     private ListType type;
 
     /**

@@ -49,7 +49,7 @@ import java.util.List;
 // TODO: Unit test
 public class ConsolidatedRejectionList<T extends Rejectable> implements RejectionList<T> {
 
-    private List<RejectionList<T>> lists = new ArrayList<RejectionList<T>>();
+    private List<RejectionList<T>> lists = new ArrayList<>();
 
     /**
      * Creates a new consolidated rejection list
@@ -67,7 +67,7 @@ public class ConsolidatedRejectionList<T extends Rejectable> implements Rejectio
      * @param lists the lists to include. Cannot be null and must have at least one record
      */
     public ConsolidatedRejectionList(RejectionList<T>... lists) {
-        this(new ArrayArrayList<RejectionList<T>>(lists));
+        this(new ArrayArrayList<>(lists));
     }
 
     @Override

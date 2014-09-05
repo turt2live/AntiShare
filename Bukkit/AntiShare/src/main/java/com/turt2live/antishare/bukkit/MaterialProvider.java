@@ -47,9 +47,8 @@ public class MaterialProvider {
             MaterialInformation that = (MaterialInformation) o;
 
             if (data != that.data) return false;
-            if (material != that.material) return false;
+            return material == that.material;
 
-            return true;
         }
 
         @Override
@@ -68,9 +67,9 @@ public class MaterialProvider {
         }
     }
 
-    private Map<String, Material> materials = new HashMap<String, Material>();
-    private List<String> additionalData = new ArrayList<String>();
-    private Map<MaterialInformation, String> playerFriendly = new HashMap<MaterialInformation, String>();
+    private Map<String, Material> materials = new HashMap<>();
+    private List<String> additionalData = new ArrayList<>();
+    private Map<MaterialInformation, String> playerFriendly = new HashMap<>();
 
     void insertPlayerFriendly(Material material, short data, String name) {
         if (material == null || name == null) return;

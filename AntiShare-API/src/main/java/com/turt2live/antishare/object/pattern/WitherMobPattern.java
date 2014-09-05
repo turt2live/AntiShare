@@ -46,7 +46,7 @@ public abstract class WitherMobPattern implements BlockPattern, MobPattern {
     public List<ABlock> getInvolvedBlocks(ABlock block) {
         if (block == null) throw new IllegalArgumentException();
 
-        List<ABlock> applicable = new ArrayList<ABlock>();
+        List<ABlock> applicable = new ArrayList<>();
 
         // Assuming the block is in a row of 3
         ABlock n = block.getRelative(Facing.NORTH);

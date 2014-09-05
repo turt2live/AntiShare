@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class GenericEntityManager implements EntityManager {
 
-    private ConcurrentMap<UUID, ObjectType> records = new ConcurrentHashMap<UUID, ObjectType>();
+    private ConcurrentMap<UUID, ObjectType> records = new ConcurrentHashMap<>();
 
     @Override
     public ObjectType getType(UUID uuid) {

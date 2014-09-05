@@ -59,7 +59,7 @@ public class NBTItem {
     }
 
     private CompoundTag createCompoundTag(Map<String, Object> serialized, String name) {
-        Map<String, Tag> tags = new HashMap<String, Tag>();
+        Map<String, Tag> tags = new HashMap<>();
 
         for (Map.Entry<String, Object> entry : serialized.entrySet()) {
             Object value = entry.getValue();
@@ -93,7 +93,7 @@ public class NBTItem {
         } else if (value instanceof Double) {
             created = new DoubleTag(name, (Double) value);
         } else if (value instanceof List) {
-            List<Tag> list = new ArrayList<Tag>();
+            List<Tag> list = new ArrayList<>();
             List<?> objs = (List<?>) value;
             Class<? extends Tag> tagClass = CompoundTag.class;
 
@@ -107,7 +107,7 @@ public class NBTItem {
         } else if (value instanceof Enum) {
             Enum e = (Enum) value;
 
-            Map<String, Tag> constants = new HashMap<String, Tag>();
+            Map<String, Tag> constants = new HashMap<>();
             constants.put("enum_class", new StringTag("ENUM_CLASS", e.getClass().getName()));
             constants.put("enum_value", new StringTag("ENUM_VALUE", e.name()));
 
@@ -136,7 +136,7 @@ public class NBTItem {
     }
 
     private static Map<String, Object> createMap(CompoundTag tag) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         for (Tag t : tag.getValue().values()) {
             map.put(t.getName(), createObject(t));
@@ -146,7 +146,7 @@ public class NBTItem {
     }
 
     private static List<Object> createList(ListTag tag) {
-        List<Object> objs = new ArrayList<Object>();
+        List<Object> objs = new ArrayList<>();
 
         for (Tag t : tag.getValue()) {
             objs.add(createObject(t));

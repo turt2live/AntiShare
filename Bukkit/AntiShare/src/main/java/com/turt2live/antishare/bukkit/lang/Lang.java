@@ -158,7 +158,7 @@ public class Lang {
 
         List<String> list = configuration.getStringList(key);
         if (list == null)
-            list = new ArrayArrayList<String>("Corrupt/missing key: " + key + ". Try /as reload?");
+            list = new ArrayArrayList<>("Corrupt/missing key: " + key + ". Try /as reload?");
 
         return list;
     }

@@ -29,9 +29,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
-/**
- * Created by DTP-Travis on 01/06/2014.
- */
 public class MaterialStringsCheck extends CheckBase {
 
     public MaterialStringsCheck(AntiShare plugin) {

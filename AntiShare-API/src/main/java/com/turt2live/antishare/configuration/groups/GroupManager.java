@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentMap;
 // TODO: Unit test
 public abstract class GroupManager {
 
-    protected final ConcurrentMap<String, Group> groups = new ConcurrentHashMap<String, Group>();
+    protected final ConcurrentMap<String, Group> groups = new ConcurrentHashMap<>();
     protected MainGroup mainGroup;
 
     /**
@@ -78,9 +78,9 @@ public abstract class GroupManager {
      * @return the inherited groups, never null but may be empty
      */
     public List<Group> getInheritances(Group group) {
-        if (group == null) return new ArrayList<Group>();
+        if (group == null) return new ArrayList<>();
 
-        List<Group> groups = new ArrayList<Group>();
+        List<Group> groups = new ArrayList<>();
 
         for (String name : group.getInheritedGroups()) {
             groups.addAll(getInheritances(getGroup(name)));
@@ -98,9 +98,9 @@ public abstract class GroupManager {
      * @return the applicable groups, or an empty list
      */
     public List<Group> getGroupsForWorld(String world, boolean includeDisabled) {
-        if (world == null) return new ArrayList<Group>();
+        if (world == null) return new ArrayList<>();
 
-        List<Group> groups = new ArrayList<Group>();
+        List<Group> groups = new ArrayList<>();
         for (Group group : this.groups.values()) {
             List<String> worlds = group.getApplicableWorlds();
             if (worlds.contains("all") || worlds.contains(world))
@@ -122,7 +122,7 @@ public abstract class GroupManager {
      * @return the applicable groups, or an empty list
      */
     public List<Group> getAllGroups(boolean includeDisabled) {
-        List<Group> groups = new ArrayList<Group>();
+        List<Group> groups = new ArrayList<>();
 
         for (Group group : this.groups.values()) {
             if (group.isEnabled() || includeDisabled) groups.add(group);
@@ -144,7 +144,7 @@ public abstract class GroupManager {
      */
     public List<Group> getGroupsForPlayer(APlayer player, boolean includeDisabled) {
         List<Group> groups = getAllGroupsForPlayer(player, includeDisabled);
-        List<Group> applicable = new ArrayList<Group>();
+        List<Group> applicable = new ArrayList<>();
 
         for (Group group : groups) {
             List<String> worlds = group.getApplicableWorlds();
@@ -172,25 +172,28 @@ public abstract class GroupManager {
      * @return the list of groups. May be empty but never null
      */
     public List<Group> getAllGroupsForPlayer(APlayer player, boolean includeDisabled) {
-        List<Group> groups = new ArrayList<Group>();
+        List<Group> groups = new ArrayList<>();
 
         for (Group group : this.groups.values()) {
             if (player.hasPermission(group.getPermission())) {
                 if (group.isEnabled() || includeDisabled) {
                     addIfNotFound(groups, group);
-                    addIfNotFound(groups, getInheritances(group).toArray(new Group[0])); // All inherited groups are automatic
+                    List<Group> var = getInheritances(group);
+                    addIfNotFound(groups, var.toArray(new Group[var.size()])); // All inherited groups are automatic
                 }
             }
         }
 
         if (player.hasPermission(mainGroup.getPermission()) && (mainGroup.isEnabled() || includeDisabled)) {
             addIfNotFound(groups, mainGroup);
-            addIfNotFound(groups, getInheritances(mainGroup).toArray(new Group[0])); // All inherited groups are automatic
+            List<Group> var = getInheritances(mainGroup);
+            addIfNotFound(groups, var.toArray(new Group[var.size()])); // All inherited groups are automatic
         }
 
         if (groups.size() <= 0) {
             addIfNotFound(groups, mainGroup);
-            addIfNotFound(groups, getInheritances(mainGroup).toArray(new Group[0])); // All inherited groups are automatic
+            List<Group> var = getInheritances(mainGroup);
+            addIfNotFound(groups, var.toArray(new Group[var.size()])); // All inherited groups are automatic
         }
 
         return groups;

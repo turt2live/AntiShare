@@ -111,9 +111,8 @@ public class ASLocation implements Cloneable {
         if (X != that.X) return false;
         if (Y != that.Y) return false;
         if (Z != that.Z) return false;
-        if (world != null ? !world.equals(that.world) : that.world != null) return false;
+        return !(world != null ? !world.equals(that.world) : that.world != null);
 
-        return true;
     }
 
     @Override

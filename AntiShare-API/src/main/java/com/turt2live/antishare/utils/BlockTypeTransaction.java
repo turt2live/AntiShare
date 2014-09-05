@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class BlockTypeTransaction {
 
-    private Map<ASLocation, ObjectType> types = new HashMap<ASLocation, ObjectType>();
+    private Map<ASLocation, ObjectType> types = new HashMap<>();
 
     /**
      * Adds a location to this transaction

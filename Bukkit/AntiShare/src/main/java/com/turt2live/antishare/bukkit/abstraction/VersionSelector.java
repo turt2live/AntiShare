@@ -101,7 +101,7 @@ public final class VersionSelector {
             if (MinecraftVersion.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
                 return (MinecraftVersion) clazz.getConstructor().newInstance(); // Set our handler
             }
-        } catch (final Exception e) {
+        } catch (final Exception ignored) {
         }
         return null;
     }

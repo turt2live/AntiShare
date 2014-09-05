@@ -61,7 +61,7 @@ public class ItemStackTest2 extends CheckBase {
         enchanted.addEnchantment(Enchantment.DAMAGE_ALL, 2);
 
         ItemMeta meta = lore.getItemMeta();
-        meta.setLore(new ArrayArrayList<String>(ChatColor.GOLD + "Colored lore", ChatColor.YELLOW + "is cool"));
+        meta.setLore(new ArrayArrayList<>(ChatColor.GOLD + "Colored lore", ChatColor.YELLOW + "is cool"));
         meta.setDisplayName(ChatColor.LIGHT_PURPLE + "{\"break\":\"things\"}");
         lore.setItemMeta(meta);
 

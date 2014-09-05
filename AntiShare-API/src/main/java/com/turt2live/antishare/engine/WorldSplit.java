@@ -36,7 +36,7 @@ public class WorldSplit {
      * The possible axises to use for splitting
      */
     public static enum Axis {
-        X, Z;
+        X, Z
     }
 
     private Axis axis;

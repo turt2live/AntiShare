@@ -41,7 +41,7 @@ public abstract class SnowmanMobPattern implements BlockPattern, MobPattern {
     public List<ABlock> getInvolvedBlocks(ABlock block) {
         if (block == null) throw new IllegalArgumentException();
 
-        List<ABlock> applicable = new ArrayList<ABlock>();
+        List<ABlock> applicable = new ArrayList<>();
 
         if (isPumpkin(block)) {
             ABlock down1 = block.getRelative(Facing.DOWN);

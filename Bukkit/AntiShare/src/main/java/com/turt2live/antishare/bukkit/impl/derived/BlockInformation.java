@@ -45,14 +45,13 @@ public class BlockInformation implements DerivedRejectable {
         BlockInformation that = (BlockInformation) o;
 
         if (damage != that.damage) return false;
-        if (material != that.material) return false;
+        return material == that.material;
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = material != null ? material.hashCode() : 0;
+        int result = material.hashCode();
         result = 31 * result + (int) damage;
         return result;
     }

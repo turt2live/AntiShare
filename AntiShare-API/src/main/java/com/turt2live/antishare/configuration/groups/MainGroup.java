@@ -41,12 +41,12 @@ public abstract class MainGroup extends Group {
 
     @Override
     public final List<String> getInheritedGroups() {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     @Override
     public final List<String> getApplicableWorlds() {
-        return new ArrayArrayList<String>(new String[] {"all"});
+        return new ArrayArrayList<>("all");
     }
 
     @Override

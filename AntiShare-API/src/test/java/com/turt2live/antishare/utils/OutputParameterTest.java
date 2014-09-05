@@ -29,74 +29,74 @@ public class OutputParameterTest {
 
     @Test
     public void testDefault() {
-        OutputParameter<Object> parameter = new OutputParameter<Object>();
+        OutputParameter<Object> parameter = new OutputParameter<>();
         assertNull(parameter.getValue());
 
         Object obj = mock(Object.class);
-        parameter = new OutputParameter<Object>(obj);
+        parameter = new OutputParameter<>(obj);
         assertNotNull(parameter.getValue());
         assertEquals(obj, parameter.getValue());
     }
 
     @Test
     public void testWasCalled() {
-        OutputParameter<Object> parameter = new OutputParameter<Object>();
+        OutputParameter<Object> parameter = new OutputParameter<>();
         assertFalse(parameter.wasCalled());
         parameter.setValue(mock(Object.class));
         assertTrue(parameter.wasCalled());
 
-        parameter = new OutputParameter<Object>(mock(Object.class));
+        parameter = new OutputParameter<>(mock(Object.class));
         assertFalse(parameter.wasCalled());
         parameter.setValue(mock(Object.class));
         assertTrue(parameter.wasCalled());
 
-        parameter = new OutputParameter<Object>();
+        parameter = new OutputParameter<>();
         parameter.setValue(null);
         assertTrue(parameter.wasCalled());
 
-        parameter = new OutputParameter<Object>(mock(Object.class));
+        parameter = new OutputParameter<>(mock(Object.class));
         parameter.setValue(null);
         assertTrue(parameter.wasCalled());
     }
 
     @Test
     public void testHasValue() {
-        OutputParameter<Object> parameter = new OutputParameter<Object>();
+        OutputParameter<Object> parameter = new OutputParameter<>();
         assertFalse(parameter.hasValue());
         parameter.setValue(mock(Object.class));
         assertTrue(parameter.hasValue());
 
-        parameter = new OutputParameter<Object>(mock(Object.class));
+        parameter = new OutputParameter<>(mock(Object.class));
         assertTrue(parameter.hasValue());
         parameter.setValue(mock(Object.class));
         assertTrue(parameter.hasValue());
 
-        parameter = new OutputParameter<Object>();
+        parameter = new OutputParameter<>();
         parameter.setValue(null);
         assertFalse(parameter.hasValue());
 
-        parameter = new OutputParameter<Object>(mock(Object.class));
+        parameter = new OutputParameter<>(mock(Object.class));
         parameter.setValue(null);
         assertFalse(parameter.hasValue());
     }
 
     @Test
     public void testGetValue() {
-        OutputParameter<Object> parameter = new OutputParameter<Object>();
+        OutputParameter<Object> parameter = new OutputParameter<>();
         assertNull(parameter.getValue());
         parameter.setValue(mock(Object.class));
         assertNotNull(parameter.getValue());
 
-        parameter = new OutputParameter<Object>(mock(Object.class));
+        parameter = new OutputParameter<>(mock(Object.class));
         assertNotNull(parameter.getValue());
         parameter.setValue(mock(Object.class));
         assertNotNull(parameter.getValue());
 
-        parameter = new OutputParameter<Object>();
+        parameter = new OutputParameter<>();
         parameter.setValue(null);
         assertNull(parameter.getValue());
 
-        parameter = new OutputParameter<Object>(mock(Object.class));
+        parameter = new OutputParameter<>(mock(Object.class));
         parameter.setValue(null);
         assertNull(parameter.getValue());
     }

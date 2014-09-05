@@ -65,7 +65,7 @@ public class FileInventoryManager extends GenericInventoryManager {
                 List<AInventory> playerInventories = inventories.get(player);
                 Tag tag = createTag(playerInventories);
 
-                Map<String, Tag> tags = new HashMap<String, Tag>();
+                Map<String, Tag> tags = new HashMap<>();
                 tags.put("inventory", tag);
 
                 CompoundTag compoundTag = new CompoundTag(player.toString(), tags);
@@ -82,7 +82,7 @@ public class FileInventoryManager extends GenericInventoryManager {
 
     @Override
     protected List<AInventory> loadInventories(UUID player) {
-        List<AInventory> inventories = new ArrayList<AInventory>();
+        List<AInventory> inventories = new ArrayList<>();
 
         File expected = new File(folder, player.toString() + ".dat");
         if (expected.exists()) {
@@ -114,7 +114,7 @@ public class FileInventoryManager extends GenericInventoryManager {
     }
 
     private Tag createTag(List<AInventory> inventories) {
-        List<Tag> tags = new ArrayList<Tag>();
+        List<Tag> tags = new ArrayList<>();
 
         for (AInventory inventory : inventories) {
             tags.add(createTag(inventory));
@@ -124,12 +124,12 @@ public class FileInventoryManager extends GenericInventoryManager {
     }
 
     private Tag createTag(AInventory inventory) {
-        Map<String, Tag> tags = new HashMap<String, Tag>();
+        Map<String, Tag> tags = new HashMap<>();
 
         tags.put("world", new StringTag("world", inventory.getWorld().getName()));
         tags.put("gamemode", new StringTag("gamemode", inventory.getGameMode().name()));
 
-        Map<String, Tag> items = new HashMap<String, Tag>();
+        Map<String, Tag> items = new HashMap<>();
         for (Map.Entry<Integer, AbstractedItem> content : inventory.getContents().entrySet()) {
             int slot = content.getKey();
             AbstractedItem item = content.getValue();
@@ -152,7 +152,7 @@ public class FileInventoryManager extends GenericInventoryManager {
 
         // Start reading items
         CompoundTag items = (CompoundTag) tags.get("items");
-        Map<Integer, AbstractedItem> itemMap = new HashMap<Integer, AbstractedItem>();
+        Map<Integer, AbstractedItem> itemMap = new HashMap<>();
         for (Tag itemTag : items.getValue().values()) {
             int slot = Integer.parseInt(itemTag.getName().substring("slot ".length()));
             AbstractedItem item = NBTItem.reconstructItem(itemTag);

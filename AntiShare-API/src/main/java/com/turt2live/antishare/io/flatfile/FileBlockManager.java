@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class FileBlockManager extends GenericBlockManager {
 
-    private ConcurrentMap<ASLocation, String> index = new ConcurrentHashMap<ASLocation, String>();
+    private ConcurrentMap<ASLocation, String> index = new ConcurrentHashMap<>();
     private File folder;
 
     /**
@@ -94,7 +94,7 @@ public class FileBlockManager extends GenericBlockManager {
             }
         }
 
-        List<BlockStore> storesList = new ArrayList<BlockStore>();
+        List<BlockStore> storesList = new ArrayList<>();
         storesList.addAll(stores.values());
         return storesList;
     }
@@ -161,7 +161,7 @@ public class FileBlockManager extends GenericBlockManager {
      */
     public int getMostCommonBlockSize() {
         File[] files = folder.listFiles();
-        Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> counts = new HashMap<>();
         if (files != null) {
             for (File file : files) {
                 FileBlockStore store = new FileBlockStore(file);
@@ -173,7 +173,7 @@ public class FileBlockManager extends GenericBlockManager {
                     counts.put(header[3], 1);
             }
         }
-        if (counts.size() > 0) {
+        if (!counts.isEmpty()) {
             int header = -1;
             int count = -1;
             for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
@@ -215,7 +215,7 @@ public class FileBlockManager extends GenericBlockManager {
      * @return the unsorted array. Never null, but may be of length 0 to represent "no stores"
      */
     public int[] getBlockSizes() {
-        List<Integer> sizes = new ArrayList<Integer>();
+        List<Integer> sizes = new ArrayList<>();
         File[] files = folder.listFiles();
         if (files != null) {
             for (File file : files) {
@@ -243,7 +243,7 @@ public class FileBlockManager extends GenericBlockManager {
     public List<BlockStore> getStoresOfSize(int blockSize) {
         if (blockSize <= 0) throw new IllegalArgumentException("block size must be a positive, non-zero, number");
 
-        List<BlockStore> stores = new ArrayList<BlockStore>();
+        List<BlockStore> stores = new ArrayList<>();
         File[] files = folder.listFiles();
         if (files != null) {
             for (File file : files) {

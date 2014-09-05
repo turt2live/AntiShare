@@ -31,13 +31,13 @@ public class ArrayArrayListTest {
 
     @Test
     public void testCreate1() {
-        ArrayArrayList<Integer> numbers = new ArrayArrayList<Integer>();
+        ArrayArrayList<Integer> numbers = new ArrayArrayList<>();
         assertEquals(0, numbers.size());
     }
 
     @Test
     public void testCreate2() {
-        ArrayArrayList<Integer> numbers = new ArrayArrayList<Integer>(new Integer[] {9, 10, 11});
+        ArrayArrayList<Integer> numbers = new ArrayArrayList<>(new Integer[] {9, 10, 11});
         assertEquals(3, numbers.size());
         assertEquals(new Integer(9), numbers.get(0));
         assertEquals(new Integer(10), numbers.get(1));
@@ -46,7 +46,7 @@ public class ArrayArrayListTest {
 
     @Test
     public void testCreate3() {
-        ArrayArrayList<Integer> numbers = new ArrayArrayList<Integer>(9, 10, 11);
+        ArrayArrayList<Integer> numbers = new ArrayArrayList<>(9, 10, 11);
         assertEquals(3, numbers.size());
         assertEquals(new Integer(9), numbers.get(0));
         assertEquals(new Integer(10), numbers.get(1));
@@ -55,7 +55,7 @@ public class ArrayArrayListTest {
 
     @Test
     public void testCreate4() {
-        ArrayArrayList<Integer> numbers = new ArrayArrayList<Integer>(Arrays.asList(9, 10, 11));
+        ArrayArrayList<Integer> numbers = new ArrayArrayList<>(Arrays.asList(9, 10, 11));
         assertEquals(3, numbers.size());
         assertEquals(new Integer(9), numbers.get(0));
         assertEquals(new Integer(10), numbers.get(1));
@@ -64,8 +64,8 @@ public class ArrayArrayListTest {
 
     @Test
     public void testCreate5() {
-        new ArrayArrayList<Integer>((List<Integer>) null);
-        new ArrayArrayList<Integer>((Integer[]) null);
+        new ArrayArrayList<>((List<Integer>) null);
+        new ArrayArrayList<>((Integer[]) null);
     }
 
 }

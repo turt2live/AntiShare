@@ -63,7 +63,7 @@ public class ItemStackTest extends CheckBase {
         enchanted.addEnchantment(Enchantment.DAMAGE_ALL, 2);
 
         ItemMeta meta = lore.getItemMeta();
-        meta.setLore(new ArrayArrayList<String>(ChatColor.GOLD + "Colored lore", ChatColor.YELLOW + "is cool"));
+        meta.setLore(new ArrayArrayList<>(ChatColor.GOLD + "Colored lore", ChatColor.YELLOW + "is cool"));
         meta.setDisplayName(ChatColor.LIGHT_PURPLE + "{\"break\":\"things\"}");
         lore.setItemMeta(meta);
 
@@ -136,7 +136,7 @@ public class ItemStackTest extends CheckBase {
     }
 
     private List<Object> deserializeList(List<?> objects) {
-        List<Object> deserialized = new ArrayList<Object>();
+        List<Object> deserialized = new ArrayList<>();
 
         for (Object object : objects) {
             if (object instanceof Map) {
@@ -174,7 +174,7 @@ public class ItemStackTest extends CheckBase {
                 entry.setValue(serialize((ConfigurationSerializable) entry.getValue()));
             } else if (entry.getValue() instanceof List) {
                 List<?> objects = (List<?>) entry.getValue();
-                List<Object> serialized = new ArrayList<Object>();
+                List<Object> serialized = new ArrayList<>();
                 for (Object o : objects) {
                     if (o instanceof ConfigurationSerializable) {
                         serialized.add(serialize((ConfigurationSerializable) o));
@@ -188,7 +188,7 @@ public class ItemStackTest extends CheckBase {
     }
 
     private Map<String, Object> clone(Map<?, ?> map) {
-        Map<String, Object> clone = new LinkedHashMap<String, Object>();
+        Map<String, Object> clone = new LinkedHashMap<>();
 
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             clone.put(entry.getKey().toString(), entry.getValue());

@@ -51,9 +51,8 @@ public class DerivedItemStack implements DerivedRejectable {
 
         DerivedItemStack that = (DerivedItemStack) o;
 
-        if (!stack.equals(that.stack)) return false;
+        return stack.equals(that.stack);
 
-        return true;
     }
 
     @Override

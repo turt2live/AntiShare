@@ -55,7 +55,7 @@ public class GenericBlockManagerTest {
 
         @Override
         public List<BlockStore> loadAll() {
-            return new ArrayArrayList<BlockStore>(store);
+            return new ArrayArrayList<>(store);
         }
     }
 

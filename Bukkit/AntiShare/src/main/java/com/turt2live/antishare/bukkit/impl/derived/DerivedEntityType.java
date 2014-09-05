@@ -42,9 +42,8 @@ public class DerivedEntityType implements DerivedRejectable {
 
         DerivedEntityType that = (DerivedEntityType) o;
 
-        if (type != that.type) return false;
+        return type == that.type;
 
-        return true;
     }
 
     @Override

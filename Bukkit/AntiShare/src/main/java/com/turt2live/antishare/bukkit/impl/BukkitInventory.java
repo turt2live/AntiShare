@@ -55,7 +55,7 @@ public class BukkitInventory extends MemoryInventoryManager.MemoryInventory {
 
         this.setContents((Map<Integer, AbstractedItem>) null);
 
-        Map<Integer, AbstractedItem> itemMap = new HashMap<Integer, AbstractedItem>();
+        Map<Integer, AbstractedItem> itemMap = new HashMap<>();
 
         for (int i = 0; i < inventory.getSize(); i++) {
             ItemStack item = inventory.getItem(i);

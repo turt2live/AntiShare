@@ -38,7 +38,7 @@ public class BlockTypeTransactionTest {
         BlockTypeTransaction transaction = new BlockTypeTransaction();
         BlockManager manager = mock(BlockManager.class);
 
-        Map<ASLocation, ObjectType> typeMap = new HashMap<ASLocation, ObjectType>();
+        Map<ASLocation, ObjectType> typeMap = new HashMap<>();
 
         for (int i = 0; i < 100; i++) {
             ASLocation location = mock(ASLocation.class);

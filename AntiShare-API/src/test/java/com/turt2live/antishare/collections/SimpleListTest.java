@@ -30,7 +30,7 @@ public class SimpleListTest {
 
     @Test
     public void testAdd() {
-        SimpleList<Integer> numbers = new SimpleList<Integer>();
+        SimpleList<Integer> numbers = new SimpleList<>();
         numbers.addItem(19);
 
         assertTrue(numbers.hasItem(19));
@@ -39,7 +39,7 @@ public class SimpleListTest {
 
     @Test
     public void testRemove() {
-        SimpleList<Integer> numbers = new SimpleList<Integer>();
+        SimpleList<Integer> numbers = new SimpleList<>();
         numbers.addItem(19);
         numbers.addItem(20);
         numbers.addItem(21);
@@ -55,7 +55,7 @@ public class SimpleListTest {
 
     @Test
     public void testConvert() {
-        SimpleList<Integer> numbers = new SimpleList<Integer>();
+        SimpleList<Integer> numbers = new SimpleList<>();
         numbers.addItem(19);
         numbers.addItem(20);
         numbers.addItem(21);
@@ -69,7 +69,7 @@ public class SimpleListTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testModify() {
-        SimpleList<Integer> numbers = new SimpleList<Integer>();
+        SimpleList<Integer> numbers = new SimpleList<>();
         numbers.addItem(19);
         numbers.addItem(20);
         numbers.addItem(21);
@@ -80,19 +80,19 @@ public class SimpleListTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNull1() {
-        SimpleList<Integer> numbers = new SimpleList<Integer>();
+        SimpleList<Integer> numbers = new SimpleList<>();
         numbers.addItem(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNull2() {
-        SimpleList<Integer> numbers = new SimpleList<Integer>();
+        SimpleList<Integer> numbers = new SimpleList<>();
         numbers.removeItem(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNull3() {
-        SimpleList<Integer> numbers = new SimpleList<Integer>();
+        SimpleList<Integer> numbers = new SimpleList<>();
         numbers.hasItem(null);
     }
 

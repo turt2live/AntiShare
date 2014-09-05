@@ -190,10 +190,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tplaceAs = " + placeAs);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        TrackedTypeList<ABlock> list = new DefaultTrackedTypeList<ABlock>();
-        RejectionList<ABlock> reject = new DefaultRejectionList<ABlock>(RejectionList.ListType.BLOCK_PLACE);
+        TrackedTypeList<ABlock> list = new DefaultTrackedTypeList<>();
+        RejectionList<ABlock> reject = new DefaultRejectionList<>(RejectionList.ListType.BLOCK_PLACE);
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             list = consolidatedGroup.getBlockTrackedList(placeAs);
@@ -225,7 +225,7 @@ public final class WorldEngine {
                 // We only need to check these two for combination states
 
 
-                List<ABlock> blocks = new ArrayList<ABlock>();
+                List<ABlock> blocks = new ArrayList<>();
                 blocks.add(block.getWorld().getBlock(block.getLocation().add(1, 0, 0)));
                 blocks.add(block.getWorld().getBlock(block.getLocation().add(-1, 0, 0)));
                 blocks.add(block.getWorld().getBlock(block.getLocation().add(0, 0, 1)));
@@ -297,9 +297,9 @@ public final class WorldEngine {
                 if (stageTwo == TrackedState.NOT_PRESENT) playerState = stageOne;
                 else playerState = stageTwo;
 
-                RejectionList<AEntity.RelevantEntityType> mobs = new DefaultRejectionList<AEntity.RelevantEntityType>(RejectionList.ListType.MOB_CREATE);
+                RejectionList<AEntity.RelevantEntityType> mobs = new DefaultRejectionList<>(RejectionList.ListType.MOB_CREATE);
 
-                if (groups != null && groups.size() > 0) {
+                if (groups != null && !groups.isEmpty()) {
                     mobs = new ConsolidatedGroup(groups).getRejectionList(mobs.getType());
                 }
 
@@ -353,13 +353,13 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tadditionalBreak = " + additionalBreak,
                 "[WorldEngine:" + worldName + "] \t\teventBreakAs = " + eventBreakAs);
 
-        List<ABlock> additional = new ArrayList<ABlock>();
+        List<ABlock> additional = new ArrayList<>();
         if (additionalBreak != null) additionalBreak.setValue(additional);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<ABlock> reject = new DefaultRejectionList<ABlock>(RejectionList.ListType.BLOCK_BREAK);
+        RejectionList<ABlock> reject = new DefaultRejectionList<>(RejectionList.ListType.BLOCK_BREAK);
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -382,7 +382,7 @@ public final class WorldEngine {
             if (objectType1 != objectType && objectType1 != ObjectType.UNKNOWN)
                 return true; // Mixed gamemode
 
-            List<ABlock> possibleAttachments = new ArrayList<ABlock>();
+            List<ABlock> possibleAttachments = new ArrayList<>();
             possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(1, 0, 0)));
             possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(-1, 0, 0)));
             possibleAttachments.add(block.getWorld().getBlock(block.getLocation().add(0, 0, 1)));
@@ -472,7 +472,7 @@ public final class WorldEngine {
 
         if (!Engine.getInstance().getFlag(Engine.CONFIG_PHYSICS_GROW_WITH_GAMEMODE, true)) return;
 
-        Map<ObjectType, Integer> votes = new HashMap<ObjectType, Integer>();
+        Map<ObjectType, Integer> votes = new HashMap<>();
         for (ABlock stem : stems) {
             ObjectType type = blockManager.getBlockType(stem.getLocation());
             int amount = votes.containsKey(type) ? votes.get(type) : 0;
@@ -481,7 +481,7 @@ public final class WorldEngine {
         }
 
         // First check for all equal
-        if (votes.size() == 0) {
+        if (votes.isEmpty()) {
             blockManager.setBlockType(spawned.getLocation(), ObjectType.UNKNOWN); // For sanity
         } else if (votes.size() == 1) {
             blockManager.setBlockType(spawned.getLocation(), votes.keySet().iterator().next());
@@ -756,10 +756,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tcommand = " + command);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<RejectableCommand> reject = new DefaultRejectionList<RejectableCommand>(RejectionList.ListType.COMMANDS);
+        RejectionList<RejectableCommand> reject = new DefaultRejectionList<>(RejectionList.ListType.COMMANDS);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -795,7 +795,7 @@ public final class WorldEngine {
                 List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
                 ASGameMode playerGM = player.getGameMode();
 
-                if (groups != null && groups.size() > 0) {
+                if (groups != null && !groups.isEmpty()) {
                     ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
                     playerGM = consolidatedGroup.getActingMode(playerGM);
@@ -832,10 +832,10 @@ public final class WorldEngine {
         ObjectType otherType = blockManager.getBlockType(block.getLocation());
         ObjectType interactAs = ASUtils.toBlockType(player.getGameMode());
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<ABlock> reject = new DefaultRejectionList<ABlock>(RejectionList.ListType.INTERACTION);
+        RejectionList<ABlock> reject = new DefaultRejectionList<>(RejectionList.ListType.INTERACTION);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -912,10 +912,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\titem = " + item);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<AItem> reject = new DefaultRejectionList<AItem>(RejectionList.ListType.ITEM_USE);
+        RejectionList<AItem> reject = new DefaultRejectionList<>(RejectionList.ListType.ITEM_USE);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -948,10 +948,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\titem = " + item);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<AItem> reject = new DefaultRejectionList<AItem>(RejectionList.ListType.ITEM_DROP);
+        RejectionList<AItem> reject = new DefaultRejectionList<>(RejectionList.ListType.ITEM_DROP);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -984,10 +984,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\titem = " + item);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<AItem> reject = new DefaultRejectionList<AItem>(RejectionList.ListType.ITEM_PICKUP);
+        RejectionList<AItem> reject = new DefaultRejectionList<>(RejectionList.ListType.ITEM_PICKUP);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -1037,11 +1037,11 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tplayer = " + player);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        TrackedTypeList<AEntity> list = new DefaultTrackedTypeList<AEntity>();
-        RejectionList<AEntity> reject = new DefaultRejectionList<AEntity>(RejectionList.ListType.ENTITY_PLACE);
+        TrackedTypeList<AEntity> list = new DefaultTrackedTypeList<>();
+        RejectionList<AEntity> reject = new DefaultRejectionList<>(RejectionList.ListType.ENTITY_PLACE);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             list = consolidatedGroup.getEntityTrackedList(playerGM);
@@ -1089,10 +1089,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<AEntity> reject = new DefaultRejectionList<AEntity>(RejectionList.ListType.ENTITY_ATTACK);
+        RejectionList<AEntity> reject = new DefaultRejectionList<>(RejectionList.ListType.ENTITY_ATTACK);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -1136,10 +1136,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<AEntity> reject = new DefaultRejectionList<AEntity>(RejectionList.ListType.ENTITY_INTERACT);
+        RejectionList<AEntity> reject = new DefaultRejectionList<>(RejectionList.ListType.ENTITY_INTERACT);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -1184,10 +1184,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\tentity = " + entity);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<AEntity> reject = new DefaultRejectionList<AEntity>(RejectionList.ListType.ENTITY_BREAK);
+        RejectionList<AEntity> reject = new DefaultRejectionList<>(RejectionList.ListType.ENTITY_BREAK);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -1232,10 +1232,10 @@ public final class WorldEngine {
                 "[WorldEngine:" + worldName + "] \t\titems = " + items);
 
         List<Group> groups = Engine.getInstance().getGroupManager().getGroupsForPlayer(player, false);
-        RejectionList<AItem> reject = new DefaultRejectionList<AItem>(RejectionList.ListType.DEATH);
+        RejectionList<AItem> reject = new DefaultRejectionList<>(RejectionList.ListType.DEATH);
         ASGameMode playerGM = player.getGameMode();
 
-        if (groups != null && groups.size() > 0) {
+        if (groups != null && !groups.isEmpty()) {
             ConsolidatedGroup consolidatedGroup = new ConsolidatedGroup(groups);
 
             reject = consolidatedGroup.getRejectionList(reject.getType());
@@ -1244,7 +1244,7 @@ public final class WorldEngine {
 
         if (playerGM != ASGameMode.CREATIVE) return; // TODO: Possible implementation of 'affect'?
 
-        List<AItem> clone = new ArrayList<AItem>(items);
+        List<AItem> clone = new ArrayList<>(items);
         for (AItem item : clone) {
             boolean denied = false;
 

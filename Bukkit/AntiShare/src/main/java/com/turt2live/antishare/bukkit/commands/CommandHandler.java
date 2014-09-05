@@ -26,6 +26,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ import java.util.List;
  */
 public class CommandHandler implements CommandExecutor, ASCommand {
 
-    private List<ASCommand> commands = new ArrayList<ASCommand>();
+    private List<ASCommand> commands = new ArrayList<>();
 
     public CommandHandler() {
         registerCommand(this);
@@ -55,7 +56,7 @@ public class CommandHandler implements CommandExecutor, ASCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        DevEngine.log("[Commands] " + sender.getName() + " ran command /" + command.getName() + " with args = " + args);
+        DevEngine.log("[Commands] " + sender.getName() + " ran command /" + command.getName() + " with args = " + Arrays.toString(args));
         if (args == null || args.length == 0) {
             sender.sendMessage(new LangBuilder(Lang.getInstance().getFormat(Lang.ERROR_HELP_SUGGEST)).withPrefix().build());
         } else {
@@ -86,9 +87,7 @@ public class CommandHandler implements CommandExecutor, ASCommand {
 
     private String[] rebuildArgs(String[] args) {
         String[] newArgs = new String[args.length - 1 < 0 ? 0 : args.length - 1];
-        for (int i = 1; i < args.length; i++) {
-            newArgs[i - 1] = args[i];
-        }
+        System.arraycopy(args, 1, newArgs, 0, args.length - 1);
         return newArgs;
     }
 

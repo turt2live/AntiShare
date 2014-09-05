@@ -44,7 +44,7 @@ public class MemoryInventoryManager extends GenericInventoryManager {
 
         private AWorld world;
         private ASGameMode gamemode;
-        private Map<Integer, AbstractedItem> contents = new HashMap<Integer, AbstractedItem>();
+        private Map<Integer, AbstractedItem> contents = new HashMap<>();
 
         /**
          * Creates a new memory inventory
@@ -105,7 +105,7 @@ public class MemoryInventoryManager extends GenericInventoryManager {
 
     @Override
     protected List<AInventory> loadInventories(UUID player) {
-        return new ArrayList<AInventory>(); // Do nothing
+        return new ArrayList<>(); // Do nothing
     }
 
     @Override

@@ -65,7 +65,7 @@ public class ConsolidatedGroup {
      * @param groups the groups to use, cannot be null and must have at least one entry
      */
     public ConsolidatedGroup(Group... groups) {
-        this(new ArrayArrayList<Group>(groups));
+        this(new ArrayArrayList<>(groups));
     }
 
     /**
@@ -78,10 +78,10 @@ public class ConsolidatedGroup {
     public ConsolidatedTrackedTypeList<ABlock> getBlockTrackedList(ASGameMode gameMode) {
         if (gameMode == null) throw new IllegalArgumentException("arguments cannot be null");
 
-        List<TrackedTypeList<ABlock>> lists = new ArrayList<TrackedTypeList<ABlock>>();
+        List<TrackedTypeList<ABlock>> lists = new ArrayList<>();
         for (Group group : groups) lists.add(group.getBlockTrackedList(gameMode));
 
-        return new ConsolidatedTrackedTypeList<ABlock>(lists);
+        return new ConsolidatedTrackedTypeList<>(lists);
     }
 
     /**
@@ -94,10 +94,10 @@ public class ConsolidatedGroup {
     public ConsolidatedTrackedTypeList<AEntity> getEntityTrackedList(ASGameMode gameMode) {
         if (gameMode == null) throw new IllegalArgumentException("arguments cannot be null");
 
-        List<TrackedTypeList<AEntity>> lists = new ArrayList<TrackedTypeList<AEntity>>();
+        List<TrackedTypeList<AEntity>> lists = new ArrayList<>();
         for (Group group : groups) lists.add(group.getEntityTrackedList(gameMode));
 
-        return new ConsolidatedTrackedTypeList<AEntity>(lists);
+        return new ConsolidatedTrackedTypeList<>(lists);
     }
 
     /**
@@ -111,13 +111,13 @@ public class ConsolidatedGroup {
     public <T extends Rejectable> ConsolidatedRejectionList<T> getRejectionList(RejectionList.ListType type) {
         if (type == null) throw new IllegalArgumentException();
 
-        List<RejectionList<T>> lists = new ArrayList<RejectionList<T>>();
+        List<RejectionList<T>> lists = new ArrayList<>();
         for (Group group : groups) {
             RejectionList<T> list = group.getRejectionList(type);
             if (list != null) lists.add(list);
         }
 
-        return new ConsolidatedRejectionList<T>(lists);
+        return new ConsolidatedRejectionList<>(lists);
     }
 
     /**

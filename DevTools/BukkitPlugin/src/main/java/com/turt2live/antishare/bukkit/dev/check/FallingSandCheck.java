@@ -41,16 +41,16 @@ public class FallingSandCheck extends CheckBase implements Listener {
     private enum SandState {
         DISSOLVE, // Sand "eats" or "dissolves" the test block
         BREAK, // Sand breaks when landing on the test block
-        STOP; // Sand is stopped by test block (landing on top)
+        STOP // Sand is stopped by test block (landing on top)
     }
 
     private boolean enabled = false;
     private int nextMaterial = 0; // AIR
     private Material[] materials = Material.values();
     private Location blockLocation, sandLocation;
-    private Map<SandState, List<Material>> results = new HashMap<SandState, List<Material>>();
+    private Map<SandState, List<Material>> results = new HashMap<>();
     private int nextFall = 0;
-    private List<Material> falling = new ArrayList<Material>();
+    private List<Material> falling = new ArrayList<>();
 
     public FallingSandCheck(AntiShare plugin) {
         super(plugin);

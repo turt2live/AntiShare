@@ -193,9 +193,8 @@ public class RejectableCommand implements Rejectable, DerivableRejectable, Deriv
         RejectableCommand that = (RejectableCommand) o;
 
         if (isNegated != that.isNegated) return false;
-        if (!commandString.equals(that.commandString)) return false;
+        return commandString.equals(that.commandString);
 
-        return true;
     }
 
     @Override

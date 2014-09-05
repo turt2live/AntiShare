@@ -57,6 +57,6 @@ public class MemoryBlockManager extends GenericBlockManager {
     @Deprecated
     @Override
     public List<BlockStore> loadAll() {
-        return new ArrayList<BlockStore>();
+        return new ArrayList<>();
     }
 }

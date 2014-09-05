@@ -35,7 +35,7 @@ import java.util.Map;
  * @author turt2live
  */
 // Taken from Hurtle :D
-public class ItemMatcher {
+public final class ItemMatcher {
 
     private enum MetaKey {
         NAME,
@@ -49,7 +49,7 @@ public class ItemMatcher {
                     meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', s));
                     break;
                 case LORE:
-                    meta.setLore(parse(new ArrayArrayList<String>(s.split("\\n"))));
+                    meta.setLore(parse(new ArrayArrayList<>(s.split("\\n"))));
                     break;
             }
 
@@ -57,7 +57,7 @@ public class ItemMatcher {
         }
 
         private List<String> parse(List<String> strings) {
-            List<String> parsed = new ArrayList<String>();
+            List<String> parsed = new ArrayList<>();
             for (int i = 0; i < strings.size(); i++) {
                 parsed.add(ChatColor.translateAlternateColorCodes('&', strings.get(i)));
             }
@@ -102,7 +102,7 @@ public class ItemMatcher {
         String[] parts = input.split(";", 2);
         if (parts.length != 2) parts = new String[] {parts[0], "1"}; // AntiShare - For semantics
         if (parts.length == 2) {
-            Map<MetaKey, String> attributes = new HashMap<MetaKey, String>();
+            Map<MetaKey, String> attributes = new HashMap<>();
             String[] amountParts = parts[1].split("\\|", 2);
             int amount = tryParse(amountParts[0]);
             if (amount <= 0) return null;
@@ -137,7 +137,7 @@ public class ItemMatcher {
     }
 
     private static Map<MetaKey, String> parse(String s) {
-        Map<MetaKey, String> parsed = new HashMap<MetaKey, String>();
+        Map<MetaKey, String> parsed = new HashMap<>();
 
         String[] parts = s.split("\\|");
         for (String part : parts) {
@@ -157,7 +157,7 @@ public class ItemMatcher {
         try {
             int n = Integer.parseInt(in);
             return n;
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ignored) {
         }
         return -1;
     }

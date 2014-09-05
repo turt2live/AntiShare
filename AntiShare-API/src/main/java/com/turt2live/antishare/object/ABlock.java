@@ -61,7 +61,7 @@ public interface ABlock extends Rejectable {
         /**
          * Not a chest
          */
-        NONE;
+        NONE
     }
 
     /**

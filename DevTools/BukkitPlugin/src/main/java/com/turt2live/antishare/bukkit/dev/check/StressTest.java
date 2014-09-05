@@ -144,7 +144,7 @@ public class StressTest extends CheckBase implements Runnable {
     }
 
     private List<BlockState> states() {
-        List<BlockState> states = new ArrayList<BlockState>();
+        List<BlockState> states = new ArrayList<>();
         List<Block> blocks = blocks();
         for (Block block : blocks) {
             states.add(block.getState());
@@ -153,7 +153,7 @@ public class StressTest extends CheckBase implements Runnable {
     }
 
     private List<Block> blocks() {
-        List<Block> blocks = new ArrayList<Block>();
+        List<Block> blocks = new ArrayList<>();
         for (int i = 0; i < AntiShare.RANDOM.nextInt(20) + 5; i++) {
             blocks.add(block());
         }

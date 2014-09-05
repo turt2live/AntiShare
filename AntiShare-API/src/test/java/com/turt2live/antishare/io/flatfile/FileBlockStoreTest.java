@@ -109,7 +109,6 @@ public class FileBlockStoreTest {
     public void gTestReadOverflow() {
         // Intentionally try to read under the block size
         FileBlockStore store = new FileBlockStore(testFile1, 10, 11, 12, 60);
-        ObjectType[] types = ObjectType.values();
         store.getType(-1, -1, -1);
     }
 
@@ -142,7 +141,7 @@ public class FileBlockStoreTest {
 
     private static void delete(File folder) {
         File[] files = folder.listFiles();
-        for (File f : files) {
+        for (File f : files != null ? files : new File[0]) {
             if (f.isDirectory()) delete(f);
             else f.delete();
         }

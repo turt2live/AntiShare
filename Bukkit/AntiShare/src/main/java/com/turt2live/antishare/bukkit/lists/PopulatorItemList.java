@@ -27,9 +27,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-/**
- * Created by DTP-Travis on 19/05/14.
- */
 public class PopulatorItemList<T extends Rejectable> implements Populator<T> {
 
     @Override

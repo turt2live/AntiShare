@@ -39,7 +39,7 @@ public class PistonCheck extends CheckBase implements Prompt {
     private Player player;
     private int nextMaterial = -1;
     private Material[] materials = Material.values();
-    private List<Material> breaks = new ArrayList<Material>();
+    private List<Material> breaks = new ArrayList<>();
 
     public PistonCheck(AntiShare plugin, Player player) {
         super(plugin);

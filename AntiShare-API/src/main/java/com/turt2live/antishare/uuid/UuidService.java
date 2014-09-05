@@ -39,7 +39,7 @@ import java.util.UUID;
 public class UuidService extends CachingServiceProvider {
 
     private static UuidService SERVICE_INSTANCE;
-    private List<CacheSource> additionalSources = new ArrayList<CacheSource>();
+    private List<CacheSource> additionalSources = new ArrayList<>();
 
     UuidService() {
         super(new ApiV2Service());
@@ -48,7 +48,7 @@ public class UuidService extends CachingServiceProvider {
     @Override
     public List<PlayerRecord> doBulkLookup(String... playerNames) {
         if (playerNames == null) throw new IllegalArgumentException();
-        List<PlayerRecord> records = new ArrayList<PlayerRecord>();
+        List<PlayerRecord> records = new ArrayList<>();
 
         for (String name : playerNames) {
             if (name == null) throw new IllegalArgumentException();
@@ -78,7 +78,7 @@ public class UuidService extends CachingServiceProvider {
     @Override
     public List<PlayerRecord> doBulkLookup(UUID... uuids) {
         if (uuids == null) throw new IllegalArgumentException();
-        List<PlayerRecord> records = new ArrayList<PlayerRecord>();
+        List<PlayerRecord> records = new ArrayList<>();
 
         for (UUID uuid : uuids) {
             if (uuid == null) throw new IllegalArgumentException();
@@ -106,14 +106,14 @@ public class UuidService extends CachingServiceProvider {
     @Override
     public PlayerRecord doLookup(String playerName) {
         List<PlayerRecord> records = doBulkLookup(playerName);
-        if (records != null && records.size() > 0) return records.get(0);
+        if (records != null && !records.isEmpty()) return records.get(0);
         return null;
     }
 
     @Override
     public PlayerRecord doLookup(UUID uuid) {
         List<PlayerRecord> records = doBulkLookup(uuid);
-        if (records != null && records.size() > 0) return records.get(0);
+        if (records != null && !records.isEmpty()) return records.get(0);
         return null;
     }
 

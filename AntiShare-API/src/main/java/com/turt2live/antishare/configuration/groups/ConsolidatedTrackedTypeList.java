@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class ConsolidatedTrackedTypeList<T extends Rejectable> implements TrackedTypeList<T> {
 
-    private List<TrackedTypeList<T>> lists = new ArrayList<TrackedTypeList<T>>();
+    private List<TrackedTypeList<T>> lists = new ArrayList<>();
 
     /**
      * Creates a new consolidated block type list
@@ -61,7 +61,7 @@ public class ConsolidatedTrackedTypeList<T extends Rejectable> implements Tracke
      * @param lists the lists to include. Cannot be null and must have at least one record
      */
     public ConsolidatedTrackedTypeList(TrackedTypeList<T>... lists) {
-        this(new ArrayArrayList<TrackedTypeList<T>>(lists));
+        this(new ArrayArrayList<>(lists));
     }
 
     @Override

@@ -42,5 +42,5 @@ public enum ObjectType {
     /**
      * No associated type
      */
-    UNKNOWN;
+    UNKNOWN
 }

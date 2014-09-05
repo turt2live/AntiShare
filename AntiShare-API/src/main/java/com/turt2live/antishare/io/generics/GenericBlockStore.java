@@ -33,13 +33,13 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class GenericBlockStore implements BlockStore {
 
-    private ConcurrentMap<ASLocation, ObjectType> types = new ConcurrentHashMap<ASLocation, ObjectType>();
+    private ConcurrentMap<ASLocation, ObjectType> types = new ConcurrentHashMap<>();
     private volatile long lastAccess = 0;
 
     // Test entry point. Should not be used elsewhere
     void initTest() {
         if (types != null) throw new IllegalArgumentException("Collection not null!");
-        this.types = new ConcurrentHashMap<ASLocation, ObjectType>();
+        this.types = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -80,7 +80,7 @@ public abstract class GenericBlockStore implements BlockStore {
 
     @Override
     public Map<ASLocation, ObjectType> getAll() {
-        Map<ASLocation, ObjectType> map = new HashMap<ASLocation, ObjectType>();
+        Map<ASLocation, ObjectType> map = new HashMap<>();
         map.putAll(types);
         return map;
     }

@@ -76,9 +76,8 @@ public abstract class GenericInventoryManager implements InventoryManager {
 
             if (gamemode != that.gamemode) return false;
             if (player != null ? !player.equals(that.player) : that.player != null) return false;
-            if (world != null ? !world.getName().equals(that.world.getName()) : that.world != null) return false;
+            return !(world != null ? !world.getName().equals(that.world.getName()) : that.world != null);
 
-            return true;
         }
 
         @Override
@@ -90,7 +89,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
         }
     }
 
-    private ConcurrentMap<InventoryKey, AInventory> inventories = new ConcurrentHashMap<InventoryKey, AInventory>();
+    private ConcurrentMap<InventoryKey, AInventory> inventories = new ConcurrentHashMap<>();
 
     @Override
     public final AInventory getInventory(UUID player, ASGameMode gamemode, AWorld world) {
@@ -135,15 +134,14 @@ public abstract class GenericInventoryManager implements InventoryManager {
 
     @Override
     public final void save() {
-        Collection<AInventory> values = inventories.values();
         saveInventories(convertInventories());
         clear();
     }
 
     @Override
     public final void save(UUID player) {
-        List<AInventory> applicable = new ArrayList<AInventory>();
-        List<InventoryKey> keys = new ArrayList<InventoryKey>();
+        List<AInventory> applicable = new ArrayList<>();
+        List<InventoryKey> keys = new ArrayList<>();
 
         for (Map.Entry<InventoryKey, AInventory> entry : inventories.entrySet()) {
             if (entry.getKey().player.equals(player)) {
@@ -152,8 +150,8 @@ public abstract class GenericInventoryManager implements InventoryManager {
             }
         }
 
-        if (applicable.size() > 0) {
-            Map<UUID, List<AInventory>> set = new HashMap<UUID, List<AInventory>>();
+        if (!applicable.isEmpty()) {
+            Map<UUID, List<AInventory>> set = new HashMap<>();
             set.put(player, applicable);
             saveInventories(set);
 
@@ -197,7 +195,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
     }
 
     private Map<UUID, List<AInventory>> convertInventories() {
-        Map<UUID, List<AInventory>> byPlayer = new HashMap<UUID, List<AInventory>>();
+        Map<UUID, List<AInventory>> byPlayer = new HashMap<>();
 
         for (Map.Entry<InventoryKey, AInventory> entry : inventories.entrySet()) {
             if (!byPlayer.containsKey(entry.getKey().player)) {

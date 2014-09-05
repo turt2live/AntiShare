@@ -50,7 +50,7 @@ public class LangBuilder {
     public static final String SELECTOR_VARIABLE = "@v";
     private boolean prefix = false;
     private String format;
-    private Map<String, String> replacements = new HashMap<String, String>();
+    private Map<String, String> replacements = new HashMap<>();
 
     /**
      * Creates a new LangBuilder
@@ -115,7 +115,7 @@ public class LangBuilder {
     public static List<String> colorize(List<String> list) {
         if (list == null) return null;
 
-        List<String> colored = new ArrayList<String>();
+        List<String> colored = new ArrayList<>();
 
         for (String s : list) {
             colored.add(ChatColor.translateAlternateColorCodes('&', s));
