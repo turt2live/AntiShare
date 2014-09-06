@@ -81,7 +81,7 @@ public class FileInventoryManager extends GenericInventoryManager {
     }
 
     @Override
-    protected List<AInventory> loadInventories(UUID player) {
+    public List<AInventory> getInventories(UUID player) {
         List<AInventory> inventories = new ArrayList<>();
 
         File expected = new File(folder, player.toString() + ".dat");

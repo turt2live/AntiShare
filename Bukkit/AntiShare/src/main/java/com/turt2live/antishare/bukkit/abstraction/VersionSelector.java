@@ -19,8 +19,7 @@ package com.turt2live.antishare.bukkit.abstraction;
 
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.engine.DevEngine;
-import org.bukkit.Bukkit;
-import org.bukkit.Server;
+import com.turt2live.lib.items.bukkit.BukkitProvider;
 import org.bukkit.event.Listener;
 
 /**
@@ -57,13 +56,8 @@ public final class VersionSelector {
             version = "pre";
         } else if (version.equals("glowstone")) {
             // Glowstone is built purely on the Bukkit API, so we can detect it's version through the version string
-            Server server = Bukkit.getServer();
-            // TODO: Cleanup/move elsewhere?
-            if (server.getBukkitVersion().equals("1.7.2-R0.2")) {
-                version = "v1_7_R1";
-            } else if (server.getBukkitVersion().equals("1.7.9-R0.1")) {
-                version = "v1_7_R3";
-            } else version = DEFAULT_VERSION; // Unknown glowstone version, assume default
+            // We can also abuse ItemAbstraction's glowstone handling for our purposes (considering it uses the same format)
+            version = BukkitProvider.getGlowstoneMappings().getGlowstoneVersion(AntiShare.getInstance().getServer().getBukkitVersion());
         }
 
         DevEngine.log("[Abstraction] Attempting to load: " + version);

@@ -97,7 +97,7 @@ public abstract class GenericInventoryManager implements InventoryManager {
 
         InventoryKey key = createKey(player, gamemode, world);
         if (!inventories.containsKey(key)) {
-            List<AInventory> loaded = loadInventories(player);
+            List<AInventory> loaded = getInventories(player);
 
             // Populate collection
             for (AInventory inv : loaded) {
@@ -166,15 +166,6 @@ public abstract class GenericInventoryManager implements InventoryManager {
      * @param inventories the inventories to save
      */
     protected abstract void saveInventories(Map<UUID, List<AInventory>> inventories);
-
-    /**
-     * Loads all of a player's inventories
-     *
-     * @param player the player, never null
-     *
-     * @return the loaded set of inventories. Should never be null, but may be empty
-     */
-    protected abstract List<AInventory> loadInventories(UUID player);
 
     /**
      * Creates an empty inventory that does not get saved to the disk

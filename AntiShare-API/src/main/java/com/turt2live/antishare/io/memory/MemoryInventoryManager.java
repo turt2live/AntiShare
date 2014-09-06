@@ -104,7 +104,7 @@ public class MemoryInventoryManager extends GenericInventoryManager {
     }
 
     @Override
-    protected List<AInventory> loadInventories(UUID player) {
+    public List<AInventory> getInventories(UUID player) {
         return new ArrayList<>(); // Do nothing
     }
 
