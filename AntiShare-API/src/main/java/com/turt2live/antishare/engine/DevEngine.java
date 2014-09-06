@@ -17,6 +17,9 @@
 
 package com.turt2live.antishare.engine;
 
+import com.turt2live.antishare.events.EventDispatcher;
+import com.turt2live.antishare.events.engine.DevEngineStateChangeEvent;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -144,6 +147,7 @@ public class DevEngine {
      */
     public static void setEnabled(boolean enabled) {
         ENABLED = enabled;
+        EventDispatcher.dispatch(new DevEngineStateChangeEvent());
     }
 
     /**

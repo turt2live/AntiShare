@@ -60,9 +60,9 @@ public final class VersionSelector {
             Server server = Bukkit.getServer();
             // TODO: Cleanup/move elsewhere?
             if (server.getBukkitVersion().equals("1.7.2-R0.2")) {
-                version = "1_7_R1";
+                version = "v1_7_R1";
             } else if (server.getBukkitVersion().equals("1.7.9-R0.1")) {
-                version = "1_7_R3";
+                version = "v1_7_R3";
             } else version = DEFAULT_VERSION; // Unknown glowstone version, assume default
         }
 
@@ -86,7 +86,7 @@ public final class VersionSelector {
 
         // Register per-version events
         if (minecraft instanceof Listener) {
-            AntiShare.getInstance().getServer().getPluginManager().registerEvents((Listener) minecraft, AntiShare.getInstance());
+            AntiShare.getInstance().getServer().getPluginManager().registerEvents(minecraft, AntiShare.getInstance());
         }
     }
 

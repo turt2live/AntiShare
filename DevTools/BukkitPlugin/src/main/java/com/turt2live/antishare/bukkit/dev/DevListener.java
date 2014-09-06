@@ -18,6 +18,9 @@
 package com.turt2live.antishare.bukkit.dev;
 
 import com.turt2live.antishare.bukkit.impl.BukkitBlock;
+import com.turt2live.antishare.engine.DevEngine;
+import com.turt2live.antishare.events.EventListener;
+import com.turt2live.antishare.events.engine.DevEngineStateChangeEvent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -44,4 +47,12 @@ public class DevListener implements Listener {
         }
     }
 
+    @EventListener
+    public void onDevEngineEnable(DevEngineStateChangeEvent event) {
+        if (DevEngine.isEnabled()) {
+            DevEngine.log("[Bukkit] Server version: " + com.turt2live.antishare.bukkit.AntiShare.getInstance().getServer().getVersion());
+            DevEngine.log("[Bukkit] Bukkit version: " + com.turt2live.antishare.bukkit.AntiShare.getInstance().getServer().getBukkitVersion());
+            DevEngine.log("[Bukkit] Online mode: " + com.turt2live.antishare.bukkit.AntiShare.getInstance().getServer().getOnlineMode());
+        }
+    }
 }

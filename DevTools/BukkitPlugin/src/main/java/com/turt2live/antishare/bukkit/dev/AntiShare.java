@@ -20,6 +20,7 @@ package com.turt2live.antishare.bukkit.dev;
 import com.turt2live.antishare.bukkit.dev.check.*;
 import com.turt2live.antishare.bukkit.util.BukkitUtils;
 import com.turt2live.antishare.engine.DevEngine;
+import com.turt2live.antishare.events.EventDispatcher;
 import com.turt2live.antishare.object.ASLocation;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -42,7 +43,9 @@ public class AntiShare extends JavaPlugin {
         getLogger().warning(" USE THESE TOOLS AT YOUR OWN RISK. THERE IS NO SUPPORT FOR THESE TOOLS.");
         getLogger().warning("============= ANTISHARE =============");
 
-        getServer().getPluginManager().registerEvents(new DevListener(), this);
+        DevListener listener = new DevListener();
+        getServer().getPluginManager().registerEvents(listener, this);
+        EventDispatcher.register(listener);
     }
 
     @Override
