@@ -540,11 +540,12 @@ public final class Engine {
      * Processes a player joining the server. This will perform any actions that
      * need to occur once the player joins the server (such as loading data or
      * updating the player's state).
+     *
      * @param player the player joining the server, cannot be null
      */
     // TODO: Unit test
     public void processPlayerJoin(APlayer player) {
-        if(player == null)throw new IllegalArgumentException();
+        if (player == null) throw new IllegalArgumentException();
 
         DevEngine.log("[Engine] Processing player join",
                 "[Engine] \t\tplayer = " + player);
@@ -558,17 +559,18 @@ public final class Engine {
      * Processes a player leaving the server for any reason. This will perform
      * the required cleanup calls as well as any final actions that need to occur
      * upon the player's exit.
+     *
      * @param player the player leaving the server, cannot be null
      */
     // TODO: Unit test
     public void processPlayerQuit(APlayer player) {
-        if(player == null)throw new IllegalArgumentException();
+        if (player == null) throw new IllegalArgumentException();
 
         DevEngine.log("[Engine] Processing player quit",
                 "[Engine] \t\tplayer = " + player);
 
         List<AInventory> resulting = processInventoryMerge(player.getInventory(), player.getUUID());
-        for(AInventory inventory : resulting)getInventoryManager().setInventory(player.getUUID(), inventory);
+        for (AInventory inventory : resulting) getInventoryManager().setInventory(player.getUUID(), inventory);
         getInventoryManager().save(player.getUUID());
     }
 
