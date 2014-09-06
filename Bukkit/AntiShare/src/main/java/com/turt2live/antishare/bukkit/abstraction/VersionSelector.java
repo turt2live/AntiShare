@@ -19,7 +19,7 @@ package com.turt2live.antishare.bukkit.abstraction;
 
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.engine.DevEngine;
-import com.turt2live.lib.items.bukkit.BukkitProvider;
+import com.turt2live.antishare.lib.items.bukkit.BukkitProvider;
 import org.bukkit.event.Listener;
 
 /**
