@@ -18,6 +18,7 @@
 package com.turt2live.antishare.engine;
 
 import com.turt2live.antishare.configuration.Configuration;
+import com.turt2live.antishare.configuration.InventoryMergeSettings;
 import com.turt2live.antishare.configuration.MemoryConfiguration;
 import com.turt2live.antishare.configuration.groups.GroupManager;
 import com.turt2live.antishare.events.EventDispatcher;
@@ -25,6 +26,7 @@ import com.turt2live.antishare.events.engine.EngineShutdownEvent;
 import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 import com.turt2live.antishare.io.InventoryManager;
 import com.turt2live.antishare.io.memory.MemoryInventoryManager;
+import com.turt2live.antishare.object.AInventory;
 import com.turt2live.antishare.object.APlayer;
 import com.turt2live.antishare.object.AWorld;
 import com.turt2live.antishare.object.pattern.PatternManager;
@@ -32,9 +34,7 @@ import com.turt2live.lib.items.AbstractedItem;
 import com.turt2live.lib.items.provider.ItemProvider;
 import com.turt2live.lib.items.provider.ProviderManager;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
@@ -117,6 +117,7 @@ public final class Engine {
     private InventoryManager inventoryManager = new MemoryInventoryManager();
     private ItemProvider itemProvider = null;
     private WorldProvider worlds = null;
+    private InventoryMergeSettings mergeSettings = new InventoryMergeSettings(configuration);
 
     private Engine() {
         newCacheTimer();
@@ -504,6 +505,17 @@ public final class Engine {
 
         this.configuration = configuration;
         configuration.load();
+
+        mergeSettings = new InventoryMergeSettings(configuration);
+    }
+
+    /**
+     * Gets the applicable inventory merge settings for this engine
+     *
+     * @return the inventory merge settings
+     */
+    public InventoryMergeSettings getMergeSettings() {
+        return mergeSettings;
     }
 
     /**
@@ -524,14 +536,72 @@ public final class Engine {
 
     }
 
-    // TODO: Player join logic
+    /**
+     * Processes a player joining the server. This will perform any actions that
+     * need to occur once the player joins the server (such as loading data or
+     * updating the player's state).
+     * @param player the player joining the server, cannot be null
+     */
+    // TODO: Unit test
     public void processPlayerJoin(APlayer player) {
+        if(player == null)throw new IllegalArgumentException();
 
+        DevEngine.log("[Engine] Processing player join",
+                "[Engine] \t\tplayer = " + player);
+
+        // We need to find the inventory for their current world/gamemode and set them
+        AInventory inventory = getInventoryManager().getInventory(player.getUUID(), player.getGameMode(), player.getWorld());
+        player.setInventory(inventory);
     }
 
-    // TODO: Player quit logic
+    /**
+     * Processes a player leaving the server for any reason. This will perform
+     * the required cleanup calls as well as any final actions that need to occur
+     * upon the player's exit.
+     * @param player the player leaving the server, cannot be null
+     */
+    // TODO: Unit test
     public void processPlayerQuit(APlayer player) {
+        if(player == null)throw new IllegalArgumentException();
 
+        DevEngine.log("[Engine] Processing player quit",
+                "[Engine] \t\tplayer = " + player);
+
+        List<AInventory> resulting = processInventoryMerge(player.getInventory(), player.getUUID());
+        for(AInventory inventory : resulting)getInventoryManager().setInventory(player.getUUID(), inventory);
+        getInventoryManager().save(player.getUUID());
+    }
+
+    /**
+     * Processes an inventory merge based upon a newly created inventory. This will gather a collection
+     * of applicable inventories for the player and merge the passed inventory into the collected inventories
+     * where applicable. The returned set contains all the collected inventories (modified) as well as
+     * the passed inventory.
+     *
+     * @param created the newly created inventory, cannot be null
+     * @param player  the player that is applicable, cannot be null
+     *
+     * @return the resulting list of modified inventories, including the passed inventory
+     */
+    // TODO: Unit test
+    List<AInventory> processInventoryMerge(AInventory created, UUID player) {
+        if (created == null || player == null) throw new IllegalArgumentException();
+
+        List<AInventory> others = getInventoryManager().getInventories(player);
+        List<Integer> remove = new ArrayList<>();
+        for (int i = 0; i < others.size(); i++) {
+            AInventory val = others.get(i);
+            if (val.getGameMode() == created.getGameMode() && val.getWorld().equals(created.getWorld())) {
+                remove.add(i);
+            }
+        }
+
+        for (int i : remove) others.remove(i);
+
+        getMergeSettings().mergeInventories(created, others);
+        others.add(created);
+
+        return others;
     }
 
     private void newCacheTimer() {

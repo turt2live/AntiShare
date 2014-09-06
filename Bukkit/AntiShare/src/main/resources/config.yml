@@ -112,3 +112,30 @@ caching:
     # objects are removed from memory. Values less than or equal to zero
     # inherit a default of 60000 (1 minute).
     cache-timer-interval: 60000
+# Inventory settings for AntiShare. Here you can configure how worlds interact
+# with eachother (with respect to inventories) as well as how to deal with the
+# multiple gamemodes possible. To merge all creative inventories between "world1"
+# and "world2", add both "world1" and "world2" under "creative.merge-with". To merge
+# creative and survival inventories together, simply add the appropriate gamemodes
+# to the "gamemode-merge" list. "none" is reserved in both list types as "no values".
+inventories:
+    creative:
+        merge-with:
+        - none
+        gamemode-merge:
+        - none
+    survival:
+        merge-with:
+        - none
+        gamemode-merge:
+        - none
+    adventure:
+        merge-with:
+        - none
+        gamemode-merge:
+        - none
+    spectator:
+        merge-with:
+        - none
+        gamemode-merge:
+        - none

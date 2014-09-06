@@ -21,6 +21,7 @@ import com.turt2live.antishare.ASGameMode;
 import com.turt2live.antishare.object.AInventory;
 import com.turt2live.antishare.object.AWorld;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -41,6 +42,15 @@ public interface InventoryManager {
      * @return the inventory found. This may be empty if it was created.
      */
     public AInventory getInventory(UUID player, ASGameMode gamemode, AWorld world);
+
+    /**
+     * Gets all applicable inventories for a specified player
+     *
+     * @param player the player to lookup, cannot be null
+     *
+     * @return the inventories found. Never null but may be empty
+     */
+    public List<AInventory> getInventories(UUID player);
 
     /**
      * Sets an inventory for a player
