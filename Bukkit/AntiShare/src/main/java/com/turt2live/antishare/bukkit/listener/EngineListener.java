@@ -841,7 +841,7 @@ public class EngineListener implements Listener {
 
         APlayer player = new BukkitPlayer(event.getPlayer());
 
-        engine.processPlayerJoin(player);
+        engine.processPlayerQuit(player);
     }
 
     /**

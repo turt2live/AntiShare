@@ -531,9 +531,29 @@ public final class Engine {
         return configuration.getBoolean(configKey, def); // Does it's own null check
     }
 
-    // TODO: World change logic
+    /**
+     * Processes a player changing worlds. This will perform any actions required
+     * to keep a proper player state.
+     *
+     * @param player the player changing worlds, cannot be null
+     * @param from   the world the player is travelling from, cannot be null
+     * @param to     the world the player is travelling to, cannot be null
+     */
+    // TODO: Unit test
     public void processWorldChange(APlayer player, AWorld from, AWorld to) {
+        if (player == null || from == null || to == null) throw new IllegalArgumentException();
 
+        DevEngine.log("[Engine] Processing player world change",
+                "[Engine] \t\tplayer = " + player,
+                "[Engine] \t\tfrom = " + from,
+                "[Engine] \t\tto = " + to);
+
+        AInventory inventory = player.getInventory();
+        inventory.setWorld(from);
+        List<AInventory> resulting = processInventoryMerge(inventory, player.getUUID());
+        for (AInventory i : resulting) getInventoryManager().setInventory(player.getUUID(), i);
+
+        player.setInventory(getInventoryManager().getInventory(player.getUUID(), player.getGameMode(), to));
     }
 
     /**

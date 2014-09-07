@@ -41,6 +41,7 @@ import com.turt2live.antishare.events.worldengine.WorldEngineCreateEvent;
 import com.turt2live.antishare.io.EntityManager;
 import com.turt2live.antishare.io.flatfile.FileBlockManager;
 import com.turt2live.antishare.io.flatfile.FileEntityManager;
+import com.turt2live.antishare.io.flatfile.FileInventoryManager;
 import com.turt2live.antishare.object.pattern.PatternManager;
 import com.turt2live.antishare.uuid.UuidService;
 import org.bukkit.Material;
@@ -257,6 +258,10 @@ public class AntiShare extends JavaPlugin {
         if (cacheMax <= 0) cacheMax = 120000;
         if (cacheInterval <= 0) cacheInterval = 60000;
 
+        // File/Folder setup
+        File inventoryFolder = new File(getDataFolder(), "data" + File.separator + "inventories");
+        if (!inventoryFolder.exists()) inventoryFolder.mkdirs();
+
         // Setup engine
         Engine.getInstance().setLogger(this.getLogger());
         Engine.getInstance().setCacheMaximum(cacheMax);
@@ -266,6 +271,7 @@ public class AntiShare extends JavaPlugin {
         Engine.getInstance().setWorldProvider(new BukkitWorldProvider());
         Engine.getInstance().setConfiguration(new BukkitConfiguration(new File(getDataFolder(), "config.yml")));
         Engine.getInstance().loadItemProvider();
+        Engine.getInstance().setInventoryManager(new FileInventoryManager(inventoryFolder));
 
         // Setup mob patterns
         PatternManager patterns = Engine.getInstance().getPatterns();
