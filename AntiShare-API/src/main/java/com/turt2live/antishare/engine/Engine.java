@@ -543,6 +543,8 @@ public final class Engine {
     public void processWorldChange(APlayer player, AWorld from, AWorld to) {
         if (player == null || from == null || to == null) throw new IllegalArgumentException();
 
+        // TODO: Permission check
+
         DevEngine.log("[Engine] Processing player world change",
                 "[Engine] \t\tplayer = " + player,
                 "[Engine] \t\tfrom = " + from,
@@ -566,6 +568,8 @@ public final class Engine {
     // TODO: Unit test
     public void processPlayerJoin(APlayer player) {
         if (player == null) throw new IllegalArgumentException();
+
+        // TODO: Handle case of players not having an initial inventory
 
         DevEngine.log("[Engine] Processing player join",
                 "[Engine] \t\tplayer = " + player);

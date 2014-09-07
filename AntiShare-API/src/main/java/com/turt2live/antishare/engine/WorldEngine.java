@@ -1315,8 +1315,39 @@ public final class WorldEngine {
         }
     }
 
-    // TODO: Gamemode change logic
+    /**
+     * Process gamemode change logic. This will do any required actions to keep the player
+     * in the proper state (such as inventory switching). This will also determine if the
+     * player is in a gamemode change cooldown. If the player is, this returns the number
+     * of seconds remaining on that cooldown. If there is no cooldown in progress, this
+     * returns -1.
+     *
+     * @param player the player, cannot be null
+     * @param from   the gamemode before the change, cannot be null
+     * @param to     the gamemode after the change, cannot be null
+     *
+     * @return the number of seconds until their cooldown expires, or -1 if none active
+     */
     public int processGameModeChange(APlayer player, ASGameMode from, ASGameMode to) {
+        if (player == null || from == null || to == null) throw new IllegalArgumentException();
+
+        // TODO: Permission check
+
+        DevEngine.log("[WorldEngine:" + getWorldName() + "] Processing player world change",
+                "[WorldEngine:" + getWorldName() + "] \t\tplayer = " + player,
+                "[WorldEngine:" + getWorldName() + "] \t\tfrom = " + from,
+                "[WorldEngine:" + getWorldName() + "] \t\tto = " + to);
+
+        // TODO: Cooldown logic
+
+        AInventory current = player.getInventory();
+        current.setGameMode(from);
+        List<AInventory> results = Engine.getInstance().processInventoryMerge(current, player.getUUID());
+        for (AInventory inventory : results)
+            Engine.getInstance().getInventoryManager().setInventory(player.getUUID(), inventory);
+
+        player.setInventory(Engine.getInstance().getInventoryManager().getInventory(player.getUUID(), to, player.getWorld()));
+
         return -1; // Number of seconds remaining on cooldown. -1 for none.
     }
 }
