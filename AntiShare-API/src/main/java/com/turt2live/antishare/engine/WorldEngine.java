@@ -1333,7 +1333,7 @@ public final class WorldEngine {
 
         // TODO: Permission check
 
-        DevEngine.log("[WorldEngine:" + getWorldName() + "] Processing player world change",
+        DevEngine.log("[WorldEngine:" + getWorldName() + "] Processing player gamemode change",
                 "[WorldEngine:" + getWorldName() + "] \t\tplayer = " + player,
                 "[WorldEngine:" + getWorldName() + "] \t\tfrom = " + from,
                 "[WorldEngine:" + getWorldName() + "] \t\tto = " + to);
