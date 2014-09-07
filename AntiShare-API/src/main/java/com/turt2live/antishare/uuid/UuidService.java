@@ -20,6 +20,7 @@ package com.turt2live.antishare.uuid;
 import com.turt2live.uuid.CachingServiceProvider;
 import com.turt2live.uuid.MemoryPlayerRecord;
 import com.turt2live.uuid.PlayerRecord;
+import com.turt2live.uuid.ServiceProvider;
 import com.turt2live.uuid.turt2live.v2.ApiV2Service;
 
 import java.util.ArrayList;
@@ -36,13 +37,14 @@ import java.util.UUID;
  *
  * @author turt2live
  */
-public class UuidService extends CachingServiceProvider {
+public class UuidService implements ServiceProvider {
 
     private static UuidService SERVICE_INSTANCE;
     private List<CacheSource> additionalSources = new ArrayList<>();
+    private CachingServiceProvider cacheProvider;
 
     UuidService() {
-        super(new ApiV2Service());
+        cacheProvider = new CachingServiceProvider(new ApiV2Service());
     }
 
     @Override
@@ -66,7 +68,7 @@ public class UuidService extends CachingServiceProvider {
             if (uuid != null) {
                 record = new MemoryPlayerRecord(uuid, name);
             } else {
-                record = super.doLookup(name);
+                record = cacheProvider.doLookup(name);
             }
 
             if (record != null) records.add(record);
@@ -94,7 +96,7 @@ public class UuidService extends CachingServiceProvider {
             if (playerName != null) {
                 record = new MemoryPlayerRecord(uuid, playerName);
             } else {
-                record = super.doLookup(uuid);
+                record = cacheProvider.doLookup(uuid);
             }
 
             if (record != null) records.add(record);
@@ -146,4 +148,28 @@ public class UuidService extends CachingServiceProvider {
         if (SERVICE_INSTANCE == null) SERVICE_INSTANCE = new UuidService();
         return SERVICE_INSTANCE;
     }
+
+    // --- start delegates ---
+
+    @Override
+    public PlayerRecord getRandomSample() {
+        return cacheProvider.getRandomSample();
+    }
+
+    @Override
+    public List<PlayerRecord> getRandomSample(int amount) {
+        return cacheProvider.getRandomSample(amount);
+    }
+
+    @Override
+    public String getServiceName() {
+        return cacheProvider.getServiceName();
+    }
+
+    @Override
+    public String[] getNameHistory(UUID uuid) {
+        return cacheProvider.getNameHistory(uuid);
+    }
+
+    // --- end delegates ---
 }
