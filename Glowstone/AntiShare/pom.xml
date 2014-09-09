@@ -27,23 +27,33 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.turt2live.antishare</groupId>
-    <artifactId>AntiShare</artifactId>
-    <name>AntiShare</name>
-    <version>5.5.3-SNAPSHOT</version> <!-- Don't forget to update Bukkit version & Bukkit Plugin dependency version -->
+    <artifactId>AntiShare-Glowstone</artifactId>
+    <name>AntiShare-Glowstone</name>
+    <version>GlowstonePlugin</version>
+
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Used by replacement plugin to inject build number -->
+        <BUILD_NUMBER>local</BUILD_NUMBER>
     </properties>
 
     <dependencies>
-        <!-- This should not include the dev tools as it is also a plugin -->
-
-        <!-- Bukkit Plugin -->
+        <!-- AntiShare API -->
         <dependency>
             <groupId>com.turt2live.antishare</groupId>
-            <artifactId>AntiShare-Bukkit</artifactId>
-            <version>5.5.3-SNAPSHOT</version> <!-- Update when the Bukkit plugin updates -->
-            <scope>compile</scope>
+            <artifactId>AntiShare-API</artifactId>
+            <version>API</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Glowstone -->
+        <dependency>
+            <groupId>net.glowstone</groupId>
+            <artifactId>glowkit</artifactId>
+            <version>1.8-R1-SNAPSHOT</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
@@ -59,28 +69,6 @@
         <finalName>${project.name}</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>false</minimizeJar>
-                            <artifactSet>
-                                <includes>
-                                    <include>com.turt2live.antishare:*</include>
-                                </includes>
-                            </artifactSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

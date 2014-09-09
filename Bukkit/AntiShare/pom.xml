@@ -30,6 +30,7 @@
     <artifactId>AntiShare-Bukkit</artifactId>
     <name>AntiShare-Bukkit</name>
     <version>5.5.3-SNAPSHOT</version>
+    <!-- Don't forget to update All-In-One version & Bukkit Plugin dependency version in All-In-One -->
 
 
     <properties>
@@ -44,6 +45,14 @@
             <groupId>com.turt2live.antishare</groupId>
             <artifactId>AntiShare-API</artifactId>
             <version>API</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Glowstone Support -->
+        <dependency>
+            <groupId>com.turt2live.antishare</groupId>
+            <artifactId>AntiShare-Glowstone</artifactId>
+            <version>GlowstonePlugin</version>
             <scope>compile</scope>
         </dependency>
 
@@ -204,7 +213,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

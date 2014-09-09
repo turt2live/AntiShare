@@ -223,7 +223,10 @@ public class AntiShare extends JavaPlugin {
         handler.registerCommand(new ReloadCommand());
     }
 
-    private void initEngine() {
+    /**
+     * Initializes the engine
+     */
+    protected void initEngine() {
         // Complain about offline mode
         if (!getServer().getOnlineMode()) {
             DevEngine.log("[Bukkit Plugin] OFFLINE MODE SERVER DETECTED");

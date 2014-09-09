@@ -1328,6 +1328,7 @@ public final class WorldEngine {
      *
      * @return the number of seconds until their cooldown expires, or -1 if none active
      */
+    // TODO: Unit test
     public int processGameModeChange(APlayer player, ASGameMode from, ASGameMode to) {
         if (player == null || from == null || to == null) throw new IllegalArgumentException();
 
