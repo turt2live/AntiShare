@@ -35,7 +35,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Used by replacement plugin to inject build number -->
-        <BUILD_NUMBER>local</BUILD_NUMBER>
+        <jenkins.build.number>local</jenkins.build.number>
     </properties>
 
     <dependencies>
@@ -105,7 +105,7 @@
                         </replacement>
                         <replacement>
                             <token>jenkins-build-number</token>
-                            <value>${BUILD_NUMBER}</value>
+                            <value>${jenkins.build.number}</value>
                         </replacement>
                     </replacements>
                 </configuration>
