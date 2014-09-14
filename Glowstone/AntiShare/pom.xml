@@ -34,8 +34,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Used by replacement plugin to inject build number -->
-        <jenkins.build.number>local</jenkins.build.number>
     </properties>
 
     <dependencies>
