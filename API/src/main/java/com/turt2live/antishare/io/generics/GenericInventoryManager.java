@@ -160,6 +160,27 @@ public abstract class GenericInventoryManager implements InventoryManager {
     }
 
     /**
+     * Gets a list of inventories for the specified player. If none are found, or the
+     * UUID is null, this returns an empty list.
+     *
+     * @param uuid the uuid to lookup
+     *
+     * @return the inventories found in memory, or an empty list
+     */
+    protected final List<AInventory> getInventoriesFor(UUID uuid) {
+        List<AInventory> inventoryList = new ArrayList<>();
+        if (uuid == null) return inventoryList;
+
+        for (Map.Entry<InventoryKey, AInventory> entry : inventories.entrySet()) {
+            if (entry.getKey().player.equals(uuid)) {
+                inventoryList.add(entry.getValue());
+            }
+        }
+
+        return inventoryList;
+    }
+
+    /**
      * Saves a set of inventories to disk. Inventories for a single player that are
      * not in the set may be removed. Players not in the set should be left untouched.
      *
