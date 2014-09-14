@@ -27,7 +27,7 @@
     <version>parent</version>
 
     <properties>
-        <plugin.version>5.5.3-SNAPSHOT</plugin.version>
+        <plugin.version>6.0.0-SNAPSHOT</plugin.version>
         <jenkins.build.number>local</jenkins.build.number>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
