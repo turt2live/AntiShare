@@ -29,7 +29,7 @@
     <groupId>com.turt2live.antishare</groupId>
     <artifactId>AntiShare</artifactId>
     <name>AntiShare</name>
-    <version>5.5.3-SNAPSHOT</version> <!-- Don't forget to update Bukkit version & Bukkit Plugin dependency version -->
+    <version>${plugin.version}</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>com.turt2live.antishare</groupId>
             <artifactId>AntiShare-Bukkit</artifactId>
-            <version>5.5.3-SNAPSHOT</version> <!-- Update when the Bukkit plugin updates -->
+            <version>${plugin.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>com.turt2live.antishare</groupId>
             <artifactId>AntiShare-Sponge</artifactId>
-            <version>5.5.3-SNAPSHOT</version> <!-- Update when Sponge plugin updates -->
+            <version>${plugin.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

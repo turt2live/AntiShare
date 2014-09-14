@@ -26,10 +26,24 @@
     <packaging>pom</packaging>
     <version>parent</version>
 
+    <properties>
+        <plugin.version>5.5.3-SNAPSHOT</plugin.version>
+
+        <!-- Used by replacement plugin to inject build number -->
+        <BUILD_NUMBER>local</BUILD_NUMBER>
+    </properties>
+
     <modules>
+        <!-- API -->
         <module>AntiShare-API</module>
+
+        <!-- Glowstone -->
         <module>Glowstone/AntiShare</module>
+
+        <!-- Sponge -->
         <module>Sponge/AntiShare</module>
+
+        <!-- Bukkit -->
         <module>Bukkit/AntiShare</module>
         <module>Bukkit/Abstraction</module>
         <module>Bukkit/AbstractImpl/Abstraction-vPre</module>
@@ -46,6 +60,8 @@
         <module>Bukkit/AbstractImpl/Abstraction-v1_7_R2</module>
         <module>Bukkit/AbstractImpl/Abstraction-v1_7_R3</module>
         <module>Bukkit/AbstractImpl/Abstraction-v1_7_R4</module>
+
+        <!-- Misc -->
         <module>DevTools/BukkitPlugin</module>
         <module>AntiShare-AllInOne</module>
     </modules>

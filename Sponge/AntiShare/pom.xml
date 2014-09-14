@@ -29,15 +29,9 @@
     <groupId>com.turt2live.antishare</groupId>
     <artifactId>AntiShare-Sponge</artifactId>
     <name>AntiShare-Sponge</name>
-    <version>5.5.3-SNAPSHOT</version>
-    <!-- Don't forget to update All-In-One version & Sponge Plugin dependency version in All-In-One -->
-    <!-- Also update the version in the main class -->
-
+    <version>${plugin.version}</version>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Used by replacement plugin to inject build number -->
-        <BUILD_NUMBER>local</BUILD_NUMBER>
     </properties>
 
     <dependencies>

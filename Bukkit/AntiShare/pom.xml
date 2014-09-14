@@ -29,14 +29,9 @@
     <groupId>com.turt2live.antishare</groupId>
     <artifactId>AntiShare-Bukkit</artifactId>
     <name>AntiShare-Bukkit</name>
-    <version>5.5.3-SNAPSHOT</version>
-    <!-- Don't forget to update All-In-One version & Bukkit Plugin dependency version in All-In-One -->
-
+    <version>${plugin.version}</version>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Used by replacement plugin to inject build number -->
-        <BUILD_NUMBER>local</BUILD_NUMBER>
     </properties>
 
     <dependencies>
