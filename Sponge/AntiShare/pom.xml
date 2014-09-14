@@ -55,8 +55,9 @@
 
     <repositories>
         <repository>
+            <!-- Temporary! -->
             <id>sponge-repo</id>
-            <url>http://repo.amigocraft.net/content/repositories/spongeapi/</url> <!-- Temporary! -->
+            <url>http://repo.amigocraft.net/content/repositories/spongeapi/</url>
         </repository>
         <repository>
             <id>turt2live-repo</id>
