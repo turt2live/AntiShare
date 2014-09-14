@@ -26,6 +26,7 @@ public final class VersionInfo {
 
     /*****
      * Update template if you change this file!
+     * Changes to this file are not saved. Update the template instead.
      *****/
 
     /**
