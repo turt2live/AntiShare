@@ -23,8 +23,8 @@ POM Information:
 <!-- Bukkit Dependency -->
 <dependency>
     <groupId>com.turt2live.antishare</groupId>
-    <artifactId>AntiShare-Bukkit</artifactId>
-    <version>LATEST</version>
+    <artifactId>AntiShare</artifactId>
+    <version>LATEST</version> <!-- Replace with current version in the pom.xml! -->
     <type>jar</type>
     <scope>compile</scope>
 </dependency>
