@@ -120,7 +120,7 @@ public class Lang {
         File toFile = new File(AntiShare.getInstance().getDataFolder(), "lang.yml");
 
         FileConfiguration lang = YamlConfiguration.loadConfiguration(toFile);
-        FileConfiguration defaults = YamlConfiguration.loadConfiguration(AntiShare.getInstance().getResource("lang.yml"));
+        FileConfiguration defaults = YamlConfiguration.loadConfiguration(AntiShare.getInstance().getResource("res-bukkit/lang.yml"));
         lang.setDefaults(defaults);
         lang.options().copyDefaults(true);
 

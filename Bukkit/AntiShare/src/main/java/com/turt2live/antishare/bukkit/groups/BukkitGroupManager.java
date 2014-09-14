@@ -23,6 +23,7 @@ import com.turt2live.antishare.configuration.Configuration;
 import com.turt2live.antishare.configuration.groups.Group;
 import com.turt2live.antishare.configuration.groups.MainGroup;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,9 +56,9 @@ public class BukkitGroupManager extends com.turt2live.antishare.configuration.gr
         }
         if (super.mainGroup == null) {
             File file = new File(plugin.getDataFolder(), "group_main.yml");
-            org.bukkit.configuration.file.YamlConfiguration yaml = new org.bukkit.configuration.file.YamlConfiguration();
+            YamlConfiguration yaml = new YamlConfiguration();
             try {
-                yaml.load(plugin.getResource("group.yml"));
+                yaml.load(plugin.getResource("res-bukkit/group.yml"));
                 yaml.save(file);
             } catch (IOException e) {
                 e.printStackTrace();

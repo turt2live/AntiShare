@@ -29,6 +29,7 @@
     <modules>
         <module>AntiShare-API</module>
         <module>Glowstone/AntiShare</module>
+        <module>Sponge/AntiShare</module>
         <module>Bukkit/AntiShare</module>
         <module>Bukkit/Abstraction</module>
         <module>Bukkit/AbstractImpl/Abstraction-vPre</module>

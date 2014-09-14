@@ -88,7 +88,7 @@ public class AntiShare extends JavaPlugin {
 
         // Load material defaults
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("item_aliases.csv")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("res-bukkit/item_aliases.csv")));
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -110,7 +110,7 @@ public class AntiShare extends JavaPlugin {
             getLogger().warning("Could not load internal item_aliases.csv, you may have weird errors");
         }
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("item_lang.csv")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("res-bukkit/item_lang.csv")));
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -141,7 +141,7 @@ public class AntiShare extends JavaPlugin {
             getLogger().warning("Could not load internal item_lang.csv, you may have weird errors");
         }
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("item_similars.txt")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getResource("res-bukkit/item_similars.txt")));
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -185,14 +185,14 @@ public class AntiShare extends JavaPlugin {
         }
 
         // Setup configuration
-        FileConfiguration configuration = YamlConfiguration.loadConfiguration(getResource("config.yml"));
+        FileConfiguration configuration = YamlConfiguration.loadConfiguration(getResource("res-bukkit/config.yml"));
         getConfig().setDefaults(configuration);
         saveDefaultConfig();
 
         // Setup world splits
         worldsplitsFile = new File(getDataFolder(), "worldsplits.yml");
         worldsplits = YamlConfiguration.loadConfiguration(worldsplitsFile);
-        worldsplits.setDefaults(YamlConfiguration.loadConfiguration(getResource("worldsplits.yml")));
+        worldsplits.setDefaults(YamlConfiguration.loadConfiguration(getResource("res-bukkit/worldsplits.yml")));
         worldsplits.options().copyDefaults(true);
         worldsplits.options().copyHeader(true);
         try {
