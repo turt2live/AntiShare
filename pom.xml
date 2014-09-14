@@ -34,10 +34,11 @@
 
     <modules>
         <!-- API -->
-        <module>AntiShare-API</module>
+        <module>API</module>
 
         <!-- Glowstone -->
         <module>Glowstone/AntiShare</module>
+        <module>Glowstone/AbstractImpl/Abstraction-v1_8_R1</module>
 
         <!-- Sponge -->
         <module>Sponge/AntiShare</module>
@@ -62,7 +63,7 @@
 
         <!-- Misc -->
         <module>DevTools/BukkitPlugin</module>
-        <module>AntiShare-AllInOne</module>
+        <module>Final</module>
     </modules>
 
     <repositories>

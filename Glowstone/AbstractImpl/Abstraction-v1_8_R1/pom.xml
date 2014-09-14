@@ -27,27 +27,28 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.turt2live.antishare</groupId>
-    <artifactId>AntiShare-Glowstone</artifactId>
-    <name>AntiShare-Glowstone</name>
-    <version>GlowstonePlugin</version>
-
+    <artifactId>AntiShare-Glowstone-v1_8_R1</artifactId>
+    <name>AntiShare-Glowstone-v1_8_R1</name>
+    <version>Glowstone-v1_8_R1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Used by replacement plugin to inject build number -->
-        <jenkins.build.number>local</jenkins.build.number>
     </properties>
 
     <dependencies>
-        <!-- AntiShare API -->
+        <dependency>
+            <groupId>com.turt2live.antishare</groupId>
+            <artifactId>AntiShare-Bukkit-Abstraction</artifactId>
+            <version>Bukkit-Abstraction</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>com.turt2live.antishare</groupId>
             <artifactId>AntiShare-API</artifactId>
             <version>API</version>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
-
-        <!-- Glowstone -->
         <dependency>
             <groupId>net.glowstone</groupId>
             <artifactId>glowkit</artifactId>
@@ -55,24 +56,22 @@
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
-
-        <!-- == START ANTISHARE ABSTRACTION == -->
-
         <dependency>
             <groupId>com.turt2live.antishare</groupId>
-            <artifactId>AntiShare-Glowstone-v1_8_R1</artifactId>
-            <version>Glowstone-v1_8_R1</version>
-            <type>jar</type>
+            <artifactId>AntiShare-Bukkit-v1_7_R4</artifactId>
+            <version>Bukkit-v1_7_R4</version>
             <scope>compile</scope>
         </dependency>
-
-        <!-- == END ANTISHARE ABSTRACTION == -->
     </dependencies>
 
     <repositories>
         <repository>
             <id>glowstone-repo</id>
             <url>http://repo.glowstone.net/content/repositories/public</url>
+        </repository>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
         <repository>
             <id>turt2live-repo</id>
@@ -87,26 +86,12 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>false</minimizeJar>
-                            <artifactSet>
-                                <includes>
-                                    <include>com.turt2live.antishare:*</include>
-                                </includes>
-                            </artifactSet>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

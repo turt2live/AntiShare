@@ -20,6 +20,7 @@ package com.turt2live.antishare.bukkit.abstraction;
 import com.turt2live.antishare.bukkit.AntiShare;
 import com.turt2live.antishare.engine.DevEngine;
 import com.turt2live.antishare.lib.items.bukkit.BukkitProvider;
+import com.turt2live.antishare.lib.items.bukkit.GlowstoneValues;
 import org.bukkit.event.Listener;
 
 /**
@@ -50,23 +51,25 @@ public final class VersionSelector {
         String version = packageName.substring(packageName.lastIndexOf('.') + 1);
 
         DevEngine.log("[Abstraction] Parsed package name: " + version);
+        GlowstoneValues.ProviderType type = GlowstoneValues.ProviderType.BUKKIT;
 
         // Get the last element of the package
         if (version.equals("craftbukkit")) { // If the last element of the package was "craftbukkit" we are now pre-refactor
-            version = "pre";
+            version = "vpre";
         } else if (version.equals("glowstone")) {
             // Glowstone is built purely on the Bukkit API, so we can detect it's version through the version string
             // We can also abuse ItemAbstraction's glowstone handling for our purposes (considering it uses the same format)
-            version = BukkitProvider.getGlowstoneMappings().getGlowstoneVersion(AntiShare.getInstance().getServer().getBukkitVersion());
+            version = BukkitProvider.getGlowstoneMappings().getGlowstoneVersion(AntiShare.getInstance().getServer());
+            type = BukkitProvider.getGlowstoneMappings().getProviderType(version);
         }
 
         DevEngine.log("[Abstraction] Attempting to load: " + version);
 
-        MinecraftVersion mc = init(version);
+        MinecraftVersion mc = init(version, type);
         if (mc == null) {
             AntiShare.getInstance().getLogger().severe("Could not find support for this CraftBukkit version.");
             DevEngine.log("[Abstraction] Attempt 1 failed, trying to load: " + version);
-            mc = init(DEFAULT_VERSION);
+            mc = init(DEFAULT_VERSION, GlowstoneValues.ProviderType.BUKKIT);
             version = DEFAULT_VERSION;
             if (mc == null) {
                 DevEngine.log("[Abstraction] Failed to find support.");
@@ -84,9 +87,11 @@ public final class VersionSelector {
         }
     }
 
-    private static MinecraftVersion init(String version) {
+    private static MinecraftVersion init(String version, GlowstoneValues.ProviderType providerType) {
+        String providerStr = providerType == null ? "bukkit" : providerType.name().toLowerCase();
+
         try {
-            String lookup = "com.turt2live.antishare.bukkit.abstraction." + version + ".Minecraft";
+            String lookup = "com.turt2live.antishare." + providerStr + ".abstraction." + version + ".Minecraft";
             final Class<?> clazz = Class.forName(lookup);
 
             DevEngine.log("[Abstraction] Lookup class: " + lookup);
@@ -95,7 +100,7 @@ public final class VersionSelector {
             if (MinecraftVersion.class.isAssignableFrom(clazz)) { // Make sure it actually implements NMS
                 return (MinecraftVersion) clazz.getConstructor().newInstance(); // Set our handler
             }
-        } catch (final Exception ignored) {
+        } catch (Exception ignored) {
         }
         return null;
     }
