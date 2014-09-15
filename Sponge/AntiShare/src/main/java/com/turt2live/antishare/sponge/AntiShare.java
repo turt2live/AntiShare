@@ -37,6 +37,8 @@ public class AntiShare {
 
     @SpongeEventHandler
     public void onEnable(ServerStartingEvent event) {
+        event.getGame().getLogger().info("[ANTISHARE]" + event.getGame().getAPIVersion());
+        event.getGame().getLogger().info("[ANTISHARE]" + event.getGame().getImplementationVersion());
     }
 
     @SpongeEventHandler
