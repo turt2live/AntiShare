@@ -52,7 +52,8 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.5-R0.1-SNAPSHOT</version>
+            <version>1.7.9-R0.1</version>
+            <!-- Incorrect version: No longer published. Was 1.7.5-R0.1-SNAPSHOT -->
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>

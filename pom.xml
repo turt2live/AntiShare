@@ -41,7 +41,7 @@
         <module>Glowstone/AbstractImpl/Abstraction-v1_8_R1</module>
 
         <!-- Sponge -->
-        <module>Sponge/AntiShare</module>
+       <!--<module>Sponge/AntiShare</module>-->
 
         <!-- Bukkit -->
         <module>Bukkit/AntiShare</module>
