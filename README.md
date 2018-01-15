@@ -1,4 +1,7 @@
-[![AntiShare](http://home.turt2live.com/AntiShare-BukkitDev-Logo.png)](http://dev.bukkit.org/server-mods/antishare)
+DISCONTINUED
+------------
+
+This project is no longer being maintained. The plugin may no longer work and may contain bugs.
 
 What is it?
 -----------
